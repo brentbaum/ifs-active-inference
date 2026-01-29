@@ -176,7 +176,7 @@ function update_pD!(
     agent::AIFAgent{T},
     eta::T,
     factors::Vector{Int}
-) where {T, Nf}
+) where {T}
 
     # Only meaningful at t=1, but we check this in the caller
     qs_1 = agent.qs[1]
