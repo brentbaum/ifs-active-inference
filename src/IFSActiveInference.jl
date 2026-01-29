@@ -43,6 +43,9 @@ include("plotting.jl")
 # ActiveInference.jl-based implementation (optional)
 include("activeinference_impl.jl")
 
+# RxInfer.jl-based implementation (optional)
+include("rxinfer_impl.jl")
+
 # Export public API
 export ModelParams,
        build_model,
@@ -70,5 +73,12 @@ export plot_belief_evolution,
 export ACTIVEINFERENCE_AVAILABLE,
        build_aif_matrices,
        run_aif_exposure_therapy
+
+# RxInfer.jl implementation exports (when available)
+export RXINFER_AVAILABLE,
+       build_rxinfer_matrices,
+       one_hot,
+       flatten_state,
+       unflatten_state
 
 end # module
