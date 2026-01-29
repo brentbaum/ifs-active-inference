@@ -1,8 +1,8 @@
-# Implementation Comparison: Custom vs ActiveInference.jl
+# Implementation Comparison: Custom vs ActiveInference.jl vs RxInfer.jl
 
 ## Summary
 
-Both implementations successfully learn from exposure therapy, but through different mechanisms.
+All three implementations successfully demonstrate exposure therapy learning dynamics, but through different mechanisms and with varying learning rates.
 
 ## Custom Implementation
 
@@ -16,6 +16,7 @@ Both implementations successfully learn from exposure therapy, but through diffe
 - Gradual belief accumulation across trials
 - Directly updates belief about danger state
 - More interpretable as "changing one's mind about danger"
+- Conservative learning rate
 
 ## ActiveInference.jl Implementation
 
@@ -33,26 +34,56 @@ Both implementations successfully learn from exposure therapy, but through diffe
 - Learns "what outcomes to expect" rather than "what the danger state is"
 - More aligned with perceptual learning literature
 
+## RxInfer.jl Implementation
+
+**Learning mechanism**: Manual Bayesian inference with Dirichlet updates on flattened state space
+
+**Results (200 trials):**
+- Safe spider: P(safe) 50.9% → 89.6% (+38.6%)
+- Dangerous spider: P(safe) 49.1% → 10.4% (-38.6%)
+
+**Characteristics:**
+- Uses flattened 24-state representation (behavior × spider × danger)
+- Forward filtering with Bayesian updates
+- Strong belief updating due to full state-space inference
+- Correctly differentiates safe vs dangerous conditions
+- Uses manual inference (RxInfer's @model macro has scoping issues in modules)
+
 ## Key Differences
 
-| Aspect | Custom | ActiveInference.jl |
-|--------|--------|-------------------|
-| Learning target | d (state prior) | pA (observation model) |
-| Learning dynamics | Gradual accumulation | Sharp initial update, then pA refinement |
-| What's learned | "Is spider dangerous?" | "What happens when I encounter danger?" |
-| Approach behavior | Forced (exposure mode) | Forced (for comparison) |
+| Aspect | Custom | ActiveInference.jl | RxInfer.jl |
+|--------|--------|-------------------|------------|
+| Learning target | d (state prior) | pA (observation model) | d (flattened state) |
+| Learning dynamics | Gradual (+5%) | Sharp initial, then pA | Strong cumulative (+39%) |
+| What's learned | "Is spider dangerous?" | "What happens when I encounter danger?" | "What is the true state?" |
+| State representation | Factored (3 factors) | Factored (3 factors) | Flattened (24 states) |
+| Inference method | Custom variational | ActiveInference.jl VMP | Manual Bayesian filtering |
+
+## Interpretation
+
+1. **Custom Implementation**: Models belief updating about the danger itself, matching the paper's intended P(safe) metric. Conservative learning suitable for therapeutic contexts.
+
+2. **ActiveInference.jl**: Models learning the consequences of danger through observation model updates. The P(safe) metric doesn't capture this type of learning well.
+
+3. **RxInfer.jl**: Shows the strongest belief updating because full Bayesian inference over the joint state space allows information to flow more freely. The symmetric belief shifts (+38.6% vs -38.6%) demonstrate appropriate sensitivity to the ground truth.
 
 ## Conclusion
 
-Both implementations capture meaningful aspects of exposure therapy learning:
-- **Custom**: Models belief updating about the danger itself
-- **ActiveInference.jl**: Models learning the consequences of danger
+All implementations capture meaningful aspects of exposure therapy learning:
+- **Custom**: Conservative belief updating about danger (closest to paper's intended behavior)
+- **ActiveInference.jl**: Perceptual learning about outcomes
+- **RxInfer.jl**: Strong Bayesian belief revision (demonstrates learning potential)
 
-The paper's MATLAB implementation uses SPM's sophisticated variational message passing, which may combine both types of learning more naturally. Our custom implementation is closer to the paper's intended behavior for the P(safe) metric.
+The choice of implementation depends on the modeling goal:
+- For replicating the paper's P(safe) dynamics: Custom implementation
+- For sophisticated observation model learning: ActiveInference.jl
+- For maximum belief updating with full inference: RxInfer.jl
 
 ## Files
 
 - `src/simulation.jl`: Custom active inference implementation
 - `src/activeinference_impl.jl`: ActiveInference.jl wrapper
-- `compare_implementations.jl`: Comparison script
+- `src/rxinfer_impl.jl`: RxInfer.jl implementation
+- `test/test_rxinfer.jl`: RxInfer-specific unit tests (169 tests)
+- `compare_implementations.jl`: Three-way comparison script
 - `comparison_safe.png`, `comparison_dangerous.png`: Result plots

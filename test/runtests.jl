@@ -1,9 +1,4 @@
 using Test
-
-# Activate project
-using Pkg
-Pkg.activate(dirname(@__DIR__))
-
 using IFSActiveInference
 
 @testset "IFSActiveInference Tests" begin
@@ -125,5 +120,8 @@ using IFSActiveInference
     end
 
 end
+
+# Include RxInfer tests
+include("test_rxinfer.jl")
 
 println("\nAll tests passed!")
