@@ -42,6 +42,7 @@ export infer_states!
 
 # Export EFE
 export calculate_efe, forward_simulate
+export compute_predicted_obs, compute_ambiguity, compute_state_info_gain
 
 # Export policy
 export infer_policies!, sample_action
@@ -51,6 +52,7 @@ export update_learning!
 
 # Export agent
 export AIFEnvironment, run_trial!
+export observe, step!, get_state, reset!
 
 # Export utilities
 export softmax, entropy, kl_divergence, sample_categorical
