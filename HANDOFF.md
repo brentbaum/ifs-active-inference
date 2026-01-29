@@ -1,35 +1,111 @@
-# Handoff: Generic Active Inference Library
+# Handoff: IFS Active Inference Implementation
 
-## Current State: Functional but Epistemic Behavior Not Working
+## Project Overview
 
-The Active Inference library is implemented and runs without crashes. However, the T-maze benchmark reveals that **state information gain is not driving epistemic behavior** as expected.
+This is a Julia implementation of Active Inference for exposure therapy modeling, specifically simulating spider phobia treatment. The project includes:
 
-## Files Implemented
+1. **Spider Phobia Model** - POMDP-based exposure therapy simulation
+2. **Generic Active Inference Library** - Reusable Active Inference implementation
+3. **T-maze Benchmark** - Standard epistemic behavior test
+4. **Multiple Backend Support** - Custom, ActiveInference.jl, and RxInfer.jl implementations
 
-| File | Lines | Status | Purpose |
-|------|-------|--------|---------|
-| `core.jl` | ~400 | Done | Types: AIFSettings, PolicySet, AIFModel, AIFAgent |
-| `inference.jl` | ~130 | Done | State inference with variational message passing |
-| `efe.jl` | ~220 | Done | Expected Free Energy calculation |
-| `policy.jl` | ~110 | Done | Policy inference and action selection |
-| `learning.jl` | ~200 | Done | Dirichlet parameter learning (A, B, D) |
-| `agent.jl` | ~150 | Done | Trial loop and environment interface |
-| `spider_model.jl` | ~265 | Done | Spider phobia application |
-| `tmaze.jl` | ~600 | Done | T-maze benchmark |
-| `ActiveInferenceCore.jl` | ~70 | Done | Module file |
+---
 
-## Bug Fixed
+## Installation
 
-**Infinite recursion in `PolicySet` constructor** - The convenience constructor for `Vector{<:Real}` was matching `Float64` and recursing infinitely. Fixed by restricting to `Vector{<:Integer}`.
+### Installing Julia
 
-## Current Issue: State Info Gain Not Working
+**Recommended: Using juliaup**
+```bash
+# Linux/macOS
+curl -fsSL https://install.julialang.org | sh
 
-### Symptom
-In T-maze, the agent should check the cue first (epistemic action) before going to an arm. Instead, it goes directly to an arm 100% of the time.
+# Or using wget
+wget -qO- https://install.julialang.org | sh
 
-### Diagnosis
-EFE breakdown for T-maze policies:
+# Windows (PowerShell)
+winget install julia -s msstore
+```
 
+**Alternative: Direct download**
+```bash
+# Download from official website
+# https://julialang.org/downloads/
+
+# Linux x64 (example for v1.10.7)
+wget https://julialang-s3.julialang.org/bin/linux/x64/1.10/julia-1.10.7-linux-x86_64.tar.gz
+tar -xzf julia-1.10.7-linux-x86_64.tar.gz
+sudo ln -sf $(pwd)/julia-1.10.7/bin/julia /usr/local/bin/julia
+```
+
+**Via Python (alternative)**
+```bash
+pip install juliacall
+# Julia will be installed automatically on first use
+```
+
+**Network-restricted environments**: If external downloads are blocked, Julia must be pre-installed or provided as a pre-built binary.
+
+### Project Setup
+
+```bash
+cd ifs-active-inference
+julia --project=. -e 'using Pkg; Pkg.instantiate()'
+```
+
+This installs dependencies from `Project.toml`:
+- `ActiveInference.jl` - Julia Active Inference library
+- `RxInfer.jl` - Reactive message passing for probabilistic programming
+- `Plots.jl` - Visualization
+
+---
+
+## Quick Start
+
+### Run Spider Therapy Simulation
+```bash
+julia --project=. run.jl --trials=200 --exposure
+```
+
+### Run T-maze Benchmark
+```bash
+julia --project=. -e '
+include("src/active_inference/ActiveInferenceCore.jl")
+using .ActiveInferenceCore
+results = run_tmaze_test(n_trials=10, verbose=true)
+println("Cue check rate: $(results.cue_check_rate * 100)%")
+'
+```
+
+### Run Implementation Comparison
+```bash
+julia --project=. compare_implementations.jl
+```
+
+---
+
+## Current State
+
+### What Works
+
+| Component | Status | Notes |
+|-----------|--------|-------|
+| Spider model construction | Working | 3 state factors, 4 observation modalities |
+| Custom Active Inference | Working | Gradual learning (+5% P(safe)) |
+| ActiveInference.jl wrapper | Working | pA learning, sharp initial update |
+| RxInfer.jl implementation | Working | Symmetric learning (+/-19%) |
+| T-maze environment | Working | Environment runs correctly |
+| Plotting utilities | Working | Generates comparison plots |
+
+### Known Issue: State Information Gain in T-maze
+
+**Symptom**: Agent goes directly to arms instead of checking cue first (0% cue-check rate).
+
+**Root cause**: State information gain is identical (1.386) for all policies. The calculation doesn't properly distinguish between:
+- Cue location: observation resolves which arm has reward (HIGH info gain)
+- Arm locations: observation only confirms if choice was correct (LOW info gain)
+
+**EFE breakdown**:
 ```
 Policy 1 (go_cue -> go_left):   ambig=0, risk=-2.0, info=1.386 => G=-3.386
 Policy 2 (go_cue -> go_right):  ambig=0, risk=-2.0, info=1.386 => G=-3.386
@@ -37,65 +113,107 @@ Policy 3 (go_left -> stay):     ambig=0, risk=-4.0, info=1.386 => G=-5.386
 Policy 4 (go_right -> stay):    ambig=0, risk=-4.0, info=1.386 => G=-5.386
 ```
 
-**Problem**: State info gain is **identical (1.386) for all policies**, but it should be HIGHER for cue-checking policies because observing the cue resolves uncertainty about which arm has the reward.
+**Location in code**: `src/active_inference/efe.jl:197-234` (`compute_state_info_gain` function)
 
-### Root Cause Hypothesis
-The `compute_state_info_gain` function computes info gain based on the **current predicted observation distribution**, but doesn't account for how different policies lead to observations that are **more or less informative about hidden states**.
+**Required fix**: Make state info gain policy-aware:
+1. Predict state distribution: `q(s|pi,tau)`
+2. Predict observation distribution: `q(o|pi,tau) = Sum_s A(o|s) q(s|pi,tau)`
+3. For each observation, compute posterior: `q(s|o,pi,tau) ~ A(o|s) q(s|pi,tau)`
+4. Info gain = `E_q(o)[D_KL[q(s|o,pi,tau) || q(s|pi,tau)]]`
 
-In the T-maze:
-- At cue location: cue observation reveals reward location (HIGH info gain)
-- At arm: reward observation only confirms if you chose correctly (LOW info gain about hidden state)
+The issue is that the posterior isn't accounting for the **location-dependent informativeness** of observations.
 
-The current implementation computes the same info gain because it doesn't properly simulate the **counterfactual** - what you would observe under each policy and how informative those observations would be.
+---
 
-### Recommended Fix
-The state info gain calculation needs to be policy-aware. For each timestep in a policy:
-1. Predict the state distribution: `q(s|π,τ)`
-2. Predict the observation distribution: `q(o|π,τ) = Σ_s A(o|s) q(s|π,τ)`
-3. For each possible observation, compute the posterior: `q(s|o,π,τ) ∝ A(o|s) q(s|π,τ)`
-4. Info gain = `E_q(o)[D_KL[q(s|o,π,τ) || q(s|π,τ)]]`
+## Project Structure
 
-The issue is likely in step 3 - the posterior computation isn't properly accounting for the **information content** of the observation at different locations.
-
-## Quick Test Commands
-
-```bash
-# Load module and run T-maze
-~/.juliaup/bin/julia --project=. -e '
-include("src/active_inference/ActiveInferenceCore.jl")
-using .ActiveInferenceCore
-results = run_tmaze_test(n_trials=10, verbose=true)
-println("Cue check rate: $(results.cue_check_rate * 100)%")
-'
-
-# Run spider model
-~/.juliaup/bin/julia --project=. -e '
-include("src/active_inference/ActiveInferenceCore.jl")
-using .ActiveInferenceCore
-include("src/model.jl")
-p_safe = run_spider_aif_therapy(n_trials=20, spider_dangerous=false)
-println("Final P(safe): $(p_safe[end])")
-'
 ```
+ifs-active-inference/
+|-- Project.toml              # Julia dependencies
+|-- Manifest.toml             # Locked dependency versions
+|-- run.jl                    # Main entry point
+|-- compare_implementations.jl # Three-way comparison script
+|
+|-- src/
+|   |-- IFSActiveInference.jl # Main module
+|   |-- model.jl              # Spider model construction
+|   |-- simulation.jl         # Custom Active Inference engine
+|   |-- activeinference_impl.jl # ActiveInference.jl wrapper
+|   |-- rxinfer_impl.jl       # RxInfer.jl implementation
+|   |-- plotting.jl           # Visualization utilities
+|   |
+|   |-- active_inference/     # Generic Active Inference library
+|       |-- ActiveInferenceCore.jl # Module file (~70 lines)
+|       |-- core.jl           # Types: AIFSettings, PolicySet, AIFModel, AIFAgent (~400 lines)
+|       |-- inference.jl      # State inference with VMP (~130 lines)
+|       |-- efe.jl            # Expected Free Energy calculation (~220 lines)
+|       |-- policy.jl         # Policy inference and action selection (~110 lines)
+|       |-- learning.jl       # Dirichlet parameter learning (~200 lines)
+|       |-- agent.jl          # Trial loop and environment interface (~150 lines)
+|       |-- tmaze.jl          # T-maze benchmark (~600 lines)
+|       |-- spider_model.jl   # Spider phobia using generic library (~265 lines)
+|
+|-- test/
+|   |-- runtests.jl           # Main test runner
+|   |-- test_rxinfer.jl       # RxInfer-specific tests (169 tests)
+|
+|-- results/                  # Output from simulations
+|-- results_safe/             # Safe spider condition results
+|-- results_dangerous/        # Dangerous spider condition results
+```
+
+---
+
+## Implementation Comparison Results
+
+| Aspect | Custom | ActiveInference.jl | RxInfer.jl |
+|--------|--------|-------------------|------------|
+| Learning target | d (state prior) | pA (observation model) | d (flattened state) |
+| Safe spider learning | +5.4% | pA-based | +19.3% |
+| Dangerous spider learning | -6.7% | pA-based | -19.3% |
+| State representation | Factored (3) | Factored (3) | Flattened (24) |
+| Interpretation | "Is spider dangerous?" | "What outcomes to expect?" | "What is true state?" |
+
+---
+
+## Key Functions
+
+### Model Construction
+```julia
+build_model(; params=ModelParams())  # Spider model
+create_tmaze_model(; ...)            # T-maze model
+```
+
+### Agent/Simulation
+```julia
+init_agent(model; settings)          # Initialize agent
+run_trial(model, agent, true_state)  # Single trial
+run_exposure_therapy(model; n_trials)# Full simulation
+run_tmaze_test(n_trials; verbose)    # T-maze benchmark
+```
+
+### EFE Calculation
+```julia
+calculate_efe(agent, model, policy_idx, settings)
+compute_state_info_gain(A_g, qs, qo, Ns)  # <- Issue is here
+compute_ambiguity(A_g, qs, Ns)
+```
+
+---
 
 ## Next Steps
 
-1. **Debug state info gain** - The key function is `compute_state_info_gain` in `efe.jl`. It needs to properly compute the expected information gain about hidden states from observations at different locations.
+1. **Fix state info gain** - Make `compute_state_info_gain` in `efe.jl` location/policy-aware
+2. **Reference comparison** - Compare against pymdp or SPM implementation
+3. **Spider model P(safe) init** - Currently starts at 1.0 instead of 0.1
+4. **Documentation** - Add docstrings to all public functions
 
-2. **Reference implementation** - Compare against pymdp or SPM implementation of epistemic value / state info gain.
+---
 
-3. **Spider model P(safe) initialization** - Currently starts at 1.0 instead of expected 0.1. May need to use the Dirichlet priors from `model.jl` properly.
-
-## Architecture Notes
-
-- **Factored state space**: States are factored as `(s_1, ..., s_Nf)` with independent factors
-- **A matrices are tensors**: Shape `(No[g], Ns[1], ..., Ns[Nf])` for factored states
-- **Mean-field approximation**: `q(s) = ∏_f q(s_f)`
-- **Policies are explicit**: `V[t, π, f]` = action for timestep t, policy π, factor f
-- **EFE terms**: Ambiguity + Risk - State Info Gain (all toggleable via settings)
-
-## Key References
+## References
 
 - Friston et al. (2017) "Active Inference: A Process Theory"
 - Da Costa et al. (2020) "Active Inference on Discrete State-Spaces"
-- pymdp library: https://github.com/infer-actively/pymdp
+- [pymdp](https://github.com/infer-actively/pymdp) - Python implementation
+- [ActiveInference.jl](https://github.com/ilabcode/ActiveInference.jl) - Julia library
+- Original MATLAB code from Scientific Reports paper on computational psychiatry
