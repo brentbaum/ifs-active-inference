@@ -170,6 +170,7 @@ function build_rxinfer_matrices(; params::ModelParams = ModelParams())
 
     return (
         A = A_flat,
+        B = B_approach,  # Default B for tests expecting :B key
         B_approach = B_approach,
         B_avoid = B_avoid,
         D = D_flat,
@@ -295,8 +296,8 @@ function run_rxinfer_exposure_therapy(;
         copy(matrices.d)
     end
 
-    # Track evolution
-    d_evolution = Vector{Vector{Float64}}[]
+    # Track evolution (vector of d_prior per trial)
+    d_evolution = Vector{Float64}[]
     approach_count = 0
     avoid_count = 0
 
@@ -410,8 +411,8 @@ function run_rxinfer_exposure_therapy(;
             @debug "Inference error at trial $trial: $e"
         end
 
-        # Store current d_prior
-        push!(d_evolution, [copy(d_prior)])
+        # Store current d_prior (single vector per trial)
+        push!(d_evolution, copy(d_prior))
 
         if trial % 50 == 0
             @info "RxInfer Trial $trial/$n_trials: Approach=$approach_count"
