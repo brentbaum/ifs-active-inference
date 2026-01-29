@@ -14,7 +14,7 @@ using LinearAlgebra: dot
 """
     calculate_efe(agent, model, policy_idx, settings)
 
-Calculate Expected Free Energy for a policy.
+Calculate Expected Free Energy for a policy from current timestep onwards.
 
 # Arguments
 - `agent`: AIFAgent with current beliefs
@@ -26,50 +26,78 @@ function calculate_efe(
     agent::AIFAgent{T},
     model::AIFModel{T,Nf},
     policy_idx::Int,
-    settings::AIFSettings
+    settings::AIFSettings;
+    sophisticated::Bool=true  # Use sophisticated inference by default
 ) where {T, Nf}
 
     policy = view(model.policies.V, :, policy_idx, :)  # (horizon, n_factors)
 
-    # Forward simulate beliefs under this policy
-    qs_pred = forward_simulate(agent, model, policy)
-
     # Get current A (possibly learned)
     A = get_A_from_pA(agent.pA)
+    B = get_B_from_pB(agent.pB)
 
-    # Compute EFE terms
+    # Calculate remaining horizon starting from current timestep
+    # At t=1, we evaluate actions at τ=1,2,...,horizon
+    # At t=2, we evaluate actions at τ=2,...,horizon
+    start_τ = agent.t
+
+    if sophisticated
+        # Use counterfactual EFE: average over possible observation sequences
+        return calculate_efe_counterfactual(agent, model, policy, A, B, settings, start_τ)
+    else
+        # Simple EFE without accounting for belief updates from observations
+        return calculate_efe_simple(agent, model, policy, A, settings, start_τ)
+    end
+end
+
+"""
+    calculate_efe_simple(agent, model, policy, A, settings, start_τ)
+
+Simple EFE calculation without sophisticated inference.
+Beliefs are only propagated through transitions, not updated by observations.
+Starts from policy timestep `start_τ` to handle mid-trial policy evaluation.
+"""
+function calculate_efe_simple(
+    agent::AIFAgent{T},
+    model::AIFModel{T,Nf},
+    policy::AbstractMatrix{Int},
+    A::Vector{<:Array},
+    settings::AIFSettings,
+    start_τ::Int
+) where {T, Nf}
+
+    horizon = size(policy, 1)
+
+    # Forward simulate from current beliefs for remaining timesteps
+    qs_pred = forward_simulate_from(agent, model, policy, start_τ)
+
     G = zero(T)
 
-    for τ in 1:model.policies.horizon
-        t_future = agent.t + τ
+    # Evaluate EFE from start_τ to horizon
+    for idx in 1:(horizon - start_τ + 1)
+        τ = start_τ + idx - 1
+        t_future = agent.t + idx  # Time in trial
+
         if t_future > model.T
             break
         end
 
-        qs_τ = qs_pred[τ]  # Predicted beliefs at future timestep
+        qs_τ = qs_pred[idx]
 
         for g in 1:model.Ng
-            # Compute predicted observation distribution
             qo_τ_g = compute_predicted_obs(A[g], qs_τ, model.Ns)
 
             if settings.use_ambiguity
-                # Ambiguity: E_q(s)[H[P(o|s)]]
-                ambiguity = compute_ambiguity(A[g], qs_τ, model.Ns)
-                G += ambiguity
+                G += compute_ambiguity(A[g], qs_τ, model.Ns)
             end
 
             if settings.use_utility
-                # Risk: E_q(o)[-C(o)]
-                # C[g][:, t_future] contains log preferences
                 C_τ = view(model.C[g], :, t_future)
-                risk = -dot(qo_τ_g, C_τ)
-                G += risk
+                G -= dot(qo_τ_g, C_τ)
             end
 
             if settings.use_states_info_gain
-                # State information gain: E_q(o)[D_KL[q(s|o) || q(s)]]
-                state_info_gain = compute_state_info_gain(A[g], qs_τ, qo_τ_g, model.Ns)
-                G -= state_info_gain  # Subtract because info gain is "good"
+                G -= compute_state_info_gain(A[g], qs_τ, qo_τ_g, model.Ns)
             end
         end
     end
@@ -78,16 +106,200 @@ function calculate_efe(
 end
 
 """
-    forward_simulate(agent, model, policy)
+    calculate_efe_counterfactual(agent, model, policy, A, B, settings, start_τ)
+
+Counterfactual EFE: For each timestep, branch over possible observations,
+update beliefs accordingly, and average the EFE over branches.
+
+This properly accounts for how observations at τ reduce uncertainty at τ+1.
+Starts from policy timestep `start_τ` to handle mid-trial policy evaluation.
+"""
+function calculate_efe_counterfactual(
+    agent::AIFAgent{T},
+    model::AIFModel{T,Nf},
+    policy::AbstractMatrix{Int},
+    A::Vector{<:Array},
+    B::Vector{<:Array},
+    settings::AIFSettings,
+    start_τ::Int
+) where {T, Nf}
+
+    horizon = size(policy, 1)
+
+    # Recursive computation: for each branch of observations, compute EFE
+    # Start with current beliefs
+    qs_current = [copy(agent.qs[agent.t][f]) for f in 1:Nf]
+
+    return efe_counterfactual_recursive(
+        qs_current, start_τ, horizon, policy, A, B, model, settings, agent.t, start_τ
+    )
+end
+
+"""
+Recursively compute counterfactual EFE by branching over observations.
+
+Parameters:
+- τ: Current policy timestep being evaluated
+- start_τ: Initial policy timestep (used to compute trial time offset)
+"""
+function efe_counterfactual_recursive(
+    qs::Vector{Vector{T}},
+    τ::Int,
+    horizon::Int,
+    policy::AbstractMatrix{Int},
+    A::Vector{<:Array},
+    B::Vector{<:Array},
+    model::AIFModel{T,Nf},
+    settings::AIFSettings,
+    current_t::Int,
+    start_τ::Int
+) where {T, Nf}
+
+    if τ > horizon
+        return zero(T)
+    end
+
+    # Compute trial time: each step from start_τ advances time by 1
+    steps_taken = τ - start_τ + 1
+    t_future = current_t + steps_taken
+    if t_future > model.T
+        return zero(T)
+    end
+
+    # Apply transition to get beliefs at this timestep
+    qs_τ = Vector{Vector{T}}(undef, Nf)
+    for f in 1:Nf
+        action = clamp(policy[τ, f], 1, model.Na[f])
+        qs_τ[f] = B[f][:, :, action] * qs[f]
+    end
+
+    # Compute EFE terms for this timestep
+    G_τ = zero(T)
+
+    for g in 1:model.Ng
+        qo_g = compute_predicted_obs(A[g], qs_τ, model.Ns)
+
+        if settings.use_ambiguity
+            G_τ += compute_ambiguity(A[g], qs_τ, model.Ns)
+        end
+
+        if settings.use_utility
+            C_τ = view(model.C[g], :, t_future)
+            G_τ -= dot(qo_g, C_τ)
+        end
+
+        if settings.use_states_info_gain
+            G_τ -= compute_state_info_gain(A[g], qs_τ, qo_g, model.Ns)
+        end
+    end
+
+    # For subsequent timesteps, branch over observations and average
+    if τ < horizon
+        # Compute joint observation distribution (simplified: just use first informative modality)
+        # Full version would branch over all modality combinations
+
+        # Find the modality with highest entropy (most informative to branch on)
+        best_g = 1
+        best_entropy = -Inf
+        for g in 1:model.Ng
+            qo_g = compute_predicted_obs(A[g], qs_τ, model.Ns)
+            H = -sum(p * log(p + eps(T)) for p in qo_g if p > eps(T))
+            if H > best_entropy
+                best_entropy = H
+                best_g = g
+            end
+        end
+
+        # Branch over observations for this modality
+        qo_branch = compute_predicted_obs(A[best_g], qs_τ, model.Ns)
+        G_future = zero(T)
+
+        for o in 1:length(qo_branch)
+            if qo_branch[o] < eps(T)
+                continue
+            end
+
+            # Compute posterior beliefs given this observation
+            qs_given_o = compute_posterior_given_obs(A[best_g], o, qs_τ, model.Ns)
+
+            # Recursively compute EFE for remaining timesteps
+            G_branch = efe_counterfactual_recursive(
+                qs_given_o, τ + 1, horizon, policy, A, B, model, settings, current_t, start_τ
+            )
+
+            G_future += qo_branch[o] * G_branch
+        end
+
+        G_τ += G_future
+    end
+
+    return G_τ
+end
+
+"""
+    forward_simulate_from(agent, model, policy, start_τ)
+
+Forward simulate beliefs under a policy starting from policy timestep start_τ.
+
+Returns vector of predicted beliefs: qs_pred[idx][f] for idx = 1:(horizon-start_τ+1)
+where qs_pred[1] corresponds to beliefs after applying action at start_τ.
+"""
+function forward_simulate_from(
+    agent::AIFAgent{T},
+    model::AIFModel{T,Nf},
+    policy::AbstractMatrix{Int},
+    start_τ::Int
+) where {T, Nf}
+
+    horizon = size(policy, 1)
+    n_steps = horizon - start_τ + 1
+
+    if n_steps <= 0
+        return Vector{Vector{Vector{T}}}()
+    end
+
+    # Get current B (possibly learned)
+    B = get_B_from_pB(agent.pB)
+
+    # Start from current beliefs
+    qs_current = [copy(agent.qs[agent.t][f]) for f in 1:Nf]
+
+    qs_pred = Vector{Vector{Vector{T}}}(undef, n_steps)
+
+    for idx in 1:n_steps
+        τ = start_τ + idx - 1
+        qs_next = Vector{Vector{T}}(undef, Nf)
+
+        for f in 1:Nf
+            action = policy[τ, f]
+            action = clamp(action, 1, model.Na[f])
+            B_f_a = B[f][:, :, action]
+            qs_next[f] = B_f_a * qs_current[f]
+        end
+
+        qs_pred[idx] = qs_next
+        qs_current = qs_next
+    end
+
+    return qs_pred
+end
+
+"""
+    forward_simulate(agent, model, policy; sophisticated=false)
 
 Forward simulate beliefs under a policy.
+
+If sophisticated=false (default): Simple transition-only propagation.
+If sophisticated=true: Accounts for expected belief updates from observations.
 
 Returns vector of predicted beliefs: qs_pred[τ][f] for τ = 1:horizon
 """
 function forward_simulate(
     agent::AIFAgent{T},
     model::AIFModel{T,Nf},
-    policy::AbstractMatrix{Int}
+    policy::AbstractMatrix{Int};
+    A::Union{Nothing, Vector{<:Array}}=nothing,
+    sophisticated::Bool=false
 ) where {T, Nf}
 
     horizon = size(policy, 1)
@@ -114,10 +326,69 @@ function forward_simulate(
         end
 
         qs_pred[τ] = qs_next
+
+        # If sophisticated, update beliefs by averaging over expected observations
+        if sophisticated && !isnothing(A)
+            qs_next = compute_expected_posterior(A, qs_next, model.Ns)
+        end
+
         qs_current = qs_next
     end
 
     return qs_pred
+end
+
+"""
+    compute_expected_posterior(A, qs, Ns)
+
+Compute expected posterior beliefs after averaging over all possible observations.
+
+For each modality g, for each possible observation o:
+1. Compute q(o|s) = A[g][o,s] weighted by q(s)
+2. Compute posterior q(s|o) using Bayes rule
+3. Weight by p(o) and average
+
+This gives the "expected updated beliefs" - accounting for the fact that
+observations will reduce uncertainty.
+"""
+function compute_expected_posterior(
+    A::Vector{<:Array{T}},
+    qs::Vector{Vector{T}},
+    Ns::NTuple{Nf, Int}
+) where {T, Nf}
+
+    # Start with current beliefs
+    qs_updated = [copy(q) for q in qs]
+
+    # Update beliefs based on expected observation from each modality
+    for (g, A_g) in enumerate(A)
+        # Compute predicted observation distribution
+        qo_g = compute_predicted_obs(A_g, qs_updated, Ns)
+
+        # Compute expected posterior for each factor
+        for f in 1:Nf
+            expected_post_f = zeros(T, Ns[f])
+
+            No_g = size(A_g, 1)
+            for o in 1:No_g
+                if qo_g[o] < eps(T)
+                    continue
+                end
+
+                # Compute posterior q(s_f|o)
+                qs_given_o = compute_posterior_given_obs(A_g, o, qs_updated, Ns)
+
+                # Weight by probability of this observation
+                expected_post_f .+= qo_g[o] .* qs_given_o[f]
+            end
+
+            # Normalize
+            expected_post_f ./= sum(expected_post_f) + eps(T)
+            qs_updated[f] = expected_post_f
+        end
+    end
+
+    return qs_updated
 end
 
 """

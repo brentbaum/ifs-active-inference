@@ -186,9 +186,11 @@ function build_tmaze_matrices(; T::Int=3, reward_preference::Float64=4.0)
     # C[2]: No preference over cue observations
     C2 = zeros(Float64, 3, T)
 
-    # C[3]: Prefer reward
+    # C[3]: Prefer reward ONLY at final timestep
+    # This is critical for epistemic behavior - if reward preference is at all timesteps,
+    # going to an arm early gives higher expected utility, defeating epistemic exploration
     C3 = zeros(Float64, 2, T)
-    C3[REWARD_GOT, :] .= reward_preference   # Prefer getting reward
+    C3[REWARD_GOT, T] = reward_preference    # Prefer getting reward at final timestep only
     C3[REWARD_NONE, :] .= 0.0                 # Neutral to no reward
 
     C = [C1, C2, C3]
