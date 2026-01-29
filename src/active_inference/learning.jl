@@ -40,21 +40,25 @@ function update_learning!(
 ) where {T, Nf}
 
     t = agent.t
-    eta = T(settings.eta)
+
+    # Use specific learning rates for each matrix type
+    eta_A = T(settings.eta_A)
+    eta_B = T(settings.eta_B)
+    eta_D = T(settings.eta_D)
 
     # Update pA for specified modalities
     if !isempty(learn_A)
-        update_pA!(agent, model, observation, eta, learn_A)
+        update_pA!(agent, model, observation, eta_A, learn_A)
     end
 
     # Update pB for specified factors (requires t > 1)
     if !isempty(learn_B) && t > 1
-        update_pB!(agent, model, eta, learn_B)
+        update_pB!(agent, model, eta_B, learn_B)
     end
 
     # Update pD for specified factors (only at t == 1)
     if !isempty(learn_D) && t == 1
-        update_pD!(agent, eta, learn_D)
+        update_pD!(agent, eta_D, learn_D)
     end
 
     return nothing

@@ -33,6 +33,7 @@ include("agent.jl")
 # Applications
 include("spider_model.jl")
 include("tmaze.jl")
+include("trust_game.jl")
 
 # Visualization
 include("visualization.jl")
@@ -67,6 +68,13 @@ export SpiderEnvironment, build_spider_aif_model, run_spider_aif_therapy
 
 # Export T-maze
 export TMazeEnvironment, build_tmaze_model, run_tmaze_test
+
+# Export Trust Game
+export AgentProfile, TrustGameEnvironment, TrustGameResults
+export healthy_profile, depressed_profile, anxious_profile, insecure_profile, all_profiles
+export build_trust_game_model, build_trust_game_A, build_trust_game_B, build_trust_game_C, build_trust_game_D
+export run_trust_game_simulation, run_trust_game_comparison
+export plot_trust_game_sharing, plot_trust_game_beliefs, plot_trust_game_summary
 
 # Export visualization
 export plot_spider_therapy, plot_spider_comparison

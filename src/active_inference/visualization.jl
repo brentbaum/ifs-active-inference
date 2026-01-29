@@ -8,6 +8,7 @@ Provides plotting functions for:
 """
 
 using Plots
+using Statistics: mean
 
 # =============================================================================
 # Spider Model Visualization
@@ -612,9 +613,4 @@ function plot_learning_curve(
     end
 
     return p
-end
-
-# Helper function
-function mean(x::AbstractVector)
-    return sum(x) / length(x)
 end

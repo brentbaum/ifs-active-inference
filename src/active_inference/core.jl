@@ -20,7 +20,10 @@ Configuration for active inference agent.
 struct AIFSettings{T<:Real}
     gamma::T                    # Policy precision (inverse temperature)
     alpha::T                    # Action precision
-    eta::T                      # Learning rate
+    eta::T                      # Global learning rate (backward compat)
+    eta_A::T                    # Learning rate for A matrix
+    eta_B::T                    # Learning rate for B matrix
+    eta_D::T                    # Learning rate for D matrix
     use_ambiguity::Bool         # Include ambiguity term in EFE
     use_utility::Bool           # Include utility/risk term in EFE
     use_states_info_gain::Bool  # Include state information gain (epistemic value)
@@ -36,7 +39,10 @@ Create AIFSettings with sensible defaults.
 # Keywords
 - `gamma=1.0`: Policy precision (inverse temperature)
 - `alpha=4.0`: Action precision
-- `eta=1.0`: Learning rate
+- `eta=1.0`: Global learning rate (used if eta_A/eta_B/eta_D not specified)
+- `eta_A=nothing`: Learning rate for A matrix (defaults to eta)
+- `eta_B=nothing`: Learning rate for B matrix (defaults to eta)
+- `eta_D=nothing`: Learning rate for D matrix (defaults to eta)
 - `use_ambiguity=true`: Include ambiguity term in EFE
 - `use_utility=true`: Include utility/risk term in EFE
 - `use_states_info_gain=true`: Include state information gain
@@ -47,15 +53,24 @@ function AIFSettings(;
     gamma::Real=1.0,
     alpha::Real=4.0,
     eta::Real=1.0,
+    eta_A::Union{Nothing,Real}=nothing,
+    eta_B::Union{Nothing,Real}=nothing,
+    eta_D::Union{Nothing,Real}=nothing,
     use_ambiguity::Bool=true,
     use_utility::Bool=true,
     use_states_info_gain::Bool=true,
     fpi_max_iter::Int=16,
     fpi_tol::Real=1e-6
 )
-    T = promote_type(typeof(gamma), typeof(alpha), typeof(eta), typeof(fpi_tol))
+    # Use specific learning rates if provided, else fall back to eta
+    lr_A = isnothing(eta_A) ? eta : eta_A
+    lr_B = isnothing(eta_B) ? eta : eta_B
+    lr_D = isnothing(eta_D) ? eta : eta_D
+
+    T = promote_type(typeof(gamma), typeof(alpha), typeof(eta),
+                     typeof(lr_A), typeof(lr_B), typeof(lr_D), typeof(fpi_tol))
     AIFSettings{T}(
-        T(gamma), T(alpha), T(eta),
+        T(gamma), T(alpha), T(eta), T(lr_A), T(lr_B), T(lr_D),
         use_ambiguity, use_utility, use_states_info_gain,
         fpi_max_iter, T(fpi_tol)
     )
