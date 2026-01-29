@@ -10,6 +10,7 @@ Generic Active Inference implementation supporting:
 module ActiveInferenceCore
 
 using LinearAlgebra
+using Plots
 
 # Core types and utilities
 include("core.jl")
@@ -32,6 +33,9 @@ include("agent.jl")
 # Applications
 include("spider_model.jl")
 include("tmaze.jl")
+
+# Visualization
+include("visualization.jl")
 
 # Export core types
 export AIFSettings, PolicySet, AIFModel, AIFAgent
@@ -63,5 +67,12 @@ export SpiderEnvironment, build_spider_aif_model, run_spider_aif_therapy
 
 # Export T-maze
 export TMazeEnvironment, build_tmaze_model, run_tmaze_test
+
+# Export visualization
+export plot_spider_therapy, plot_spider_comparison
+export plot_belief_evolution, plot_belief_heatmap
+export plot_tmaze_trial, plot_tmaze_policy_probs
+export plot_tmaze_summary, plot_tmaze_comparison_summary
+export plot_learning_curve
 
 end # module
