@@ -116,119 +116,306 @@ const N_CHOICE_ACTIONS = 2
 
 Specification for how an agent's generative model is biased.
 
-# Fields
+Matches the paper's parameterization with extensions for our implementation.
+
+# Fields - Observation Model (A matrix)
 - `name`: Profile identifier
-- `p_share_friendly`: P(partner shares | friendly context) for A matrix
-- `p_share_hostile`: P(partner shares | hostile context) for A matrix
-- `p_context_friendly`: Prior belief that context is friendly (D matrix)
-- `p_context_hostile`: Prior belief that context is hostile (D matrix)
-- `loss_aversion`: Scaling factor for negative outcomes in C matrix (>1 = loss averse)
-- `agency`: Belief that actions affect context (B matrix learning relevance)
+- `p_share_friendly`: P(social behavior | friendly context)
+- `p_share_hostile`: P(social behavior | hostile context)
+- `p_share_neutral`: P(social behavior | neutral context)
+
+# Fields - Prior Beliefs (D matrix)
+- `p_context_friendly`: Prior P(friendly)
+- `p_context_hostile`: Prior P(hostile)
+
+# Fields - Preferences (C matrix)
+- `reward_sensitivity`: Gain from positive outcomes (paper: p_r0, healthy=2.5)
+- `loss_aversion`: Pain from negative outcomes (paper: p_r1, healthy=-2.2)
+- `neutral_preference`: Value of neutral outcomes (paper: p_r2, healthy=1.0)
+
+# Fields - Transitions (B matrix)
+- `context_stability`: P(context stays same) - for dynamic context
+- `update_B`: Whether to learn transition model
+
+# Fields - Learning Rates
 - `eta_A`: Learning rate for observation model
 - `eta_B`: Learning rate for transition model
 - `eta_D`: Learning rate for prior beliefs
+
+# Fields - Policy Selection
+- `gamma`: Policy precision (inverse temperature)
 """
 struct AgentProfile
     name::String
+
     # A matrix biases (observation model)
     p_share_friendly::Float64   # P(social behavior | friendly)
     p_share_hostile::Float64    # P(social behavior | hostile)
+    p_share_neutral::Float64    # P(social behavior | neutral)
+
     # D matrix biases (prior beliefs)
     p_context_friendly::Float64 # Prior P(friendly)
     p_context_hostile::Float64  # Prior P(hostile)
-    # C matrix biases (preferences)
-    loss_aversion::Float64      # Weight on negative outcomes (>1 = loss averse)
-    # B matrix biases (agency)
-    agency::Float64             # Belief actions affect context (0-1)
+
+    # C matrix biases (preferences) - matches paper's p_r0, p_r1, p_r2
+    reward_sensitivity::Float64 # Gain from positive outcomes (paper: 2.5 healthy, 0.8 depressed)
+    loss_aversion::Float64      # Pain from negative outcomes (paper: -2.2)
+    neutral_preference::Float64 # Value of neutral outcomes (paper: 1.0)
+
+    # B matrix biases (context dynamics)
+    context_stability::Float64  # P(context stays same) - 1.0 = static, <1.0 = dynamic
+    update_B::Bool              # Whether to learn transition model
+
     # Learning rates
     eta_A::Float64
     eta_B::Float64
     eta_D::Float64
+
+    # Policy selection
+    gamma::Float64              # Policy precision
 end
 
-"""
-Default healthy agent profile with balanced priors.
-"""
-function healthy_profile()
+# Convenience constructor with backward compatibility
+function AgentProfile(
+    name::String,
+    p_share_friendly::Float64,
+    p_share_hostile::Float64,
+    p_context_friendly::Float64,
+    p_context_hostile::Float64,
+    loss_aversion::Float64,
+    agency::Float64,
+    eta_A::Float64,
+    eta_B::Float64,
+    eta_D::Float64
+)
+    # Convert old-style parameters to new format
     AgentProfile(
-        "healthy",
-        0.8,    # p_share_friendly: can distinguish friendly partners
-        0.2,    # p_share_hostile: can distinguish hostile partners
-        0.33,   # p_context_friendly: balanced prior
-        0.33,   # p_context_hostile: balanced prior
-        1.0,    # loss_aversion: neutral
-        0.5,    # agency: moderate
-        0.5,    # eta_A
-        0.5,    # eta_B
-        0.5     # eta_D
+        name,
+        p_share_friendly,
+        p_share_hostile,
+        0.5,                    # p_share_neutral
+        p_context_friendly,
+        p_context_hostile,
+        2.5,                    # reward_sensitivity (healthy default)
+        -2.2 * loss_aversion,   # loss_aversion (scaled)
+        1.0,                    # neutral_preference
+        1.0,                    # context_stability (static)
+        agency > 0.1,           # update_B
+        eta_A,
+        eta_B,
+        eta_D,
+        4.0                     # gamma (moderate)
+    )
+end
+
+# =============================================================================
+# Paper-Matching Profiles (from pymdp_depression library.py)
+# =============================================================================
+
+"""
+Paper-matching healthy agent (Player1_healthy).
+
+From paper:
+- p_share_friendly=0.9, p_share_hostile=0.15
+- pr_context_pos=0.6, pr_context_neg=0.35
+- p_r0=2.5, p_r1=-2.2, p_r2=1.0
+- gamma=16.0
+"""
+function healthy_profile_paper()
+    AgentProfile(
+        "healthy_paper",
+        0.9, 0.15, 0.5,         # A: p_share (friendly, hostile, neutral)
+        0.6, 0.35,              # D: p_context (friendly, hostile)
+        2.5, -2.2, 1.0,         # C: reward_sens, loss_aversion, neutral
+        0.9,                    # B: context_stability (dynamic)
+        true,                   # update_B
+        0.1, 3.0, 1.0,          # Learning rates (A, B, D)
+        16.0                    # gamma
     )
 end
 
 """
-Type 1 depressed agent: loss aversion + pessimism + low agency (fatalism).
+Paper-matching Type1 depressed agent.
 
 From paper: "reward-insensitive, fatalistic pessimists"
+- Reduced reward sensitivity (p_r0=0.8 vs 2.5)
+- Pessimistic prior (80% hostile)
+- updateB=False (fatalistic)
+"""
+function depressed_profile_paper()
+    AgentProfile(
+        "depressed_paper",
+        0.9, 0.15, 0.5,         # A: same observation model as healthy
+        0.15, 0.8,              # D: pessimistic (15% friendly, 80% hostile)
+        0.8, -2.2, 1.0,         # C: LOW reward sensitivity (key difference!)
+        0.9,                    # B: context_stability
+        false,                  # update_B = false (fatalistic)
+        0.1, 3.0, 1.0,          # Learning rates
+        16.0                    # gamma
+    )
+end
+
+"""
+Paper-matching Type2 depressed agent.
+
+More loss averse than Type1.
+"""
+function depressed2_profile_paper()
+    AgentProfile(
+        "depressed2_paper",
+        0.9, 0.15, 0.5,         # A: normal observation
+        0.1, 0.6,               # D: very pessimistic
+        2.5, -2.5, 1.5,         # C: higher loss aversion
+        0.9,                    # B: context_stability
+        true,                   # update_B
+        0.1, 1.0, 1.0,          # Learning rates (slower B learning)
+        16.0                    # gamma
+    )
+end
+
+"""
+Paper-matching social phobia Type1 agent.
+
+High loss aversion, uncertainty about social cues.
+"""
+function social_phobia_profile_paper()
+    AgentProfile(
+        "social_phobia_paper",
+        0.6, 0.15, 0.4,         # A: uncertain about friendly (0.6 vs 0.9)
+        0.4, 0.2,               # D: less pessimistic than depressed
+        2.5, -3.5, 1.0,         # C: HIGH loss aversion (-3.5)
+        0.9,                    # B: context_stability
+        false,                  # update_B = false
+        0.1, 3.0, 1.0,          # Learning rates
+        16.0                    # gamma
+    )
+end
+
+"""
+Paper-matching social phobia Type2 agent.
+
+More uncertainty, more pessimistic.
+"""
+function social_phobia2_profile_paper()
+    AgentProfile(
+        "social_phobia2_paper",
+        0.6, 0.4, 0.5,          # A: high uncertainty (0.6 vs 0.4)
+        0.2, 0.8,               # D: pessimistic
+        1.2, -2.2, 1.3,         # C: reduced reward sensitivity
+        0.9,                    # B: context_stability
+        true,                   # update_B
+        0.1, 1.0, 1.0,          # Learning rates
+        16.0                    # gamma
+    )
+end
+
+"""
+Paper-matching borderline personality agent.
+
+Extreme loss aversion, pessimistic.
+"""
+function borderline_profile_paper()
+    AgentProfile(
+        "borderline_paper",
+        0.9, 0.15, 0.5,         # A: normal observation
+        0.15, 0.8,              # D: pessimistic
+        1.0, -4.0, 1.2,         # C: EXTREME loss aversion (-4.0)
+        0.9,                    # B: context_stability
+        true,                   # update_B
+        0.1, 1.0, 1.0,          # Learning rates
+        16.0                    # gamma
+    )
+end
+
+# =============================================================================
+# Simplified Profiles (our original, more moderate versions)
+# =============================================================================
+
+"""
+Default healthy agent profile with balanced priors.
+
+Key: neutral_preference=0.0 ensures sharing is attractive when context is likely friendly.
+"""
+function healthy_profile()
+    AgentProfile(
+        "healthy",
+        0.8, 0.2, 0.5,          # A: p_share
+        0.33, 0.33,             # D: balanced prior
+        2.5, -2.2, 0.0,         # C: neutral=0 so sharing dominates when favorable
+        1.0,                    # B: static context
+        true,                   # update_B
+        0.5, 0.5, 0.5,          # Learning rates
+        4.0                     # gamma (lower for exploration)
+    )
+end
+
+"""
+Type 1 depressed agent: reward insensitivity + pessimism + fatalism.
 """
 function depressed_profile()
     AgentProfile(
         "depressed",
-        0.8,    # p_share_friendly: normal observation
-        0.2,    # p_share_hostile: normal observation
-        0.15,   # p_context_friendly: pessimistic prior
-        0.55,   # p_context_hostile: expects hostility (paper: ~70% but that's too extreme)
-        1.5,    # loss_aversion: losses hurt more (paper: 2.2x but that prevents all sharing)
-        0.3,    # agency: fatalistic (actions don't matter)
-        0.3,    # eta_A: slow learning
-        0.1,    # eta_B: very slow transition learning
-        0.3     # eta_D: slow prior updating
+        0.8, 0.2, 0.5,          # A: normal observation
+        0.15, 0.55,             # D: pessimistic
+        1.0, -3.0, 0.0,         # C: reduced reward sensitivity, higher loss aversion
+        1.0,                    # B: static context
+        false,                  # update_B = false (fatalistic)
+        0.3, 0.1, 0.3,          # Learning rates (slow)
+        4.0                     # gamma
     )
 end
 
 """
 Type 2 anxious agent: uncertainty + pessimism.
-
-From paper: "uncertain pessimists"
 """
 function anxious_profile()
     AgentProfile(
         "anxious",
-        0.55,   # p_share_friendly: uncertain - can't distinguish well
-        0.45,   # p_share_hostile: uncertain - can't distinguish well
-        0.25,   # p_context_friendly: somewhat pessimistic
-        0.45,   # p_context_hostile: expects hostility
-        1.2,    # loss_aversion: moderate
-        0.5,    # agency: normal
-        0.5,    # eta_A
-        0.5,    # eta_B
-        0.5     # eta_D
+        0.55, 0.45, 0.5,        # A: uncertain
+        0.25, 0.45,             # D: somewhat pessimistic
+        2.0, -2.5, 0.0,         # C: moderate
+        1.0,                    # B: static context
+        true,                   # update_B
+        0.5, 0.5, 0.5,          # Learning rates
+        4.0                     # gamma
     )
 end
 
 """
-Type 3 insecure attachment agent: pessimism + low learning.
-
-From paper: "slow-learning pessimists"
+Type 3 insecure attachment agent: pessimism + slow learning.
 """
 function insecure_profile()
     AgentProfile(
         "insecure",
-        0.8,    # p_share_friendly: normal observation
-        0.2,    # p_share_hostile: normal observation
-        0.2,    # p_context_friendly: pessimistic
-        0.5,    # p_context_hostile: expects hostility
-        1.1,    # loss_aversion: slight
-        0.5,    # agency: normal
-        0.2,    # eta_A: slow learning
-        0.2,    # eta_B: slow learning
-        0.15    # eta_D: very slow prior updating (resistant to change)
+        0.8, 0.2, 0.5,          # A: normal observation
+        0.2, 0.5,               # D: pessimistic
+        2.2, -2.4, 0.0,         # C: slight loss aversion
+        1.0,                    # B: static context
+        true,                   # update_B
+        0.2, 0.2, 0.15,         # Learning rates (very slow)
+        4.0                     # gamma
     )
 end
 
 """
-Get all standard agent profiles for comparison studies.
+Get all simplified profiles for comparison studies.
 """
 function all_profiles()
     [healthy_profile(), depressed_profile(), anxious_profile(), insecure_profile()]
+end
+
+"""
+Get all paper-matching profiles.
+"""
+function all_paper_profiles()
+    [
+        healthy_profile_paper(),
+        depressed_profile_paper(),
+        depressed2_profile_paper(),
+        social_phobia_profile_paper(),
+        social_phobia2_profile_paper(),
+        borderline_profile_paper()
+    ]
 end
 
 # =============================================================================
@@ -352,8 +539,9 @@ Modality 1 (Reward): Depends on context × choice
 - Keep → Neutral reward
 
 Modality 2 (Behavior): Depends on context
-- Friendly → Social behavior
-- Hostile → Antisocial behavior
+- Friendly → Social behavior (with probability p_share_friendly)
+- Hostile → Antisocial behavior (with probability 1-p_share_hostile)
+- Neutral → Mixed (with probability p_share_neutral)
 
 Modality 3 (Choice): Agent observes own choice
 """
@@ -370,17 +558,17 @@ function build_trust_game_A(profile::AgentProfile)
 
     # After sharing: depends on context
     # Friendly context → high reward (cooperation returned)
-    A1[REWARD_HIGH, CONTEXT_FRIENDLY, CHOICE_SHARE] = 0.9
-    A1[REWARD_NEUTRAL, CONTEXT_FRIENDLY, CHOICE_SHARE] = 0.1
+    A1[REWARD_HIGH, CONTEXT_FRIENDLY, CHOICE_SHARE] = profile.p_share_friendly
+    A1[REWARD_NEUTRAL, CONTEXT_FRIENDLY, CHOICE_SHARE] = 1.0 - profile.p_share_friendly
 
     # Hostile context → low reward (betrayed)
-    A1[REWARD_LOW, CONTEXT_HOSTILE, CHOICE_SHARE] = 0.9
-    A1[REWARD_NEUTRAL, CONTEXT_HOSTILE, CHOICE_SHARE] = 0.1
+    A1[REWARD_LOW, CONTEXT_HOSTILE, CHOICE_SHARE] = 1.0 - profile.p_share_hostile
+    A1[REWARD_NEUTRAL, CONTEXT_HOSTILE, CHOICE_SHARE] = profile.p_share_hostile
 
-    # Neutral context → mixed outcome
-    A1[REWARD_HIGH, CONTEXT_NEUTRAL, CHOICE_SHARE] = 0.4
-    A1[REWARD_LOW, CONTEXT_NEUTRAL, CHOICE_SHARE] = 0.4
-    A1[REWARD_NEUTRAL, CONTEXT_NEUTRAL, CHOICE_SHARE] = 0.2
+    # Neutral context → mixed outcome based on p_share_neutral
+    A1[REWARD_HIGH, CONTEXT_NEUTRAL, CHOICE_SHARE] = profile.p_share_neutral
+    A1[REWARD_LOW, CONTEXT_NEUTRAL, CHOICE_SHARE] = 1.0 - profile.p_share_neutral
+    A1[REWARD_NEUTRAL, CONTEXT_NEUTRAL, CHOICE_SHARE] = 0.0
 
     # Normalize
     A1 ./= sum(A1, dims=1)
@@ -398,8 +586,9 @@ function build_trust_game_A(profile::AgentProfile)
         A2[BEHAVIOR_SOCIAL, CONTEXT_HOSTILE, choice] = profile.p_share_hostile
         A2[BEHAVIOR_ANTISOCIAL, CONTEXT_HOSTILE, choice] = 1.0 - profile.p_share_hostile
 
-        # Neutral context → unknown
-        A2[BEHAVIOR_UNKNOWN, CONTEXT_NEUTRAL, choice] = 1.0
+        # Neutral context → based on p_share_neutral
+        A2[BEHAVIOR_SOCIAL, CONTEXT_NEUTRAL, choice] = profile.p_share_neutral
+        A2[BEHAVIOR_ANTISOCIAL, CONTEXT_NEUTRAL, choice] = 1.0 - profile.p_share_neutral
     end
 
     # At start, behavior is unknown
@@ -425,15 +614,46 @@ end
 
 Build transition matrices for trust game.
 
-Factor 1 (Context): Static - doesn't change (but agent may believe it does)
+Factor 1 (Context): Can be static or dynamic based on context_stability
+- context_stability = 1.0: Static (identity transitions)
+- context_stability < 1.0: Dynamic with probability of staying in same state
+
+Paper uses dynamic context transitions:
+- friendly → friendly: 0.9
+- friendly → hostile: 0.02
+- hostile → hostile: 0.6
+- etc.
+
 Factor 2 (Choice): Controllable - agent chooses share or keep
 """
 function build_trust_game_B(profile::AgentProfile)
     # B[1]: Context transitions (3 × 3 × 1)
-    # Context is static - identity transition
     B1 = zeros(N_CONTEXT_STATES, N_CONTEXT_STATES, N_CONTEXT_ACTIONS)
-    for s in 1:N_CONTEXT_STATES
-        B1[s, s, 1] = 1.0
+
+    if profile.context_stability >= 1.0
+        # Static context - identity transition
+        for s in 1:N_CONTEXT_STATES
+            B1[s, s, 1] = 1.0
+        end
+    else
+        # Dynamic context transitions (matching paper's gen_B())
+        p_stay = profile.context_stability
+        p_switch = (1.0 - p_stay) / 2.0
+
+        # Friendly context
+        B1[CONTEXT_FRIENDLY, CONTEXT_FRIENDLY, 1] = p_stay
+        B1[CONTEXT_HOSTILE, CONTEXT_FRIENDLY, 1] = p_switch * 0.2  # Less likely to become hostile
+        B1[CONTEXT_NEUTRAL, CONTEXT_FRIENDLY, 1] = 1.0 - B1[CONTEXT_FRIENDLY, CONTEXT_FRIENDLY, 1] - B1[CONTEXT_HOSTILE, CONTEXT_FRIENDLY, 1]
+
+        # Hostile context (paper: hostile→hostile = 0.6)
+        B1[CONTEXT_HOSTILE, CONTEXT_HOSTILE, 1] = p_stay * 0.7  # More sticky when hostile
+        B1[CONTEXT_FRIENDLY, CONTEXT_HOSTILE, 1] = p_switch
+        B1[CONTEXT_NEUTRAL, CONTEXT_HOSTILE, 1] = 1.0 - B1[CONTEXT_HOSTILE, CONTEXT_HOSTILE, 1] - B1[CONTEXT_FRIENDLY, CONTEXT_HOSTILE, 1]
+
+        # Neutral context
+        B1[CONTEXT_NEUTRAL, CONTEXT_NEUTRAL, 1] = p_stay * 0.5
+        B1[CONTEXT_FRIENDLY, CONTEXT_NEUTRAL, 1] = (1.0 - B1[CONTEXT_NEUTRAL, CONTEXT_NEUTRAL, 1]) / 2.0
+        B1[CONTEXT_HOSTILE, CONTEXT_NEUTRAL, 1] = (1.0 - B1[CONTEXT_NEUTRAL, CONTEXT_NEUTRAL, 1]) / 2.0
     end
 
     # B[2]: Choice transitions (3 × 3 × 2)
@@ -454,28 +674,26 @@ end
 
 Build preference matrices for trust game.
 
-Preferences are over observations at final timestep only.
-Loss aversion affects how negative outcomes are weighted.
+Uses paper's parameterization:
+- reward_sensitivity (p_r0): Gain from positive outcomes (healthy=2.5, depressed=0.8)
+- loss_aversion (p_r1): Pain from negative outcomes (healthy=-2.2, borderline=-4.0)
+- neutral_preference (p_r2): Value of neutral outcomes (healthy=1.0)
 
-Note: Values are scaled to be moderate - extreme values prevent exploration.
-The paper uses ~2.2 for loss aversion multiplier but we use log-preferences
-so values are scaled accordingly.
+Preferences are applied at the final timestep for planning.
 """
 function build_trust_game_C(profile::AgentProfile, T::Int)
-    # C[1]: Reward preferences (log-preferences, so smaller values)
+    # C[1]: Reward preferences using paper's parameterization
     C1 = zeros(N_REWARD_OBS, T)
-    # Only care about outcome at final timestep
-    # Base preference scaled to allow exploration
-    base_gain = 1.0
-    base_loss = -1.0 * profile.loss_aversion
-    C1[REWARD_HIGH, T] = base_gain
-    C1[REWARD_LOW, T] = base_loss
-    C1[REWARD_NEUTRAL, T] = 0.0
 
-    # C[2]: Behavior preferences (very slight)
+    # Apply preferences at final timestep (for EFE calculation)
+    C1[REWARD_HIGH, T] = profile.reward_sensitivity
+    C1[REWARD_LOW, T] = profile.loss_aversion  # Already negative in profile
+    C1[REWARD_NEUTRAL, T] = profile.neutral_preference
+
+    # C[2]: Behavior preferences (slight preference for social)
     C2 = zeros(N_BEHAVIOR_OBS, T)
-    C2[BEHAVIOR_SOCIAL, T] = 0.1
-    C2[BEHAVIOR_ANTISOCIAL, T] = -0.1
+    C2[BEHAVIOR_SOCIAL, T] = 0.5
+    C2[BEHAVIOR_ANTISOCIAL, T] = -0.5
     C2[BEHAVIOR_UNKNOWN, T] = 0.0
 
     # C[3]: No preference over choice observation
@@ -584,7 +802,8 @@ end
         profile::AgentProfile,
         partner_type::Symbol,
         n_trials::Int=100,
-        T::Int=2
+        T::Int=2,
+        verbose::Bool=false
     ) -> TrustGameResults
 
 Run a trust game simulation.
@@ -593,22 +812,26 @@ Run a trust game simulation.
 - `profile`: Agent profile specifying biases
 - `partner_type`: :friendly, :hostile, or :neutral
 - `n_trials`: Number of rounds to play
-- `T`: Timesteps per trial (default 2: decide then observe)
+- `T`: Timesteps per trial (planning horizon + 1). Default 2 means decide then observe.
+       Use T=3 for decide, observe intermediate, observe final. Paper uses variable T.
+- `verbose`: Print progress information
 """
 function run_trust_game_simulation(;
     profile::AgentProfile,
     partner_type::Symbol,
     n_trials::Int=100,
-    T::Int=2
+    T::Int=2,
+    verbose::Bool=false
 )
-    # Build model and settings
-    # Use moderate precision to allow exploration while still preferring better options
+    # Build model with specified planning horizon
     model = build_trust_game_model(profile; T=T)
+
+    # Use profile's gamma for policy precision
     settings = AIFSettings(
-        gamma=2.0,   # Moderate policy precision (lower = more exploration)
-        alpha=4.0,   # Moderate action precision
+        gamma=profile.gamma,
+        alpha=profile.gamma * 0.5,  # Action precision proportional to policy precision
         eta_A=profile.eta_A,
-        eta_B=profile.eta_B,
+        eta_B=profile.update_B ? profile.eta_B : 0.0,  # Disable B learning if update_B=false
         eta_D=profile.eta_D
     )
 
@@ -643,31 +866,45 @@ function run_trust_game_simulation(;
         belief_friendly[trial] = D_normalized[CONTEXT_FRIENDLY]
         belief_hostile[trial] = D_normalized[CONTEXT_HOSTILE]
 
-        # Timestep 1: Observe initial state, decide
-        agent.t = 1
-        obs = observe(env)
-        infer_states!(agent, model, obs, settings)
-        infer_policies!(agent, model, settings)
-        action = sample_action(agent, model; alpha=settings.alpha)
+        # Run through all timesteps
+        final_choice = CHOICE_START
+        final_reward = REWARD_NEUTRAL
 
-        # Record choice
-        choices[trial] = action[2]  # Factor 2 is choice
+        for t in 1:T
+            agent.t = t
+            obs = observe(env)
+            infer_states!(agent, model, obs, settings)
 
-        # Execute action
-        push!(agent.actions, copy(action))
-        step!(env, action)
+            if t < T
+                # Decision timestep
+                infer_policies!(agent, model, settings)
+                action = sample_action(agent, model; alpha=settings.alpha)
 
-        # Timestep 2: Observe outcome
-        agent.t = 2
-        obs = observe(env)
-        infer_states!(agent, model, obs, settings)
+                # Record first non-start choice as the decision
+                if action[2] != CHOICE_START
+                    final_choice = action[2]
+                end
 
-        # Record reward observation
-        rewards[trial] = obs[1]  # Modality 1 is reward
+                push!(agent.actions, copy(action))
+                step!(env, action)
+            else
+                # Final observation timestep
+                final_reward = obs[1]
+            end
+        end
 
-        # Learning: Update D (context beliefs) based on observations
-        # Use final beliefs for static hidden states
+        # Record results
+        choices[trial] = final_choice
+        rewards[trial] = final_reward
+
+        # Learning: Update D (context beliefs) based on final beliefs
         update_pD_final!(agent, settings.eta_D, [1])
+
+        if verbose && trial % 20 == 0
+            sharing_so_far = count(c -> c == CHOICE_SHARE, choices[1:trial]) / trial
+            println("Trial $trial: sharing rate = $(round(sharing_so_far * 100, digits=1))%, " *
+                    "P(friendly) = $(round(belief_friendly[trial] * 100, digits=1))%")
+        end
     end
 
     # Calculate sharing rate
