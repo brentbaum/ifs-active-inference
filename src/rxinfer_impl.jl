@@ -17,6 +17,10 @@ catch e
     false
 end
 
+# Action indices (must match model.jl action ordering)
+const ACTION_APPROACH = 1
+const ACTION_AVOID = 2
+
 """
     one_hot(idx::Int, n::Int)
 
@@ -79,7 +83,7 @@ function build_rxinfer_matrices(; params::ModelParams = ModelParams())
     # Total flattened state space size
     n_states_flat = prod(Ns)  # 6 * 2 * 2 = 24
 
-    # Build flattened transition matrix for action 1 (approach)
+    # Build flattened transition matrix for approach action
     B_approach = zeros(n_states_flat, n_states_flat)
     for s_flat in 1:n_states_flat
         s = unflatten_state(s_flat, Ns)
@@ -89,7 +93,7 @@ function build_rxinfer_matrices(; params::ModelParams = ModelParams())
             s_next = unflatten_state(s_next_flat, Ns)
             prob = 1.0
             for f in 1:length(Ns)
-                a = min(1, size(model.B[f], 3))  # Approach action
+                a = min(ACTION_APPROACH, size(model.B[f], 3))
                 prob *= model.B[f][s_next[f], s[f], a]
             end
             s_next_probs[s_next_flat] = prob
@@ -102,7 +106,7 @@ function build_rxinfer_matrices(; params::ModelParams = ModelParams())
         end
     end
 
-    # Build flattened transition matrix for action 2 (avoid)
+    # Build flattened transition matrix for avoid action
     B_avoid = zeros(n_states_flat, n_states_flat)
     for s_flat in 1:n_states_flat
         s = unflatten_state(s_flat, Ns)
@@ -111,7 +115,7 @@ function build_rxinfer_matrices(; params::ModelParams = ModelParams())
             s_next = unflatten_state(s_next_flat, Ns)
             prob = 1.0
             for f in 1:length(Ns)
-                a = min(2, size(model.B[f], 3))  # Avoid action
+                a = min(ACTION_AVOID, size(model.B[f], 3))
                 prob *= model.B[f][s_next[f], s[f], a]
             end
             s_next_probs[s_next_flat] = prob
@@ -235,8 +239,15 @@ Run single-timestep state inference using manual Bayesian update.
 function run_rxinfer_state_inference(; observation::Vector{Int}, params::ModelParams = ModelParams())
     matrices = build_rxinfer_matrices(params=params)
 
-    # Prior over state from d
-    prior = matrices.d ./ sum(matrices.d)
+    # Validate observation indices
+    for g in 1:length(matrices.No)
+        if observation[g] < 1 || observation[g] > matrices.No[g]
+            error("Observation[$g] = $(observation[g]) out of range [1, $(matrices.No[g])]")
+        end
+    end
+
+    # Prior over state from D (normalized initial state distribution)
+    prior = copy(matrices.D)
 
     # Likelihood for each modality
     lik = ones(matrices.n_states)
@@ -252,7 +263,7 @@ function run_rxinfer_state_inference(; observation::Vector{Int}, params::ModelPa
 
     return (
         qs = posterior,
-        D = matrices.d,
+        D = matrices.D,
         matrices = matrices
     )
 end
@@ -349,6 +360,14 @@ function run_rxinfer_exposure_therapy(;
         filtered_beliefs = Vector{Vector{Float64}}()
 
         for t in 1:params.T
+            # Validate observation indices
+            for g in 1:length(matrices.No)
+                obs_idx = observations[t][g]
+                if obs_idx < 1 || obs_idx > matrices.No[g]
+                    error("Observation at t=$t, modality $g: $obs_idx out of range [1, $(matrices.No[g])]")
+                end
+            end
+
             # Prediction step (for t > 1)
             if t == 1
                 predicted = prior
@@ -370,15 +389,17 @@ function run_rxinfer_exposure_therapy(;
             push!(filtered_beliefs, posterior)
         end
 
-        # Update d_prior using the final filtered belief
-        # This implements Dirichlet learning: add pseudo-counts based on posterior
-        final_belief = filtered_beliefs[end]
+        # Update d_prior using average belief across all timesteps
+        # This uses all available evidence from the trial, approximating the
+        # marginal distribution over states. While not a pure initial-state update,
+        # it provides better learning signal than using only t=1 evidence.
+        avg_belief = sum(filtered_beliefs) ./ length(filtered_beliefs)
 
         # Learning rate for Dirichlet update
         eta = 0.5
 
         # Update: add weighted pseudo-counts to concentration parameters
-        d_prior = d_prior .+ eta .* final_belief
+        d_prior = d_prior .+ eta .* avg_belief
 
         # Store current d_prior (single vector per trial)
         push!(d_evolution, copy(d_prior))

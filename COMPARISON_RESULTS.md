@@ -39,13 +39,14 @@ All three implementations successfully demonstrate exposure therapy learning dyn
 **Learning mechanism**: Manual Bayesian inference with Dirichlet updates on flattened state space
 
 **Results (200 trials):**
-- Safe spider: P(safe) 50.9% → 89.6% (+38.6%)
-- Dangerous spider: P(safe) 49.1% → 10.4% (-38.6%)
+- Safe spider: P(safe) 50.5% → 69.8% (+19.3%)
+- Dangerous spider: P(safe) 49.5% → 30.2% (-19.3%)
 
 **Characteristics:**
 - Uses flattened 24-state representation (behavior × spider × danger)
 - Forward filtering with Bayesian updates
-- Strong belief updating due to full state-space inference
+- Uses average belief across timesteps for learning signal
+- Symmetric learning rates demonstrate appropriate sensitivity to ground truth
 - Correctly differentiates safe vs dangerous conditions
 - Uses manual inference (RxInfer's @model macro has scoping issues in modules)
 
@@ -54,7 +55,7 @@ All three implementations successfully demonstrate exposure therapy learning dyn
 | Aspect | Custom | ActiveInference.jl | RxInfer.jl |
 |--------|--------|-------------------|------------|
 | Learning target | d (state prior) | pA (observation model) | d (flattened state) |
-| Learning dynamics | Gradual (+5%) | Sharp initial, then pA | Strong cumulative (+39%) |
+| Learning dynamics | Gradual (+5%) | Sharp initial, then pA | Moderate (+19%) |
 | What's learned | "Is spider dangerous?" | "What happens when I encounter danger?" | "What is the true state?" |
 | State representation | Factored (3 factors) | Factored (3 factors) | Flattened (24 states) |
 | Inference method | Custom variational | ActiveInference.jl VMP | Manual Bayesian filtering |
@@ -65,19 +66,19 @@ All three implementations successfully demonstrate exposure therapy learning dyn
 
 2. **ActiveInference.jl**: Models learning the consequences of danger through observation model updates. The P(safe) metric doesn't capture this type of learning well.
 
-3. **RxInfer.jl**: Shows the strongest belief updating because full Bayesian inference over the joint state space allows information to flow more freely. The symmetric belief shifts (+38.6% vs -38.6%) demonstrate appropriate sensitivity to the ground truth.
+3. **RxInfer.jl**: Shows moderate belief updating with symmetric learning. Uses average filtered belief across timesteps to accumulate evidence, providing a balanced approach between the conservative custom implementation and aggressive pure Bayesian updates.
 
 ## Conclusion
 
 All implementations capture meaningful aspects of exposure therapy learning:
 - **Custom**: Conservative belief updating about danger (closest to paper's intended behavior)
 - **ActiveInference.jl**: Perceptual learning about outcomes
-- **RxInfer.jl**: Strong Bayesian belief revision (demonstrates learning potential)
+- **RxInfer.jl**: Moderate Bayesian belief revision with symmetric learning
 
 The choice of implementation depends on the modeling goal:
 - For replicating the paper's P(safe) dynamics: Custom implementation
 - For sophisticated observation model learning: ActiveInference.jl
-- For maximum belief updating with full inference: RxInfer.jl
+- For balanced belief updating with full inference: RxInfer.jl
 
 ## Files
 
