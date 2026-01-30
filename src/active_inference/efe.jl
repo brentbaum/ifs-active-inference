@@ -1,19 +1,19 @@
 """
     efe.jl - Expected Free Energy calculation
 
-G(π) = Σ_τ [ambiguity(τ) + risk(τ) - state_info_gain(τ) - param_info_gain(τ)]
+We follow pymdp's convention where G is the *negative* expected free energy
+to be *maximized* (policies with higher G are more likely):
+
+G(π) = Σ_τ [expected_utility(τ) + state_info_gain(τ) + param_info_gain(τ) - ambiguity(τ)]
 
 Where:
-- ambiguity = E_{q(s|π,τ)}[H[P(o|s)]] - expected entropy of observations
-- risk = -E_{q(o|π,τ)}[log softmax(C(o,τ))] - negative expected log preference
-- state_info_gain = E_{q(o|π,τ)}[D_KL[q(s|o,π,τ) || q(s|π,τ)]] - epistemic value
+- expected_utility = E_{q(o|π,τ)}[log softmax(C(o,τ))] (negative log-preferences)
+- state_info_gain = E_{q(o|π,τ)}[D_KL[q(s|o,π,τ) || q(s|π,τ)]] (Bayesian surprise)
 - param_info_gain = expected KL between posterior and prior Dirichlet parameters
+- ambiguity = E_{q(s|π,τ)}[H[P(o|s)]] (expected entropy of observations)
 
-Lower G = preferred (we minimize EFE).
-
-Note: pymdp converts C to log-probabilities via softmax before computing risk.
-Since log_C is negative (log of probabilities), we compute risk as -E[log_C].
-This makes preferences relative rather than absolute.
+Note: pymdp converts C to log-probabilities via softmax before computing utility.
+Since log_C is negative (log of probabilities), utilities are relative.
 """
 
 using LinearAlgebra: dot
@@ -41,13 +41,9 @@ function get_log_C(C::Vector{<:Matrix{T}}) where T
     for g in 1:length(C)
         log_C[g] = similar(C[g])
         for t in 1:size(C[g], 2)
-            # Softmax then log (stable version)
             c_t = C[g][:, t]
-            c_max = maximum(c_t)
-            c_shifted = c_t .- c_max
-            exp_c = exp.(c_shifted)
-            softmax_c = exp_c ./ sum(exp_c)
-            log_C[g][:, t] = log.(softmax_c .+ eps(T))
+            c_prob = softmax(c_t)
+            log_C[g][:, t] = log.(c_prob .+ eps(T))
         end
     end
 
@@ -76,7 +72,7 @@ function calculate_efe(
     model::AIFModel{T,Nf},
     policy_idx::Int,
     settings::AIFSettings;
-    sophisticated::Bool=true  # Use sophisticated inference by default
+    sophisticated::Bool=false  # Match pymdp: no counterfactual observation branching
 ) where {T, Nf}
 
     policy = view(model.policies.V, :, policy_idx, :)  # (horizon, n_factors)
@@ -149,22 +145,19 @@ function calculate_efe_simple(
 
             if settings.use_utility
                 # pymdp formulation: utility = E[log(softmax(C))]
-                # log_C is negative (log of probabilities), closer to 0 for preferred outcomes
-                # We SUBTRACT because lower G = preferred, so higher utility should decrease G
-                # Subtracting a less negative number (good outcome) decreases G less
-                # Subtracting a more negative number (bad outcome) increases G more
                 log_C_τ = view(log_C[g], :, t_future)
-                G -= dot(qo_τ_g, log_C_τ)
+                G += dot(qo_τ_g, log_C_τ)
             end
 
             if settings.use_states_info_gain
-                G -= compute_state_info_gain(A[g], qs_τ, qo_τ_g, model.Ns)
+                G += compute_state_info_gain(A[g], qs_τ, qo_τ_g, model.Ns)
             end
         end
 
         if settings.use_param_info_gain
-            G -= compute_param_info_gain_A(agent, model, qs_τ, A, settings)
-            G -= compute_param_info_gain_B(agent, model, qs_prev, qs_τ, policy, τ, settings)
+            weight = settings.param_info_gain_weight
+            G += weight * compute_param_info_gain_A(agent, model, qs_τ, A, settings)
+            G += weight * compute_param_info_gain_B(agent, model, qs_prev, qs_τ, policy, τ, settings)
         end
     end
 
@@ -260,19 +253,19 @@ function efe_counterfactual_recursive(
 
         if settings.use_utility
             # pymdp formulation: utility = E[log(softmax(C))]
-            # We SUBTRACT because lower G = preferred, and log_C is negative
             log_C_τ = view(log_C[g], :, t_future)
-            G_τ -= dot(qo_g, log_C_τ)
+            G_τ += dot(qo_g, log_C_τ)
         end
 
         if settings.use_states_info_gain
-            G_τ -= compute_state_info_gain(A[g], qs_τ, qo_g, model.Ns)
+            G_τ += compute_state_info_gain(A[g], qs_τ, qo_g, model.Ns)
         end
     end
 
     if settings.use_param_info_gain
-        G_τ -= compute_param_info_gain_A_from_pA(pA, model, qs_τ, A, settings)
-        G_τ -= compute_param_info_gain_B_from_pB(pB, model, qs, qs_τ, policy, τ, settings)
+        weight = settings.param_info_gain_weight
+        G_τ += weight * compute_param_info_gain_A_from_pA(pA, model, qs_τ, A, settings)
+        G_τ += weight * compute_param_info_gain_B_from_pB(pB, model, qs, qs_τ, policy, τ, settings)
     end
 
     # For subsequent timesteps, branch over observations and average
@@ -543,10 +536,9 @@ end
 """
     compute_state_info_gain(A_g, qs, qo, Ns)
 
-Compute state information gain: E_{q(o)}[D_KL[q(s|o) || q(s)]]
+Compute expected information gain about hidden states.
 
-This is the expected KL divergence between posterior (after observing o) and prior beliefs.
-Measures how much observing o would reduce uncertainty about s.
+This returns E_{q(o|π)}[ KL(q(s|o,π) || q(s|π)) ], i.e. expected reduction in state uncertainty.
 """
 function compute_state_info_gain(
     A_g::Array{T},
@@ -555,32 +547,23 @@ function compute_state_info_gain(
     Ns::NTuple{Nf, Int}
 ) where {T, Nf}
 
-    No_g = length(qo)
     info_gain = zero(T)
+    No = size(A_g, 1)
 
-    # For each possible observation
-    for o in 1:No_g
+    for o in 1:No
         if qo[o] < eps(T)
             continue
         end
-
-        # Compute posterior q(s|o) for each factor
-        # Using Bayes: q(s_f|o) ∝ P(o|s_f) q(s_f)
-        # where P(o|s_f) = E_{q(s_{-f})}[A_g[o, s]]
         qs_given_o = compute_posterior_given_obs(A_g, o, qs, Ns)
-
-        # KL divergence: D_KL[q(s|o) || q(s)] = Σ_f D_KL[q(s_f|o) || q(s_f)]
         kl = zero(T)
-        for f in 1:length(qs)
-            for s_f in 1:Ns[f]
-                p_post = qs_given_o[f][s_f]
-                p_prior = qs[f][s_f]
-                if p_post > eps(T)
-                    kl += p_post * (log(p_post + eps(T)) - log(p_prior + eps(T)))
+        for f in 1:Nf
+            for s in 1:Ns[f]
+                p = qs_given_o[f][s]
+                if p > eps(T)
+                    kl += p * log(p / (qs[f][s] + eps(T)))
                 end
             end
         end
-
         info_gain += qo[o] * kl
     end
 
@@ -637,26 +620,13 @@ end
 # Parameter Information Gain (pymdp-style wnorm)
 # ==============================================================================
 
-function digamma_approx(x::Real)
-    # Use recurrence to shift to large x
-    y = x
-    result = 0.0
-    while y < 6.0
-        result -= 1.0 / y
-        y += 1.0
-    end
-
-    inv = 1.0 / y
-    inv2 = inv * inv
-    # Asymptotic expansion
-    result + log(y) - 0.5 * inv - inv2 * (1 / 12 - inv2 * (1 / 120 - inv2 * (1 / 252)))
-end
-
+# Match pymdp's spm_wnorm approximation:
+# wA = 1/sum(A) - 1/A (with epsilon)
 function wnorm(A::Array{T}) where {T}
-    sum_A = sum(A, dims=1)
-    digamma_A = digamma_approx.(A)
-    digamma_sum = digamma_approx.(sum_A)
-    return digamma_A .- digamma_sum
+    A_eps = A .+ eps(T)
+    norm = one(T) ./ sum(A_eps, dims=1)
+    avg = one(T) ./ A_eps
+    return norm .- avg
 end
 
 function compute_param_info_gain_A(
@@ -686,7 +656,7 @@ function compute_param_info_gain_A_from_pA(
             continue
         end
 
-        wA = wnorm(pA[g]) .* (pA[g] .> 0)
+        wA = wnorm(pA[g])
         qo = compute_predicted_obs(A[g], qs, model.Ns)
         wA_qs = compute_predicted_obs(wA, qs, model.Ns)
         ig -= dot(qo, wA_qs)
@@ -726,7 +696,7 @@ function compute_param_info_gain_B_from_pB(
             continue
         end
         a_f = clamp(policy[τ, f], 1, model.Na[f])
-        wB = wnorm(pB[f][:, :, a_f]) .* (pB[f][:, :, a_f] .> 0)
+        wB = wnorm(pB[f][:, :, a_f])
         ig -= dot(qs_curr[f], wB * qs_prev[f])
     end
 
