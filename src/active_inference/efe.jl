@@ -1,15 +1,64 @@
 """
     efe.jl - Expected Free Energy calculation
 
-G(π) = Σ_τ [ambiguity(τ) + risk(τ) - state_info_gain(τ)]
+G(π) = Σ_τ [ambiguity(τ) + risk(τ) - state_info_gain(τ) - param_info_gain(τ)]
 
 Where:
-- ambiguity = E_{q(s|π,τ)}[H[P(o|s)]]
-- risk = E_{q(o|π,τ)}[-C(o,τ)]
-- state_info_gain = E_{q(o|π,τ)}[D_KL[q(s|o,π,τ) || q(s|π,τ)]]
+- ambiguity = E_{q(s|π,τ)}[H[P(o|s)]] - expected entropy of observations
+- risk = -E_{q(o|π,τ)}[log softmax(C(o,τ))] - negative expected log preference
+- state_info_gain = E_{q(o|π,τ)}[D_KL[q(s|o,π,τ) || q(s|π,τ)]] - epistemic value
+- param_info_gain = expected KL between posterior and prior Dirichlet parameters
+
+Lower G = preferred (we minimize EFE).
+
+Note: pymdp converts C to log-probabilities via softmax before computing risk.
+Since log_C is negative (log of probabilities), we compute risk as -E[log_C].
+This makes preferences relative rather than absolute.
 """
 
 using LinearAlgebra: dot
+
+# Cache for softmax-transformed C matrices to avoid recomputation
+const C_LOG_CACHE = Dict{UInt64, Vector{Matrix{Float64}}}()
+
+"""
+    get_log_C(C::Vector{<:Matrix})
+
+Get log(softmax(C)) for utility computation.
+Matches pymdp's calc_expected_utility which does:
+  C_prob = softmax(C)
+  lnC = log(C_prob)
+  utility = sum(qo .* lnC)
+"""
+function get_log_C(C::Vector{<:Matrix{T}}) where T
+    # Check cache
+    key = hash(C)
+    if haskey(C_LOG_CACHE, key)
+        return C_LOG_CACHE[key]
+    end
+
+    log_C = Vector{Matrix{T}}(undef, length(C))
+    for g in 1:length(C)
+        log_C[g] = similar(C[g])
+        for t in 1:size(C[g], 2)
+            # Softmax then log (stable version)
+            c_t = C[g][:, t]
+            c_max = maximum(c_t)
+            c_shifted = c_t .- c_max
+            exp_c = exp.(c_shifted)
+            softmax_c = exp_c ./ sum(exp_c)
+            log_C[g][:, t] = log.(softmax_c .+ eps(T))
+        end
+    end
+
+    # Cache result (limit cache size)
+    if length(C_LOG_CACHE) > 100
+        empty!(C_LOG_CACHE)
+    end
+    C_LOG_CACHE[key] = log_C
+
+    return log_C
+end
 
 """
     calculate_efe(agent, model, policy_idx, settings)
@@ -36,6 +85,9 @@ function calculate_efe(
     A = get_A_from_pA(agent.pA)
     B = get_B_from_pB(agent.pB)
 
+    # Get log(softmax(C)) for utility computation (pymdp formulation)
+    log_C = get_log_C(model.C)
+
     # Calculate remaining horizon starting from current timestep
     # At t=1, we evaluate actions at τ=1,2,...,horizon
     # At t=2, we evaluate actions at τ=2,...,horizon
@@ -43,25 +95,28 @@ function calculate_efe(
 
     if sophisticated
         # Use counterfactual EFE: average over possible observation sequences
-        return calculate_efe_counterfactual(agent, model, policy, A, B, settings, start_τ)
+        return calculate_efe_counterfactual(agent, model, policy, A, B, log_C, settings, start_τ)
     else
         # Simple EFE without accounting for belief updates from observations
-        return calculate_efe_simple(agent, model, policy, A, settings, start_τ)
+        return calculate_efe_simple(agent, model, policy, A, log_C, settings, start_τ)
     end
 end
 
 """
-    calculate_efe_simple(agent, model, policy, A, settings, start_τ)
+    calculate_efe_simple(agent, model, policy, A, log_C, settings, start_τ)
 
 Simple EFE calculation without sophisticated inference.
 Beliefs are only propagated through transitions, not updated by observations.
 Starts from policy timestep `start_τ` to handle mid-trial policy evaluation.
+
+Uses pymdp formulation where utility = E[log(softmax(C))].
 """
 function calculate_efe_simple(
     agent::AIFAgent{T},
     model::AIFModel{T,Nf},
     policy::AbstractMatrix{Int},
     A::Vector{<:Array},
+    log_C::Vector{<:Matrix},
     settings::AIFSettings,
     start_τ::Int
 ) where {T, Nf}
@@ -83,6 +138,7 @@ function calculate_efe_simple(
         end
 
         qs_τ = qs_pred[idx]
+        qs_prev = idx == 1 ? agent.qs[agent.t] : qs_pred[idx - 1]
 
         for g in 1:model.Ng
             qo_τ_g = compute_predicted_obs(A[g], qs_τ, model.Ns)
@@ -92,13 +148,23 @@ function calculate_efe_simple(
             end
 
             if settings.use_utility
-                C_τ = view(model.C[g], :, t_future)
-                G -= dot(qo_τ_g, C_τ)
+                # pymdp formulation: utility = E[log(softmax(C))]
+                # log_C is negative (log of probabilities), closer to 0 for preferred outcomes
+                # We SUBTRACT because lower G = preferred, so higher utility should decrease G
+                # Subtracting a less negative number (good outcome) decreases G less
+                # Subtracting a more negative number (bad outcome) increases G more
+                log_C_τ = view(log_C[g], :, t_future)
+                G -= dot(qo_τ_g, log_C_τ)
             end
 
             if settings.use_states_info_gain
                 G -= compute_state_info_gain(A[g], qs_τ, qo_τ_g, model.Ns)
             end
+        end
+
+        if settings.use_param_info_gain
+            G -= compute_param_info_gain_A(agent, model, qs_τ, A, settings)
+            G -= compute_param_info_gain_B(agent, model, qs_prev, qs_τ, policy, τ, settings)
         end
     end
 
@@ -106,13 +172,15 @@ function calculate_efe_simple(
 end
 
 """
-    calculate_efe_counterfactual(agent, model, policy, A, B, settings, start_τ)
+    calculate_efe_counterfactual(agent, model, policy, A, B, log_C, settings, start_τ)
 
 Counterfactual EFE: For each timestep, branch over possible observations,
 update beliefs accordingly, and average the EFE over branches.
 
 This properly accounts for how observations at τ reduce uncertainty at τ+1.
 Starts from policy timestep `start_τ` to handle mid-trial policy evaluation.
+
+Uses pymdp formulation where utility = E[log(softmax(C))].
 """
 function calculate_efe_counterfactual(
     agent::AIFAgent{T},
@@ -120,6 +188,7 @@ function calculate_efe_counterfactual(
     policy::AbstractMatrix{Int},
     A::Vector{<:Array},
     B::Vector{<:Array},
+    log_C::Vector{<:Matrix},
     settings::AIFSettings,
     start_τ::Int
 ) where {T, Nf}
@@ -131,7 +200,8 @@ function calculate_efe_counterfactual(
     qs_current = [copy(agent.qs[agent.t][f]) for f in 1:Nf]
 
     return efe_counterfactual_recursive(
-        qs_current, start_τ, horizon, policy, A, B, model, settings, agent.t, start_τ
+        qs_current, start_τ, horizon, policy, A, B, log_C, model, settings, agent.t, start_τ,
+        agent.pA, agent.pB
     )
 end
 
@@ -141,6 +211,8 @@ Recursively compute counterfactual EFE by branching over observations.
 Parameters:
 - τ: Current policy timestep being evaluated
 - start_τ: Initial policy timestep (used to compute trial time offset)
+
+Uses pymdp formulation where utility = E[log(softmax(C))].
 """
 function efe_counterfactual_recursive(
     qs::Vector{Vector{T}},
@@ -149,10 +221,13 @@ function efe_counterfactual_recursive(
     policy::AbstractMatrix{Int},
     A::Vector{<:Array},
     B::Vector{<:Array},
+    log_C::Vector{<:Matrix},
     model::AIFModel{T,Nf},
     settings::AIFSettings,
     current_t::Int,
-    start_τ::Int
+    start_τ::Int,
+    pA::Vector{<:Array},
+    pB::Vector{<:Array}
 ) where {T, Nf}
 
     if τ > horizon
@@ -184,13 +259,20 @@ function efe_counterfactual_recursive(
         end
 
         if settings.use_utility
-            C_τ = view(model.C[g], :, t_future)
-            G_τ -= dot(qo_g, C_τ)
+            # pymdp formulation: utility = E[log(softmax(C))]
+            # We SUBTRACT because lower G = preferred, and log_C is negative
+            log_C_τ = view(log_C[g], :, t_future)
+            G_τ -= dot(qo_g, log_C_τ)
         end
 
         if settings.use_states_info_gain
             G_τ -= compute_state_info_gain(A[g], qs_τ, qo_g, model.Ns)
         end
+    end
+
+    if settings.use_param_info_gain
+        G_τ -= compute_param_info_gain_A_from_pA(pA, model, qs_τ, A, settings)
+        G_τ -= compute_param_info_gain_B_from_pB(pB, model, qs, qs_τ, policy, τ, settings)
     end
 
     # For subsequent timesteps, branch over observations and average
@@ -224,7 +306,8 @@ function efe_counterfactual_recursive(
 
             # Recursively compute EFE for remaining timesteps
             G_branch = efe_counterfactual_recursive(
-                qs_given_o, τ + 1, horizon, policy, A, B, model, settings, current_t, start_τ
+                qs_given_o, τ + 1, horizon, policy, A, B, log_C, model, settings, current_t, start_τ,
+                pA, pB
             )
 
             G_future += qo_branch[o] * G_branch
@@ -548,4 +631,104 @@ function compute_posterior_given_obs(
     end
 
     return qs_given_o
+end
+
+# ==============================================================================
+# Parameter Information Gain (pymdp-style wnorm)
+# ==============================================================================
+
+function digamma_approx(x::Real)
+    # Use recurrence to shift to large x
+    y = x
+    result = 0.0
+    while y < 6.0
+        result -= 1.0 / y
+        y += 1.0
+    end
+
+    inv = 1.0 / y
+    inv2 = inv * inv
+    # Asymptotic expansion
+    result + log(y) - 0.5 * inv - inv2 * (1 / 12 - inv2 * (1 / 120 - inv2 * (1 / 252)))
+end
+
+function wnorm(A::Array{T}) where {T}
+    sum_A = sum(A, dims=1)
+    digamma_A = digamma_approx.(A)
+    digamma_sum = digamma_approx.(sum_A)
+    return digamma_A .- digamma_sum
+end
+
+function compute_param_info_gain_A(
+    agent::AIFAgent{T},
+    model::AIFModel{T,Nf},
+    qs::Vector{Vector{T}},
+    A::Vector{<:Array},
+    settings::AIFSettings
+) where {T, Nf}
+    return compute_param_info_gain_A_from_pA(agent.pA, model, qs, A, settings)
+end
+
+function compute_param_info_gain_A_from_pA(
+    pA::Vector{<:Array},
+    model::AIFModel{T,Nf},
+    qs::Vector{Vector{T}},
+    A::Vector{<:Array},
+    settings::AIFSettings
+) where {T, Nf}
+    ig = zero(T)
+    if isempty(settings.learn_A)
+        return ig
+    end
+
+    for g in settings.learn_A
+        if g < 1 || g > model.Ng
+            continue
+        end
+
+        wA = wnorm(pA[g]) .* (pA[g] .> 0)
+        qo = compute_predicted_obs(A[g], qs, model.Ns)
+        wA_qs = compute_predicted_obs(wA, qs, model.Ns)
+        ig -= dot(qo, wA_qs)
+    end
+
+    return ig
+end
+
+function compute_param_info_gain_B(
+    agent::AIFAgent{T},
+    model::AIFModel{T,Nf},
+    qs_prev::Vector{Vector{T}},
+    qs_curr::Vector{Vector{T}},
+    policy::AbstractMatrix{Int},
+    τ::Int,
+    settings::AIFSettings
+) where {T, Nf}
+    return compute_param_info_gain_B_from_pB(agent.pB, model, qs_prev, qs_curr, policy, τ, settings)
+end
+
+function compute_param_info_gain_B_from_pB(
+    pB::Vector{<:Array},
+    model::AIFModel{T,Nf},
+    qs_prev::Vector{Vector{T}},
+    qs_curr::Vector{Vector{T}},
+    policy::AbstractMatrix{Int},
+    τ::Int,
+    settings::AIFSettings
+) where {T, Nf}
+    ig = zero(T)
+    if isempty(settings.learn_B)
+        return ig
+    end
+
+    for f in settings.learn_B
+        if f < 1 || f > Nf
+            continue
+        end
+        a_f = clamp(policy[τ, f], 1, model.Na[f])
+        wB = wnorm(pB[f][:, :, a_f]) .* (pB[f][:, :, a_f] .> 0)
+        ig -= dot(qs_curr[f], wB * qs_prev[f])
+    end
+
+    return ig
 end

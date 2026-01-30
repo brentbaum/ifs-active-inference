@@ -78,7 +78,9 @@ export all_paper_profiles
 export build_trust_game_model, build_trust_game_A, build_trust_game_B, build_trust_game_C, build_trust_game_D
 export build_trust_game_policies
 export run_trust_game_simulation, run_trust_game_comparison
+export PaperStyleResults, run_trust_game_phases
 export plot_trust_game_sharing, plot_trust_game_beliefs, plot_trust_game_summary
+export plot_trust_game_paper_style, plot_trust_game_comparison_paper_style
 
 # Export visualization
 export plot_spider_therapy, plot_spider_comparison
