@@ -134,7 +134,8 @@ Matches the paper's parameterization with extensions for our implementation.
 - `neutral_preference`: Value of neutral outcomes (paper: p_r2, healthy=1.0)
 
 # Fields - Transitions (B matrix)
-- `context_stability`: P(context stays same) - for dynamic context
+- `b_mode`: Which transition scheme to use (:heuristic, :paper_default, :depressed, :insecure, :defeated, :static)
+- `context_stability`: P(context stays same) - for heuristic dynamics
 - `update_B`: Whether to learn transition model
 
 # Fields - Learning Rates
@@ -163,6 +164,7 @@ struct AgentProfile
     neutral_preference::Float64 # Value of neutral outcomes (paper: 1.0)
 
     # B matrix biases (context dynamics)
+    b_mode::Symbol             # Which B transition scheme to use
     context_stability::Float64  # P(context stays same) - 1.0 = static, <1.0 = dynamic
     update_B::Bool              # Whether to learn transition model
 
@@ -199,6 +201,7 @@ function AgentProfile(
         2.5,                    # reward_sensitivity (healthy default)
         -2.2 * loss_aversion,   # loss_aversion (scaled)
         1.0,                    # neutral_preference
+        :heuristic,             # b_mode
         1.0,                    # context_stability (static)
         agency > 0.1,           # update_B
         eta_A,
@@ -227,6 +230,7 @@ function healthy_profile_paper()
         0.9, 0.15, 0.5,         # A: p_share (friendly, hostile, neutral)
         0.6, 0.35,              # D: p_context (friendly, hostile)
         2.5, -2.2, 1.0,         # C: reward_sens, loss_aversion, neutral
+        :paper_default,         # B: exact paper transition matrix
         0.9,                    # B: context_stability (dynamic)
         true,                   # update_B
         0.1, 3.0, 1.0,          # Learning rates (A, B, D)
@@ -248,6 +252,7 @@ function depressed_profile_paper()
         0.9, 0.15, 0.5,         # A: same observation model as healthy
         0.15, 0.8,              # D: pessimistic (15% friendly, 80% hostile)
         0.8, -2.2, 1.0,         # C: LOW reward sensitivity (key difference!)
+        :depressed,             # B: depressed transition matrix
         0.9,                    # B: context_stability
         false,                  # update_B = false (fatalistic)
         0.1, 3.0, 1.0,          # Learning rates
@@ -266,6 +271,7 @@ function depressed2_profile_paper()
         0.9, 0.15, 0.5,         # A: normal observation
         0.1, 0.6,               # D: very pessimistic
         2.5, -2.5, 1.5,         # C: higher loss aversion
+        :static,                # B: static transition matrix
         0.9,                    # B: context_stability
         true,                   # update_B
         0.1, 1.0, 1.0,          # Learning rates (slower B learning)
@@ -284,6 +290,7 @@ function social_phobia_profile_paper()
         0.6, 0.15, 0.4,         # A: uncertain about friendly (0.6 vs 0.9)
         0.4, 0.2,               # D: less pessimistic than depressed
         2.5, -3.5, 1.0,         # C: HIGH loss aversion (-3.5)
+        :insecure,              # B: insecure transition matrix
         0.9,                    # B: context_stability
         false,                  # update_B = false
         0.1, 3.0, 1.0,          # Learning rates
@@ -302,6 +309,7 @@ function social_phobia2_profile_paper()
         0.6, 0.4, 0.5,          # A: high uncertainty (0.6 vs 0.4)
         0.2, 0.8,               # D: pessimistic
         1.2, -2.2, 1.3,         # C: reduced reward sensitivity
+        :defeated,              # B: defeated transition matrix
         0.9,                    # B: context_stability
         true,                   # update_B
         0.1, 1.0, 1.0,          # Learning rates
@@ -320,6 +328,7 @@ function borderline_profile_paper()
         0.9, 0.15, 0.5,         # A: normal observation
         0.15, 0.8,              # D: pessimistic
         1.0, -4.0, 1.2,         # C: EXTREME loss aversion (-4.0)
+        :depressed,             # B: depressed transition matrix
         0.9,                    # B: context_stability
         true,                   # update_B
         0.1, 1.0, 1.0,          # Learning rates
@@ -342,6 +351,7 @@ function healthy_profile()
         0.8, 0.2, 0.5,          # A: p_share
         0.33, 0.33,             # D: balanced prior
         2.5, -2.2, 0.0,         # C: neutral=0 so sharing dominates when favorable
+        :heuristic,             # B: heuristic transition matrix
         1.0,                    # B: static context
         true,                   # update_B
         0.5, 0.5, 0.5,          # Learning rates
@@ -358,6 +368,7 @@ function depressed_profile()
         0.8, 0.2, 0.5,          # A: normal observation
         0.15, 0.55,             # D: pessimistic
         1.0, -3.0, 0.0,         # C: reduced reward sensitivity, higher loss aversion
+        :heuristic,             # B: heuristic transition matrix
         1.0,                    # B: static context
         false,                  # update_B = false (fatalistic)
         0.3, 0.1, 0.3,          # Learning rates (slow)
@@ -374,6 +385,7 @@ function anxious_profile()
         0.55, 0.45, 0.5,        # A: uncertain
         0.25, 0.45,             # D: somewhat pessimistic
         2.0, -2.5, 0.0,         # C: moderate
+        :heuristic,             # B: heuristic transition matrix
         1.0,                    # B: static context
         true,                   # update_B
         0.5, 0.5, 0.5,          # Learning rates
@@ -390,6 +402,7 @@ function insecure_profile()
         0.8, 0.2, 0.5,          # A: normal observation
         0.2, 0.5,               # D: pessimistic
         2.2, -2.4, 0.0,         # C: slight loss aversion
+        :heuristic,             # B: heuristic transition matrix
         1.0,                    # B: static context
         true,                   # update_B
         0.2, 0.2, 0.15,         # Learning rates (very slow)
@@ -476,6 +489,25 @@ function reset!(env::TrustGameEnvironment)
     return env
 end
 
+"""
+    set_partner!(env, partner_type)
+
+Update environment partner type and reset context state accordingly.
+"""
+function set_partner!(env::TrustGameEnvironment, partner_type::Symbol)
+    env.partner_type = partner_type
+    context = if partner_type == :friendly
+        CONTEXT_FRIENDLY
+    elseif partner_type == :hostile
+        CONTEXT_HOSTILE
+    else
+        CONTEXT_NEUTRAL
+    end
+    env.initial_state = [context, CHOICE_START]
+    env.current_state .= env.initial_state
+    return env
+end
+
 function get_state(env::TrustGameEnvironment)::Vector{Int}
     return copy(env.current_state)
 end
@@ -533,15 +565,18 @@ end
 
 Build observation likelihood matrices for trust game.
 
-Modality 1 (Reward): Depends on context × choice
-- Friendly + Share → High reward
-- Hostile + Share → Low reward
-- Keep → Neutral reward
+**Key pymdp-matching behavior:**
+- Share → only HIGH or LOW reward (no neutral) - this creates clear risk/reward contrast
+- Keep/Start → behavior is UNKNOWN (no epistemic gain without sharing)
 
-Modality 2 (Behavior): Depends on context
-- Friendly → Social behavior (with probability p_share_friendly)
-- Hostile → Antisocial behavior (with probability 1-p_share_hostile)
-- Neutral → Mixed (with probability p_share_neutral)
+Modality 1 (Reward): Depends on context × choice
+- Start → Low (0.0 in pymdp paper GM)
+- Keep → Neutral (0.5 in paper)
+- Share → High/Low only based on context
+
+Modality 2 (Behavior): Partner's observed behavior
+- Keep/Start → Unknown (critical: no info gain without sharing!)
+- Share → Social/Antisocial based on context
 
 Modality 3 (Choice): Agent observes own choice
 """
@@ -550,59 +585,58 @@ function build_trust_game_A(profile::AgentProfile)
     # Shape: (reward_obs, context_state, choice_state)
     A1 = zeros(N_REWARD_OBS, N_CONTEXT_STATES, N_CHOICE_STATES)
 
-    # At start state: neutral observation
-    A1[REWARD_NEUTRAL, :, CHOICE_START] .= 1.0
+    # At start state: low reward (pymdp: 0.0)
+    A1[REWARD_LOW, :, CHOICE_START] .= 1.0
 
     # After keeping: neutral outcome regardless of context
     A1[REWARD_NEUTRAL, :, CHOICE_KEEP] .= 1.0
 
-    # After sharing: depends on context
+    # After sharing: HIGH or LOW only (no neutral!) - matches pymdp
     # Friendly context → high reward (cooperation returned)
     A1[REWARD_HIGH, CONTEXT_FRIENDLY, CHOICE_SHARE] = profile.p_share_friendly
-    A1[REWARD_NEUTRAL, CONTEXT_FRIENDLY, CHOICE_SHARE] = 1.0 - profile.p_share_friendly
+    A1[REWARD_LOW, CONTEXT_FRIENDLY, CHOICE_SHARE] = 1.0 - profile.p_share_friendly
 
     # Hostile context → low reward (betrayed)
+    A1[REWARD_HIGH, CONTEXT_HOSTILE, CHOICE_SHARE] = profile.p_share_hostile
     A1[REWARD_LOW, CONTEXT_HOSTILE, CHOICE_SHARE] = 1.0 - profile.p_share_hostile
-    A1[REWARD_NEUTRAL, CONTEXT_HOSTILE, CHOICE_SHARE] = profile.p_share_hostile
 
     # Neutral context → mixed outcome based on p_share_neutral
     A1[REWARD_HIGH, CONTEXT_NEUTRAL, CHOICE_SHARE] = profile.p_share_neutral
     A1[REWARD_LOW, CONTEXT_NEUTRAL, CHOICE_SHARE] = 1.0 - profile.p_share_neutral
-    A1[REWARD_NEUTRAL, CONTEXT_NEUTRAL, CHOICE_SHARE] = 0.0
-
-    # Normalize
-    A1 ./= sum(A1, dims=1)
 
     # A[2]: Behavior observations (3 × 3 × 3)
+    # CRITICAL: Keep/Start → Unknown (no epistemic value without sharing!)
     A2 = zeros(N_BEHAVIOR_OBS, N_CONTEXT_STATES, N_CHOICE_STATES)
 
-    # Behavior mainly depends on context, biased by profile
-    for choice in 1:N_CHOICE_STATES
-        # Friendly context → social behavior
-        A2[BEHAVIOR_SOCIAL, CONTEXT_FRIENDLY, choice] = profile.p_share_friendly
-        A2[BEHAVIOR_ANTISOCIAL, CONTEXT_FRIENDLY, choice] = 1.0 - profile.p_share_friendly
+    # Keep → Unknown (no information about partner without sharing)
+    A2[BEHAVIOR_UNKNOWN, :, CHOICE_KEEP] .= 1.0
 
-        # Hostile context → antisocial behavior
-        A2[BEHAVIOR_SOCIAL, CONTEXT_HOSTILE, choice] = profile.p_share_hostile
-        A2[BEHAVIOR_ANTISOCIAL, CONTEXT_HOSTILE, choice] = 1.0 - profile.p_share_hostile
-
-        # Neutral context → based on p_share_neutral
-        A2[BEHAVIOR_SOCIAL, CONTEXT_NEUTRAL, choice] = profile.p_share_neutral
-        A2[BEHAVIOR_ANTISOCIAL, CONTEXT_NEUTRAL, choice] = 1.0 - profile.p_share_neutral
-    end
-
-    # At start, behavior is unknown
-    A2[:, :, CHOICE_START] .= 0.0
+    # Start → Unknown
     A2[BEHAVIOR_UNKNOWN, :, CHOICE_START] .= 1.0
 
-    # Normalize
-    A2 ./= sum(A2, dims=1)
+    # Share → Social/Antisocial based on context (this is how agent learns about partner)
+    A2[BEHAVIOR_SOCIAL, CONTEXT_FRIENDLY, CHOICE_SHARE] = profile.p_share_friendly
+    A2[BEHAVIOR_ANTISOCIAL, CONTEXT_FRIENDLY, CHOICE_SHARE] = 1.0 - profile.p_share_friendly
+
+    A2[BEHAVIOR_SOCIAL, CONTEXT_HOSTILE, CHOICE_SHARE] = profile.p_share_hostile
+    A2[BEHAVIOR_ANTISOCIAL, CONTEXT_HOSTILE, CHOICE_SHARE] = 1.0 - profile.p_share_hostile
+
+    A2[BEHAVIOR_SOCIAL, CONTEXT_NEUTRAL, CHOICE_SHARE] = profile.p_share_neutral
+    A2[BEHAVIOR_ANTISOCIAL, CONTEXT_NEUTRAL, CHOICE_SHARE] = 1.0 - profile.p_share_neutral
 
     # A[3]: Choice observations (agent sees own choice)
     A3 = zeros(N_CHOICE_OBS, N_CONTEXT_STATES, N_CHOICE_STATES)
     for context in 1:N_CONTEXT_STATES
         for choice in 1:N_CHOICE_STATES
             A3[choice, context, choice] = 1.0
+        end
+    end
+
+    # Match pymdp: apply softmax over observation dimension for A2 and A3
+    for context in 1:N_CONTEXT_STATES
+        for choice in 1:N_CHOICE_STATES
+            A2[:, context, choice] = softmax(view(A2, :, context, choice))
+            A3[:, context, choice] = softmax(view(A3, :, context, choice))
         end
     end
 
@@ -614,15 +648,13 @@ end
 
 Build transition matrices for trust game.
 
-Factor 1 (Context): Can be static or dynamic based on context_stability
-- context_stability = 1.0: Static (identity transitions)
-- context_stability < 1.0: Dynamic with probability of staying in same state
-
-Paper uses dynamic context transitions:
-- friendly → friendly: 0.9
-- friendly → hostile: 0.02
-- hostile → hostile: 0.6
-- etc.
+Factor 1 (Context): Uses profile-specific transition matrices from pymdp:
+- :paper_default (gen_B)
+- :depressed (gen_depressedB)
+- :insecure (gen_insecureB)
+- :defeated (gen_defeatedB)
+- :static (gen_staticB)
+- :heuristic (legacy context_stability heuristic)
 
 Factor 2 (Choice): Controllable - agent chooses share or keep
 """
@@ -630,30 +662,53 @@ function build_trust_game_B(profile::AgentProfile)
     # B[1]: Context transitions (3 × 3 × 1)
     B1 = zeros(N_CONTEXT_STATES, N_CONTEXT_STATES, N_CONTEXT_ACTIONS)
 
-    if profile.context_stability >= 1.0
-        # Static context - identity transition
-        for s in 1:N_CONTEXT_STATES
-            B1[s, s, 1] = 1.0
-        end
+    if profile.b_mode == :paper_default
+        # gen_B() from pymdp
+        B1[:, CONTEXT_FRIENDLY, 1] = [0.9, 0.02, 0.08]
+        B1[:, CONTEXT_HOSTILE, 1] = [0.32, 0.6, 0.08]
+        B1[:, CONTEXT_NEUTRAL, 1] = [0.5, 0.3, 0.2]
+    elseif profile.b_mode == :depressed
+        # gen_depressedB()
+        B1[:, CONTEXT_FRIENDLY, 1] = [0.20, 0.70, 0.10]
+        B1[:, CONTEXT_HOSTILE, 1] = [0.05, 0.90, 0.05]
+        B1[:, CONTEXT_NEUTRAL, 1] = [0.15, 0.15, 0.70]
+    elseif profile.b_mode == :insecure
+        # gen_insecureB()
+        B1[:, CONTEXT_FRIENDLY, 1] = [0.2, 0.3, 0.50]
+        B1[:, CONTEXT_HOSTILE, 1] = [0.1, 0.4, 0.50]
+        B1[:, CONTEXT_NEUTRAL, 1] = [0.2, 0.3, 0.50]
+    elseif profile.b_mode == :defeated
+        # gen_defeatedB()
+        B1[:, CONTEXT_FRIENDLY, 1] = [0.20, 0.60, 0.20]
+        B1[:, CONTEXT_HOSTILE, 1] = [0.15, 0.80, 0.05]
+        B1[:, CONTEXT_NEUTRAL, 1] = [0.20, 0.30, 0.50]
+    elseif profile.b_mode == :static
+        # gen_staticB()
+        B1[:, CONTEXT_FRIENDLY, 1] = [0.6, 0.3, 0.1]
+        B1[:, CONTEXT_HOSTILE, 1] = [0.05, 0.8, 0.15]
+        B1[:, CONTEXT_NEUTRAL, 1] = [0.1, 0.6, 0.3]
     else
-        # Dynamic context transitions (matching paper's gen_B())
-        p_stay = profile.context_stability
-        p_switch = (1.0 - p_stay) / 2.0
+        # Heuristic context dynamics (legacy)
+        if profile.context_stability >= 1.0
+            for s in 1:N_CONTEXT_STATES
+                B1[s, s, 1] = 1.0
+            end
+        else
+            p_stay = profile.context_stability
+            p_switch = (1.0 - p_stay) / 2.0
 
-        # Friendly context
-        B1[CONTEXT_FRIENDLY, CONTEXT_FRIENDLY, 1] = p_stay
-        B1[CONTEXT_HOSTILE, CONTEXT_FRIENDLY, 1] = p_switch * 0.2  # Less likely to become hostile
-        B1[CONTEXT_NEUTRAL, CONTEXT_FRIENDLY, 1] = 1.0 - B1[CONTEXT_FRIENDLY, CONTEXT_FRIENDLY, 1] - B1[CONTEXT_HOSTILE, CONTEXT_FRIENDLY, 1]
+            B1[CONTEXT_FRIENDLY, CONTEXT_FRIENDLY, 1] = p_stay
+            B1[CONTEXT_HOSTILE, CONTEXT_FRIENDLY, 1] = p_switch * 0.2
+            B1[CONTEXT_NEUTRAL, CONTEXT_FRIENDLY, 1] = 1.0 - B1[CONTEXT_FRIENDLY, CONTEXT_FRIENDLY, 1] - B1[CONTEXT_HOSTILE, CONTEXT_FRIENDLY, 1]
 
-        # Hostile context (paper: hostile→hostile = 0.6)
-        B1[CONTEXT_HOSTILE, CONTEXT_HOSTILE, 1] = p_stay * 0.7  # More sticky when hostile
-        B1[CONTEXT_FRIENDLY, CONTEXT_HOSTILE, 1] = p_switch
-        B1[CONTEXT_NEUTRAL, CONTEXT_HOSTILE, 1] = 1.0 - B1[CONTEXT_HOSTILE, CONTEXT_HOSTILE, 1] - B1[CONTEXT_FRIENDLY, CONTEXT_HOSTILE, 1]
+            B1[CONTEXT_HOSTILE, CONTEXT_HOSTILE, 1] = p_stay * 0.7
+            B1[CONTEXT_FRIENDLY, CONTEXT_HOSTILE, 1] = p_switch
+            B1[CONTEXT_NEUTRAL, CONTEXT_HOSTILE, 1] = 1.0 - B1[CONTEXT_HOSTILE, CONTEXT_HOSTILE, 1] - B1[CONTEXT_FRIENDLY, CONTEXT_HOSTILE, 1]
 
-        # Neutral context
-        B1[CONTEXT_NEUTRAL, CONTEXT_NEUTRAL, 1] = p_stay * 0.5
-        B1[CONTEXT_FRIENDLY, CONTEXT_NEUTRAL, 1] = (1.0 - B1[CONTEXT_NEUTRAL, CONTEXT_NEUTRAL, 1]) / 2.0
-        B1[CONTEXT_HOSTILE, CONTEXT_NEUTRAL, 1] = (1.0 - B1[CONTEXT_NEUTRAL, CONTEXT_NEUTRAL, 1]) / 2.0
+            B1[CONTEXT_NEUTRAL, CONTEXT_NEUTRAL, 1] = p_stay * 0.5
+            B1[CONTEXT_FRIENDLY, CONTEXT_NEUTRAL, 1] = (1.0 - B1[CONTEXT_NEUTRAL, CONTEXT_NEUTRAL, 1]) / 2.0
+            B1[CONTEXT_HOSTILE, CONTEXT_NEUTRAL, 1] = (1.0 - B1[CONTEXT_NEUTRAL, CONTEXT_NEUTRAL, 1]) / 2.0
+        end
     end
 
     # B[2]: Choice transitions (3 × 3 × 2)
@@ -674,29 +729,37 @@ end
 
 Build preference matrices for trust game.
 
+**pymdp-matching behavior:**
+- C stores raw utilities; EFE converts to log(softmax(C)) for risk
+- This compresses extreme preferences and makes the risk term scale-invariant
+
 Uses paper's parameterization:
 - reward_sensitivity (p_r0): Gain from positive outcomes (healthy=2.5, depressed=0.8)
 - loss_aversion (p_r1): Pain from negative outcomes (healthy=-2.2, borderline=-4.0)
 - neutral_preference (p_r2): Value of neutral outcomes (healthy=1.0)
-
-Preferences are applied at the final timestep for planning.
 """
 function build_trust_game_C(profile::AgentProfile, T::Int)
-    # C[1]: Reward preferences using paper's parameterization
+    # C[1]: Reward preferences using pymdp's log-softmax style
+    # pymdp does: C_prob = softmax([p_r0, p_r1, p_r2]), then uses log(C_prob) in EFE
     C1 = zeros(N_REWARD_OBS, T)
 
-    # Apply preferences at final timestep (for EFE calculation)
-    C1[REWARD_HIGH, T] = profile.reward_sensitivity
-    C1[REWARD_LOW, T] = profile.loss_aversion  # Already negative in profile
-    C1[REWARD_NEUTRAL, T] = profile.neutral_preference
+    raw_prefs = [
+        profile.reward_sensitivity,   # REWARD_HIGH
+        profile.loss_aversion,        # REWARD_LOW (negative)
+        profile.neutral_preference    # REWARD_NEUTRAL
+    ]
 
-    # C[2]: Behavior preferences (slight preference for social)
+    # pymdp stores softmax(prefs) in C, then softmaxes again in utility computation.
+    # We mirror that behavior here to match their risk scaling.
+    prefs = softmax(raw_prefs)
+    C1[REWARD_HIGH, T] = prefs[1]
+    C1[REWARD_LOW, T] = prefs[2]
+    C1[REWARD_NEUTRAL, T] = prefs[3]
+
+    # C[2]: Behavior preferences (pymdp uses uniform)
     C2 = zeros(N_BEHAVIOR_OBS, T)
-    C2[BEHAVIOR_SOCIAL, T] = 0.5
-    C2[BEHAVIOR_ANTISOCIAL, T] = -0.5
-    C2[BEHAVIOR_UNKNOWN, T] = 0.0
 
-    # C[3]: No preference over choice observation
+    # C[3]: Choice preferences (uniform)
     C3 = zeros(N_CHOICE_OBS, T)
 
     return [C1, C2, C3]
@@ -707,16 +770,16 @@ end
 
 Build initial state prior for trust game.
 
+pymdp uses a softmax with a neutral baseline:
+- D_context = softmax([pr_context_pos, pr_context_neg, 0.0])
+
 Factor 1 (Context): Prior beliefs about partner's disposition
 Factor 2 (Choice): Start in start state
 """
 function build_trust_game_D(profile::AgentProfile)
-    # D[1]: Context prior (biased by profile)
-    D1 = zeros(N_CONTEXT_STATES)
-    D1[CONTEXT_FRIENDLY] = profile.p_context_friendly
-    D1[CONTEXT_HOSTILE] = profile.p_context_hostile
-    D1[CONTEXT_NEUTRAL] = 1.0 - profile.p_context_friendly - profile.p_context_hostile
-    D1 = D1 ./ sum(D1)  # Normalize
+    # D[1]: Context prior using pymdp's softmax-with-neutral-baseline
+    # pymdp: D_context = softmax([pr_context_pos, pr_context_neg, 0])
+    D1 = softmax([profile.p_context_friendly, profile.p_context_hostile, 0.0])
 
     # D[2]: Choice prior (start in start state)
     D2 = zeros(N_CHOICE_STATES)
@@ -803,6 +866,9 @@ end
         partner_type::Symbol,
         n_trials::Int=100,
         T::Int=2,
+        context_switch::Bool=false,
+        switch_trial::Int=20,
+        switch_partner_type::Union{Nothing,Symbol}=nothing,
         verbose::Bool=false
     ) -> TrustGameResults
 
@@ -814,6 +880,9 @@ Run a trust game simulation.
 - `n_trials`: Number of rounds to play
 - `T`: Timesteps per trial (planning horizon + 1). Default 2 means decide then observe.
        Use T=3 for decide, observe intermediate, observe final. Paper uses variable T.
+- `context_switch`: If true, switch partner type at `switch_trial`
+- `switch_trial`: Trial index at which to switch (1-based)
+- `switch_partner_type`: Partner type after switch (defaults to opposite of initial)
 - `verbose`: Print progress information
 """
 function run_trust_game_simulation(;
@@ -821,6 +890,9 @@ function run_trust_game_simulation(;
     partner_type::Symbol,
     n_trials::Int=100,
     T::Int=2,
+    context_switch::Bool=false,
+    switch_trial::Int=20,
+    switch_partner_type::Union{Nothing,Symbol}=nothing,
     verbose::Bool=false
 )
     # Build model with specified planning horizon
@@ -832,23 +904,41 @@ function run_trust_game_simulation(;
         alpha=profile.gamma * 0.5,  # Action precision proportional to policy precision
         eta_A=profile.eta_A,
         eta_B=profile.update_B ? profile.eta_B : 0.0,  # Disable B learning if update_B=false
-        eta_D=profile.eta_D
+        eta_D=profile.eta_D,
+        use_ambiguity=true,         # pymdp's state info gain uses negative ambiguity
+        use_states_info_gain=false, # disable KL-based info gain (not used in pymdp)
+        use_param_info_gain=true,
+        learn_A=[1, 2],  # reward + behavior
+        learn_B=[1, 2]   # context + choice
     )
 
     # Initialize agent with Dirichlet priors
-    # Scale priors to reflect profile's certainty
-    pA_scale = 10.0  # Moderate prior strength
-    pB_scale = 10.0
-    pD_scale = 50.0  # Strong prior on context beliefs
+    # Use WEAK priors to match pymdp (they effectively use raw A/B/D)
+    # Strong priors suppress exploration and make learning slow
+    pA_scale = 1.0   # Weak prior - allows learning from observations
+    pB_scale = 1.0   # Weak prior - allows learning transitions
+    pD_scale = 1.0   # Weak prior - allows updating context beliefs
 
-    pA = [pA_scale .* model.A[g] for g in 1:model.Ng]
-    pB = [pB_scale .* model.B[f] for f in 1:length(model.D)]
-    pD = [pD_scale .* model.D[f] for f in 1:length(model.D)]
+    epsilon_prior = 1e-3  # Tiny offset to keep Dirichlet params positive
+    pA = [pA_scale .* model.A[g] .+ epsilon_prior for g in 1:model.Ng]
+    pB = [pB_scale .* model.B[f] .+ epsilon_prior for f in 1:length(model.D)]
+    pD = [pD_scale .* model.D[f] .+ epsilon_prior for f in 1:length(model.D)]
 
     agent = init_agent(model, pA, pB, pD)
 
-    # Create environment
-    env = TrustGameEnvironment(partner_type, model.A, model.B)
+    # Create environment: keep context fixed (pymdp environment does not transition context)
+    env_B = [copy(b) for b in model.B]
+    env_B[1] .= 0.0
+    for s in 1:N_CONTEXT_STATES
+        env_B[1][s, s, 1] = 1.0
+    end
+    env = TrustGameEnvironment(partner_type, model.A, env_B)
+
+    # Determine switch partner type if needed
+    if context_switch && isnothing(switch_partner_type)
+        switch_partner_type = partner_type == :friendly ? :hostile :
+                              partner_type == :hostile ? :friendly : :neutral
+    end
 
     # Storage
     choices = Vector{Int}(undef, n_trials)
@@ -858,6 +948,9 @@ function run_trust_game_simulation(;
 
     # Run trials
     for trial in 1:n_trials
+        if context_switch && trial == switch_trial + 1
+            set_partner!(env, switch_partner_type)
+        end
         reset_trial!(agent, model)
         reset!(env)
 
@@ -866,14 +959,22 @@ function run_trust_game_simulation(;
         belief_friendly[trial] = D_normalized[CONTEXT_FRIENDLY]
         belief_hostile[trial] = D_normalized[CONTEXT_HOSTILE]
 
-        # Run through all timesteps
+        # Initialize observation to match pymdp: low reward, unknown behavior, start
+        obs = [REWARD_LOW, BEHAVIOR_UNKNOWN, CHOICE_START]
+
         final_choice = CHOICE_START
         final_reward = REWARD_NEUTRAL
 
         for t in 1:T
             agent.t = t
-            obs = observe(env)
             infer_states!(agent, model, obs, settings)
+
+            # Learning updates at each timestep (matches pymdp-style per-step updates)
+            update_pA!(agent, model, obs, settings.eta_A, [1, 2])
+            if profile.update_B && t > 1
+                update_pB!(agent, model, settings.eta_B, [1, 2])
+            end
+            update_pD_from_qs!(agent, settings.eta_D, [1], agent.qs[agent.t])
 
             if t < T
                 # Decision timestep
@@ -885,10 +986,12 @@ function run_trust_game_simulation(;
                     final_choice = action[2]
                 end
 
-                push!(agent.actions, copy(action))
+                # Step environment and get next observation
                 step!(env, action)
+                obs = observe(env)
+                final_reward = obs[1]
             else
-                # Final observation timestep
+                # Final observation already in obs
                 final_reward = obs[1]
             end
         end
@@ -896,9 +999,6 @@ function run_trust_game_simulation(;
         # Record results
         choices[trial] = final_choice
         rewards[trial] = final_reward
-
-        # Learning: Update D (context beliefs) based on final beliefs
-        update_pD_final!(agent, settings.eta_D, [1])
 
         if verbose && trial % 20 == 0
             sharing_so_far = count(c -> c == CHOICE_SHARE, choices[1:trial]) / trial
@@ -1048,6 +1148,289 @@ function plot_trust_game_summary(;
     p2 = plot_trust_game_beliefs(avg_results)
 
     return plot(p1, p2, layout=(2, 1), size=(800, 900))
+end
+
+# =============================================================================
+# Paper-Style Simulation (Multi-Phase with Changing Partners)
+# =============================================================================
+
+"""
+    PaperStyleResults
+
+Detailed results for paper-style visualization with changing partner types.
+
+# Fields
+- `belief_friendly`: P(cooperative) at each trial
+- `belief_hostile`: P(hostile) at each trial
+- `belief_neutral`: P(random) at each trial
+- `choices`: Agent's choice each trial (1=share, 2=keep)
+- `rewards`: Reward observation each trial (1=high, 2=low, 3=neutral)
+- `partner_types`: True partner type each trial (:friendly, :hostile, :neutral)
+- `phase_boundaries`: Trial indices where partner type changes
+"""
+struct PaperStyleResults
+    belief_friendly::Vector{Float64}
+    belief_hostile::Vector{Float64}
+    belief_neutral::Vector{Float64}
+    choices::Vector{Int}
+    rewards::Vector{Int}
+    partner_types::Vector{Symbol}
+    phase_boundaries::Vector{Int}
+end
+
+"""
+    run_trust_game_phases(;
+        profile::AgentProfile,
+        phases::Vector{Tuple{Symbol, Int}},
+        T::Int=2,
+        verbose::Bool=false
+    ) -> PaperStyleResults
+
+Run trust game with multiple phases of different partner types.
+
+# Arguments
+- `profile`: Agent profile
+- `phases`: Vector of (partner_type, n_trials) tuples, e.g., [(:friendly, 20), (:hostile, 20)]
+- `T`: Timesteps per trial
+- `verbose`: Print progress
+
+# Example
+```julia
+results = run_trust_game_phases(
+    profile=healthy_profile_paper(),
+    phases=[(:friendly, 20), (:hostile, 20), (:friendly, 20)]
+)
+```
+"""
+function run_trust_game_phases(;
+    profile::AgentProfile,
+    phases::Vector{Tuple{Symbol, Int}},
+    T::Int=2,
+    verbose::Bool=false
+)
+    total_trials = sum(p[2] for p in phases)
+
+    # Build model
+    model = build_trust_game_model(profile; T=T)
+
+    settings = AIFSettings(
+        gamma=profile.gamma,
+        alpha=profile.gamma * 0.5,
+        eta_A=profile.eta_A,
+        eta_B=profile.update_B ? profile.eta_B : 0.0,
+        eta_D=profile.eta_D,
+        use_param_info_gain=true,
+        learn_A=[1, 2],
+        learn_B=[1, 2]
+    )
+
+    # Initialize agent with weak priors
+    pA = [1.0 .* model.A[g] .+ 1e-3 for g in 1:model.Ng]
+    pB = [1.0 .* model.B[f] .+ 1e-3 for f in 1:length(model.D)]
+    pD = [1.0 .* model.D[f] .+ 1e-3 for f in 1:length(model.D)]
+    agent = init_agent(model, pA, pB, pD)
+
+    # Storage
+    belief_friendly = Vector{Float64}(undef, total_trials)
+    belief_hostile = Vector{Float64}(undef, total_trials)
+    belief_neutral = Vector{Float64}(undef, total_trials)
+    choices = Vector{Int}(undef, total_trials)
+    rewards = Vector{Int}(undef, total_trials)
+    partner_types = Vector{Symbol}(undef, total_trials)
+    phase_boundaries = Int[]
+
+    trial_idx = 0
+
+    for (phase_num, (partner_type, n_trials)) in enumerate(phases)
+        push!(phase_boundaries, trial_idx + 1)
+
+        # Create environment for this phase
+        env = TrustGameEnvironment(partner_type, model.A, model.B)
+
+        for _ in 1:n_trials
+            trial_idx += 1
+            reset_trial!(agent, model)
+            reset!(env)
+
+            # Record beliefs at start of trial
+            D_norm = agent.pD[1] ./ sum(agent.pD[1])
+            belief_friendly[trial_idx] = D_norm[CONTEXT_FRIENDLY]
+            belief_hostile[trial_idx] = D_norm[CONTEXT_HOSTILE]
+            belief_neutral[trial_idx] = D_norm[CONTEXT_NEUTRAL]
+            partner_types[trial_idx] = partner_type
+
+            # Initial observation
+            obs = [REWARD_LOW, BEHAVIOR_UNKNOWN, CHOICE_START]
+
+            final_choice = CHOICE_START
+            final_reward = REWARD_NEUTRAL
+
+            for t in 1:T
+                agent.t = t
+                infer_states!(agent, model, obs, settings)
+
+                # Per-step learning
+                update_pA!(agent, model, obs, settings.eta_A, [1, 2])
+                if profile.update_B && t > 1
+                    update_pB!(agent, model, settings.eta_B, [1, 2])
+                end
+                update_pD_from_qs!(agent, settings.eta_D, [1], agent.qs[agent.t])
+
+                if t < T
+                    infer_policies!(agent, model, settings)
+                    action = sample_action(agent, model; alpha=settings.alpha)
+
+                    if action[2] != CHOICE_START
+                        final_choice = action[2]
+                    end
+
+                    step!(env, action)
+                    obs = observe(env)
+                    final_reward = obs[1]
+                else
+                    final_reward = obs[1]
+                end
+            end
+
+            choices[trial_idx] = final_choice
+            rewards[trial_idx] = final_reward
+
+            if verbose && trial_idx % 10 == 0
+                println("Trial $trial_idx ($(partner_type)): choice=$(final_choice==1 ? "share" : "keep"), " *
+                        "P(friendly)=$(round(belief_friendly[trial_idx]*100, digits=1))%")
+            end
+        end
+    end
+
+    return PaperStyleResults(
+        belief_friendly, belief_hostile, belief_neutral,
+        choices, rewards, partner_types, phase_boundaries
+    )
+end
+
+"""
+    plot_trust_game_paper_style(results::PaperStyleResults; title="", save_path=nothing)
+
+Create paper-style visualization with:
+- Background shading for true partner type (blue=friendly, red=hostile)
+- Belief evolution lines (cooperative, hostile, random)
+- Action markers (triangles for invest outcomes, asterisks for keep)
+
+# Arguments
+- `results`: PaperStyleResults from run_trust_game_phases
+- `title`: Plot title
+- `save_path`: Optional path to save figure
+"""
+function plot_trust_game_paper_style(
+    results::PaperStyleResults;
+    title::String="",
+    save_path::Union{String,Nothing}=nothing
+)
+    n_trials = length(results.choices)
+
+    # Create plot
+    p = plot(
+        size=(900, 400),
+        xlabel="t",
+        ylabel="p(context)",
+        title=title,
+        legend=:topright,
+        ylims=(-0.05, 1.05),
+        xlims=(0, n_trials + 1),
+        grid=false
+    )
+
+    # Add background shading for each phase using vspan
+    phase_starts = results.phase_boundaries
+    phase_ends = [phase_starts[2:end] .- 1; n_trials]
+
+    for (i, (start_t, end_t)) in enumerate(zip(phase_starts, phase_ends))
+        partner = results.partner_types[start_t]
+
+        fill_color = if partner == :friendly
+            :lightblue
+        elseif partner == :hostile
+            :mistyrose
+        else
+            :lightgray
+        end
+
+        # Use Shape to draw filled rectangle
+        vspan!(p, [start_t - 1.5, end_t - 0.5],
+               fillcolor=fill_color, fillalpha=0.5,
+               linecolor=:transparent, label="")
+    end
+
+    # Plot belief lines
+    plot!(p, 0:n_trials-1, results.belief_friendly,
+          label="cooperative", color=:blue, linewidth=1.5, marker=:circle, markersize=3)
+    plot!(p, 0:n_trials-1, results.belief_hostile,
+          label="hostile", color=:red, linewidth=1.5, marker=:circle, markersize=3)
+    plot!(p, 0:n_trials-1, results.belief_neutral,
+          label="random", color=:gray, linewidth=1.5, marker=:diamond, markersize=3)
+
+    # Add action markers
+    for t in 1:n_trials
+        x = t - 1
+        choice = results.choices[t]
+        reward = results.rewards[t]
+
+        if choice == CHOICE_SHARE
+            # Shared - show outcome
+            if reward == REWARD_HIGH
+                # Blue triangle up - investment led to cooperation
+                scatter!(p, [x], [results.belief_hostile[t] + 0.05],
+                        marker=:utriangle, markersize=6, color=:blue, label="")
+            else
+                # Red triangle down - investment led to defection
+                scatter!(p, [x], [results.belief_hostile[t] + 0.05],
+                        marker=:dtriangle, markersize=6, color=:red, label="")
+            end
+        else
+            # Kept - show asterisk
+            scatter!(p, [x], [results.belief_hostile[t] + 0.05],
+                    marker=:star5, markersize=4, color=:black, label="")
+        end
+    end
+
+    if !isnothing(save_path)
+        savefig(p, save_path)
+        @info "Saved paper-style plot to $save_path"
+    end
+
+    return p
+end
+
+"""
+    plot_trust_game_comparison_paper_style(;
+        profiles::Vector{AgentProfile},
+        phases::Vector{Tuple{Symbol, Int}},
+        save_path=nothing
+    )
+
+Create multi-panel figure comparing different agent profiles in paper style.
+"""
+function plot_trust_game_comparison_paper_style(;
+    profiles::Vector{AgentProfile}=[healthy_profile_paper(), depressed_profile_paper()],
+    phases::Vector{Tuple{Symbol, Int}}=[(:friendly, 20), (:hostile, 20)],
+    save_path::Union{String,Nothing}=nothing
+)
+    plots = []
+
+    for profile in profiles
+        results = run_trust_game_phases(profile=profile, phases=phases)
+        p = plot_trust_game_paper_style(results; title=profile.name)
+        push!(plots, p)
+    end
+
+    combined = plot(plots..., layout=(length(profiles), 1), size=(900, 400 * length(profiles)))
+
+    if !isnothing(save_path)
+        savefig(combined, save_path)
+        @info "Saved comparison plot to $save_path"
+    end
+
+    return combined
 end
 
 # =============================================================================

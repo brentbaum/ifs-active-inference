@@ -27,6 +27,9 @@ struct AIFSettings{T<:Real}
     use_ambiguity::Bool         # Include ambiguity term in EFE
     use_utility::Bool           # Include utility/risk term in EFE
     use_states_info_gain::Bool  # Include state information gain (epistemic value)
+    use_param_info_gain::Bool   # Include parameter information gain (learning value)
+    learn_A::Vector{Int}        # Modalities to include in param info gain
+    learn_B::Vector{Int}        # Factors to include in param info gain
     fpi_max_iter::Int           # Fixed-point iteration max iterations
     fpi_tol::T                  # Convergence tolerance
 end
@@ -46,6 +49,9 @@ Create AIFSettings with sensible defaults.
 - `use_ambiguity=true`: Include ambiguity term in EFE
 - `use_utility=true`: Include utility/risk term in EFE
 - `use_states_info_gain=true`: Include state information gain
+- `use_param_info_gain=false`: Include parameter information gain (learning value)
+- `learn_A=Int[]`: Modalities to include in param info gain
+- `learn_B=Int[]`: Factors to include in param info gain
 - `fpi_max_iter=16`: Max fixed-point iterations
 - `fpi_tol=1e-6`: Convergence tolerance
 """
@@ -59,6 +65,9 @@ function AIFSettings(;
     use_ambiguity::Bool=true,
     use_utility::Bool=true,
     use_states_info_gain::Bool=true,
+    use_param_info_gain::Bool=false,
+    learn_A::Vector{Int}=Int[],
+    learn_B::Vector{Int}=Int[],
     fpi_max_iter::Int=16,
     fpi_tol::Real=1e-6
 )
@@ -72,6 +81,7 @@ function AIFSettings(;
     AIFSettings{T}(
         T(gamma), T(alpha), T(eta), T(lr_A), T(lr_B), T(lr_D),
         use_ambiguity, use_utility, use_states_info_gain,
+        use_param_info_gain, copy(learn_A), copy(learn_B),
         fpi_max_iter, T(fpi_tol)
     )
 end

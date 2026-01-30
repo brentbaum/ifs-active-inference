@@ -203,6 +203,31 @@ function update_pD!(
 end
 
 """
+    update_pD_from_qs!(agent, eta, factors, qs)
+
+Update initial state Dirichlet parameters pD using provided beliefs `qs`.
+This mirrors pymdp's update_D behavior used in the trust game simulations.
+"""
+function update_pD_from_qs!(
+    agent::AIFAgent{T},
+    eta::T,
+    factors::Vector{Int},
+    qs::Vector{Vector{T}}
+) where {T}
+    for f in factors
+        Nf_actual = length(agent.pD)
+        if f < 1 || f > Nf_actual
+            @warn "Skipping invalid factor index $f (agent has $Nf_actual factors)"
+            continue
+        end
+        for s in 1:length(agent.pD[f])
+            agent.pD[f][s] += eta * qs[f][s]
+        end
+    end
+    return nothing
+end
+
+"""
     compute_learning_diagnostics(agent, model)
 
 Compute diagnostics about learned parameters.
