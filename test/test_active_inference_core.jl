@@ -318,4 +318,6 @@ include("../src/model.jl")
 
 end
 
+include("test_concepts_model.jl")
+
 println("\nActiveInferenceCore tests completed!")

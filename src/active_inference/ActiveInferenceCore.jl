@@ -11,6 +11,7 @@ module ActiveInferenceCore
 
 using LinearAlgebra
 using Plots
+using SpecialFunctions
 
 # Core types and utilities
 include("core.jl")
@@ -34,6 +35,7 @@ include("agent.jl")
 include("spider_model.jl")
 include("tmaze.jl")
 include("trust_game.jl")
+include("concepts_model.jl")
 
 # Visualization
 include("visualization.jl")
@@ -81,6 +83,16 @@ export run_trust_game_simulation, run_trust_game_comparison
 export PaperStyleResults, run_trust_game_phases
 export plot_trust_game_sharing, plot_trust_game_beliefs, plot_trust_game_summary
 export plot_trust_game_paper_style, plot_trust_game_comparison_paper_style
+
+# Export Concepts Model (PMC7250191)
+export ConceptsEnvironment, CONCEPT_ANIMALS, CONCEPT_REPORTS, CONCEPT_FEEDBACK
+export DISTANCE_REPORTS
+export build_concepts_model, build_concepts_A, build_concepts_B, build_concepts_C, build_concepts_D
+export build_concepts_policies, init_concepts_agent, concepts_settings
+export copy_agent_to_model, run_concepts_learning!, evaluate_reporting
+export bmr_reduce_D, apply_bmr_D!
+export build_distance_model, build_distance_A, build_distance_B, build_distance_D
+export build_distance_policies, evaluate_distance_reporting
 
 # Export visualization
 export plot_spider_therapy, plot_spider_comparison

@@ -33,9 +33,9 @@ function infer_policies!(
 end
 
 """
-    sample_action(agent, model; alpha=4.0)
+    sample_action(agent, model; alpha=4.0, deterministic=false)
 
-Sample action from policy posterior for current timestep.
+    Sample action from policy posterior for current timestep.
 
 Marginalizes over policies to get action distribution per factor:
 P(a_f | t) = Σ_π Q(π) δ(a_f, V[t, π, f])
@@ -46,11 +46,13 @@ Then samples with action precision α.
 - `agent`: AIFAgent with policy posterior qpi
 - `model`: AIFModel
 - `alpha`: Action precision (higher = more deterministic)
+- `deterministic`: If true, pick the MAP action instead of sampling
 """
 function sample_action(
     agent::AIFAgent{T},
     model::AIFModel{T,Nf};
-    alpha::Real=4.0
+    alpha::Real=4.0,
+    deterministic::Bool=false
 ) where {T, Nf}
 
     t = agent.t
@@ -79,8 +81,12 @@ function sample_action(
         ln_action_probs = T(alpha) .* log.(action_probs .+ eps(T))
         action_dist = softmax(ln_action_probs)
 
-        # Sample from categorical
-        actions[f] = sample_categorical(action_dist)
+        if deterministic
+            actions[f] = argmax(action_dist)
+        else
+            # Sample from categorical
+            actions[f] = sample_categorical(action_dist)
+        end
     end
 
     # Store action

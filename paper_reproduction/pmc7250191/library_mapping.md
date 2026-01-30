@@ -29,6 +29,7 @@ This file maps paper requirements to current library capabilities and notes gaps
 - **C matrix**: set preferences over feedback outcomes only; other modalities uniform.
 - **D matrix**: flat or weak prior; learned via `pD` updates.
 - **Learning**: `update_pA!` + `update_pD_from_qs!` per trial.
+- **Dirichlet expectation for inference**: added `use_dirichlet_expectation` to use `E[ln A]` (digamma) as in SPM.
 - **Policy restriction**:
   - Learning phase: only allow “stay / no report” policy.
   - Reporting phase: enable all report policies.
@@ -37,13 +38,8 @@ This file maps paper requirements to current library capabilities and notes gaps
    - policy precision uses beta=1 (gamma=1/beta in SPM conventions)
 
 ## 3) Gaps / Missing Features
-- **Bayesian Model Reduction (BMR)** not implemented. Need:
-  - Dirichlet evidence comparison (log‑beta functions).
-  - Ability to collapse redundant concepts and reset priors.
-- **Supplementary parameters** missing in paper text:
-  - Exact Dirichlet prior strengths, learning rates, and C numeric values.
-  - Noise magnitude for flat A columns (symmetry‑breaking).
-  - These should be pulled from Concepts_model.m (supplementary Data_Sheet_1.zip).
+- **BMR for A** (optional in paper) not implemented; only D reduction is supported.
+- **Supplementary parameters** are now captured in `task_spec.md` from Concepts_model.m.
 
 ## 4) Open Items
 - Obtain supplementary code to fix numerical parameters.
