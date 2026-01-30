@@ -86,6 +86,8 @@ with the first row effectively unused/“null”; labels only expose the 2 meani
 - Successful avoidance of unused-slot engagement during familiar-only exposure.
 - Generalization accuracy in the distance question task.
 - Sanity checks from the paper: with fully known A, specific report accuracy is 100% across 32 sims (4 trials per animal); with only wings/gills knowledge, basic category accuracy is 100%.
+- Supplementary demo code plots **A before/after learning**; we also track similarity of learned A to the true A for concept acquisition curves.
+- When multiple concepts are learned without feedback, feature columns can permute; reporting accuracy can be evaluated after aligning learned columns to true feature signatures.
 
 ## 11) Parameters Not Explicitly Specified in Paper Text
 (Need confirmation from SPM demo code or supplements)

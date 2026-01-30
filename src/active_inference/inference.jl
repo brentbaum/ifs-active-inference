@@ -29,6 +29,15 @@ function infer_states!(
 
     # Get current A (possibly learned)
     A = get_A_from_pA(agent.pA)
+    lnA = nothing
+    if settings.use_dirichlet_expectation
+        lnA = Vector{Array{T}}(undef, model.Ng)
+        floor = exp(-4)
+        for g in 1:model.Ng
+            pA_safe = agent.pA[g] .+ floor
+            lnA[g] = digamma.(pA_safe) .- digamma.(sum(pA_safe, dims=1))
+        end
+    end
 
     # Get current B (possibly learned)
     B = get_B_from_pB(agent.pB)
@@ -68,9 +77,13 @@ function infer_states!(
 
             # Add log likelihood from each modality
             for g in 1:model.Ng
-                ln_A_marginal = compute_ln_A_marginal(
-                    A[g], observation[g], agent.qs[t], f, model.Ns
-                )
+                ln_A_marginal = settings.use_dirichlet_expectation ?
+                    compute_ln_A_marginal_from_lnA(
+                        lnA[g], observation[g], agent.qs[t], f, model.Ns
+                    ) :
+                    compute_ln_A_marginal(
+                        A[g], observation[g], agent.qs[t], f, model.Ns
+                    )
                 ln_qs .+= ln_A_marginal
             end
 
@@ -88,6 +101,36 @@ function infer_states!(
     end
 
     return agent.qs[t]
+end
+
+"""
+    compute_ln_A_marginal_from_lnA(lnA_g, o, qs, f, Ns)
+
+Compute E_{q(s_{-f})}[ln A_g(o_g | s)] for factor f using a precomputed lnA.
+"""
+function compute_ln_A_marginal_from_lnA(
+    lnA_g::Array{T},
+    o::Int,
+    qs::Vector{Vector{T}},
+    f::Int,
+    Ns::NTuple{Nf, Int}
+) where {T, Nf}
+
+    result = zeros(T, Ns[f])
+
+    for idx in CartesianIndices(Ns)
+        s_f = idx[f]
+        prob_other = one(T)
+        for ff in 1:Nf
+            if ff != f
+                prob_other *= qs[ff][idx[ff]]
+            end
+        end
+
+        result[s_f] += lnA_g[o, idx] * prob_other
+    end
+
+    return result
 end
 
 """

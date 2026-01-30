@@ -85,6 +85,7 @@ Feedback depends on **animal identity** + **report choice**:
 - D learning enabled (`prior_D_learning = 1`).
 - **alpha = 128** (action selection inverse temperature)
 - **beta = 1** (policy precision; higher beta → more random). We map to our `gamma = 1/beta`.
+- Inference should use **Dirichlet expectations** `E[ln A]` (digamma) rather than `log(A)` to match SPM updates.
 
 ## 8) Unknown concept initialization
 For any “unknown” concept column, knowledge is flattened via:
@@ -107,4 +108,3 @@ with `pa = 0`, applied to rows 2–3 for each feature modality.
   - `remove_granularity`, `remove_{animal}_knowledge`
   - `prevent_reporting`
   - `BMR`
-

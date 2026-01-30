@@ -28,6 +28,7 @@ struct AIFSettings{T<:Real}
     use_utility::Bool           # Include utility/risk term in EFE
     use_states_info_gain::Bool  # Include state information gain (epistemic value)
     use_param_info_gain::Bool   # Include parameter information gain (learning value)
+    use_dirichlet_expectation::Bool # Use E[ln A] from Dirichlet parameters in inference
     param_info_gain_weight::T   # Weight for parameter info gain term
     learn_A::Vector{Int}        # Modalities to include in param info gain
     learn_B::Vector{Int}        # Factors to include in param info gain
@@ -51,6 +52,7 @@ Create AIFSettings with sensible defaults.
 - `use_utility=true`: Include utility/risk term in EFE
 - `use_states_info_gain=true`: Include state information gain
 - `use_param_info_gain=false`: Include parameter information gain (learning value)
+- `use_dirichlet_expectation=false`: Use digamma-based expectation for A in inference
 - `learn_A=Int[]`: Modalities to include in param info gain
 - `learn_B=Int[]`: Factors to include in param info gain
 - `fpi_max_iter=16`: Max fixed-point iterations
@@ -67,6 +69,7 @@ function AIFSettings(;
     use_utility::Bool=true,
     use_states_info_gain::Bool=true,
     use_param_info_gain::Bool=false,
+    use_dirichlet_expectation::Bool=false,
     param_info_gain_weight::Real=1.0,
     learn_A::Vector{Int}=Int[],
     learn_B::Vector{Int}=Int[],
@@ -84,7 +87,7 @@ function AIFSettings(;
     AIFSettings{T}(
         T(gamma), T(alpha), T(eta), T(lr_A), T(lr_B), T(lr_D),
         use_ambiguity, use_utility, use_states_info_gain,
-        use_param_info_gain, T(param_info_gain_weight),
+        use_param_info_gain, use_dirichlet_expectation, T(param_info_gain_weight),
         copy(learn_A), copy(learn_B),
         fpi_max_iter, T(fpi_tol)
     )

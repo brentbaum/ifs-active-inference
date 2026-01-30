@@ -32,6 +32,18 @@ const CONCEPT_FEEDBACK = ["start", "correct-specific", "incorrect", "correct-bas
 
 const N_CONCEPTS = 8
 const N_REPORT_STATES = 11
+const N_DISTANCE_REPORT_STATES = 3
+
+const DISTANCE_REPORTS = ["start", "Yes", "No"]
+
+const SIZE_ROW2 = [0, 1, 0, 1, 0, 1, 0, 1]
+const SIZE_ROW3 = [1, 0, 1, 0, 1, 0, 1, 0]
+
+const COLOR_ROW2 = [1, 1, 0, 0, 1, 1, 0, 0]
+const COLOR_ROW3 = [0, 0, 1, 1, 0, 0, 1, 1]
+
+const SPECIES_ROW2 = [1, 1, 1, 1, 0, 0, 0, 0]
+const SPECIES_ROW3 = [0, 0, 0, 0, 1, 1, 1, 1]
 
 const MOD_SIZE = 1
 const MOD_COLOR = 2
@@ -47,7 +59,7 @@ const FEEDBACK_CORRECT_BASIC = 4
 # Environment
 # =============================================================================
 
-struct ConceptsEnvironment <: AIFEnvironment
+mutable struct ConceptsEnvironment <: AIFEnvironment
     A::Vector{Array{Float64}}
     B::Vector{Array{Float64,3}}
     animal_probs::Vector{Float64}
@@ -139,24 +151,15 @@ function build_concepts_A()
         A[g] = zeros(Float64, No[g], Ns...)
     end
 
-    size_row2 = [0, 1, 0, 1, 0, 1, 0, 1]
-    size_row3 = [1, 0, 1, 0, 1, 0, 1, 0]
-
-    color_row2 = [1, 1, 0, 0, 1, 1, 0, 0]
-    color_row3 = [0, 0, 1, 1, 0, 0, 1, 1]
-
-    species_row2 = [1, 1, 1, 1, 0, 0, 0, 0]
-    species_row3 = [0, 0, 0, 0, 1, 1, 1, 1]
-
     for r in 1:N_REPORT_STATES
-        A[MOD_SIZE][2, :, r] .= size_row2
-        A[MOD_SIZE][3, :, r] .= size_row3
+        A[MOD_SIZE][2, :, r] .= SIZE_ROW2
+        A[MOD_SIZE][3, :, r] .= SIZE_ROW3
 
-        A[MOD_COLOR][2, :, r] .= color_row2
-        A[MOD_COLOR][3, :, r] .= color_row3
+        A[MOD_COLOR][2, :, r] .= COLOR_ROW2
+        A[MOD_COLOR][3, :, r] .= COLOR_ROW3
 
-        A[MOD_SPECIES][2, :, r] .= species_row2
-        A[MOD_SPECIES][3, :, r] .= species_row3
+        A[MOD_SPECIES][2, :, r] .= SPECIES_ROW2
+        A[MOD_SPECIES][3, :, r] .= SPECIES_ROW3
     end
 
     # Feedback modality
@@ -292,6 +295,119 @@ function build_concepts_model(; T::Int=2, allow_reports::Bool=true)
 end
 
 # =============================================================================
+# Generalization (Distance Question) Variant
+# =============================================================================
+
+"""
+    build_distance_A() -> Vector{Array{Float64}}
+
+Build A for the distance-question task (report: Yes/No).
+"""
+function build_distance_A()
+    Ns = (N_CONCEPTS, N_DISTANCE_REPORT_STATES)
+    No = (3, 3, 3, 4)
+    A = Vector{Array{Float64}}(undef, length(No))
+    for g in 1:length(No)
+        A[g] = zeros(Float64, No[g], Ns...)
+    end
+
+    for r in 1:N_DISTANCE_REPORT_STATES
+        A[MOD_SIZE][2, :, r] .= SIZE_ROW2
+        A[MOD_SIZE][3, :, r] .= SIZE_ROW3
+
+        A[MOD_COLOR][2, :, r] .= COLOR_ROW2
+        A[MOD_COLOR][3, :, r] .= COLOR_ROW3
+
+        A[MOD_SPECIES][2, :, r] .= SPECIES_ROW2
+        A[MOD_SPECIES][3, :, r] .= SPECIES_ROW3
+    end
+
+    # Distance rule: seen from afar if big + colorful
+    seen_from_distance = [(SIZE_ROW2[i] == 1 && COLOR_ROW2[i] == 1) for i in 1:N_CONCEPTS]
+
+    # Feedback modality
+    A[MOD_FEEDBACK][FEEDBACK_START, :, 1] .= 1.0
+
+    for animal in 1:N_CONCEPTS
+        if seen_from_distance[animal]
+            A[MOD_FEEDBACK][FEEDBACK_CORRECT_SPECIFIC, animal, 2] = 1.0
+            A[MOD_FEEDBACK][FEEDBACK_INCORRECT, animal, 3] = 1.0
+        else
+            A[MOD_FEEDBACK][FEEDBACK_INCORRECT, animal, 2] = 1.0
+            A[MOD_FEEDBACK][FEEDBACK_CORRECT_SPECIFIC, animal, 3] = 1.0
+        end
+    end
+
+    return A
+end
+
+"""
+    build_distance_B() -> Vector{Array{Float64,3}}
+"""
+function build_distance_B()
+    B = Vector{Array{Float64,3}}(undef, 2)
+
+    B[1] = zeros(Float64, N_CONCEPTS, N_CONCEPTS, 1)
+    for s in 1:N_CONCEPTS
+        B[1][s, s, 1] = 1.0
+    end
+
+    B[2] = zeros(Float64, N_DISTANCE_REPORT_STATES, N_DISTANCE_REPORT_STATES, N_DISTANCE_REPORT_STATES)
+    for k in 1:N_DISTANCE_REPORT_STATES
+        B[2][k, :, k] .= 1.0
+    end
+
+    for s in 2:N_DISTANCE_REPORT_STATES
+        B[2][:, s, :] .= 0.0
+        B[2][s, s, :] .= 1.0
+    end
+
+    return B
+end
+
+"""
+    build_distance_D() -> Vector{Vector{Float64}}
+"""
+function build_distance_D()
+    D1 = ones(Float64, N_CONCEPTS)
+    D2 = zeros(Float64, N_DISTANCE_REPORT_STATES)
+    D2[1] = 1.0
+    return [D1, D2]
+end
+
+"""
+    build_distance_policies(T::Int=2; allow_reports::Bool=true) -> PolicySet
+"""
+function build_distance_policies(T::Int=2; allow_reports::Bool=true)
+    horizon = T - 1
+    n_factors = 2
+
+    actions = allow_reports ? [2, 3] : [1]
+    n_policies = length(actions)
+    V = ones(Int, horizon, n_policies, n_factors)
+
+    for (i, act) in enumerate(actions)
+        V[:, i, 2] .= act
+    end
+    V[:, :, 1] .= 1
+
+    E = fill(1.0 / n_policies, n_policies)
+    return PolicySet(V, E)
+end
+
+"""
+    build_distance_model(; T=2, allow_reports=true) -> AIFModel
+"""
+function build_distance_model(; T::Int=2, allow_reports::Bool=true)
+    A = build_distance_A()
+    B = build_distance_B()
+    C = build_concepts_C(T)
+    D = build_distance_D()
+    policies = build_distance_policies(T; allow_reports=allow_reports)
+    return AIFModel(A, B, C, D; policies=policies, trial_length=T)
+end
+
+# =============================================================================
 # Agent Initialization
 # =============================================================================
 
@@ -345,6 +461,143 @@ function init_concepts_agent(
 end
 
 # =============================================================================
+# Training and Transfer Helpers
+# =============================================================================
+
+"""
+    concepts_settings(; kwargs...) -> AIFSettings
+
+Default settings for the concepts model (alpha=128, gamma=1).
+"""
+function concepts_settings(;
+    gamma::Real=1.0,
+    alpha::Real=128.0,
+    eta_A::Real=1.0,
+    eta_D::Real=1.0,
+    eta_B::Real=0.0,
+    use_param_info_gain::Bool=false,
+    use_dirichlet_expectation::Bool=true
+)
+    return AIFSettings(
+        gamma=gamma,
+        alpha=alpha,
+        eta_A=eta_A,
+        eta_B=eta_B,
+        eta_D=eta_D,
+        use_param_info_gain=use_param_info_gain,
+        use_dirichlet_expectation=use_dirichlet_expectation
+    )
+end
+
+"""
+    copy_agent_to_model(agent, model) -> AIFAgent
+
+Create a new agent for `model` carrying over learned pA/pB/pD from `agent`.
+Useful when switching between learning and reporting policy sets.
+"""
+function copy_agent_to_model(agent::AIFAgent, model::AIFModel)
+    pA = [copy(pa) for pa in agent.pA]
+    pB = [copy(pb) for pb in agent.pB]
+    pD = [copy(pd) for pd in agent.pD]
+    return init_agent(model, pA, pB, pD)
+end
+
+"""
+    run_concepts_learning!(agent, model; n_trials=2000, animal_probs, animal_sequence, learn_A, learn_D, settings)
+
+Run the learning phase with reporting disabled (policies restricted by model).
+"""
+function run_concepts_learning!(
+    agent::AIFAgent,
+    model::AIFModel;
+    n_trials::Int=2000,
+    animal_probs::Vector{Float64}=fill(1.0 / N_CONCEPTS, N_CONCEPTS),
+    animal_sequence::Union{Nothing, Vector{Int}}=nothing,
+    learn_A::Vector{Int}=[MOD_SIZE, MOD_COLOR, MOD_SPECIES],
+    learn_D::Vector{Int}=[1],
+    settings::AIFSettings=concepts_settings()
+)
+    env = ConceptsEnvironment(model.A, model.B;
+        animal_probs=animal_probs,
+        animal_sequence=animal_sequence
+    )
+
+    for _ in 1:n_trials
+        run_trial!(agent, model, env, settings;
+            learn_A=learn_A,
+            learn_B=Int[],
+            learn_D=learn_D
+        )
+        # Tie feature likelihoods across report states (A does not depend on report)
+        for g in (MOD_SIZE, MOD_COLOR, MOD_SPECIES)
+            for r in 2:N_REPORT_STATES
+                agent.pA[g][:, :, r] .= agent.pA[g][:, :, 1]
+            end
+        end
+    end
+
+    return agent
+end
+
+# =============================================================================
+# Bayesian Model Reduction (BMR) for D
+# =============================================================================
+
+"""
+    bmr_log_evidence(q, p, r) -> Float64
+
+Compute negative log-evidence (free energy) for a reduced Dirichlet prior `r`
+given posterior `q` and full prior `p`.
+"""
+function bmr_log_evidence(q::AbstractVector, p::AbstractVector, r::AbstractVector)
+    logB(x) = sum(loggamma.(x)) - loggamma(sum(x))
+    n = q .- p
+    log_evidence = logB(r .+ n) - logB(r)
+    return -log_evidence
+end
+
+"""
+    bmr_reduce_D(q, p; values=[1.0, 8.0]) -> NamedTuple
+
+Search over combinations of `values` for each element of D to find the
+reduced prior that maximizes log evidence (minimizes free energy).
+"""
+function bmr_reduce_D(q::AbstractVector, p::AbstractVector; values::Vector{Float64}=[1.0, 8.0])
+    n = length(q)
+    n_models = length(values)^n
+    best_r = copy(p)
+    best_f = Inf
+
+    for mask in 0:(n_models - 1)
+        r = similar(q, Float64)
+        idx = mask
+        for i in 1:n
+            choice = (idx % length(values)) + 1
+            r[i] = values[choice]
+            idx ÷= length(values)
+        end
+        f = bmr_log_evidence(q, p, r)
+        if f < best_f
+            best_f = f
+            best_r .= r
+        end
+    end
+
+    return (prior=best_r, free_energy=best_f)
+end
+
+"""
+    apply_bmr_D!(agent, prior; values=[1.0, 8.0]) -> NamedTuple
+
+Apply BMR to factor 1 (concept identity) and overwrite agent.pD[1].
+"""
+function apply_bmr_D!(agent::AIFAgent, prior::Vector{Float64}; values::Vector{Float64}=[1.0, 8.0])
+    result = bmr_reduce_D(agent.pD[1], prior; values=values)
+    agent.pD[1] .= result.prior
+    return result
+end
+
+# =============================================================================
 # Evaluation Helpers
 # =============================================================================
 
@@ -368,32 +621,55 @@ function classify_report(animal_idx::Int, report_action::Int)
 end
 
 """
+    classify_distance_report(animal_idx, report_action) -> Symbol
+
+Return :correct or :incorrect for the distance question (Yes/No).
+"""
+function classify_distance_report(animal_idx::Int, report_action::Int)
+    seen_from_distance = (SIZE_ROW2[animal_idx] == 1 && COLOR_ROW2[animal_idx] == 1)
+    if report_action == 1
+        return :no_report
+    elseif report_action == 2
+        return seen_from_distance ? :correct : :incorrect
+    elseif report_action == 3
+        return seen_from_distance ? :incorrect : :correct
+    else
+        return :incorrect
+    end
+end
+
+"""
     evaluate_reporting(agent, model; trials_per_animal=20) -> NamedTuple
 """
 function evaluate_reporting(
     agent::AIFAgent,
     model::AIFModel;
-    trials_per_animal::Int=20
+    trials_per_animal::Int=20,
+    animal_sequence::Union{Nothing, Vector{Int}}=nothing,
+    deterministic::Bool=true,
+    settings::AIFSettings=concepts_settings(eta_A=0.0, eta_B=0.0, eta_D=0.0)
 )
     total = 0
     correct_specific = 0
     correct_basic = 0
     incorrect = 0
 
-    seq = vcat([fill(a, trials_per_animal) for a in 1:N_CONCEPTS]...)
+    seq = isnothing(animal_sequence) ?
+        vcat([fill(a, trials_per_animal) for a in 1:N_CONCEPTS]...) :
+        animal_sequence
     env = ConceptsEnvironment(model.A, model.B; animal_sequence=seq)
 
-    settings = AIFSettings(
-        gamma=1.0,
-        alpha=128.0,
-        eta_A=0.0,
-        eta_D=0.0,
-        eta_B=0.0,
-        use_param_info_gain=false
-    )
-
     for _ in 1:length(seq)
-        hist = run_trial!(agent, model, env, settings; learn_A=Int[], learn_B=Int[], learn_D=Int[])
+        hist = run_trial!(
+            agent,
+            model,
+            env,
+            settings;
+            learn_A=Int[],
+            learn_B=Int[],
+            learn_D=Int[],
+            deterministic_actions=deterministic
+        )
         animal_idx = env.current_state[1]
         report_action = hist.actions[1][2]
         result = classify_report(animal_idx, report_action)
@@ -417,3 +693,54 @@ function evaluate_reporting(
     )
 end
 
+"""
+    evaluate_distance_reporting(agent, model; trials_per_animal=20, deterministic=true, settings=...)
+
+Evaluate accuracy on the distance question (Yes/No).
+"""
+function evaluate_distance_reporting(
+    agent::AIFAgent,
+    model::AIFModel;
+    trials_per_animal::Int=20,
+    animal_sequence::Union{Nothing, Vector{Int}}=nothing,
+    deterministic::Bool=true,
+    settings::AIFSettings=concepts_settings(eta_A=0.0, eta_B=0.0, eta_D=0.0)
+)
+    total = 0
+    correct = 0
+    incorrect = 0
+
+    seq = isnothing(animal_sequence) ?
+        vcat([fill(a, trials_per_animal) for a in 1:N_CONCEPTS]...) :
+        animal_sequence
+    env = ConceptsEnvironment(model.A, model.B; animal_sequence=seq)
+
+    for _ in 1:length(seq)
+        hist = run_trial!(
+            agent,
+            model,
+            env,
+            settings;
+            learn_A=Int[],
+            learn_B=Int[],
+            learn_D=Int[],
+            deterministic_actions=deterministic
+        )
+        animal_idx = env.current_state[1]
+        report_action = hist.actions[1][2]
+        result = classify_distance_report(animal_idx, report_action)
+        total += 1
+        if result == :correct
+            correct += 1
+        elseif result == :incorrect
+            incorrect += 1
+        end
+    end
+
+    return (
+        total=total,
+        correct=correct,
+        incorrect=incorrect,
+        acc=correct / total
+    )
+end
