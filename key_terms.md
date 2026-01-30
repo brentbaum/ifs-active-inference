@@ -4,6 +4,22 @@
 
 ---
 
+## Precision
+
+**What is precision applied to?** Precision is (always) applied to prediction error.
+
+```
+weighted update = prediction error × precision
+```
+
+Precision is inverse variance (1/σ²) — a measure of confidence or reliability. It modulates how much a given prediction error influences belief updating. High precision = this error matters, update strongly. Low precision = this error is unreliable, discount it.
+
+**See also:**
+- `papers/limanowski_friston_2018_seeing_the_dark/paper.md` — Precision as the mechanism for attention and transparency/opacity
+- `papers/limanowski_blankenburg_2013_minimal_self/paper.md` — Precision weighting in hierarchical self-models
+
+---
+
 ## Opacity
 
 The degree to which the generative world model is aware of itself as a construction—when the representational nature of experience becomes introspectively accessible. An opaque representation appears "as being constructed by one's mind" rather than as direct contact with reality.
