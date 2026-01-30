@@ -28,6 +28,7 @@ struct AIFSettings{T<:Real}
     use_utility::Bool           # Include utility/risk term in EFE
     use_states_info_gain::Bool  # Include state information gain (epistemic value)
     use_param_info_gain::Bool   # Include parameter information gain (learning value)
+    param_info_gain_weight::T   # Weight for parameter info gain term
     learn_A::Vector{Int}        # Modalities to include in param info gain
     learn_B::Vector{Int}        # Factors to include in param info gain
     fpi_max_iter::Int           # Fixed-point iteration max iterations
@@ -66,6 +67,7 @@ function AIFSettings(;
     use_utility::Bool=true,
     use_states_info_gain::Bool=true,
     use_param_info_gain::Bool=false,
+    param_info_gain_weight::Real=1.0,
     learn_A::Vector{Int}=Int[],
     learn_B::Vector{Int}=Int[],
     fpi_max_iter::Int=16,
@@ -77,11 +79,13 @@ function AIFSettings(;
     lr_D = isnothing(eta_D) ? eta : eta_D
 
     T = promote_type(typeof(gamma), typeof(alpha), typeof(eta),
-                     typeof(lr_A), typeof(lr_B), typeof(lr_D), typeof(fpi_tol))
+                     typeof(lr_A), typeof(lr_B), typeof(lr_D),
+                     typeof(param_info_gain_weight), typeof(fpi_tol))
     AIFSettings{T}(
         T(gamma), T(alpha), T(eta), T(lr_A), T(lr_B), T(lr_D),
         use_ambiguity, use_utility, use_states_info_gain,
-        use_param_info_gain, copy(learn_A), copy(learn_B),
+        use_param_info_gain, T(param_info_gain_weight),
+        copy(learn_A), copy(learn_B),
         fpi_max_iter, T(fpi_tol)
     )
 end

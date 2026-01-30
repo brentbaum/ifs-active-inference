@@ -23,8 +23,8 @@ function infer_policies!(
         G[pi] = calculate_efe(agent, model, pi, settings)
     end
 
-    # Log posterior: ln Q(π) = ln P(π) - γ G(π) + const
-    ln_qpi = log.(model.policies.E .+ eps(T)) .- settings.gamma .* G
+    # Match pymdp: Q(π) ∝ exp(γ G(π)) * P(π)
+    ln_qpi = log.(model.policies.E .+ eps(T)) .+ settings.gamma .* G
 
     # Normalize with numerical stability
     agent.qpi .= softmax(ln_qpi)
