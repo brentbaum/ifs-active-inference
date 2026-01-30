@@ -58,7 +58,7 @@ julia --project=. test/test_trust_game.jl
 
 ## Manual Verification Checklist
 
-Compare generated plots (`trust_game_paper_style.png`, `trust_game_comparison.png`) against paper Figure 2:
+Compare generated plots (`figures/trust_game/trust_game_paper_style.png`, `figures/trust_game/trust_game_comparison.png`) against paper Figure 2:
 
 ### Visual Pattern Matching
 
@@ -116,6 +116,6 @@ Expected sharing rates: **Healthy > Borderline > Social Anxiety > Depression**
 3. **Exact values**: Match patterns, not pixel-perfect numbers
 
 ## Files Generated
-- `trust_game_paper_style.png` - Single profile with phases
-- `trust_game_comparison.png` - All profiles comparison
+- `figures/trust_game/trust_game_paper_style.png` - Single profile with phases
+- `figures/trust_game/trust_game_comparison.png` - All profiles comparison
 - `test/test_trust_game.jl` - Automated verification tests
