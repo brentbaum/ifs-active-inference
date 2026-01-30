@@ -126,8 +126,8 @@ for (i, (results, title)) in enumerate([
     end
 end
 
-savefig(fig, "paper_figure_comparison.png")
-println("Saved to paper_figure_comparison.png")
+savefig(fig, "figures/trust_game/paper_figure_comparison.png")
+println("Saved to figures/trust_game/paper_figure_comparison.png")
 
 # =============================================================================
 # Create individual paper-style figures
@@ -137,19 +137,19 @@ println("\n\nGenerating individual paper-style figures...")
 plot_trust_game_paper_style(
     results_2A,
     title="Healthy-optimistic (Friendly → Hostile)",
-    save_path="trust_game_figure2A_style.png",
+    save_path="figures/trust_game/trust_game_figure2A_style.png",
     plot_pD=true
 )
 
 plot_trust_game_paper_style(
     results_2B,
     title="Healthy-optimistic (Hostile → Friendly)",
-    save_path="trust_game_figure2B_style.png",
+    save_path="figures/trust_game/trust_game_figure2B_style.png",
     plot_pD=true
 )
 
 println("\n✓ All figures generated!")
 println("\nFiles created:")
-println("  - paper_figure_comparison.png   (side-by-side 2A and 2B)")
-println("  - trust_game_figure2A_style.png (friendly → hostile)")
-println("  - trust_game_figure2B_style.png (hostile → friendly)")
+println("  - figures/trust_game/paper_figure_comparison.png   (side-by-side 2A and 2B)")
+println("  - figures/trust_game/trust_game_figure2A_style.png (friendly → hostile)")
+println("  - figures/trust_game/trust_game_figure2B_style.png (hostile → friendly)")
