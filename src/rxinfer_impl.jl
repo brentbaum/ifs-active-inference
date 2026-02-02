@@ -411,14 +411,37 @@ function run_rxinfer_exposure_therapy(;
     matrices = build_rxinfer_matrices(params=params)
 
     # Initial d prior (Dirichlet concentration parameters)
+    # Use UNIFORM prior (like rxinfer_native.jl) to allow unbiased learning
+    # The old biased prior from matrices.d strongly favored danger, preventing exploration
     d_prior = if low_concentration
         ones(matrices.n_states) .+ 0.1
     else
-        copy(matrices.d)
+        ones(matrices.n_states)  # Uniform prior - no initial bias toward danger
     end
+
+    # === SEPARATE GENERATIVE MODEL FROM RECOGNITION MODEL ===
+    # A_world: Fixed generative model - the TRUE observation likelihoods
+    #          Used ONLY for sampling observations from the environment
+    # A_agent: Learnable recognition model - agent's BELIEFS about P(o|s)
+    #          Used for state inference, EFE calculation, and updated via learning
+    #
+    # This separation allows the agent to have "wrong" initial beliefs that
+    # get corrected through experience, matching the active inference framework.
+    # See simulation.jl which uses model.A (fixed) vs agent.a (learnable).
+
+    A_world = deepcopy(matrices.A)  # Fixed - never modified during simulation
+
+    # Initial A priors (Dirichlet concentration parameters for observation likelihoods)
+    # We learn modality 3 (affect) to match the original paper model
+    a_priors = [copy(A_g) .+ 1.0 for A_g in matrices.A]  # Add 1 for proper Dirichlet
+    modalities_to_learn = [3]  # Only learn affect modality (matches paper)
+
+    # A_agent: normalized beliefs derived from a_priors
+    A_agent = [a_priors[g] ./ sum(a_priors[g], dims=1) for g in 1:length(matrices.A)]
 
     # Track evolution
     d_evolution = Vector{Float64}[]
+    a_evolution = Matrix{Float64}[]  # Track A[3] evolution
     approach_count = 0
     avoid_count = 0
     efe_history = Vector{Float64}[]  # Track EFE values
@@ -432,6 +455,7 @@ function run_rxinfer_exposure_therapy(;
     for trial in 1:n_trials
         # Track observations and states for this trial
         observations = Vector{Int}[]
+        observations_onehot = Vector{Vector{Vector{Float64}}}()  # For A learning
         true_states = Int[]
         actions = Int[]
 
@@ -444,10 +468,10 @@ function run_rxinfer_exposure_therapy(;
         qs = d_prior ./ sum(d_prior)
 
         for t in 1:params.T
-            # Generate observation for each modality
+            # Generate observation for each modality using A_world (true generative model)
             obs = Int[]
             for g in 1:length(matrices.No)
-                probs = matrices.A[g][:, true_state]
+                probs = A_world[g][:, true_state]  # Use FIXED world model
                 probs = probs ./ (sum(probs) + 1e-16)
                 # Sample from categorical
                 r = rand()
@@ -463,11 +487,14 @@ function run_rxinfer_exposure_therapy(;
                 push!(obs, sampled)
             end
             push!(observations, obs)
+            # Also store as one-hot for A learning
+            obs_onehot = [one_hot(obs[g], matrices.No[g]) for g in 1:length(matrices.No)]
+            push!(observations_onehot, obs_onehot)
 
-            # State inference: update belief given observation
+            # State inference: update belief given observation using A_agent (learned beliefs)
             lik = ones(matrices.n_states)
             for g in 1:length(matrices.No)
-                lik .*= matrices.A[g][obs[g], :]
+                lik .*= A_agent[g][obs[g], :]  # Use LEARNED agent beliefs
             end
             qs = qs .* lik
             qs = qs ./ (sum(qs) + 1e-16)
@@ -478,13 +505,15 @@ function run_rxinfer_exposure_therapy(;
                     # Exposure therapy: force approach
                     action = ACTION_APPROACH
                 else
-                    # Active inference: select action via EFE
-                    qpi, G = infer_policies(qs, matrices; gamma=gamma)
+                    # Active inference: select action via EFE using A_agent
+                    # Create a matrices-like object with A_agent for EFE calculation
+                    matrices_agent = (A=A_agent, B_actions=matrices.B_actions, C=matrices.C, E=matrices.E, T=matrices.T)
+                    qpi, G = infer_policies(qs, matrices_agent; gamma=gamma)
                     action = sample_action(qpi)
 
                     # Store EFE for first timestep of first trial for debugging
                     if trial == 1 && t == 1
-                        push!(efe_history, G...)
+                        push!(efe_history, G)
                     end
                 end
                 push!(actions, action)
@@ -538,10 +567,10 @@ function run_rxinfer_exposure_therapy(;
             end
             predicted = predicted ./ (sum(predicted) + 1e-16)
 
-            # Update with observation
+            # Update with observation using A_agent (learned beliefs, not A_world)
             lik = ones(matrices.n_states)
             for g in 1:length(matrices.No)
-                lik .*= matrices.A[g][observations[t][g], :]
+                lik .*= A_agent[g][observations[t][g], :]  # Use learned beliefs
             end
             posterior = predicted .* lik
             posterior = posterior ./ (sum(posterior) + 1e-16)
@@ -556,6 +585,25 @@ function run_rxinfer_exposure_therapy(;
         # Store current d_prior
         push!(d_evolution, copy(d_prior))
 
+        # Update A_agent for learnable modalities (external Dirichlet update)
+        # Uses soft state posteriors (qs) instead of argmax for more stable learning
+        for g in modalities_to_learn
+            # Extract observations for this modality
+            obs_g = [observations_onehot[t][g] for t in 1:length(observations_onehot)]
+
+            # Accumulate counts using SOFT state beliefs (not argmax)
+            # This is more principled: weight observation by probability of each state
+            for t in eachindex(obs_g)
+                a_priors[g] .+= eta .* (obs_g[t] * filtered_beliefs[t]')
+            end
+
+            # Update A_agent with normalized likelihood (NOT A_world!)
+            A_agent[g] .= a_priors[g] ./ sum(a_priors[g], dims=1)
+        end
+
+        # Store A_agent[3] evolution
+        push!(a_evolution, copy(A_agent[3]))
+
         if trial % 50 == 0
             @info "RxInfer Trial $trial/$n_trials" approach=approach_count avoid=avoid_count
         end
@@ -563,6 +611,7 @@ function run_rxinfer_exposure_therapy(;
 
     return (
         d_evolution = d_evolution,
+        a_evolution = a_evolution,
         approach_count = approach_count,
         avoid_count = avoid_count,
         n_trials = n_trials,
