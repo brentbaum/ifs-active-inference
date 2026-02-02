@@ -46,6 +46,9 @@ include("activeinference_impl.jl")
 # RxInfer.jl-based implementation (optional)
 include("rxinfer_impl.jl")
 
+# Native RxInfer factor graph models (optional, requires RxInfer)
+include("rxinfer_native.jl")
+
 # Export public API
 export ModelParams,
        build_model,
@@ -79,6 +82,15 @@ export RXINFER_AVAILABLE,
        build_rxinfer_matrices,
        one_hot,
        flatten_state,
-       unflatten_state
+       unflatten_state,
+       run_rxinfer_exposure_therapy
+
+# Native RxInfer factor graph exports (when available)
+export infer_state_rxinfer,
+       infer_temporal_state_rxinfer,
+       learn_prior_rxinfer,
+       learn_likelihood_external,
+       learn_likelihood_multi_modality,
+       run_rxinfer_native_therapy
 
 end # module
