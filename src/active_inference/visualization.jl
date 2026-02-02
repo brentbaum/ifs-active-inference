@@ -614,3 +614,463 @@ function plot_learning_curve(
 
     return p
 end
+
+# =============================================================================
+# Coherence Therapy Visualization
+# =============================================================================
+
+"""
+    plot_ct_trajectories(all_results; save_path=nothing)
+
+Plot P(avoid) trajectories for all conditions in the Coherence Therapy simulation.
+Shows the key comparison: CT step function vs CBT gradual resolution.
+
+# Arguments
+- `all_results`: NamedTuple with :baseline, :cbt, :ct, :ct_dangerous fields
+- `save_path`: Optional path to save the figure
+
+# Returns
+A multi-panel plot showing all condition trajectories.
+"""
+function plot_ct_trajectories(all_results; save_path::Union{String,Nothing}=nothing)
+    # Aggregate trajectories
+    function agg(results)
+        n_trials = length(results[1].p_avoid)
+        n_reps = length(results)
+        traj = zeros(n_trials, n_reps)
+        for (i, r) in enumerate(results)
+            traj[:, i] = r.p_avoid
+        end
+        m = vec(mean(traj, dims=2))
+        s = vec(std(traj, dims=2))
+        ci_lo = m .- 1.96 * s / sqrt(n_reps)
+        ci_hi = m .+ 1.96 * s / sqrt(n_reps)
+        return (mean=m, ci_lo=ci_lo, ci_hi=ci_hi)
+    end
+
+    baseline = agg(all_results.baseline)
+    cbt = agg(all_results.cbt)
+    ct = agg(all_results.ct)
+    ctd = agg(all_results.ct_dangerous)
+
+    n_trials = length(baseline.mean)
+    trials = 1:n_trials
+
+    # Create main comparison plot
+    p = plot(
+        xlabel="Trial",
+        ylabel="P(avoid)",
+        title="Coherence Therapy vs CBT: Avoidance Trajectories",
+        legend=:right,
+        ylims=(-0.05, 1.05),
+        size=(900, 600),
+        grid=true,
+        gridlinewidth=0.5,
+        gridalpha=0.3
+    )
+
+    # Colors
+    c_baseline = RGB(0.7, 0.7, 0.7)
+    c_cbt = RGB(0.2, 0.6, 0.9)
+    c_ct = RGB(0.1, 0.7, 0.3)
+    c_ctd = RGB(0.9, 0.4, 0.2)
+
+    # Plot with confidence intervals
+    plot!(p, trials, baseline.mean, ribbon=(baseline.mean .- baseline.ci_lo, baseline.ci_hi .- baseline.mean),
+        fillalpha=0.2, color=c_baseline, linewidth=3, label="Baseline (modular)")
+
+    plot!(p, trials, cbt.mean, ribbon=(cbt.mean .- cbt.ci_lo, cbt.ci_hi .- cbt.mean),
+        fillalpha=0.2, color=c_cbt, linewidth=3, label="CBT (gradual learning)")
+
+    plot!(p, trials, ct.mean, ribbon=(ct.mean .- ct.ci_lo, ct.ci_hi .- ct.mean),
+        fillalpha=0.2, color=c_ct, linewidth=3, label="CT (modularity-breaking)")
+
+    plot!(p, trials, ctd.mean, ribbon=(ctd.mean .- ctd.ci_lo, ctd.ci_hi .- ctd.mean),
+        fillalpha=0.2, color=c_ctd, linewidth=3, label="CT-dangerous")
+
+    # Add intervention marker
+    vline!(p, [51], linestyle=:dash, color=:black, alpha=0.5, linewidth=2, label="CT Intervention")
+
+    # Add annotations
+    annotate!(p, [(75, 0.95, text("Baseline: maintains avoidance", 8, :gray)),
+                  (75, 0.15, text("CBT: gradual resolution", 8, c_cbt)),
+                  (60, 0.5, text("CT: step function", 8, c_ct, :left))])
+
+    if !isnothing(save_path)
+        savefig(p, save_path)
+        @info "Saved CT trajectories to $save_path"
+    end
+
+    return p
+end
+
+"""
+    plot_ct_mechanism_comparison(all_results; save_path=nothing)
+
+Plot side-by-side comparison highlighting the CT vs CBT mechanism difference.
+"""
+function plot_ct_mechanism_comparison(all_results; save_path::Union{String,Nothing}=nothing)
+    function agg(results)
+        n_trials = length(results[1].p_avoid)
+        n_reps = length(results)
+        traj = zeros(n_trials, n_reps)
+        for (i, r) in enumerate(results)
+            traj[:, i] = r.p_avoid
+        end
+        return vec(mean(traj, dims=2))
+    end
+
+    cbt = agg(all_results.cbt)
+    ct = agg(all_results.ct)
+    n_trials = length(cbt)
+    trials = 1:n_trials
+
+    # Create two-panel plot
+    p1 = plot(trials, cbt,
+        xlabel="Trial", ylabel="P(avoid)",
+        title="CBT: Gradual Parameter Learning",
+        linewidth=3, color=RGB(0.2, 0.6, 0.9),
+        legend=false, ylims=(-0.05, 1.05),
+        grid=true, gridlinewidth=0.5
+    )
+    hline!(p1, [0.5], linestyle=:dot, color=:gray, alpha=0.5)
+
+    # Add gradient annotation
+    annotate!(p1, [(50, 0.7, text("D₃ belief updating\nover many trials", 9, :center))])
+
+    p2 = plot(trials, ct,
+        xlabel="Trial", ylabel="P(avoid)",
+        title="CT: Structural Change (Modularity-Breaking)",
+        linewidth=3, color=RGB(0.1, 0.7, 0.3),
+        legend=false, ylims=(-0.05, 1.05),
+        grid=true, gridlinewidth=0.5
+    )
+    vline!(p2, [51], linestyle=:dash, color=:red, alpha=0.7, linewidth=2)
+    hline!(p2, [0.5], linestyle=:dot, color=:gray, alpha=0.5)
+
+    # Add step annotation
+    annotate!(p2, [(51, 0.5, text("Intervention:\nSchema becomes\ncontext-sensitive", 9, :left))])
+
+    p = plot(p1, p2, layout=(1, 2), size=(1100, 450), margin=5Plots.mm)
+
+    if !isnothing(save_path)
+        savefig(p, save_path)
+        @info "Saved CT mechanism comparison to $save_path"
+    end
+
+    return p
+end
+
+"""
+    plot_ct_schematic()
+
+Create a schematic diagram showing the model structure and therapy mechanism.
+"""
+function plot_ct_schematic(; save_path::Union{String,Nothing}=nothing)
+    # Create a conceptual diagram using annotations
+    p = plot(
+        xlims=(0, 10), ylims=(0, 8),
+        aspect_ratio=:equal,
+        axis=false, grid=false,
+        legend=false,
+        size=(900, 700),
+        title="Coherence Therapy Active Inference Model"
+    )
+
+    # Box colors
+    modular_color = RGB(0.9, 0.7, 0.7)
+    integrated_color = RGB(0.7, 0.9, 0.7)
+
+    # Modular mode box (left)
+    plot!(p, Shape([1, 4, 4, 1], [4.5, 4.5, 7.5, 7.5]), color=modular_color, alpha=0.5)
+    annotate!(p, [(2.5, 7.2, text("MODULAR MODE", 11, :bold, :center)),
+                  (2.5, 6.5, text("Context-blind", 10, :center)),
+                  (2.5, 6.0, text("• A₁ uniform (can't process cues)", 8, :left)),
+                  (2.5, 5.5, text("• D₁ fearful prior", 8, :left)),
+                  (2.5, 5.0, text("• D₃ learning blocked", 8, :left))])
+
+    # Integrated mode box (right)
+    plot!(p, Shape([6, 9, 9, 6], [4.5, 4.5, 7.5, 7.5]), color=integrated_color, alpha=0.5)
+    annotate!(p, [(7.5, 7.2, text("INTEGRATED MODE", 11, :bold, :center)),
+                  (7.5, 6.5, text("Context-aware", 10, :center)),
+                  (7.5, 6.0, text("• A₁ identity (processes cues)", 8, :left)),
+                  (7.5, 5.5, text("• D₁ accurate prior", 8, :left)),
+                  (7.5, 5.0, text("• D₃ learning enabled", 8, :left))])
+
+    # Arrow between modes
+    plot!(p, [4.2, 5.8], [6, 6], arrow=true, color=:black, linewidth=2)
+    annotate!(p, [(5, 6.3, text("Therapist\nIntervention", 9, :center))])
+
+    # Outcome boxes
+    # Avoidance outcome (left bottom)
+    plot!(p, Shape([1, 4, 4, 1], [1, 1, 3, 3]), color=RGB(1.0, 0.8, 0.8), alpha=0.5)
+    annotate!(p, [(2.5, 2.5, text("OUTCOME", 10, :bold, :center)),
+                  (2.5, 2.0, text("P(avoid) ≈ 0.96", 9, :center)),
+                  (2.5, 1.5, text("Pathological avoidance", 8, :center))])
+
+    # Approach outcome (right bottom)
+    plot!(p, Shape([6, 9, 9, 6], [1, 1, 3, 3]), color=RGB(0.8, 1.0, 0.8), alpha=0.5)
+    annotate!(p, [(7.5, 2.5, text("OUTCOME", 10, :bold, :center)),
+                  (7.5, 2.0, text("P(approach) ≈ 0.97", 9, :center)),
+                  (7.5, 1.5, text("Context-appropriate engagement", 8, :center))])
+
+    # Arrows from modes to outcomes
+    plot!(p, [2.5, 2.5], [4.3, 3.2], arrow=true, color=:gray, linewidth=1.5)
+    plot!(p, [7.5, 7.5], [4.3, 3.2], arrow=true, color=:gray, linewidth=1.5)
+
+    # Key insight box at bottom
+    annotate!(p, [(5, 0.4, text("Key Insight: Resolution via structural change, not belief updating (D₃ change ≈ 0)", 10, :center, RGB(0.3, 0.3, 0.6)))])
+
+    if !isnothing(save_path)
+        savefig(p, save_path)
+        @info "Saved CT schematic to $save_path"
+    end
+
+    return p
+end
+
+"""
+    plot_ct_all_panels(all_results; save_dir=nothing)
+
+Generate all Coherence Therapy visualization panels.
+
+# Arguments
+- `all_results`: Results from run_all_conditions()
+- `save_dir`: Optional directory to save all plots
+
+# Returns
+NamedTuple with all plot objects
+"""
+function plot_ct_all_panels(all_results; save_dir::Union{String,Nothing}=nothing)
+    plots = Dict{Symbol, Any}()
+
+    # Main trajectory plot
+    plots[:trajectories] = plot_ct_trajectories(all_results)
+
+    # Mechanism comparison
+    plots[:mechanism] = plot_ct_mechanism_comparison(all_results)
+
+    # Schematic
+    plots[:schematic] = plot_ct_schematic()
+
+    if !isnothing(save_dir)
+        mkpath(save_dir)
+        savefig(plots[:trajectories], joinpath(save_dir, "ct_trajectories.png"))
+        savefig(plots[:mechanism], joinpath(save_dir, "ct_mechanism_comparison.png"))
+        savefig(plots[:schematic], joinpath(save_dir, "ct_schematic.png"))
+
+        # Also save as PDF for publication
+        savefig(plots[:trajectories], joinpath(save_dir, "ct_trajectories.pdf"))
+        savefig(plots[:mechanism], joinpath(save_dir, "ct_mechanism_comparison.pdf"))
+
+        @info "Saved all CT plots to $save_dir"
+    end
+
+    return (plots...,)
+end
+
+# =============================================================================
+# Discovery Process Visualization (Chamberlin 2022 Extension)
+# =============================================================================
+
+"""
+    plot_discovery_trajectory(result::CTDiscoveryResult; title="Discovery Process")
+
+Plot Discovery simulation showing P(avoid), access level, and precision over trials.
+"""
+function plot_discovery_trajectory(result; title::String="Discovery Process: Gradual Schema Accessibility")
+    n_trials = length(result.p_avoid)
+
+    # Create 3-panel plot
+    l = @layout [a; b; c]
+
+    # Panel 1: P(avoid) trajectory
+    p1 = plot(1:n_trials, result.p_avoid,
+        ylabel="P(avoid)",
+        linewidth=2,
+        color=:red,
+        legend=false,
+        ylims=(0, 1),
+        grid=true,
+        title=title)
+
+    # Add P(approach) on same axis
+    plot!(p1, 1:n_trials, result.p_approach,
+        linewidth=2,
+        color=:green,
+        linestyle=:dash,
+        label="")
+
+    # Panel 2: Schema access level (as step function)
+    access_labels = ["Implicit", "Partial", "Explicit"]
+    p2 = plot(1:n_trials, result.access_trajectory,
+        ylabel="Access Level",
+        linewidth=2,
+        color=:purple,
+        seriestype=:steppost,
+        legend=false,
+        ylims=(0.5, 3.5),
+        yticks=(1:3, access_labels),
+        grid=true)
+
+    # Shade regions by access level
+    for i in 1:3
+        mask = result.access_trajectory .== i
+        if any(mask)
+            first_trial = findfirst(mask)
+            last_trial = findlast(mask)
+            if !isnothing(first_trial) && !isnothing(last_trial)
+                vspan!(p2, [first_trial, last_trial], alpha=0.1,
+                    color=[:red, :yellow, :green][i], label="")
+            end
+        end
+    end
+
+    # Panel 3: Annealed precision (exploration → exploitation)
+    p3 = plot(1:n_trials, result.precision_trajectory,
+        xlabel="Trial",
+        ylabel="Policy Precision (γ)",
+        linewidth=2,
+        color=:blue,
+        legend=false,
+        grid=true)
+
+    # Annotations
+    annotate!(p3, [(n_trials * 0.1, minimum(result.precision_trajectory) + 0.5,
+        text("Exploration", 8, :left)),
+        (n_trials * 0.9, maximum(result.precision_trajectory) - 0.5,
+        text("Exploitation", 8, :right))])
+
+    return plot(p1, p2, p3, layout=l, size=(800, 700))
+end
+
+"""
+    plot_discovery_comparison(results_dict; save_path=nothing)
+
+Compare different Discovery conditions (fast, standard, slow).
+"""
+function plot_discovery_comparison(results_dict; save_path::Union{String,Nothing}=nothing)
+    colors = Dict(
+        :fast => :green,
+        :standard => :blue,
+        :slow => :orange
+    )
+
+    labels = Dict(
+        :fast => "Fast Discovery",
+        :standard => "Standard Discovery",
+        :slow => "Slow Discovery"
+    )
+
+    # P(avoid) comparison
+    p1 = plot(title="Discovery Process Comparison: P(avoid)",
+        xlabel="Trial", ylabel="Mean P(avoid)",
+        ylims=(0, 1), grid=true, legend=:topright)
+
+    for (name, results) in results_dict
+        agg = aggregate_discovery_trajectories(results, :p_avoid)
+        n_trials = length(agg.mean)
+        plot!(p1, 1:n_trials, agg.mean,
+            ribbon=(agg.mean .- agg.ci_lower, agg.ci_upper .- agg.mean),
+            fillalpha=0.2,
+            linewidth=2,
+            color=get(colors, name, :gray),
+            label=get(labels, name, string(name)))
+    end
+
+    # Access level comparison
+    p2 = plot(title="Schema Accessibility Over Time",
+        xlabel="Trial", ylabel="Mean Access Level",
+        ylims=(0.5, 3.5),
+        yticks=(1:3, ["Implicit", "Partial", "Explicit"]),
+        grid=true, legend=:bottomright)
+
+    for (name, results) in results_dict
+        agg = aggregate_discovery_trajectories(results, :access_trajectory)
+        n_trials = length(agg.mean)
+        plot!(p2, 1:n_trials, agg.mean,
+            ribbon=(agg.mean .- agg.ci_lower, agg.ci_upper .- agg.mean),
+            fillalpha=0.2,
+            linewidth=2,
+            color=get(colors, name, :gray),
+            label=get(labels, name, string(name)))
+    end
+
+    # Combined plot
+    combined = plot(p1, p2, layout=(2, 1), size=(900, 700))
+
+    if !isnothing(save_path)
+        savefig(combined, save_path)
+        @info "Saved Discovery comparison plot to $save_path"
+    end
+
+    return combined
+end
+
+"""
+    plot_discovery_mechanism(result; title="Discovery Mechanism")
+
+Detailed view of Discovery mechanism showing how interpolation works.
+"""
+function plot_discovery_mechanism(result; title::String="Discovery: Simulated Annealing Mechanism")
+    n_trials = length(result.p_avoid)
+
+    l = @layout [a b; c d]
+
+    # Panel 1: Behavioral trajectory
+    p1 = plot(1:n_trials, result.p_avoid,
+        ylabel="P(avoid)",
+        linewidth=2,
+        color=:red,
+        label="Avoid",
+        title="Behavioral Change",
+        ylims=(0, 1),
+        legend=:right)
+    plot!(p1, 1:n_trials, result.p_approach,
+        linewidth=2,
+        color=:green,
+        label="Approach")
+
+    # Mark transitions
+    for i in 2:n_trials
+        if result.access_trajectory[i] > result.access_trajectory[i-1]
+            vline!(p1, [i], color=:purple, linestyle=:dash, alpha=0.5, label="")
+        end
+    end
+
+    # Panel 2: Mixing coefficient (α) over time
+    α_trajectory = [CT_ACCESS_MIXING[a] for a in result.access_trajectory]
+    p2 = plot(1:n_trials, α_trajectory,
+        ylabel="Mixing Coef. (α)",
+        linewidth=2,
+        color=:purple,
+        seriestype=:steppost,
+        title="Context-Sensitivity",
+        ylims=(0, 1),
+        legend=false)
+    annotate!(p2, [(10, 0.1, text("Modular", 8)), (90, 0.9, text("Integrated", 8))])
+
+    # Panel 3: Policy precision (γ)
+    p3 = plot(1:n_trials, result.precision_trajectory,
+        xlabel="Trial",
+        ylabel="Precision (γ)",
+        linewidth=2,
+        color=:blue,
+        title="Simulated Annealing",
+        legend=false)
+    annotate!(p3, [(10, minimum(result.precision_trajectory) + 1, text("Exploration", 8)),
+        (90, maximum(result.precision_trajectory) - 1, text("Exploitation", 8))])
+
+    # Panel 4: D3 belief trajectory
+    p_threat = [d[1] / sum(d) for d in result.d3_trajectory]
+    p4 = plot(1:n_trials, p_threat,
+        xlabel="Trial",
+        ylabel="P(threatening)",
+        linewidth=2,
+        color=:orange,
+        title="Schema Belief (D3)",
+        ylims=(0, 1),
+        legend=false)
+
+    return plot(p1, p2, p3, p4, layout=l, size=(1000, 700), plot_title=title)
+end

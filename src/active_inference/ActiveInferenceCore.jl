@@ -36,6 +36,7 @@ include("spider_model.jl")
 include("tmaze.jl")
 include("trust_game.jl")
 include("concepts_model.jl")
+include("coherence_therapy_model.jl")
 
 # Visualization
 include("visualization.jl")
@@ -100,5 +101,31 @@ export plot_belief_evolution, plot_belief_heatmap
 export plot_tmaze_trial, plot_tmaze_policy_probs
 export plot_tmaze_summary, plot_tmaze_comparison_summary
 export plot_learning_curve
+export plot_ct_trajectories, plot_ct_mechanism_comparison
+export plot_ct_schematic, plot_ct_all_panels
+export plot_discovery_trajectory, plot_discovery_comparison, plot_discovery_mechanism
+
+# Export Coherence Therapy Model (Chamberlin 2022)
+export CTEnvironment, CTModelParams, CTSimulationConfig, CTSimulationResult
+export TherapistIntervention, CTTestResults
+export build_ct_model, build_ct_A, build_ct_B, build_ct_C, build_ct_D, build_ct_policies
+export ct_settings, therapist_intervene!
+export baseline_config, cbt_config, ct_config, ct_dangerous_config
+export run_ct_simulation, run_ct_replications, run_all_conditions
+export aggregate_trajectories, compute_d3_change, cohens_d, detect_change_point
+export run_all_tests, print_test_results, run_chamberlin_2022
+
+# Export Discovery Process Model (Chamberlin 2022 Extension)
+export CT_ACCESS_IMPLICIT, CT_ACCESS_PARTIAL, CT_ACCESS_EXPLICIT, CT_ACCESS_MIXING
+export CTDiscoveryResult, CTDiscoveryConfig, DiscoverySchedule
+export build_discovery_model, build_discovery_A, build_discovery_D
+export interpolate_A1, interpolate_D1, compute_annealed_precision
+export run_ct_discovery_simulation, run_discovery_replications
+export discovery_config, discovery_fast_config, discovery_slow_config
+export aggregate_discovery_trajectories, therapist_scaffold!
+
+# Export Discovery Tests
+export CTDiscoveryTestResults, run_discovery_tests, print_discovery_test_results
+export run_discovery_conditions, run_chamberlin_2022_discovery, run_chamberlin_2022_full
 
 end # module

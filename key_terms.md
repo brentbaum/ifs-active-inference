@@ -34,6 +34,22 @@ The degree to which the generative world model is aware of itself as a construct
 
 ---
 
+## Hierarchical Precision
+
+A mechanism in hierarchical generative models where higher-level states parameterize the precision (inverse variance) of lower-level priors. This allows the system to represent beliefs about uncertainty itself—how confident to be in predictions at each level.
+
+**Mechanism:** A higher-level state (e.g., volatility) controls the precision of transitions at lower levels. High volatility → low precision → fast learning from new evidence. Low volatility → high precision → trust existing beliefs.
+
+**Key insight:** This separates "what I believe" from "how confident I am in that belief"—and makes confidence itself learnable.
+
+**Examples:** Volatility estimation in HGF, attention as precision optimization, trauma as aberrant precision (frozen high-confidence priors).
+
+**See also:**
+- `docs/concepts/hierarchical_precision.md` — detailed explanation with implementation notes
+- `paper_reproduction/chamberlin_2022/model_design.md` — discrete schema_mode as simplified version
+
+---
+
 ## Transparency
 
 The default mode of conscious experience where mental representations feel like direct, unmediated contact with mind-independent reality—"like looking through a window onto the world." The construction process remains inaccessible to introspection.
@@ -47,5 +63,49 @@ The default mode of conscious experience where mental representations feel like 
 **See also:**
 - `papers/limanowski_friston_2018_seeing_the_dark/paper.md` — "Seeing the Dark" title refers to making uncertainty (darkness) visible
 - `papers/laukkonen_friston_chandaria_2025_beautiful_loop/paper.md` — Relates to epistemic depth and luminosity
+
+---
+
+## Effective Free Energy
+
+*(Definition TBD)*
+
+---
+
+## Variational Bayesian Methods
+
+A family of techniques for approximating intractable integrals in Bayesian inference. Alternative to Markov Chain Monte Carlo (MCMC) methods. Includes variational message passing.
+
+**Key idea:** Instead of sampling (like MCMC), variational methods optimize an approximate distribution to be as close as possible to the true posterior.
+
+---
+
+## Marginal Likelihood (Evidence)
+
+The likelihood function integrated over the parameter space—i.e., the probability of generating the observed sample given the model (but marginalized over all possible parameter values).
+
+Also called "model evidence" in Bayesian model comparison. This is the denominator in Bayes' theorem.
+
+---
+
+## Bayes' Theorem
+
+The fundamental rule for updating beliefs given new evidence:
+
+```
+Posterior = (Likelihood × Prior) / Evidence
+```
+
+Or in notation: P(θ|D) = P(D|θ) × P(θ) / P(D)
+
+---
+
+## Prior Parameters
+
+Priors are characterized by two parameters:
+- **Mean (μ):** The expected value
+- **Sigma (σ):** The standard deviation
+
+**Precision** is calculated as: 1/σ² (inverse of variance)
 
 ---
