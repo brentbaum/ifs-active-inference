@@ -72,6 +72,44 @@ The default mode of conscious experience where mental representations feel like 
 
 ---
 
+## Factored State Space
+
+A decomposition of a large joint state into independent pieces called **factors**. Instead of tracking a single belief distribution over every possible combination of states, you maintain separate, smaller distributions — one per factor.
+
+For example, with factors context (3 states), action (4 states), threat (2 states), and schema_mode (2 states), the full joint has 3×4×2×2 = 48 entries. The factored representation has only 3+4+2+2 = 11 entries — each factor gets its own belief vector.
+
+This makes inference tractable but introduces an approximation: you lose the ability to represent correlations between factors (e.g., "context and threat are linked"). See **Mean-Field Approximation** for how this trade-off is formalized.
+
+**See also:**
+- `src/active_inference/inference.jl` — multi-factor VMP implementation
+- `PLAN_v2.md` (State Inference section) — mathematical specification
+
+---
+
+## Mean-Field Approximation
+
+The assumption that the joint posterior over all hidden states factorizes into independent marginals:
+
+```
+q(s) ≈ ∏_f q(s_f)
+```
+
+Each factor f gets its own variational update, derived by taking the expected log-joint while holding all other factors fixed:
+
+```
+ln q(s_f) ∝ ln D_f(s_f) + ∑_g 𝔼_{q(s₋f)}[ln A_g(o_g | s)]
+```
+
+The term 𝔼_{q(s₋f)}[·] is the marginalization step: summing out all factors except f, weighted by their current beliefs. Because each factor's update depends on the others' current beliefs, you iterate (cycle through all factors, recompute, repeat) until beliefs stabilize. This is the **fixed-point iteration** at the heart of variational message passing.
+
+**Trade-off:** Fast and tractable, but cannot represent correlations between factors. If two factors are strongly coupled (e.g., threat level depends heavily on context), the mean-field approximation may underestimate uncertainty.
+
+**See also:**
+- `src/active_inference/inference.jl` — `infer_states!()` implements this loop
+- `docs/concepts/hierarchical_precision.md` — how precision interacts with this factorization
+
+---
+
 ## Variational Bayesian Methods
 
 A family of techniques for approximating intractable integrals in Bayesian inference. Alternative to Markov Chain Monte Carlo (MCMC) methods. Includes variational message passing.
