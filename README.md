@@ -1,183 +1,69 @@
-# IFS Active Inference - Spider Phobia Exposure Therapy Model
+# IFS Active Inference
 
-A Julia implementation of the active inference model for CBT exposure therapy, based on the MATLAB code from the Scientific Reports paper on computational models of phobia treatment.
+Computational models of Internal Family Systems therapy through Active Inference. A Julia implementation of active inference for discrete POMDPs, applied to computational psychiatry.
 
-## Overview
+## What's Here
 
-This package implements a Partially Observable Markov Decision Process (POMDP) active inference model that simulates:
+This repo is organized using [PARA](https://fortelabs.com/blog/para/):
 
-1. **Spider phobia** with initial beliefs that spiders are dangerous
-2. **Exposure therapy** where repeated safe interactions update beliefs
-3. **Belief learning** through Dirichlet-categorical updates
+### Projects
 
-### Model Structure
+- **[`projects/library/`](projects/library/)** — The Julia active inference engine. A reusable implementation of active inference algorithms for discrete, partially observable MDPs with Dirichlet-categorical learning.
 
-- **3 Hidden State Factors**:
-  1. Behavioral state (start/stim/approach/interact/avoid/safety+cost)
-  2. Spider presence (absent/present)
-  3. Spider dangerousness (dangerous/safe)
+- **[`projects/ifs-paper/`](projects/ifs-paper/)** — The IFS-Active Inference paper. The novel theoretical contribution: modeling IFS "parts" as precision-modulating meta-priors within a single generative model.
 
-- **4 Observation Modalities**:
-  1. Visual (see spider or not)
-  2. Arousal (low/high)
-  3. Affective consequences (neutral/negative/harm)
-  4. Behavioral (current action state)
+- **[`projects/reproductions/`](projects/reproductions/)** — Paper reproductions that validate the library and build toward the IFS theory:
+  - `chamberlin_2022/` — Coherence therapy mechanisms (most documented)
+  - `smith_2021/` — Spider phobia exposure therapy
+  - `eckertal_2023/` — Trust game social cognition
+  - `pmc7250191/` — Concept learning dynamics
 
-- **2 Policies**: Approach vs Avoid
+### Resources
 
-## Installation
+- **[`resources/papers/`](resources/papers/)** — Reference literature being read
+- **[`resources/glossary.md`](resources/glossary.md)** — Key terms and definitions
+- **[`resources/docs/`](resources/docs/)** — Concepts, guides, and a searchable solution knowledge base
 
-### Prerequisites
+### Archive
 
-Install Julia (1.6 or later):
-```bash
-# Using juliaup (recommended)
-curl -fsSL https://install.julialang.org | sh
-
-# Or download from https://julialang.org/downloads/
-```
-
-### Setup
-
-```bash
-cd ifs-active-inference
-julia --project=.
-```
-
-In the Julia REPL:
-```julia
-using Pkg
-Pkg.instantiate()
-
-# Optional: Install Plots for visualization
-Pkg.add("Plots")
-```
+- **[`archive/`](archive/)** — Completed validation artifacts, old simulation results, superseded plans
 
 ## Quick Start
 
-### Run the simulation
-
 ```bash
-julia --project=. run.jl
-```
+# Activate the Julia package
+julia --project=projects/library
 
-Or with options:
-```bash
-julia --project=. run.jl --trials=200 --exposure
+# In the REPL:
+using Pkg; Pkg.instantiate()
 ```
-
-### Use as a library
 
 ```julia
-using IFSActiveInference
+# Load the active inference core
+include("projects/library/src/active_inference/ActiveInferenceCore.jl")
+using .ActiveInferenceCore
 
-# Build the model with custom parameters
-params = ModelParams(
-    CABi = 0.9,      # Cognitive-affective belief interaction
-    Psafe = 0.1,     # Prior probability spider is safe
-    N = 200,         # Number of trials
-    T = 4            # Time steps per trial
-)
-model = build_model(params=params)
-
-# Configure simulation
-settings = SimulationSettings(
-    alpha = 16.0,           # Action precision
-    eta = 1.0,              # Learning rate
-    exposure_mode = true    # Force approach policy
-)
-
-# Run exposure therapy
-results = run_exposure_therapy(model; n_trials=200, settings=settings)
-
-# View results
-println("Approach: $(results.approach_count)")
-println("Avoid: $(results.avoid_count)")
-
-# Final beliefs about spider safety
-p_safe = softmax_tau(results.agent.d[3]; tau=0.1)[2]
-println("P(safe): $p_safe")
+# Run Chamberlin 2022 tests (14 total)
+results = run_chamberlin_2022_full(n_replications=30)
 ```
 
-## Model Components
+## Running Tests
 
-### Matrices
-
-| Matrix | Description |
-|--------|-------------|
-| `D` | Initial state priors (categorical) |
-| `d` | Dirichlet concentration parameters for D |
-| `A` | Observation likelihood (state → observation) |
-| `a` | Dirichlet concentration parameters for A |
-| `B` | State transition matrices |
-| `C` | Observation preferences (reward/cost) |
-| `E` | Policy prior |
-| `V` | Policy definitions (action sequences) |
-
-### Key Functions
-
-```julia
-# Model construction
-build_model(; params=ModelParams())
-
-# Agent initialization
-init_agent(model; settings=SimulationSettings())
-
-# Run single trial
-run_trial(model, agent, true_state; settings)
-
-# Run full simulation
-run_exposure_therapy(model; n_trials, settings)
+```bash
+julia --project=projects/library projects/library/test/runtests.jl
 ```
 
 ## Theory
 
-The model implements the **expected free energy** (EFE) formulation of active inference:
+The working thesis: **Parts in IFS are not separate sub-agents but precision-modulating meta-priors within a single generative model.** Modularity (isolation of subgraphs) prevents context-dependent learning. IFS therapy works through re-contextualization — progressively reconnecting isolated beliefs to the full model.
 
-```
-G(π) = Σ_t [ E_Q[H(o|s)] - E_Q[log P(o|C)] ]
-     = Σ_t [ ambiguity     -  expected utility ]
-```
-
-Where:
-- **Ambiguity**: Expected uncertainty about observations given states
-- **Expected utility**: Alignment of expected observations with preferences
-
-### Learning
-
-The agent learns through **Dirichlet-categorical** updates:
-- `a` parameters update the observation model (learns spider is safe)
-- `d` parameters update initial state beliefs (updates P(safe))
-
-## Testing
-
-```bash
-julia --project=. test/runtests.jl
-```
-
-## Files
-
-```
-ifs-active-inference/
-├── Project.toml           # Julia dependencies
-├── README.md
-├── run.jl                 # Main entry point
-├── spec.md                # Original specification
-├── src/
-│   ├── IFSActiveInference.jl  # Module definition
-│   ├── model.jl           # Model construction
-│   ├── simulation.jl      # Active inference engine
-│   └── plotting.jl        # Visualization utilities
-└── test/
-    └── runtests.jl        # Unit tests
-```
+See [`projects/ifs-paper/outline-v1.md`](projects/ifs-paper/outline-v1.md) for the full theoretical framework.
 
 ## References
 
-- Original MATLAB code from the Scientific Reports paper on computational psychiatry
-- [ActiveInference.jl](https://github.com/ilabcode/ActiveInference.jl) - Julia active inference library
-- [pymdp](https://github.com/infer-actively/pymdp) - Python implementation
-- Friston et al. "Active Inference and Learning" - Theoretical foundations
+- [ActiveInference.jl](https://github.com/ilabcode/ActiveInference.jl) — Julia active inference library
+- [pymdp](https://github.com/infer-actively/pymdp) — Python implementation
+- Friston et al. "Active Inference and Learning" — Theoretical foundations
 
 ## License
 

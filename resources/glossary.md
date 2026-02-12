@@ -147,3 +147,41 @@ Priors are characterized by two parameters:
 **Precision** is calculated as: 1/σ² (inverse of variance)
 
 ---
+
+## Active Inference Matrices
+
+The standard notation for discrete active inference models uses lettered matrices to represent different components of the generative model:
+
+| Matrix | Name | What it represents | IFS interpretation |
+|--------|------|-------------------|-------------------|
+| **A** | Likelihood | P(o \| s) — "Given hidden state *s*, what observations *o* do I expect?" | How a part shapes *perception* — "if dogs are dangerous, I expect to see threat cues." Modular parts have A matrices that don't condition on context. |
+| **B** | Transition dynamics | P(s' \| s, u) — "Given state *s* and action *u*, what state comes next?" | The "stickiness" of parts — once a part is active, how likely it stays active. Also captures how actions change internal states. |
+| **C** | Preference prior | P(o) preferred — "What observations do I want?" | Pragmatic priors — "I want to not be near dogs." Exiles often have extreme C priors (avoid pain). Valence = prediction error relative to C. |
+| **D** | Initial state prior | P(s₀) — "What state am I likely in at the start?" | Baseline activation of parts before any evidence. Trauma can shift D toward hypervigilant states. |
+| **E** | Policy prior (habits) | P(π) — "Which policies do I tend to select?" | Manager/firefighter distinction — habitual action tendencies. Managers have high E on avoidance policies; firefighters on escape policies. |
+
+**Additional notation:**
+
+| Symbol | Meaning |
+|--------|---------|
+| o | Observations (what the agent perceives) |
+| s | Hidden states (what the agent infers about the world) |
+| u | Actions/controls |
+| π | Policy (sequence of actions) |
+| F | Variational free energy (to be minimized — roughly: surprise + complexity) |
+| G | Expected free energy (to be minimized — drives policy selection) |
+| γ | Precision on policies (confidence in action selection) |
+
+**Key relationships:**
+- Parts affect **A** (perception) by biasing what observations are expected given states
+- Parts affect **B** (stickiness) by influencing state transition probabilities
+- Parts affect **C** (preferences) by holding strong outcome preferences
+- Parts affect **E** (habits) by biasing policy selection
+- Blending = one part's matrices dominating inference
+- Unblending = restoring balanced contribution from multiple subgraphs
+
+**See also:**
+- `ifs-active-inference-outline-v1.md` Section 2 — Parts in Active Inference Terms
+- `paper_reproduction/chamberlin_2022/model_design.md` — Implementation of matrices
+
+---

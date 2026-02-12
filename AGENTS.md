@@ -10,22 +10,79 @@ Julia implementation of Active Inference models for computational psychiatry, fo
 - **Concept learning** (PMC7250191)
 - **Coherence Therapy** (Chamberlin 2022)
 
+## Repository Structure (PARA)
+
+```
+ifs-active-inference/
+├── projects/
+│   ├── library/                        # Julia package (active inference engine)
+│   │   ├── Project.toml
+│   │   ├── Manifest.toml
+│   │   ├── src/
+│   │   │   ├── IFSActiveInference.jl
+│   │   │   ├── active_inference/
+│   │   │   │   ├── ActiveInferenceCore.jl   # Main module
+│   │   │   │   ├── core.jl                  # Types and utilities
+│   │   │   │   ├── inference.jl             # State inference
+│   │   │   │   ├── efe.jl                   # Expected Free Energy
+│   │   │   │   ├── policy.jl                # Policy inference
+│   │   │   │   ├── learning.jl              # Dirichlet learning
+│   │   │   │   ├── agent.jl                 # Agent loop
+│   │   │   │   ├── spider_model.jl          # Smith 2021
+│   │   │   │   ├── trust_game.jl            # Eckertal 2023
+│   │   │   │   ├── concepts_model.jl        # PMC7250191
+│   │   │   │   ├── coherence_therapy_model.jl # Chamberlin 2022
+│   │   │   │   └── visualization.jl         # Plotting
+│   │   │   └── ...
+│   │   ├── test/
+│   │   └── scripts/
+│   │
+│   ├── ifs-paper/                      # Novel IFS-Active Inference paper
+│   │   ├── outline-v1.md
+│   │   ├── claims.md
+│   │   └── draft-critique.md
+│   │
+│   └── reproductions/                  # Paper reproductions
+│       ├── chamberlin_2022/            # Most documented
+│       ├── smith_2021/
+│       ├── eckertal_2023/
+│       └── pmc7250191/
+│
+├── resources/                          # Reference material
+│   ├── papers/                         # Literature being read
+│   ├── glossary.md                     # Key terms
+│   ├── learning_notes.md               # Study notes
+│   └── docs/
+│       ├── concepts/
+│       ├── guides/
+│       └── solutions/                  # Knowledge base
+│
+├── archive/                            # Completed/inactive work
+│   ├── library-validation/             # Completed validation phase
+│   ├── results/                        # Old simulation outputs
+│   ├── superseded/                     # Old plans and specs
+│   └── figures/                        # Generated plots
+│
+├── README.md
+└── AGENTS.md                           # ← You are here
+```
+
 ## Before Starting Work
 
 ### Check Existing Learnings
 
 **IMPORTANT**: Before implementing new features or fixing issues, check the documented learnings:
 
-1. **Solution Knowledge Base**: `docs/solutions/INDEX.md`
+1. **Solution Knowledge Base**: `resources/docs/solutions/INDEX.md`
    - Searchable by category, component, and tags
    - Contains root cause analysis and verified solutions
 
-2. **Design Patterns & Best Practices**: `docs/guides/LEARNINGS_INDEX.md`
+2. **Design Patterns & Best Practices**: `resources/docs/guides/LEARNINGS_INDEX.md`
    - Navigation guide to all knowledge artifacts
    - Common pitfalls and how to avoid them
    - When to consult external experts
 
-3. **Paper-Specific Learnings**: `paper_reproduction/[paper]/learnings.md`
+3. **Paper-Specific Learnings**: `projects/reproductions/[paper]/learnings.md`
    - Design decisions and bugs encountered for each reproduction
 
 ### Key Insight from Chamberlin 2022
@@ -44,48 +101,20 @@ end
 
 A trauma-formed schema assumes danger *because it was formed in danger*.
 
-## Codebase Structure
+## Running the Julia Package
 
-```
-ifs-active-inference/
-├── src/active_inference/
-│   ├── ActiveInferenceCore.jl    # Main module
-│   ├── core.jl                   # Types and utilities
-│   ├── inference.jl              # State inference
-│   ├── efe.jl                    # Expected Free Energy
-│   ├── policy.jl                 # Policy inference
-│   ├── learning.jl               # Dirichlet learning
-│   ├── agent.jl                  # Agent loop
-│   ├── spider_model.jl           # Smith 2021
-│   ├── trust_game.jl             # Eckertal 2023
-│   ├── concepts_model.jl         # PMC7250191
-│   ├── coherence_therapy_model.jl # Chamberlin 2022 (+ Discovery extension)
-│   └── visualization.jl          # Plotting functions
-├── paper_reproduction/
-│   ├── smith_2021/
-│   ├── eckertal_2023/
-│   ├── pmc7250191/
-│   └── chamberlin_2022/          # Most documented reproduction
-│       ├── PLAN.md               # Status and results
-│       ├── learnings.md          # Key insights
-│       ├── task_spec.md          # Full specification
-│       └── figures/              # Generated plots
-└── docs/
-    ├── solutions/                # Knowledge base
-    │   ├── INDEX.md
-    │   └── logic-errors/
-    └── guides/                   # Best practices
-        ├── LEARNINGS_INDEX.md    # START HERE
-        ├── PREVENTION_STRATEGIES.md
-        └── QUICK_START_CHECKLIST.md
-```
+```bash
+# From repo root:
+julia --project=projects/library
 
-## Running Tests
+# In REPL:
+using Pkg; Pkg.instantiate()
+```
 
 ### Chamberlin 2022 (14 tests)
 
 ```julia
-include("src/active_inference/ActiveInferenceCore.jl")
+include("projects/library/src/active_inference/ActiveInferenceCore.jl")
 using .ActiveInferenceCore
 
 # Run all 14 tests (7 original + 7 Discovery)
@@ -100,6 +129,12 @@ run_chamberlin_2022(n_replications=10)
 
 # Just Discovery tests
 run_chamberlin_2022_discovery(n_replications=10)
+```
+
+## Running Tests
+
+```bash
+julia --project=projects/library projects/library/test/runtests.jl
 ```
 
 ## Design Patterns
@@ -140,20 +175,20 @@ Delegate to Codex Architect when:
 
 ## Adding New Paper Reproductions
 
-1. Create `paper_reproduction/[paper_name]/`
+1. Create `projects/reproductions/[paper_name]/`
 2. Add `PLAN.md`, `learnings.md`, `task_spec.md`
-3. Implement in `src/active_inference/[paper]_model.jl`
+3. Implement in `projects/library/src/active_inference/[paper]_model.jl`
 4. Export from `ActiveInferenceCore.jl`
-5. Document solution in `docs/solutions/[category]/`
+5. Document solution in `resources/docs/solutions/[category]/`
 
 ## Common Mistakes to Avoid
 
 1. **Don't** set D priors independent of gating mechanism
 2. **Don't** tune parameters after seeing test results (pre-register)
 3. **Don't** confuse instant mechanism with gradual behavioral change
-4. **Do** check `docs/guides/LEARNINGS_INDEX.md` before starting
+4. **Do** check `resources/docs/guides/LEARNINGS_INDEX.md` before starting
 5. **Do** run tests after any model changes
-6. **Do** document learnings in `paper_reproduction/[paper]/learnings.md`
+6. **Do** document learnings in `projects/reproductions/[paper]/learnings.md`
 
 ## Test Thresholds
 
@@ -167,4 +202,4 @@ Delegate to Codex Architect when:
 
 ## Questions?
 
-Check `docs/guides/LEARNINGS_INDEX.md` for navigation to specific topics.
+Check `resources/docs/guides/LEARNINGS_INDEX.md` for navigation to specific topics.
