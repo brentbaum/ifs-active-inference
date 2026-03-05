@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manager Subgraph &mdash; Weighted Connections to Sensory Evidence</title>
+<style>
+  :root {
+    --bg: #fafaf8;
+    --text: #1a1a1a;
+    --muted: #666;
+    --accent: #2d5a9e;
+    --accent-light: #e8f0fe;
+    --border: #ddd;
+    --manager-color: #2980b9;
+    --evidence-color: #8e44ad;
+    --strong-edge: #c0392b;
+    --weak-edge: #ccc;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Charter', 'Georgia', serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .figure {
+    margin: 2rem 0;
+    text-align: center;
+  }
+
+  .figure svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .figure-caption {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 1rem;
+    font-style: italic;
+    max-width: 680px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+  }
+
+  .figure-label {
+    font-weight: 600;
+    color: var(--text);
+    font-style: normal;
+  }
+
+  .key-claim {
+    background: var(--accent-light);
+    border-left: 4px solid var(--accent);
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0;
+    border-radius: 0 6px 6px 0;
+    font-style: italic;
+  }
+
+  .key-claim strong { font-style: normal; }
+
+  p { margin-bottom: 1rem; }
+
+  .controls {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin: 1.5rem 0;
+    padding: 1.25rem;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+
+  .slider-group {
+    flex: 1;
+    min-width: 160px;
+  }
+
+  .slider-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.3rem;
+  }
+
+  .slider-label span {
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+
+  .slider-label .weight-val {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  input[type="range"] {
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    border-radius: 3px;
+    background: #e0e0e0;
+    outline: none;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .slider-dog input::-webkit-slider-thumb { background: var(--strong-edge); }
+  .slider-safe input::-webkit-slider-thumb { background: #95a5a6; }
+  .slider-adult input::-webkit-slider-thumb { background: #95a5a6; }
+  .slider-friendly input::-webkit-slider-thumb { background: #95a5a6; }
+
+  .legend {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    margin: 0.5rem 0 1.5rem;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .legend-line {
+    width: 28px;
+    height: 0;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 640px) {
+    body { padding: 1.5rem 1rem; }
+    h1 { font-size: 1.4rem; }
+    .controls { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Manager Subgraph</h1>
+<p class="subtitle">Weighted connections to sensory evidence &mdash; not disconnected, but radically imbalanced</p>
+
+<div class="key-claim">
+  <strong>The claim isn't that parts have zero connections.</strong>
+  It's that the weights are so imbalanced that only one channel &mdash; the threat-relevant one &mdash;
+  drives inference. The manager "hears" dog presence at full volume and everything else
+  at a whisper. This is functional disconnection through precision, not structural absence.
+</div>
+
+<div class="controls" id="controls">
+  <div class="slider-group slider-dog">
+    <div class="slider-label">
+      <span>Dog present</span>
+      <span class="weight-val" id="val-dog">0.90</span>
+    </div>
+    <input type="range" id="w-dog" min="0" max="100" value="90">
+  </div>
+  <div class="slider-group slider-safe">
+    <div class="slider-label">
+      <span>Safe environ.</span>
+      <span class="weight-val" id="val-safe">0.08</span>
+    </div>
+    <input type="range" id="w-safe" min="0" max="100" value="8">
+  </div>
+  <div class="slider-group slider-adult">
+    <div class="slider-label">
+      <span>Adult capable</span>
+      <span class="weight-val" id="val-adult">0.05</span>
+    </div>
+    <input type="range" id="w-adult" min="0" max="100" value="5">
+  </div>
+  <div class="slider-group slider-friendly">
+    <div class="slider-label">
+      <span>Friendly cues</span>
+      <span class="weight-val" id="val-friendly">0.04</span>
+    </div>
+    <input type="range" id="w-friendly" min="0" max="100" value="4">
+  </div>
+</div>
+
+<div class="legend">
+  <div class="legend-item">
+    <svg class="legend-line" viewBox="0 0 28 4"><line x1="0" y1="2" x2="28" y2="2" stroke="#c0392b" stroke-width="3"/></svg>
+    Strong weight
+  </div>
+  <div class="legend-item">
+    <svg class="legend-line" viewBox="0 0 28 4"><line x1="0" y1="2" x2="28" y2="2" stroke="#ccc" stroke-width="1.5"/></svg>
+    Weak weight
+  </div>
+</div>
+
+<div class="figure" id="graph-container"></div>
+
+<p class="figure-caption" id="caption-text"></p>
+
+<script>
+var EDGE_DEFS = [
+  { from: 'dog',      evidenceIdx: 0, defaultW: 0.90 },
+  { from: 'safe',     evidenceIdx: 1, defaultW: 0.08 },
+  { from: 'adult',    evidenceIdx: 2, defaultW: 0.05 },
+  { from: 'friendly', evidenceIdx: 3, defaultW: 0.04 },
+];
+
+var MANAGER_NODES = [
+  { id: 'avoid',  label: 'avoid dogs',    cx: 80,  cy: 105 },
+  { id: 'scan',   label: 'scan threats',  cx: 170, cy: 105 },
+  { id: 'route',  label: 'plan routes',   cx: 80,  cy: 170 },
+  { id: 'alert',  label: 'stay alert',    cx: 170, cy: 170 },
+];
+
+var EVIDENCE_NODES = [
+  { id: 'dog',      label: 'dog present',      cx: 430, cy: 80  },
+  { id: 'safe',     label: 'safe environ.',     cx: 430, cy: 135 },
+  { id: 'adult',    label: 'adult capable',     cx: 430, cy: 190 },
+  { id: 'friendly', label: 'friendly cues',     cx: 430, cy: 245 },
+];
+
+var INTERNAL_EDGES = [
+  [0, 1], [0, 2], [1, 3], [2, 3],
+];
+
+function getWeights() {
+  return {
+    dog:      parseInt(document.getElementById('w-dog').value, 10) / 100,
+    safe:     parseInt(document.getElementById('w-safe').value, 10) / 100,
+    adult:    parseInt(document.getElementById('w-adult').value, 10) / 100,
+    friendly: parseInt(document.getElementById('w-friendly').value, 10) / 100,
+  };
+}
+
+function lerp(a, b, t) { return a + (b - a) * t; }
+
+function weightColor(w) {
+  // Interpolate from weak gray to strong red
+  var r = Math.round(lerp(190, 192, Math.min(w * 2, 1)));
+  var g = Math.round(lerp(190, 57, Math.min(w * 2, 1)));
+  var b = Math.round(lerp(190, 43, Math.min(w * 2, 1)));
+  return 'rgb(' + r + ',' + g + ',' + b + ')';
+}
+
+function weightStroke(w) {
+  return Math.max(1, w * 6);
+}
+
+function weightOpacity(w) {
+  return Math.max(0.2, Math.min(1, w * 1.2));
+}
+
+function buildSVG() {
+  var weights = getWeights();
+  var svgNS = 'http://www.w3.org/2000/svg';
+
+  var svg = document.createElementNS(svgNS, 'svg');
+  svg.setAttribute('viewBox', '0 0 560 310');
+  svg.setAttribute('xmlns', svgNS);
+
+  // Background panels
+  var mgrBg = document.createElementNS(svgNS, 'rect');
+  mgrBg.setAttribute('x', '15');
+  mgrBg.setAttribute('y', '15');
+  mgrBg.setAttribute('width', '220');
+  mgrBg.setAttribute('height', '280');
+  mgrBg.setAttribute('rx', '12');
+  mgrBg.setAttribute('fill', '#eef4fb');
+  mgrBg.setAttribute('stroke', '#b8d4f0');
+  mgrBg.setAttribute('stroke-width', '1.5');
+  svg.appendChild(mgrBg);
+
+  var mgrTitle = document.createElementNS(svgNS, 'text');
+  mgrTitle.setAttribute('x', '125');
+  mgrTitle.setAttribute('y', '42');
+  mgrTitle.setAttribute('text-anchor', 'middle');
+  mgrTitle.setAttribute('font-family', 'Georgia, serif');
+  mgrTitle.setAttribute('font-size', '13');
+  mgrTitle.setAttribute('font-weight', '600');
+  mgrTitle.setAttribute('fill', '#2980b9');
+  mgrTitle.textContent = 'Manager Subgraph';
+  svg.appendChild(mgrTitle);
+
+  var mgrSub = document.createElementNS(svgNS, 'text');
+  mgrSub.setAttribute('x', '125');
+  mgrSub.setAttribute('y', '58');
+  mgrSub.setAttribute('text-anchor', 'middle');
+  mgrSub.setAttribute('font-family', 'monospace');
+  mgrSub.setAttribute('font-size', '10');
+  mgrSub.setAttribute('fill', '#6ca6d4');
+  mgrSub.textContent = '"Never get close to dogs"';
+  svg.appendChild(mgrSub);
+
+  var evBg = document.createElementNS(svgNS, 'rect');
+  evBg.setAttribute('x', '335');
+  evBg.setAttribute('y', '15');
+  evBg.setAttribute('width', '210');
+  evBg.setAttribute('height', '280');
+  evBg.setAttribute('rx', '12');
+  evBg.setAttribute('fill', '#f5eef9');
+  evBg.setAttribute('stroke', '#d4bee6');
+  evBg.setAttribute('stroke-width', '1.5');
+  svg.appendChild(evBg);
+
+  var evTitle = document.createElementNS(svgNS, 'text');
+  evTitle.setAttribute('x', '440');
+  evTitle.setAttribute('y', '42');
+  evTitle.setAttribute('text-anchor', 'middle');
+  evTitle.setAttribute('font-family', 'Georgia, serif');
+  evTitle.setAttribute('font-size', '13');
+  evTitle.setAttribute('font-weight', '600');
+  evTitle.setAttribute('fill', '#8e44ad');
+  evTitle.textContent = 'Sensory Evidence';
+  svg.appendChild(evTitle);
+
+  var evSub = document.createElementNS(svgNS, 'text');
+  evSub.setAttribute('x', '440');
+  evSub.setAttribute('y', '58');
+  evSub.setAttribute('text-anchor', 'middle');
+  evSub.setAttribute('font-family', 'monospace');
+  evSub.setAttribute('font-size', '10');
+  evSub.setAttribute('fill', '#b388cc');
+  evSub.textContent = 'What the world is telling you';
+  svg.appendChild(evSub);
+
+  // Cross-edges (drawn first, behind nodes)
+  var edgeKeys = ['dog', 'safe', 'adult', 'friendly'];
+  for (var e = 0; e < edgeKeys.length; e++) {
+    var key = edgeKeys[e];
+    var w = weights[key];
+    var evNode = EVIDENCE_NODES[e];
+
+    // Connect from right side of manager subgraph to evidence node
+    // Pick a manager node to connect from based on relevance
+    var mgrSource;
+    if (e === 0) mgrSource = MANAGER_NODES[1]; // scan threats -> dog
+    else if (e === 1) mgrSource = MANAGER_NODES[2]; // plan routes -> safe
+    else if (e === 2) mgrSource = MANAGER_NODES[0]; // avoid dogs -> adult
+    else mgrSource = MANAGER_NODES[3]; // stay alert -> friendly
+
+    var line = document.createElementNS(svgNS, 'line');
+    line.setAttribute('x1', String(mgrSource.cx + 18));
+    line.setAttribute('y1', String(mgrSource.cy));
+    line.setAttribute('x2', String(evNode.cx - 55));
+    line.setAttribute('y2', String(evNode.cy));
+    line.setAttribute('stroke', weightColor(w));
+    line.setAttribute('stroke-width', String(weightStroke(w)));
+    line.setAttribute('opacity', String(weightOpacity(w)));
+    if (w < 0.15) {
+      line.setAttribute('stroke-dasharray', '4 3');
+    }
+    svg.appendChild(line);
+
+    // Weight label
+    var labelX = (mgrSource.cx + 18 + evNode.cx - 55) / 2;
+    var labelY = (mgrSource.cy + evNode.cy) / 2 - 8;
+    var wLabel = document.createElementNS(svgNS, 'text');
+    wLabel.setAttribute('x', String(labelX));
+    wLabel.setAttribute('y', String(labelY));
+    wLabel.setAttribute('text-anchor', 'middle');
+    wLabel.setAttribute('font-family', 'JetBrains Mono, Fira Code, monospace');
+    wLabel.setAttribute('font-size', '10');
+    wLabel.setAttribute('fill', w > 0.3 ? weightColor(w) : '#aaa');
+    wLabel.setAttribute('font-weight', w > 0.3 ? '700' : '400');
+    wLabel.textContent = 'w=' + w.toFixed(2);
+    svg.appendChild(wLabel);
+  }
+
+  // Manager internal edges
+  for (var i = 0; i < INTERNAL_EDGES.length; i++) {
+    var a = MANAGER_NODES[INTERNAL_EDGES[i][0]];
+    var b = MANAGER_NODES[INTERNAL_EDGES[i][1]];
+    var iLine = document.createElementNS(svgNS, 'line');
+    iLine.setAttribute('x1', String(a.cx));
+    iLine.setAttribute('y1', String(a.cy + 16));
+    iLine.setAttribute('x2', String(b.cx));
+    iLine.setAttribute('y2', String(b.cy - 16));
+    iLine.setAttribute('stroke', '#2980b9');
+    iLine.setAttribute('stroke-width', '1.5');
+    iLine.setAttribute('opacity', '0.4');
+
+    // Adjust for horizontal edges
+    if (Math.abs(a.cy - b.cy) < 5) {
+      iLine.setAttribute('y1', String(a.cy));
+      iLine.setAttribute('y2', String(b.cy));
+      iLine.setAttribute('x1', String(a.cx + 16));
+      iLine.setAttribute('x2', String(b.cx - 16));
+    }
+    svg.appendChild(iLine);
+  }
+
+  // Manager nodes
+  for (var m = 0; m < MANAGER_NODES.length; m++) {
+    var mn = MANAGER_NODES[m];
+    var circ = document.createElementNS(svgNS, 'circle');
+    circ.setAttribute('cx', String(mn.cx));
+    circ.setAttribute('cy', String(mn.cy));
+    circ.setAttribute('r', '18');
+    circ.setAttribute('fill', '#3498db');
+    circ.setAttribute('opacity', '0.85');
+    svg.appendChild(circ);
+
+    var txt = document.createElementNS(svgNS, 'text');
+    txt.setAttribute('x', String(mn.cx));
+    txt.setAttribute('y', String(mn.cy + 4));
+    txt.setAttribute('text-anchor', 'middle');
+    txt.setAttribute('font-family', 'monospace');
+    txt.setAttribute('font-size', '8');
+    txt.setAttribute('fill', 'white');
+    txt.textContent = mn.label;
+    svg.appendChild(txt);
+  }
+
+  // Evidence nodes
+  for (var ev = 0; ev < EVIDENCE_NODES.length; ev++) {
+    var en = EVIDENCE_NODES[ev];
+    var eKey = edgeKeys[ev];
+    var eW = weights[eKey];
+
+    // Node circle - opacity reflects how much the manager "hears" it
+    var eCirc = document.createElementNS(svgNS, 'circle');
+    eCirc.setAttribute('cx', String(en.cx));
+    eCirc.setAttribute('cy', String(en.cy));
+    eCirc.setAttribute('r', '16');
+    var nodeOpacity = Math.max(0.3, Math.min(1, eW + 0.3));
+    eCirc.setAttribute('fill', '#9b59b6');
+    eCirc.setAttribute('opacity', String(nodeOpacity));
+    svg.appendChild(eCirc);
+
+    var eTxt = document.createElementNS(svgNS, 'text');
+    eTxt.setAttribute('x', String(en.cx));
+    eTxt.setAttribute('y', String(en.cy + 3));
+    eTxt.setAttribute('text-anchor', 'middle');
+    eTxt.setAttribute('font-family', 'monospace');
+    eTxt.setAttribute('font-size', '7.5');
+    eTxt.setAttribute('fill', 'white');
+    eTxt.textContent = en.label;
+    svg.appendChild(eTxt);
+  }
+
+  // Annotation: what the manager "hears"
+  var maxKey = 'dog';
+  var maxW = 0;
+  for (var k = 0; k < edgeKeys.length; k++) {
+    if (weights[edgeKeys[k]] > maxW) {
+      maxW = weights[edgeKeys[k]];
+      maxKey = edgeKeys[k];
+    }
+  }
+
+  return svg;
+}
+
+function updateCaption() {
+  var weights = getWeights();
+  var total = weights.dog + weights.safe + weights.adult + weights.friendly;
+  var dogPct = total > 0 ? (weights.dog / total * 100).toFixed(0) : '0';
+
+  var caption = document.getElementById('caption-text');
+  while (caption.firstChild) caption.removeChild(caption.firstChild);
+
+  var labelSpan = document.createElement('span');
+  labelSpan.className = 'figure-label';
+  labelSpan.textContent = 'Figure 1. ';
+  caption.appendChild(labelSpan);
+
+  var text;
+  if (weights.dog > 0.5 && weights.safe < 0.2 && weights.adult < 0.2) {
+    text = 'The manager subgraph receives sensory evidence through weighted edges. '
+         + '"Dog present" carries ' + dogPct + '% of the total incoming signal. '
+         + 'Safety, adult resources, and friendliness are technically connected but their weights are so low '
+         + 'that they barely influence inference. The manager effectively "hears" one channel at full volume '
+         + 'and everything else at a whisper. This is functional disconnection through precision imbalance.';
+  } else if (weights.dog < 0.3) {
+    text = 'With the dog-present weight reduced, the manager can now receive competing evidence. '
+         + 'Safety and adult-capability signals begin to influence inference. '
+         + 'This is what re-contextualization looks like in weight space: not adding edges from scratch, '
+         + 'but rebalancing existing connections so the full evidence landscape becomes available.';
+  } else {
+    text = 'The current weight distribution determines what the manager "hears." '
+         + 'Dog presence carries ' + dogPct + '% of total incoming signal. '
+         + 'Adjust the sliders to see how rebalancing the weights changes what evidence reaches the subgraph.';
+  }
+  caption.appendChild(document.createTextNode(text));
+}
+
+function render() {
+  var container = document.getElementById('graph-container');
+  while (container.firstChild) container.removeChild(container.firstChild);
+  container.appendChild(buildSVG());
+
+  // Update value labels
+  var weights = getWeights();
+  document.getElementById('val-dog').textContent = weights.dog.toFixed(2);
+  document.getElementById('val-safe').textContent = weights.safe.toFixed(2);
+  document.getElementById('val-adult').textContent = weights.adult.toFixed(2);
+  document.getElementById('val-friendly').textContent = weights.friendly.toFixed(2);
+
+  updateCaption();
+}
+
+// Bind sliders
+var sliders = document.querySelectorAll('input[type="range"]');
+for (var s = 0; s < sliders.length; s++) {
+  sliders[s].addEventListener('input', render);
+}
+
+render();
+</script>
+</body>
+</html>
