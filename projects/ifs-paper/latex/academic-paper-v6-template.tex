@@ -1,0 +1,117 @@
+\documentclass[11pt,a4paper]{article}
+
+% Encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Layout and typography
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage{setspace}
+\setstretch{1.1}
+\setlength{\parskip}{0.45em}
+\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{3em}
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+
+% Math
+\usepackage{mathtools}
+\usepackage{amssymb}
+
+% Graphics and floats
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[section]{placeins}
+\usepackage[font=small,labelfont=bf,format=hang]{caption}
+\usepackage{subcaption}
+\captionsetup{width=0.94\linewidth}
+\graphicspath{{figures/}}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\newcounter{none}
+\usepackage{calc}
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{multirow}
+\renewcommand{\arraystretch}{1.08}
+
+% Lists
+\usepackage{enumitem}
+\setlist{topsep=0.35em,itemsep=0.15em,parsep=0pt,partopsep=0pt}
+
+% Page style
+\usepackage{fancyhdr}
+\setlength{\headheight}{14pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\fancyhead[L]{\footnotesize\itshape Brent Baumgartner and Edmundo Lopez-Sola}
+\fancyhead[R]{\footnotesize\itshape Self-Energy and Witnessing}
+\renewcommand{\headrulewidth}{0.2pt}
+
+% Colors and links
+\usepackage{xcolor}
+\definecolor{linkblue}{RGB}{0,51,153}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=linkblue,
+  citecolor=linkblue,
+  urlcolor=linkblue,
+  pdftitle={$title$}
+}
+\usepackage{cleveref}
+\crefname{figure}{Fig.}{Figs.}
+\crefname{table}{Table}{Tables}
+\crefname{section}{Sec.}{Secs.}
+\crefname{equation}{Eq.}{Eqs.}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% Pandoc 3.x compatibility: \pandocbounded constrains image width to \textwidth
+% Uses \resizebox to scale down oversized images while preserving aspect ratio
+\newcommand{\pandocbounded}[1]{%
+  \setbox0=\hbox{#1}%
+  \ifdim\wd0>\textwidth
+    \resizebox{\textwidth}{!}{#1}%
+  \else
+    #1%
+  \fi
+}
+
+\makeatletter
+\renewcommand{\maketitle}{
+  \thispagestyle{empty}
+  \begin{center}
+    {\LARGE\bfseries \@title\par}
+    \vspace{0.55em}
+    {\large \@author\par}
+    \vspace{1.4em}
+  \end{center}
+}
+\renewcommand\section{\@startsection{section}{1}{0pt}{2.3ex plus 0.6ex minus 0.2ex}{1.1ex plus 0.2ex}{\large\bfseries}}
+\renewcommand\subsection{\@startsection{subsection}{2}{0pt}{1.8ex plus 0.5ex minus 0.2ex}{0.8ex plus 0.2ex}{\normalsize\bfseries}}
+\renewcommand\subsubsection{\@startsection{subsubsection}{3}{0pt}{1.4ex plus 0.4ex minus 0.2ex}{0.6ex plus 0.2ex}{\normalsize\itshape}}
+\makeatother
+
+\title{\textbf{$title$}\\[0.4em]\large $subtitle$}
+\author{Brent Baumgartner and Edmundo Lopez-Sola}
+\date{}
+
+\begin{document}
+\maketitle
+
+$body$
+
+\end{document}

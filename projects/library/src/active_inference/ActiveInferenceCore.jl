@@ -37,6 +37,8 @@ include("tmaze.jl")
 include("trust_game.jl")
 include("concepts_model.jl")
 include("coherence_therapy_model.jl")
+include("ifs_model.jl")
+include("ifs_formation_model.jl")
 
 # Visualization
 include("visualization.jl")
@@ -127,5 +129,23 @@ export aggregate_discovery_trajectories, therapist_scaffold!
 # Export Discovery Tests
 export CTDiscoveryTestResults, run_discovery_tests, print_discovery_test_results
 export run_discovery_conditions, run_chamberlin_2022_discovery, run_chamberlin_2022_full
+
+# Export IFS Model
+export IFSModelParams, IFSConditionConfig, IFSTrialResult, IFSSimulationResult
+export IFSEnvironment
+export build_ifs_model, build_ifs_A_h1, build_ifs_A_h2, build_ifs_B, build_ifs_C, build_ifs_D
+export build_ifs_pD, build_ifs_policies
+export compute_effective_precisions, compute_capture_index
+export baseline_ifs_config, exposure_ifs_config, witnessing_ifs_config
+export real_danger_ifs_config, dissociation_ifs_config, all_ifs_configs
+export run_ifs_simulation, run_all_ifs_conditions, run_h1_h2_comparison
+export run_ifs_trial!, build_modulated_A, compute_avoidance_tendency
+export extract_trajectory, rolling_mean, find_crossing_trial
+
+# Export IFS Formation Model (Appendix A)
+export IFSFormationEnvV2, IFSFormationParams, FormationResults
+export build_formation_A, build_formation_B, build_formation_B_with_actions
+export build_formation_C, build_formation_D_flat, build_formation_policies
+export run_formation_simulation, run_formation_comparison
 
 end # module
