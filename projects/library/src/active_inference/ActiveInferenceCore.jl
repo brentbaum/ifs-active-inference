@@ -38,6 +38,7 @@ include("trust_game.jl")
 include("concepts_model.jl")
 include("coherence_therapy_model.jl")
 include("ifs_model.jl")
+include("ifs_model_v2.jl")
 include("ifs_formation_model.jl")
 
 # Visualization
@@ -141,6 +142,19 @@ export real_danger_ifs_config, dissociation_ifs_config, all_ifs_configs
 export run_ifs_simulation, run_all_ifs_conditions, run_h1_h2_comparison
 export run_ifs_trial!, build_modulated_A, compute_avoidance_tendency
 export extract_trajectory, rolling_mean, find_crossing_trial
+
+# Export IFS Model v2
+export IFSV2Params, IFSV2ConditionConfig, IFSV2Environment, IFSV2Model
+export IFSV2StepResult, IFSV2Metrics, IFSV2Run, IFSV2Summary
+export build_ifs_v2_model, build_ifs_v2_D, build_ifs_v2_A_h1, build_ifs_v2_A_h2
+export build_ifs_v2_B_h1, build_ifs_v2_B_h2, build_ifs_v2_A
+export validate_ifs_v2_A, validate_ifs_v2_transitions, override_ifs_v2_params
+export compute_ifs_v2_precisions, compute_ifs_v2_capture, compute_ifs_v2_witness_precision
+export compute_ifs_v2_policy_probs, propagate_ifs_v2_beliefs, compute_ifs_v2_metrics
+export baseline_ifs_v2_config, exposure_ifs_v2_config, informational_ifs_v2_config
+export relational_depth_ifs_v2_config, real_danger_ifs_v2_config
+export main_ifs_v2_configs, control_ifs_v2_configs, all_ifs_v2_configs
+export run_ifs_v2_condition, run_ifs_v2_replications, run_ifs_v2_suite, run_ifs_v2_sensitivity
 
 # Export IFS Formation Model (Appendix A)
 export IFSFormationEnvV2, IFSFormationParams, FormationResults
