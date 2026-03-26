@@ -22,6 +22,7 @@ using Statistics
 
 include(joinpath(@__DIR__, "..", "src", "active_inference", "core.jl"))
 include(joinpath(@__DIR__, "..", "src", "active_inference", "inference.jl"))
+include(joinpath(@__DIR__, "..", "src", "active_inference", "efe.jl"))
 include(joinpath(@__DIR__, "..", "src", "active_inference", "ifs_model_v2.jl"))
 end
 
@@ -41,6 +42,7 @@ using .IFSV2ScriptSupport:
     run_ifs_v2_suite,
     run_ifs_v2_replications,
     run_ifs_v2_sensitivity,
+    override_ifs_v2_params,
     baseline_ifs_v2_config,
     exposure_ifs_v2_config,
     informational_ifs_v2_config
@@ -73,6 +75,7 @@ mkpath(FIGURE_DIR)
 const N_REPS = parse(Int, get(ENV, "IFS_V2_N_REPS", "60"))
 const SWEEP_REPS = parse(Int, get(ENV, "IFS_V2_SWEEP_REPS", string(max(80, N_REPS))))
 const SENS_REPS = parse(Int, get(ENV, "IFS_V2_SENS_REPS", string(max(50, N_REPS))))
+const FOCUSED_REPS = parse(Int, get(ENV, "IFS_V2_FOCUSED_REPS", string(max(40, N_REPS))))
 const SEED = 42
 
 const ROW_LABELS = ["Self-state", "Threat", "Expected Outcome", "P(approach/stay)"]
@@ -163,6 +166,203 @@ function print_sensitivity_summary(rows)
     println("  worst baseline    = $(round(maximum(row.baseline_drift for row in rows), digits=3))")
     println("  worst danger pol  = $(round(maximum(row.danger_policy for row in rows), digits=3))")
     println("  weakest self gap  = $(round(minimum(row.self_gap for row in rows), digits=3))")
+end
+
+pairwise_l1(a::AbstractVector{<:Real}, b::AbstractVector{<:Real}) = sum(abs.(Float64.(a) .- Float64.(b)))
+
+function evaluate_success_criteria(
+    h1_lookup::Dict{String,IFSV2Summary},
+    h2_relational::IFSV2Summary,
+    sensitivity_rows
+)
+    exposure = h1_lookup["Exposure"]
+    informational = h1_lookup["Informational"]
+    relational = h1_lookup["Relational Depth"]
+
+    probe_vectors = [
+        exposure.mean_probe_policy[:, end],
+        informational.mean_probe_policy[:, end],
+        relational.mean_probe_policy[:, end],
+    ]
+    probe_l1 = minimum(pairwise_l1(probe_vectors[i], probe_vectors[j]) for i in 1:2 for j in (i + 1):3)
+
+    self_cross = relational.metric_means[:first_passage_self]
+    threat_cross = relational.metric_means[:first_passage_threat]
+    outcome_cross = relational.metric_means[:first_passage_outcome]
+    policy_cross = relational.metric_means[:first_passage_policy]
+
+    criteria = (
+        cascade_diagonal =
+            !isnan(self_cross) &&
+            !isnan(threat_cross) &&
+            !isnan(outcome_cross) &&
+            !isnan(policy_cross) &&
+            self_cross <= threat_cross <= outcome_cross <= policy_cross &&
+            self_cross < policy_cross,
+        relational_gap_nonoverlap =
+            (relational.mean_self[end] - relational.std_self[end]) >
+            max(
+                exposure.mean_self[end] + exposure.std_self[end],
+                informational.mean_self[end] + informational.std_self[end],
+            ),
+        free_choice_differentiates = probe_l1 > 0.15,
+        h1_vs_h2_differentiates =
+            (relational.mean_self[end] - h2_relational.mean_self[end]) > 0.40 &&
+            (relational.mean_policy[end] - h2_relational.mean_policy[end]) > 0.30,
+        sensitivity_stable = all(
+            row.relational_self_std <= 0.15 &&
+            row.baseline_drift <= 0.10 &&
+            row.danger_policy <= 0.50
+            for row in sensitivity_rows
+        ),
+    )
+
+    return criteria, probe_l1
+end
+
+function print_success_criteria(criteria, probe_l1)
+    println("\nSuccess criteria")
+    println("  cascade diagonal  = $(criteria.cascade_diagonal)")
+    println("  relational gap    = $(criteria.relational_gap_nonoverlap)")
+    println("  free-choice probe = $(criteria.free_choice_differentiates) (min L1 = $(round(probe_l1, digits=3)))")
+    println("  H1 vs H2          = $(criteria.h1_vs_h2_differentiates)")
+    println("  sensitivity stab. = $(criteria.sensitivity_stable)")
+end
+
+function build_ratio_varied_params(params::IFSV2Params, target_ratio::Float64)
+    product = params.beta_se * params.gamma_se
+    beta = sqrt(product * target_ratio)
+    gamma = sqrt(product / target_ratio)
+    return override_ifs_v2_params(params; beta_se=beta, gamma_se=gamma)
+end
+
+function run_focused_sensitivity(params::IFSV2Params; n_replications::Int=FOCUSED_REPS, seed::Int=SEED + 4000)
+    specs = [
+        (:lambda_witness_max, collect(2.0:1.0:10.0)),
+        (:alpha_witness, collect(1.5:0.5:5.0)),
+        (:beta_gamma_ratio, [0.5, 0.75, 1.0, 1.25, 1.5, 2.0]),
+        (:policy_precision, collect(2.0:1.0:8.0)),
+    ]
+
+    rows = NamedTuple[]
+    for (name, values) in specs
+        for (idx, value) in enumerate(values)
+            varied = if name == :beta_gamma_ratio
+                build_ratio_varied_params(params, value)
+            else
+                override_ifs_v2_params(params; NamedTuple{(name,)}((value,))...)
+            end
+
+            seed_base = seed + Int(mod(hash((name, value, :base)), 10^8))
+            exposure = run_ifs_v2_replications(
+                architecture=:H1,
+                config=exposure_ifs_v2_config(varied),
+                params=varied,
+                n_replications=n_replications,
+                seed=seed_base + idx
+            )
+            informational = run_ifs_v2_replications(
+                architecture=:H1,
+                config=informational_ifs_v2_config(varied),
+                params=varied,
+                n_replications=n_replications,
+                seed=seed_base + 100 + idx
+            )
+            relational = run_ifs_v2_replications(
+                architecture=:H1,
+                config=relational_depth_ifs_v2_config(varied),
+                params=varied,
+                n_replications=n_replications,
+                seed=seed_base + 200 + idx
+            )
+            baseline = run_ifs_v2_replications(
+                architecture=:H1,
+                config=baseline_ifs_v2_config(varied),
+                params=varied,
+                n_replications=n_replications,
+                seed=seed_base + 300 + idx
+            )
+            danger = run_ifs_v2_replications(
+                architecture=:H1,
+                config=condition_config_by_name("Real Danger", varied),
+                params=varied,
+                n_replications=n_replications,
+                seed=seed_base + 400 + idx
+            )
+            h2_relational = run_ifs_v2_replications(
+                architecture=:H2,
+                config=relational_depth_ifs_v2_config(varied),
+                params=varied,
+                n_replications=n_replications,
+                seed=seed_base + 500 + idx
+            )
+
+            probe_vectors = [
+                exposure.mean_probe_policy[:, end],
+                informational.mean_probe_policy[:, end],
+                relational.mean_probe_policy[:, end],
+            ]
+            min_probe_l1 = minimum(pairwise_l1(probe_vectors[i], probe_vectors[j]) for i in 1:2 for j in (i + 1):3)
+            rel_gap = relational.mean_self[end] - max(exposure.mean_self[end] + exposure.std_self[end], informational.mean_self[end] + informational.std_self[end])
+            self_gap = relational.mean_self[end] - informational.mean_self[end]
+            h1_h2_gap = relational.mean_self[end] - h2_relational.mean_self[end]
+
+            pass =
+                !isnan(relational.metric_means[:first_passage_policy]) &&
+                relational.metric_means[:first_passage_self] <= relational.metric_means[:first_passage_threat] <= relational.metric_means[:first_passage_outcome] <= relational.metric_means[:first_passage_policy] &&
+                relational.metric_means[:first_passage_self] < relational.metric_means[:first_passage_policy] &&
+                rel_gap > 0.0 &&
+                min_probe_l1 > 0.15 &&
+                h1_h2_gap > 0.40 &&
+                abs(baseline.mean_self[end] - baseline.mean_self[1]) <= 0.10 &&
+                danger.mean_policy[end] <= 0.50
+
+            push!(rows, (
+                parameter=name,
+                value=value,
+                relational_self=relational.mean_self[end],
+                self_gap=self_gap,
+                relational_gap=rel_gap,
+                baseline_drift=abs(baseline.mean_self[end] - baseline.mean_self[1]),
+                danger_policy=danger.mean_policy[end],
+                h1_h2_gap=h1_h2_gap,
+                cascade_rate=relational.metric_means[:cascade_rate],
+                probe_l1=min_probe_l1,
+                pass=pass,
+            ))
+        end
+    end
+
+    return rows
+end
+
+function print_focused_sensitivity(rows)
+    println("\nFocused sensitivity")
+    for parameter in (:lambda_witness_max, :alpha_witness, :beta_gamma_ratio, :policy_precision)
+        subset = filter(row -> row.parameter == parameter, rows)
+        pass_count = count(row -> row.pass, subset)
+        worst_gap = minimum(row.relational_gap for row in subset)
+        worst_probe = minimum(row.probe_l1 for row in subset)
+        best_baseline = maximum(row.baseline_drift for row in subset)
+        println("  $(parameter):")
+        println("    pass values      = $pass_count / $(length(subset))")
+        println("    relational gap   = $(round(worst_gap, digits=3)) min")
+        println("    probe separation = $(round(worst_probe, digits=3)) min L1")
+        println("    baseline drift   = $(round(best_baseline, digits=3)) max")
+    end
+end
+
+function summarize_parameter_dependence(rows)
+    summary = NamedTuple[]
+    for parameter in (:lambda_witness_max, :alpha_witness, :beta_gamma_ratio, :policy_precision)
+        subset = filter(row -> row.parameter == parameter, rows)
+        pass_rate = count(row -> row.pass, subset) / length(subset)
+        rel_span = maximum(row.relational_self for row in subset) - minimum(row.relational_self for row in subset)
+        gap_span = maximum(row.self_gap for row in subset) - minimum(row.self_gap for row in subset)
+        fragility = (1.0 - pass_rate) + rel_span + gap_span
+        push!(summary, (parameter=parameter, pass_rate=pass_rate, rel_span=rel_span, gap_span=gap_span, fragility=fragility))
+    end
+    return sort(summary; by=row -> -row.fragility)
 end
 
 if ENABLE_FIGURES
@@ -302,6 +502,35 @@ if ENABLE_FIGURES
         savefig(p, joinpath(FIGURE_DIR, "ifs_v2_free_choice_probe.png"))
         println("  saved ifs_v2_free_choice_probe.png")
     end
+
+    function save_focused_sensitivity(rows)
+        params = [:lambda_witness_max, :alpha_witness, :beta_gamma_ratio, :policy_precision]
+        panels = Any[]
+        for parameter in params
+            subset = filter(row -> row.parameter == parameter, rows)
+            xs = [row.value for row in subset]
+            rel = [row.relational_self for row in subset]
+            gap = [row.self_gap for row in subset]
+            probe = [row.probe_l1 for row in subset]
+            p = plot(
+                xs,
+                rel,
+                label="Relational self",
+                xlabel=String(parameter),
+                ylabel="Metric",
+                title=String(parameter),
+                legend=:best,
+                ylims=(0.0, max(1.0, maximum(probe)))
+            )
+            plot!(p, xs, gap, label="Self gap")
+            plot!(p, xs, probe, label="Probe L1")
+            scatter!(p, xs, [row.pass ? 0.98 : 0.02 for row in subset], label="Pass", markersize=4)
+            push!(panels, p)
+        end
+        fig = plot(panels..., layout=(2, 2), size=(1200, 800), plot_title="Focused Sensitivity")
+        savefig(fig, joinpath(FIGURE_DIR, "ifs_v2_focused_sensitivity.png"))
+        println("  saved ifs_v2_focused_sensitivity.png")
+    end
 end
 
 println("=" ^ 72)
@@ -315,7 +544,7 @@ println("  T_forced = $(params.T_forced), T_probe = $(params.T_probe)")
 println("  beta_se = $(params.beta_se), gamma_se = $(params.gamma_se)")
 println("  pi_part = $(params.pi_part), lambda_ctx = $(params.lambda_ctx)")
 println("  lambda_witness_max = $(params.lambda_witness_max), alpha_witness = $(params.alpha_witness), witness_floor = $(params.lambda_witness_floor)")
-println("  probe_policy_precision = $(params.probe_policy_precision)")
+println("  witness_to_info_ratio = $(params.witness_to_info_ratio), info_to_external_ratio = $(params.info_to_external_ratio)")
 
 print_matrix_validation(params)
 print_single_trial_debug(params)
@@ -357,6 +586,19 @@ sensitivity_rows = run_ifs_v2_sensitivity(
 )
 print_sensitivity_summary(sensitivity_rows)
 
+println("\nFocused sensitivity ($FOCUSED_REPS replications per value)")
+focused_rows = run_focused_sensitivity(params; n_replications=FOCUSED_REPS, seed=SEED + 3000)
+print_focused_sensitivity(focused_rows)
+
+criteria, probe_l1 = evaluate_success_criteria(h1_lookup, h2_relational, sensitivity_rows)
+print_success_criteria(criteria, probe_l1)
+
+println("\nParameter dependence")
+for row in summarize_parameter_dependence(focused_rows)
+    label = row.pass_rate == 1.0 ? "can vary freely" : row.pass_rate >= 0.5 ? "moderately constrained" : "most constraining"
+    println("  $(row.parameter): $label (pass_rate=$(round(row.pass_rate, digits=2)), rel_span=$(round(row.rel_span, digits=3)), gap_span=$(round(row.gap_span, digits=3)))")
+end
+
 if ENABLE_FIGURES
     println("\nGenerating figures")
     main_summaries = [h1_lookup["Exposure"], h1_lookup["Informational"], h1_lookup["Relational Depth"]]
@@ -365,6 +607,7 @@ if ENABLE_FIGURES
     save_self_energy_sweep(Es, sweep_mean, sweep_std)
     save_h1_vs_h2(h1_lookup["Relational Depth"], h2_relational, params)
     save_free_choice_probe(h1_lookup)
+    save_focused_sensitivity(focused_rows)
 else
     println("\nSkipping figure generation because IFS_V2_SKIP_FIGURES=1")
 end

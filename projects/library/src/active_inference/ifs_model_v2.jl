@@ -82,7 +82,6 @@ Base.@kwdef struct IFSV2Params
     # Policy precision: high enough to separate probe choices without making
     # them deterministically brittle under small belief changes.
     policy_precision::Float64 = 4.0
-    probe_policy_precision::Float64 = 4.6
 
     # Move 2: Self-energy rebalances part precision vs context precision.
     # These are inherited from the v1 logic, but slightly softened so the
@@ -91,7 +90,6 @@ Base.@kwdef struct IFSV2Params
     gamma_se::Float64 = 2.0
     pi_part::Float64 = 3.2
     lambda_ctx::Float64 = 0.9
-    r_t::Float64 = 1.0
 
     # Move 3: witnessing opens from inverse capture only after context precision
     # clears an absolute floor. `alpha_witness > 1` makes opening superlinear.
@@ -99,14 +97,11 @@ Base.@kwdef struct IFSV2Params
     alpha_witness::Float64 = 3.0
     lambda_witness_floor::Float64 = 2.75
 
-    # Modality weights. These are not fitted to a target curve; they only
-    # express the intended asymmetry: informational context matters more than a
-    # single external cue, and witnessed self-state should dominate once open.
-    weight_external::Float64 = 0.18
-    weight_intero::Float64 = 0.18
-    weight_outcome::Float64 = 0.16
-    weight_info::Float64 = 0.24
-    weight_witness::Float64 = 1.0
+    # Modality weights are derived from two interpretable ratios:
+    # channels 1-3 share the same base weight, channel 4 is amplified relative
+    # to that base, and channel 5 is amplified relative to channel 4.
+    witness_to_info_ratio::Float64 = 1.6
+    info_to_external_ratio::Float64 = 2.4
 
     # Initial burdened priors. Strong but not locked: the model should revise
     # when the mechanism is right, not only under knife-edge parameters.
@@ -303,9 +298,25 @@ function override_ifs_v2_params(params::IFSV2Params; kwargs...)
 end
 
 function compute_ifs_v2_precisions(params::IFSV2Params, E_t::Float64)
-    pi_part_eff = params.r_t * params.pi_part * exp(-params.beta_se * E_t)
+    pi_part_eff = params.pi_part * exp(-params.beta_se * E_t)
     lambda_ctx_eff = params.lambda_ctx * exp(params.gamma_se * E_t)
     return pi_part_eff, lambda_ctx_eff
+end
+
+function compute_ifs_v2_modality_weights(params::IFSV2Params)
+    @assert params.witness_to_info_ratio > 0.0
+    @assert params.info_to_external_ratio > 0.0
+
+    weight_witness = 1.0
+    weight_info = weight_witness / params.witness_to_info_ratio
+    weight_external = weight_info / params.info_to_external_ratio
+    return (
+        weight_external,
+        weight_external,
+        weight_external,
+        weight_info,
+        weight_witness,
+    )
 end
 
 function compute_ifs_v2_capture(params::IFSV2Params, E_t::Float64, q_stage1::Vector{Vector{Float64}})
@@ -327,7 +338,60 @@ function compute_ifs_v2_witness_precision(
 )
     floor_term = clamp((lambda_ctx_eff - params.lambda_witness_floor) / params.lambda_witness_floor, 0.0, 1.0)
     witness = params.lambda_witness_max * (1.0 - capture)^params.alpha_witness * floor_term
-    return params.weight_witness * witness
+    return compute_ifs_v2_modality_weights(params)[5] * witness
+end
+
+function compute_ifs_v2_stage1_weights(
+    params::IFSV2Params,
+    E_t::Float64,
+    q_reference::Vector{Vector{Float64}};
+    probe::Bool=false
+)
+    weights = compute_ifs_v2_modality_weights(params)
+    pi_eff, lambda_ctx_eff = compute_ifs_v2_precisions(params, E_t)
+
+    if probe
+        return (
+            weights[1] * 1.20 * lambda_ctx_eff,
+            weights[2] * (1.15 * pi_eff + 0.05 * lambda_ctx_eff),
+            0.0,
+            weights[4] * 0.55 * lambda_ctx_eff,
+            0.0,
+        ), pi_eff, lambda_ctx_eff
+    end
+
+    return (
+        weights[1] * lambda_ctx_eff,
+        weights[2] * (0.6 * pi_eff + 0.4 * lambda_ctx_eff),
+        weights[3] * lambda_ctx_eff,
+        weights[4] * lambda_ctx_eff,
+        0.0,
+    ), pi_eff, lambda_ctx_eff
+end
+
+function build_ifs_v2_preference_vectors(q::Vector{Vector{Float64}})
+    revision = clamp(q[1][IFSV2_SELF_CAPABLE_PRESENT], 0.0, 1.0)^2
+    burden = 1.0 - revision
+
+    support_burdened = [0.8, -0.8]
+    support_revised = [-2.0, 4.0]
+    witness_burdened = [0.8, -0.8]
+    witness_revised = [-2.0, 4.0]
+    outcome_burdened = [3.0, -1.0, -4.0]
+    outcome_revised = [-1.0, 3.0, -4.0]
+
+    return [
+        [0.0, 0.0, 0.0],                                 # external cue
+        [1.0, 0.0, -2.0],                                # calm > activated > panic
+        burden .* outcome_burdened .+ revision .* outcome_revised,
+        burden .* support_burdened .+ revision .* support_revised,
+        burden .* witness_burdened .+ revision .* witness_revised,
+    ]
+end
+
+function compute_ifs_v2_log_preferences(q::Vector{Vector{Float64}})
+    pref_vectors = build_ifs_v2_preference_vectors(q)
+    return [log.(softmax(pref) .+ eps(Float64)) for pref in pref_vectors]
 end
 
 # ============================================================================
@@ -604,53 +668,67 @@ function infer_ifs_v2_stage(
     return qs
 end
 
-function compute_ifs_v2_policy_probs(q::Vector{Vector{Float64}}, params::IFSV2Params)
-    return compute_ifs_v2_policy_probs(q, params; probe=false)
+function compute_ifs_v2_policy_efe(
+    model::IFSV2Model,
+    env::IFSV2Environment,
+    q::Vector{Vector{Float64}},
+    E_t::Float64,
+    action::Int
+)
+    params = model.params
+    q_next = propagate_ifs_v2_beliefs(model, q, action)
+    A_policy = build_ifs_v2_A(model, env, action)
+    log_prefs = compute_ifs_v2_log_preferences(q)
+
+    stage_weights, _, lambda_ctx_eff = compute_ifs_v2_stage1_weights(params, E_t, q_next)
+    capture, _, _ = compute_ifs_v2_capture(params, E_t, q_next)
+    witness_precision = model.architecture == :H2 ? 0.0 : compute_ifs_v2_witness_precision(params, capture, lambda_ctx_eff)
+    modality_weights = (
+        stage_weights[1],
+        stage_weights[2],
+        stage_weights[3],
+        stage_weights[4],
+        witness_precision,
+    )
+
+    ambiguity_cost = 0.0
+    pragmatic_cost = 0.0
+    epistemic_value = 0.0
+    for g in 1:length(A_policy)
+        weight = modality_weights[g]
+        weight <= 0.0 && continue
+
+        qo = compute_predicted_obs(A_policy[g], q_next, IFSV2_NS)
+        ambiguity_cost += weight * compute_ambiguity(A_policy[g], q_next, IFSV2_NS)
+        pragmatic_cost -= weight * sum(qo .* log_prefs[g])
+        epistemic_value += weight * compute_state_info_gain(A_policy[g], q_next, qo, IFSV2_NS)
+    end
+
+    return ambiguity_cost + pragmatic_cost - epistemic_value
 end
 
 function compute_ifs_v2_policy_probs(
+    model::IFSV2Model,
+    env::IFSV2Environment,
     q::Vector{Vector{Float64}},
-    params::IFSV2Params;
-    probe::Bool=false,
-    capture::Union{Nothing,Float64}=nothing
+    E_t::Float64
 )
-    p_self_helpless = q[1][IFSV2_SELF_HELPLESS_ALONE]
-    p_self_capable = q[1][IFSV2_SELF_CAPABLE_PRESENT]
-    p_threat_danger = q[2][IFSV2_THREAT_DANGEROUS]
-    p_threat_safe = q[2][IFSV2_THREAT_SAFE]
-    p_outcome_avoid = q[3][IFSV2_OUTCOME_AVOIDANCE_SAVES]
-    p_outcome_manage = q[3][IFSV2_OUTCOME_CONTACT_MANAGEABLE]
-
-    uncertainty_bonus = 1.0 - abs(2.0 * p_threat_safe - 1.0)
-    if probe
-        capture_value = isnothing(capture) ? 0.5 : clamp(capture, 0.0, 1.0)
-        mid_capture_bonus = clamp(1.0 - abs(capture_value - 0.40) / 0.40, 0.0, 1.0)
-        avoid_score = 1.7 * p_self_helpless + 1.3 * p_threat_danger + 2.0 * p_outcome_avoid
-        inspect_score = 0.75 * p_self_capable + 0.40 * p_threat_safe + 0.40 * p_outcome_manage + 1.05 * uncertainty_bonus
-        stay_score = 0.82 * p_self_capable + 0.20 * p_threat_safe + 1.05 * p_outcome_manage
-        avoid_score += 1.10 * capture_value
-        inspect_score += 0.95 * mid_capture_bonus
-        stay_score += 0.95 * (1.0 - capture_value)
-        scores = params.probe_policy_precision .* [avoid_score, inspect_score, stay_score]
-        return softmax(scores)
-    end
-
-    avoid_score = 1.5 * p_self_helpless + 1.1 * p_threat_danger + 2.2 * p_outcome_avoid
-    inspect_score = 0.5 * p_self_capable + 0.2 * p_threat_safe + 0.7 * p_outcome_manage + 0.7 * uncertainty_bonus
-    stay_score = 1.0 * p_self_capable + 0.3 * p_threat_safe + 2.4 * p_outcome_manage
-
-    scores = params.policy_precision .* [avoid_score, inspect_score, stay_score]
-    return softmax(scores)
+    efe = [
+        compute_ifs_v2_policy_efe(model, env, q, E_t, IFSV2_POLICY_AVOID),
+        compute_ifs_v2_policy_efe(model, env, q, E_t, IFSV2_POLICY_INSPECT),
+        compute_ifs_v2_policy_efe(model, env, q, E_t, IFSV2_POLICY_STAY),
+    ]
+    return softmax((-model.params.policy_precision) .* efe)
 end
 
 function select_ifs_v2_action(
+    model::IFSV2Model,
+    env::IFSV2Environment,
     q::Vector{Vector{Float64}},
-    params::IFSV2Params;
-    deterministic::Bool=false,
-    probe::Bool=false,
-    capture::Union{Nothing,Float64}=nothing
+    E_t::Float64;
+    deterministic::Bool=false
 )
-    policy_probs = compute_ifs_v2_policy_probs(q, params; probe=probe, capture=capture)
+    policy_probs = compute_ifs_v2_policy_probs(model, env, q, E_t)
     if deterministic
         return argmax(policy_probs), policy_probs
     end
@@ -673,14 +751,7 @@ function infer_ifs_v2_probe_beliefs(
         env.actual_self == IFSV2_SELF_CAPABLE_PRESENT ? IFSV2_WIT_CAPABLE_PRESENT : IFSV2_WIT_HELPLESS_ALONE,
     )
 
-    pi_eff, lambda_ctx_eff = compute_ifs_v2_precisions(params, config.E_t)
-    stage1_weights = (
-        params.weight_external * 1.20 * lambda_ctx_eff,
-        params.weight_intero * (1.15 * pi_eff + 0.05 * lambda_ctx_eff),
-        0.0,
-        params.weight_info * 0.55 * lambda_ctx_eff,
-        0.0,
-    )
+    stage1_weights, _, lambda_ctx_eff = compute_ifs_v2_stage1_weights(params, config.E_t, prior; probe=true)
 
     q_stage1 = infer_ifs_v2_stage(prior, probe_A, probe_obs, stage1_weights; active_modalities=(1, 2, 4))
     capture, _, lambda_ctx_eff = compute_ifs_v2_capture(params, config.E_t, q_stage1)
@@ -806,14 +877,14 @@ function run_ifs_v2_condition(
         phase = t <= config.T_forced ? :forced : :probe
 
         if phase == :forced
-            action = config.forced_action > 0 ? config.forced_action : select_ifs_v2_action(prior, params; deterministic=true)[1]
+            action = config.forced_action > 0 ? config.forced_action : select_ifs_v2_action(model, env, prior, config.E_t; deterministic=true)[1]
             A = build_ifs_v2_A(model, env, action)
             obs = sample_ifs_v2_observation(A, env)
 
             if config.no_contact
                 capture, _, lambda_ctx_eff = compute_ifs_v2_capture(params, config.E_t, prior)
                 witness_precision = compute_ifs_v2_witness_precision(params, capture, lambda_ctx_eff)
-                policy_probs = compute_ifs_v2_policy_probs(prior, params)
+                policy_probs = compute_ifs_v2_policy_probs(model, env, prior, config.E_t)
                 push!(steps, IFSV2StepResult(
                     t,
                     phase,
@@ -835,14 +906,7 @@ function run_ifs_v2_condition(
                 continue
             end
 
-            pi_eff, lambda_ctx_eff = compute_ifs_v2_precisions(params, config.E_t)
-            stage1_weights = (
-                params.weight_external * lambda_ctx_eff,
-                params.weight_intero * (0.6 * pi_eff + 0.4 * lambda_ctx_eff),
-                params.weight_outcome * lambda_ctx_eff * max(0.25, prior[2][IFSV2_THREAT_SAFE]),
-                params.weight_info * lambda_ctx_eff,
-                0.0,
-            )
+            stage1_weights, _, lambda_ctx_eff = compute_ifs_v2_stage1_weights(params, config.E_t, prior)
 
             q_stage1 = infer_ifs_v2_stage(prior, A, obs, stage1_weights; active_modalities=1:4)
             capture, _, lambda_ctx_eff = compute_ifs_v2_capture(params, config.E_t, q_stage1)
@@ -857,7 +921,7 @@ function run_ifs_v2_condition(
                 witness_scale * witness_precision,
             )
             q_final = infer_ifs_v2_stage(prior, A, obs, stage2_weights; active_modalities=1:5)
-            policy_probs = compute_ifs_v2_policy_probs(q_final, params)
+            policy_probs = compute_ifs_v2_policy_probs(model, env, q_final, config.E_t)
 
             push!(steps, IFSV2StepResult(
                 t,
@@ -890,7 +954,7 @@ function run_ifs_v2_condition(
             @assert final_forced_belief !== nothing "Forced phase must run before the probe."
             frozen = final_forced_belief::Vector{Vector{Float64}}
             q_probe, obs, capture, witness_precision = infer_ifs_v2_probe_beliefs(model, env, frozen, config)
-            action, policy_probs = select_ifs_v2_action(q_probe, params; deterministic=deterministic_probe, probe=true, capture=capture)
+            action, policy_probs = select_ifs_v2_action(model, env, q_probe, config.E_t; deterministic=deterministic_probe)
             push!(steps, IFSV2StepResult(
                 t,
                 phase,
@@ -1060,6 +1124,8 @@ function run_ifs_v2_sensitivity(;
         :lambda_witness_max,
         :alpha_witness,
         :policy_precision,
+        :witness_to_info_ratio,
+        :info_to_external_ratio,
         :d_self_helpless,
         :d_threat_dangerous,
         :d_outcome_avoidance,
