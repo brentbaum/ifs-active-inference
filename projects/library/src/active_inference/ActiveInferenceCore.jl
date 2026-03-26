@@ -39,6 +39,7 @@ include("concepts_model.jl")
 include("coherence_therapy_model.jl")
 include("ifs_model.jl")
 include("ifs_model_v2.jl")
+include("ifs_polarization_v2.jl")
 include("ifs_formation_model.jl")
 
 # Visualization
@@ -155,6 +156,21 @@ export baseline_ifs_v2_config, exposure_ifs_v2_config, informational_ifs_v2_conf
 export relational_depth_ifs_v2_config, real_danger_ifs_v2_config
 export main_ifs_v2_configs, control_ifs_v2_configs, all_ifs_v2_configs
 export run_ifs_v2_condition, run_ifs_v2_replications, run_ifs_v2_suite, run_ifs_v2_sensitivity
+
+# Export IFS Polarization Model v2
+export IFSPolarizationV2PartSpec, IFSPolarizationV2Params, IFSPolarizationV2ConditionConfig
+export IFSPolarizationV2PartModel, IFSPolarizationV2Model
+export IFSPolarizationV2PartStep, IFSPolarizationV2StepResult, IFSPolarizationV2Metrics
+export IFSPolarizationV2Run, IFSPolarizationV2Summary
+export constant_schedule, ramp_schedule
+export low_ifs_polarization_v2_config, medium_ifs_polarization_v2_config
+export high_ifs_polarization_v2_config, oscillation_ifs_polarization_v2_config
+export resolution_ifs_polarization_v2_config
+export main_ifs_polarization_v2_configs, all_ifs_polarization_v2_configs
+export override_ifs_polarization_v2_params, build_ifs_polarization_v2_model
+export compute_ifs_polarization_v2_metrics, summarize_ifs_polarization_v2_runs
+export run_ifs_polarization_v2_condition, run_ifs_polarization_v2_replications
+export run_ifs_polarization_v2_suite, run_ifs_polarization_v2_sensitivity
 
 # Export IFS Formation Model (Appendix A)
 export IFSFormationEnvV2, IFSFormationParams, FormationResults
