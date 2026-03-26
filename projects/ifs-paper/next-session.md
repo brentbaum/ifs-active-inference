@@ -1,67 +1,103 @@
-# Next Session: Conversation 4
+# Next Session: Conversation 5
 
-Conversations 1–3 are done. Pick up here.
-
----
-
-## What's been done
-
-**Conversation 1 — Discriminant Validity**
-- Tighter paragraph in §3 distinguishing parts from schemas, latent contexts, and trait priors
-- Citations: Spens & Burgess 2024, Friston 2016, Mathys 2014
-- "Fourfold structure" removed everywhere; "predicts" replaces "explains"
-
-**Conversation 2 — Section Structure**
-- 14 → 12 sections
-- §3 is now "Parts as Identity-Level Precision Bundles" (formal object arrives early)
-- Translation table shrunk to 6 rows, moved to end of §2 as bridge; full glossary in Appendix C
-- 2x2 therapeutic zone table moved to §6.6 (end of Self-energy section)
-- §10 + §11 merged into §9 Extensions
-- draft-v7-academic-paper.tex still needs to be regenerated to match
-
-**Conversation 3 — Abstract**
-- New single-paragraph abstract
-- Opens: "Internal Family Systems is a powerful and widely adopted multiplicity-of-mind framework..."
-- "driver's seat" language for parts taking over (from soul.md)
-- Contribution explicit by sentence 3; cascade simulation anchor in sentence 5
-- Carry-forward sentence is in §3, not abstract
-- Title candidate: "Parts as Identity-Level Precision Bundles in Internal Family Systems"
-- Open question: horizon sentence may be too narrow
+Conversations 1–4b are done. Draft v8 is current. V2 simulation is working.
 
 ---
 
-## Conversation 4: Carry-Forward Sentence + §3 Polish
+## What's been done (2026-03-26, massive session)
 
-**Goal:** Lock the paper's most citable sentence and polish §3.
+**Conversations 1-3:** Discriminant validity, section structure, abstract. All done.
 
-**The current carry-forward sentence (in §3):**
-> A part is not a fear memory. It is an identity-level precision bundle in which self-state is the organizing prior — and revision that reaches the root generalizes in ways that revision of threat meaning alone cannot.
+**Conversation 4:** Carry-forward sentence locked. Discriminant validity trimmed (Option B). All settled.
 
-**Questions to work through:**
-1. Does "identity-level precision bundle" earn its place in the carry-forward sentence, or is a simpler formulation stronger? Vocabulary candidates flagged in prior sessions: "identifying," "self-belief."
-2. Does the two-sentence form work, or is one sentence sharper?
-3. Where exactly in §3 does it land? Currently: after the discriminant validity paragraph, before the dog example. Is that right?
-4. The discriminant validity paragraph is "complete but dense" per Codex — could trim 10–15% per contrast. Worth a second pass.
+**Conversation 4b — Move 3 (relational prediction error):**
+- Formalized what happens inside the witnessing window
+- Self's present-moment self-state generates relational PE at the identity level
+- Two evidence channels: relational (primary) vs informational (secondary)
+- Move 3 is Move 2 at sufficient depth — not a separate mechanism
+- §8.3 written, consistency pass applied across all 12 sections → draft-v8.md
+- draft-v8-academic-paper.tex + PDF generated
 
-**Secondary: horizon sentence in abstract**
-The current horizon — "positions Self-energy as a tractable target for empirical comparison of IFS with exposure-based approaches" — is functional but narrow. Consider widening to something like: "opens a formal research program for the growing field of multiplicity-of-mind therapies."
+**Simulation v2 (three-move, tuned):**
+- 3 hidden factors, 5 observation channels, depth-gated witnessed self-state
+- All success criteria pass: cascade diagonal, relational depth gap, free-choice probe differentiation, H1 vs H2, ±20% sensitivity
+- Five figures in `figures/v2/`
+
+**Polarization simulation:**
+- Two-part dog scenario (exile vs social manager)
+- Oscillation → compromise → resolution under varying Self-energy
+- Three figures
+
+**Infrastructure:** Parameter registry (`simulation-magic-numbers.md`), CLAUDE.md, figure inspiration doc.
+
+**Critique of draft v8:** Full architectural critique saved at `papers/critiques/critique-draft-v8-2026-03-26.md`. Verdict: READY FOR REVISION PASS.
 
 ---
+
+## Next Session: Simulation Section Rewrite + Structural Promotion
+
+### Priority 1: Promote §8.3 to top-level section (from critique)
+
+Move 3 (relational prediction error) is the paper's deepest contribution but is buried as §8.3. Promote it to its own top-level section — the structural climax of the theoretical argument. This renumbers everything after it.
+
+### Priority 2: Rewrite §10-11 with v2 simulation results
+
+Full plan at: `papers/critiques/critique-draft-v8-2026-03-26.md` (critique) and the simulation section planning agent output.
+
+**§10 (Simulation Design) — near-complete rewrite:**
+- 10.1 Architecture (3 factors, 5 channels, context environmental)
+- 10.2 The Witnessed Self-State Channel (inverse-capture gating, floor safeguard, update ordering)
+- 10.3 Conditions (Exposure / Informational / Relational Depth + two-phase design)
+- 10.4 H1 vs H2 (updated for four-element chain)
+- 10.5 Pre-registered Cascade Metrics
+- 10.6 Parameter Sensitivity
+
+**§11 (Results) — near-complete rewrite:**
+- 11.1 The Cascade Diagonal (Figure: ifs_v2_one_figure.png — THE iconic figure)
+- 11.2 The Relational Depth Gap (Figure: ifs_v2_relational_depth_gap.png)
+- 11.3 Free-Choice Probe (Figure: ifs_v2_free_choice_probe.png)
+- 11.4 H1 vs H2 (Figure: ifs_v2_h1_vs_h2.png)
+- 11.5 Self-Energy Sweep (Figure: ifs_v2_self_energy_sweep.png)
+- 11.6 Real-Danger Safety Control
+- 11.7 Parameter Sensitivity
+- 11.8 Formation (keep as-is)
+- 11.9 Polarization (updated with v2 results)
+
+### Priority 3: Update §3.1 (Computational Setup)
+
+Update hidden factors (3 not the old set), observation channels (5 not 4), scope discipline to mention derived witness precision.
+
+### Priority 4: Update §12 (Discussion)
+
+- §12.2: Remove/soften the relational PE limitation (it's now addressed)
+- §12.4: Note relational channel prediction has simulation support; add EFE refactor as future work
+- §12.1: Note sixth explanatory claim now has simulation backing
+
+### Priority 5: Rewrite the conclusion (from critique)
+
+The conclusion enumerates rather than gathers. "This paper does not finish the job. It builds the first floor." undersells what the paper has done. Rewrite as recognition — the floor holds, the mechanism is visible, the cascade is real.
+
+### Priority 6: Introduction sharpening (from critique)
+
+Add one sentence naming the COST of no formalization: "the claim that IFS works differently from exposure remains unfalsifiable" is sharper than "IFS lacks a formal account."
+
+### Priority 7: Name one clinical surprise
+
+The formalism predicts something clinicians don't already know: witnessing without life-updating should suffice for identity-level revision. State this as a finding, not just a future empirical target.
+
+---
+
+## Other pending items
+
+- **EFE refactor:** GPT 5.4 is replacing the bespoke policy scoring with proper EFE. Evaluate when complete — may or may not make the paper stronger.
+- **Scope qualification (Open Thread B):** Not all trauma is identity-organized. Find exceptions. Not urgent.
+- **Conversation 6 (Diagrams):** The v2 simulation provides data figures. Conceptual diagrams (bundle diagram, mechanism inset) still needed. See figure-inspiration.md.
+- **Jargon audit:** Done in this session. Minor items remain (harmonize Table 1/Appendix C).
 
 ## Files to read at session start
 
-- `projects/ifs-paper/draft-v7.md` — current draft (especially §3, lines 69–141)
-- `projects/ifs-paper/v7-learnings.md` — full record of prior sessions
+- `projects/ifs-paper/draft-v8.md` — current draft
+- `papers/critiques/critique-draft-v8-2026-03-26.md` — latest critique
+- `projects/ifs-paper/simulation-v2-spec.md` — simulation design
+- `projects/ifs-paper/simulation-magic-numbers.md` — parameter registry
 - `memory/project_revision_roadmap.md` — full roadmap
-
-## After Conversation 4
-
-**Conversation 5:** H1 framing as definitionally entailed + §12.4 empirical targets (revision order test, generalization gradient test)
-
-**New threads to work in (added 2026-03-26):**
-- **Relational contact as mechanism** — Self relating to part *now* as the mechanism that addresses the identity prior directly. Missing from witnessing section (§8/§9). Key question: what is necessary vs. sufficient — relational quality or visual modality? Contrast with Gendlin's Focusing (somatic, not relational-contact). Somatic IFS variants confirm modality independence, which *strengthens* the relational-quality argument.
-- **Scope qualification for bundle claim** — Not all trauma is identity-organized. Find 1–2 examples of threat-primary (not identity-primary) fear learning (e.g., adult-onset specific phobia with preserved self-competence) to specify the bundle claim's scope without weakening it. See roadmap Open Thread B.
-
-**Conversation 6:** Diagrams — bundle diagram, capture/context-held regime figure, H1 causal chain, three-regime distinction. Research already done; see roadmap for Beautiful Loop and Chamberlin diagram precedents.
-
-**Also pending:** Regenerate draft-v7-academic-paper.tex to match restructured .md. Run after Conversation 5 when prose is stable.
