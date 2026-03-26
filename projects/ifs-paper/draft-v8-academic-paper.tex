@@ -1,0 +1,1824 @@
+\documentclass[12pt,a4paper]{article}
+
+% Encoding and fonts — Computer Modern with scalable outlines (Beautiful Loop style)
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Layout and typography
+\usepackage[a4paper, top=1.25in, bottom=1.25in, left=1.25in, right=1.25in]{geometry}
+\usepackage[protrusion=true,expansion=false]{microtype}
+\usepackage{setspace}
+\setstretch{1.0}
+\setlength{\parskip}{0pt}
+\setlength{\parindent}{1.5em}
+\setlength{\emergencystretch}{3em}
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+
+% Math
+\usepackage{mathtools}
+\usepackage{amssymb}
+
+% Graphics and floats
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[section]{placeins}
+\usepackage[font=small,labelfont=it,labelsep=period,format=plain,justification=justified]{caption}
+\usepackage{subcaption}
+\captionsetup{width=0.92\linewidth,skip=6pt}
+\graphicspath{{figures/}}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\newcounter{none}
+\usepackage{calc}
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{multirow}
+\renewcommand{\arraystretch}{1.08}
+
+% Lists
+\usepackage{enumitem}
+\setlist{topsep=0.35em,itemsep=0.15em,parsep=0pt,partopsep=0pt}
+
+% Page style
+\usepackage{fancyhdr}
+\setlength{\headheight}{14pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\fancyhead[L]{\footnotesize\itshape Brent Baumgartner and Edmundo Lopez-Sola}
+\fancyhead[R]{\footnotesize\itshape Self-Energy and Witnessing}
+\renewcommand{\headrulewidth}{0.2pt}
+
+% Colors and links
+\usepackage{xcolor}
+\definecolor{linkblue}{RGB}{0,51,153}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=linkblue,
+  citecolor=linkblue,
+  urlcolor=linkblue,
+  pdftitle={Self-Energy, Witnessing, and the Revision of Part Beliefs}
+}
+\usepackage{cleveref}
+\crefname{figure}{Fig.}{Figs.}
+\crefname{table}{Table}{Tables}
+\crefname{section}{Sec.}{Secs.}
+\crefname{equation}{Eq.}{Eqs.}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% Pandoc 3.x compatibility: \pandocbounded constrains image width to \textwidth
+% Uses \resizebox to scale down oversized images while preserving aspect ratio
+\newcommand{\pandocbounded}[1]{%
+  \setbox0=\hbox{#1}%
+  \ifdim\wd0>\textwidth
+    \resizebox{\textwidth}{!}{#1}%
+  \else
+    #1%
+  \fi
+}
+
+% Section formatting — numbered, uppercase, not bold (Beautiful Loop style)
+\makeatletter
+\renewcommand\section{\@startsection{section}{1}{0pt}%
+  {3ex plus 0.6ex minus 0.3ex}%
+  {1.2ex plus 0.2ex}%
+  {\large\normalfont\MakeUppercase}}
+\renewcommand\subsection{\@startsection{subsection}{2}{0pt}%
+  {2ex plus 0.4ex minus 0.2ex}%
+  {0.8ex plus 0.1ex}%
+  {\normalsize\itshape}}
+\renewcommand\subsubsection{\@startsection{subsubsection}{3}{0pt}%
+  {1.5ex plus 0.3ex minus 0.1ex}%
+  {0.6ex}%
+  {\normalsize\itshape}}
+
+% Redefine section numbering format: "1." not "1"
+\def\@seccntformat#1{\csname the#1\endcsname.\quad}
+
+% Title page — centered, no bold title, affiliation block below authors
+\newcommand{\@affiliation}{}
+\newcommand{\affiliation}[1]{\renewcommand{\@affiliation}{#1}}
+
+\renewcommand{\maketitle}{%
+  \thispagestyle{empty}%
+  \begin{center}
+    \vspace*{1.5em}
+    {\Large \@title\par}
+    \vspace{2.2em}
+    {\normalsize \@author\par}
+    \vspace{0.6em}
+    {\small \@affiliation\par}
+    \vspace{3.5em}
+  \end{center}
+}
+\makeatother
+
+\title{Self-Energy, Witnessing, and the Revision of Part Beliefs\\[0.5em]%
+  \large An Active Inference Account of Internal Family Systems}
+\author{Brent Baumgartner\textsuperscript{1} and Edmundo Lopez-Sola\textsuperscript{2}}
+\affiliation{%
+  \textsuperscript{1}Independent Researcher \quad
+  \textsuperscript{2}Active Inference Institute
+}
+\date{}
+
+\begin{document}
+\maketitle
+
+
+\begin{center}
+  \textsc{Abstract}
+\end{center}
+\vspace{0.4em}
+
+Internal Family Systems is a powerful and widely adopted
+multiplicity-of-mind framework in clinical practice: it proposes that
+the mind contains distinct subpersonalities --- \emph{parts} --- and
+that the quality of one's inner life depends on whether those parts are
+in the driver's seat or can be held in awareness from a stable center.
+Despite its clinical reach, IFS has lacked a formal computational
+account of what a part actually is. We propose that parts are
+identity-level precision bundles --- coupled priors over self-state,
+world-state, policy, and expected outcome, with self-state as the
+organizing prior. This structure predicts a revision cascade unavailable
+to simpler accounts: interventions that reach self-state generalize to
+downstream threat meaning and protective policy; interventions that stay
+at the threat level do not. Active inference simulations confirm the
+ordering: under context-held activation (witnessing), self-state is
+revised first, threat meaning follows, protective policy lags; under
+matched exposure, all three move more uniformly and the cascade does not
+appear. The formal distinction between \emph{capture} and
+\emph{context-held activation} explains why only the latter permits
+lasting change. Inside the context-held window, the activated part
+encounters Self's present-moment self-state --- generating relational
+prediction error that reaches the identity-level organizing prior
+directly, not merely the threat expectation. The model positions
+Self-energy and the relational prediction error it enables as tractable
+targets for empirical comparison of IFS with exposure-based approaches.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\vspace{1.5em}
+\noindent\textit{Keywords:} internal family systems, active inference, precision weighting, parts, Self-energy, witnessing, memory reconsolidation, relational prediction error
+
+\vspace{0.8em}
+\noindent\rule{\linewidth}{0.4pt}
+\vspace{0.5em}
+
+\section{Introduction}\label{introduction}
+
+Sometimes \emph{I am afraid.} Sometimes \emph{a part of me is afraid.}
+Same activation, different relationship.
+
+Consider a simple case. A person who was badly frightened by a dog as a
+child sees an off-leash dog running toward them in a park. Their chest
+tightens. Their body pulls back. One organization of the system becomes
+certain all at once: \emph{dogs are dangerous; I am small; get away
+now.} In ordinary fear-learning language, that looks like a threat
+response. But existing active inference accounts of fear do not have a
+formal account of why this activation feels like \emph{identity} rather
+than one belief among many, or why some activations revise while others
+merely repeat. A threat response is a belief about danger. What IFS
+describes is something more specific: a coupled bundle in which
+\emph{who I am} is not separable from \emph{what this means} and
+\emph{what I must do}. Formalizing that distinction is the first task of
+this paper.
+
+IFS describes the dog case in more specific terms. A \emph{burdened
+part} --- a subpersonality carrying old fear and its associated identity
+claims --- is active. \emph{Protectors}, other parts whose job is to
+prevent destabilizing activation, are organizing around it. The central
+question is whether the person is now \emph{captured} by the part
+(speaking as it, from inside its local world) or can relate to it from a
+different vantage point --- what IFS calls Self (the state in which no
+part dominates and the person can hold what is active with curiosity and
+care).
+
+That distinction is ordinary in IFS practice and underdescribed in most
+formal accounts. If the activation takes over, the fear is not
+experienced as one perspective among others; it becomes reality. The dog
+is dangerous now. The body is small now. Avoidance feels necessary now.
+If the same activation remains present while also being held in
+awareness, the fear is still there, but the system is no longer speaking
+only from inside the part. The person can relate to it.
+
+IFS treats that relational difference as load-bearing. The therapist
+does not simply increase contact with the dog, the memory, or the feared
+affect. The therapist helps the client step back from the activated
+part, approach it from Self, and remain in relationship to it long
+enough for something new to happen. That is why the method keeps
+returning to questions like: \emph{How do you feel toward this part?}
+\emph{What does it fear would happen if it stopped?} \emph{Will it let
+you get closer?} The intervention is not organized around activation
+alone. It is organized around who is relating to whom inside the system.
+
+The claim of this paper is direct. The decisive therapeutic variable is
+not activation alone. It is the relation of the system to activated
+part-content. We propose that this relation is formalizable, tractable,
+and clinically consequential. The governing variable in the present
+account is \textbf{Self-energy}.
+
+This paper is not arguing that IFS replaces exposure, schema work, or
+other evidence-based approaches. The claim is narrower. Different
+therapies alter different inferential variables. Exposure changes what
+the system learns under contact with feared stimuli. IFS, at its core,
+changes whether the activated part takes over or can be held in context.
+Before translating that claim into active inference, it helps to state
+the clinical picture in IFS's own terms.
+
+The rest of the paper is straightforward. Section 2 explains the
+phenomenon in IFS language and introduces a translation between clinical
+and computational vocabularies. Section 3 defines the formal object ---
+parts as identity-level precision bundles --- and introduces the active
+inference machinery the argument needs. Sections 4--5 show how parts
+form and how they persist. Section 6 introduces Self-energy and the
+inferential regimes it governs. Sections 7--8 formalize capture,
+context-held activation, the relational prediction error that operates
+inside the context-held window, and why only this combination permits
+lasting change. Section 9 extends the framework to protectors and
+polarization. Sections 10--11 present the simulation design and results.
+Section 12 closes with what the model explains, where it is still thin,
+and what should come next.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{IFS in Its Own Terms}\label{ifs-in-its-own-terms}
+
+IFS begins from a simple claim: the mind is multiple, and that
+multiplicity is organized. People have parts. Some parts carry terror,
+shame, grief, helplessness, or loneliness. These are often called
+\emph{exiles} because the system keeps them out of ordinary
+consciousness when their pain would be too much. Other parts work to
+prevent that activation. These are \emph{protectors}. Some are
+\emph{managers}: they anticipate trouble, control situations, avoid
+risk, and keep life organized so the exile does not break through.
+Others are \emph{firefighters}: they react after activation has already
+begun and try to shut it down fast, often through dissociation, numbing,
+rage, or impulsive action.
+
+IFS also posits \textbf{Self}. Self is not another part with better
+ideas. It is the state in which the person is not captured by any one
+part and can relate with curiosity, calm, compassion, and clarity. In
+practice, therapists use Self as both a diagnostic and a therapeutic
+reality. If the client can feel warmth, respect, or curiosity toward an
+activated part, there is enough Self-energy in the system to proceed. If
+the client says \emph{I hate this scared part} or \emph{I need it gone},
+the therapist assumes another protector is now blended and works there
+first.
+
+The dog example makes the structure concrete. A child is bitten,
+cornered, or badly frightened by a dog. An exile comes to carry terror
+and helplessness. A manager learns to scan sidewalks, cross the street,
+and keep distance before the fear surges. If a dog gets too close
+anyway, a firefighter may take over with panic, collapse, dissociation,
+or an urgent need to flee. From the inside, the episode does not feel
+like a neutral memory being retrieved. It feels immediate: \emph{this
+dog is dangerous; I am small; I have to get away}.
+
+In IFS, the therapeutic question is therefore not just whether the fear
+has been activated. It is whether the person is \textbf{captured} by the
+part or can become unblended enough to relate to it. Capture means the
+part is speaking as the whole person. Stepping back from capture means
+the person can speak \emph{for} the part rather than only \emph{from}
+it. The linguistic difference is small. The experiential difference is
+large:
+
+\begin{itemize}
+\tightlist
+\item
+  \emph{I am terrified of dogs. I need to leave.}
+\item
+  \emph{A young part of me is terrified of dogs. I can feel how sure it
+  is that we are in danger.}
+\end{itemize}
+
+Those are not interchangeable descriptions. In the first, the part has
+the microphone. In the second, the part is still fully present, but
+there is now a witnessing relationship to it.
+
+That is why the classic IFS question, \emph{How do you feel toward this
+part?}, is so diagnostic. It does not ask how intense the fear is. It
+asks who is relating to the fear. If curiosity is available, Self is
+present. If contempt, urgency, or shutdown are present, another part is
+likely blended. The question does not measure activation. It measures
+relationship to activation. That is exactly what the model says matters.
+
+On this view, lasting change requires more than repeated exposure to a
+feared stimulus. The part has to be approached from Self, its burden has
+to become explicit, and the system has to learn that the old danger
+model is no longer the only available reality. That is the clinical
+phenomenon the present paper aims to formalize.
+
+Table 1 states the translation between IFS and computational
+vocabularies for the six terms used most heavily in the paper. A full
+glossary appears in Appendix C.
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+IFS term
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Computational translation
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Parts} & Identity-level precision bundles: learned local models
+coupling self-state, world-state, policy, and expected outcome \\
+\textbf{Blending} & Clinical name for capture: the active bundle
+dominates inference; present context loses inferential weight \\
+\textbf{Witnessing} & Context-held activation: the same bundle remains
+live while present evidence --- including Self's present-moment
+self-state --- stays online, enabling relational prediction error
+(§8.3) \\
+\textbf{Self} & A regime of uncaptured inference; when this regime
+obtains, the system's present-moment self-state becomes available as a
+differentiated presence that parts can register \\
+\textbf{Self-energy} & The governing variable for which regime obtains;
+a composite of autonomic safety and metacognitive depth \\
+\textbf{Protectors} & Policy priors and access-control tendencies that
+prevent destabilizing activation of exiles \\
+\textbf{Unburdening} & Durable revision of upstream priors under
+context-held activation \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{3. Parts as Identity-Level Precision
+Bundles}\label{parts-as-identity-level-precision-bundles}
+
+In the present model, a part is a local control model. It is a bundle of
+priors that learned together and now reactivate together. Throughout
+this paper, ``parts'' is the clinical term, ``identity-level precision
+bundle'' is the formal definition, and ``local control model'' describes
+the computational role the bundle plays.
+
+The bundle has four elements:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Self-state} --- who I am here
+\item
+  \textbf{World-state} --- what kind of situation this is
+\item
+  \textbf{Policy} --- what I must do
+\item
+  \textbf{Expected outcome} --- what will happen if I do or do not
+\end{enumerate}
+
+This bundle structure has an independent precedent in object relations
+theory, where a complete object relation is composed of a self-image, an
+object-image, a cause-image, and an effect-image. The computational
+bundle and the object-relational structure are tracking the same thing
+at different levels of description. That convergence is not
+coincidental: both are trying to name the minimal representational unit
+of an agent in a situation.
+
+\textbf{What makes this an identity-level bundle --- discriminant
+validity.} This structure may look like a relabeling, but it predicts
+things that nearby constructs cannot. \emph{Schemas} can update without
+re-entering the identity position that organized them. \emph{Latent
+contexts} select which model is operative, not who the agent is within
+it --- a context switch says ``now use model B''; a part activation says
+``now I am the self that model B was organized around.'' \emph{Trait
+priors} are slowly-updated meta-parameters, not identity states coupled
+to world-meaning and policy in a single unit. Three things follow that
+none predict: (a) parts feel like whole worlds, because all four
+elements arrive together; (b) identity-level change generalizes while
+threat-level change stays local; (c) activation feels like regression to
+an earlier self-position, not recall of a fear memory.
+
+A part is not a fear memory. It is an identity-level precision bundle in
+which self-state is the organizing prior --- and revision that reaches
+the root generalizes in ways that revision of threat meaning alone
+cannot. Because self-state is the organizing prior, it is also where
+relational contact can do what threat-level intervention cannot --- a
+point §8.3 takes up in detail.
+
+Return to the dog case. A child is attacked by a dog. Under overwhelm
+and low control, one bundle may consolidate around the following priors:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Self-state:} I am small and helpless
+\item
+  \textbf{World-state:} dogs are dangerous
+\item
+  \textbf{Policy:} avoid, freeze, get away
+\item
+  \textbf{Expected outcome:} avoidance keeps me safe
+\end{itemize}
+
+That is more than a fear memory. It is a local solution to a world once
+experienced as both threatening and unmanageable. It contains an
+identity claim, a world claim, an action imperative, and a prediction
+about consequences.
+
+This is why activated parts feel coherent. They are coherent. The bundle
+does not deliver one isolated belief. It delivers a whole local world.
+Helplessness makes danger more likely. Danger licenses avoidance.
+Avoidance confirms the original reading. The system is not merely
+remembering the past. It is re-entering a learned inferential regime.
+
+This is also why activation tends to feel like identity rather than
+object. When the bundle's precision dominates inference, there is no
+vantage point outside it from which to observe it. The system does not
+report, ``a bundle with helpless self-state is active.'' It reports, ``I
+am afraid,'' ``I am six,'' ``I can't handle this,'' or ``I need to get
+out.''
+
+The model defines the smallest computational unit capable of reproducing
+that phenomenology. It does not settle every ontological question inside
+clinical IFS. A clinician may meet an exile and a protector as distinct
+parts with distinct voices and histories. The formal claim here is
+narrower: the smallest load-bearing structure is a bundle over
+self-state, world-state, policy, and expected outcome. Richer models may
+split one clinical presentation into multiple bundles, or show that
+several clinically named parts are coupled facets of one larger
+structure. Nothing in the argument turns on which of those later proves
+more accurate.
+
+\subsection{Computational setup}\label{computational-setup}
+
+The present model does not treat parts as literally separate agents with
+separate generative models. It models them as learned local control
+models within a single generative model. They are coherent because the
+priors that compose them were learned together. They feel intentional
+because they couple perception, prediction, and policy in a
+goal-directed way. They feel like subjects when active because their
+precision can dominate inference.
+
+\paragraph{Generative model}\label{generative-model}
+
+A generative model is the system's model of how hidden states produce
+observations and how actions change what will be observed next. It
+supports three things at once: inferring what is happening, selecting
+what to do, and updating beliefs over time. This paper uses only as much
+of this machinery as the argument needs.
+
+The present simulations use a discrete state-space formulation with
+three hidden factors:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{External context} --- safe or dangerous.
+\item
+  \textbf{Self-state} --- child-helpless or adult-capable.
+\item
+  \textbf{Threat meaning} --- dangerous or safe.
+\end{enumerate}
+
+Observations are sampled through external cues, interoceptive arousal,
+outcomes, and present-context support. Policies are minimal: avoid,
+inspect, or stay.
+
+\paragraph{Precision}\label{precision}
+
+Precision is the main formal tool in this paper. For non-technical
+readers: \textbf{how much the system trusts a given source of
+information}. More precisely, precision weights the influence of
+prediction error on inference. High precision means ``trust this
+strongly.'' Low precision means ``weight it lightly.''
+
+The paper manipulates only two precision-bearing quantities directly:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Part-bundle prior precision}: how strongly the active bundle
+  insists on its version of self, world, and action.
+\item
+  \textbf{Present-context evidence precision}: how much inferential
+  weight the system gives to what is true here and now.
+\end{itemize}
+
+Everything important in the core model falls out of their interplay.
+
+\paragraph{Scope discipline}\label{scope-discipline}
+
+The model is deliberately minimal. Only three quantities vary in the
+main model:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \texttt{π\_part}: precision on the active part bundle
+\item
+  \texttt{λ\_ctx}: precision on present-context evidence
+\item
+  \texttt{E\_t}: Self-energy, which modulates the effective balance
+  between the first two
+\end{enumerate}
+
+Other precision-like quantities are held fixed. The paper is isolating
+one mechanism: how part priors and present context compete under
+different levels of Self-energy.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{How Parts Form}\label{how-parts-form}
+
+Parts form under overwhelm and low control. That is the paper's
+formation claim.
+
+High threat alone is not enough. A frightening event can be fully real
+and still not become a rigid part if the person retains agency, receives
+co-regulation, or can update their model through successful action. A
+child who is frightened and then held by a safe caregiver does not have
+the same inferential problem as a child who is frightened and alone.
+Threat matters. Control matters just as much.
+
+The formation sequence is simple:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Prediction error exceeds the system's capacity for orderly updating.
+\item
+  Perceived control is low: action cannot meaningfully alter the
+  situation.
+\item
+  Attention narrows to the most salient threat-relevant features.
+\item
+  The action repertoire contracts.
+\item
+  One local solution reliably reduces acute free energy (the system's
+  overall prediction error) and is retained with high precision.
+\end{enumerate}
+
+This is compression under overwhelm. The system narrows until one way of
+being small enough to survive becomes highly trusted.
+
+That mechanism makes two immediate predictions. First, not all fear
+becomes a part. Fear plus available agency or support often leads to
+integration rather than compression. Second, chronic neglect can be
+part-forming even without one catastrophic event. Moderate threat plus
+chronic low support can consolidate diffuse, persistent local models
+because the system repeatedly encounters need without solution.
+
+The formation simulations (Appendix A) support the low-control claim.
+Across acquisition, the \textbf{high-threat + low-control} condition
+produces the strongest bundle rigidity. \textbf{Chronic low support}
+produces an intermediate profile. \textbf{High threat + high control}
+attenuates bundle formation rather than eliminating learning altogether:
+the agent still learns that threat matters, but helpless self-state
+consolidates far less strongly than under low control. That is the
+important result. Control does not erase fear learning. It prevents fear
+learning from crystallizing into an identity-level bundle.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio,alt={Figure: Formation results showing bundle rigidity across conditions}]{figures/formation_bundle_rigidity.png}}
+\caption{Figure: Formation results showing bundle rigidity across
+conditions}
+\end{figure}
+
+\emph{Figure 1. Bundle rigidity across three formation conditions. High
+threat with low control produces the strongest consolidation of helpless
+self-state, danger meaning, and avoidance policy. High control
+attenuates identity-level consolidation without eliminating threat
+learning.}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{How Parts Persist}\label{how-parts-persist}
+
+Once formed, parts can persist for decades. The present model explains
+that persistence without assuming literal structural disconnection.
+
+Three mechanisms do the work together.
+
+\subsection{High prior precision}\label{high-prior-precision}
+
+The part's beliefs were learned under conditions that made them urgent
+and survival-relevant. They therefore carry high precision. Incoming
+evidence that contradicts them --- \emph{you are an adult now; this dog
+is friendly; you are not trapped here} --- arrives, but carries too
+little weight to move the posterior much.
+
+\subsubsection{5.2 Underweighted present
+context}\label{underweighted-present-context}
+
+When the part activates, present-context evidence loses inferential
+force. The issue is not that context vanishes physically. The issue is
+that it no longer matters enough computationally. The room is safe, the
+therapist is present, the body is grown --- and yet the active model
+remains: \emph{I am small, this is dangerous, I must avoid}.
+
+\subsection{Avoidant sampling}\label{avoidant-sampling}
+
+The part's policy priors steer the system away from the very evidence
+that would weaken the part. Avoidance prevents contradictory experience.
+The part is therefore not merely strongly believed. It is actively
+protected from disconfirmation by the policy it itself prefers.
+
+These three mechanisms form a self-sealing loop. High precision
+discounts contradiction. Low context weighting reduces present
+correction. Avoidance prevents new evidence from arriving in the first
+place.
+
+\subsubsection{5.4 Functional isolation vs.~structural
+isolation}\label{functional-isolation-vs.-structural-isolation}
+
+Most persistence is treated here as \textbf{functional isolation}. The
+channels remain available in principle, but they are chronically
+underweighted. That matters because it generates a useful prediction.
+Functional isolation admits of slow change under repeated safe contact.
+Structural isolation predicts little or no change until something like
+reconnection occurs.
+
+The simulations in this paper instantiate functional isolation. That is
+one reason exposure still produces some revision in the model: repeated
+safe contact can gradually move threat meaning even when Self-energy is
+not raised into the witnessing regime. If future work encounters cases
+where matched safe contact produces essentially zero updating over long
+horizons, more structural accounts will become more plausible for those
+presentations.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Self and Self-Energy}\label{self-and-self-energy}
+
+IFS gives Self a special status. This paper keeps that centrality while
+translating it into computationally tractable terms.
+
+\subsection{Self as regime}\label{self-as-regime}
+
+Self is not modeled here as a homunculus. It is a regime of uncaptured
+inference.
+
+When no part dominates, inference remains responsive across channels.
+Present evidence can register. Multiple action possibilities remain
+available. The system is not being run by one compressed local model.
+That is the formal content of Self in the present account.
+
+But the regime has a further consequence. When no part's self-state
+dominates, the system's present-moment self-state becomes available:
+adult, located in the current context, not organized around the original
+danger. That self-state is not a homunculus. It is what self-modeling
+yields when inference is uncaptured. Parts, however, can register it ---
+and as §8.3 argues, that registration is load-bearing.
+
+This regime-based translation explains why Self appears when parts stop
+taking over. It does not yet fully explain why Self has the positive
+phenomenology it does --- calm, curiosity, compassion, clarity. The
+working interpretation here is that these qualities are the signature of
+sufficiently uncaptured inference under the right embodied conditions,
+not something the model has fully derived.
+
+\subsubsection{6.2 Self-energy as
+composite}\label{self-energy-as-composite}
+
+Self-energy is the paper's answer to its central question. It is what
+determines whether activation becomes capture or can be held in context.
+
+Theoretically, Self-energy is composite. At minimum it includes two
+components:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Autonomic-social regulation (\texttt{V\_t})}: ventral-vagal
+  availability, embodied safety, the capacity to remain in contact
+  without survival mode taking over.
+\item
+  \textbf{Metacognitive depth (\texttt{M\_t})}: the capacity to
+  represent one's own state as state rather than identity; to know
+  \emph{a part of me is afraid} instead of only \emph{I am afraid}.
+\end{itemize}
+
+Neither component is sufficient on its own. A person can be somatically
+calm and still have no witnessing capacity. A person can describe their
+parts with elegant insight while their body remains in full sympathetic
+threat. Self-energy is high when both are available together.
+
+In the simulations, \texttt{E\_t} is a scalar proxy for this composite.
+That is a deliberate simplification. The immediate question is whether
+changes in the relation to activation are sufficient to alter revision
+trajectories. Answering that does not require a full decomposition of
+\texttt{E\_t}, though later work probably will.
+
+\subsection{Relational scaffolding}\label{relational-scaffolding}
+
+Clinically, Self-energy is often not endogenous at first. It is
+scaffolded. The therapist's regulated presence, pacing, and stance
+supply part of what the client cannot yet stably generate alone. The
+simulations include this only minimally through an external support
+term. The model is intra-agent by design. Therapy is not.
+
+\subsubsection{6.4 Self-led calm vs.~dissociative
+quiet}\label{self-led-calm-vs.-dissociative-quiet}
+
+The paper distinguishes two superficially similar states that are
+clinically opposite.
+
+\textbf{Self-led calm} keeps present evidence strongly online. The
+system is quiet because nothing has captured it. If something important
+changed, the system would register it.
+
+\textbf{Dissociative quiet} reduces the impact of incoming evidence. The
+system is quiet because contact has been turned down. It may look calm.
+It is not the same regime.
+
+The control simulations make this distinction visible. Dissociation
+reduces apparent disturbance but produces little upstream revision.
+Context-held activation (witnessing), by contrast, preserves contact and
+changes the priors that organized the original disturbance.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio,alt={Figure: Control conditions showing dissociation vs witnessing profiles}]{figures/fig4_control_conditions.png}}
+\caption{Figure: Control conditions showing dissociation vs witnessing
+profiles}
+\end{figure}
+
+\emph{Figure 2. Control conditions. The real danger condition preserves
+adaptive fear under high Self-energy. The dissociation condition reduces
+disturbance without revising upstream priors --- distinguishing it from
+genuine context-held activation. The key discriminator is whether
+present-context evidence remains online.}
+
+\subsubsection{6.5 The 8 C's and self-like
+parts}\label{the-8-cs-and-self-like-parts}
+
+The 8 C's of Self --- calm, curiosity, clarity, compassion, confidence,
+courage, creativity, connectedness --- can be read here as the
+phenomenological signature of uncaptured inference under sufficiently
+high Self-energy. That interpretation is respectful and minimal. It
+honors the clinical observation without claiming to derive all eight
+qualities from first principles.
+
+The hardest test case is the self-like part: a manager that sounds
+reflective, calm, and compassionate without actually producing the
+inferential regime in which revision can occur. The model flags that
+problem but does not solve it. A better account will have to separate
+embodied regulation from reportable meta-awareness more sharply than a
+single scalar allows.
+
+\subsubsection{6.6 What Self-energy governs: the therapeutic
+zone}\label{what-self-energy-governs-the-therapeutic-zone}
+
+The simplest way to picture what Self-energy determines is a 2×2
+crossing part activation and Self-energy level.
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+& Low Self-energy & High Self-energy \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Low activation} & ordinary cognition & presence / Self \\
+\textbf{High activation} & capture & context-held activation \\
+\end{longtable}
+}
+
+IFS therapy aims for the lower-right cell. That is difficult because the
+cell is unstable by default: activation tends to lower Self-energy, and
+high Self-energy tends to prevent full activation. Therapy therefore
+works by titrating both at once --- enough activation for the target
+priors to come online, enough Self-energy for context to remain present.
+The following section formalizes the two regimes.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{7. Capture and Context-Held
+Activation}\label{capture-and-context-held-activation}
+
+Same activation, different relationship. That is the paper's center of
+gravity.
+
+The two regimes are not symmetric. Capture is the failure mode --- the
+condition in which the active bundle dominates inference and makes
+revision impossible. Context-held activation is the goal --- the
+condition in which the same bundle remains live while the system retains
+contact with present reality. Witnessing --- the deliberate relational
+practice of holding an activated part in awareness rather than speaking
+from inside it --- is the clinically named form of context-held
+activation. The asymmetry is not cosmetic. It reflects what IFS therapy
+is actually trying to do: not oscillate between two equal states, but
+move from capture into the territory where revision becomes possible.
+
+\subsection{Capture}\label{capture}
+
+Capture occurs when an activated part takes over inference. The part's
+self-state, world-state, policy, and expected-outcome priors dominate
+the posterior strongly enough that present context loses inferential
+force. The person does not merely have fear. The fear organizes the
+whole field. Blending is the clinical name for capture --- it is the
+phenomenological description of what capture feels like from the inside.
+
+Formally, capture corresponds to a high \textbf{capture index}:
+
+{[} C\_t =
+\frac{\pi^{\mathrm{eff}}_{\mathrm{part}}}{\pi^{\mathrm{eff}}_{\mathrm{part}} + \lambda^{\mathrm{eff}}_{\mathrm{ctx}}}
+{]}
+
+where
+
+{[} \pi\^{}\{\mathrm{eff}\}\emph{\{\mathrm{part}\} = r\_t
+\cdot \pi}\{\mathrm{part}\} \cdot e\^{}\{-\beta E\_t\} {]}
+
+and
+
+{[} \lambda\^{}\{\mathrm{eff}\}\emph{\{\mathrm{ctx}\} =
+\lambda}\{\mathrm{ctx}\} \cdot e\^{}\{+\gamma E\_t\} {]}
+
+Here \texttt{r\_t} is activation strength. Self-energy does not have to
+turn activation off. It changes how much that activation can dominate.
+
+Capture is graded, not binary. What varies is how much of the active
+model becomes system-wide capture. Mild capture preserves some dual
+awareness. Strong capture turns the part's beliefs into the only
+available reality model.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio,alt={Figure: Capture index across conditions}]{figures/fig5_capture_index.png}}
+\caption{Figure: Capture index across conditions}
+\end{figure}
+
+\emph{Figure 3. Capture index as a function of Self-energy. Low
+Self-energy places baseline, exposure, and dissociation in the capture
+zone. High Self-energy places witnessing in the context-held regime.
+Capture is best read as a regime descriptor determined by the
+condition-level Self-energy parameter.}
+
+\subsubsection{7.2 Context-Held
+Activation}\label{context-held-activation}
+
+Context-held activation is not the absence of activation. It is
+activation held in context. Witnessing is the therapeutically cultivated
+form of this state --- the specific relational practice IFS uses to
+achieve it.
+
+The part still fires. The body may still accelerate. The old priors
+still come online. But the system is not captured by them. Self's
+present-moment self-state remains available --- adult, capable, not
+organized around the original danger --- and so does informational
+context: \emph{I am in this room; this body is adult; this moment is not
+the original one.} The activated part becomes something the system can
+relate to rather than only speak from. What that relating does --- and
+why it, more than the informational context, is the primary channel of
+revision --- is the subject of §8.3.
+
+That is why context-held activation is formally distinct from
+distraction, suppression, or dissociation. Distraction lowers
+activation. Dissociation lowers context impact. Context-held activation
+leaves activation live while preventing capture.
+
+\subsection{The clinical probe}\label{the-clinical-probe}
+
+Clinicians do not ask for the capture index. They ask, ``How do you feel
+toward this part?''
+
+That question is a phenomenological assay of inferential regime. If the
+client answers from the part --- \emph{I am terrified; I hate this; I
+need to get away} --- the system is still captured by one bundle or
+another. If the client answers with curiosity, compassion, calm
+interest, or respectful distance, the system is more likely in
+context-held activation. The question does not measure activation. It
+measures relationship to activation. That is exactly what the model says
+matters.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{8. Why Only Context-Held Activation Permits Lasting
+Change}\label{why-only-context-held-activation-permits-lasting-change}
+
+This section states the paper's main therapeutic claim.
+
+Durable revision requires three conditions at once:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{The part must be active.} Otherwise the target priors are
+  dormant.
+\item
+  \textbf{Present context must be online.} Otherwise there is nothing to
+  revise the priors with.
+\item
+  \textbf{The part must not capture inference.} Otherwise the mismatch
+  between past model and present reality cannot register with enough
+  force.
+\end{enumerate}
+
+Context-held activation is the only regime that satisfies all three
+simultaneously.
+
+\subsection{Why capture fails}\label{why-capture-fails}
+
+Under capture, the part's priors dominate too strongly for present
+contradiction to gain traction. The system may be surrounded by safety
+and still infer danger because the active model interprets everything
+through its own lens. The result is repetition without revision. The
+part can activate thousands of times and remain essentially unchanged
+because every activation happens inside the same local world.
+
+\subsubsection{8.2 Why calm without activation
+fails}\label{why-calm-without-activation-fails}
+
+Calm by itself is not enough. A person can be regulated, insightful, and
+articulate while the relevant bundle remains offline. In that case
+nothing is live to revise. This is one reason understanding alone often
+changes so little. Dormant priors do not update because they are not
+currently generating predictions that can be contradicted.
+
+\subsubsection{8.3 Relational prediction
+error}\label{relational-prediction-error}
+
+The three conditions above --- activation, context, and absence of
+capture --- specify the regime in which revision becomes possible. They
+do not yet specify what happens inside the window that produces
+revision. The answer involves a form of prediction error the paper has
+not yet named.
+
+When present context stays online (condition 2), this paper has so far
+emphasized informational context: the room, the therapist, the adult
+body, the fact that this moment is not the original one. But present
+context also includes something more specific. As §6.1 argued, when no
+part's self-state dominates, the system's present-moment self-state
+becomes available --- adult, capable, not organized around the original
+danger. Under context-held activation, that self-state can be registered
+by the activated part.
+
+The part's generative model includes relational expectations, not only
+threat expectations. A bundle consolidated under overwhelm and isolation
+encodes not just \emph{dogs are dangerous} and \emph{avoidance keeps me
+safe} but also \emph{I am alone with this} and \emph{no one can be here
+with me in this.} These relational priors belong to the self-state
+element --- they encode who-I-am-in-relation, not what-is-dangerous.
+
+When Self is present as a differentiated self-state, those relational
+expectations generate prediction error at the identity level. The part
+expected isolation. It encountered presence. The part expected that its
+wound would overwhelm or repel. Instead, the wound was met with
+curiosity and care. That mismatch does not update threat meaning. It
+reaches the self-state prior directly --- the organizing root of the
+bundle.
+
+Two channels of evidence are available inside the window, and they are
+not interchangeable. The primary channel is relational: the part
+registers Self's current self-state --- adult, capable, present, not
+overwhelmed by what the part carries. That registration is always
+load-bearing. The secondary channel is informational: the part can be
+shown the current life, the current body, the fact that the original
+danger is past. This world-state evidence is often useful but not always
+necessary. In practice, the shift often occurs during witnessing itself
+--- the part sees Self and something opens --- before any explicit
+life-updating. That confirms the identity-level mismatch, not the
+informational update, is doing the deeper work.
+
+This is what IFS clinicians are pointing at when they say the core of
+the work is relational. ``Relationship building is our job throughout
+IFS therapy. We want parts to be in relationship with the client's
+Self'' (Anderson, \emph{Skills Training Manual}). The clinical process
+questions --- \emph{Is she aware of you? Is she feeling you?} --- are
+not checking whether information has been transmitted. They are checking
+whether the part has registered Self's presence. The moment of shift,
+when it comes, is often marked by exactly this registration: \emph{She
+sees me now} (Schwartz, \emph{Shame and Guilt}).
+
+The memory reconsolidation literature offers independent support.
+Reconsolidation requires a prediction error strong enough to destabilize
+a consolidated memory trace. In IFS, that prediction error is
+relational: ``The mismatch unfolds as the exiled part feels fully
+understood, validated and loved by the Self during witnessing''
+(Anderson, \emph{Skills Training Manual}). The mismatch is not
+re-exposure to the feared stimulus under new conditions. It is the part
+encountering a relational context that contradicts its deepest
+expectation.
+
+This distinction sharpens the difference between exposure and
+context-held activation at the mechanistic level. Exposure generates
+informational prediction error: the dog did not bite; the feared outcome
+did not occur. That error updates threat meaning and stimulus-safety
+associations. But the part's relational expectation --- \emph{I am alone
+with this} --- remains unchallenged, because the person was alone with
+the dog then and is alone with the dog now. Only context-held
+activation, in which Self is present as a differentiated subject,
+generates the relational prediction error that reaches the organizing
+prior.
+
+Modality independence follows directly. IFS works through visual
+imagery, inner dialogue, and somatic felt-sense. The relational
+registration --- the part experiencing Self's presence --- can occur
+through any of these channels. What matters is not the sensory modality
+but whether the part registers that it is being met. ``\,`Seeing' a part
+is not necessary in the sense that a clear visual image appears in the
+person's mind. Many people simply sense the presence of parts and
+interact with them on that basis'' (Goulding \& Schwartz, \emph{Mosaic
+Mind}).
+
+\subsubsection{8.4 Unburdening as upstream
+revision}\label{unburdening-as-upstream-revision}
+
+At the algorithmic level, the paper interprets unburdening as durable
+revision of upstream priors. In H1, self-state sits upstream of threat
+meaning, which sits upstream of protective policy. A revision in
+self-state --- from \emph{I am helpless here} to \emph{I am capable
+here} --- changes what counts as dangerous. A change in threat meaning
+changes what policies remain necessary.
+
+This gives a formal answer to a familiar clinical observation: why does
+deep change sometimes feel sudden? Because once an upstream prior shifts
+far enough, several downstream expectations lose support together.
+
+Clinically, unburdening often does more than reduce intensity. A part
+that carried helplessness may, after unburdening, take on a new
+functional role --- playfulness, healthy assertiveness, creativity. In
+the present model, that transition corresponds to the bundle adopting
+new policy priors and expected-outcome priors once the old self-state no
+longer constrains the solution space. The formal account predicts
+qualitative regime change, not merely damping.
+
+\subsubsection{8.5 Exposure versus context-held
+activation}\label{exposure-versus-context-held-activation}
+
+Exposure and context-held activation both supply corrective contact
+under activation. The distinction developed in §8.3 makes the comparison
+precise.
+
+Exposure generates informational prediction error: the feared outcome
+does not occur, and threat meaning can update. But it does not generate
+relational prediction error, because Self-energy remains outside the
+witnessing regime --- the person's relation to the activation is
+unchanged. Learning therefore occurs more locally. Threat meaning can
+move. Specific stimulus-safety associations can soften. Self-state can
+shift somewhat over time, but later, less deeply, and with less
+generalization.
+
+Context-held activation supplies both channels: informational context is
+present \emph{and} Self's present-moment self-state is available to the
+part. The relational prediction error reaches self-state directly. Under
+H1, that allows self-state revision to occur earlier and to cascade
+forward.
+
+The simulations support exactly that pattern. Under H1 witnessing,
+self-state crosses the revision threshold first, threat meaning follows,
+and avoidance lags. Under exposure, all three move more slowly and with
+much less separation.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio,alt={Figure: Witnessing vs exposure belief trajectories}]{figures/fig2_witnessing_vs_exposure.png}}
+\caption{Figure: Witnessing vs exposure belief trajectories}
+\end{figure}
+
+\emph{Figure 4. Context-held activation (witnessing) versus exposure
+under matched contact. Witnessing produces faster and deeper revision
+across all three target variables. The separation is attributable to
+inferential regime, not privileged information --- the cue structure is
+identical across conditions.}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{9. Extensions: Protectors and
+Polarization}\label{extensions-protectors-and-polarization}
+
+The core argument is complete by §8. Parts form under overwhelm, persist
+via self-sealing loops, and revise durably only under context-held
+activation. The following two sections extend that framework to
+protectors and multi-part polarization --- the next tier of IFS
+phenomena.
+
+\subsection{Protectors}\label{protectors}
+
+Protectors are indispensable to clinical IFS. The model treats them
+minimally, but not dismissively.
+
+A protector is a learned policy prior plus an access-control tendency.
+It prevents destabilizing takeover. That is already enough to explain
+why protectors exist. If exile activation has historically led to
+flooding, collapse, or unbearable pain, then preemptive management is
+locally rational.
+
+This is the core protector computation in the current model:
+
+\begin{itemize}
+\tightlist
+\item
+  if cue patterns predict that an exile may activate
+\item
+  and if available Self-energy is judged insufficient
+\item
+  then favor policies that reduce activation or block access to the
+  exile
+\end{itemize}
+
+That minimal story already captures a great deal: avoidance,
+intellectualization, perfectionism, numbing, distraction, rage, and
+dissociation can all function as ways of preventing the wrong kind of
+contact.
+
+IFS distinguishes \textbf{managers} and \textbf{firefighters}. The
+distinction maps cleanly onto temporal depth. Managers act
+prospectively. They organize life to avoid entering dangerous
+state-space in the first place. Firefighters act reactively. They
+minimize acute free energy once danger has already broken through.
+
+What the model does not yet formalize is equally important. Protectors
+do not merely block. They negotiate. They assess trust. They have
+conditions under which they will step back. A protector's willingness to
+relax is not simply a function of reduced threat. It depends on whether
+the protector believes Self is present enough, the context is safe
+enough, and the process can be trusted. Computationally, that looks less
+like a simple policy prior and more like a gate on information flow with
+a learned trust variable. Those dynamics are clinically central and
+formally deferred here.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{9.2 Multi-Part
+Polarization}\label{multi-part-polarization}
+
+Single-part dynamics are not enough to describe actual inner life. One
+of the most recognizable IFS phenomena is polarization: mutually
+incompatible parts treating one another's preferred policies as
+dangerous.
+
+The mechanism is simple. Two bundles are active. Each assigns high cost
+to the other's preferred action.
+
+\begin{itemize}
+\tightlist
+\item
+  Part A: \emph{approach, disclose, attach}
+\item
+  Part B: \emph{withdraw, protect, avoid}
+\end{itemize}
+
+Part A experiences withdrawal as abandonment and deadness. Part B
+experiences approach as exposure and danger. Each therefore escalates in
+response to the other. This is not merely conflict between
+simultaneously represented preferences. It is often alternation between
+rival local realities --- each side wholly true when it has the floor,
+and each experiencing the other's preferred policy as threat.
+
+Under low Self-energy, this produces the familiar phenomenology:
+ambivalence, reversals, exhaustion, and the feeling that each side is
+wholly true when it has the floor. Under high Self-energy, both remain
+simultaneously representable without either taking over. A mixed or
+negotiated policy becomes possible.
+
+The polarization simulations support this reading. Under low
+Self-energy, the two activations enter strong anti-phase oscillation.
+Under high Self-energy, both remain simultaneously representable without
+either taking over. A mixed or negotiated policy becomes possible.
+
+One nuance is worth stating clearly. The summary metrics show that
+\textbf{medium} Self-energy produces the highest policy entropy and
+switching, while \textbf{high} Self-energy produces the most stable
+simultaneous representation. That is not a bug. It suggests a transition
+band. As capture weakens, the system first explores more combinations
+and switches more often; once both parts can remain stably represented
+together, switching drops and coexistence rises. That is clinically
+plausible and theoretically useful.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio,alt={Figure: Polarization dynamics across Self-energy levels}]{figures/polarization_combined.png}}
+\caption{Figure: Polarization dynamics across Self-energy levels}
+\end{figure}
+
+\emph{Figure 5. Polarization dynamics. Low Self-energy produces
+anti-phase oscillation between rival bundles. Medium Self-energy
+increases exploration and switching. High Self-energy produces stable
+simultaneous representation and reduced switching --- the transition
+from capture to coexistence.}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Simulation Design}\label{simulation-design}
+
+The simulations are designed to test the paper's central claim in the
+leanest case: same part, same cue channels, same architecture, different
+inferential regime.
+
+\subsection{Main model}\label{main-model}
+
+The main simulation compares five conditions:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Baseline} --- safe world, low Self-energy, free policy
+  selection
+\item
+  \textbf{Exposure} --- same safe world and cue structure, forced
+  contact, Self-energy not elevated into the witnessing regime
+\item
+  \textbf{Witnessing} --- same contact as exposure, but with Self-energy
+  elevated
+\item
+  \textbf{Real danger control} --- dangerous world under high
+  Self-energy
+\item
+  \textbf{Dissociation control} --- safe world, low Self-energy, context
+  impact reduced rather than genuinely maintained
+\end{enumerate}
+
+The part bundle begins with strong priors on child-helpless self-state,
+danger meaning, and avoidance policy. The key comparison matches contact
+across exposure and witnessing so that differences in updating are
+attributable to inferential regime rather than privileged information.
+
+\subsection{H1 versus H2}\label{h1-versus-h2}
+
+The simulation compares two causal architectures.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{H1: self-state upstream.} Present-context support informs
+  self-state strongly; self-state conditions threat meaning; threat
+  meaning conditions policy.
+\item
+  \textbf{H2: threat-primary.} Threat meaning is revised first;
+  self-state follows.
+\end{itemize}
+
+This is not an arbitrary graph choice. H1 is motivated by the clinical
+observation that parts often activate first as \emph{who I am here} ---
+\emph{I am six; I am small; I am powerless} --- and that deep
+therapeutic change is frequently experienced as a change in
+identity-position before the world itself fully changes meaning. H2
+remains a live competitor because many fear-learning models are
+threat-primary. The point of the comparison is precisely to test which
+ordering better fits the simulated dynamics.
+
+\subsubsection{10.3 Formation and polarization
+appendices}\label{formation-and-polarization-appendices}
+
+Appendix A simulates part formation under three acquisition
+environments: high threat plus low control, high threat plus high
+control, and chronic low support. Appendix B simulates polarization
+between two mutually threatening bundles under varying levels of
+Self-energy.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Results}\label{results}
+
+The simulations support the core architecture of the paper.
+
+\subsubsection{11.1 Same activation, different
+relationship}\label{same-activation-different-relationship}
+
+The first result is the simplest and the most important. Under matched
+cue exposure, raising Self-energy changes the regime in which activation
+occurs. Context-held activation (witnessing) is not lower activation by
+another name. It is the same activation held in a different relation.
+
+In the H1 main simulation, the witnessing condition shows markedly
+faster and deeper revision than exposure or baseline across all three
+target variables. By the end of the run, witnessing reduces helpless
+self-state, danger meaning, and avoidance far more than exposure does,
+while baseline remains comparatively rigid. The separation is clear and
+consistent with the theory.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio,alt={Figure: H1 belief trajectories across conditions}]{figures/fig1_h1_belief_trajectories.png}}
+\caption{Figure: H1 belief trajectories across conditions}
+\end{figure}
+
+\emph{Figure 6. H1 belief trajectories. Witnessing (green) produces the
+deepest revision across self-state, threat meaning, and avoidance.
+Exposure (blue) learns but more slowly and uniformly. Baseline (grey)
+shows minimal movement. The separation is attributable to inferential
+regime under matched contact.}
+
+\subsubsection{11.2 H1 produces the predicted revision
+order}\label{h1-produces-the-predicted-revision-order}
+
+Under H1 witnessing, self-state revises first. The child-helpless prior
+crosses the chosen threshold at trial 9. Threat meaning follows at trial
+13. Avoidance declines last and only later approaches the same
+threshold. This is the exact ordering the model predicts if self-state
+is upstream of threat meaning and threat meaning is upstream of policy.
+
+The exposure condition does not show that ordering clearly. All three
+trajectories move together more slowly. The system learns, but it learns
+locally and without the same cascade.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio,alt={Figure: Revision order under H1 vs H2}]{figures/fig6_revision_order.png}}
+\caption{Figure: Revision order under H1 vs H2}
+\end{figure}
+
+\emph{Figure 7. Revision order comparison. H1 witnessing produces the
+predicted cascade: self-state first, threat meaning second, avoidance
+last. H2 reverses the order, with threat meaning leading. The ordering
+difference is the paper's main model comparison.}
+
+\subsection{H2 flips the order}\label{h2-flips-the-order}
+
+The H1/H2 comparison comes out in the right place. Under H2, danger
+meaning moves earlier and self-state lags. That is the opposite of the
+IFS-consistent prediction. The bar summary of threshold crossings makes
+the contrast legible: H1 gives \textbf{child first, danger second}; H2
+gives \textbf{danger first, child later}. This is the paper's main model
+comparison.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio,alt={Figure: H1 vs H2 witnessing trajectories}]{figures/fig3_h1_vs_h2_witnessing.png}}
+\caption{Figure: H1 vs H2 witnessing trajectories}
+\end{figure}
+
+\emph{Figure 8. H1 versus H2 under witnessing. The two architectures
+produce different revision cascades. H1 revises self-state upstream,
+consistent with IFS clinical observation. H2 revises threat meaning
+first, consistent with threat-primary fear-learning models.}
+
+\subsubsection{11.4 Witnessing outperforms exposure without changing the
+task}\label{witnessing-outperforms-exposure-without-changing-the-task}
+
+The witnessing versus exposure comparison is one of the paper's
+strongest results because the task is matched. The system sees the same
+kinds of cues and undergoes the same kind of contact. The difference is
+inferential regime, not information. Witnessing therefore does not win
+by being handed a privileged channel. It wins because Self-energy
+changes the precision balance between the active bundle and present
+context.
+
+\subsubsection{11.5 Real danger preserves adaptive
+fear}\label{real-danger-preserves-adaptive-fear}
+
+The real danger control does exactly what it needs to do. Under genuine
+danger, the model does not collapse into indiscriminate calm. Threat
+meaning remains high even under high Self-energy. This is a sanity check
+and a theoretical constraint. Self-energy does not abolish fear. It
+preserves the possibility of accurate fear.
+
+One nuance deserves explicit interpretation. In the real-danger
+condition, threat meaning remains high while helpless self-state still
+softens relative to its initial value. This is not incoherent. The
+system can learn \emph{this is dangerous} without also learning
+\emph{therefore I am a child and helpless}. That distinction is
+clinically welcome. Mature fear does not require regressive identity.
+
+\subsubsection{11.6 Dissociation is not
+witnessing}\label{dissociation-is-not-witnessing}
+
+The dissociation control is equally important. It reduces disturbance
+without producing the same revision profile as witnessing. Self-state
+barely moves. Avoidance remains high. The system is quieter, but the old
+priors remain largely intact.
+
+That is exactly the distinction the paper needs. Calm is not enough.
+What matters is whether context stays online or is functionally turned
+down.
+
+\subsubsection{11.7 Capture is a regime parameter in the current
+simulations}\label{capture-is-a-regime-parameter-in-the-current-simulations}
+
+The capture index figure shows the mapping from Self-energy to capture
+clearly. Low Self-energy places baseline, exposure, and dissociation in
+the capture zone; high Self-energy places witnessing in the context-held
+regime. In the current implementation, capture is set by the
+condition-level Self-energy parameter, which is why it remains constant
+across trials within a given condition. In this implementation, capture
+is best read as a \textbf{regime descriptor} rather than a
+learning-dependent time series.
+
+\subsubsection{11.8 Formation depends strongly on low
+control}\label{formation-depends-strongly-on-low-control}
+
+The formation appendix supports the threat-plus-low-control claim. High
+threat with low control produces the strongest final bundle rigidity.
+Chronic low support produces an intermediate profile. High threat with
+high control produces substantially weaker helpless self-state
+consolidation.
+
+\textbf{Control chiefly gates whether threat learning hardens into
+identity-level bundle rigidity.} Threat meaning and avoidance rise
+across conditions, but low control most strongly sharpens the helpless
+self-state and the integrated bundle measure. High-control threat still
+produces learning, but much less identity-level consolidation.
+
+\subsubsection{11.9 Polarization is mutual threat plus
+capture}\label{polarization-is-mutual-threat-plus-capture}
+
+The polarization appendix also behaves well. Low Self-energy produces
+the expected oscillatory alternation between the two bundles. High
+Self-energy produces prolonged simultaneous representation and sharp
+reductions in policy switching. Medium Self-energy increases entropy and
+switching before the system settles into stable coexistence. Read
+clinically, the model suggests a transition from capture, to
+exploration, to negotiation.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio,alt={Figure: Main simulation summary}]{figures/fig7_main_summary.png}}
+\caption{Figure: Main simulation summary}
+\end{figure}
+
+\emph{Figure 9. Main simulation summary. Final belief states across all
+five conditions for self-state, threat meaning, and avoidance.
+Witnessing produces the deepest revision. Exposure produces intermediate
+revision. Baseline and dissociation leave priors largely intact. Real
+danger preserves adaptive threat meaning.}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Discussion}\label{discussion}
+
+The paper set out to answer a narrow but clinically important question:
+when a part activates, what determines whether it takes over or can be
+held in context, and why does only the latter permit lasting change?
+
+The answer proposed here is structural. Self-energy governs the
+precision balance between active part priors and present-context
+evidence. That balance determines inferential regime. Under capture, the
+part dominates the field. Under context-held activation, the same part
+remains active while context stays online --- and, critically, Self's
+present-moment self-state becomes available as a differentiated presence
+the part can register (§8.3). That difference is enough to explain why
+some activations merely repeat a prior and others revise it.
+
+\subsubsection{12.1 What the model
+explains}\label{what-the-model-explains}
+
+The account explains six things without too much machinery.
+
+First, it explains why parts feel like whole worlds rather than isolated
+beliefs. The bundle structure couples self-state, world-state, policy,
+and outcome.
+
+Second, it explains why activation alone is not therapeutic. Without
+context, activation repeats. Without activation, context cannot reach
+the dormant prior. Context-held activation uniquely provides both.
+
+Third, it explains why IFS-like change often feels upstream and
+generalizing. Under H1, revising self-state changes what counts as
+dangerous, which then changes what protectors need to do.
+
+Fourth, it distinguishes Self-led calm from dissociative quiet. Both may
+look regulated. Only one preserves contact.
+
+Fifth, it shows why this still counts as an IFS model despite being
+minimal. What makes the model specifically IFS is not plurality alone.
+It is the claim that the decisive therapeutic variable is the
+Self-mediated relation to activated part-content.
+
+Sixth, it identifies the specific prediction error that does the work
+inside the context-held window: the part's relational expectation ---
+isolation, overwhelm, rejection --- is contradicted by Self's
+present-moment self-state, generating identity-level mismatch that
+reaches the organizing prior directly. That is why the core of IFS
+change is relational, not merely informational (§8.3).
+
+\subsubsection{12.2 What it does not yet
+explain}\label{what-it-does-not-yet-explain}
+
+The paper also leaves several clinically important structures
+under-modeled.
+
+It does not yet formalize full protector negotiation. Protectors in
+clinical IFS do not merely block --- they compute trust, grant
+permission, and have conditions under which they will step back. The
+current model captures the blocking function but not the relational
+intelligence that makes IFS's protector work distinctive. It does not
+distinguish genuine Self from self-like managerial imitation --- a
+distinction that probably requires separating embodied regulation from
+reportable meta-awareness more sharply than a single scalar allows. It
+does not model the therapist as a second agent, even though the clinical
+process is often dyadic long before it becomes stably intra-psychic. And
+it does not yet scale from one activated bundle or one polarity pair to
+a full inner parliament.
+
+It does not yet model relational prediction error as a distinct channel;
+in the current simulations, Self-energy shifts precision globally rather
+than differentiating between relational and informational evidence.
+
+These are real absences. They are also the right absences for a first
+model. The ambition here is not comprehensiveness. It is to get the core
+mechanism right before expanding the frame.
+
+\subsubsection{12.3 Implications for therapy
+comparison}\label{implications-for-therapy-comparison}
+
+The strongest comparative implication concerns exposure. The paper does
+not claim that exposure fails. The simulations show the opposite:
+exposure learns. What they show is that exposure and context-held
+activation learn differently.
+
+Exposure alters threat expectations under contact. Context-held
+activation alters the relation in which that contact occurs.
+Specifically, the relational prediction error generated when the part
+encounters Self's present-moment self-state reaches the identity-level
+organizing prior --- a channel exposure does not open, because exposure
+does not change who is relating to the activation (§8.3). If self-state
+truly sits upstream, then witnessing should revise a broader class of
+downstream appraisals. That is the paper's clearest comparative claim
+and probably its cleanest empirical target.
+
+\subsection{Next steps}\label{next-steps}
+
+The paper's two most important empirical targets follow directly from
+the architecture.
+
+\textbf{Revision order prediction.} Under IFS-informed contact
+(witnessing condition), self-state should cross its revision threshold
+--- the point at which its posterior probability shifts meaningfully
+away from the original burdened prior --- before threat meaning does,
+and threat meaning should cross before policy and avoidance change.
+Under standard exposure, all three should move more uniformly without
+the predicted cascade. The prediction requires purpose-built measures
+that cleanly separate the bundle elements: ``I feel like my younger or
+smaller self'' tracks self-state; ``this thing is genuinely dangerous''
+tracks threat meaning; approach/avoidance behavior tracks policy. If
+those three measures separate in the predicted order under IFS-like
+witnessing but track together under exposure, the identity-upstream
+architecture is supported. If they do not separate, the bundle
+structure's causal claim needs revision.
+
+\textbf{Generalization gradient prediction.} If self-state is the root
+of the bundle, IFS-like change should generalize to novel feared stimuli
+more than exposure-based change does. The test: after treatment
+targeting one fear, measure transfer to a structurally similar but
+untrained fear. The model predicts that IFS transfer will exceed
+exposure transfer because IFS revises the identity-level prior that
+organized the bundle --- not merely the specific threat association.
+Exposure-based change, which moves threat meaning without necessarily
+revising the self-state root, should generalize less. This is a
+between-treatment prediction that standard fear-learning models do not
+typically make, because those models lack the identity-upstream causal
+structure.
+
+\textbf{Relational channel prediction.} A further prediction follows
+from §8.3: the relational channel (the part registering Self's
+present-moment self-state) should contribute more to revision than the
+informational channel (showing the part current-life evidence). If
+witnessing without explicit life-updating produces comparable revision
+to witnessing with it, the primary-channel claim is supported. This
+could be tested by comparing IFS sessions in which witnessing occurs
+with and without the retrieval step (showing the part the current life).
+The model predicts that the relational contact alone should be
+sufficient for identity-level revision to begin.
+
+Beyond these three empirical targets, the next modeling extensions are:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Dyadic regulation:} model therapist and client as interacting
+  agents rather than hiding co-regulation inside one scalar support
+  term.
+\item
+  \textbf{Self-like parts:} separate autonomic regulation from
+  meta-awareness and test which combinations produce revision versus
+  pseudo-witnessing.
+\item
+  \textbf{Richer protector computation:} formalize trust, conditional
+  permission, and role transformation.
+\item
+  \textbf{Multi-part networks:} move from one polarity pair to several
+  coupled bundles with different developmental ages and policies.
+\item
+  \textbf{Empirical fitting:} align simulated trajectory measures with
+  session-level data, especially revision order and generalization
+  gradients.
+\end{enumerate}
+
+This paper does not finish the job. It builds the first floor. That is
+enough, at least for now, if the floor holds.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Appendix A. Formation
+Simulation}\label{appendix-a.-formation-simulation}
+
+The formation simulation asks a simple question: can part-like bundle
+rigidity arise through precision-weighted learning alone, without
+assuming literal graph surgery?
+
+The answer from the current simulation is yes, with one important
+refinement. All three acquisition environments produce some learning,
+but not the same kind of learning.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{High threat + low control} produces the strongest helpless
+  self-state consolidation and the highest integrated bundle rigidity.
+\item
+  \textbf{High threat + high control} produces strong danger learning
+  but much weaker helpless self-state consolidation.
+\item
+  \textbf{Chronic low support} produces an intermediate, slower-forming
+  profile.
+\end{itemize}
+
+This pattern supports the formation account. The critical ingredient is
+not fear in isolation. It is fear under insufficient control or
+co-regulation. The readout in a safe context makes that visible: the
+low-control condition carries the strongest residual bundle into safety.
+
+\textbf{Low control converts threat learning into identity-weighted part
+formation.}
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio,alt={Figure: Formation acquisition trajectories}]{figures/formation_acquisition_trajectories.png}}
+\caption{Figure: Formation acquisition trajectories}
+\end{figure}
+
+\emph{Figure A1. Acquisition trajectories across three formation
+conditions. High threat with low control produces the strongest and
+fastest consolidation of the full bundle (self-state, threat meaning,
+avoidance).}
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio,alt={Figure: Formation controllability gradient}]{figures/formation_controllability_gradient.png}}
+\caption{Figure: Formation controllability gradient}
+\end{figure}
+
+\emph{Figure A2. Controllability gradient. As perceived control
+increases, helpless self-state consolidation weakens sharply while
+threat learning persists --- supporting the claim that control gates
+identity-level bundle formation.}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Appendix B. Polarization
+Simulation}\label{appendix-b.-polarization-simulation}
+
+The polarization simulation introduces two mutually threatening bundles:
+
+\begin{itemize}
+\tightlist
+\item
+  Part A: approach, disclose, attach
+\item
+  Part B: withdraw, protect, avoid
+\end{itemize}
+
+Under low Self-energy, the activations alternate in anti-phase. Each
+bundle becomes locally true when active and intolerable when not. Under
+high Self-energy, both remain representable together and a mixed policy
+becomes possible.
+
+The summary metrics suggest a three-regime picture:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Low Self-energy:} mutual takeover and narrow policy dominance
+\item
+  \textbf{Medium Self-energy:} exploration band with high entropy and
+  switching
+\item
+  \textbf{High Self-energy:} stable simultaneous representation and
+  reduced switching
+\end{itemize}
+
+That middle band is theoretically useful. It suggests that
+de-polarization may not look like immediate calm. It may first look like
+more simultaneous representability, more policy experimentation, and
+only later like stable negotiation.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio,alt={Figure: Polarization summary metrics}]{figures/polarization_summary.png}}
+\caption{Figure: Polarization summary metrics}
+\end{figure}
+
+\emph{Figure B1. Polarization summary across Self-energy levels. Low
+Self-energy produces anti-phase oscillation. Medium Self-energy
+increases policy entropy and switching. High Self-energy produces the
+most stable co-representation with the least switching --- suggesting a
+three-regime transition from capture through exploration to
+negotiation.}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Appendix C. Full Glossary}\label{appendix-c.-full-glossary}
+
+This table gives the full computational translation for all IFS and
+technical terms used in the paper. Table 1 (§2) contains the six terms
+needed to enter the formalism; this appendix is the complete reference.
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Term
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Computational translation
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Parts} & Identity-level precision bundles: learned local control
+models coupling self-state, world-state, policy, and expected outcome as
+a single activation unit \\
+\textbf{Blending} & Clinical name for capture: the condition in which a
+part's bundle dominates inference and present context loses inferential
+weight \\
+\textbf{Witnessing} & Therapeutically cultivated form of context-held
+activation: the part remains live while the system retains
+present-context contact \\
+\textbf{Capture} & The inferential regime in which an active bundle
+dominates; present evidence cannot gain traction; the part's beliefs
+feel like the whole of reality \\
+\textbf{Context-held activation} & The inferential regime in which the
+same bundle remains live while present evidence stays online; the part
+is present but not dominant \\
+\textbf{Self} & A regime of uncaptured inference: no part dominates;
+evidence flows across channels; the system remains responsive to
+context. When this regime obtains, the system's present-moment
+self-state becomes available as a differentiated presence that parts can
+register (§6.1, §8.3) \\
+\textbf{Self-energy} & The governing variable for which regime obtains;
+a composite of autonomic-social regulation and metacognitive depth;
+operationalized as a scalar proxy \\
+\textbf{Protectors} & Policy priors and access-control tendencies that
+prevent destabilizing activation of exiles; subdivided into managers
+(prospective) and firefighters (reactive) \\
+\textbf{Exiles} & Parts carrying high-precision bundles formed under
+overwhelm and low control; kept offline by protectors \\
+\textbf{Unburdening} & Durable revision of upstream priors under
+context-held activation; in H1, begins with self-state and cascades to
+threat meaning and policy \\
+\textbf{Polarization} & Two or more bundles assigning high cost to one
+another's preferred policies; produces anti-phase oscillation under low
+Self-energy \\
+\textbf{Outdated beliefs} & Priors that were adaptive at formation and
+are anachronistic now; persist via high precision and avoidant
+sampling \\
+\textbf{Age regression} & Activation of a bundle carrying a
+developmental self-state prior; ``I am six'' is modeled as live
+inference, not retrieval \\
+\textbf{The 8 C's} & Calm, curiosity, clarity, compassion, confidence,
+courage, creativity, connectedness --- the phenomenological signature of
+sufficiently uncaptured inference under high Self-energy \\
+\textbf{Exposure vs.~IFS} & Exposure generates informational prediction
+error (threat meaning updates) without generating relational prediction
+error (Self's self-state is not available to the part). IFS changes the
+inferential regime so that both channels are open (§8.3, §8.5) \\
+\textbf{Dissociation vs.~Self-led calm} & Both may appear quiet;
+dissociation lowers context impact while leaving capture intact;
+Self-led calm keeps context strongly online without capture \\
+\textbf{H1 (self-state upstream)} & The causal architecture in which
+self-state is revised first; threat meaning follows; protective policy
+lags --- producing a revision cascade that generalizes \\
+\textbf{H2 (threat-primary)} & The competing architecture in which
+threat meaning is revised first; self-state follows; no cascade;
+generalization is local \\
+\textbf{Capture index} & Formal measure of inferential regime: effective
+part precision over the sum of effective part and context precision \\
+\textbf{Relational prediction error} & Identity-level mismatch generated
+when a part's relational expectation (isolation, overwhelm) encounters
+Self's present-moment self-state (presence, compassion); reaches the
+organizing prior directly; distinguished from informational prediction
+error, which updates threat meaning (§8.3) \\
+\textbf{Two evidence channels} & Inside the context-held window, the
+relational channel (part registering Self's self-state) is primary and
+always load-bearing; the informational channel (current life, adult
+body, safety of the room) is secondary and not always necessary
+(§8.3) \\
+\textbf{Why change generalizes} & Under H1, revising self-state changes
+what counts as dangerous and what policies remain necessary --- cascade
+predicts cross-stimulus transfer; H2 does not \\
+\end{longtable}
+}
+
+\end{document}
