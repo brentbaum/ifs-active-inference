@@ -39,6 +39,7 @@ include("concepts_model.jl")
 include("coherence_therapy_model.jl")
 include("ifs_model.jl")
 include("ifs_model_v2.jl")
+include("ifs_model_v3.jl")
 include("ifs_polarization_v2.jl")
 include("ifs_formation_model.jl")
 
@@ -146,16 +147,35 @@ export extract_trajectory, rolling_mean, find_crossing_trial
 
 # Export IFS Model v2
 export IFSV2Params, IFSV2ConditionConfig, IFSV2Environment, IFSV2Model
-export IFSV2StepResult, IFSV2Metrics, IFSV2Run, IFSV2Summary
+export IFSV2EFEDecomposition, IFSV2StepResult, IFSV2Metrics, IFSV2Run, IFSV2Summary
 export build_ifs_v2_model, build_ifs_v2_D, build_ifs_v2_A_h1, build_ifs_v2_A_h2
 export build_ifs_v2_B_h1, build_ifs_v2_B_h2, build_ifs_v2_A
 export validate_ifs_v2_A, validate_ifs_v2_transitions, override_ifs_v2_params
 export compute_ifs_v2_precisions, compute_ifs_v2_capture, compute_ifs_v2_witness_precision
+export compute_ifs_v2_policy_efe, compute_ifs_v2_policy_efe_decomposed
 export compute_ifs_v2_policy_probs, propagate_ifs_v2_beliefs, compute_ifs_v2_metrics
 export baseline_ifs_v2_config, exposure_ifs_v2_config, informational_ifs_v2_config
 export relational_depth_ifs_v2_config, real_danger_ifs_v2_config
 export main_ifs_v2_configs, control_ifs_v2_configs, all_ifs_v2_configs
 export run_ifs_v2_condition, run_ifs_v2_replications, run_ifs_v2_suite, run_ifs_v2_sensitivity
+
+# Export IFS Model v3
+export IFSV3Params, IFSV3ConditionConfig, IFSV3TrialConfig, IFSV3Model
+export IFSV3TrialResult, IFSV3Run, IFSV3Summary, IFSV3EFEDecomposition
+export IFSV3_CHANNEL_CUE, IFSV3_CHANNEL_SELF, IFSV3_CHANNEL_OUTCOME
+export IFSV3_SELF_HELPLESS, IFSV3_SELF_RESOURCED
+export IFSV3_THREAT_DANGEROUS, IFSV3_THREAT_SAFE
+export IFSV3_STIMULUS_DOG, IFSV3_STIMULUS_CAT
+export IFSV3_POLICY_AVOID, IFSV3_POLICY_CONTACT
+export build_ifs_v3_A_self, build_ifs_v3_A_outcome, build_ifs_v3_B
+export validate_ifs_v3_matrices, override_ifs_v3_params, compute_ifs_v3_precisions
+export ifs_v3_h1_highE_config, ifs_v3_h2_highE_config, ifs_v3_h1_lowE_config
+export main_ifs_v3_configs, build_ifs_v3_model
+export infer_ifs_v3_self, infer_ifs_v3_threat_from_self, infer_ifs_v3_threat_from_outcome
+export compute_ifs_v3_policy_efe, compute_ifs_v3_policy_efe_decomposed
+export compute_ifs_v3_policy_probs, update_ifs_v3_banks!
+export run_ifs_v3_trial!, run_ifs_v3_condition, summarize_ifs_v3_runs
+export run_ifs_v3_replications, run_ifs_v3_suite
 
 # Export IFS Polarization Model v2
 export IFSPolarizationV2PartSpec, IFSPolarizationV2Params, IFSPolarizationV2ConditionConfig

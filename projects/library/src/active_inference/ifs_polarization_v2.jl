@@ -38,7 +38,6 @@ Base.@kwdef struct IFSPolarizationV2Params
         T_forced=24,
         T_probe=1,
         policy_precision=4.2,
-        probe_policy_precision=4.8,
         beta_se=2.2,
         gamma_se=2.0,
         pi_part=3.3,
@@ -273,8 +272,7 @@ function _part_model(
         d_threat_safe=spec.d_threat_safe,
         d_outcome_avoidance=spec.d_outcome_avoidance,
         d_outcome_manageable=spec.d_outcome_manageable,
-        policy_precision=base.policy_precision * spec.precision_scale,
-        probe_policy_precision=base.probe_policy_precision * spec.precision_scale
+        policy_precision=base.policy_precision * spec.precision_scale
     )
     return IFSPolarizationV2PartModel(spec, build_ifs_v2_model(architecture=architecture, params=params))
 end
@@ -309,14 +307,7 @@ function _infer_part_step(
     E_t::Float64
 )
     A = build_ifs_v2_A(part.model, env, action)
-    pi_eff, lambda_ctx_eff = compute_ifs_v2_precisions(part.model.params, E_t)
-    stage1_weights = (
-        part.model.params.weight_external * lambda_ctx_eff,
-        part.model.params.weight_intero * (0.60 * pi_eff + 0.40 * lambda_ctx_eff),
-        part.model.params.weight_outcome * lambda_ctx_eff * max(0.25, prior[2][IFSV2_THREAT_SAFE]),
-        part.model.params.weight_info * lambda_ctx_eff,
-        0.0,
-    )
+    stage1_weights, _, lambda_ctx_eff = compute_ifs_v2_stage1_weights(part.model.params, E_t, prior)
 
     q_stage1 = infer_ifs_v2_stage(prior, A, obs, stage1_weights; active_modalities=1:4)
     capture_base, _, lambda_ctx_eff = compute_ifs_v2_capture(part.model.params, E_t, q_stage1)
@@ -337,7 +328,7 @@ function _infer_part_step(
         active_modalities=1:5
     )
 
-    native_policy = compute_ifs_v2_policy_probs(q_final, part.model.params)
+    native_policy = compute_ifs_v2_policy_probs(part.model, env, q_final, E_t)
     behavior_probs = _apply_policy_bias(native_policy, part.spec.policy_bias)
     preferred_prob = behavior_probs[part.spec.preferred_action]
 
@@ -371,13 +362,14 @@ end
 
 function _self_policy_probs(
     q_self::Vector{Vector{Float64}},
+    shared_model::IFSV2Model,
+    env::IFSV2Environment,
     params::IFSPolarizationV2Params,
     part_a::IFSPolarizationV2PartStep,
     part_b::IFSPolarizationV2PartStep,
     E_t::Float64
 )
-    mean_capture = 0.5 * (part_a.capture + part_b.capture)
-    base_policy = compute_ifs_v2_policy_probs(q_self, params.base; probe=true, capture=mean_capture)
+    base_policy = compute_ifs_v2_policy_probs(shared_model, env, q_self, E_t)
 
     balance = 1.0 - abs(part_a.preferred_prob - part_b.preferred_prob)
     flexible_bonus = clamp(E_t, 0.0, 1.0) * (0.6 + 0.4 * balance)
@@ -543,7 +535,7 @@ function run_ifs_polarization_v2_condition(
         weights = normalize_prob([eff_a, eff_b, eff_self])
 
         q_self = _blend_posteriors(q_a, q_b)
-        self_policy = _self_policy_probs(q_self, params, step_a0, step_b0, E_t)
+        self_policy = _self_policy_probs(q_self, model.shared_model, env, params, step_a0, step_b0, E_t)
         behavior_probs = normalize_prob(
             weights[1] .* [step_a0.p_avoid, step_a0.p_approach, step_a0.p_flexible] .+
             weights[2] .* [step_b0.p_avoid, step_b0.p_approach, step_b0.p_flexible] .+

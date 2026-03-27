@@ -133,6 +133,9 @@ The bundle has four elements:
 3. **Policy** — what I must do
 4. **Expected outcome** — what will happen if I do or do not
 
+<!-- KEEP: This mapping to object relations is load-bearing for the paper's claim that parts are identity-level bundles, not merely fear associations. Do not cut. -->
+This fourfold structure has an independent precedent in object relations theory, where a complete object relation is composed of a self-image, an object-image, a cause-image, and an effect-image. The computational bundle and the object-relational structure are tracking the same thing at different levels of description. That convergence is not coincidental: both are trying to name the minimal representational unit of an agent in a situation.
+
 Return to the dog case. A child is attacked by a dog. Under overwhelm and low control, one bundle may consolidate around the following priors:
 
 - **Self-state:** I am small and helpless
