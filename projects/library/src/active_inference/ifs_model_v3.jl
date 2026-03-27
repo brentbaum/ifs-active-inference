@@ -50,6 +50,10 @@ const IFSV3_OUTCOME_NEUTRAL = 2
 const IFSV3_NS = (2, 2)
 const IFSV3_NO = (2, 2, 2)
 
+const IFSV3_CHANNEL_CUE = 1
+const IFSV3_CHANNEL_SELF = 2
+const IFSV3_CHANNEL_OUTCOME = 3
+
 # ============================================================================
 # PARAMETERS AND RESULT TYPES
 # ============================================================================
@@ -133,6 +137,15 @@ struct IFSV3Model
     B_threat::Array{Float64,3}
 end
 
+struct IFSV3EFEDecomposition
+    pragmatic_per_channel::NTuple{3,Float64}
+    epistemic_per_channel::NTuple{3,Float64}
+    ambiguity_per_channel::NTuple{3,Float64}
+    pragmatic_total::Float64
+    epistemic_total::Float64
+    ambiguity_total::Float64
+end
+
 struct IFSV3TrialResult
     trial_index::Int
     phase::Symbol
@@ -150,6 +163,20 @@ struct IFSV3TrialResult
     p_threat_safe_final::Float64
     p_contact::Float64
     p_avoid::Float64
+    efe_avoid::Float64
+    efe_contact::Float64
+    efe_pragmatic_avoid::Float64
+    efe_pragmatic_contact::Float64
+    efe_epistemic_avoid::Float64
+    efe_epistemic_contact::Float64
+    efe_ambiguity_avoid::Float64
+    efe_ambiguity_contact::Float64
+    efe_pragmatic_channels_avoid::NTuple{3,Float64}
+    efe_pragmatic_channels_contact::NTuple{3,Float64}
+    efe_epistemic_channels_avoid::NTuple{3,Float64}
+    efe_epistemic_channels_contact::NTuple{3,Float64}
+    efe_ambiguity_channels_avoid::NTuple{3,Float64}
+    efe_ambiguity_channels_contact::NTuple{3,Float64}
     pD_self_resourced::Float64
     pD_threat_dog_safe::Float64
     pD_threat_cat_safe::Float64
@@ -253,6 +280,8 @@ normalize_prob(v::AbstractVector{<:Real}) = begin
     out ./ total
 end
 
+as_ifs_v3_channel_tuple(v::AbstractVector{<:Real}) = (Float64(v[1]), Float64(v[2]), Float64(v[3]))
+
 function sample_ifs_v3_categorical(rng::AbstractRNG, probs::AbstractVector{<:Real})
     r = rand(rng)
     cumprob = 0.0
@@ -306,6 +335,15 @@ function build_ifs_v3_A_self(params::IFSV3Params=IFSV3Params())
     for threat in 1:2
         A[:, IFSV3_SELF_HELPLESS, threat] = [truth, 1.0 - truth]
         A[:, IFSV3_SELF_RESOURCED, threat] = [1.0 - truth, truth]
+    end
+    return A
+end
+
+function build_ifs_v3_A_cue(stimulus::Int)
+    A = zeros(Float64, 2, 2, 2)
+    cue_obs = stimulus == IFSV3_STIMULUS_DOG ? IFSV3_CUE_DOG : IFSV3_CUE_CAT
+    for self in 1:2, threat in 1:2
+        A[cue_obs, self, threat] = 1.0
     end
     return A
 end
@@ -380,6 +418,190 @@ function compute_ifs_v3_precisions(params::IFSV3Params, E_t::Float64)
     return pi_part_eff, lambda_self_eff
 end
 
+function compute_ifs_v3_predicted_obs(
+    A::Array{Float64,3},
+    q_self::Vector{Float64},
+    q_threat::Vector{Float64},
+)
+    qo = zeros(Float64, size(A, 1))
+    for self in 1:2, threat in 1:2
+        qo .+= (q_self[self] * q_threat[threat]) .* view(A, :, self, threat)
+    end
+    return normalize_prob(qo)
+end
+
+function compute_ifs_v3_ambiguity(
+    A::Array{Float64,3},
+    q_self::Vector{Float64},
+    q_threat::Vector{Float64},
+)
+    ambiguity = 0.0
+    for self in 1:2, threat in 1:2
+        p_state = q_self[self] * q_threat[threat]
+        p_state <= eps(Float64) && continue
+
+        entropy = 0.0
+        for p in view(A, :, self, threat)
+            p <= eps(Float64) && continue
+            entropy -= p * log(p)
+        end
+        ambiguity += p_state * entropy
+    end
+    return ambiguity
+end
+
+function compute_ifs_v3_posterior_given_obs(
+    A::Array{Float64,3},
+    obs::Int,
+    q_self::Vector{Float64},
+    q_threat::Vector{Float64},
+)
+    joint = zeros(Float64, 2, 2)
+    for self in 1:2, threat in 1:2
+        joint[self, threat] = A[obs, self, threat] * q_self[self] * q_threat[threat]
+    end
+
+    evidence = sum(joint)
+    evidence <= eps(Float64) && return copy(q_self), copy(q_threat)
+    joint ./= evidence
+    return vec(sum(joint; dims=2)), vec(sum(joint; dims=1))
+end
+
+function compute_ifs_v3_state_info_gain(
+    A::Array{Float64,3},
+    q_self::Vector{Float64},
+    q_threat::Vector{Float64},
+    qo::Vector{Float64},
+)
+    info_gain = 0.0
+    for obs in 1:length(qo)
+        qo[obs] <= eps(Float64) && continue
+        q_self_given_obs, q_threat_given_obs = compute_ifs_v3_posterior_given_obs(A, obs, q_self, q_threat)
+        kl = 0.0
+        for self in 1:2
+            p = q_self_given_obs[self]
+            p > eps(Float64) && (kl += p * log(p / (q_self[self] + eps(Float64))))
+        end
+        for threat in 1:2
+            p = q_threat_given_obs[threat]
+            p > eps(Float64) && (kl += p * log(p / (q_threat[threat] + eps(Float64))))
+        end
+        info_gain += qo[obs] * kl
+    end
+    return info_gain
+end
+
+function compute_ifs_v3_channel_weights(
+    model::IFSV3Model,
+    E_t::Float64;
+    learn_self::Bool=true,
+    self_channel_mode::Symbol=:self,
+)
+    _, lambda_self_eff = compute_ifs_v3_precisions(model.params, E_t)
+    cue_weight = 1.0
+    self_weight = model.architecture == :H1 && learn_self && self_channel_mode == :self ?
+        E_t * lambda_self_eff :
+        0.0
+    outcome_weight = 1.0
+    return cue_weight, self_weight, outcome_weight
+end
+
+function compute_ifs_v3_log_preferences(params::IFSV3Params, action::Int)
+    cue_log_prefs = zeros(Float64, 2)
+    self_log_prefs = zeros(Float64, 2)
+    outcome_raw = action == IFSV3_POLICY_CONTACT ?
+        [params.utility_contact_harm, params.utility_contact_neutral] :
+        [params.utility_avoid_harm, params.utility_avoid_neutral]
+    outcome_log_prefs = log.(softmax(outcome_raw) .+ eps(Float64))
+    return cue_log_prefs, self_log_prefs, outcome_log_prefs
+end
+
+function compute_ifs_v3_policy_efe_decomposed(
+    model::IFSV3Model,
+    stimulus::Int,
+    q_self::Vector{Float64},
+    q_threat::Vector{Float64},
+    E_t::Float64,
+    action::Int;
+    learn_self::Bool=true,
+    self_channel_mode::Symbol=:self,
+)
+    A_channels = (
+        build_ifs_v3_A_cue(stimulus),
+        model.A_self,
+        action == IFSV3_POLICY_CONTACT ? model.A_outcome_contact : model.A_outcome_avoid,
+    )
+    log_prefs = compute_ifs_v3_log_preferences(model.params, action)
+    channel_weights = compute_ifs_v3_channel_weights(
+        model,
+        E_t;
+        learn_self=learn_self,
+        self_channel_mode=self_channel_mode,
+    )
+
+    pragmatic_per_channel = zeros(Float64, 3)
+    epistemic_per_channel = zeros(Float64, 3)
+    ambiguity_per_channel = zeros(Float64, 3)
+
+    for g in 1:3
+        weight = channel_weights[g]
+        weight <= 0.0 && continue
+
+        qo = compute_ifs_v3_predicted_obs(A_channels[g], q_self, q_threat)
+        ambiguity_per_channel[g] = weight * compute_ifs_v3_ambiguity(A_channels[g], q_self, q_threat)
+        pragmatic_per_channel[g] = -weight * sum(qo .* log_prefs[g])
+        epistemic_per_channel[g] = weight * compute_ifs_v3_state_info_gain(A_channels[g], q_self, q_threat, qo)
+    end
+
+    self_signal = q_self[IFSV3_SELF_RESOURCED] - q_self[IFSV3_SELF_HELPLESS]
+    threat_signal = q_threat[IFSV3_THREAT_SAFE] - q_threat[IFSV3_THREAT_DANGEROUS]
+    if action == IFSV3_POLICY_CONTACT
+        pragmatic_per_channel[IFSV3_CHANNEL_OUTCOME] -= model.params.threat_policy_weight * threat_signal
+        if model.architecture == :H1 && self_channel_mode == :self
+            pragmatic_per_channel[IFSV3_CHANNEL_SELF] -= model.params.contact_self_bias * self_signal
+        end
+    else
+        pragmatic_per_channel[IFSV3_CHANNEL_OUTCOME] += model.params.threat_policy_weight * threat_signal
+        if model.architecture == :H1 && self_channel_mode == :self
+            pragmatic_per_channel[IFSV3_CHANNEL_SELF] += model.params.avoid_bias * self_signal
+        end
+    end
+
+    decomposition = IFSV3EFEDecomposition(
+        as_ifs_v3_channel_tuple(pragmatic_per_channel),
+        as_ifs_v3_channel_tuple(epistemic_per_channel),
+        as_ifs_v3_channel_tuple(ambiguity_per_channel),
+        sum(pragmatic_per_channel),
+        sum(epistemic_per_channel),
+        sum(ambiguity_per_channel),
+    )
+    efe = decomposition.ambiguity_total + decomposition.pragmatic_total - decomposition.epistemic_total
+    return efe, decomposition
+end
+
+function compute_ifs_v3_policy_efe(
+    model::IFSV3Model,
+    stimulus::Int,
+    q_self::Vector{Float64},
+    q_threat::Vector{Float64},
+    E_t::Float64,
+    action::Int;
+    learn_self::Bool=true,
+    self_channel_mode::Symbol=:self,
+)
+    efe, _ = compute_ifs_v3_policy_efe_decomposed(
+        model,
+        stimulus,
+        q_self,
+        q_threat,
+        E_t,
+        action;
+        learn_self=learn_self,
+        self_channel_mode=self_channel_mode,
+    )
+    return efe
+end
+
 function infer_ifs_v3_self(
     model::IFSV3Model,
     prior_self::Vector{Float64},
@@ -450,31 +672,34 @@ end
 
 function compute_ifs_v3_policy_probs(
     model::IFSV3Model,
+    stimulus::Int,
     q_self::Vector{Float64},
     q_threat::Vector{Float64},
+    E_t::Float64;
+    learn_self::Bool=true,
+    self_channel_mode::Symbol=:self,
 )
-    params = model.params
-    pred_contact = expected_ifs_v3_outcome(model, q_threat, IFSV3_POLICY_CONTACT)
-    pred_avoid = expected_ifs_v3_outcome(model, q_threat, IFSV3_POLICY_AVOID)
-    self_signal = q_self[IFSV3_SELF_RESOURCED] - q_self[IFSV3_SELF_HELPLESS]
-    threat_signal = q_threat[IFSV3_THREAT_SAFE] - q_threat[IFSV3_THREAT_DANGEROUS]
-    self_weight = model.architecture == :H1 ? params.contact_self_bias : 0.0
-    avoid_weight = model.architecture == :H1 ? params.avoid_bias : 0.0
-
-    contact_score =
-        pred_contact[IFSV3_OUTCOME_HARM] * params.utility_contact_harm +
-        pred_contact[IFSV3_OUTCOME_NEUTRAL] * params.utility_contact_neutral +
-        params.threat_policy_weight * threat_signal +
-        self_weight * self_signal
-
-    avoid_score =
-        pred_avoid[IFSV3_OUTCOME_HARM] * params.utility_avoid_harm +
-        pred_avoid[IFSV3_OUTCOME_NEUTRAL] * params.utility_avoid_neutral +
-        params.threat_policy_weight * (-threat_signal) +
-        avoid_weight * (-self_signal)
-
-    qpi = softmax(params.policy_precision .* [avoid_score, contact_score])
-    return qpi
+    efe_avoid = compute_ifs_v3_policy_efe(
+        model,
+        stimulus,
+        q_self,
+        q_threat,
+        E_t,
+        IFSV3_POLICY_AVOID;
+        learn_self=learn_self,
+        self_channel_mode=self_channel_mode,
+    )
+    efe_contact = compute_ifs_v3_policy_efe(
+        model,
+        stimulus,
+        q_self,
+        q_threat,
+        E_t,
+        IFSV3_POLICY_CONTACT;
+        learn_self=learn_self,
+        self_channel_mode=self_channel_mode,
+    )
+    return softmax((-model.params.policy_precision) .* [efe_avoid, efe_contact])
 end
 
 function sample_ifs_v3_outcome(model::IFSV3Model, action::Int, actual_self::Int, actual_threat::Int)
@@ -556,10 +781,33 @@ function run_ifs_v3_trial!(
         mode=config.self_channel_mode,
         lambda_self_eff=lambda_self_eff,
     )
+    policy_threat = isnothing(config.forced_action) || config.self_channel_mode == :threat ?
+        q_threat_after_self :
+        q_threat_prior
 
-    policy_threat = isnothing(config.forced_action) ? q_threat_after_self : q_threat_prior
-    qpi = compute_ifs_v3_policy_probs(model, q_self_after, policy_threat)
+    efe_avoid, efe_decomp_avoid = compute_ifs_v3_policy_efe_decomposed(
+        model,
+        config.stimulus,
+        q_self_after,
+        policy_threat,
+        config.E_t,
+        IFSV3_POLICY_AVOID;
+        learn_self=config.learn_self,
+        self_channel_mode=config.self_channel_mode,
+    )
+    efe_contact, efe_decomp_contact = compute_ifs_v3_policy_efe_decomposed(
+        model,
+        config.stimulus,
+        q_self_after,
+        policy_threat,
+        config.E_t,
+        IFSV3_POLICY_CONTACT;
+        learn_self=config.learn_self,
+        self_channel_mode=config.self_channel_mode,
+    )
+    qpi = softmax((-model.params.policy_precision) .* [efe_avoid, efe_contact])
     action = isnothing(config.forced_action) ? sample_ifs_v3_categorical(rng, qpi) : config.forced_action
+
     outcome_obs = sample_ifs_v3_outcome(rng, model, action, config.actual_self, config.actual_threat)
     q_threat_final = infer_ifs_v3_threat_from_outcome(model, q_threat_after_self, action, outcome_obs)
     q_self_final = copy(q_self_after)
@@ -584,7 +832,8 @@ function run_ifs_v3_trial!(
         "lambda_self=$(round(lambda_self_eff, digits=3)) q_self_prior=$(round(q_self_prior[2], digits=3)) ",
         "q_self_after=$(round(q_self_after[2], digits=3)) q_threat_prior=$(round(q_threat_prior[2], digits=3)) ",
         "q_threat_after_self=$(round(q_threat_after_self[2], digits=3)) q_threat_final=$(round(q_threat_final[2], digits=3)) ",
-        "qpi=$(round.(qpi, digits=3)) action=$(action) outcome=$(outcome_obs)"
+        "qpi=$(round.(qpi, digits=3)) efe=$(round.([efe_avoid, efe_contact], digits=3)) ",
+        "action=$(action) outcome=$(outcome_obs)"
     )
 
     return IFSV3TrialResult(
@@ -604,6 +853,20 @@ function run_ifs_v3_trial!(
         q_threat_final[IFSV3_THREAT_SAFE],
         qpi[IFSV3_POLICY_CONTACT],
         qpi[IFSV3_POLICY_AVOID],
+        efe_avoid,
+        efe_contact,
+        efe_decomp_avoid.pragmatic_total,
+        efe_decomp_contact.pragmatic_total,
+        efe_decomp_avoid.epistemic_total,
+        efe_decomp_contact.epistemic_total,
+        efe_decomp_avoid.ambiguity_total,
+        efe_decomp_contact.ambiguity_total,
+        efe_decomp_avoid.pragmatic_per_channel,
+        efe_decomp_contact.pragmatic_per_channel,
+        efe_decomp_avoid.epistemic_per_channel,
+        efe_decomp_contact.epistemic_per_channel,
+        efe_decomp_avoid.ambiguity_per_channel,
+        efe_decomp_contact.ambiguity_per_channel,
         normalize_prob(pD_self)[IFSV3_SELF_RESOURCED],
         normalize_prob(pD_threat_dog)[IFSV3_THREAT_SAFE],
         normalize_prob(pD_threat_cat)[IFSV3_THREAT_SAFE],

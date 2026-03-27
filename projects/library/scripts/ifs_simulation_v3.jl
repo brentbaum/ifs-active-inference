@@ -32,6 +32,9 @@ using .IFSV3ScriptSupport:
     IFSV3Summary,
     IFSV3Run,
     IFSV3TrialResult,
+    IFSV3_CHANNEL_CUE,
+    IFSV3_CHANNEL_SELF,
+    IFSV3_CHANNEL_OUTCOME,
     IFSV3_SELF_HELPLESS,
     IFSV3_SELF_RESOURCED,
     IFSV3_THREAT_SAFE,
@@ -70,7 +73,14 @@ if ENABLE_FIGURES
     const COL_H1 = RGB(0.72, 0.31, 0.22)
     const COL_H2 = RGB(0.22, 0.43, 0.66)
     const COL_LOW = RGB(0.48, 0.52, 0.34)
-    const COL_BG = RGB(0.99, 0.98, 0.95)
+    const COL_SELF = RGB(0.74, 0.31, 0.23)
+    const COL_OUTCOME = RGB(0.23, 0.44, 0.68)
+    const COL_CUE = RGB(0.62, 0.62, 0.58)
+    const COL_PRAGMATIC = RGB(0.23, 0.45, 0.69)
+    const COL_EPISTEMIC = RGB(0.72, 0.31, 0.22)
+    const COL_AMBIGUITY = RGB(0.76, 0.67, 0.28)
+    const COL_ENERGY = RGB(0.15, 0.15, 0.15)
+    const COL_BG = RGB(1.0, 1.0, 0.973)
     const COL_GRID = RGB(0.84, 0.84, 0.82)
 
     default(
@@ -82,7 +92,7 @@ if ENABLE_FIGURES
         titlefontsize=11,
         dpi=250,
         grid=false,
-        framestyle=:semi,
+        framestyle=:axes,
         background_color=COL_BG,
         background_color_inside=COL_BG,
         foreground_color_grid=COL_GRID,
@@ -96,6 +106,12 @@ mkpath(FIGURE_DIR)
 const N_REPS = parse(Int, get(ENV, "IFS_V3_N_REPS", "60"))
 const SENS_REPS = parse(Int, get(ENV, "IFS_V3_SENS_REPS", "50"))
 const SEED = 42
+const V3_CHANNEL_LABELS = ["Cue", "Self evidence", "Outcome"]
+const V3_CHANNEL_COLORS = if ENABLE_FIGURES
+    [COL_CUE, COL_SELF, COL_OUTCOME]
+else
+    Any[]
+end
 
 summary_by_name(summaries) = Dict(summary.condition => summary for summary in summaries)
 
@@ -382,100 +398,238 @@ function print_criteria(title::String, rows)
     end
 end
 
+function action_field_symbol(kind::Symbol, action::Int)
+    suffix = action == IFSV3_POLICY_CONTACT ? "contact" : "avoid"
+    return Symbol("efe_", String(kind), "_", suffix)
+end
+
+function action_channels_field_symbol(kind::Symbol, action::Int)
+    suffix = action == IFSV3_POLICY_CONTACT ? "contact" : "avoid"
+    return Symbol("efe_", String(kind), "_channels_", suffix)
+end
+
+function mean_action_total_series(
+    summary::IFSV3Summary,
+    action::Int,
+    kind::Symbol;
+    trial_indices,
+)
+    values = zeros(Float64, length(trial_indices), length(summary.runs))
+    field = action_field_symbol(kind, action)
+    for (j, run) in enumerate(summary.runs)
+        for (k, t) in enumerate(trial_indices)
+            values[k, j] = getfield(run.trials[t], field)
+        end
+    end
+    return vec(mean(values; dims=2))
+end
+
+function mean_action_channel_matrix(
+    summary::IFSV3Summary,
+    action::Int,
+    kind::Symbol;
+    trial_indices,
+)
+    values = zeros(Float64, 3, length(trial_indices), length(summary.runs))
+    field = action_channels_field_symbol(kind, action)
+    for (j, run) in enumerate(summary.runs)
+        for (k, t) in enumerate(trial_indices)
+            channel_values = getfield(run.trials[t], field)
+            for g in 1:3
+                values[g, k, j] = channel_values[g]
+            end
+        end
+    end
+    return dropdims(mean(values; dims=3), dims=3)
+end
+
+function mean_action_components_at_trial(summary::IFSV3Summary, action::Int, trial_index::Int)
+    pragmatic = zeros(Float64, length(summary.runs))
+    epistemic = zeros(Float64, length(summary.runs))
+    ambiguity = zeros(Float64, length(summary.runs))
+    efe = zeros(Float64, length(summary.runs))
+    for (j, run) in enumerate(summary.runs)
+        trial = run.trials[trial_index]
+        pragmatic[j] = getfield(trial, action_field_symbol(:pragmatic, action))
+        epistemic[j] = getfield(trial, action_field_symbol(:epistemic, action))
+        ambiguity[j] = getfield(trial, action_field_symbol(:ambiguity, action))
+        efe[j] = getfield(trial, action == IFSV3_POLICY_CONTACT ? :efe_contact : :efe_avoid)
+    end
+    return (
+        pragmatic=mean(pragmatic),
+        epistemic=mean(epistemic),
+        ambiguity=mean(ambiguity),
+        efe=mean(efe),
+    )
+end
+
+function extend_for_labels(xs)
+    return (first(xs), last(xs) + 2.0)
+end
+
+function label_series_end!(p, x, series::Vector{Float64}, label::String, color; dy::Float64=0.0)
+    annotate!(p, x[end] + 0.45, series[end] + dy, text(label, 8, :left, color))
+    return p
+end
+
 function build_main_figure(params::IFSV3Params, summaries::Dict{String,IFSV3Summary})
     !ENABLE_FIGURES && return nothing
     xs = collect(training_ix(params))
-    probe_x = ["H1-highE", "H2-highE", "H1-lowE"]
-    colors = [COL_H1, COL_H2, COL_LOW]
-
-    p_left = plot(title="Dog Training", xlabel="Training trial", ylabel="Probability")
-    for (name, color) in zip(probe_x, colors)
+    panels = Plots.Plot[]
+    offsets = [0.01, 0.03, -0.02]
+    for name in ["H1-highE", "H2-highE", "H1-lowE"]
         summary = summaries[name]
-        plot!(p_left, xs, summary.mean_pD_self_resourced[xs], color=color, label="$(name) self", linestyle=:solid)
-        plot!(p_left, xs, summary.mean_pD_dog_safe[xs], color=color, label="$(name) dog threat", linestyle=:dash)
+        epistemic = mean_action_channel_matrix(summary, IFSV3_POLICY_CONTACT, :epistemic; trial_indices=xs)
+        ymax = max(maximum(epistemic) * 1.12, 0.02)
+        p = plot(
+            title=name,
+            xlabel="Training trial",
+            ylabel=name == "H1-highE" ? "Epistemic value" : "",
+            xlims=extend_for_labels(xs),
+            ylims=(0.0, ymax),
+            legend=false,
+            size=(360, 340),
+        )
+        for g in 1:3
+            series = vec(epistemic[g, :])
+            plot!(p, xs, series; color=V3_CHANNEL_COLORS[g], linewidth=g == IFSV3_CHANNEL_SELF ? 2.8 : 2.0, label="")
+            label_series_end!(p, xs, series, V3_CHANNEL_LABELS[g], V3_CHANNEL_COLORS[g]; dy=offsets[g])
+        end
+        push!(panels, p)
     end
-    hline!(p_left, [0.5], color=:black, alpha=0.15, linestyle=:dot, label="")
 
-    p_right = bar(
-        probe_x,
-        [summaries[name].mean_contact[first_probe_ix(params)] for name in probe_x];
-        color=colors,
-        legend=false,
-        ylabel="P(contact)",
-        title="First Cat Probe",
-        ylim=(0, 1),
+    fig = plot(
+        panels...;
+        layout=(1, 3),
+        size=(1180, 340),
+        plot_title="What Is the Agent Curious About During Therapy?",
+        plot_titlefontsize=13,
     )
-
-    fig = plot(p_left, p_right; layout=(1, 2), size=(1100, 450))
-    savefig(fig, joinpath(FIGURE_DIR, "ifs_generalization_main_v3.png"))
+    savefig(fig, joinpath(FIGURE_DIR, "ifs_v3_epistemic_channels_training.png"))
     return nothing
 end
 
-function build_within_trial_figure(params::IFSV3Params)
+function build_within_trial_figure(params::IFSV3Params, h1::IFSV3Summary)
     !ENABLE_FIGURES && return nothing
-    model = build_ifs_v3_model(architecture=:H1, params=params)
-    pD_self, pD_dog, pD_cat = initial_ifs_v3_banks(params)
-    trial = run_ifs_v3_trial!(
-        model,
-        pD_self,
-        pD_dog,
-        pD_cat,
-        IFSV3TrialConfig(
-            IFSV3_STIMULUS_DOG,
-            params.high_E,
-            IFSV3_POLICY_CONTACT,
-            IFSV3_SELF_RESOURCED,
-            IFSV3_THREAT_SAFE,
-            false,
-            false,
-            true,
-            :self,
-        );
-        trial_index=1,
-        phase=:training,
-        rng=MersenneTwister(SEED),
+    xs = collect(training_ix(params))
+    self_series = h1.mean_pD_self_resourced[xs]
+    E_series = fill(h1.E_t, length(xs))
+    self_epistemic = vec(mean_action_channel_matrix(h1, IFSV3_POLICY_CONTACT, :epistemic; trial_indices=xs)[IFSV3_CHANNEL_SELF, :])
+    ymax = max(maximum(vcat(self_series, E_series, self_epistemic)) * 1.12, 0.05)
+
+    p = plot(
+        xs,
+        self_series;
+        color=COL_SELF,
+        linewidth=2.8,
+        xlabel="Training trial",
+        ylabel="Value",
+        title="The Full Picture",
+        xlims=extend_for_labels(xs),
+        ylims=(0.0, ymax),
+        legend=false,
+        size=(900, 420),
     )
+    plot!(p, xs, E_series; color=COL_ENERGY, linestyle=:dash, linewidth=1.8, alpha=0.75, label="")
+    plot!(p, xs, self_epistemic; color=COL_EPISTEMIC, linewidth=2.4, label="")
 
-    steps = 1:3
-    labels = ["Prior", "After self", "After outcome"]
-    self_vals = [trial.p_self_resourced_prior, trial.p_self_resourced_after_self, trial.p_self_resourced_final]
-    threat_vals = [trial.p_threat_safe_prior, trial.p_threat_safe_after_self, trial.p_threat_safe_final]
+    label_series_end!(p, xs, self_series, "P(resourced self)", COL_SELF; dy=0.01)
+    label_series_end!(p, xs, E_series, "E_t", COL_ENERGY; dy=0.0)
+    label_series_end!(p, xs, self_epistemic, "Self epistemic", COL_EPISTEMIC; dy=0.01)
 
-    p = plot(steps, self_vals; label="P(resourced self)", marker=:circle, color=COL_H1,
-        xticks=(steps, labels), ylabel="Posterior", xlabel="Inference stage",
-        title="Within-Trial Cascade", ylim=(0, 1))
-    plot!(p, steps, threat_vals; label="P(safe threat)", marker=:diamond, color=COL_H2)
-    savefig(p, joinpath(FIGURE_DIR, "ifs_generalization_within_trial_v3.png"))
+    savefig(p, joinpath(FIGURE_DIR, "ifs_v3_full_picture_training.png"))
     return nothing
 end
 
 function build_ablation_figure(params::IFSV3Params, summaries::Dict{String,IFSV3Summary}, ablation::IFSV3Summary)
     !ENABLE_FIGURES && return nothing
-    labels = ["H1-highE", "H1-highE η_self=0", "H2-highE"]
-    vals = [
-        summaries["H1-highE"].mean_contact[first_probe_ix(params)],
-        ablation.mean_contact[first_probe_ix(params)],
-        summaries["H2-highE"].mean_contact[first_probe_ix(params)],
-    ]
-    p = bar(labels, vals; color=[COL_H1, RGB(0.55, 0.55, 0.55), COL_H2], ylim=(0, 1),
-        ylabel="P(contact)", title="Self-Learning Necessity")
-    savefig(p, joinpath(FIGURE_DIR, "ifs_generalization_self_learning_necessity_v3.png"))
+    xs = collect(training_ix(params))
+    panels = Plots.Plot[]
+    for name in ["H1-highE", "H2-highE"]
+        summary = summaries[name]
+        pragmatic = mean_action_total_series(summary, IFSV3_POLICY_CONTACT, :pragmatic; trial_indices=xs)
+        epistemic = vec(mean_action_channel_matrix(summary, IFSV3_POLICY_CONTACT, :epistemic; trial_indices=xs)[IFSV3_CHANNEL_SELF, :])
+        ymax = max(maximum(vcat(pragmatic, epistemic)) * 1.12, 0.05)
+        p = plot(
+            xs,
+            pragmatic;
+            color=COL_PRAGMATIC,
+            linewidth=2.6,
+            xlabel="Training trial",
+            ylabel=name == "H1-highE" ? "Expected value" : "",
+            title=name,
+            xlims=extend_for_labels(xs),
+            ylims=(0.0, ymax),
+            legend=false,
+            size=(470, 360),
+        )
+        plot!(p, xs, epistemic; color=COL_EPISTEMIC, linewidth=2.4, label="")
+        label_series_end!(p, xs, pragmatic, "Pragmatic", COL_PRAGMATIC; dy=0.01)
+        label_series_end!(p, xs, epistemic, "Self epistemic", COL_EPISTEMIC; dy=-0.01)
+        push!(panels, p)
+    end
+
+    fig = plot(
+        panels...;
+        layout=(1, 2),
+        size=(980, 360),
+        plot_title="Motivation Shifts as Self Revises",
+        plot_titlefontsize=13,
+    )
+    savefig(fig, joinpath(FIGURE_DIR, "ifs_v3_motivation_shift_training.png"))
     return nothing
 end
 
 function build_specificity_figure(params::IFSV3Params, summaries::Dict{String,IFSV3Summary})
     !ENABLE_FIGURES && return nothing
-    labels = ["H1-highE", "H2-highE", "H1-lowE"]
-    pre = fill(normalize_prob([params.pD_threat_dangerous, params.pD_threat_safe])[2], 3)
-    post = [summaries[name].runs[1].pD_threat_cat_final[2] for name in labels]
-
-    p = plot(title="Stimulus Specificity", xlabel="Condition", ylabel="P(cat safe prior)", ylim=(0, 1))
-    scatter!(p, labels, pre; label="Before dog training", color=:black, marker=:circle)
-    scatter!(p, labels, post; label="After dog training", color=COL_LOW, marker=:diamond)
-    for i in eachindex(labels)
-        plot!(p, [labels[i], labels[i]], [pre[i], post[i]]; color=:black, alpha=0.25, label="")
+    trial_ix = first_probe_ix(params)
+    panels = Plots.Plot[]
+    for name in ["H1-highE", "H2-highE"]
+        summary = summaries[name]
+        avoid = mean_action_components_at_trial(summary, IFSV3_POLICY_AVOID, trial_ix)
+        contact = mean_action_components_at_trial(summary, IFSV3_POLICY_CONTACT, trial_ix)
+        components = Dict(
+            "Ambiguity" => ([avoid.ambiguity, contact.ambiguity], COL_AMBIGUITY),
+            "Pragmatic" => ([avoid.pragmatic, contact.pragmatic], COL_PRAGMATIC),
+            "Epistemic" => ([-avoid.epistemic, -contact.epistemic], COL_EPISTEMIC),
+            "Total EFE" => ([avoid.efe, contact.efe], COL_ENERGY),
+        )
+        xmin = minimum(vcat([vals for (vals, _) in values(components)]...)) - 0.08
+        xmax = maximum(vcat([vals for (vals, _) in values(components)]...)) + 0.12
+        p = plot(
+            title=name,
+            xlabel="Contribution",
+            ylabel="",
+            yticks=([1, 2], ["Avoid", "Contact"]),
+            xlims=(xmin, xmax),
+            ylims=(0.5, 2.5),
+            legend=false,
+            size=(470, 320),
+        )
+        vline!(p, [0.0]; color=:black, alpha=0.15, linestyle=:dot, label="")
+        for (i, total) in enumerate([avoid.efe, contact.efe])
+            plot!(p, [0.0, total], [i, i]; color=:black, alpha=0.12, linewidth=1.0, label="")
+        end
+        for (label, (vals, color)) in components
+            scatter!(p, vals, [1, 2]; color=color, markersize=5, markerstrokewidth=0, label="")
+        end
+        annotate!(p, contact.ambiguity, 2.18, text("Ambiguity", 8, :left, COL_AMBIGUITY))
+        annotate!(p, contact.pragmatic, 2.03, text("Pragmatic", 8, :left, COL_PRAGMATIC))
+        annotate!(p, -contact.epistemic, 1.88, text("-Epistemic", 8, :left, COL_EPISTEMIC))
+        annotate!(p, contact.efe, 1.73, text("Total EFE", 8, :left, COL_ENERGY))
+        winner = contact.efe < avoid.efe ? "Contact lower" : "Avoid lower"
+        annotate!(p, xmax - 0.02, 2.32, text(winner, 8, :right, COL_ENERGY))
+        push!(panels, p)
     end
-    savefig(p, joinpath(FIGURE_DIR, "ifs_generalization_stimulus_specificity_v3.png"))
+
+    fig = plot(
+        panels...;
+        layout=(1, 2),
+        size=(980, 320),
+        plot_title="Why H1-highE Approaches Cat",
+        plot_titlefontsize=13,
+    )
+    savefig(fig, joinpath(FIGURE_DIR, "ifs_v3_cat_probe_efe_decomposition.png"))
     return nothing
 end
 
@@ -516,16 +670,16 @@ function run_all_outputs()
     end
 
     build_main_figure(params, summaries)
-    build_within_trial_figure(params)
+    build_within_trial_figure(params, summaries["H1-highE"])
     build_ablation_figure(params, summaries, ablation)
     build_specificity_figure(params, summaries)
 
     println("\nStep 7: Figures")
     if ENABLE_FIGURES
-        println("  saved: " * joinpath(FIGURE_DIR, "ifs_generalization_main_v3.png"))
-        println("  saved: " * joinpath(FIGURE_DIR, "ifs_generalization_within_trial_v3.png"))
-        println("  saved: " * joinpath(FIGURE_DIR, "ifs_generalization_self_learning_necessity_v3.png"))
-        println("  saved: " * joinpath(FIGURE_DIR, "ifs_generalization_stimulus_specificity_v3.png"))
+        println("  saved: " * joinpath(FIGURE_DIR, "ifs_v3_epistemic_channels_training.png"))
+        println("  saved: " * joinpath(FIGURE_DIR, "ifs_v3_motivation_shift_training.png"))
+        println("  saved: " * joinpath(FIGURE_DIR, "ifs_v3_full_picture_training.png"))
+        println("  saved: " * joinpath(FIGURE_DIR, "ifs_v3_cat_probe_efe_decomposition.png"))
     else
         println("  skipped figure generation")
     end
