@@ -264,3 +264,39 @@ Verdict: READY FOR REVISION PASS. Key findings:
 10. **Vertical divider between phases** — forced contact | free choice, clearly marked
 
 Source: Chamberlin 2022 Coherence Therapy figures (ct_schematic, ct_mechanism_comparison, ct_before_after, ct_trajectories, discovery_mechanism). Full analysis in `figure-inspiration.md`.
+
+---
+
+# V3 Session Learnings (2026-03-27)
+
+## The v2 → v3 arc: adversarial testing works
+
+V2 passed all initial success criteria. Then adversarial Test 4 (fake Channel 5) broke the Move 3 claim: replacing self-state content with threat content produced similar cascade dynamics. The model couldn't distinguish WHERE evidence entered the causal chain.
+
+**Root cause:** v2 used within-trial B-matrix propagation as the proof. The coupling was tight enough that any evidence propagated everywhere. The explicit Channel 5 gate created a "late-opening channel" story instead of a "content-specific evidence" story.
+
+**The fix was not parameter tuning — it was a design change.** V3 shifted the proof from within-trial gating to cross-trial generalization. Train on dog, probe on cat. The discriminant: does revised self-state transfer to a novel stimulus?
+
+## V3 design principles (from Claude + GPT 5.4 adversarial collaboration)
+
+1. **Cross-trial learning is the proof, not within-trial propagation.** Which PRIOR gets revised across encounters matters more than what happens within a single timestep.
+2. **Matched model comparison.** H1 and H2 must fit training equally well. The discriminant is transfer only.
+3. **Minimal factors.** 2 hidden factors (shared self-state + stimulus-specific threat). Everything else derived.
+4. **No explicit gating.** Channel 5 always on, always truthful. E_t modulates precision only.
+5. **Separate Dirichlet banks per stimulus.** d_self is shared. d_threat_dog and d_threat_cat are local. Transfer comes from shared prior revision, not from leakage.
+6. **Pre-register everything.** 7 success criteria + 5 adversarial tests defined before running.
+
+## V3 results
+
+- H1-highE: P(contact cat) ≈ 1.0 — self revised, transfer occurred
+- H2-highE: P(contact cat) ≈ 0.0 — only dog threat revised, no transfer
+- H1-lowE: P(contact cat) ≈ 0.0 — self too rigid, no transfer
+- D_threat_cat unchanged in all conditions — transfer is through d_self, not leakage
+- η_self=0 ablation kills transfer completely — self learning is necessary
+
+## What the adversarial arc taught us
+
+1. **Test your simulation's claims, not just its outputs.** V2 produced beautiful figures. They just didn't prove what we thought.
+2. **The content-specificity question is harder than the gating question.** "Does a channel open?" is easy to simulate. "Does the CONTENT of what enters through that channel matter?" requires generalization across stimuli.
+3. **B-matrix coupling is not the right place to carry a content claim.** Tight coupling makes everything propagate. The proof needs to live in what PRIORS get revised, not what STATES update within a timestep.
+4. **Two rounds of adversarial design review with GPT 5.4 caught problems we wouldn't have found otherwise.** The "iterate till you agree" protocol works.
