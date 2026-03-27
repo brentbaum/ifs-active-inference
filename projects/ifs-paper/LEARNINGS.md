@@ -1,13 +1,13 @@
-# v7 Learnings: Critique Session and Implemented Shifts
-*From the 2026-03-26 seminal-paper-writing session*
+# Paper Learnings
+*Cumulative record of what we figured out, session by session*
 
 ---
 
 ## What This Document Is
 
-A record of the architectural critique session that produced v7, including: what was wrong with v6, what we figured out together, what was implemented, and what remains open. Read this before touching v7.
+A living record of insights, decisions, and patterns from critique and revision sessions. Read this before touching the draft.
 
-Full critique: `papers/critiques/critique-self-energy-witnessing-2026-03-26.md`
+Critiques: `papers/critiques/`
 
 ---
 
@@ -25,9 +25,9 @@ Everything else in the paper is downstream of this.
 
 ---
 
-## The Two-Move Structure (Settled)
+## The Three-Move Structure (Settled v8)
 
-The paper has two distinct theoretical moves, both necessary, neither sufficient alone:
+The paper has three distinct theoretical moves:
 
 **Move 1 — Parts as identity-level precision bundles**
 Defines the formal object. A part bundles four priors: self-state, world-state, policy, expected outcome. *Self-state is the organizing prior* — not just one element among four, but the root from which the others derive. This is what makes parts identity-level rather than merely stimulus-specific.
@@ -48,7 +48,17 @@ Explains:
 - Why dissociation differs from witnessing (context is turned down, not maintained)
 - Why exposure differs from witnessing (different inferential regime, not different information)
 
-**Together:** Move 1 explains the phenomenology of activation. Move 2 explains the phenomenology of change. H1 (self-state upstream) is the bridge — it is definitionally entailed by Move 1, not a separate empirical hypothesis.
+**Move 3 — Relational prediction error (added v8, 2026-03-26)**
+Explains what happens *inside* the witnessing window. At sufficient Self-energy depth, the system can observe its own present-moment self-state. The part's relational expectation (isolation) encounters Self's presence. That identity-level prediction error reaches the organizing prior directly. Move 3 is Move 2 at sufficient depth — not a separate mechanism.
+
+Explains:
+- Why the core of IFS change is relational, not informational
+- Why witnessing without life-updating can suffice for identity-level revision
+- Why exposure doesn't produce the same depth of change (no relational PE)
+- Why modality doesn't matter (visual, somatic, inner-voice all work — the relational registration is what counts)
+- Why parts detect the difference between Self-energy and caring-part energy
+
+**Together:** Move 1 explains the phenomenology of activation. Move 2 opens the window for change. Move 3 explains what happens inside the window that produces revision. H1 (self-state upstream) is definitionally entailed by Move 1, not a separate empirical hypothesis.
 
 ---
 
@@ -186,3 +196,71 @@ See `memory/project_revision_roadmap.md` for the full 6-conversation plan. Short
 ## One Thing to Hold
 
 The paper's central move is now clear and the spine is agreed. The remaining work is making the paper *execute* what the dialogue revealed it was about. The gap between "what the paper argues" and "what a first-time reader would take away" is still real — but it is now a prose and structure problem, not a conceptual one.
+
+---
+
+# V8 Session Learnings (2026-03-26, evening)
+
+## Move 3: Relational Prediction Error
+
+The single biggest theoretical addition. Discovered through a chain:
+1. Brent noted that IFS uses imagination to relate to parts — Self is present *now* in relationship to the part *then*. Going straight for the identity prior.
+2. Pulled therapist quotes (5 tiers, saved to `resources/ifs-relationship-quotes.md`). Manual 4090 is the gold quote: the reconsolidation mismatch is relational, not informational.
+3. Formalized the Self regime/subject decomposition. Self-energy is the regime (Move 2). Self's present-moment self-state is the presence (Move 3). Originally called "Self-as-subject" — dropped the term, kept the descriptive language.
+4. Key reframe from Brent: these aren't separate things. Move 3 IS Move 2 at sufficient depth. Self-energy progressively unlocks self-observation.
+5. Two evidence channels: relational (primary, always load-bearing) and informational (secondary, not always necessary). Witnessing exists to serve the relational update.
+
+## The Self Decomposition (Regime + Presence)
+
+Dick Schwartz says Self is "a particle and a wave." We don't use that metaphor but the formal content is:
+- Self-energy (regime): the precision governor. Determines capture vs context-held. The field, the container.
+- Self's present-moment self-state (presence): what emerges when the regime is in place. What parts register. What generates relational PE.
+
+The paper's §6.1 now says both: Self is a regime of uncaptured inference, AND when that regime obtains, the system's present-moment self-state becomes available as a differentiated presence that parts can register.
+
+## Simulation V2: Three-Move Model
+
+- 3 hidden factors (self-state, threat meaning, expected outcome). Context environmental. Policy derived.
+- 5 observation channels. Channel 5 = "witnessed self-state" — precision gated by inverse capture.
+- The cascade diagonal in the heatmap IS the paper's argument.
+- Free-choice probe differentiates three conditions: Exposure=avoid, Informational=inspect, Relational Depth=stay.
+- H1 vs H2: cascade present under H1, absent under H2.
+- Self-energy sweep shows sigmoid threshold at E_t ≈ 0.60-0.65.
+
+## Polarization V2: Two Parts, One System
+
+Part A (exile: avoid dog) vs Part B (social manager: approach human). Mixture-of-experts.
+- Low E_t: oscillation or one-part capture.
+- Medium E_t: awkward compromise.
+- High E_t: Self-dominant, both parts witnessed, dual cascade, flexible behavior.
+- Clinical insight confirmed: you don't resolve a parts war by choosing one side.
+
+## EFE Refactor
+
+Replaced ~20 hand-tuned policy scoring coefficients with proper Expected Free Energy computation. Also eliminated r_t and probe_policy_precision, reduced 5 modality weights to 2 ratios. More principled but less transparent to a clinical reader. Evaluation: keep EFE in code, explain in terms of preferences in the paper.
+
+## V8 Critique Findings
+
+Verdict: READY FOR REVISION PASS. Key findings:
+1. Move 3 (§8.3) is the star but is buried as a subsection → promote to top-level section
+2. Conclusion enumerates rather than gathers → rewrite as recognition
+3. Introduction states a gap but not a cost → "IFS claims remain unfalsifiable" is sharper
+4. Name one clinical surprise the formalism generates → witnessing without life-updating should suffice
+5. Simulation sections need rewriting for v2
+
+---
+
+## 10 Figure Design Patterns (from Chamberlin 2022 analysis)
+
+1. **Step-function / phase transition** — make the cascade look like something SHIFTED, not gradual drift
+2. **Identical axes across condition panels** — direct visual comparison without mental rescaling
+3. **Color hierarchy** — consistent colors for conditions; muted for controls, saturated for key result
+4. **Confidence bands over error bars** — mean + shaded region for stochastic runs
+5. **Small multiples** — one panel per bundle element, shared time axis
+6. **Annotated intervention points** — vertical dashed line at phase transitions, labeled
+7. **Effect size prominence** — make the key result visually dominant; don't equalize conditions
+8. **Mechanism inset** — small causal diagram accompanying the data figure
+9. **First-passage markers** — dots/ticks showing when each element crosses threshold
+10. **Vertical divider between phases** — forced contact | free choice, clearly marked
+
+Source: Chamberlin 2022 Coherence Therapy figures (ct_schematic, ct_mechanism_comparison, ct_before_after, ct_trajectories, discovery_mechanism). Full analysis in `figure-inspiration.md`.
