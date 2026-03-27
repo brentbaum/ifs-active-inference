@@ -95,3 +95,56 @@ The diagonal IS the argument.
 Chamberlin 2022: `projects/reproductions/chamberlin_2022/figures/ct_*.png`, `discovery_*.png`
 IFS current: `projects/ifs-paper/figures/fig*.png`, `formation_*.png`, `polarization_*.png`
 Reference: `resources/papers/ho_2021_compassion/figures/`, `resources/papers/limanowski_blankenburg_2013_minimal_self/figures/`
+
+---
+
+## System Architecture Diagrams (for simulation model figure)
+
+Searched all figures in `projects/reproductions/chamberlin_2022/figures/`, `resources/papers/ho_2021_compassion/figures/`, and `archive/figures/`. The following show generative model structure, hidden-factor-to-observation mappings, or prior flow through a model. Simulation output plots (trajectories, bar charts, heatmaps) are excluded.
+
+### 1. Ho 2021 Figure 1 -- Bayesian Active Inference Architecture
+**File:** `resources/papers/ho_2021_compassion/figures/figure1_bayesian_active_inference.jpg`
+
+Four-node box-and-arrow diagram inside a rounded rectangle labeled "(sample space)." Nodes: External State (Node E, dashed border -- hidden/unobservable), Sensory State (Node S, solid border), Active State (Node A, solid border), Internal State (Node I, large circle). Thick block arrows show causal flow: E -> S, S -> I, I -> A, A -> E. Bidirectional "Prediction Errors" arrows connect S and A through the center. Asterisks on S and A mark them as Markov Blanket nodes separating Internal from External states.
+
+**Relevance for IFS v2 figure:** The clearest precedent for showing a generative model's high-level architecture in this literature. Clean, minimal, black-and-white. The four-node layout with directed arrows is the template. For the IFS figure, we replace this with: Hidden Factors (self-state, threat, outcome) as internal nodes, Observation Channels (1-5) as sensory nodes, Policy/EFE as the active node, and Environment as the external node. The Markov Blanket concept maps to the observation channels mediating between hidden states and the world.
+
+### 2. Ho 2021 Figure 2 -- Bayesian Dysfunction (Ego-Preserving Bias)
+**File:** `resources/papers/ho_2021_compassion/figures/figure2_bayesian_dysfunction.jpg`
+
+Same four-node layout as Figure 1, now populated with clinical content. P1's Node E lists "events causing sensations to conform to identity-grasping beliefs: flashbacks, interoceptive triggers, conceptual thoughts (VIKALPA)" and "events caused by actions driven by ego-preserving bias: objects to be avoided, objects to seek, objects to destroy." P1's Node S feeds into P1's Node I which contains "mental images, identity-grasping beliefs & other conceptual thoughts (VIKALPA)." Between S and A: "Excessive Free-Energy" with a fire icon and "Irreconcilable prediction errors due to ego-preserving bias" plus "Chronic Stress." Two face icons (P1, P2) flank the diagram showing interpersonal context.
+
+**Relevance for IFS v2 figure:** Demonstrates how to annotate a system architecture diagram with domain-specific content while keeping the structural skeleton intact. The "excessive free energy" annotation between sensory and active states maps directly to the IFS concept of capture -- where prediction errors are resolved by maintaining burdened priors rather than updating them. The P1/P2 relational framing maps to the IFS witnessed-self-state channel that requires relational context.
+
+### 3. Ho 2021 Figure 4 -- Attuning to Another Agent
+**File:** `resources/papers/ho_2021_compassion/figures/figure4_attuning_to_others.jpg`
+
+Horizontal flow diagram. Left: P2's Bayesian Engine (brain icon) feeds into P1's sample space through "Mirror-Neuron Systems (automatic mirroring)", "Ventral Attention Network (data-driven attention, conflict detection)", and "Frontoparietal Network (reasoning, working memory, thought releasing, spatial frame regulation)." These converge on P1's Node S and Node A within the sample space. Right side shows a vertical column of processing stages: "P1-P2 attunement" -> "P1's Reality-Checking" -> "P1's Conflict-Alarming" -> "P1's Relation-Modeling", each annotated with brain regions (Salience Network: PAG, Amygdala, Caudate, pvMCC & Insula; DMN Affect-Object Generating Network: Limbic, vACC, OFC, vmPFC; etc.). Arrow flows show belief-violation signals feeding up to a "Relational Frames / Hippocampus" component.
+
+**Relevance for IFS v2 figure:** Most complex architecture in the set. Shows how an external agent's influence enters the generative model through specific neural network pathways. For IFS v2, the "P2's Bayesian Engine" maps to the therapeutic relationship generating observations on Channels 4 and 5. The staged processing (attunement -> reality-checking -> conflict-alarming -> relation-modeling) parallels the IFS cascade (self-state -> threat -> outcome -> policy), though the Ho figure is neural rather than computational. The key lesson: show the external relational input as a distinct entry point, not just another observation.
+
+### 4. Chamberlin 2022 ct_schematic.png -- Coherence Therapy Process Schematic
+**File:** `projects/reproductions/chamberlin_2022/figures/ct_schematic.png`
+
+Two-column process diagram. Left: "MODULAR MODE" (pink background) -- Context-blind. Lists: "A: uniform (can't process cues)", "D: fearful prior", "D: learning blocked." Right: "INTEGRATED MODE" (green background) -- Context-aware. Lists: "A: identity (processes cues)", "D: accurate prior", "D: learning enabled." Between them: "Therapist Intervention" arrow pointing right. Below each mode: OUTCOME boxes. Modular: "P(avoid) = 0.96, Pathological avoidance." Integrated: "P(approach) = 0.97, Context-appropriate engagement." Footer: "Key Insight: Resolution via structural change, not belief updating (D change = 0)."
+
+**Relevance for IFS v2 figure:** This is the closest structural precedent to what the IFS v2 figure needs. It shows two regimes of the SAME generative model (not two different models) with different A-matrix and D-prior configurations, and the intervention that switches between them. For IFS v2, the two regimes are "capture" (part precision dominates, channel 5 off) and "relational depth" (context precision grows, channel 5 opens, cascade occurs). The Chamberlin figure uses color-coding (pink = pathological, green = resolved) and parameter annotations (A, D values) that could be adapted. Key difference: the IFS model has a CONTINUOUS transition governed by self-energy, not a discrete switch.
+
+### 5. Chamberlin 2022 discovery_mechanism.png -- 2x2 Mechanism Dashboard
+**File:** `projects/reproductions/chamberlin_2022/figures/discovery_mechanism.png`
+
+Four-panel small-multiples figure. Top-left: "Behavioral Change" (avoidance probability over trials, showing regime shifts). Top-right: "Context Sensitivity" (binary modular/integrated state over trials, showing step transitions). Bottom-left: "Simulated Annealing" (precision/temperature curve stepping down over trials). Bottom-right: "Schema Belief (D3)" (belief parameter trajectory). All panels share the trial axis. Color-coded conditions overlay on each panel.
+
+**Relevance for IFS v2 figure:** Not a system architecture diagram per se, but shows how to decompose a model's internal dynamics into parallel panels that together tell the mechanistic story. The "simulated annealing" panel is directly analogous to the self-energy / capture index trajectory in the IFS model. For the IFS figure, a companion version of this layout could show: (1) capture index, (2) channel 5 precision, (3) self-state posterior, (4) cascade readout -- all sharing the time axis.
+
+### Summary: What to borrow for the IFS v2 system architecture figure
+
+**From Ho 2021 Figure 1:** The basic template -- nodes for hidden factors, directed arrows for causal structure, observation channels as the interface between internal and external. Black-and-white, academic, minimal.
+
+**From Ho 2021 Figure 2:** How to annotate nodes with domain content (IFS part states, observation meanings) without cluttering the structural logic. The "excessive free energy" placement between nodes is a good template for showing where capture operates.
+
+**From Ho 2021 Figure 4:** The relational input as a distinct entry pathway. Channel 5 (witnessed self-state) should enter the architecture from a visually distinct direction or with distinct notation, not blended with the other four channels.
+
+**From Chamberlin ct_schematic.png:** Regime comparison (capture vs. relational depth) with parameter annotations. Color-coded backgrounds for the two operating modes. Outcome annotations showing behavioral consequences.
+
+**Key design principle across all:** The architecture diagram should be readable by someone who has never seen an active inference model. Nodes should be labeled with IFS language (not just "s1, s2"), arrows should indicate what causes what, and the self-energy modulation should be visually prominent as the mechanism that governs which regime the system operates in.

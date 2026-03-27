@@ -138,6 +138,75 @@
   svg text {
     font-family: 'Lora', Georgia, serif;
   }
+
+  /* === Side-by-side comparison layout === */
+  .page-wrapper {
+    max-width: 80rem;
+  }
+
+  .comparison-row {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    margin-top: 1.5rem;
+  }
+
+  .comparison-col {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .version-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .version-label.v2-label {
+    color: var(--steel);
+  }
+
+  .critique-note {
+    flex: 0 0 14rem;
+    padding: 1rem 1.2rem;
+    background: var(--paper);
+    border-left: 3px solid var(--warm);
+    font-size: 0.78rem;
+    line-height: 1.55;
+    color: var(--text);
+    align-self: center;
+  }
+
+  .critique-note strong {
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--warm);
+    margin-bottom: 0.4rem;
+  }
+
+  .critique-note .taxonomy {
+    font-size: 0.7rem;
+    color: var(--steel);
+    font-style: italic;
+    margin-top: 0.5rem;
+    display: block;
+  }
+
+  .critique-note .checks {
+    margin-top: 0.5rem;
+    font-size: 0.68rem;
+    color: var(--text-light);
+    line-height: 1.5;
+  }
+
+  .critique-note .checks .pass { color: #4a7fa5; }
+  .critique-note .checks .fail { color: #c45a3c; }
 </style>
 </head>
 <body>
@@ -159,50 +228,109 @@
     <h2 class="visual-title">The Bundle</h2>
     <p class="visual-description">A part is four coupled priors with self-state as the organizing root &mdash; not a flat list, but a hierarchy.</p>
   </div>
-  <div class="visual-container">
-    <svg viewBox="0 0 520 340" width="520" height="340" xmlns="http://www.w3.org/2000/svg">
-      <!-- Self-state: large root circle -->
-      <circle cx="260" cy="70" r="44" fill="none" stroke="#2a2a2a" stroke-width="2.5"/>
-      <text x="260" y="65" text-anchor="middle" font-size="11" font-weight="600" fill="#2a2a2a">Self-state</text>
-      <text x="260" y="80" text-anchor="middle" font-size="9" font-style="italic" fill="#6a6a6a">who I am here</text>
+  <div class="comparison-row">
+    <!-- V1 -->
+    <div class="comparison-col">
+      <span class="version-label">v1</span>
+      <div class="visual-container">
+        <svg viewBox="0 0 520 340" width="520" height="340" xmlns="http://www.w3.org/2000/svg">
+          <!-- Self-state: large root circle -->
+          <circle cx="260" cy="70" r="44" fill="none" stroke="#2a2a2a" stroke-width="2.5"/>
+          <text x="260" y="65" text-anchor="middle" font-size="11" font-weight="600" fill="#2a2a2a">Self-state</text>
+          <text x="260" y="80" text-anchor="middle" font-size="9" font-style="italic" fill="#6a6a6a">who I am here</text>
 
-      <!-- Connecting lines from self-state to three children -->
-      <line x1="230" y1="110" x2="130" y2="170" stroke="#2a2a2a" stroke-width="1.5"/>
-      <line x1="260" y1="114" x2="260" y2="170" stroke="#2a2a2a" stroke-width="1.5"/>
-      <line x1="290" y1="110" x2="390" y2="170" stroke="#2a2a2a" stroke-width="1.5"/>
+          <!-- Connecting lines from self-state to three children -->
+          <line x1="230" y1="110" x2="130" y2="170" stroke="#2a2a2a" stroke-width="1.5"/>
+          <line x1="260" y1="114" x2="260" y2="170" stroke="#2a2a2a" stroke-width="1.5"/>
+          <line x1="290" y1="110" x2="390" y2="170" stroke="#2a2a2a" stroke-width="1.5"/>
 
-      <!-- World-state -->
-      <circle cx="130" cy="205" r="34" fill="none" stroke="#4a7fa5" stroke-width="1.5"/>
-      <text x="130" y="200" text-anchor="middle" font-size="10" fill="#4a7fa5">World-state</text>
-      <text x="130" y="214" text-anchor="middle" font-size="8.5" font-style="italic" fill="#6a6a6a">what this means</text>
+          <!-- World-state -->
+          <circle cx="130" cy="205" r="34" fill="none" stroke="#4a7fa5" stroke-width="1.5"/>
+          <text x="130" y="200" text-anchor="middle" font-size="10" fill="#4a7fa5">World-state</text>
+          <text x="130" y="214" text-anchor="middle" font-size="8.5" font-style="italic" fill="#6a6a6a">what this means</text>
 
-      <!-- Policy -->
-      <circle cx="260" cy="205" r="34" fill="none" stroke="#4a7fa5" stroke-width="1.5"/>
-      <text x="260" y="200" text-anchor="middle" font-size="10" fill="#4a7fa5">Policy</text>
-      <text x="260" y="214" text-anchor="middle" font-size="8.5" font-style="italic" fill="#6a6a6a">what I must do</text>
+          <!-- Policy -->
+          <circle cx="260" cy="205" r="34" fill="none" stroke="#4a7fa5" stroke-width="1.5"/>
+          <text x="260" y="200" text-anchor="middle" font-size="10" fill="#4a7fa5">Policy</text>
+          <text x="260" y="214" text-anchor="middle" font-size="8.5" font-style="italic" fill="#6a6a6a">what I must do</text>
 
-      <!-- Expected outcome -->
-      <circle cx="390" cy="205" r="34" fill="none" stroke="#4a7fa5" stroke-width="1.5"/>
-      <text x="390" y="200" text-anchor="middle" font-size="10" fill="#4a7fa5">Expected</text>
-      <text x="390" y="214" text-anchor="middle" font-size="8.5" font-style="italic" fill="#6a6a6a">what will happen</text>
+          <!-- Expected outcome -->
+          <circle cx="390" cy="205" r="34" fill="none" stroke="#4a7fa5" stroke-width="1.5"/>
+          <text x="390" y="200" text-anchor="middle" font-size="10" fill="#4a7fa5">Expected</text>
+          <text x="390" y="214" text-anchor="middle" font-size="8.5" font-style="italic" fill="#6a6a6a">what will happen</text>
 
-      <!-- Coupling arcs between children -->
-      <path d="M 164,205 Q 195,260 226,205" fill="none" stroke="#d8d6d0" stroke-width="1" stroke-dasharray="3,3"/>
-      <path d="M 294,205 Q 325,260 356,205" fill="none" stroke="#d8d6d0" stroke-width="1" stroke-dasharray="3,3"/>
+          <!-- Coupling arcs between children -->
+          <path d="M 164,205 Q 195,260 226,205" fill="none" stroke="#d8d6d0" stroke-width="1" stroke-dasharray="3,3"/>
+          <path d="M 294,205 Q 325,260 356,205" fill="none" stroke="#d8d6d0" stroke-width="1" stroke-dasharray="3,3"/>
 
-      <!-- Brace + label: "organizing prior" -->
-      <line x1="220" y1="30" x2="300" y2="30" stroke="#c45a3c" stroke-width="1"/>
-      <line x1="220" y1="26" x2="220" y2="34" stroke="#c45a3c" stroke-width="1"/>
-      <line x1="300" y1="26" x2="300" y2="34" stroke="#c45a3c" stroke-width="1"/>
-      <text x="260" y="22" text-anchor="middle" font-size="9" fill="#c45a3c" font-weight="500">organizing prior</text>
+          <!-- Brace + label: "organizing prior" -->
+          <line x1="220" y1="30" x2="300" y2="30" stroke="#c45a3c" stroke-width="1"/>
+          <line x1="220" y1="26" x2="220" y2="34" stroke="#c45a3c" stroke-width="1"/>
+          <line x1="300" y1="26" x2="300" y2="34" stroke="#c45a3c" stroke-width="1"/>
+          <text x="260" y="22" text-anchor="middle" font-size="9" fill="#c45a3c" font-weight="500">organizing prior</text>
 
-      <!-- Annotation: "learned together, reactivate together" -->
-      <text x="260" y="290" text-anchor="middle" font-size="9" fill="#6a6a6a" font-style="italic">Learned together. Reactivate together.</text>
+          <!-- Annotation: "learned together, reactivate together" -->
+          <text x="260" y="290" text-anchor="middle" font-size="9" fill="#6a6a6a" font-style="italic">Learned together. Reactivate together.</text>
 
-      <!-- Size emphasis: self-state circle is visibly larger -->
-      <!-- Precision indicator -->
-      <text x="260" y="310" text-anchor="middle" font-size="8" fill="#6a6a6a">Circle size ~ precision weight</text>
-    </svg>
+          <!-- Size emphasis: self-state circle is visibly larger -->
+          <!-- Precision indicator -->
+          <text x="260" y="310" text-anchor="middle" font-size="8" fill="#6a6a6a">Circle size ~ precision weight</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Critique -->
+    <div class="critique-note">
+      <strong>Critique</strong>
+      Self-state and children are nearly the same visual weight, so the hierarchy is readable but not felt. The italic sub-labels add clutter without aiding the thumbnail. v2 makes the root visually dominant (filled, larger), drops the italic glosses, and uses stroke weight alone to show coupling.
+      <span class="taxonomy">Type: Mechanism diagram</span>
+      <div class="checks">
+        <span class="pass">One-move: PASS</span> &middot;
+        <span class="fail">Thumbnail: FAIL (too many labels)</span> &middot;
+        <span class="pass">Reading-path: PASS (top-down)</span> &middot;
+        <span class="pass">Fidelity: PASS</span>
+      </div>
+    </div>
+
+    <!-- V2 -->
+    <div class="comparison-col">
+      <span class="version-label v2-label">v2</span>
+      <div class="visual-container">
+        <svg viewBox="0 0 420 310" width="420" height="310" xmlns="http://www.w3.org/2000/svg">
+          <!-- Self-state: dominant filled root -->
+          <circle cx="210" cy="70" r="50" fill="#2a2a2a" opacity="0.1" stroke="#2a2a2a" stroke-width="2.8"/>
+          <text x="210" y="67" text-anchor="middle" font-size="13" font-weight="700" fill="#2a2a2a">Self-state</text>
+          <text x="210" y="84" text-anchor="middle" font-size="8" fill="#c45a3c" font-weight="500">organizing prior</text>
+
+          <!-- Connecting lines -->
+          <line x1="178" y1="115" x2="100" y2="168" stroke="#2a2a2a" stroke-width="2"/>
+          <line x1="210" y1="120" x2="210" y2="168" stroke="#2a2a2a" stroke-width="2"/>
+          <line x1="242" y1="115" x2="320" y2="168" stroke="#2a2a2a" stroke-width="2"/>
+
+          <!-- World-state: smaller child -->
+          <circle cx="100" cy="200" r="28" fill="none" stroke="#4a7fa5" stroke-width="1.5"/>
+          <text x="100" y="204" text-anchor="middle" font-size="10" fill="#4a7fa5">World</text>
+
+          <!-- Policy -->
+          <circle cx="210" cy="200" r="28" fill="none" stroke="#4a7fa5" stroke-width="1.5"/>
+          <text x="210" y="204" text-anchor="middle" font-size="10" fill="#4a7fa5">Policy</text>
+
+          <!-- Expected outcome -->
+          <circle cx="320" cy="200" r="28" fill="none" stroke="#4a7fa5" stroke-width="1.5"/>
+          <text x="320" y="204" text-anchor="middle" font-size="10" fill="#4a7fa5">Outcome</text>
+
+          <!-- Coupling arcs -->
+          <path d="M 128,200 Q 155,245 182,200" fill="none" stroke="#d8d6d0" stroke-width="1.2" stroke-dasharray="3,3"/>
+          <path d="M 238,200 Q 265,245 292,200" fill="none" stroke="#d8d6d0" stroke-width="1.2" stroke-dasharray="3,3"/>
+
+          <!-- Tagline -->
+          <text x="210" y="270" text-anchor="middle" font-size="9" fill="#6a6a6a" font-style="italic">Learned together. Reactivate together.</text>
+
+          <!-- Size legend -->
+          <text x="210" y="296" text-anchor="middle" font-size="7.5" fill="#d8d6d0">size = precision weight</text>
+        </svg>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -215,210 +343,125 @@
 <section class="visual-section">
   <div class="visual-header">
     <span class="visual-number">Candidate 2</span>
-    <h2 class="visual-title">The Cascade</h2>
-    <p class="visual-description">Self-state revision propagates downstream: change at the root generalizes; change at a leaf stays local.</p>
-  </div>
-  <div class="visual-container">
-    <svg viewBox="0 0 560 320" width="560" height="320" xmlns="http://www.w3.org/2000/svg">
-      <!-- Title labels -->
-      <text x="160" y="24" text-anchor="middle" font-size="10" font-weight="600" fill="#2a2a2a">H1: Self-state upstream</text>
-      <text x="430" y="24" text-anchor="middle" font-size="10" font-weight="500" fill="#6a6a6a">Leaf-only revision</text>
-
-      <!-- LEFT: Cascade from root -->
-      <!-- Nodes -->
-      <rect x="100" y="42" width="120" height="32" rx="4" fill="#2a2a2a"/>
-      <text x="160" y="63" text-anchor="middle" font-size="10" fill="white" font-weight="500">Self-state</text>
-
-      <rect x="100" y="104" width="120" height="32" rx="4" fill="#4a7fa5"/>
-      <text x="160" y="125" text-anchor="middle" font-size="10" fill="white">Threat meaning</text>
-
-      <rect x="100" y="166" width="120" height="32" rx="4" fill="#4a7fa5" opacity="0.7"/>
-      <text x="160" y="187" text-anchor="middle" font-size="10" fill="white">Expected outcome</text>
-
-      <rect x="100" y="228" width="120" height="32" rx="4" fill="#4a7fa5" opacity="0.5"/>
-      <text x="160" y="249" text-anchor="middle" font-size="10" fill="white">Policy</text>
-
-      <!-- Cascade arrows with diminishing warmth -->
-      <line x1="160" y1="74" x2="160" y2="104" stroke="#c45a3c" stroke-width="2" marker-end="url(#arrow-warm)"/>
-      <line x1="160" y1="136" x2="160" y2="166" stroke="#c45a3c" stroke-width="1.5" opacity="0.7" marker-end="url(#arrow-warm)"/>
-      <line x1="160" y1="198" x2="160" y2="228" stroke="#c45a3c" stroke-width="1.2" opacity="0.5" marker-end="url(#arrow-warm)"/>
-
-      <!-- Revision spark at root -->
-      <circle cx="80" cy="58" r="6" fill="#c45a3c" opacity="0.3"/>
-      <circle cx="80" cy="58" r="3" fill="#c45a3c"/>
-      <line x1="86" y1="58" x2="100" y2="58" stroke="#c45a3c" stroke-width="1.2" stroke-dasharray="2,2"/>
-      <text x="60" y="48" text-anchor="middle" font-size="8" fill="#c45a3c">revision</text>
-
-      <!-- RIGHT: Leaf-only change -->
-      <rect x="370" y="42" width="120" height="32" rx="4" fill="none" stroke="#d8d6d0" stroke-width="1.5"/>
-      <text x="430" y="63" text-anchor="middle" font-size="10" fill="#6a6a6a">Self-state</text>
-
-      <rect x="370" y="104" width="120" height="32" rx="4" fill="#4a7fa5" opacity="0.4"/>
-      <text x="430" y="125" text-anchor="middle" font-size="10" fill="white">Threat meaning</text>
-
-      <rect x="370" y="166" width="120" height="32" rx="4" fill="none" stroke="#d8d6d0" stroke-width="1.5"/>
-      <text x="430" y="187" text-anchor="middle" font-size="10" fill="#6a6a6a">Expected outcome</text>
-
-      <rect x="370" y="228" width="120" height="32" rx="4" fill="none" stroke="#d8d6d0" stroke-width="1.5"/>
-      <text x="430" y="249" text-anchor="middle" font-size="10" fill="#6a6a6a">Policy</text>
-
-      <!-- No cascade: only threat updates -->
-      <circle cx="350" cy="120" r="6" fill="#4a7fa5" opacity="0.3"/>
-      <circle cx="350" cy="120" r="3" fill="#4a7fa5"/>
-      <line x1="356" y1="120" x2="370" y2="120" stroke="#4a7fa5" stroke-width="1.2" stroke-dasharray="2,2"/>
-      <text x="334" y="110" text-anchor="middle" font-size="8" fill="#4a7fa5">revision</text>
-
-      <!-- X marks: no propagation -->
-      <text x="430" y="155" text-anchor="middle" font-size="10" fill="#d8d6d0">&#x2715; no cascade</text>
-
-      <!-- Bottom annotation -->
-      <text x="160" y="290" text-anchor="middle" font-size="9" fill="#c45a3c" font-weight="500">Generalizes</text>
-      <text x="430" y="290" text-anchor="middle" font-size="9" fill="#6a6a6a">Stays local</text>
-
-      <!-- Arrow markers -->
-      <defs>
-        <marker id="arrow-warm" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-          <path d="M0,0 L8,3 L0,6" fill="none" stroke="#c45a3c" stroke-width="1"/>
-        </marker>
-      </defs>
-    </svg>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-
-<!-- ============================================================ -->
-<!-- VISUAL 3: Capture vs Witnessing -->
-<!-- ============================================================ -->
-<section class="visual-section">
-  <div class="visual-header">
-    <span class="visual-number">Candidate 3</span>
-    <h2 class="visual-title">Capture vs Witnessing</h2>
-    <p class="visual-description">Two states of the same system. Under capture, the part fills the frame. Under witnessing, the part is present but held.</p>
-  </div>
-  <div class="visual-container">
-    <svg viewBox="0 0 560 300" width="560" height="300" xmlns="http://www.w3.org/2000/svg">
-      <!-- LEFT: Capture -->
-      <text x="140" y="24" text-anchor="middle" font-size="11" font-weight="600" fill="#2a2a2a">Capture</text>
-      <text x="140" y="40" text-anchor="middle" font-size="8" fill="#6a6a6a" font-style="italic">"I am afraid"</text>
-
-      <!-- Part fills the entire frame -->
-      <rect x="30" y="54" width="220" height="200" rx="6" fill="#2a2a2a" opacity="0.06" stroke="#2a2a2a" stroke-width="2"/>
-
-      <!-- Part: large dark mass -->
-      <circle cx="140" cy="150" r="72" fill="#2a2a2a" opacity="0.12"/>
-      <circle cx="140" cy="150" r="56" fill="#2a2a2a" opacity="0.18"/>
-      <circle cx="140" cy="150" r="38" fill="#2a2a2a" opacity="0.25"/>
-      <text x="140" y="146" text-anchor="middle" font-size="11" fill="#2a2a2a" font-weight="600">Part</text>
-      <text x="140" y="162" text-anchor="middle" font-size="9" fill="#2a2a2a" font-style="italic">dominates</text>
-
-      <!-- Context: tiny, pushed to corner -->
-      <circle cx="220" cy="84" r="10" fill="none" stroke="#d8d6d0" stroke-width="1" stroke-dasharray="2,2"/>
-      <text x="220" y="87" text-anchor="middle" font-size="6" fill="#d8d6d0">ctx</text>
-
-      <!-- Self: absent -->
-      <text x="140" y="272" text-anchor="middle" font-size="8" fill="#6a6a6a">Self not available</text>
-
-      <!-- Divider -->
-      <line x1="280" y1="50" x2="280" y2="260" stroke="#d8d6d0" stroke-width="1"/>
-
-      <!-- RIGHT: Witnessing -->
-      <text x="420" y="24" text-anchor="middle" font-size="11" font-weight="600" fill="#4a7fa5">Witnessing</text>
-      <text x="420" y="40" text-anchor="middle" font-size="8" fill="#6a6a6a" font-style="italic">"A part of me is afraid"</text>
-
-      <rect x="310" y="54" width="220" height="200" rx="6" fill="#4a7fa5" opacity="0.04" stroke="#4a7fa5" stroke-width="1.5"/>
-
-      <!-- Self: present, open, surrounding -->
-      <circle cx="420" cy="145" r="76" fill="none" stroke="#4a7fa5" stroke-width="1.5" stroke-dasharray="4,3"/>
-      <text x="420" y="80" text-anchor="middle" font-size="9" fill="#4a7fa5" font-weight="500">Self</text>
-
-      <!-- Part: smaller, contained -->
-      <circle cx="420" cy="155" r="32" fill="#2a2a2a" opacity="0.12"/>
-      <circle cx="420" cy="155" r="22" fill="#2a2a2a" opacity="0.2"/>
-      <text x="420" y="153" text-anchor="middle" font-size="10" fill="#2a2a2a">Part</text>
-      <text x="420" y="166" text-anchor="middle" font-size="8" fill="#2a2a2a" font-style="italic">held</text>
-
-      <!-- Context: present, visible -->
-      <circle cx="490" cy="100" r="14" fill="none" stroke="#4a7fa5" stroke-width="1" opacity="0.6"/>
-      <text x="490" y="104" text-anchor="middle" font-size="7" fill="#4a7fa5">context</text>
-
-      <!-- Relational arrow: Self seeing Part -->
-      <line x1="420" y1="95" x2="420" y2="130" stroke="#c45a3c" stroke-width="1.2" marker-end="url(#arrow-rel)"/>
-      <text x="444" y="115" font-size="7" fill="#c45a3c" font-style="italic">relates to</text>
-
-      <text x="420" y="272" text-anchor="middle" font-size="8" fill="#4a7fa5">Self present, context online</text>
-
-      <defs>
-        <marker id="arrow-rel" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
-          <path d="M0,0 L7,2.5 L0,5" fill="none" stroke="#c45a3c" stroke-width="1"/>
-        </marker>
-      </defs>
-    </svg>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-
-<!-- ============================================================ -->
-<!-- VISUAL 4: Self-Energy as Depth -->
-<!-- ============================================================ -->
-<section class="visual-section">
-  <div class="visual-header">
-    <span class="visual-number">Candidate 4</span>
     <h2 class="visual-title">Self-Energy as Depth</h2>
     <p class="visual-description">A vertical axis from capture to relational depth. What becomes observable depends on how much Self-energy is present.</p>
   </div>
-  <div class="visual-container">
-    <svg viewBox="0 0 480 420" width="480" height="420" xmlns="http://www.w3.org/2000/svg">
-      <!-- Vertical axis -->
-      <line x1="80" y1="40" x2="80" y2="380" stroke="#2a2a2a" stroke-width="1.5"/>
-      <text x="30" y="210" text-anchor="middle" font-size="9" fill="#2a2a2a" font-weight="600" transform="rotate(-90,30,210)">Self-energy</text>
+  <div class="comparison-row">
+    <!-- V1 -->
+    <div class="comparison-col">
+      <span class="version-label">v1</span>
+      <div class="visual-container">
+        <svg viewBox="0 0 480 420" width="480" height="420" xmlns="http://www.w3.org/2000/svg">
+          <!-- Vertical axis -->
+          <line x1="80" y1="40" x2="80" y2="380" stroke="#2a2a2a" stroke-width="1.5"/>
+          <text x="30" y="210" text-anchor="middle" font-size="9" fill="#2a2a2a" font-weight="600" transform="rotate(-90,30,210)">Self-energy</text>
 
-      <!-- Arrow at bottom -->
-      <polygon points="76,380 84,380 80,392" fill="#2a2a2a"/>
-      <text x="80" y="410" text-anchor="middle" font-size="8" fill="#6a6a6a">increasing depth</text>
+          <!-- Arrow at bottom -->
+          <polygon points="76,380 84,380 80,392" fill="#2a2a2a"/>
+          <text x="80" y="410" text-anchor="middle" font-size="8" fill="#6a6a6a">increasing depth</text>
 
-      <!-- Zone 1: Capture (top = low self-energy) -->
-      <rect x="100" y="40" width="340" height="90" rx="3" fill="#2a2a2a" opacity="0.06"/>
-      <text x="120" y="62" font-size="10" font-weight="600" fill="#2a2a2a">Capture</text>
-      <text x="120" y="78" font-size="9" fill="#6a6a6a" font-style="italic">Part dominates inference</text>
-      <text x="120" y="95" font-size="8.5" fill="#6a6a6a">Observable: nothing outside the part</text>
+          <!-- Zone 1: Capture (top = low self-energy) -->
+          <rect x="100" y="40" width="340" height="90" rx="3" fill="#2a2a2a" opacity="0.06"/>
+          <text x="120" y="62" font-size="10" font-weight="600" fill="#2a2a2a">Capture</text>
+          <text x="120" y="78" font-size="9" fill="#6a6a6a" font-style="italic">Part dominates inference</text>
+          <text x="120" y="95" font-size="8.5" fill="#6a6a6a">Observable: nothing outside the part</text>
 
-      <!-- Threshold line 1 -->
-      <line x1="100" y1="140" x2="440" y2="140" stroke="#4a7fa5" stroke-width="1" stroke-dasharray="5,4"/>
-      <text x="440" y="137" text-anchor="end" font-size="7.5" fill="#4a7fa5" font-weight="500">context threshold</text>
+          <!-- Threshold line 1 -->
+          <line x1="100" y1="140" x2="440" y2="140" stroke="#4a7fa5" stroke-width="1" stroke-dasharray="5,4"/>
+          <text x="440" y="137" text-anchor="end" font-size="7.5" fill="#4a7fa5" font-weight="500">context threshold</text>
 
-      <!-- Zone 2: Informational context -->
-      <rect x="100" y="150" width="340" height="90" rx="3" fill="#4a7fa5" opacity="0.06"/>
-      <text x="120" y="172" font-size="10" font-weight="600" fill="#4a7fa5">Context-held activation</text>
-      <text x="120" y="188" font-size="9" fill="#6a6a6a" font-style="italic">Present evidence registers</text>
-      <text x="120" y="205" font-size="8.5" fill="#6a6a6a">Observable: world-state, external context</text>
-      <!-- Observation icons -->
-      <circle cx="400" cy="180" r="10" fill="none" stroke="#4a7fa5" stroke-width="1"/>
-      <text x="400" y="183" text-anchor="middle" font-size="7" fill="#4a7fa5">ctx</text>
+          <!-- Zone 2: Informational context -->
+          <rect x="100" y="150" width="340" height="90" rx="3" fill="#4a7fa5" opacity="0.06"/>
+          <text x="120" y="172" font-size="10" font-weight="600" fill="#4a7fa5">Context-held activation</text>
+          <text x="120" y="188" font-size="9" fill="#6a6a6a" font-style="italic">Present evidence registers</text>
+          <text x="120" y="205" font-size="8.5" fill="#6a6a6a">Observable: world-state, external context</text>
+          <!-- Observation icons -->
+          <circle cx="400" cy="180" r="10" fill="none" stroke="#4a7fa5" stroke-width="1"/>
+          <text x="400" y="183" text-anchor="middle" font-size="7" fill="#4a7fa5">ctx</text>
 
-      <!-- Threshold line 2 -->
-      <line x1="100" y1="250" x2="440" y2="250" stroke="#c45a3c" stroke-width="1.5" stroke-dasharray="5,4"/>
-      <text x="440" y="247" text-anchor="end" font-size="7.5" fill="#c45a3c" font-weight="500">relational depth threshold</text>
+          <!-- Threshold line 2 -->
+          <line x1="100" y1="250" x2="440" y2="250" stroke="#c45a3c" stroke-width="1.5" stroke-dasharray="5,4"/>
+          <text x="440" y="247" text-anchor="end" font-size="7.5" fill="#c45a3c" font-weight="500">relational depth threshold</text>
 
-      <!-- Zone 3: Relational depth -->
-      <rect x="100" y="260" width="340" height="110" rx="3" fill="#c45a3c" opacity="0.06"/>
-      <text x="120" y="282" font-size="10" font-weight="600" fill="#c45a3c">Relational depth</text>
-      <text x="120" y="298" font-size="9" fill="#6a6a6a" font-style="italic">Self's self-state observable by part</text>
-      <text x="120" y="315" font-size="8.5" fill="#6a6a6a">Observable: present self-state (adult, capable, present)</text>
-      <text x="120" y="335" font-size="8.5" fill="#c45a3c">Relational prediction error reaches the organizing prior</text>
+          <!-- Zone 3: Relational depth -->
+          <rect x="100" y="260" width="340" height="110" rx="3" fill="#c45a3c" opacity="0.06"/>
+          <text x="120" y="282" font-size="10" font-weight="600" fill="#c45a3c">Relational depth</text>
+          <text x="120" y="298" font-size="9" fill="#6a6a6a" font-style="italic">Self's self-state observable by part</text>
+          <text x="120" y="315" font-size="8.5" fill="#6a6a6a">Observable: present self-state (adult, capable, present)</text>
+          <text x="120" y="335" font-size="8.5" fill="#c45a3c">Relational prediction error reaches the organizing prior</text>
 
-      <!-- Observation icons -->
-      <circle cx="380" cy="300" r="10" fill="none" stroke="#c45a3c" stroke-width="1"/>
-      <text x="380" y="303" text-anchor="middle" font-size="7" fill="#c45a3c">ctx</text>
-      <circle cx="410" cy="300" r="10" fill="none" stroke="#c45a3c" stroke-width="1.5"/>
-      <text x="410" y="303" text-anchor="middle" font-size="7" fill="#c45a3c" font-weight="600">self</text>
+          <!-- Observation icons -->
+          <circle cx="380" cy="300" r="10" fill="none" stroke="#c45a3c" stroke-width="1"/>
+          <text x="380" y="303" text-anchor="middle" font-size="7" fill="#c45a3c">ctx</text>
+          <circle cx="410" cy="300" r="10" fill="none" stroke="#c45a3c" stroke-width="1.5"/>
+          <text x="410" y="303" text-anchor="middle" font-size="7" fill="#c45a3c" font-weight="600">self</text>
 
-      <!-- Key insight annotation -->
-      <text x="270" y="395" text-anchor="middle" font-size="8.5" fill="#6a6a6a" font-style="italic">Move 3 IS Move 2 at sufficient depth</text>
-    </svg>
+          <!-- Key insight annotation -->
+          <text x="270" y="395" text-anchor="middle" font-size="8.5" fill="#6a6a6a" font-style="italic">Move 3 IS Move 2 at sufficient depth</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Critique -->
+    <div class="critique-note">
+      <strong>Critique</strong>
+      Each zone carries too many lines of text, making it read like a table rather than a visual. The arrow pointing downward to "increasing depth" is counterintuitive (depth should feel like descent, but the best zone is at the bottom). v2 flips to a left-to-right gradient, strips each zone to one word and one icon, and uses a color-intensity ramp so the structure reads at thumbnail.
+      <span class="taxonomy">Type: Threshold image</span>
+      <div class="checks">
+        <span class="pass">One-move: PASS</span> &middot;
+        <span class="fail">Thumbnail: FAIL (text-heavy zones blur)</span> &middot;
+        <span class="fail">Reading-path: FAIL (downward arrow ambiguous)</span> &middot;
+        <span class="pass">Fidelity: PASS</span>
+      </div>
+    </div>
+
+    <!-- V2 -->
+    <div class="comparison-col">
+      <span class="version-label v2-label">v2</span>
+      <div class="visual-container">
+        <svg viewBox="0 0 480 320" width="480" height="320" xmlns="http://www.w3.org/2000/svg">
+          <!-- Horizontal axis: Self-energy increasing left to right -->
+          <line x1="40" y1="250" x2="450" y2="250" stroke="#2a2a2a" stroke-width="1.5"/>
+          <polygon points="450,246 450,254 462,250" fill="#2a2a2a"/>
+          <text x="250" y="278" text-anchor="middle" font-size="9" fill="#2a2a2a" font-weight="500">Self-energy</text>
+
+          <!-- Zone 1: Capture (left, dark) -->
+          <rect x="40" y="50" width="130" height="190" rx="4" fill="#2a2a2a" opacity="0.10"/>
+          <text x="105" y="90" text-anchor="middle" font-size="13" font-weight="700" fill="#2a2a2a">Capture</text>
+          <!-- Single dark dot: alone -->
+          <circle cx="105" cy="150" r="20" fill="#2a2a2a" opacity="0.18"/>
+          <circle cx="105" cy="150" r="10" fill="#2a2a2a" opacity="0.25"/>
+          <text x="105" y="200" text-anchor="middle" font-size="8" fill="#6a6a6a">nothing visible</text>
+
+          <!-- Threshold line 1 -->
+          <line x1="175" y1="50" x2="175" y2="240" stroke="#4a7fa5" stroke-width="1.2" stroke-dasharray="5,4"/>
+
+          <!-- Zone 2: Context (middle, steel) -->
+          <rect x="180" y="50" width="130" height="190" rx="4" fill="#4a7fa5" opacity="0.06"/>
+          <text x="245" y="90" text-anchor="middle" font-size="13" font-weight="700" fill="#4a7fa5">Context</text>
+          <!-- Dot + context ring -->
+          <circle cx="245" cy="145" r="22" fill="none" stroke="#4a7fa5" stroke-width="1.5"/>
+          <circle cx="245" cy="145" r="10" fill="#2a2a2a" opacity="0.18"/>
+          <text x="245" y="200" text-anchor="middle" font-size="8" fill="#4a7fa5">world visible</text>
+
+          <!-- Threshold line 2 -->
+          <line x1="315" y1="50" x2="315" y2="240" stroke="#c45a3c" stroke-width="1.8" stroke-dasharray="5,4"/>
+
+          <!-- Zone 3: Relational depth (right, warm) -->
+          <rect x="320" y="50" width="130" height="190" rx="4" fill="#c45a3c" opacity="0.07"/>
+          <text x="385" y="90" text-anchor="middle" font-size="13" font-weight="700" fill="#c45a3c">Depth</text>
+          <!-- Self ring + witnessed part -->
+          <circle cx="385" cy="135" r="30" fill="none" stroke="#c45a3c" stroke-width="2" stroke-dasharray="5,3"/>
+          <text x="385" y="115" text-anchor="middle" font-size="8" fill="#c45a3c" font-weight="500">Self</text>
+          <circle cx="385" cy="150" r="10" fill="#2a2a2a" opacity="0.18"/>
+          <line x1="385" y1="138" x2="385" y2="142" stroke="#c45a3c" stroke-width="1.5"/>
+          <text x="385" y="200" text-anchor="middle" font-size="8" fill="#c45a3c">self-state visible</text>
+
+          <!-- Bottom insight -->
+          <text x="250" y="305" text-anchor="middle" font-size="9" fill="#6a6a6a" font-style="italic">What becomes observable depends on how much Self-energy is present</text>
+        </svg>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -430,70 +473,139 @@
 <!-- ============================================================ -->
 <section class="visual-section">
   <div class="visual-header">
-    <span class="visual-number">Candidate 5</span>
+    <span class="visual-number">Candidate 3</span>
     <h2 class="visual-title">The Relational Prediction Error</h2>
     <p class="visual-description">The part expects isolation. It encounters presence. The mismatch reaches the identity-level organizing prior.</p>
   </div>
-  <div class="visual-container">
-    <svg viewBox="0 0 520 340" width="520" height="340" xmlns="http://www.w3.org/2000/svg">
-      <!-- LEFT: Expected self-state -->
-      <text x="140" y="28" text-anchor="middle" font-size="10" font-weight="500" fill="#6a6a6a">Part expects</text>
+  <div class="comparison-row">
+    <!-- V1 -->
+    <div class="comparison-col">
+      <span class="version-label">v1</span>
+      <div class="visual-container">
+        <svg viewBox="0 0 520 340" width="520" height="340" xmlns="http://www.w3.org/2000/svg">
+          <!-- LEFT: Expected self-state -->
+          <text x="140" y="28" text-anchor="middle" font-size="10" font-weight="500" fill="#6a6a6a">Part expects</text>
 
-      <!-- Small isolated figure -->
-      <rect x="60" y="50" width="160" height="180" rx="4" fill="none" stroke="#d8d6d0" stroke-width="1"/>
+          <!-- Small isolated figure -->
+          <rect x="60" y="50" width="160" height="180" rx="4" fill="none" stroke="#d8d6d0" stroke-width="1"/>
 
-      <!-- Single small dot: alone -->
-      <circle cx="140" cy="145" r="14" fill="#2a2a2a" opacity="0.2"/>
-      <circle cx="140" cy="145" r="8" fill="#2a2a2a" opacity="0.35"/>
-      <text x="140" y="148" text-anchor="middle" font-size="7" fill="white" font-weight="500">part</text>
+          <!-- Single small dot: alone -->
+          <circle cx="140" cy="145" r="14" fill="#2a2a2a" opacity="0.2"/>
+          <circle cx="140" cy="145" r="8" fill="#2a2a2a" opacity="0.35"/>
+          <text x="140" y="148" text-anchor="middle" font-size="7" fill="white" font-weight="500">part</text>
 
-      <!-- Emptiness around it -->
-      <text x="140" y="185" text-anchor="middle" font-size="8.5" fill="#6a6a6a" font-style="italic">"I am alone with this"</text>
-      <text x="140" y="200" text-anchor="middle" font-size="8.5" fill="#6a6a6a" font-style="italic">"I am small"</text>
-      <text x="140" y="215" text-anchor="middle" font-size="8.5" fill="#6a6a6a" font-style="italic">"No one can be here"</text>
+          <!-- Emptiness around it -->
+          <text x="140" y="185" text-anchor="middle" font-size="8.5" fill="#6a6a6a" font-style="italic">"I am alone with this"</text>
+          <text x="140" y="200" text-anchor="middle" font-size="8.5" fill="#6a6a6a" font-style="italic">"I am small"</text>
+          <text x="140" y="215" text-anchor="middle" font-size="8.5" fill="#6a6a6a" font-style="italic">"No one can be here"</text>
 
-      <!-- CENTER: Prediction error gap -->
-      <text x="260" y="100" text-anchor="middle" font-size="10" font-weight="600" fill="#c45a3c">mismatch</text>
+          <!-- CENTER: Prediction error gap -->
+          <text x="260" y="100" text-anchor="middle" font-size="10" font-weight="600" fill="#c45a3c">mismatch</text>
 
-      <!-- Prediction error lightning -->
-      <path d="M 248,110 L 255,130 L 250,130 L 258,158 L 252,158 L 266,188 L 254,155 L 260,155 L 252,133 L 258,133 L 246,110" fill="#c45a3c" opacity="0.25"/>
-      <line x1="230" y1="148" x2="290" y2="148" stroke="#c45a3c" stroke-width="2" stroke-dasharray="4,3"/>
+          <!-- Prediction error lightning -->
+          <path d="M 248,110 L 255,130 L 250,130 L 258,158 L 252,158 L 266,188 L 254,155 L 260,155 L 252,133 L 258,133 L 246,110" fill="#c45a3c" opacity="0.25"/>
+          <line x1="230" y1="148" x2="290" y2="148" stroke="#c45a3c" stroke-width="2" stroke-dasharray="4,3"/>
 
-      <text x="260" y="210" text-anchor="middle" font-size="8" fill="#c45a3c" font-weight="500">prediction error</text>
-      <text x="260" y="224" text-anchor="middle" font-size="8" fill="#c45a3c">at identity level</text>
+          <text x="260" y="210" text-anchor="middle" font-size="8" fill="#c45a3c" font-weight="500">prediction error</text>
+          <text x="260" y="224" text-anchor="middle" font-size="8" fill="#c45a3c">at identity level</text>
 
-      <!-- RIGHT: Observed self-state -->
-      <text x="400" y="28" text-anchor="middle" font-size="10" font-weight="500" fill="#4a7fa5">Part encounters</text>
+          <!-- RIGHT: Observed self-state -->
+          <text x="400" y="28" text-anchor="middle" font-size="10" font-weight="500" fill="#4a7fa5">Part encounters</text>
 
-      <rect x="320" y="50" width="160" height="180" rx="4" fill="none" stroke="#4a7fa5" stroke-width="1.5"/>
+          <rect x="320" y="50" width="160" height="180" rx="4" fill="none" stroke="#4a7fa5" stroke-width="1.5"/>
 
-      <!-- Self: present, larger -->
-      <circle cx="400" cy="120" r="28" fill="none" stroke="#4a7fa5" stroke-width="1.5" stroke-dasharray="4,3"/>
-      <text x="400" y="117" text-anchor="middle" font-size="9" fill="#4a7fa5" font-weight="500">Self</text>
-      <text x="400" y="129" text-anchor="middle" font-size="7" fill="#4a7fa5">present</text>
+          <!-- Self: present, larger -->
+          <circle cx="400" cy="120" r="28" fill="none" stroke="#4a7fa5" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <text x="400" y="117" text-anchor="middle" font-size="9" fill="#4a7fa5" font-weight="500">Self</text>
+          <text x="400" y="129" text-anchor="middle" font-size="7" fill="#4a7fa5">present</text>
 
-      <!-- Part: small but met -->
-      <circle cx="400" cy="165" r="10" fill="#2a2a2a" opacity="0.2"/>
-      <circle cx="400" cy="165" r="6" fill="#2a2a2a" opacity="0.35"/>
+          <!-- Part: small but met -->
+          <circle cx="400" cy="165" r="10" fill="#2a2a2a" opacity="0.2"/>
+          <circle cx="400" cy="165" r="6" fill="#2a2a2a" opacity="0.35"/>
 
-      <!-- Connection line -->
-      <line x1="400" y1="148" x2="400" y2="158" stroke="#c45a3c" stroke-width="1.2"/>
+          <!-- Connection line -->
+          <line x1="400" y1="148" x2="400" y2="158" stroke="#c45a3c" stroke-width="1.2"/>
 
-      <text x="400" y="195" text-anchor="middle" font-size="8.5" fill="#4a7fa5" font-style="italic">"I am met"</text>
-      <text x="400" y="210" text-anchor="middle" font-size="8.5" fill="#4a7fa5" font-style="italic">"I am not alone"</text>
-      <text x="400" y="225" text-anchor="middle" font-size="8.5" fill="#4a7fa5" font-style="italic">"This can be held"</text>
+          <text x="400" y="195" text-anchor="middle" font-size="8.5" fill="#4a7fa5" font-style="italic">"I am met"</text>
+          <text x="400" y="210" text-anchor="middle" font-size="8.5" fill="#4a7fa5" font-style="italic">"I am not alone"</text>
+          <text x="400" y="225" text-anchor="middle" font-size="8.5" fill="#4a7fa5" font-style="italic">"This can be held"</text>
 
-      <!-- Bottom: where PE goes -->
-      <path d="M 260,240 L 260,280" stroke="#c45a3c" stroke-width="1.2" marker-end="url(#arrow-pe)"/>
-      <rect x="185" y="284" width="150" height="30" rx="4" fill="#c45a3c" opacity="0.08" stroke="#c45a3c" stroke-width="1"/>
-      <text x="260" y="304" text-anchor="middle" font-size="9" fill="#c45a3c" font-weight="500">Self-state prior revised</text>
+          <!-- Bottom: where PE goes -->
+          <path d="M 260,240 L 260,280" stroke="#c45a3c" stroke-width="1.2" marker-end="url(#arrow-pe)"/>
+          <rect x="185" y="284" width="150" height="30" rx="4" fill="#c45a3c" opacity="0.08" stroke="#c45a3c" stroke-width="1"/>
+          <text x="260" y="304" text-anchor="middle" font-size="9" fill="#c45a3c" font-weight="500">Self-state prior revised</text>
 
-      <defs>
-        <marker id="arrow-pe" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-          <path d="M0,0 L8,3 L0,6" fill="none" stroke="#c45a3c" stroke-width="1"/>
-        </marker>
-      </defs>
-    </svg>
+          <defs>
+            <marker id="arrow-pe" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+              <path d="M0,0 L8,3 L0,6" fill="none" stroke="#c45a3c" stroke-width="1"/>
+            </marker>
+          </defs>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Critique -->
+    <div class="critique-note">
+      <strong>Critique</strong>
+      The lightning bolt and three-line quotes on each side make the center compete with the flanks for attention. The downward arrow to "Self-state prior revised" is the payoff, but it reads last rather than being visually dominant. v2 strips the quotes to single words, enlarges the mismatch gap as a bold vertical bar, and makes the revision box heavier so the eye terminates there.
+      <span class="taxonomy">Type: Before/after ontology image</span>
+      <div class="checks">
+        <span class="pass">One-move: PASS</span> &middot;
+        <span class="fail">Thumbnail: FAIL (lightning bolt + quotes clutter)</span> &middot;
+        <span class="pass">Reading-path: PASS (left-right-down)</span> &middot;
+        <span class="pass">Fidelity: PASS</span>
+      </div>
+    </div>
+
+    <!-- V2 -->
+    <div class="comparison-col">
+      <span class="version-label v2-label">v2</span>
+      <div class="visual-container">
+        <svg viewBox="0 0 460 310" width="460" height="310" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arrow-pe-v2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+              <path d="M0,0 L8,3 L0,6" fill="none" stroke="#c45a3c" stroke-width="1.2"/>
+            </marker>
+          </defs>
+
+          <!-- LEFT: Expects isolation -->
+          <text x="110" y="28" text-anchor="middle" font-size="11" font-weight="600" fill="#6a6a6a">Expects</text>
+          <rect x="40" y="42" width="140" height="140" rx="4" fill="none" stroke="#d8d6d0" stroke-width="1"/>
+
+          <!-- Single small dot: alone -->
+          <circle cx="110" cy="108" r="12" fill="#2a2a2a" opacity="0.25"/>
+          <text x="110" y="112" text-anchor="middle" font-size="7.5" fill="white" font-weight="500">part</text>
+          <text x="110" y="155" text-anchor="middle" font-size="9" fill="#6a6a6a" font-style="italic">alone</text>
+
+          <!-- CENTER: Bold mismatch bar -->
+          <rect x="200" y="52" width="60" height="120" rx="3" fill="#c45a3c" opacity="0.08" stroke="#c45a3c" stroke-width="2"/>
+          <text x="230" y="100" text-anchor="middle" font-size="14" font-weight="700" fill="#c45a3c">!=</text>
+          <text x="230" y="120" text-anchor="middle" font-size="8" fill="#c45a3c" font-weight="500">mismatch</text>
+
+          <!-- RIGHT: Encounters presence -->
+          <text x="350" y="28" text-anchor="middle" font-size="11" font-weight="600" fill="#4a7fa5">Encounters</text>
+          <rect x="280" y="42" width="140" height="140" rx="4" fill="none" stroke="#4a7fa5" stroke-width="1.5"/>
+
+          <!-- Self: present, larger -->
+          <circle cx="350" cy="90" r="30" fill="none" stroke="#4a7fa5" stroke-width="1.8" stroke-dasharray="5,3"/>
+          <text x="350" y="82" text-anchor="middle" font-size="9" fill="#4a7fa5" font-weight="500">Self</text>
+          <!-- Part: met -->
+          <circle cx="350" cy="108" r="8" fill="#2a2a2a" opacity="0.2"/>
+          <line x1="350" y1="96" x2="350" y2="102" stroke="#c45a3c" stroke-width="1.5"/>
+          <text x="350" y="155" text-anchor="middle" font-size="9" fill="#4a7fa5" font-style="italic">met</text>
+
+          <!-- Downward arrow to result -->
+          <path d="M 230,180 L 230,230" stroke="#c45a3c" stroke-width="2" marker-end="url(#arrow-pe-v2)"/>
+
+          <!-- Result box: heavy, dominant -->
+          <rect x="130" y="238" width="200" height="40" rx="5" fill="#c45a3c" opacity="0.12" stroke="#c45a3c" stroke-width="2.2"/>
+          <text x="230" y="263" text-anchor="middle" font-size="11" fill="#c45a3c" font-weight="600">Self-state prior revised</text>
+
+          <!-- Minimal tagline -->
+          <text x="230" y="300" text-anchor="middle" font-size="8" fill="#6a6a6a" font-style="italic">Identity-level prediction error</text>
+        </svg>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -505,147 +617,122 @@
 <!-- ============================================================ -->
 <section class="visual-section">
   <div class="visual-header">
-    <span class="visual-number">Candidate 6</span>
-    <h2 class="visual-title">H1 vs H2 Causal Architecture</h2>
-    <p class="visual-description">Two causal orderings. Under H1, self-state is upstream and cascade exists. Under H2, threat is primary and no cascade.</p>
-  </div>
-  <div class="visual-container">
-    <svg viewBox="0 0 560 280" width="560" height="280" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <marker id="arr-h1" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-          <path d="M0,0 L8,3 L0,6" fill="none" stroke="#2a2a2a" stroke-width="1"/>
-        </marker>
-        <marker id="arr-h2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-          <path d="M0,0 L8,3 L0,6" fill="none" stroke="#6a6a6a" stroke-width="1"/>
-        </marker>
-      </defs>
-
-      <!-- H1 -->
-      <text x="150" y="24" text-anchor="middle" font-size="12" font-weight="600" fill="#2a2a2a">H1</text>
-      <text x="150" y="40" text-anchor="middle" font-size="9" fill="#6a6a6a" font-style="italic">self-state upstream</text>
-
-      <!-- H1 nodes in a clean vertical chain -->
-      <rect x="88" y="56" width="124" height="28" rx="3" fill="#2a2a2a"/>
-      <text x="150" y="75" text-anchor="middle" font-size="10" fill="white" font-weight="500">Self-state</text>
-
-      <line x1="150" y1="84" x2="150" y2="104" stroke="#2a2a2a" stroke-width="1.5" marker-end="url(#arr-h1)"/>
-
-      <rect x="88" y="108" width="124" height="28" rx="3" fill="#4a7fa5"/>
-      <text x="150" y="127" text-anchor="middle" font-size="10" fill="white">Threat meaning</text>
-
-      <line x1="150" y1="136" x2="150" y2="156" stroke="#2a2a2a" stroke-width="1.5" marker-end="url(#arr-h1)"/>
-
-      <rect x="88" y="160" width="124" height="28" rx="3" fill="#4a7fa5" opacity="0.7"/>
-      <text x="150" y="179" text-anchor="middle" font-size="10" fill="white">Expected outcome</text>
-
-      <line x1="150" y1="188" x2="150" y2="208" stroke="#2a2a2a" stroke-width="1.5" marker-end="url(#arr-h1)"/>
-
-      <rect x="88" y="212" width="124" height="28" rx="3" fill="#4a7fa5" opacity="0.5"/>
-      <text x="150" y="231" text-anchor="middle" font-size="10" fill="white">Policy</text>
-
-      <!-- Cascade indicator -->
-      <path d="M 75,65 C 60,65 55,110 55,125 C 55,170 60,215 75,225" fill="none" stroke="#c45a3c" stroke-width="1.2" stroke-dasharray="3,2"/>
-      <text x="42" y="148" text-anchor="middle" font-size="8" fill="#c45a3c" transform="rotate(-90,42,148)">cascade</text>
-
-      <!-- Dividing line -->
-      <line x1="280" y1="20" x2="280" y2="260" stroke="#d8d6d0" stroke-width="1"/>
-
-      <!-- H2 -->
-      <text x="410" y="24" text-anchor="middle" font-size="12" font-weight="600" fill="#6a6a6a">H2</text>
-      <text x="410" y="40" text-anchor="middle" font-size="9" fill="#6a6a6a" font-style="italic">threat primary</text>
-
-      <!-- H2 nodes: threat on top -->
-      <rect x="348" y="56" width="124" height="28" rx="3" fill="#4a7fa5" opacity="0.6"/>
-      <text x="410" y="75" text-anchor="middle" font-size="10" fill="white">Threat meaning</text>
-
-      <line x1="410" y1="84" x2="410" y2="104" stroke="#6a6a6a" stroke-width="1.5" marker-end="url(#arr-h2)"/>
-
-      <rect x="348" y="108" width="124" height="28" rx="3" fill="none" stroke="#6a6a6a" stroke-width="1.5"/>
-      <text x="410" y="127" text-anchor="middle" font-size="10" fill="#6a6a6a">Self-state</text>
-
-      <line x1="410" y1="136" x2="410" y2="156" stroke="#6a6a6a" stroke-width="1.5" marker-end="url(#arr-h2)"/>
-
-      <rect x="348" y="160" width="124" height="28" rx="3" fill="none" stroke="#d8d6d0" stroke-width="1.5"/>
-      <text x="410" y="179" text-anchor="middle" font-size="10" fill="#6a6a6a">Expected outcome</text>
-
-      <line x1="410" y1="188" x2="410" y2="208" stroke="#6a6a6a" stroke-width="1.5" marker-end="url(#arr-h2)"/>
-
-      <rect x="348" y="212" width="124" height="28" rx="3" fill="none" stroke="#d8d6d0" stroke-width="1.5"/>
-      <text x="410" y="231" text-anchor="middle" font-size="10" fill="#6a6a6a">Policy</text>
-
-      <!-- No cascade indicator -->
-      <text x="410" y="268" text-anchor="middle" font-size="8.5" fill="#6a6a6a" font-style="italic">No cascade: revision does not propagate from root</text>
-
-      <!-- H1 prediction -->
-      <text x="150" y="268" text-anchor="middle" font-size="8.5" fill="#c45a3c" font-weight="500">Cascade: root revision generalizes</text>
-    </svg>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-
-<!-- ============================================================ -->
-<!-- VISUAL 7: The Dog Encounter -->
-<!-- ============================================================ -->
-<section class="visual-section">
-  <div class="visual-header">
-    <span class="visual-number">Candidate 7</span>
+    <span class="visual-number">Candidate 4</span>
     <h2 class="visual-title">The Dog Encounter</h2>
     <p class="visual-description">The paper's running example instantiated as a concrete bundle: a child frightened by a dog, carried forward into adulthood.</p>
   </div>
-  <div class="visual-container">
-    <svg viewBox="0 0 520 380" width="520" height="380" xmlns="http://www.w3.org/2000/svg">
-      <!-- Outer bundle boundary -->
-      <rect x="60" y="50" width="400" height="280" rx="8" fill="none" stroke="#2a2a2a" stroke-width="2"/>
-      <text x="260" y="38" text-anchor="middle" font-size="10" font-weight="600" fill="#2a2a2a" letter-spacing="0.1em">PART BUNDLE</text>
+  <div class="comparison-row">
+    <!-- V1 -->
+    <div class="comparison-col">
+      <span class="version-label">v1</span>
+      <div class="visual-container">
+        <svg viewBox="0 0 520 380" width="520" height="380" xmlns="http://www.w3.org/2000/svg">
+          <!-- Outer bundle boundary -->
+          <rect x="60" y="50" width="400" height="280" rx="8" fill="none" stroke="#2a2a2a" stroke-width="2"/>
+          <text x="260" y="38" text-anchor="middle" font-size="10" font-weight="600" fill="#2a2a2a" letter-spacing="0.1em">PART BUNDLE</text>
 
-      <!-- Self-state: top center, dominant -->
-      <rect x="160" y="70" width="200" height="50" rx="5" fill="#2a2a2a" opacity="0.08" stroke="#2a2a2a" stroke-width="2"/>
-      <text x="260" y="91" text-anchor="middle" font-size="11" font-weight="600" fill="#2a2a2a">I am small and helpless</text>
-      <text x="260" y="108" text-anchor="middle" font-size="8" fill="#6a6a6a">self-state &middot; organizing prior</text>
+          <!-- Self-state: top center, dominant -->
+          <rect x="160" y="70" width="200" height="50" rx="5" fill="#2a2a2a" opacity="0.08" stroke="#2a2a2a" stroke-width="2"/>
+          <text x="260" y="91" text-anchor="middle" font-size="11" font-weight="600" fill="#2a2a2a">I am small and helpless</text>
+          <text x="260" y="108" text-anchor="middle" font-size="8" fill="#6a6a6a">self-state &middot; organizing prior</text>
 
-      <!-- Connectors from self-state to the three children -->
-      <line x1="200" y1="120" x2="140" y2="150" stroke="#2a2a2a" stroke-width="1.2"/>
-      <line x1="260" y1="120" x2="260" y2="150" stroke="#2a2a2a" stroke-width="1.2"/>
-      <line x1="320" y1="120" x2="380" y2="150" stroke="#2a2a2a" stroke-width="1.2"/>
+          <!-- Connectors from self-state to the three children -->
+          <line x1="200" y1="120" x2="140" y2="150" stroke="#2a2a2a" stroke-width="1.2"/>
+          <line x1="260" y1="120" x2="260" y2="150" stroke="#2a2a2a" stroke-width="1.2"/>
+          <line x1="320" y1="120" x2="380" y2="150" stroke="#2a2a2a" stroke-width="1.2"/>
 
-      <!-- World-state -->
-      <rect x="80" y="150" width="130" height="44" rx="4" fill="#4a7fa5" opacity="0.1" stroke="#4a7fa5" stroke-width="1.5"/>
-      <text x="145" y="170" text-anchor="middle" font-size="10" fill="#4a7fa5" font-weight="500">Dogs are dangerous</text>
-      <text x="145" y="184" text-anchor="middle" font-size="8" fill="#6a6a6a">world-state</text>
+          <!-- World-state -->
+          <rect x="80" y="150" width="130" height="44" rx="4" fill="#4a7fa5" opacity="0.1" stroke="#4a7fa5" stroke-width="1.5"/>
+          <text x="145" y="170" text-anchor="middle" font-size="10" fill="#4a7fa5" font-weight="500">Dogs are dangerous</text>
+          <text x="145" y="184" text-anchor="middle" font-size="8" fill="#6a6a6a">world-state</text>
 
-      <!-- Policy -->
-      <rect x="220" y="150" width="86" height="44" rx="4" fill="#4a7fa5" opacity="0.1" stroke="#4a7fa5" stroke-width="1.5"/>
-      <text x="263" y="170" text-anchor="middle" font-size="10" fill="#4a7fa5" font-weight="500">Avoid</text>
-      <text x="263" y="184" text-anchor="middle" font-size="8" fill="#6a6a6a">policy</text>
+          <!-- Policy -->
+          <rect x="220" y="150" width="86" height="44" rx="4" fill="#4a7fa5" opacity="0.1" stroke="#4a7fa5" stroke-width="1.5"/>
+          <text x="263" y="170" text-anchor="middle" font-size="10" fill="#4a7fa5" font-weight="500">Avoid</text>
+          <text x="263" y="184" text-anchor="middle" font-size="8" fill="#6a6a6a">policy</text>
 
-      <!-- Expected outcome -->
-      <rect x="316" y="150" width="130" height="44" rx="4" fill="#4a7fa5" opacity="0.1" stroke="#4a7fa5" stroke-width="1.5"/>
-      <text x="381" y="170" text-anchor="middle" font-size="10" fill="#4a7fa5" font-weight="500">Avoidance saves me</text>
-      <text x="381" y="184" text-anchor="middle" font-size="8" fill="#6a6a6a">expected outcome</text>
+          <!-- Expected outcome -->
+          <rect x="316" y="150" width="130" height="44" rx="4" fill="#4a7fa5" opacity="0.1" stroke="#4a7fa5" stroke-width="1.5"/>
+          <text x="381" y="170" text-anchor="middle" font-size="10" fill="#4a7fa5" font-weight="500">Avoidance saves me</text>
+          <text x="381" y="184" text-anchor="middle" font-size="8" fill="#6a6a6a">expected outcome</text>
 
-      <!-- Self-sealing loop -->
-      <path d="M 145,194 Q 145,230 200,235 Q 260,240 320,235 Q 381,230 381,194" fill="none" stroke="#d8d6d0" stroke-width="1" stroke-dasharray="3,3"/>
-      <text x="260" y="248" text-anchor="middle" font-size="8" fill="#d8d6d0">mutually reinforcing</text>
+          <!-- Self-sealing loop -->
+          <path d="M 145,194 Q 145,230 200,235 Q 260,240 320,235 Q 381,230 381,194" fill="none" stroke="#d8d6d0" stroke-width="1" stroke-dasharray="3,3"/>
+          <text x="260" y="248" text-anchor="middle" font-size="8" fill="#d8d6d0">mutually reinforcing</text>
 
-      <!-- Present encounter: bottom -->
-      <line x1="80" y1="270" x2="440" y2="270" stroke="#d8d6d0" stroke-width="0.5"/>
-      <text x="260" y="288" text-anchor="middle" font-size="9" fill="#6a6a6a" font-weight="500">Present moment: adult in a park, friendly off-leash dog</text>
-      <text x="260" y="305" text-anchor="middle" font-size="9" fill="#6a6a6a" font-style="italic">The bundle activates. The local world becomes the whole world.</text>
+          <!-- Present encounter: bottom -->
+          <line x1="80" y1="270" x2="440" y2="270" stroke="#d8d6d0" stroke-width="0.5"/>
+          <text x="260" y="288" text-anchor="middle" font-size="9" fill="#6a6a6a" font-weight="500">Present moment: adult in a park, friendly off-leash dog</text>
+          <text x="260" y="305" text-anchor="middle" font-size="9" fill="#6a6a6a" font-style="italic">The bundle activates. The local world becomes the whole world.</text>
 
-      <!-- Small scenic indication -->
-      <!-- Tree -->
-      <line x1="90" y1="330" x2="90" y2="316" stroke="#6a6a6a" stroke-width="1"/>
-      <circle cx="90" cy="313" r="5" fill="none" stroke="#6a6a6a" stroke-width="0.8"/>
-      <!-- Dog silhouette: simple -->
-      <ellipse cx="140" cy="328" rx="12" ry="6" fill="none" stroke="#c45a3c" stroke-width="1"/>
-      <text x="140" y="348" text-anchor="middle" font-size="7" fill="#c45a3c">dog</text>
-      <!-- Person -->
-      <circle cx="260" cy="320" r="4" fill="none" stroke="#2a2a2a" stroke-width="1"/>
-      <line x1="260" y1="324" x2="260" y2="340" stroke="#2a2a2a" stroke-width="1"/>
-      <text x="260" y="358" text-anchor="middle" font-size="7" fill="#2a2a2a">adult body</text>
-    </svg>
+          <!-- Small scenic indication -->
+          <!-- Tree -->
+          <line x1="90" y1="330" x2="90" y2="316" stroke="#6a6a6a" stroke-width="1"/>
+          <circle cx="90" cy="313" r="5" fill="none" stroke="#6a6a6a" stroke-width="0.8"/>
+          <!-- Dog silhouette: simple -->
+          <ellipse cx="140" cy="328" rx="12" ry="6" fill="none" stroke="#c45a3c" stroke-width="1"/>
+          <text x="140" y="348" text-anchor="middle" font-size="7" fill="#c45a3c">dog</text>
+          <!-- Person -->
+          <circle cx="260" cy="320" r="4" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+          <line x1="260" y1="324" x2="260" y2="340" stroke="#2a2a2a" stroke-width="1"/>
+          <text x="260" y="358" text-anchor="middle" font-size="7" fill="#2a2a2a">adult body</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Critique -->
+    <div class="critique-note">
+      <strong>Critique</strong>
+      The bottom scenic icons (tree, dog, person) fragment attention and do not carry conceptual weight. The bundle structure is clear but the image tries to do two things: show the bundle architecture AND show the present trigger. v2 drops the scenic strip, moves the trigger cue into a single annotation, and lets the bundle itself dominate. The self-state box is visually heavier to anchor the hierarchy.
+      <span class="taxonomy">Type: Mechanism diagram (concrete instance)</span>
+      <div class="checks">
+        <span class="pass">One-move: PASS</span> &middot;
+        <span class="fail">Thumbnail: FAIL (bottom icons unreadable)</span> &middot;
+        <span class="fail">Reading-path: FAIL (eye torn between bundle and scene)</span> &middot;
+        <span class="pass">Fidelity: PASS</span>
+      </div>
+    </div>
+
+    <!-- V2 -->
+    <div class="comparison-col">
+      <span class="version-label v2-label">v2</span>
+      <div class="visual-container">
+        <svg viewBox="0 0 440 310" width="440" height="310" xmlns="http://www.w3.org/2000/svg">
+          <!-- Outer bundle boundary -->
+          <rect x="40" y="40" width="360" height="220" rx="6" fill="none" stroke="#2a2a2a" stroke-width="2"/>
+
+          <!-- Self-state: dominant top bar -->
+          <rect x="90" y="55" width="260" height="48" rx="5" fill="#2a2a2a" opacity="0.10" stroke="#2a2a2a" stroke-width="2.5"/>
+          <text x="220" y="77" text-anchor="middle" font-size="13" font-weight="700" fill="#2a2a2a">I am small and helpless</text>
+          <text x="220" y="94" text-anchor="middle" font-size="8" fill="#c45a3c" font-weight="500">organizing prior</text>
+
+          <!-- Connectors -->
+          <line x1="155" y1="103" x2="110" y2="130" stroke="#2a2a2a" stroke-width="1.5"/>
+          <line x1="220" y1="103" x2="220" y2="130" stroke="#2a2a2a" stroke-width="1.5"/>
+          <line x1="285" y1="103" x2="330" y2="130" stroke="#2a2a2a" stroke-width="1.5"/>
+
+          <!-- World-state -->
+          <rect x="55" y="130" width="110" height="36" rx="4" fill="#4a7fa5" opacity="0.08" stroke="#4a7fa5" stroke-width="1.3"/>
+          <text x="110" y="153" text-anchor="middle" font-size="9.5" fill="#4a7fa5" font-weight="500">Dogs = danger</text>
+
+          <!-- Policy -->
+          <rect x="175" y="130" width="90" height="36" rx="4" fill="#4a7fa5" opacity="0.08" stroke="#4a7fa5" stroke-width="1.3"/>
+          <text x="220" y="153" text-anchor="middle" font-size="9.5" fill="#4a7fa5" font-weight="500">Avoid</text>
+
+          <!-- Expected outcome -->
+          <rect x="275" y="130" width="110" height="36" rx="4" fill="#4a7fa5" opacity="0.08" stroke="#4a7fa5" stroke-width="1.3"/>
+          <text x="330" y="153" text-anchor="middle" font-size="9.5" fill="#4a7fa5" font-weight="500">Safety via escape</text>
+
+          <!-- Self-sealing arc -->
+          <path d="M 110,166 Q 110,200 165,204 Q 220,208 275,204 Q 330,200 330,166" fill="none" stroke="#d8d6d0" stroke-width="1.2" stroke-dasharray="3,3"/>
+          <text x="220" y="218" text-anchor="middle" font-size="7.5" fill="#d8d6d0">self-sealing</text>
+
+          <!-- Trigger annotation: clean, no icons -->
+          <line x1="40" y1="270" x2="400" y2="270" stroke="#c45a3c" stroke-width="0.8" stroke-dasharray="4,3"/>
+          <text x="220" y="290" text-anchor="middle" font-size="9" fill="#c45a3c" font-weight="500">Trigger: friendly dog in a park. Bundle fires. Past becomes present.</text>
+        </svg>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -657,134 +744,192 @@
 <!-- ============================================================ -->
 <section class="visual-section">
   <div class="visual-header">
-    <span class="visual-number">Candidate 8</span>
+    <span class="visual-number">Candidate 5</span>
     <h2 class="visual-title">Three Conditions</h2>
     <p class="visual-description">Exposure, informational context, and relational depth as three configurations of the same system &mdash; what differs is which channels are open.</p>
   </div>
-  <div class="visual-container">
-    <svg viewBox="0 0 580 340" width="580" height="340" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <marker id="arr-cond" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
-          <path d="M0,0 L7,2.5 L0,5" fill="none" stroke="#2a2a2a" stroke-width="0.8"/>
-        </marker>
-        <marker id="arr-blue" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
-          <path d="M0,0 L7,2.5 L0,5" fill="none" stroke="#4a7fa5" stroke-width="0.8"/>
-        </marker>
-        <marker id="arr-red" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
-          <path d="M0,0 L7,2.5 L0,5" fill="none" stroke="#c45a3c" stroke-width="0.8"/>
-        </marker>
-      </defs>
+  <div class="comparison-row">
+    <!-- V1 -->
+    <div class="comparison-col">
+      <span class="version-label">v1</span>
+      <div class="visual-container">
+        <svg viewBox="0 0 580 340" width="580" height="340" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arr-cond" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+              <path d="M0,0 L7,2.5 L0,5" fill="none" stroke="#2a2a2a" stroke-width="0.8"/>
+            </marker>
+            <marker id="arr-blue" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+              <path d="M0,0 L7,2.5 L0,5" fill="none" stroke="#4a7fa5" stroke-width="0.8"/>
+            </marker>
+            <marker id="arr-red" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+              <path d="M0,0 L7,2.5 L0,5" fill="none" stroke="#c45a3c" stroke-width="0.8"/>
+            </marker>
+          </defs>
 
-      <!-- CONDITION A: Exposure -->
-      <text x="100" y="20" text-anchor="middle" font-size="10" font-weight="600" fill="#2a2a2a">Exposure</text>
-      <text x="100" y="34" text-anchor="middle" font-size="8" fill="#6a6a6a">low Self-energy</text>
+          <!-- CONDITION A: Exposure -->
+          <text x="100" y="20" text-anchor="middle" font-size="10" font-weight="600" fill="#2a2a2a">Exposure</text>
+          <text x="100" y="34" text-anchor="middle" font-size="8" fill="#6a6a6a">low Self-energy</text>
 
-      <!-- Part bundle: compact -->
-      <rect x="52" y="48" width="96" height="100" rx="3" fill="#2a2a2a" opacity="0.06" stroke="#2a2a2a" stroke-width="1.5"/>
+          <rect x="52" y="48" width="96" height="100" rx="3" fill="#2a2a2a" opacity="0.06" stroke="#2a2a2a" stroke-width="1.5"/>
 
-      <!-- Self-state node -->
-      <circle cx="100" cy="72" r="14" fill="#2a2a2a" opacity="0.15" stroke="#2a2a2a" stroke-width="1.2"/>
-      <text x="100" y="75" text-anchor="middle" font-size="7" fill="#2a2a2a">S</text>
+          <circle cx="100" cy="72" r="14" fill="#2a2a2a" opacity="0.15" stroke="#2a2a2a" stroke-width="1.2"/>
+          <text x="100" y="75" text-anchor="middle" font-size="7" fill="#2a2a2a">S</text>
 
-      <!-- Threat node -->
-      <circle cx="80" cy="112" r="11" fill="#4a7fa5" opacity="0.2" stroke="#4a7fa5" stroke-width="1"/>
-      <text x="80" y="115" text-anchor="middle" font-size="7" fill="#4a7fa5">T</text>
+          <circle cx="80" cy="112" r="11" fill="#4a7fa5" opacity="0.2" stroke="#4a7fa5" stroke-width="1"/>
+          <text x="80" y="115" text-anchor="middle" font-size="7" fill="#4a7fa5">T</text>
 
-      <!-- Policy node -->
-      <circle cx="120" cy="112" r="11" fill="#4a7fa5" opacity="0.2" stroke="#4a7fa5" stroke-width="1"/>
-      <text x="120" y="115" text-anchor="middle" font-size="7" fill="#4a7fa5">P</text>
+          <circle cx="120" cy="112" r="11" fill="#4a7fa5" opacity="0.2" stroke="#4a7fa5" stroke-width="1"/>
+          <text x="120" y="115" text-anchor="middle" font-size="7" fill="#4a7fa5">P</text>
 
-      <line x1="100" y1="86" x2="84" y2="100" stroke="#2a2a2a" stroke-width="0.8"/>
-      <line x1="100" y1="86" x2="116" y2="100" stroke="#2a2a2a" stroke-width="0.8"/>
+          <line x1="100" y1="86" x2="84" y2="100" stroke="#2a2a2a" stroke-width="0.8"/>
+          <line x1="100" y1="86" x2="116" y2="100" stroke="#2a2a2a" stroke-width="0.8"/>
 
-      <!-- Observation channel: external only, weak -->
-      <rect x="60" y="170" width="80" height="22" rx="3" fill="none" stroke="#d8d6d0" stroke-width="1"/>
-      <text x="100" y="184" text-anchor="middle" font-size="7.5" fill="#6a6a6a">external cue</text>
-      <line x1="100" y1="148" x2="100" y2="170" stroke="#6a6a6a" stroke-width="0.8" stroke-dasharray="2,2" marker-end="url(#arr-cond)"/>
+          <rect x="60" y="170" width="80" height="22" rx="3" fill="none" stroke="#d8d6d0" stroke-width="1"/>
+          <text x="100" y="184" text-anchor="middle" font-size="7.5" fill="#6a6a6a">external cue</text>
+          <line x1="100" y1="148" x2="100" y2="170" stroke="#6a6a6a" stroke-width="0.8" stroke-dasharray="2,2" marker-end="url(#arr-cond)"/>
 
-      <!-- No self-state channel -->
-      <text x="100" y="212" text-anchor="middle" font-size="7.5" fill="#d8d6d0">self-state channel: closed</text>
+          <text x="100" y="212" text-anchor="middle" font-size="7.5" fill="#d8d6d0">self-state channel: closed</text>
 
-      <!-- What updates -->
-      <text x="100" y="240" text-anchor="middle" font-size="8" fill="#6a6a6a" font-weight="500">Updates:</text>
-      <text x="100" y="254" text-anchor="middle" font-size="8" fill="#6a6a6a">threat meaning (slow)</text>
-      <text x="100" y="268" text-anchor="middle" font-size="8" fill="#d8d6d0">self-state: minimal</text>
+          <text x="100" y="240" text-anchor="middle" font-size="8" fill="#6a6a6a" font-weight="500">Updates:</text>
+          <text x="100" y="254" text-anchor="middle" font-size="8" fill="#6a6a6a">threat meaning (slow)</text>
+          <text x="100" y="268" text-anchor="middle" font-size="8" fill="#d8d6d0">self-state: minimal</text>
 
-      <!-- Divider -->
-      <line x1="185" y1="10" x2="185" y2="290" stroke="#d8d6d0" stroke-width="0.5"/>
+          <line x1="185" y1="10" x2="185" y2="290" stroke="#d8d6d0" stroke-width="0.5"/>
 
-      <!-- CONDITION B: Informational -->
-      <text x="295" y="20" text-anchor="middle" font-size="10" font-weight="600" fill="#4a7fa5">Informational</text>
-      <text x="295" y="34" text-anchor="middle" font-size="8" fill="#6a6a6a">medium Self-energy</text>
+          <!-- CONDITION B: Informational -->
+          <text x="295" y="20" text-anchor="middle" font-size="10" font-weight="600" fill="#4a7fa5">Informational</text>
+          <text x="295" y="34" text-anchor="middle" font-size="8" fill="#6a6a6a">medium Self-energy</text>
 
-      <rect x="247" y="48" width="96" height="100" rx="3" fill="#4a7fa5" opacity="0.04" stroke="#4a7fa5" stroke-width="1.5"/>
+          <rect x="247" y="48" width="96" height="100" rx="3" fill="#4a7fa5" opacity="0.04" stroke="#4a7fa5" stroke-width="1.5"/>
 
-      <circle cx="295" cy="72" r="14" fill="#2a2a2a" opacity="0.12" stroke="#2a2a2a" stroke-width="1"/>
-      <text x="295" y="75" text-anchor="middle" font-size="7" fill="#2a2a2a">S</text>
+          <circle cx="295" cy="72" r="14" fill="#2a2a2a" opacity="0.12" stroke="#2a2a2a" stroke-width="1"/>
+          <text x="295" y="75" text-anchor="middle" font-size="7" fill="#2a2a2a">S</text>
 
-      <circle cx="275" cy="112" r="11" fill="#4a7fa5" opacity="0.3" stroke="#4a7fa5" stroke-width="1.2"/>
-      <text x="275" y="115" text-anchor="middle" font-size="7" fill="#4a7fa5">T</text>
+          <circle cx="275" cy="112" r="11" fill="#4a7fa5" opacity="0.3" stroke="#4a7fa5" stroke-width="1.2"/>
+          <text x="275" y="115" text-anchor="middle" font-size="7" fill="#4a7fa5">T</text>
 
-      <circle cx="315" cy="112" r="11" fill="#4a7fa5" opacity="0.2" stroke="#4a7fa5" stroke-width="1"/>
-      <text x="315" y="115" text-anchor="middle" font-size="7" fill="#4a7fa5">P</text>
+          <circle cx="315" cy="112" r="11" fill="#4a7fa5" opacity="0.2" stroke="#4a7fa5" stroke-width="1"/>
+          <text x="315" y="115" text-anchor="middle" font-size="7" fill="#4a7fa5">P</text>
 
-      <line x1="295" y1="86" x2="279" y2="100" stroke="#2a2a2a" stroke-width="0.8"/>
-      <line x1="295" y1="86" x2="311" y2="100" stroke="#2a2a2a" stroke-width="0.8"/>
+          <line x1="295" y1="86" x2="279" y2="100" stroke="#2a2a2a" stroke-width="0.8"/>
+          <line x1="295" y1="86" x2="311" y2="100" stroke="#2a2a2a" stroke-width="0.8"/>
 
-      <!-- Observation channels: external + context -->
-      <rect x="250" y="170" width="90" height="22" rx="3" fill="none" stroke="#4a7fa5" stroke-width="1.2"/>
-      <text x="295" y="184" text-anchor="middle" font-size="7.5" fill="#4a7fa5">external + context</text>
-      <line x1="295" y1="148" x2="295" y2="170" stroke="#4a7fa5" stroke-width="1" marker-end="url(#arr-blue)"/>
+          <rect x="250" y="170" width="90" height="22" rx="3" fill="none" stroke="#4a7fa5" stroke-width="1.2"/>
+          <text x="295" y="184" text-anchor="middle" font-size="7.5" fill="#4a7fa5">external + context</text>
+          <line x1="295" y1="148" x2="295" y2="170" stroke="#4a7fa5" stroke-width="1" marker-end="url(#arr-blue)"/>
 
-      <!-- Self-state channel: still closed -->
-      <text x="295" y="212" text-anchor="middle" font-size="7.5" fill="#d8d6d0">self-state channel: closed</text>
+          <text x="295" y="212" text-anchor="middle" font-size="7.5" fill="#d8d6d0">self-state channel: closed</text>
 
-      <!-- What updates -->
-      <text x="295" y="240" text-anchor="middle" font-size="8" fill="#4a7fa5" font-weight="500">Updates:</text>
-      <text x="295" y="254" text-anchor="middle" font-size="8" fill="#4a7fa5">threat meaning (moderate)</text>
-      <text x="295" y="268" text-anchor="middle" font-size="8" fill="#d8d6d0">self-state: minimal</text>
+          <text x="295" y="240" text-anchor="middle" font-size="8" fill="#4a7fa5" font-weight="500">Updates:</text>
+          <text x="295" y="254" text-anchor="middle" font-size="8" fill="#4a7fa5">threat meaning (moderate)</text>
+          <text x="295" y="268" text-anchor="middle" font-size="8" fill="#d8d6d0">self-state: minimal</text>
 
-      <!-- Divider -->
-      <line x1="380" y1="10" x2="380" y2="290" stroke="#d8d6d0" stroke-width="0.5"/>
+          <line x1="380" y1="10" x2="380" y2="290" stroke="#d8d6d0" stroke-width="0.5"/>
 
-      <!-- CONDITION C: Relational Depth -->
-      <text x="483" y="20" text-anchor="middle" font-size="10" font-weight="600" fill="#c45a3c">Relational Depth</text>
-      <text x="483" y="34" text-anchor="middle" font-size="8" fill="#6a6a6a">high Self-energy</text>
+          <!-- CONDITION C: Relational Depth -->
+          <text x="483" y="20" text-anchor="middle" font-size="10" font-weight="600" fill="#c45a3c">Relational Depth</text>
+          <text x="483" y="34" text-anchor="middle" font-size="8" fill="#6a6a6a">high Self-energy</text>
 
-      <rect x="435" y="48" width="96" height="100" rx="3" fill="#c45a3c" opacity="0.04" stroke="#c45a3c" stroke-width="1.5"/>
+          <rect x="435" y="48" width="96" height="100" rx="3" fill="#c45a3c" opacity="0.04" stroke="#c45a3c" stroke-width="1.5"/>
 
-      <circle cx="483" cy="72" r="14" fill="#c45a3c" opacity="0.12" stroke="#c45a3c" stroke-width="1.5"/>
-      <text x="483" y="75" text-anchor="middle" font-size="7" fill="#c45a3c" font-weight="600">S</text>
+          <circle cx="483" cy="72" r="14" fill="#c45a3c" opacity="0.12" stroke="#c45a3c" stroke-width="1.5"/>
+          <text x="483" y="75" text-anchor="middle" font-size="7" fill="#c45a3c" font-weight="600">S</text>
 
-      <circle cx="463" cy="112" r="11" fill="#4a7fa5" opacity="0.3" stroke="#4a7fa5" stroke-width="1.2"/>
-      <text x="463" y="115" text-anchor="middle" font-size="7" fill="#4a7fa5">T</text>
+          <circle cx="463" cy="112" r="11" fill="#4a7fa5" opacity="0.3" stroke="#4a7fa5" stroke-width="1.2"/>
+          <text x="463" y="115" text-anchor="middle" font-size="7" fill="#4a7fa5">T</text>
 
-      <circle cx="503" cy="112" r="11" fill="#4a7fa5" opacity="0.2" stroke="#4a7fa5" stroke-width="1"/>
-      <text x="503" y="115" text-anchor="middle" font-size="7" fill="#4a7fa5">P</text>
+          <circle cx="503" cy="112" r="11" fill="#4a7fa5" opacity="0.2" stroke="#4a7fa5" stroke-width="1"/>
+          <text x="503" y="115" text-anchor="middle" font-size="7" fill="#4a7fa5">P</text>
 
-      <line x1="483" y1="86" x2="467" y2="100" stroke="#2a2a2a" stroke-width="0.8"/>
-      <line x1="483" y1="86" x2="499" y2="100" stroke="#2a2a2a" stroke-width="0.8"/>
+          <line x1="483" y1="86" x2="467" y2="100" stroke="#2a2a2a" stroke-width="0.8"/>
+          <line x1="483" y1="86" x2="499" y2="100" stroke="#2a2a2a" stroke-width="0.8"/>
 
-      <!-- Observation channels: all open -->
-      <rect x="438" y="170" width="90" height="22" rx="3" fill="none" stroke="#4a7fa5" stroke-width="1.2"/>
-      <text x="483" y="184" text-anchor="middle" font-size="7.5" fill="#4a7fa5">external + context</text>
-      <line x1="475" y1="148" x2="475" y2="170" stroke="#4a7fa5" stroke-width="1" marker-end="url(#arr-blue)"/>
+          <rect x="438" y="170" width="90" height="22" rx="3" fill="none" stroke="#4a7fa5" stroke-width="1.2"/>
+          <text x="483" y="184" text-anchor="middle" font-size="7.5" fill="#4a7fa5">external + context</text>
+          <line x1="475" y1="148" x2="475" y2="170" stroke="#4a7fa5" stroke-width="1" marker-end="url(#arr-blue)"/>
 
-      <!-- Self-state channel: OPEN -->
-      <rect x="438" y="198" width="90" height="22" rx="3" fill="#c45a3c" opacity="0.08" stroke="#c45a3c" stroke-width="1.2"/>
-      <text x="483" y="212" text-anchor="middle" font-size="7.5" fill="#c45a3c" font-weight="500">witnessed self-state</text>
-      <line x1="491" y1="148" x2="491" y2="198" stroke="#c45a3c" stroke-width="1.2" marker-end="url(#arr-red)"/>
+          <rect x="438" y="198" width="90" height="22" rx="3" fill="#c45a3c" opacity="0.08" stroke="#c45a3c" stroke-width="1.2"/>
+          <text x="483" y="212" text-anchor="middle" font-size="7.5" fill="#c45a3c" font-weight="500">witnessed self-state</text>
+          <line x1="491" y1="148" x2="491" y2="198" stroke="#c45a3c" stroke-width="1.2" marker-end="url(#arr-red)"/>
 
-      <!-- What updates -->
-      <text x="483" y="240" text-anchor="middle" font-size="8" fill="#c45a3c" font-weight="500">Updates:</text>
-      <text x="483" y="254" text-anchor="middle" font-size="8" fill="#c45a3c">self-state first (cascade)</text>
-      <text x="483" y="268" text-anchor="middle" font-size="8" fill="#c45a3c">then threat, outcome, policy</text>
+          <text x="483" y="240" text-anchor="middle" font-size="8" fill="#c45a3c" font-weight="500">Updates:</text>
+          <text x="483" y="254" text-anchor="middle" font-size="8" fill="#c45a3c">self-state first (cascade)</text>
+          <text x="483" y="268" text-anchor="middle" font-size="8" fill="#c45a3c">then threat, outcome, policy</text>
 
-      <!-- Bottom labels -->
-      <text x="100" y="304" text-anchor="middle" font-size="8" fill="#6a6a6a">slow, uniform</text>
-      <text x="295" y="304" text-anchor="middle" font-size="8" fill="#4a7fa5">partial</text>
-      <text x="483" y="304" text-anchor="middle" font-size="8" fill="#c45a3c" font-weight="600">cascade</text>
-    </svg>
+          <text x="100" y="304" text-anchor="middle" font-size="8" fill="#6a6a6a">slow, uniform</text>
+          <text x="295" y="304" text-anchor="middle" font-size="8" fill="#4a7fa5">partial</text>
+          <text x="483" y="304" text-anchor="middle" font-size="8" fill="#c45a3c" font-weight="600">cascade</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Critique -->
+    <div class="critique-note">
+      <strong>Critique</strong>
+      Conceptually strong -- the three-condition layout is the right architecture. But the three panels are too symmetric; the key differentiator (the self-state channel opening) gets lost among identical-looking node clusters. v2 makes the rightmost panel visually larger and uses a single bold "channel open" indicator rather than duplicated node diagrams, making the critical difference jump out at thumbnail.
+      <span class="taxonomy">Type: Three-condition architecture</span>
+      <div class="checks">
+        <span class="pass">One-move: PASS</span> &middot;
+        <span class="fail">Thumbnail: FAIL (three identical node clusters)</span> &middot;
+        <span class="pass">Reading-path: PASS (left to right)</span> &middot;
+        <span class="pass">Fidelity: PASS</span>
+      </div>
+    </div>
+
+    <!-- V2 -->
+    <div class="comparison-col">
+      <span class="version-label v2-label">v2</span>
+      <div class="visual-container">
+        <svg viewBox="0 0 520 280" width="520" height="280" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arr-red-v2" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+              <path d="M0,0 L7,2.5 L0,5" fill="none" stroke="#c45a3c" stroke-width="1"/>
+            </marker>
+          </defs>
+
+          <!-- CONDITION A: Exposure (compact, muted) -->
+          <rect x="20" y="30" width="120" height="170" rx="4" fill="#2a2a2a" opacity="0.04" stroke="#d8d6d0" stroke-width="1"/>
+          <text x="80" y="52" text-anchor="middle" font-size="10" font-weight="600" fill="#6a6a6a">Exposure</text>
+
+          <!-- Closed channel icon: X through line -->
+          <circle cx="80" cy="100" r="20" fill="#2a2a2a" opacity="0.06" stroke="#2a2a2a" stroke-width="1.2"/>
+          <text x="80" y="104" text-anchor="middle" font-size="8" fill="#2a2a2a">S</text>
+          <line x1="60" y1="140" x2="100" y2="140" stroke="#d8d6d0" stroke-width="2"/>
+          <text x="80" y="136" text-anchor="middle" font-size="7" fill="#d8d6d0">closed</text>
+          <text x="80" y="172" text-anchor="middle" font-size="8" fill="#6a6a6a">slow</text>
+
+          <!-- CONDITION B: Informational (medium) -->
+          <rect x="160" y="30" width="130" height="170" rx="4" fill="#4a7fa5" opacity="0.04" stroke="#4a7fa5" stroke-width="1"/>
+          <text x="225" y="52" text-anchor="middle" font-size="10" font-weight="600" fill="#4a7fa5">Informational</text>
+
+          <circle cx="225" cy="100" r="22" fill="#4a7fa5" opacity="0.06" stroke="#4a7fa5" stroke-width="1.2"/>
+          <text x="225" y="96" text-anchor="middle" font-size="8" fill="#4a7fa5">S</text>
+          <text x="225" y="108" text-anchor="middle" font-size="6" fill="#4a7fa5">+ ctx</text>
+          <line x1="200" y1="140" x2="250" y2="140" stroke="#d8d6d0" stroke-width="2"/>
+          <text x="225" y="136" text-anchor="middle" font-size="7" fill="#d8d6d0">closed</text>
+          <text x="225" y="172" text-anchor="middle" font-size="8" fill="#4a7fa5">partial</text>
+
+          <!-- CONDITION C: Relational Depth (dominant, larger) -->
+          <rect x="310" y="16" width="190" height="198" rx="5" fill="#c45a3c" opacity="0.05" stroke="#c45a3c" stroke-width="2.2"/>
+          <text x="405" y="42" text-anchor="middle" font-size="12" font-weight="700" fill="#c45a3c">Relational Depth</text>
+
+          <!-- S node: larger, warm-filled -->
+          <circle cx="405" cy="100" r="28" fill="#c45a3c" opacity="0.10" stroke="#c45a3c" stroke-width="2"/>
+          <text x="405" y="96" text-anchor="middle" font-size="10" fill="#c45a3c" font-weight="600">S</text>
+          <text x="405" y="110" text-anchor="middle" font-size="7" fill="#c45a3c">+ ctx + self</text>
+
+          <!-- Open channel: bold warm line -->
+          <line x1="370" y1="146" x2="440" y2="146" stroke="#c45a3c" stroke-width="2.5"/>
+          <text x="405" y="142" text-anchor="middle" font-size="8" fill="#c45a3c" font-weight="600">open</text>
+
+          <!-- Cascade label -->
+          <text x="405" y="182" text-anchor="middle" font-size="10" fill="#c45a3c" font-weight="600">cascade</text>
+
+          <!-- Bottom summary -->
+          <text x="260" y="248" text-anchor="middle" font-size="9" fill="#6a6a6a" font-style="italic">Same system, different channels. Only relational depth opens the self-state channel.</text>
+        </svg>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -796,257 +941,130 @@
 <!-- ============================================================ -->
 <section class="visual-section">
   <div class="visual-header">
-    <span class="visual-number">Candidate 9</span>
-    <h2 class="visual-title">Two Parts, One System</h2>
-    <p class="visual-description">Polarization: two bundles compete for control. At low Self-energy, oscillation. At high Self-energy, both witnessed.</p>
-  </div>
-  <div class="visual-container">
-    <svg viewBox="0 0 580 340" width="580" height="340" xmlns="http://www.w3.org/2000/svg">
-      <!-- LEFT: Low Self-energy -->
-      <text x="150" y="20" text-anchor="middle" font-size="10" font-weight="600" fill="#2a2a2a">Low Self-energy</text>
-      <text x="150" y="36" text-anchor="middle" font-size="8" fill="#6a6a6a" font-style="italic">oscillation between rivals</text>
-
-      <!-- System boundary -->
-      <rect x="40" y="50" width="220" height="220" rx="6" fill="none" stroke="#2a2a2a" stroke-width="1.5"/>
-
-      <!-- Part A: large, dominant in this frame -->
-      <circle cx="120" cy="130" r="42" fill="#4a7fa5" opacity="0.12" stroke="#4a7fa5" stroke-width="2"/>
-      <text x="120" y="124" text-anchor="middle" font-size="10" fill="#4a7fa5" font-weight="600">Part A</text>
-      <text x="120" y="138" text-anchor="middle" font-size="8" fill="#4a7fa5">approach</text>
-
-      <!-- Part B: small, suppressed -->
-      <circle cx="195" cy="200" r="28" fill="#c45a3c" opacity="0.08" stroke="#c45a3c" stroke-width="1" stroke-dasharray="3,3"/>
-      <text x="195" y="196" text-anchor="middle" font-size="9" fill="#c45a3c" opacity="0.6">Part B</text>
-      <text x="195" y="208" text-anchor="middle" font-size="7.5" fill="#c45a3c" opacity="0.6">avoid</text>
-
-      <!-- Oscillation arrows -->
-      <path d="M 150,160 Q 170,175 185,172" fill="none" stroke="#2a2a2a" stroke-width="1" marker-end="url(#arr-osc)"/>
-      <path d="M 170,188 Q 155,185 138,165" fill="none" stroke="#2a2a2a" stroke-width="1" marker-end="url(#arr-osc)"/>
-
-      <!-- Time indicator: oscillation wave -->
-      <text x="150" y="248" text-anchor="middle" font-size="8" fill="#6a6a6a">mixing weight over time:</text>
-      <path d="M 65,262 Q 80,252 95,262 Q 110,272 125,262 Q 140,252 155,262 Q 170,272 185,262 Q 200,252 215,262 Q 230,272 240,262" fill="none" stroke="#2a2a2a" stroke-width="1"/>
-
-      <!-- Divider -->
-      <line x1="290" y1="16" x2="290" y2="290" stroke="#d8d6d0" stroke-width="1"/>
-
-      <!-- RIGHT: High Self-energy -->
-      <text x="435" y="20" text-anchor="middle" font-size="10" font-weight="600" fill="#4a7fa5">High Self-energy</text>
-      <text x="435" y="36" text-anchor="middle" font-size="8" fill="#6a6a6a" font-style="italic">both witnessed simultaneously</text>
-
-      <rect x="325" y="50" width="220" height="220" rx="6" fill="#4a7fa5" opacity="0.03" stroke="#4a7fa5" stroke-width="1.5"/>
-
-      <!-- Self: encompassing -->
-      <circle cx="435" cy="155" r="78" fill="none" stroke="#4a7fa5" stroke-width="1.2" stroke-dasharray="5,4"/>
-      <text x="435" y="85" text-anchor="middle" font-size="9" fill="#4a7fa5" font-weight="500">Self</text>
-
-      <!-- Part A -->
-      <circle cx="400" cy="140" r="30" fill="#4a7fa5" opacity="0.1" stroke="#4a7fa5" stroke-width="1.5"/>
-      <text x="400" y="136" text-anchor="middle" font-size="9" fill="#4a7fa5" font-weight="500">Part A</text>
-      <text x="400" y="148" text-anchor="middle" font-size="7.5" fill="#4a7fa5">approach</text>
-
-      <!-- Part B -->
-      <circle cx="470" cy="170" r="30" fill="#c45a3c" opacity="0.1" stroke="#c45a3c" stroke-width="1.5"/>
-      <text x="470" y="166" text-anchor="middle" font-size="9" fill="#c45a3c" font-weight="500">Part B</text>
-      <text x="470" y="178" text-anchor="middle" font-size="7.5" fill="#c45a3c">avoid</text>
-
-      <!-- Both present: stable line -->
-      <text x="435" y="248" text-anchor="middle" font-size="8" fill="#6a6a6a">mixing weight over time:</text>
-      <line x1="355" y1="262" x2="515" y2="262" stroke="#4a7fa5" stroke-width="1.2"/>
-      <line x1="355" y1="268" x2="515" y2="268" stroke="#c45a3c" stroke-width="1.0" opacity="0.6"/>
-
-      <text x="435" y="286" text-anchor="middle" font-size="7.5" fill="#6a6a6a" font-style="italic">stable coexistence</text>
-
-      <defs>
-        <marker id="arr-osc" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto">
-          <path d="M0,0 L6,2 L0,4" fill="none" stroke="#2a2a2a" stroke-width="0.8"/>
-        </marker>
-      </defs>
-
-      <!-- Bottom annotation -->
-      <text x="290" y="328" text-anchor="middle" font-size="9" fill="#6a6a6a" font-style="italic">Self-energy governs whether polarization produces oscillation or coexistence</text>
-    </svg>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-
-<!-- ============================================================ -->
-<!-- VISUAL 10: The One-Sentence Summary -->
-<!-- ============================================================ -->
-<section class="visual-section">
-  <div class="visual-header">
-    <span class="visual-number">Candidate 10</span>
-    <h2 class="visual-title">The One-Sentence Summary</h2>
-    <p class="visual-description">The paper's central claim, visually annotated: what each clause means structurally.</p>
-  </div>
-  <div class="visual-container" style="padding: 3rem 2rem;">
-    <svg viewBox="0 0 600 480" width="600" height="480" xmlns="http://www.w3.org/2000/svg">
-      <!-- The sentence, broken into annotated clauses -->
-
-      <!-- Clause 1 -->
-      <text x="300" y="40" text-anchor="middle" font-size="14" font-weight="600" fill="#2a2a2a" font-style="italic">
-        "A part is not a fear memory.
-      </text>
-
-      <!-- Annotation: what it negates -->
-      <line x1="175" y1="48" x2="175" y2="68" stroke="#d8d6d0" stroke-width="0.8"/>
-      <text x="175" y="82" text-anchor="middle" font-size="8" fill="#6a6a6a">Not a stimulus-response pair.</text>
-      <text x="175" y="94" text-anchor="middle" font-size="8" fill="#6a6a6a">Not a schema. Not a latent context.</text>
-
-      <!-- Clause 2 -->
-      <text x="300" y="130" text-anchor="middle" font-size="13" font-weight="500" fill="#2a2a2a">
-        It is an
-      </text>
-      <text x="300" y="154" text-anchor="middle" font-size="14" font-weight="600" fill="#2a2a2a">identity-level precision bundle</text>
-
-      <!-- Annotation: the four elements -->
-      <line x1="300" y1="162" x2="300" y2="178" stroke="#4a7fa5" stroke-width="0.8"/>
-
-      <rect x="105" y="182" width="85" height="28" rx="3" fill="#4a7fa5" opacity="0.08" stroke="#4a7fa5" stroke-width="1"/>
-      <text x="147" y="200" text-anchor="middle" font-size="8" fill="#4a7fa5">self-state</text>
-
-      <rect x="200" y="182" width="85" height="28" rx="3" fill="#4a7fa5" opacity="0.08" stroke="#4a7fa5" stroke-width="1"/>
-      <text x="242" y="200" text-anchor="middle" font-size="8" fill="#4a7fa5">world-state</text>
-
-      <rect x="295" y="182" width="85" height="28" rx="3" fill="#4a7fa5" opacity="0.08" stroke="#4a7fa5" stroke-width="1"/>
-      <text x="337" y="200" text-anchor="middle" font-size="8" fill="#4a7fa5">policy</text>
-
-      <rect x="390" y="182" width="110" height="28" rx="3" fill="#4a7fa5" opacity="0.08" stroke="#4a7fa5" stroke-width="1"/>
-      <text x="445" y="200" text-anchor="middle" font-size="8" fill="#4a7fa5">expected outcome</text>
-
-      <!-- Clause 3 -->
-      <text x="300" y="244" text-anchor="middle" font-size="13" font-weight="500" fill="#2a2a2a">
-        in which
-      </text>
-      <text x="300" y="268" text-anchor="middle" font-size="14" font-weight="600" fill="#c45a3c">self-state is the organizing prior</text>
-
-      <!-- Annotation: what "organizing" means -->
-      <line x1="300" y1="276" x2="300" y2="292" stroke="#c45a3c" stroke-width="0.8"/>
-      <text x="300" y="306" text-anchor="middle" font-size="8.5" fill="#c45a3c">The root of the hierarchy. Change here cascades.</text>
-
-      <!-- Visual: mini hierarchy -->
-      <circle cx="300" cy="330" r="10" fill="#c45a3c" opacity="0.15" stroke="#c45a3c" stroke-width="1.2"/>
-      <text x="300" y="333" text-anchor="middle" font-size="6.5" fill="#c45a3c">S</text>
-      <line x1="293" y1="339" x2="275" y2="355" stroke="#c45a3c" stroke-width="0.8"/>
-      <line x1="300" y1="340" x2="300" y2="355" stroke="#c45a3c" stroke-width="0.8"/>
-      <line x1="307" y1="339" x2="325" y2="355" stroke="#c45a3c" stroke-width="0.8"/>
-      <circle cx="275" cy="360" r="6" fill="#4a7fa5" opacity="0.15" stroke="#4a7fa5" stroke-width="0.8"/>
-      <circle cx="300" cy="360" r="6" fill="#4a7fa5" opacity="0.15" stroke="#4a7fa5" stroke-width="0.8"/>
-      <circle cx="325" cy="360" r="6" fill="#4a7fa5" opacity="0.15" stroke="#4a7fa5" stroke-width="0.8"/>
-
-      <!-- Clause 4: the consequence -->
-      <text x="300" y="396" text-anchor="middle" font-size="12" font-weight="500" fill="#2a2a2a">
-        and revision that reaches the root
-      </text>
-      <text x="300" y="416" text-anchor="middle" font-size="13" font-weight="600" fill="#2a2a2a">
-        generalizes
-      </text>
-      <text x="300" y="436" text-anchor="middle" font-size="12" font-weight="500" fill="#2a2a2a">
-        in ways that revision of threat meaning alone
-      </text>
-      <text x="300" y="456" text-anchor="middle" font-size="13" font-weight="600" fill="#6a6a6a">
-        cannot."
-      </text>
-
-      <!-- Contrast markers -->
-      <line x1="240" y1="420" x2="190" y2="420" stroke="#c45a3c" stroke-width="1"/>
-      <text x="175" y="420" text-anchor="end" font-size="8" fill="#c45a3c">relational PE</text>
-
-      <line x1="410" y1="460" x2="460" y2="460" stroke="#6a6a6a" stroke-width="1"/>
-      <text x="475" y="460" text-anchor="start" font-size="8" fill="#6a6a6a">informational PE</text>
-    </svg>
-  </div>
-</section>
-
-
-<div class="divider"></div>
-
-
-<!-- ============================================================ -->
-<!-- CHAMBERLIN-MATCHED FIGURES                                    -->
-<!-- ============================================================ -->
-
-<header style="margin-top: 4rem; margin-bottom: 4rem; padding-bottom: 2rem; border-bottom: 2px solid var(--charcoal); border-top: 2px solid var(--charcoal); padding-top: 2rem;">
-  <h1>Chamberlin-Matched Figures</h1>
-  <div class="subtitle">IFS equivalents of the key figures from Chamberlin (2022), Coherence Therapy under Active Inference</div>
-  <div class="meta">Figures 11&ndash;15 &middot; Matched Layout &amp; Style</div>
-</header>
-
-
-<!-- ============================================================ -->
-<!-- VISUAL 11: Capture Mode vs Relational Depth Mode              -->
-<!-- (Matches Chamberlin ct_schematic.png)                         -->
-<!-- ============================================================ -->
-<section class="visual-section">
-  <div class="visual-header">
-    <span class="visual-number">Candidate 11</span>
+    <span class="visual-number">Candidate 6</span>
     <h2 class="visual-title">Capture Mode vs Relational Depth Mode</h2>
     <p class="visual-description">Two modes of the same system &mdash; capture is context-blind avoidance; relational depth is witnessed, context-aware presence. <em>Corresponds to Chamberlin ct_schematic.png.</em></p>
   </div>
-  <div class="visual-container">
-    <svg viewBox="0 0 680 420" width="680" height="420" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <marker id="arr-mode" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-          <path d="M0,0 L10,3.5 L0,7" fill="none" stroke="#2a2a2a" stroke-width="1.2"/>
-        </marker>
-      </defs>
+  <div class="comparison-row">
+    <!-- V1 -->
+    <div class="comparison-col">
+      <span class="version-label">v1</span>
+      <div class="visual-container">
+        <svg viewBox="0 0 680 420" width="680" height="420" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arr-mode" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+              <path d="M0,0 L10,3.5 L0,7" fill="none" stroke="#2a2a2a" stroke-width="1.2"/>
+            </marker>
+          </defs>
 
-      <!-- ===== LEFT BOX: Capture Mode ===== -->
-      <rect x="20" y="30" width="260" height="260" rx="6" fill="#c45a3c" opacity="0.06" stroke="#c45a3c" stroke-width="2"/>
-      <text x="150" y="58" text-anchor="middle" font-size="13" font-weight="600" fill="#c45a3c">Capture Mode</text>
-      <line x1="100" y1="66" x2="200" y2="66" stroke="#c45a3c" stroke-width="0.8" opacity="0.4"/>
+          <rect x="20" y="30" width="260" height="260" rx="6" fill="#c45a3c" opacity="0.06" stroke="#c45a3c" stroke-width="2"/>
+          <text x="150" y="58" text-anchor="middle" font-size="13" font-weight="600" fill="#c45a3c">Capture Mode</text>
+          <line x1="100" y1="66" x2="200" y2="66" stroke="#c45a3c" stroke-width="0.8" opacity="0.4"/>
 
-      <text x="42" y="92" font-size="9.5" fill="#2a2a2a" font-weight="500">Part dominates inference</text>
-      <text x="42" y="112" font-size="9" fill="#6a6a6a">Channel 5 (self-state): closed</text>
-      <text x="42" y="132" font-size="9" fill="#6a6a6a">Context: blind</text>
-      <text x="42" y="152" font-size="9" fill="#6a6a6a">Self-energy: low</text>
-      <text x="42" y="172" font-size="9" fill="#6a6a6a">Policy: rigid avoidance</text>
+          <text x="42" y="92" font-size="9.5" fill="#2a2a2a" font-weight="500">Part dominates inference</text>
+          <text x="42" y="112" font-size="9" fill="#6a6a6a">Channel 5 (self-state): closed</text>
+          <text x="42" y="132" font-size="9" fill="#6a6a6a">Context: blind</text>
+          <text x="42" y="152" font-size="9" fill="#6a6a6a">Self-energy: low</text>
+          <text x="42" y="172" font-size="9" fill="#6a6a6a">Policy: rigid avoidance</text>
 
-      <!-- Icon: single dark circle filling frame -->
-      <circle cx="150" cy="230" r="36" fill="#2a2a2a" opacity="0.10"/>
-      <circle cx="150" cy="230" r="24" fill="#2a2a2a" opacity="0.15"/>
-      <text x="150" y="234" text-anchor="middle" font-size="9" fill="#2a2a2a" font-weight="500">Part</text>
-      <text x="150" y="274" text-anchor="middle" font-size="8" fill="#6a6a6a" font-style="italic">"I am afraid"</text>
+          <circle cx="150" cy="230" r="36" fill="#2a2a2a" opacity="0.10"/>
+          <circle cx="150" cy="230" r="24" fill="#2a2a2a" opacity="0.15"/>
+          <text x="150" y="234" text-anchor="middle" font-size="9" fill="#2a2a2a" font-weight="500">Part</text>
+          <text x="150" y="274" text-anchor="middle" font-size="8" fill="#6a6a6a" font-style="italic">"I am afraid"</text>
 
-      <!-- ===== CENTER ARROW ===== -->
-      <line x1="290" y1="160" x2="380" y2="160" stroke="#2a2a2a" stroke-width="2" marker-end="url(#arr-mode)"/>
-      <text x="335" y="148" text-anchor="middle" font-size="9" fill="#2a2a2a" font-weight="500">Self-energy</text>
-      <text x="335" y="162" text-anchor="middle" font-size="8.5" fill="#6a6a6a" font-style="italic">increases</text>
-      <text x="335" y="182" text-anchor="middle" font-size="8" fill="#c45a3c">relational depth</text>
+          <line x1="290" y1="160" x2="380" y2="160" stroke="#2a2a2a" stroke-width="2" marker-end="url(#arr-mode)"/>
+          <text x="335" y="148" text-anchor="middle" font-size="9" fill="#2a2a2a" font-weight="500">Self-energy</text>
+          <text x="335" y="162" text-anchor="middle" font-size="8.5" fill="#6a6a6a" font-style="italic">increases</text>
+          <text x="335" y="182" text-anchor="middle" font-size="8" fill="#c45a3c">relational depth</text>
 
-      <!-- ===== RIGHT BOX: Relational Depth Mode ===== -->
-      <rect x="398" y="30" width="260" height="260" rx="6" fill="#4a7fa5" opacity="0.06" stroke="#4a7fa5" stroke-width="2"/>
-      <text x="528" y="58" text-anchor="middle" font-size="13" font-weight="600" fill="#4a7fa5">Relational Depth Mode</text>
-      <line x1="468" y1="66" x2="588" y2="66" stroke="#4a7fa5" stroke-width="0.8" opacity="0.4"/>
+          <rect x="398" y="30" width="260" height="260" rx="6" fill="#4a7fa5" opacity="0.06" stroke="#4a7fa5" stroke-width="2"/>
+          <text x="528" y="58" text-anchor="middle" font-size="13" font-weight="600" fill="#4a7fa5">Relational Depth Mode</text>
+          <line x1="468" y1="66" x2="588" y2="66" stroke="#4a7fa5" stroke-width="0.8" opacity="0.4"/>
 
-      <text x="420" y="92" font-size="9.5" fill="#2a2a2a" font-weight="500">Self present alongside part</text>
-      <text x="420" y="112" font-size="9" fill="#4a7fa5">Channel 5 (self-state): open</text>
-      <text x="420" y="132" font-size="9" fill="#4a7fa5">Context: aware</text>
-      <text x="420" y="152" font-size="9" fill="#4a7fa5">Self-energy: high</text>
-      <text x="420" y="172" font-size="9" fill="#4a7fa5">Policy: witnessed self-state</text>
+          <text x="420" y="92" font-size="9.5" fill="#2a2a2a" font-weight="500">Self present alongside part</text>
+          <text x="420" y="112" font-size="9" fill="#4a7fa5">Channel 5 (self-state): open</text>
+          <text x="420" y="132" font-size="9" fill="#4a7fa5">Context: aware</text>
+          <text x="420" y="152" font-size="9" fill="#4a7fa5">Self-energy: high</text>
+          <text x="420" y="172" font-size="9" fill="#4a7fa5">Policy: witnessed self-state</text>
 
-      <!-- Icon: Self containing part -->
-      <circle cx="528" cy="226" r="38" fill="none" stroke="#4a7fa5" stroke-width="1.5" stroke-dasharray="5,3"/>
-      <text x="528" y="198" text-anchor="middle" font-size="8" fill="#4a7fa5" font-weight="500">Self</text>
-      <circle cx="528" cy="234" r="18" fill="#2a2a2a" opacity="0.10"/>
-      <text x="528" y="238" text-anchor="middle" font-size="8" fill="#2a2a2a">Part</text>
-      <text x="528" y="274" text-anchor="middle" font-size="8" fill="#4a7fa5" font-style="italic">"A part of me is afraid"</text>
+          <circle cx="528" cy="226" r="38" fill="none" stroke="#4a7fa5" stroke-width="1.5" stroke-dasharray="5,3"/>
+          <text x="528" y="198" text-anchor="middle" font-size="8" fill="#4a7fa5" font-weight="500">Self</text>
+          <circle cx="528" cy="234" r="18" fill="#2a2a2a" opacity="0.10"/>
+          <text x="528" y="238" text-anchor="middle" font-size="8" fill="#2a2a2a">Part</text>
+          <text x="528" y="274" text-anchor="middle" font-size="8" fill="#4a7fa5" font-style="italic">"A part of me is afraid"</text>
 
-      <!-- ===== OUTCOME BOXES BELOW ===== -->
-      <rect x="50" y="310" width="200" height="44" rx="4" fill="#c45a3c" opacity="0.08" stroke="#c45a3c" stroke-width="1.2"/>
-      <text x="150" y="330" text-anchor="middle" font-size="10" font-weight="500" fill="#c45a3c">P(avoid) = 0.83</text>
-      <text x="150" y="346" text-anchor="middle" font-size="8" fill="#6a6a6a">context-blind, self-sealing</text>
+          <rect x="50" y="310" width="200" height="44" rx="4" fill="#c45a3c" opacity="0.08" stroke="#c45a3c" stroke-width="1.2"/>
+          <text x="150" y="330" text-anchor="middle" font-size="10" font-weight="500" fill="#c45a3c">P(avoid) = 0.83</text>
+          <text x="150" y="346" text-anchor="middle" font-size="8" fill="#6a6a6a">context-blind, self-sealing</text>
 
-      <rect x="428" y="310" width="200" height="44" rx="4" fill="#4a7fa5" opacity="0.08" stroke="#4a7fa5" stroke-width="1.2"/>
-      <text x="528" y="330" text-anchor="middle" font-size="10" font-weight="500" fill="#4a7fa5">P(stay) = 0.98</text>
-      <text x="528" y="346" text-anchor="middle" font-size="8" fill="#6a6a6a">context-aware, witnessed</text>
+          <rect x="428" y="310" width="200" height="44" rx="4" fill="#4a7fa5" opacity="0.08" stroke="#4a7fa5" stroke-width="1.2"/>
+          <text x="528" y="330" text-anchor="middle" font-size="10" font-weight="500" fill="#4a7fa5">P(stay) = 0.98</text>
+          <text x="528" y="346" text-anchor="middle" font-size="8" fill="#6a6a6a">context-aware, witnessed</text>
 
-      <!-- ===== KEY INSIGHT BOX ===== -->
-      <rect x="140" y="376" width="400" height="32" rx="4" fill="none" stroke="#c45a3c" stroke-width="1.5"/>
-      <text x="340" y="396" text-anchor="middle" font-size="9.5" fill="#c45a3c" font-weight="500">Resolution via relational prediction error, not threat updating alone</text>
-    </svg>
+          <rect x="140" y="376" width="400" height="32" rx="4" fill="none" stroke="#c45a3c" stroke-width="1.5"/>
+          <text x="340" y="396" text-anchor="middle" font-size="9.5" fill="#c45a3c" font-weight="500">Resolution via relational prediction error, not threat updating alone</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Critique -->
+    <div class="critique-note">
+      <strong>Critique</strong>
+      The five-line property lists in each box make the image read like a specification table rather than a visual. The icons below (Part alone vs Self containing Part) are the strongest element but get buried. v2 eliminates the property lists entirely, makes the icons the main event, and puts the key shift ("I am afraid" vs "A part of me is afraid") as the only text within each frame.
+      <span class="taxonomy">Type: Before/after ontology image</span>
+      <div class="checks">
+        <span class="pass">One-move: PASS</span> &middot;
+        <span class="fail">Thumbnail: FAIL (text walls)</span> &middot;
+        <span class="pass">Reading-path: PASS (left-arrow-right)</span> &middot;
+        <span class="pass">Fidelity: PASS</span>
+      </div>
+    </div>
+
+    <!-- V2 -->
+    <div class="comparison-col">
+      <span class="version-label v2-label">v2</span>
+      <div class="visual-container">
+        <svg viewBox="0 0 520 300" width="520" height="300" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arr-mode-v2" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+              <path d="M0,0 L10,3.5 L0,7" fill="none" stroke="#2a2a2a" stroke-width="1.2"/>
+            </marker>
+          </defs>
+
+          <!-- LEFT: Capture Mode -->
+          <rect x="20" y="20" width="180" height="210" rx="6" fill="#c45a3c" opacity="0.05" stroke="#c45a3c" stroke-width="2"/>
+          <text x="110" y="46" text-anchor="middle" font-size="12" font-weight="700" fill="#c45a3c">Capture</text>
+
+          <!-- Large part circle filling the frame -->
+          <circle cx="110" cy="130" r="50" fill="#2a2a2a" opacity="0.10"/>
+          <circle cx="110" cy="130" r="34" fill="#2a2a2a" opacity="0.15"/>
+          <text x="110" y="134" text-anchor="middle" font-size="11" fill="#2a2a2a" font-weight="600">Part</text>
+          <text x="110" y="200" text-anchor="middle" font-size="9" fill="#6a6a6a" font-style="italic">"I am afraid"</text>
+
+          <!-- CENTER: Arrow -->
+          <line x1="210" y1="125" x2="300" y2="125" stroke="#2a2a2a" stroke-width="2.5" marker-end="url(#arr-mode-v2)"/>
+          <text x="255" y="115" text-anchor="middle" font-size="9" fill="#2a2a2a" font-weight="500">Self-energy</text>
+
+          <!-- RIGHT: Relational Depth -->
+          <rect x="320" y="20" width="180" height="210" rx="6" fill="#4a7fa5" opacity="0.05" stroke="#4a7fa5" stroke-width="2"/>
+          <text x="410" y="46" text-anchor="middle" font-size="12" font-weight="700" fill="#4a7fa5">Witnessed</text>
+
+          <!-- Self containing part -->
+          <circle cx="410" cy="120" r="52" fill="none" stroke="#4a7fa5" stroke-width="2" stroke-dasharray="6,3"/>
+          <text x="410" y="85" text-anchor="middle" font-size="9" fill="#4a7fa5" font-weight="500">Self</text>
+          <circle cx="410" cy="135" r="22" fill="#2a2a2a" opacity="0.10"/>
+          <text x="410" y="139" text-anchor="middle" font-size="9" fill="#2a2a2a">Part</text>
+          <text x="410" y="200" text-anchor="middle" font-size="9" fill="#4a7fa5" font-style="italic">"A part of me is afraid"</text>
+
+          <!-- Outcome comparison: minimal -->
+          <text x="110" y="256" text-anchor="middle" font-size="11" font-weight="600" fill="#c45a3c">P(avoid) = .83</text>
+          <text x="410" y="256" text-anchor="middle" font-size="11" font-weight="600" fill="#4a7fa5">P(stay) = .98</text>
+
+          <!-- Bottom insight -->
+          <text x="260" y="288" text-anchor="middle" font-size="8.5" fill="#c45a3c" font-weight="500">Resolution via relational prediction error</text>
+        </svg>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1059,90 +1077,154 @@
 <!-- ============================================================ -->
 <section class="visual-section">
   <div class="visual-header">
-    <span class="visual-number">Candidate 12</span>
+    <span class="visual-number">Candidate 7</span>
     <h2 class="visual-title">Exposure vs IFS: Mechanism Comparison</h2>
     <p class="visual-description">Two update dynamics side by side &mdash; gradual threat updating vs identity-level cascade after self-state crosses threshold. <em>Corresponds to Chamberlin ct_mechanism_comparison.png.</em></p>
   </div>
-  <div class="visual-container">
-    <svg viewBox="0 0 680 380" width="680" height="380" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <marker id="arr-axis12" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-          <path d="M0,0 L8,3 L0,6" fill="none" stroke="#2a2a2a" stroke-width="1"/>
-        </marker>
-      </defs>
+  <div class="comparison-row">
+    <!-- V1 -->
+    <div class="comparison-col">
+      <span class="version-label">v1</span>
+      <div class="visual-container">
+        <svg viewBox="0 0 680 380" width="680" height="380" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arr-axis12" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+              <path d="M0,0 L8,3 L0,6" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+            </marker>
+          </defs>
 
-      <!-- ===== LEFT PANEL: Exposure ===== -->
-      <text x="170" y="28" text-anchor="middle" font-size="12" font-weight="600" fill="#4a7fa5">Exposure: Gradual Threat Updating</text>
-      <text x="170" y="44" text-anchor="middle" font-size="8.5" fill="#6a6a6a" font-style="italic">P(avoid) decreases slowly; self-state barely moves</text>
+          <text x="170" y="28" text-anchor="middle" font-size="12" font-weight="600" fill="#4a7fa5">Exposure: Gradual Threat Updating</text>
+          <text x="170" y="44" text-anchor="middle" font-size="8.5" fill="#6a6a6a" font-style="italic">P(avoid) decreases slowly; self-state barely moves</text>
 
-      <!-- Axes -->
-      <line x1="60" y1="70" x2="60" y2="290" stroke="#2a2a2a" stroke-width="1.2"/>
-      <line x1="60" y1="290" x2="310" y2="290" stroke="#2a2a2a" stroke-width="1.2" marker-end="url(#arr-axis12)"/>
-      <text x="30" y="180" text-anchor="middle" font-size="8" fill="#2a2a2a" font-weight="500" transform="rotate(-90,30,180)">P(avoid)</text>
-      <text x="185" y="310" text-anchor="middle" font-size="8" fill="#2a2a2a">Trials</text>
+          <line x1="60" y1="70" x2="60" y2="290" stroke="#2a2a2a" stroke-width="1.2"/>
+          <line x1="60" y1="290" x2="310" y2="290" stroke="#2a2a2a" stroke-width="1.2" marker-end="url(#arr-axis12)"/>
+          <text x="30" y="180" text-anchor="middle" font-size="8" fill="#2a2a2a" font-weight="500" transform="rotate(-90,30,180)">P(avoid)</text>
+          <text x="185" y="310" text-anchor="middle" font-size="8" fill="#2a2a2a">Trials</text>
 
-      <!-- Y ticks -->
-      <text x="52" y="74" text-anchor="end" font-size="7" fill="#6a6a6a">1.0</text>
-      <line x1="56" y1="70" x2="60" y2="70" stroke="#6a6a6a" stroke-width="0.5"/>
-      <text x="52" y="184" text-anchor="end" font-size="7" fill="#6a6a6a">0.5</text>
-      <line x1="56" y1="180" x2="60" y2="180" stroke="#6a6a6a" stroke-width="0.5"/>
-      <text x="52" y="294" text-anchor="end" font-size="7" fill="#6a6a6a">0.0</text>
+          <text x="52" y="74" text-anchor="end" font-size="7" fill="#6a6a6a">1.0</text>
+          <line x1="56" y1="70" x2="60" y2="70" stroke="#6a6a6a" stroke-width="0.5"/>
+          <text x="52" y="184" text-anchor="end" font-size="7" fill="#6a6a6a">0.5</text>
+          <line x1="56" y1="180" x2="60" y2="180" stroke="#6a6a6a" stroke-width="0.5"/>
+          <text x="52" y="294" text-anchor="end" font-size="7" fill="#6a6a6a">0.0</text>
 
-      <!-- X ticks -->
-      <text x="60" y="304" text-anchor="middle" font-size="7" fill="#6a6a6a">0</text>
-      <text x="185" y="304" text-anchor="middle" font-size="7" fill="#6a6a6a">50</text>
-      <text x="300" y="304" text-anchor="middle" font-size="7" fill="#6a6a6a">100</text>
+          <text x="60" y="304" text-anchor="middle" font-size="7" fill="#6a6a6a">0</text>
+          <text x="185" y="304" text-anchor="middle" font-size="7" fill="#6a6a6a">50</text>
+          <text x="300" y="304" text-anchor="middle" font-size="7" fill="#6a6a6a">100</text>
 
-      <!-- P(avoid) curve: gradual decline (blue) -->
-      <path d="M 60,88 Q 120,96 150,120 Q 185,150 220,175 Q 260,202 300,220" fill="none" stroke="#4a7fa5" stroke-width="2.5"/>
-      <text x="270" y="210" font-size="8" fill="#4a7fa5" font-weight="500">P(avoid)</text>
+          <path d="M 60,88 Q 120,96 150,120 Q 185,150 220,175 Q 260,202 300,220" fill="none" stroke="#4a7fa5" stroke-width="2.5"/>
+          <text x="270" y="210" font-size="8" fill="#4a7fa5" font-weight="500">P(avoid)</text>
 
-      <!-- Self-state: barely moves (dashed gray) -->
-      <path d="M 60,264 Q 120,262 185,258 Q 250,254 300,250" fill="none" stroke="#6a6a6a" stroke-width="1.2" stroke-dasharray="4,3"/>
-      <text x="270" y="244" font-size="7.5" fill="#6a6a6a">self-state</text>
+          <path d="M 60,264 Q 120,262 185,258 Q 250,254 300,250" fill="none" stroke="#6a6a6a" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <text x="270" y="244" font-size="7.5" fill="#6a6a6a">self-state</text>
 
-      <!-- ===== DIVIDER ===== -->
-      <line x1="340" y1="20" x2="340" y2="330" stroke="#d8d6d0" stroke-width="1"/>
+          <line x1="340" y1="20" x2="340" y2="330" stroke="#d8d6d0" stroke-width="1"/>
 
-      <!-- ===== RIGHT PANEL: IFS (Relational Depth) ===== -->
-      <text x="510" y="28" text-anchor="middle" font-size="12" font-weight="600" fill="#c45a3c">IFS: Identity-Level Cascade</text>
-      <text x="510" y="44" text-anchor="middle" font-size="8.5" fill="#6a6a6a" font-style="italic">P(avoid) drops sharply when self-state crosses threshold</text>
+          <text x="510" y="28" text-anchor="middle" font-size="12" font-weight="600" fill="#c45a3c">IFS: Identity-Level Cascade</text>
+          <text x="510" y="44" text-anchor="middle" font-size="8.5" fill="#6a6a6a" font-style="italic">P(avoid) drops sharply when self-state crosses threshold</text>
 
-      <!-- Axes -->
-      <line x1="390" y1="70" x2="390" y2="290" stroke="#2a2a2a" stroke-width="1.2"/>
-      <line x1="390" y1="290" x2="640" y2="290" stroke="#2a2a2a" stroke-width="1.2" marker-end="url(#arr-axis12)"/>
-      <text x="360" y="180" text-anchor="middle" font-size="8" fill="#2a2a2a" font-weight="500" transform="rotate(-90,360,180)">P(avoid)</text>
-      <text x="515" y="310" text-anchor="middle" font-size="8" fill="#2a2a2a">Trials</text>
+          <line x1="390" y1="70" x2="390" y2="290" stroke="#2a2a2a" stroke-width="1.2"/>
+          <line x1="390" y1="290" x2="640" y2="290" stroke="#2a2a2a" stroke-width="1.2" marker-end="url(#arr-axis12)"/>
+          <text x="360" y="180" text-anchor="middle" font-size="8" fill="#2a2a2a" font-weight="500" transform="rotate(-90,360,180)">P(avoid)</text>
+          <text x="515" y="310" text-anchor="middle" font-size="8" fill="#2a2a2a">Trials</text>
 
-      <!-- Y ticks -->
-      <text x="382" y="74" text-anchor="end" font-size="7" fill="#6a6a6a">1.0</text>
-      <line x1="386" y1="70" x2="390" y2="70" stroke="#6a6a6a" stroke-width="0.5"/>
-      <text x="382" y="184" text-anchor="end" font-size="7" fill="#6a6a6a">0.5</text>
-      <line x1="386" y1="180" x2="390" y2="180" stroke="#6a6a6a" stroke-width="0.5"/>
-      <text x="382" y="294" text-anchor="end" font-size="7" fill="#6a6a6a">0.0</text>
+          <text x="382" y="74" text-anchor="end" font-size="7" fill="#6a6a6a">1.0</text>
+          <line x1="386" y1="70" x2="390" y2="70" stroke="#6a6a6a" stroke-width="0.5"/>
+          <text x="382" y="184" text-anchor="end" font-size="7" fill="#6a6a6a">0.5</text>
+          <line x1="386" y1="180" x2="390" y2="180" stroke="#6a6a6a" stroke-width="0.5"/>
+          <text x="382" y="294" text-anchor="end" font-size="7" fill="#6a6a6a">0.0</text>
 
-      <!-- X ticks -->
-      <text x="390" y="304" text-anchor="middle" font-size="7" fill="#6a6a6a">0</text>
-      <text x="515" y="304" text-anchor="middle" font-size="7" fill="#6a6a6a">50</text>
-      <text x="630" y="304" text-anchor="middle" font-size="7" fill="#6a6a6a">100</text>
+          <text x="390" y="304" text-anchor="middle" font-size="7" fill="#6a6a6a">0</text>
+          <text x="515" y="304" text-anchor="middle" font-size="7" fill="#6a6a6a">50</text>
+          <text x="630" y="304" text-anchor="middle" font-size="7" fill="#6a6a6a">100</text>
 
-      <!-- P(avoid): flat high, then sharp step drop (green/warm) -->
-      <path d="M 390,88 L 500,88 Q 508,88 512,140 Q 516,220 520,268 L 630,268" fill="none" stroke="#c45a3c" stroke-width="2.5"/>
-      <text x="600" y="258" font-size="8" fill="#c45a3c" font-weight="500">P(avoid)</text>
+          <path d="M 390,88 L 500,88 Q 508,88 512,140 Q 516,220 520,268 L 630,268" fill="none" stroke="#c45a3c" stroke-width="2.5"/>
+          <text x="600" y="258" font-size="8" fill="#c45a3c" font-weight="500">P(avoid)</text>
 
-      <!-- Self-state: rises steeply then plateaus (dashed green) -->
-      <path d="M 390,264 Q 430,262 470,250 Q 498,230 510,130 Q 516,90 520,82 L 630,82" fill="none" stroke="#4a7fa5" stroke-width="1.5" stroke-dasharray="4,3"/>
-      <text x="600" y="76" font-size="7.5" fill="#4a7fa5">self-state</text>
+          <path d="M 390,264 Q 430,262 470,250 Q 498,230 510,130 Q 516,90 520,82 L 630,82" fill="none" stroke="#4a7fa5" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <text x="600" y="76" font-size="7.5" fill="#4a7fa5">self-state</text>
 
-      <!-- Threshold line -->
-      <line x1="390" y1="180" x2="640" y2="180" stroke="#c45a3c" stroke-width="0.8" stroke-dasharray="3,4" opacity="0.5"/>
-      <text x="642" y="176" font-size="7" fill="#c45a3c" opacity="0.7">threshold</text>
+          <line x1="390" y1="180" x2="640" y2="180" stroke="#c45a3c" stroke-width="0.8" stroke-dasharray="3,4" opacity="0.5"/>
+          <text x="642" y="176" font-size="7" fill="#c45a3c" opacity="0.7">threshold</text>
 
-      <!-- Annotation arrow at cascade point -->
-      <line x1="510" y1="330" x2="510" y2="295" stroke="#c45a3c" stroke-width="1" marker-end="url(#arr-axis12)"/>
-      <text x="510" y="346" text-anchor="middle" font-size="8" fill="#c45a3c" font-weight="500">Self-state revision</text>
-      <text x="510" y="358" text-anchor="middle" font-size="8" fill="#c45a3c">triggers cascade</text>
-    </svg>
+          <line x1="510" y1="330" x2="510" y2="295" stroke="#c45a3c" stroke-width="1" marker-end="url(#arr-axis12)"/>
+          <text x="510" y="346" text-anchor="middle" font-size="8" fill="#c45a3c" font-weight="500">Self-state revision</text>
+          <text x="510" y="358" text-anchor="middle" font-size="8" fill="#c45a3c">triggers cascade</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Critique -->
+    <div class="critique-note">
+      <strong>Critique</strong>
+      This is already one of the strongest candidates -- two clean panels, clear curves. The main weakness is that the right panel's dramatic step function does not visually dominate; the two panels are sized identically. v2 makes the right panel slightly taller, thickens the cascade drop, and adds a subtle shaded region at the cascade point to make the step-change unmissable at thumbnail. Also removes the bottom annotation to reduce clutter.
+      <span class="taxonomy">Type: Bridge image (maps two mechanisms side by side)</span>
+      <div class="checks">
+        <span class="pass">One-move: PASS</span> &middot;
+        <span class="pass">Thumbnail: PASS (barely -- curves readable)</span> &middot;
+        <span class="pass">Reading-path: PASS (left then right)</span> &middot;
+        <span class="pass">Fidelity: PASS</span>
+      </div>
+    </div>
+
+    <!-- V2 -->
+    <div class="comparison-col">
+      <span class="version-label v2-label">v2</span>
+      <div class="visual-container">
+        <svg viewBox="0 0 640 340" width="640" height="340" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arr-axis12-v2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+              <path d="M0,0 L8,3 L0,6" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+            </marker>
+          </defs>
+
+          <!-- LEFT PANEL: Exposure (compact) -->
+          <text x="150" y="22" text-anchor="middle" font-size="11" font-weight="600" fill="#4a7fa5">Exposure</text>
+
+          <line x1="50" y1="44" x2="50" y2="250" stroke="#2a2a2a" stroke-width="1"/>
+          <line x1="50" y1="250" x2="270" y2="250" stroke="#2a2a2a" stroke-width="1" marker-end="url(#arr-axis12-v2)"/>
+          <text x="50" y="40" text-anchor="middle" font-size="7" fill="#6a6a6a">1.0</text>
+          <text x="50" y="262" text-anchor="middle" font-size="7" fill="#6a6a6a">0</text>
+
+          <!-- P(avoid): gradual decline -->
+          <path d="M 50,62 Q 100,70 130,95 Q 165,130 200,155 Q 240,180 265,195" fill="none" stroke="#4a7fa5" stroke-width="2.5"/>
+          <text x="240" y="186" font-size="8" fill="#4a7fa5" font-weight="500">P(avoid)</text>
+
+          <!-- Self-state: flat -->
+          <path d="M 50,230 Q 130,228 200,225 Q 250,223 265,222" fill="none" stroke="#6a6a6a" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <text x="240" y="216" font-size="7" fill="#6a6a6a">self-state</text>
+
+          <text x="150" y="282" text-anchor="middle" font-size="8" fill="#6a6a6a" font-style="italic">gradual, no cascade</text>
+
+          <!-- DIVIDER -->
+          <line x1="305" y1="14" x2="305" y2="290" stroke="#d8d6d0" stroke-width="1"/>
+
+          <!-- RIGHT PANEL: IFS (larger, dominant) -->
+          <text x="470" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#c45a3c">IFS: Identity Cascade</text>
+
+          <line x1="340" y1="44" x2="340" y2="260" stroke="#2a2a2a" stroke-width="1"/>
+          <line x1="340" y1="260" x2="610" y2="260" stroke="#2a2a2a" stroke-width="1" marker-end="url(#arr-axis12-v2)"/>
+          <text x="340" y="40" text-anchor="middle" font-size="7" fill="#6a6a6a">1.0</text>
+          <text x="340" y="272" text-anchor="middle" font-size="7" fill="#6a6a6a">0</text>
+
+          <!-- Threshold line -->
+          <line x1="340" y1="152" x2="610" y2="152" stroke="#c45a3c" stroke-width="0.8" stroke-dasharray="3,4" opacity="0.4"/>
+          <text x="618" y="150" font-size="6.5" fill="#c45a3c" opacity="0.6">threshold</text>
+
+          <!-- Cascade shaded region -->
+          <rect x="466" y="44" width="24" height="216" rx="2" fill="#c45a3c" opacity="0.06"/>
+
+          <!-- P(avoid): flat then dramatic step -->
+          <path d="M 340,62 L 466,62 Q 472,62 475,110 Q 478,200 480,242 L 600,242" fill="none" stroke="#c45a3c" stroke-width="3.5"/>
+          <text x="570" y="234" font-size="8" fill="#c45a3c" font-weight="600">P(avoid)</text>
+
+          <!-- Self-state: rises steeply -->
+          <path d="M 340,232 Q 380,230 430,218 Q 460,198 472,110 Q 476,66 480,58 L 600,58" fill="none" stroke="#4a7fa5" stroke-width="2" stroke-dasharray="5,3"/>
+          <text x="570" y="52" font-size="7.5" fill="#4a7fa5" font-weight="500">self-state</text>
+
+          <text x="470" y="300" text-anchor="middle" font-size="9" fill="#c45a3c" font-weight="500">Self-state revision triggers cascade</text>
+        </svg>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1155,109 +1237,150 @@
 <!-- ============================================================ -->
 <section class="visual-section">
   <div class="visual-header">
-    <span class="visual-number">Candidate 13</span>
+    <span class="visual-number">Candidate 8</span>
     <h2 class="visual-title">Free-Choice Probe: Before vs After Contact</h2>
     <p class="visual-description">P(avoid) before and at probe across five conditions &mdash; dramatic drop only under relational depth, with safety specificity preserved. <em>Corresponds to Chamberlin ct_before_after.png.</em></p>
   </div>
-  <div class="visual-container">
-    <svg viewBox="0 0 680 420" width="680" height="420" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <marker id="arr-axis13" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-          <path d="M0,0 L8,3 L0,6" fill="none" stroke="#2a2a2a" stroke-width="1"/>
-        </marker>
-      </defs>
+  <div class="comparison-row">
+    <!-- V1 -->
+    <div class="comparison-col">
+      <span class="version-label">v1</span>
+      <div class="visual-container">
+        <svg viewBox="0 0 680 420" width="680" height="420" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arr-axis13" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+              <path d="M0,0 L8,3 L0,6" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+            </marker>
+          </defs>
 
-      <!-- Title -->
-      <text x="340" y="24" text-anchor="middle" font-size="12" font-weight="600" fill="#2a2a2a">P(avoid) Before Contact vs At Probe</text>
+          <text x="340" y="24" text-anchor="middle" font-size="12" font-weight="600" fill="#2a2a2a">P(avoid) Before Contact vs At Probe</text>
 
-      <!-- Y axis -->
-      <line x1="80" y1="50" x2="80" y2="330" stroke="#2a2a2a" stroke-width="1.2"/>
-      <text x="28" y="190" text-anchor="middle" font-size="9" fill="#2a2a2a" font-weight="500" transform="rotate(-90,28,190)">P(avoid)</text>
+          <line x1="80" y1="50" x2="80" y2="330" stroke="#2a2a2a" stroke-width="1.2"/>
+          <text x="28" y="190" text-anchor="middle" font-size="9" fill="#2a2a2a" font-weight="500" transform="rotate(-90,28,190)">P(avoid)</text>
 
-      <!-- Y ticks -->
-      <text x="72" y="58" text-anchor="end" font-size="7.5" fill="#6a6a6a">1.0</text>
-      <line x1="76" y1="54" x2="80" y2="54" stroke="#d8d6d0" stroke-width="0.5"/>
-      <line x1="80" y1="54" x2="640" y2="54" stroke="#d8d6d0" stroke-width="0.3" stroke-dasharray="2,4"/>
+          <text x="72" y="58" text-anchor="end" font-size="7.5" fill="#6a6a6a">1.0</text>
+          <line x1="76" y1="54" x2="80" y2="54" stroke="#d8d6d0" stroke-width="0.5"/>
+          <line x1="80" y1="54" x2="640" y2="54" stroke="#d8d6d0" stroke-width="0.3" stroke-dasharray="2,4"/>
 
-      <text x="72" y="128" text-anchor="end" font-size="7.5" fill="#6a6a6a">0.75</text>
-      <line x1="76" y1="123" x2="80" y2="123" stroke="#d8d6d0" stroke-width="0.5"/>
-      <line x1="80" y1="123" x2="640" y2="123" stroke="#d8d6d0" stroke-width="0.3" stroke-dasharray="2,4"/>
+          <text x="72" y="128" text-anchor="end" font-size="7.5" fill="#6a6a6a">0.75</text>
+          <line x1="76" y1="123" x2="80" y2="123" stroke="#d8d6d0" stroke-width="0.5"/>
+          <line x1="80" y1="123" x2="640" y2="123" stroke="#d8d6d0" stroke-width="0.3" stroke-dasharray="2,4"/>
 
-      <text x="72" y="198" text-anchor="end" font-size="7.5" fill="#6a6a6a">0.50</text>
-      <line x1="76" y1="192" x2="80" y2="192" stroke="#d8d6d0" stroke-width="0.5"/>
-      <line x1="80" y1="192" x2="640" y2="192" stroke="#d8d6d0" stroke-width="0.3" stroke-dasharray="2,4"/>
+          <text x="72" y="198" text-anchor="end" font-size="7.5" fill="#6a6a6a">0.50</text>
+          <line x1="76" y1="192" x2="80" y2="192" stroke="#d8d6d0" stroke-width="0.5"/>
+          <line x1="80" y1="192" x2="640" y2="192" stroke="#d8d6d0" stroke-width="0.3" stroke-dasharray="2,4"/>
 
-      <text x="72" y="268" text-anchor="end" font-size="7.5" fill="#6a6a6a">0.25</text>
-      <line x1="76" y1="261" x2="80" y2="261" stroke="#d8d6d0" stroke-width="0.5"/>
-      <line x1="80" y1="261" x2="640" y2="261" stroke="#d8d6d0" stroke-width="0.3" stroke-dasharray="2,4"/>
+          <text x="72" y="268" text-anchor="end" font-size="7.5" fill="#6a6a6a">0.25</text>
+          <line x1="76" y1="261" x2="80" y2="261" stroke="#d8d6d0" stroke-width="0.5"/>
+          <line x1="80" y1="261" x2="640" y2="261" stroke="#d8d6d0" stroke-width="0.3" stroke-dasharray="2,4"/>
 
-      <text x="72" y="334" text-anchor="end" font-size="7.5" fill="#6a6a6a">0.0</text>
+          <text x="72" y="334" text-anchor="end" font-size="7.5" fill="#6a6a6a">0.0</text>
 
-      <!-- X axis -->
-      <line x1="80" y1="330" x2="660" y2="330" stroke="#2a2a2a" stroke-width="1.2"/>
+          <line x1="80" y1="330" x2="660" y2="330" stroke="#2a2a2a" stroke-width="1.2"/>
 
-      <!-- === CONDITION 1: Baseline === -->
-      <!-- Before: 0.83 => y=54 + (1-0.83)*276 = 54+47 = 101 -->
-      <!-- After:  0.80 => y=54 + (1-0.80)*276 = 54+55 = 109 -->
-      <rect x="100" y="101" width="24" height="229" rx="2" fill="#4a7fa5" opacity="0.7"/>
-      <rect x="128" y="109" width="24" height="221" rx="2" fill="#c45a3c" opacity="0.7"/>
-      <text x="126" y="352" text-anchor="middle" font-size="8.5" fill="#2a2a2a" font-weight="500">Baseline</text>
-      <text x="112" y="96" text-anchor="middle" font-size="7" fill="#4a7fa5">.83</text>
-      <text x="140" y="104" text-anchor="middle" font-size="7" fill="#c45a3c">.80</text>
+          <rect x="100" y="101" width="24" height="229" rx="2" fill="#4a7fa5" opacity="0.7"/>
+          <rect x="128" y="109" width="24" height="221" rx="2" fill="#c45a3c" opacity="0.7"/>
+          <text x="126" y="352" text-anchor="middle" font-size="8.5" fill="#2a2a2a" font-weight="500">Baseline</text>
+          <text x="112" y="96" text-anchor="middle" font-size="7" fill="#4a7fa5">.83</text>
+          <text x="140" y="104" text-anchor="middle" font-size="7" fill="#c45a3c">.80</text>
 
-      <!-- === CONDITION 2: Exposure === -->
-      <!-- Before: 0.83 => y=101 -->
-      <!-- After:  0.51 => y=54 + (1-0.51)*276 = 54+135 = 189 -->
-      <rect x="200" y="101" width="24" height="229" rx="2" fill="#4a7fa5" opacity="0.7"/>
-      <rect x="228" y="189" width="24" height="141" rx="2" fill="#c45a3c" opacity="0.7"/>
-      <text x="226" y="352" text-anchor="middle" font-size="8.5" fill="#2a2a2a" font-weight="500">Exposure</text>
-      <text x="212" y="96" text-anchor="middle" font-size="7" fill="#4a7fa5">.83</text>
-      <text x="240" y="184" text-anchor="middle" font-size="7" fill="#c45a3c">.51</text>
+          <rect x="200" y="101" width="24" height="229" rx="2" fill="#4a7fa5" opacity="0.7"/>
+          <rect x="228" y="189" width="24" height="141" rx="2" fill="#c45a3c" opacity="0.7"/>
+          <text x="226" y="352" text-anchor="middle" font-size="8.5" fill="#2a2a2a" font-weight="500">Exposure</text>
+          <text x="212" y="96" text-anchor="middle" font-size="7" fill="#4a7fa5">.83</text>
+          <text x="240" y="184" text-anchor="middle" font-size="7" fill="#c45a3c">.51</text>
 
-      <!-- === CONDITION 3: Informational === -->
-      <!-- Before: 0.83 => y=101 -->
-      <!-- After:  0.03 => y=54 + (1-0.03)*276 = 54+268 = 322 -->
-      <rect x="300" y="101" width="24" height="229" rx="2" fill="#4a7fa5" opacity="0.7"/>
-      <rect x="328" y="322" width="24" height="8" rx="2" fill="#c45a3c" opacity="0.7"/>
-      <text x="326" y="352" text-anchor="middle" font-size="8.5" fill="#2a2a2a" font-weight="500">Informational</text>
-      <text x="312" y="96" text-anchor="middle" font-size="7" fill="#4a7fa5">.83</text>
-      <text x="340" y="316" text-anchor="middle" font-size="7" fill="#c45a3c">.03</text>
+          <rect x="300" y="101" width="24" height="229" rx="2" fill="#4a7fa5" opacity="0.7"/>
+          <rect x="328" y="322" width="24" height="8" rx="2" fill="#c45a3c" opacity="0.7"/>
+          <text x="326" y="352" text-anchor="middle" font-size="8.5" fill="#2a2a2a" font-weight="500">Informational</text>
+          <text x="312" y="96" text-anchor="middle" font-size="7" fill="#4a7fa5">.83</text>
+          <text x="340" y="316" text-anchor="middle" font-size="7" fill="#c45a3c">.03</text>
 
-      <!-- === CONDITION 4: Relational Depth === -->
-      <!-- Before: 0.83 => y=101 -->
-      <!-- After:  0.02 => y=54 + (1-0.02)*276 = 54+270 = 324 -->
-      <rect x="400" y="101" width="24" height="229" rx="2" fill="#4a7fa5" opacity="0.7"/>
-      <rect x="428" y="324" width="24" height="6" rx="2" fill="#c45a3c" opacity="0.7"/>
-      <text x="426" y="352" text-anchor="middle" font-size="8" fill="#c45a3c" font-weight="600">Relational</text>
-      <text x="426" y="364" text-anchor="middle" font-size="8" fill="#c45a3c" font-weight="600">Depth</text>
-      <text x="412" y="96" text-anchor="middle" font-size="7" fill="#4a7fa5">.83</text>
-      <text x="440" y="316" text-anchor="middle" font-size="7" fill="#c45a3c">.02</text>
+          <rect x="400" y="101" width="24" height="229" rx="2" fill="#4a7fa5" opacity="0.7"/>
+          <rect x="428" y="324" width="24" height="6" rx="2" fill="#c45a3c" opacity="0.7"/>
+          <text x="426" y="352" text-anchor="middle" font-size="8" fill="#c45a3c" font-weight="600">Relational</text>
+          <text x="426" y="364" text-anchor="middle" font-size="8" fill="#c45a3c" font-weight="600">Depth</text>
+          <text x="412" y="96" text-anchor="middle" font-size="7" fill="#4a7fa5">.83</text>
+          <text x="440" y="316" text-anchor="middle" font-size="7" fill="#c45a3c">.02</text>
 
-      <!-- Dramatic drop annotation -->
-      <line x1="470" y1="101" x2="470" y2="324" stroke="#c45a3c" stroke-width="1" stroke-dasharray="3,2"/>
-      <path d="M 458,120 L 470,120" stroke="#c45a3c" stroke-width="0.8"/>
-      <path d="M 458,310 L 470,310" stroke="#c45a3c" stroke-width="0.8"/>
+          <line x1="470" y1="101" x2="470" y2="324" stroke="#c45a3c" stroke-width="1" stroke-dasharray="3,2"/>
+          <path d="M 458,120 L 470,120" stroke="#c45a3c" stroke-width="0.8"/>
+          <path d="M 458,310 L 470,310" stroke="#c45a3c" stroke-width="0.8"/>
 
-      <!-- === CONDITION 5: Real Danger === -->
-      <!-- Before: 0.83 => y=101 -->
-      <!-- After:  0.85 => y=54 + (1-0.85)*276 = 54+41 = 95 -->
-      <rect x="520" y="101" width="24" height="229" rx="2" fill="#4a7fa5" opacity="0.7"/>
-      <rect x="548" y="95" width="24" height="235" rx="2" fill="#c45a3c" opacity="0.7"/>
-      <text x="546" y="352" text-anchor="middle" font-size="8.5" fill="#2a2a2a" font-weight="500">Real</text>
-      <text x="546" y="364" text-anchor="middle" font-size="8.5" fill="#2a2a2a" font-weight="500">Danger</text>
-      <text x="532" y="96" text-anchor="middle" font-size="7" fill="#4a7fa5">.83</text>
-      <text x="560" y="90" text-anchor="middle" font-size="7" fill="#c45a3c">.85</text>
+          <rect x="520" y="101" width="24" height="229" rx="2" fill="#4a7fa5" opacity="0.7"/>
+          <rect x="548" y="95" width="24" height="235" rx="2" fill="#c45a3c" opacity="0.7"/>
+          <text x="546" y="352" text-anchor="middle" font-size="8.5" fill="#2a2a2a" font-weight="500">Real</text>
+          <text x="546" y="364" text-anchor="middle" font-size="8.5" fill="#2a2a2a" font-weight="500">Danger</text>
+          <text x="532" y="96" text-anchor="middle" font-size="7" fill="#4a7fa5">.83</text>
+          <text x="560" y="90" text-anchor="middle" font-size="7" fill="#c45a3c">.85</text>
 
-      <!-- Legend -->
-      <rect x="480" y="56" width="14" height="10" rx="1" fill="#4a7fa5" opacity="0.7"/>
-      <text x="500" y="65" font-size="8" fill="#2a2a2a">Before contact</text>
-      <rect x="560" y="56" width="14" height="10" rx="1" fill="#c45a3c" opacity="0.7"/>
-      <text x="580" y="65" font-size="8" fill="#2a2a2a">At probe</text>
+          <rect x="480" y="56" width="14" height="10" rx="1" fill="#4a7fa5" opacity="0.7"/>
+          <text x="500" y="65" font-size="8" fill="#2a2a2a">Before contact</text>
+          <rect x="560" y="56" width="14" height="10" rx="1" fill="#c45a3c" opacity="0.7"/>
+          <text x="580" y="65" font-size="8" fill="#2a2a2a">At probe</text>
 
-      <!-- Safety specificity note -->
-      <rect x="140" y="384" width="400" height="28" rx="4" fill="none" stroke="#6a6a6a" stroke-width="1"/>
-      <text x="340" y="402" text-anchor="middle" font-size="8.5" fill="#6a6a6a">Safety specificity: Real Danger stays high &mdash; revision is context-appropriate, not indiscriminate</text>
-    </svg>
+          <rect x="140" y="384" width="400" height="28" rx="4" fill="none" stroke="#6a6a6a" stroke-width="1"/>
+          <text x="340" y="402" text-anchor="middle" font-size="8.5" fill="#6a6a6a">Safety specificity: Real Danger stays high &mdash; revision is context-appropriate, not indiscriminate</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Critique -->
+    <div class="critique-note">
+      <strong>Critique</strong>
+      Good data visualization, but the "before" bars are all identical (all .83), wasting visual real estate. Five conditions may be too many for a headline image. v2 reduces to three key conditions (Exposure, Relational Depth, Real Danger), shows only the "at probe" bars with a single reference line for the common baseline, and makes the relational depth bar visually dominant via width and color saturation.
+      <span class="taxonomy">Type: Three-condition architecture (as bar chart)</span>
+      <div class="checks">
+        <span class="pass">One-move: PASS</span> &middot;
+        <span class="fail">Thumbnail: FAIL (five bar pairs blur together)</span> &middot;
+        <span class="pass">Reading-path: PASS (left to right)</span> &middot;
+        <span class="pass">Fidelity: PASS</span>
+      </div>
+    </div>
+
+    <!-- V2 -->
+    <div class="comparison-col">
+      <span class="version-label v2-label">v2</span>
+      <div class="visual-container">
+        <svg viewBox="0 0 440 340" width="440" height="340" xmlns="http://www.w3.org/2000/svg">
+          <!-- Title -->
+          <text x="220" y="22" text-anchor="middle" font-size="11" font-weight="600" fill="#2a2a2a">P(avoid) at Free-Choice Probe</text>
+
+          <!-- Y axis -->
+          <line x1="70" y1="44" x2="70" y2="260" stroke="#2a2a2a" stroke-width="1"/>
+          <text x="60" y="52" text-anchor="end" font-size="7.5" fill="#6a6a6a">1.0</text>
+          <text x="60" y="264" text-anchor="end" font-size="7.5" fill="#6a6a6a">0.0</text>
+
+          <!-- Baseline reference line -->
+          <line x1="70" y1="80" x2="400" y2="80" stroke="#2a2a2a" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
+          <text x="404" y="78" font-size="7" fill="#6a6a6a">baseline .83</text>
+
+          <!-- X axis -->
+          <line x1="70" y1="260" x2="400" y2="260" stroke="#2a2a2a" stroke-width="1"/>
+
+          <!-- Exposure bar: .51 => y = 44 + (1-0.51)*216 = 44+106 = 150, height=110 -->
+          <rect x="100" y="150" width="50" height="110" rx="3" fill="#4a7fa5" opacity="0.6"/>
+          <text x="125" y="145" text-anchor="middle" font-size="9" fill="#4a7fa5" font-weight="600">.51</text>
+          <text x="125" y="282" text-anchor="middle" font-size="9" fill="#4a7fa5" font-weight="500">Exposure</text>
+
+          <!-- Relational Depth bar: .02 => y = 44 + (1-0.02)*216 = 44+212 = 256, height=4 -->
+          <rect x="195" y="256" width="70" height="4" rx="2" fill="#c45a3c" opacity="0.9"/>
+          <!-- Drop annotation -->
+          <line x1="230" y1="80" x2="230" y2="250" stroke="#c45a3c" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <text x="230" y="245" text-anchor="middle" font-size="10" fill="#c45a3c" font-weight="700">.02</text>
+          <text x="230" y="282" text-anchor="middle" font-size="10" fill="#c45a3c" font-weight="700">Relational</text>
+          <text x="230" y="296" text-anchor="middle" font-size="10" fill="#c45a3c" font-weight="700">Depth</text>
+
+          <!-- Real Danger bar: .85 => y = 44 + (1-0.85)*216 = 44+32 = 76, height=184 -->
+          <rect x="320" y="76" width="50" height="184" rx="3" fill="#2a2a2a" opacity="0.15"/>
+          <text x="345" y="71" text-anchor="middle" font-size="9" fill="#2a2a2a" font-weight="600">.85</text>
+          <text x="345" y="282" text-anchor="middle" font-size="9" fill="#6a6a6a" font-weight="500">Real Danger</text>
+
+          <!-- Safety specificity note -->
+          <text x="220" y="328" text-anchor="middle" font-size="8" fill="#6a6a6a" font-style="italic">Revision is context-appropriate, not indiscriminate</text>
+        </svg>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1270,94 +1393,136 @@
 <!-- ============================================================ -->
 <section class="visual-section">
   <div class="visual-header">
-    <span class="visual-number">Candidate 14</span>
+    <span class="visual-number">Candidate 9</span>
     <h2 class="visual-title">Self-State Revision Trajectories</h2>
     <p class="visual-description">Multi-condition overlay of self-state over time &mdash; relational depth revises fast and deep, while other conditions plateau low. <em>Corresponds to Chamberlin ct_trajectories.png.</em></p>
   </div>
-  <div class="visual-container">
-    <svg viewBox="0 0 640 400" width="640" height="400" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <marker id="arr-axis14" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-          <path d="M0,0 L8,3 L0,6" fill="none" stroke="#2a2a2a" stroke-width="1"/>
-        </marker>
-      </defs>
+  <div class="comparison-row">
+    <!-- V1 -->
+    <div class="comparison-col">
+      <span class="version-label">v1</span>
+      <div class="visual-container">
+        <svg viewBox="0 0 640 400" width="640" height="400" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arr-axis14" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+              <path d="M0,0 L8,3 L0,6" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+            </marker>
+          </defs>
 
-      <!-- Title -->
-      <text x="340" y="24" text-anchor="middle" font-size="12" font-weight="600" fill="#2a2a2a">Self-State Revision Trajectories by Condition</text>
+          <text x="340" y="24" text-anchor="middle" font-size="12" font-weight="600" fill="#2a2a2a">Self-State Revision Trajectories by Condition</text>
 
-      <!-- Y axis -->
-      <line x1="70" y1="50" x2="70" y2="310" stroke="#2a2a2a" stroke-width="1.2"/>
-      <text x="22" y="180" text-anchor="middle" font-size="9" fill="#2a2a2a" font-weight="500" transform="rotate(-90,22,180)">Self-state</text>
+          <line x1="70" y1="50" x2="70" y2="310" stroke="#2a2a2a" stroke-width="1.2"/>
+          <text x="22" y="180" text-anchor="middle" font-size="9" fill="#2a2a2a" font-weight="500" transform="rotate(-90,22,180)">Self-state</text>
 
-      <!-- Y ticks -->
-      <text x="62" y="58" text-anchor="end" font-size="7.5" fill="#6a6a6a">1.0</text>
-      <line x1="66" y1="54" x2="70" y2="54" stroke="#d8d6d0" stroke-width="0.5"/>
-      <text x="62" y="138" text-anchor="end" font-size="7.5" fill="#6a6a6a">0.7</text>
-      <line x1="66" y1="132" x2="70" y2="132" stroke="#d8d6d0" stroke-width="0.5"/>
-      <text x="62" y="184" text-anchor="end" font-size="7.5" fill="#6a6a6a">0.5</text>
-      <line x1="66" y1="180" x2="70" y2="180" stroke="#d8d6d0" stroke-width="0.5"/>
-      <text x="62" y="284" text-anchor="end" font-size="7.5" fill="#6a6a6a">0.1</text>
-      <line x1="66" y1="280" x2="70" y2="280" stroke="#d8d6d0" stroke-width="0.5"/>
-      <text x="62" y="314" text-anchor="end" font-size="7.5" fill="#6a6a6a">0.0</text>
+          <text x="62" y="58" text-anchor="end" font-size="7.5" fill="#6a6a6a">1.0</text>
+          <line x1="66" y1="54" x2="70" y2="54" stroke="#d8d6d0" stroke-width="0.5"/>
+          <text x="62" y="138" text-anchor="end" font-size="7.5" fill="#6a6a6a">0.7</text>
+          <line x1="66" y1="132" x2="70" y2="132" stroke="#d8d6d0" stroke-width="0.5"/>
+          <text x="62" y="184" text-anchor="end" font-size="7.5" fill="#6a6a6a">0.5</text>
+          <line x1="66" y1="180" x2="70" y2="180" stroke="#d8d6d0" stroke-width="0.5"/>
+          <text x="62" y="284" text-anchor="end" font-size="7.5" fill="#6a6a6a">0.1</text>
+          <line x1="66" y1="280" x2="70" y2="280" stroke="#d8d6d0" stroke-width="0.5"/>
+          <text x="62" y="314" text-anchor="end" font-size="7.5" fill="#6a6a6a">0.0</text>
 
-      <!-- X axis -->
-      <line x1="70" y1="310" x2="600" y2="310" stroke="#2a2a2a" stroke-width="1.2" marker-end="url(#arr-axis14)"/>
-      <text x="340" y="338" text-anchor="middle" font-size="9" fill="#2a2a2a">Time (trials)</text>
+          <line x1="70" y1="310" x2="600" y2="310" stroke="#2a2a2a" stroke-width="1.2" marker-end="url(#arr-axis14)"/>
+          <text x="340" y="338" text-anchor="middle" font-size="9" fill="#2a2a2a">Time (trials)</text>
 
-      <!-- X ticks -->
-      <text x="70" y="326" text-anchor="middle" font-size="7.5" fill="#6a6a6a">0</text>
-      <text x="240" y="326" text-anchor="middle" font-size="7.5" fill="#6a6a6a">Forced</text>
-      <text x="420" y="326" text-anchor="middle" font-size="7.5" fill="#6a6a6a">Probe</text>
-      <text x="590" y="326" text-anchor="middle" font-size="7.5" fill="#6a6a6a">End</text>
+          <text x="70" y="326" text-anchor="middle" font-size="7.5" fill="#6a6a6a">0</text>
+          <text x="240" y="326" text-anchor="middle" font-size="7.5" fill="#6a6a6a">Forced</text>
+          <text x="420" y="326" text-anchor="middle" font-size="7.5" fill="#6a6a6a">Probe</text>
+          <text x="590" y="326" text-anchor="middle" font-size="7.5" fill="#6a6a6a">End</text>
 
-      <!-- Dashed vertical line: forced -> probe boundary -->
-      <line x1="330" y1="50" x2="330" y2="310" stroke="#2a2a2a" stroke-width="1.2" stroke-dasharray="6,4"/>
-      <text x="330" y="44" text-anchor="middle" font-size="7.5" fill="#2a2a2a" font-weight="500">forced &rarr; probe</text>
+          <line x1="330" y1="50" x2="330" y2="310" stroke="#2a2a2a" stroke-width="1.2" stroke-dasharray="6,4"/>
+          <text x="330" y="44" text-anchor="middle" font-size="7.5" fill="#2a2a2a" font-weight="500">forced &rarr; probe</text>
 
-      <!-- === 1. Baseline (flat ~0.1, gray) === -->
-      <!-- y for 0.1 = 54 + (1-0.1)*260/1 = 54 + 234 = 288... let's use: y=0 at 54, y=1 at 310? No. -->
-      <!-- Scale: y=54 is 1.0, y=310 is 0.0, range=256. self-state 0.1 => y = 54 + (1-0.1)*256 = 54+230 = 284 -->
-      <path d="M 70,284 L 200,284 L 330,284 L 500,282 L 590,282" fill="none" stroke="#6a6a6a" stroke-width="1.5" opacity="0.5"/>
-      <text x="594" y="282" font-size="8" fill="#6a6a6a">Baseline</text>
+          <path d="M 70,284 L 200,284 L 330,284 L 500,282 L 590,282" fill="none" stroke="#6a6a6a" stroke-width="1.5" opacity="0.5"/>
+          <text x="594" y="282" font-size="8" fill="#6a6a6a">Baseline</text>
 
-      <!-- === 2. Exposure (slow rise to ~0.7, blue) === -->
-      <!-- 0.1 => 284, 0.7 => 54+(1-0.7)*256=54+77=131 -->
-      <path d="M 70,284 Q 150,280 200,270 Q 280,250 330,218 Q 400,180 460,155 Q 520,140 590,131" fill="none" stroke="#4a7fa5" stroke-width="2"/>
-      <text x="594" y="131" font-size="8" fill="#4a7fa5">Exposure</text>
+          <path d="M 70,284 Q 150,280 200,270 Q 280,250 330,218 Q 400,180 460,155 Q 520,140 590,131" fill="none" stroke="#4a7fa5" stroke-width="2"/>
+          <text x="594" y="131" font-size="8" fill="#4a7fa5">Exposure</text>
 
-      <!-- === 3. Informational (similar slow rise, orange) === -->
-      <!-- rises to ~0.65: 54+(1-0.65)*256=54+90=144 -->
-      <path d="M 70,284 Q 150,278 200,268 Q 280,248 330,220 Q 400,186 460,162 Q 520,150 590,144" fill="none" stroke="#c45a3c" stroke-width="1.5" opacity="0.6" stroke-dasharray="6,3"/>
-      <text x="594" y="148" font-size="8" fill="#c45a3c" opacity="0.7">Informational</text>
+          <path d="M 70,284 Q 150,278 200,268 Q 280,248 330,220 Q 400,186 460,162 Q 520,150 590,144" fill="none" stroke="#c45a3c" stroke-width="1.5" opacity="0.6" stroke-dasharray="6,3"/>
+          <text x="594" y="148" font-size="8" fill="#c45a3c" opacity="0.7">Informational</text>
 
-      <!-- === 4. Relational Depth (fast rise to ~1.0, green/warm bold) === -->
-      <!-- 0.1 => 284, 1.0 => 54 -->
-      <path d="M 70,284 Q 120,280 170,268 Q 220,240 260,180 Q 290,110 310,70 Q 320,58 330,56 L 590,56" fill="none" stroke="#c45a3c" stroke-width="2.8"/>
-      <text x="594" y="56" font-size="8" fill="#c45a3c" font-weight="600">Relational Depth</text>
+          <path d="M 70,284 Q 120,280 170,268 Q 220,240 260,180 Q 290,110 310,70 Q 320,58 330,56 L 590,56" fill="none" stroke="#c45a3c" stroke-width="2.8"/>
+          <text x="594" y="56" font-size="8" fill="#c45a3c" font-weight="600">Relational Depth</text>
 
-      <!-- Annotation on relational depth line -->
-      <line x1="280" y1="100" x2="260" y2="128" stroke="#c45a3c" stroke-width="0.8"/>
-      <rect x="170" y="118" width="180" height="18" rx="3" fill="white" stroke="#c45a3c" stroke-width="0.8"/>
-      <text x="260" y="131" text-anchor="middle" font-size="7.5" fill="#c45a3c" font-weight="500">Relational depth: self-state revises first</text>
+          <line x1="280" y1="100" x2="260" y2="128" stroke="#c45a3c" stroke-width="0.8"/>
+          <rect x="170" y="118" width="180" height="18" rx="3" fill="white" stroke="#c45a3c" stroke-width="0.8"/>
+          <text x="260" y="131" text-anchor="middle" font-size="7.5" fill="#c45a3c" font-weight="500">Relational depth: self-state revises first</text>
 
-      <!-- === 5. Real Danger (flat low, red) === -->
-      <!-- flat ~0.08 => 54+(1-0.08)*256=54+235=289 -->
-      <path d="M 70,289 L 200,289 L 330,290 L 500,290 L 590,290" fill="none" stroke="#c45a3c" stroke-width="1.2" opacity="0.35" stroke-dasharray="2,3"/>
-      <text x="594" y="294" font-size="8" fill="#c45a3c" opacity="0.45">Real Danger</text>
+          <path d="M 70,289 L 200,289 L 330,290 L 500,290 L 590,290" fill="none" stroke="#c45a3c" stroke-width="1.2" opacity="0.35" stroke-dasharray="2,3"/>
+          <text x="594" y="294" font-size="8" fill="#c45a3c" opacity="0.45">Real Danger</text>
 
-      <!-- Legend box -->
-      <rect x="80" y="354" width="520" height="34" rx="4" fill="none" stroke="#d8d6d0" stroke-width="1"/>
-      <line x1="100" y1="372" x2="128" y2="372" stroke="#6a6a6a" stroke-width="1.5" opacity="0.5"/>
-      <text x="134" y="376" font-size="7.5" fill="#6a6a6a">Baseline</text>
-      <line x1="190" y1="372" x2="218" y2="372" stroke="#4a7fa5" stroke-width="2"/>
-      <text x="224" y="376" font-size="7.5" fill="#4a7fa5">Exposure</text>
-      <line x1="284" y1="372" x2="312" y2="372" stroke="#c45a3c" stroke-width="1.5" opacity="0.6" stroke-dasharray="6,3"/>
-      <text x="318" y="376" font-size="7.5" fill="#c45a3c" opacity="0.7">Informational</text>
-      <line x1="400" y1="372" x2="428" y2="372" stroke="#c45a3c" stroke-width="2.8"/>
-      <text x="434" y="376" font-size="7.5" fill="#c45a3c" font-weight="600">Relational Depth</text>
-      <line x1="532" y1="372" x2="560" y2="372" stroke="#c45a3c" stroke-width="1.2" opacity="0.35" stroke-dasharray="2,3"/>
-      <text x="566" y="376" font-size="7.5" fill="#c45a3c" opacity="0.45">Real Danger</text>
-    </svg>
+          <rect x="80" y="354" width="520" height="34" rx="4" fill="none" stroke="#d8d6d0" stroke-width="1"/>
+          <line x1="100" y1="372" x2="128" y2="372" stroke="#6a6a6a" stroke-width="1.5" opacity="0.5"/>
+          <text x="134" y="376" font-size="7.5" fill="#6a6a6a">Baseline</text>
+          <line x1="190" y1="372" x2="218" y2="372" stroke="#4a7fa5" stroke-width="2"/>
+          <text x="224" y="376" font-size="7.5" fill="#4a7fa5">Exposure</text>
+          <line x1="284" y1="372" x2="312" y2="372" stroke="#c45a3c" stroke-width="1.5" opacity="0.6" stroke-dasharray="6,3"/>
+          <text x="318" y="376" font-size="7.5" fill="#c45a3c" opacity="0.7">Informational</text>
+          <line x1="400" y1="372" x2="428" y2="372" stroke="#c45a3c" stroke-width="2.8"/>
+          <text x="434" y="376" font-size="7.5" fill="#c45a3c" font-weight="600">Relational Depth</text>
+          <line x1="532" y1="372" x2="560" y2="372" stroke="#c45a3c" stroke-width="1.2" opacity="0.35" stroke-dasharray="2,3"/>
+          <text x="566" y="376" font-size="7.5" fill="#c45a3c" opacity="0.45">Real Danger</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Critique -->
+    <div class="critique-note">
+      <strong>Critique</strong>
+      Five curves in a single panel makes it hard to distinguish lines at thumbnail. Informational and Exposure nearly overlap. The bold Relational Depth line is the hero, but the annotation callout box obscures the very region where the steep rise is most visible. v2 reduces to three lines (Baseline, Exposure, Relational Depth), adds a shaded area under the Relational Depth curve to make it unmissable, and removes the annotation box.
+      <span class="taxonomy">Type: Threshold image (trajectory crossing)</span>
+      <div class="checks">
+        <span class="pass">One-move: PASS</span> &middot;
+        <span class="fail">Thumbnail: FAIL (five overlapping lines)</span> &middot;
+        <span class="pass">Reading-path: PASS (left to right)</span> &middot;
+        <span class="pass">Fidelity: PASS</span>
+      </div>
+    </div>
+
+    <!-- V2 -->
+    <div class="comparison-col">
+      <span class="version-label v2-label">v2</span>
+      <div class="visual-container">
+        <svg viewBox="0 0 500 320" width="500" height="320" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arr-axis14-v2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+              <path d="M0,0 L8,3 L0,6" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+            </marker>
+          </defs>
+
+          <text x="260" y="22" text-anchor="middle" font-size="11" font-weight="600" fill="#2a2a2a">Self-State Revision Over Time</text>
+
+          <!-- Axes -->
+          <line x1="60" y1="44" x2="60" y2="250" stroke="#2a2a2a" stroke-width="1"/>
+          <line x1="60" y1="250" x2="460" y2="250" stroke="#2a2a2a" stroke-width="1" marker-end="url(#arr-axis14-v2)"/>
+          <text x="50" y="50" text-anchor="end" font-size="7" fill="#6a6a6a">1.0</text>
+          <text x="50" y="254" text-anchor="end" font-size="7" fill="#6a6a6a">0.0</text>
+          <text x="260" y="272" text-anchor="middle" font-size="8" fill="#2a2a2a">time</text>
+
+          <!-- Shaded area under Relational Depth curve -->
+          <!-- y scale: 44=1.0, 250=0.0, range=206. 0.1=>44+0.9*206=44+185=229 -->
+          <path d="M 60,229 Q 100,226 140,216 Q 180,195 210,150 Q 235,90 250,58 Q 258,48 264,46 L 450,46 L 450,250 L 60,250 Z" fill="#c45a3c" opacity="0.06"/>
+
+          <!-- Baseline (flat) -->
+          <path d="M 60,229 L 250,229 L 450,228" fill="none" stroke="#d8d6d0" stroke-width="1.5"/>
+          <text x="454" y="228" font-size="8" fill="#d8d6d0">Baseline</text>
+
+          <!-- Exposure (slow rise) -->
+          <path d="M 60,229 Q 130,225 200,210 Q 280,185 340,145 Q 400,118 450,105" fill="none" stroke="#4a7fa5" stroke-width="2"/>
+          <text x="454" y="105" font-size="8" fill="#4a7fa5">Exposure</text>
+
+          <!-- Relational Depth (fast steep rise) -->
+          <path d="M 60,229 Q 100,226 140,216 Q 180,195 210,150 Q 235,90 250,58 Q 258,48 264,46 L 450,46" fill="none" stroke="#c45a3c" stroke-width="3"/>
+          <text x="454" y="46" font-size="8" fill="#c45a3c" font-weight="700">Relational Depth</text>
+
+          <!-- Minimal legend inline with labels at right edge -->
+          <text x="260" y="300" text-anchor="middle" font-size="8.5" fill="#6a6a6a" font-style="italic">Relational depth revises self-state fast; other conditions plateau</text>
+        </svg>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1370,136 +1535,179 @@
 <!-- ============================================================ -->
 <section class="visual-section">
   <div class="visual-header">
-    <span class="visual-number">Candidate 15</span>
+    <span class="visual-number">Candidate 10</span>
     <h2 class="visual-title">The Four-Element Cascade Under Relational Depth</h2>
     <p class="visual-description">2&times;2 small multiples showing each bundle element&rsquo;s trajectory; first-passage markers reveal the cascade order: self-state crosses first, then threat, outcome, policy. <em>Corresponds to Chamberlin discovery_mechanism.png.</em></p>
   </div>
-  <div class="visual-container">
-    <svg viewBox="0 0 640 520" width="640" height="520" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <marker id="arr-axis15" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
-          <path d="M0,0 L6,2.5 L0,5" fill="none" stroke="#2a2a2a" stroke-width="0.8"/>
-        </marker>
-      </defs>
+  <div class="comparison-row">
+    <!-- V1 -->
+    <div class="comparison-col">
+      <span class="version-label">v1</span>
+      <div class="visual-container">
+        <svg viewBox="0 0 640 520" width="640" height="520" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arr-axis15" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+              <path d="M0,0 L6,2.5 L0,5" fill="none" stroke="#2a2a2a" stroke-width="0.8"/>
+            </marker>
+          </defs>
 
-      <!-- Title -->
-      <text x="320" y="24" text-anchor="middle" font-size="12" font-weight="600" fill="#2a2a2a">The Four-Element Cascade Under Relational Depth</text>
-      <text x="320" y="42" text-anchor="middle" font-size="9" fill="#6a6a6a" font-style="italic">Cascade order visible across panels: self-state &rarr; threat &rarr; outcome &rarr; policy</text>
+          <text x="320" y="24" text-anchor="middle" font-size="12" font-weight="600" fill="#2a2a2a">The Four-Element Cascade Under Relational Depth</text>
+          <text x="320" y="42" text-anchor="middle" font-size="9" fill="#6a6a6a" font-style="italic">Cascade order visible across panels: self-state &rarr; threat &rarr; outcome &rarr; policy</text>
 
-      <!-- ================================================ -->
-      <!-- PANEL A (top-left): Self-state                    -->
-      <!-- ================================================ -->
-      <!-- Panel boundary -->
-      <rect x="30" y="60" width="280" height="200" rx="4" fill="none" stroke="#d8d6d0" stroke-width="0.8"/>
-      <text x="170" y="80" text-anchor="middle" font-size="10" font-weight="600" fill="#c45a3c">Self-state</text>
+          <rect x="30" y="60" width="280" height="200" rx="4" fill="none" stroke="#d8d6d0" stroke-width="0.8"/>
+          <text x="170" y="80" text-anchor="middle" font-size="10" font-weight="600" fill="#c45a3c">Self-state</text>
 
-      <!-- Axes -->
-      <line x1="60" y1="92" x2="60" y2="240" stroke="#2a2a2a" stroke-width="0.8"/>
-      <line x1="60" y1="240" x2="290" y2="240" stroke="#2a2a2a" stroke-width="0.8" marker-end="url(#arr-axis15)"/>
-      <text x="52" y="98" text-anchor="end" font-size="6.5" fill="#6a6a6a">1.0</text>
-      <text x="52" y="170" text-anchor="end" font-size="6.5" fill="#6a6a6a">0.5</text>
-      <text x="52" y="244" text-anchor="end" font-size="6.5" fill="#6a6a6a">0.0</text>
-      <text x="175" y="254" text-anchor="middle" font-size="7" fill="#6a6a6a">time</text>
+          <line x1="60" y1="92" x2="60" y2="240" stroke="#2a2a2a" stroke-width="0.8"/>
+          <line x1="60" y1="240" x2="290" y2="240" stroke="#2a2a2a" stroke-width="0.8" marker-end="url(#arr-axis15)"/>
+          <text x="52" y="98" text-anchor="end" font-size="6.5" fill="#6a6a6a">1.0</text>
+          <text x="52" y="170" text-anchor="end" font-size="6.5" fill="#6a6a6a">0.5</text>
+          <text x="52" y="244" text-anchor="end" font-size="6.5" fill="#6a6a6a">0.0</text>
+          <text x="175" y="254" text-anchor="middle" font-size="7" fill="#6a6a6a">time</text>
 
-      <!-- 0.5 threshold line -->
-      <line x1="60" y1="166" x2="290" y2="166" stroke="#d8d6d0" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <line x1="60" y1="166" x2="290" y2="166" stroke="#d8d6d0" stroke-width="0.5" stroke-dasharray="3,3"/>
 
-      <!-- Trajectory: rises fast from ~0.1 to ~1.0, crosses 0.5 EARLY -->
-      <!-- y scale: 92=1.0, 240=0.0, range=148. 0.1=>240-14.8=225, 0.5=>166, 1.0=>92 -->
-      <path d="M 60,225 Q 90,222 110,210 Q 130,185 145,166 Q 165,130 180,105 Q 200,94 220,93 L 285,93" fill="none" stroke="#c45a3c" stroke-width="2.2"/>
+          <path d="M 60,225 Q 90,222 110,210 Q 130,185 145,166 Q 165,130 180,105 Q 200,94 220,93 L 285,93" fill="none" stroke="#c45a3c" stroke-width="2.2"/>
 
-      <!-- First-passage marker at 0.5 crossing -->
-      <circle cx="145" cy="166" r="5" fill="#c45a3c" opacity="0.3"/>
-      <circle cx="145" cy="166" r="2.5" fill="#c45a3c"/>
-      <text x="145" y="158" text-anchor="middle" font-size="7" fill="#c45a3c" font-weight="600">1st</text>
+          <circle cx="145" cy="166" r="5" fill="#c45a3c" opacity="0.3"/>
+          <circle cx="145" cy="166" r="2.5" fill="#c45a3c"/>
+          <text x="145" y="158" text-anchor="middle" font-size="7" fill="#c45a3c" font-weight="600">1st</text>
 
-      <!-- ================================================ -->
-      <!-- PANEL B (top-right): Threat Meaning               -->
-      <!-- ================================================ -->
-      <rect x="330" y="60" width="280" height="200" rx="4" fill="none" stroke="#d8d6d0" stroke-width="0.8"/>
-      <text x="470" y="80" text-anchor="middle" font-size="10" font-weight="600" fill="#4a7fa5">Threat Meaning</text>
+          <rect x="330" y="60" width="280" height="200" rx="4" fill="none" stroke="#d8d6d0" stroke-width="0.8"/>
+          <text x="470" y="80" text-anchor="middle" font-size="10" font-weight="600" fill="#4a7fa5">Threat Meaning</text>
 
-      <!-- Axes -->
-      <line x1="360" y1="92" x2="360" y2="240" stroke="#2a2a2a" stroke-width="0.8"/>
-      <line x1="360" y1="240" x2="590" y2="240" stroke="#2a2a2a" stroke-width="0.8" marker-end="url(#arr-axis15)"/>
-      <text x="352" y="98" text-anchor="end" font-size="6.5" fill="#6a6a6a">1.0</text>
-      <text x="352" y="170" text-anchor="end" font-size="6.5" fill="#6a6a6a">0.5</text>
-      <text x="352" y="244" text-anchor="end" font-size="6.5" fill="#6a6a6a">0.0</text>
-      <text x="475" y="254" text-anchor="middle" font-size="7" fill="#6a6a6a">time</text>
+          <line x1="360" y1="92" x2="360" y2="240" stroke="#2a2a2a" stroke-width="0.8"/>
+          <line x1="360" y1="240" x2="590" y2="240" stroke="#2a2a2a" stroke-width="0.8" marker-end="url(#arr-axis15)"/>
+          <text x="352" y="98" text-anchor="end" font-size="6.5" fill="#6a6a6a">1.0</text>
+          <text x="352" y="170" text-anchor="end" font-size="6.5" fill="#6a6a6a">0.5</text>
+          <text x="352" y="244" text-anchor="end" font-size="6.5" fill="#6a6a6a">0.0</text>
+          <text x="475" y="254" text-anchor="middle" font-size="7" fill="#6a6a6a">time</text>
 
-      <!-- 0.5 threshold -->
-      <line x1="360" y1="166" x2="590" y2="166" stroke="#d8d6d0" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <line x1="360" y1="166" x2="590" y2="166" stroke="#d8d6d0" stroke-width="0.5" stroke-dasharray="3,3"/>
 
-      <!-- Trajectory: starts high ~0.9 (threat meaning = "dangerous"), drops after self-state revises -->
-      <!-- 0.9 => 92+(1-0.9)*148=92+15=107. Crosses 0.5 at second position. Falls to 0.1=225 -->
-      <!-- Inverted: high=dangerous. Plotting "revised threat" as dropping from 0.9 to 0.1 -->
-      <path d="M 360,107 L 430,107 Q 460,108 475,130 Q 490,155 500,166 Q 520,200 540,220 L 585,225" fill="none" stroke="#4a7fa5" stroke-width="2.2"/>
+          <path d="M 360,107 L 430,107 Q 460,108 475,130 Q 490,155 500,166 Q 520,200 540,220 L 585,225" fill="none" stroke="#4a7fa5" stroke-width="2.2"/>
 
-      <!-- First-passage marker at 0.5 crossing -->
-      <circle cx="500" cy="166" r="5" fill="#4a7fa5" opacity="0.3"/>
-      <circle cx="500" cy="166" r="2.5" fill="#4a7fa5"/>
-      <text x="500" y="158" text-anchor="middle" font-size="7" fill="#4a7fa5" font-weight="600">2nd</text>
+          <circle cx="500" cy="166" r="5" fill="#4a7fa5" opacity="0.3"/>
+          <circle cx="500" cy="166" r="2.5" fill="#4a7fa5"/>
+          <text x="500" y="158" text-anchor="middle" font-size="7" fill="#4a7fa5" font-weight="600">2nd</text>
 
-      <!-- ================================================ -->
-      <!-- PANEL C (bottom-left): Expected Outcome           -->
-      <!-- ================================================ -->
-      <rect x="30" y="280" width="280" height="200" rx="4" fill="none" stroke="#d8d6d0" stroke-width="0.8"/>
-      <text x="170" y="300" text-anchor="middle" font-size="10" font-weight="600" fill="#4a7fa5" opacity="0.7">Expected Outcome</text>
+          <rect x="30" y="280" width="280" height="200" rx="4" fill="none" stroke="#d8d6d0" stroke-width="0.8"/>
+          <text x="170" y="300" text-anchor="middle" font-size="10" font-weight="600" fill="#4a7fa5" opacity="0.7">Expected Outcome</text>
 
-      <!-- Axes -->
-      <line x1="60" y1="312" x2="60" y2="460" stroke="#2a2a2a" stroke-width="0.8"/>
-      <line x1="60" y1="460" x2="290" y2="460" stroke="#2a2a2a" stroke-width="0.8" marker-end="url(#arr-axis15)"/>
-      <text x="52" y="318" text-anchor="end" font-size="6.5" fill="#6a6a6a">1.0</text>
-      <text x="52" y="390" text-anchor="end" font-size="6.5" fill="#6a6a6a">0.5</text>
-      <text x="52" y="464" text-anchor="end" font-size="6.5" fill="#6a6a6a">0.0</text>
-      <text x="175" y="474" text-anchor="middle" font-size="7" fill="#6a6a6a">time</text>
+          <line x1="60" y1="312" x2="60" y2="460" stroke="#2a2a2a" stroke-width="0.8"/>
+          <line x1="60" y1="460" x2="290" y2="460" stroke="#2a2a2a" stroke-width="0.8" marker-end="url(#arr-axis15)"/>
+          <text x="52" y="318" text-anchor="end" font-size="6.5" fill="#6a6a6a">1.0</text>
+          <text x="52" y="390" text-anchor="end" font-size="6.5" fill="#6a6a6a">0.5</text>
+          <text x="52" y="464" text-anchor="end" font-size="6.5" fill="#6a6a6a">0.0</text>
+          <text x="175" y="474" text-anchor="middle" font-size="7" fill="#6a6a6a">time</text>
 
-      <!-- 0.5 threshold -->
-      <line x1="60" y1="386" x2="290" y2="386" stroke="#d8d6d0" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <line x1="60" y1="386" x2="290" y2="386" stroke="#d8d6d0" stroke-width="0.5" stroke-dasharray="3,3"/>
 
-      <!-- Trajectory: Expected outcome revises from low (~0.15) to high (~0.85) -->
-      <!-- 0.15 => 312+(1-0.15)*148=312+126=438. 0.85=>312+22=334. crosses 0.5 at 386, third. -->
-      <path d="M 60,438 L 140,438 Q 170,436 190,420 Q 210,400 220,386 Q 240,355 260,340 L 285,334" fill="none" stroke="#4a7fa5" stroke-width="2.2" opacity="0.7"/>
+          <path d="M 60,438 L 140,438 Q 170,436 190,420 Q 210,400 220,386 Q 240,355 260,340 L 285,334" fill="none" stroke="#4a7fa5" stroke-width="2.2" opacity="0.7"/>
 
-      <!-- First-passage marker -->
-      <circle cx="220" cy="386" r="5" fill="#4a7fa5" opacity="0.2"/>
-      <circle cx="220" cy="386" r="2.5" fill="#4a7fa5" opacity="0.7"/>
-      <text x="220" y="378" text-anchor="middle" font-size="7" fill="#4a7fa5" font-weight="600">3rd</text>
+          <circle cx="220" cy="386" r="5" fill="#4a7fa5" opacity="0.2"/>
+          <circle cx="220" cy="386" r="2.5" fill="#4a7fa5" opacity="0.7"/>
+          <text x="220" y="378" text-anchor="middle" font-size="7" fill="#4a7fa5" font-weight="600">3rd</text>
 
-      <!-- ================================================ -->
-      <!-- PANEL D (bottom-right): P(approach/stay)          -->
-      <!-- ================================================ -->
-      <rect x="330" y="280" width="280" height="200" rx="4" fill="none" stroke="#d8d6d0" stroke-width="0.8"/>
-      <text x="470" y="300" text-anchor="middle" font-size="10" font-weight="600" fill="#4a7fa5" opacity="0.5">P(approach / stay)</text>
+          <rect x="330" y="280" width="280" height="200" rx="4" fill="none" stroke="#d8d6d0" stroke-width="0.8"/>
+          <text x="470" y="300" text-anchor="middle" font-size="10" font-weight="600" fill="#4a7fa5" opacity="0.5">P(approach / stay)</text>
 
-      <!-- Axes -->
-      <line x1="360" y1="312" x2="360" y2="460" stroke="#2a2a2a" stroke-width="0.8"/>
-      <line x1="360" y1="460" x2="590" y2="460" stroke="#2a2a2a" stroke-width="0.8" marker-end="url(#arr-axis15)"/>
-      <text x="352" y="318" text-anchor="end" font-size="6.5" fill="#6a6a6a">1.0</text>
-      <text x="352" y="390" text-anchor="end" font-size="6.5" fill="#6a6a6a">0.5</text>
-      <text x="352" y="464" text-anchor="end" font-size="6.5" fill="#6a6a6a">0.0</text>
-      <text x="475" y="474" text-anchor="middle" font-size="7" fill="#6a6a6a">time</text>
+          <line x1="360" y1="312" x2="360" y2="460" stroke="#2a2a2a" stroke-width="0.8"/>
+          <line x1="360" y1="460" x2="590" y2="460" stroke="#2a2a2a" stroke-width="0.8" marker-end="url(#arr-axis15)"/>
+          <text x="352" y="318" text-anchor="end" font-size="6.5" fill="#6a6a6a">1.0</text>
+          <text x="352" y="390" text-anchor="end" font-size="6.5" fill="#6a6a6a">0.5</text>
+          <text x="352" y="464" text-anchor="end" font-size="6.5" fill="#6a6a6a">0.0</text>
+          <text x="475" y="474" text-anchor="middle" font-size="7" fill="#6a6a6a">time</text>
 
-      <!-- 0.5 threshold -->
-      <line x1="360" y1="386" x2="590" y2="386" stroke="#d8d6d0" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <line x1="360" y1="386" x2="590" y2="386" stroke="#d8d6d0" stroke-width="0.5" stroke-dasharray="3,3"/>
 
-      <!-- Trajectory: P(approach) rises from ~0.1 to ~0.98, crosses 0.5 last -->
-      <!-- 0.1=>312+(1-0.1)*148=312+133=445. 0.98=>312+3=315. crosses 0.5 at 386, fourth. -->
-      <path d="M 360,445 L 460,445 Q 490,442 510,420 Q 525,400 535,386 Q 550,350 565,322 L 585,315" fill="none" stroke="#4a7fa5" stroke-width="2.2" opacity="0.5"/>
+          <path d="M 360,445 L 460,445 Q 490,442 510,420 Q 525,400 535,386 Q 550,350 565,322 L 585,315" fill="none" stroke="#4a7fa5" stroke-width="2.2" opacity="0.5"/>
 
-      <!-- First-passage marker -->
-      <circle cx="535" cy="386" r="5" fill="#4a7fa5" opacity="0.15"/>
-      <circle cx="535" cy="386" r="2.5" fill="#4a7fa5" opacity="0.5"/>
-      <text x="535" y="378" text-anchor="middle" font-size="7" fill="#4a7fa5" font-weight="600">4th</text>
+          <circle cx="535" cy="386" r="5" fill="#4a7fa5" opacity="0.15"/>
+          <circle cx="535" cy="386" r="2.5" fill="#4a7fa5" opacity="0.5"/>
+          <text x="535" y="378" text-anchor="middle" font-size="7" fill="#4a7fa5" font-weight="600">4th</text>
 
-      <!-- ================================================ -->
-      <!-- CASCADE ORDER ANNOTATION                          -->
-      <!-- ================================================ -->
-      <rect x="120" y="492" width="400" height="22" rx="3" fill="none" stroke="#c45a3c" stroke-width="1.2"/>
-      <text x="320" y="507" text-anchor="middle" font-size="9" fill="#c45a3c" font-weight="500">
-        Cascade order: Self-state (1st) &rarr; Threat (2nd) &rarr; Outcome (3rd) &rarr; Policy (4th)
-      </text>
-    </svg>
+          <rect x="120" y="492" width="400" height="22" rx="3" fill="none" stroke="#c45a3c" stroke-width="1.2"/>
+          <text x="320" y="507" text-anchor="middle" font-size="9" fill="#c45a3c" font-weight="500">
+            Cascade order: Self-state (1st) &rarr; Threat (2nd) &rarr; Outcome (3rd) &rarr; Policy (4th)
+          </text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Critique -->
+    <div class="critique-note">
+      <strong>Critique</strong>
+      The 2x2 small-multiples layout is rigorous but each panel looks nearly identical at thumbnail -- four grey boxes with curves. The cascade order (the main claim) only becomes visible if you read the "1st, 2nd, 3rd, 4th" labels. v2 collapses all four trajectories into a single panel with a shared time axis, staggering the crossing points left to right. This makes the cascade order immediately visible as a visual pattern rather than requiring label-reading.
+      <span class="taxonomy">Type: Mechanism diagram (temporal cascade)</span>
+      <div class="checks">
+        <span class="pass">One-move: PASS</span> &middot;
+        <span class="fail">Thumbnail: FAIL (four identical panels)</span> &middot;
+        <span class="fail">Reading-path: FAIL (Z-pattern across 4 panels)</span> &middot;
+        <span class="pass">Fidelity: PASS</span>
+      </div>
+    </div>
+
+    <!-- V2 -->
+    <div class="comparison-col">
+      <span class="version-label v2-label">v2</span>
+      <div class="visual-container">
+        <svg viewBox="0 0 520 340" width="520" height="340" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arr-axis15-v2" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+              <path d="M0,0 L7,2.5 L0,5" fill="none" stroke="#2a2a2a" stroke-width="0.8"/>
+            </marker>
+          </defs>
+
+          <text x="270" y="22" text-anchor="middle" font-size="12" font-weight="600" fill="#2a2a2a">The Cascade Under Relational Depth</text>
+
+          <!-- Axes -->
+          <line x1="60" y1="44" x2="60" y2="260" stroke="#2a2a2a" stroke-width="1"/>
+          <line x1="60" y1="260" x2="490" y2="260" stroke="#2a2a2a" stroke-width="1" marker-end="url(#arr-axis15-v2)"/>
+          <text x="270" y="282" text-anchor="middle" font-size="8" fill="#2a2a2a">time</text>
+
+          <!-- 0.5 threshold -->
+          <line x1="60" y1="152" x2="490" y2="152" stroke="#d8d6d0" stroke-width="0.8" stroke-dasharray="3,3"/>
+          <text x="495" y="150" font-size="6.5" fill="#d8d6d0">0.5</text>
+
+          <!-- y scale: 44=1.0, 260=0.0, range=216. 0.5 => 44 + 0.5*216 = 152 -->
+          <!-- All start near bottom (0.1 => 44+0.9*216=238), cross 0.5 at staggered x positions -->
+
+          <!-- 1. Self-state: crosses first (x~140), bold warm -->
+          <path d="M 60,238 Q 90,235 110,222 Q 125,200 140,152 Q 155,100 170,70 Q 185,52 200,48 L 480,48" fill="none" stroke="#c45a3c" stroke-width="2.8"/>
+          <!-- Crossing marker -->
+          <circle cx="140" cy="152" r="6" fill="#c45a3c" opacity="0.25"/>
+          <circle cx="140" cy="152" r="3" fill="#c45a3c"/>
+          <text x="140" y="142" text-anchor="middle" font-size="8" fill="#c45a3c" font-weight="700">1st</text>
+          <text x="484" y="48" font-size="8" fill="#c45a3c" font-weight="600">Self-state</text>
+
+          <!-- 2. Threat meaning: crosses second (x~230), inverted (drops from high) -->
+          <!-- starts at 0.9 => 44+0.1*216=65.6 ~ 66, crosses 0.5 at x~230, ends at 0.1 => 238 -->
+          <path d="M 60,66 L 160,66 Q 190,68 210,100 Q 222,130 230,152 Q 250,200 280,230 L 480,238" fill="none" stroke="#4a7fa5" stroke-width="2.2"/>
+          <circle cx="230" cy="152" r="6" fill="#4a7fa5" opacity="0.25"/>
+          <circle cx="230" cy="152" r="3" fill="#4a7fa5"/>
+          <text x="230" y="142" text-anchor="middle" font-size="8" fill="#4a7fa5" font-weight="700">2nd</text>
+          <text x="484" y="242" font-size="8" fill="#4a7fa5">Threat</text>
+
+          <!-- 3. Expected outcome: crosses third (x~310) -->
+          <path d="M 60,238 L 200,238 Q 250,236 280,210 Q 300,180 310,152 Q 330,110 360,80 L 480,66" fill="none" stroke="#4a7fa5" stroke-width="1.8" opacity="0.6"/>
+          <circle cx="310" cy="152" r="5" fill="#4a7fa5" opacity="0.15"/>
+          <circle cx="310" cy="152" r="2.5" fill="#4a7fa5" opacity="0.6"/>
+          <text x="310" y="142" text-anchor="middle" font-size="8" fill="#4a7fa5" font-weight="600" opacity="0.7">3rd</text>
+          <text x="484" y="66" font-size="8" fill="#4a7fa5" opacity="0.6">Outcome</text>
+
+          <!-- 4. Policy: crosses last (x~390) -->
+          <path d="M 60,238 L 300,238 Q 350,236 370,210 Q 385,180 390,152 Q 405,105 420,76 L 480,56" fill="none" stroke="#4a7fa5" stroke-width="1.5" opacity="0.4"/>
+          <circle cx="390" cy="152" r="4" fill="#4a7fa5" opacity="0.1"/>
+          <circle cx="390" cy="152" r="2" fill="#4a7fa5" opacity="0.4"/>
+          <text x="390" y="142" text-anchor="middle" font-size="8" fill="#4a7fa5" font-weight="600" opacity="0.5">4th</text>
+          <text x="484" y="56" font-size="8" fill="#4a7fa5" opacity="0.4">Policy</text>
+
+          <!-- Cascade order annotation -->
+          <rect x="80" y="298" width="380" height="24" rx="3" fill="none" stroke="#c45a3c" stroke-width="1.2"/>
+          <text x="270" y="315" text-anchor="middle" font-size="9" fill="#c45a3c" font-weight="500">Self-state crosses first. Everything else follows.</text>
+        </svg>
+      </div>
+    </div>
   </div>
 </section>
 
