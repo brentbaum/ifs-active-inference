@@ -32,7 +32,9 @@ using .IFSV2ScriptSupport:
     IFSV2ConditionConfig,
     IFSV2Summary,
     IFSV2_CONTEXT_SAFE,
+    IFSV2_POLICY_AVOID,
     IFSV2_POLICY_INSPECT,
+    IFSV2_POLICY_STAY,
     all_ifs_v2_configs,
     build_ifs_v2_model,
     validate_ifs_v2_A,
@@ -52,6 +54,7 @@ const ENABLE_FIGURES = get(ENV, "IFS_V2_SKIP_FIGURES", "0") != "1"
 
 if ENABLE_FIGURES
     ENV["GKSwstype"] = get(ENV, "GKSwstype", "100")
+    ENV["GKS_NO_GUI"] = get(ENV, "GKS_NO_GUI", "1")
     using Plots
 
     # --- Tufte palette ---
@@ -61,6 +64,13 @@ if ENABLE_FIGURES
     const COL_BG         = RGB(1.0, 1.0, 0.973)       # #fffff8 -- Tufte off-white
     const COL_GRID       = RGB(0.85, 0.85, 0.85)      # light gray for sparse gridlines
     const COL_ANNOTATION = RGB(0.3, 0.3, 0.3)
+    const COL_LIGHT_GRAY = RGB(0.72, 0.72, 0.72)
+    const COL_SOFT_BLUE  = RGB(0.57, 0.67, 0.78)
+    const COL_SOFT_TAUPE = RGB(0.70, 0.65, 0.58)
+    const COL_CHANNELS   = [COL_LIGHT_GRAY, COL_SOFT_BLUE, COL_SOFT_TAUPE, COL_BLUE, COL_ACCENT]
+    const COL_PRAGMATIC  = COL_GRAY
+    const COL_EPISTEMIC  = COL_ACCENT
+    const COL_AMBIGUITY  = COL_LIGHT_GRAY
 
     default(
         fontfamily="Georgia",
@@ -90,6 +100,18 @@ const SEED = 42
 
 const ROW_LABELS = ["Self-state", "Threat", "Expected Outcome", "P(approach/stay)"]
 const STRIP_LABELS = ["Capture", "Witness"]
+const CHANNEL_LABELS = [
+    "External cue",
+    "Arousal",
+    "Action outcome",
+    "Informational context",
+    "Witnessed self-state",
+]
+const ACTION_LABELS = Dict(
+    IFSV2_POLICY_AVOID => "Avoid",
+    IFSV2_POLICY_INSPECT => "Inspect",
+    IFSV2_POLICY_STAY => "Stay",
+)
 
 summary_by_name(summaries) = Dict(summary.condition => summary for summary in summaries)
 
@@ -179,6 +201,72 @@ function print_sensitivity_summary(rows)
 end
 
 pairwise_l1(a::AbstractVector{<:Real}, b::AbstractVector{<:Real}) = sum(abs.(Float64.(a) .- Float64.(b)))
+
+function run_step_matrix(summary::IFSV2Summary, getter::Function)
+    T = length(summary.runs[1].steps)
+    N = length(summary.runs)
+    data = zeros(Float64, T, N)
+    for (j, run) in enumerate(summary.runs)
+        for (t, step) in enumerate(run.steps)
+            data[t, j] = getter(step)
+        end
+    end
+    return data
+end
+
+function mean_step_series(summary::IFSV2Summary, getter::Function)
+    data = run_step_matrix(summary, getter)
+    return vec(mean(data; dims=2)), vec(std(data; dims=2))
+end
+
+function mean_channel_series(summary::IFSV2Summary, getter::Function)
+    T = length(summary.runs[1].steps)
+    N = length(summary.runs)
+    data = zeros(Float64, 5, T, N)
+    for (j, run) in enumerate(summary.runs)
+        for (t, step) in enumerate(run.steps)
+            values = getter(step)
+            for g in 1:5
+                data[g, t, j] = values[g]
+            end
+        end
+    end
+    return dropdims(mean(data; dims=3), dims=3)
+end
+
+function mean_action_filtered_series(summary::IFSV2Summary, action::Int, getter::Function)
+    return mean_step_series(summary) do step
+        step.action == action ? getter(step) : 0.0
+    end
+end
+
+function condition_decomposition_payload(summary::IFSV2Summary)
+    pragmatic_channels = mean_channel_series(summary, step -> step.efe_pragmatic_channels)
+    epistemic_channels = mean_channel_series(summary, step -> step.efe_epistemic_channels)
+    pragmatic, _ = mean_step_series(summary, step -> step.efe_pragmatic)
+    epistemic, _ = mean_step_series(summary, step -> step.efe_epistemic)
+    ambiguity, _ = mean_step_series(summary, step -> step.efe_ambiguity)
+    return (
+        pragmatic_channels=pragmatic_channels,
+        epistemic_channels=epistemic_channels,
+        pragmatic=pragmatic,
+        epistemic=epistemic,
+        ambiguity=ambiguity,
+    )
+end
+
+function time_axis(summary::IFSV2Summary)
+    return collect(1:length(summary.runs[1].steps))
+end
+
+function onset_index(series::AbstractVector{<:Real}; min_fraction::Float64=0.15, floor::Float64=1e-3)
+    peak = maximum(Float64.(series))
+    threshold = max(floor, peak * min_fraction)
+    for i in eachindex(series)
+        series[i] >= threshold && return i
+    end
+    return nothing
+end
 
 function evaluate_success_criteria(
     h1_lookup::Dict{String,IFSV2Summary},
@@ -376,6 +464,152 @@ function summarize_parameter_dependence(rows)
 end
 
 if ENABLE_FIGURES
+    function format_panel!(p, forced_boundary::Int, ymax::Float64, x_end::Int)
+        vline!(p, [forced_boundary + 0.5], color=COL_GRID, linestyle=:dash, linewidth=1.0, label="")
+        ylims!(p, (0.0, ymax))
+        xlims!(p, (1.0, x_end + 3.0))
+        return p
+    end
+
+    function plot_stacked_channel_panel(
+        series::Matrix{Float64},
+        title_text::String,
+        forced_boundary::Int;
+        ylabel::String=""
+    )
+        x = 1:size(series, 2)
+        ymax = max(maximum(vec(sum(series; dims=1))) * 1.10, 1e-3)
+        p = plot(
+            title=title_text,
+            xlabel="Time step",
+            ylabel=ylabel,
+            legend=false,
+            size=(750, 500),
+            grid=false,
+            background_color=COL_BG,
+            background_color_inside=COL_BG,
+        )
+
+        lower = zeros(Float64, length(x))
+        for g in 1:5
+            upper = lower .+ vec(series[g, :])
+            plot!(
+                p,
+                x,
+                upper,
+                fillrange=lower,
+                fillalpha=g == 5 ? 0.92 : 0.82,
+                color=COL_CHANNELS[g],
+                linecolor=COL_CHANNELS[g],
+                linewidth=g == 5 ? 1.8 : 1.2,
+                label="",
+            )
+            lower = upper
+        end
+
+        format_panel!(p, forced_boundary, ymax, length(x))
+
+        cumulative = cumsum(series; dims=1)
+        for g in 1:5
+            lower_band = g == 1 ? 0.0 : cumulative[g - 1, end]
+            upper_band = cumulative[g, end]
+            band_height = upper_band - lower_band
+            if g == 5 || band_height >= 0.06 * ymax
+                annotate!(
+                    p,
+                    x[end] + 0.6,
+                    (lower_band + upper_band) / 2,
+                    text(CHANNEL_LABELS[g], 7, :left, COL_CHANNELS[g]),
+                )
+            end
+        end
+        return p
+    end
+
+    function plot_decomposition_line_panel(
+        pragmatic::Vector{Float64},
+        epistemic::Vector{Float64},
+        title_text::String,
+        forced_boundary::Int;
+        ylabel::String=""
+    )
+        x = 1:length(pragmatic)
+        ymax = max(maximum(vcat(pragmatic, epistemic)) * 1.10, 1e-3)
+        p = plot(
+            x,
+            pragmatic,
+            title=title_text,
+            xlabel="Time step",
+            ylabel=ylabel,
+            color=COL_PRAGMATIC,
+            linewidth=2.2,
+            label="",
+            legend=false,
+            size=(750, 500),
+            grid=false,
+            background_color=COL_BG,
+            background_color_inside=COL_BG,
+        )
+        plot!(p, x, epistemic, color=COL_EPISTEMIC, linewidth=2.2, label="")
+        format_panel!(p, forced_boundary, ymax, length(x))
+        annotate!(p, x[end] + 0.5, pragmatic[end], text("Pragmatic", 8, :left, COL_PRAGMATIC))
+        annotate!(p, x[end] + 0.5, epistemic[end], text("Epistemic", 8, :left, COL_EPISTEMIC))
+        return p
+    end
+
+    function plot_action_fingerprint_panel(
+        summary::IFSV2Summary,
+        action::Int,
+        forced_boundary::Int;
+        title_text::String="",
+        ylabel::String="",
+        annotate_components::Bool=false
+    )
+        pragmatic, _ = mean_action_filtered_series(summary, action, step -> step.efe_pragmatic)
+        epistemic, _ = mean_action_filtered_series(summary, action, step -> step.efe_epistemic)
+        ambiguity, _ = mean_action_filtered_series(summary, action, step -> step.efe_ambiguity)
+        x = 1:length(pragmatic)
+        ymax = max(maximum(pragmatic .+ ambiguity .+ epistemic) * 1.12, 1e-3)
+
+        p = plot(
+            title=title_text,
+            xlabel="Time step",
+            ylabel=ylabel,
+            legend=false,
+            size=(500, 333),
+            grid=false,
+            background_color=COL_BG,
+            background_color_inside=COL_BG,
+        )
+
+        lower = zeros(Float64, length(x))
+        for (label, values, color) in [
+            ("Pragmatic", pragmatic, COL_PRAGMATIC),
+            ("Ambiguity", ambiguity, COL_AMBIGUITY),
+            ("Epistemic", epistemic, COL_EPISTEMIC),
+        ]
+            upper = lower .+ values
+            plot!(
+                p,
+                x,
+                upper,
+                fillrange=lower,
+                fillalpha=0.85,
+                color=color,
+                linecolor=color,
+                linewidth=1.2,
+                label="",
+            )
+            if annotate_components && maximum(values) > 0.02
+                annotate!(p, x[end] + 0.35, (lower[end] + upper[end]) / 2, text(label, 7, :left, color))
+            end
+            lower = upper
+        end
+
+        format_panel!(p, forced_boundary, ymax, length(x))
+        return p
+    end
+
     function condition_heatmap_data(summary::IFSV2Summary)
         [
             summary.mean_self';
@@ -645,6 +879,136 @@ if ENABLE_FIGURES
         savefig(fig, joinpath(FIGURE_DIR, "ifs_v2_focused_sensitivity.png"))
         println("  saved ifs_v2_focused_sensitivity.png")
     end
+
+    function save_epistemic_by_channel(main_lookup::Dict{String,IFSV2Summary}, params::IFSV2Params)
+        names = ["Exposure", "Informational", "Relational Depth"]
+        panels = Any[]
+        for (idx, name) in enumerate(names)
+            payload = condition_decomposition_payload(main_lookup[name])
+            ylabel = idx == 2 ? "Epistemic value" : ""
+            push!(panels, plot_stacked_channel_panel(payload.epistemic_channels, name, params.T_forced; ylabel=ylabel))
+        end
+        fig = plot(
+            panels...,
+            layout=(3, 1),
+            size=(900, 600),
+            plot_title="What Is the Agent Curious About?",
+            background_color=COL_BG,
+        )
+        savefig(fig, joinpath(FIGURE_DIR, "ifs_v2_epistemic_by_channel.png"))
+        println("  saved ifs_v2_epistemic_by_channel.png")
+    end
+
+    function save_pragmatic_by_channel(main_lookup::Dict{String,IFSV2Summary}, params::IFSV2Params)
+        names = ["Exposure", "Informational", "Relational Depth"]
+        panels = Any[]
+        for (idx, name) in enumerate(names)
+            payload = condition_decomposition_payload(main_lookup[name])
+            ylabel = idx == 2 ? "Pragmatic value" : ""
+            push!(panels, plot_stacked_channel_panel(payload.pragmatic_channels, name, params.T_forced; ylabel=ylabel))
+        end
+        fig = plot(
+            panels...,
+            layout=(3, 1),
+            size=(900, 600),
+            plot_title="What Drives Action?",
+            background_color=COL_BG,
+        )
+        savefig(fig, joinpath(FIGURE_DIR, "ifs_v2_pragmatic_by_channel.png"))
+        println("  saved ifs_v2_pragmatic_by_channel.png")
+    end
+
+    function save_efe_decomposition(main_lookup::Dict{String,IFSV2Summary}, params::IFSV2Params)
+        names = ["Exposure", "Informational", "Relational Depth"]
+        panels = Any[]
+        for (idx, name) in enumerate(names)
+            payload = condition_decomposition_payload(main_lookup[name])
+            ylabel = idx == 2 ? "Component value" : ""
+            push!(panels, plot_decomposition_line_panel(payload.pragmatic, payload.epistemic, name, params.T_forced; ylabel=ylabel))
+        end
+        fig = plot(
+            panels...,
+            layout=(3, 1),
+            size=(900, 600),
+            plot_title="Pragmatic vs Epistemic Over Time",
+            background_color=COL_BG,
+        )
+        savefig(fig, joinpath(FIGURE_DIR, "ifs_v2_efe_decomposition.png"))
+        println("  saved ifs_v2_efe_decomposition.png")
+    end
+
+    function save_channel5_epistemic(main_lookup::Dict{String,IFSV2Summary}, params::IFSV2Params)
+        exposure = condition_decomposition_payload(main_lookup["Exposure"]).epistemic_channels[5, :]
+        informational = condition_decomposition_payload(main_lookup["Informational"]).epistemic_channels[5, :]
+        relational = condition_decomposition_payload(main_lookup["Relational Depth"]).epistemic_channels[5, :]
+        x = time_axis(main_lookup["Exposure"])
+        ymax = max(maximum(vcat(exposure, informational, relational)) * 1.12, 0.02)
+        p = plot(
+            x,
+            exposure,
+            color=COL_GRAY,
+            linewidth=2.0,
+            label="",
+            title="Witnessing Begins: Epistemic Drive on Self-State Channel",
+            xlabel="Time step",
+            ylabel="Channel 5 epistemic value",
+            legend=false,
+            size=(750, 500),
+            grid=false,
+            background_color=COL_BG,
+            background_color_inside=COL_BG,
+        )
+        plot!(p, x, informational, color=COL_BLUE, linewidth=2.0, label="")
+        plot!(p, x, relational, color=COL_ACCENT, linewidth=2.6, label="")
+        format_panel!(p, params.T_forced, ymax, length(x))
+        annotate!(p, x[end] + 0.5, exposure[end], text("Exposure", 8, :left, COL_GRAY))
+        annotate!(p, x[end] + 0.5, informational[end], text("Informational", 8, :left, COL_BLUE))
+        annotate!(p, x[end] + 0.5, relational[end], text("Relational depth", 8, :left, COL_ACCENT))
+
+        onset = onset_index(relational; min_fraction=0.20, floor=0.01)
+        if !isnothing(onset)
+            vline!(p, [onset], color=COL_ACCENT, linestyle=:dot, linewidth=1.1, alpha=0.7, label="")
+            annotate!(
+                p,
+                onset + 0.4,
+                relational[onset] + 0.06 * ymax,
+                text("onset", 8, :left, COL_ACCENT),
+            )
+        end
+
+        savefig(p, joinpath(FIGURE_DIR, "ifs_v2_channel5_epistemic.png"))
+        println("  saved ifs_v2_channel5_epistemic.png")
+    end
+
+    function save_motivation_fingerprint(main_lookup::Dict{String,IFSV2Summary}, params::IFSV2Params)
+        names = ["Exposure", "Informational", "Relational Depth"]
+        actions = [IFSV2_POLICY_AVOID, IFSV2_POLICY_INSPECT, IFSV2_POLICY_STAY]
+        panels = Any[]
+        for action in actions
+            for (idx, name) in enumerate(names)
+                title_text = action == IFSV2_POLICY_AVOID ? name : ""
+                ylabel = idx == 1 ? ACTION_LABELS[action] : ""
+                annotate_components = action == IFSV2_POLICY_STAY && name == "Relational Depth"
+                push!(panels, plot_action_fingerprint_panel(
+                    main_lookup[name],
+                    action,
+                    params.T_forced;
+                    title_text=title_text,
+                    ylabel=ylabel,
+                    annotate_components=annotate_components,
+                ))
+            end
+        end
+        fig = plot(
+            panels...,
+            layout=(3, 3),
+            size=(1500, 1000),
+            plot_title="Why the Agent Switches Actions",
+            background_color=COL_BG,
+        )
+        savefig(fig, joinpath(FIGURE_DIR, "ifs_v2_motivation_fingerprint.png"))
+        println("  saved ifs_v2_motivation_fingerprint.png")
+    end
 end
 
 println("=" ^ 72)
@@ -722,6 +1086,11 @@ if ENABLE_FIGURES
     save_h1_vs_h2(h1_lookup["Relational Depth"], h2_relational, params)
     save_free_choice_probe(h1_lookup)
     save_focused_sensitivity(focused_rows)
+    save_epistemic_by_channel(h1_lookup, params)
+    save_pragmatic_by_channel(h1_lookup, params)
+    save_efe_decomposition(h1_lookup, params)
+    save_channel5_epistemic(h1_lookup, params)
+    save_motivation_fingerprint(h1_lookup, params)
 else
     println("\nSkipping figure generation because IFS_V2_SKIP_FIGURES=1")
 end

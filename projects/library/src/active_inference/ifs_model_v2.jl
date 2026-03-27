@@ -141,6 +141,15 @@ struct IFSV2Model
     D::Vector{Vector{Float64}}
 end
 
+struct IFSV2EFEDecomposition
+    pragmatic_per_channel::NTuple{5,Float64}
+    epistemic_per_channel::NTuple{5,Float64}
+    ambiguity_per_channel::NTuple{5,Float64}
+    pragmatic_total::Float64
+    epistemic_total::Float64
+    ambiguity_total::Float64
+end
+
 struct IFSV2StepResult
     timestep::Int
     phase::Symbol
@@ -155,6 +164,11 @@ struct IFSV2StepResult
     p_approach_stay::Float64
     capture::Float64
     witness_precision::Float64
+    efe_pragmatic::Float64
+    efe_epistemic::Float64
+    efe_ambiguity::Float64
+    efe_pragmatic_channels::NTuple{5,Float64}
+    efe_epistemic_channels::NTuple{5,Float64}
 end
 
 struct IFSV2Metrics
@@ -256,6 +270,13 @@ end
 function validate_probability_vector(v::AbstractVector{<:Real}; atol::Float64=1e-8)
     @assert all(v .>= -atol)
     @assert isapprox(sum(v), 1.0; atol=atol)
+end
+
+zero_ifs_v2_channel_tuple() = ntuple(_ -> 0.0, 5)
+
+function as_ifs_v2_channel_tuple(values::AbstractVector{<:Real})
+    @assert length(values) == 5
+    return ntuple(i -> Float64(values[i]), 5)
 end
 
 function validate_ifs_v2_A(A::Vector{Array{Float64,4}}; atol::Float64=1e-8)
@@ -668,7 +689,7 @@ function infer_ifs_v2_stage(
     return qs
 end
 
-function compute_ifs_v2_policy_efe(
+function compute_ifs_v2_policy_efe_decomposed(
     model::IFSV2Model,
     env::IFSV2Environment,
     q::Vector{Vector{Float64}},
@@ -691,20 +712,40 @@ function compute_ifs_v2_policy_efe(
         witness_precision,
     )
 
-    ambiguity_cost = 0.0
-    pragmatic_cost = 0.0
-    epistemic_value = 0.0
+    ambiguity_per_channel = zeros(Float64, 5)
+    pragmatic_per_channel = zeros(Float64, 5)
+    epistemic_per_channel = zeros(Float64, 5)
     for g in 1:length(A_policy)
         weight = modality_weights[g]
         weight <= 0.0 && continue
 
         qo = compute_predicted_obs(A_policy[g], q_next, IFSV2_NS)
-        ambiguity_cost += weight * compute_ambiguity(A_policy[g], q_next, IFSV2_NS)
-        pragmatic_cost -= weight * sum(qo .* log_prefs[g])
-        epistemic_value += weight * compute_state_info_gain(A_policy[g], q_next, qo, IFSV2_NS)
+        ambiguity_per_channel[g] = weight * compute_ambiguity(A_policy[g], q_next, IFSV2_NS)
+        pragmatic_per_channel[g] = -weight * sum(qo .* log_prefs[g])
+        epistemic_per_channel[g] = weight * compute_state_info_gain(A_policy[g], q_next, qo, IFSV2_NS)
     end
 
-    return ambiguity_cost + pragmatic_cost - epistemic_value
+    decomposition = IFSV2EFEDecomposition(
+        as_ifs_v2_channel_tuple(pragmatic_per_channel),
+        as_ifs_v2_channel_tuple(epistemic_per_channel),
+        as_ifs_v2_channel_tuple(ambiguity_per_channel),
+        sum(pragmatic_per_channel),
+        sum(epistemic_per_channel),
+        sum(ambiguity_per_channel),
+    )
+    efe = decomposition.ambiguity_total + decomposition.pragmatic_total - decomposition.epistemic_total
+    return efe, decomposition
+end
+
+function compute_ifs_v2_policy_efe(
+    model::IFSV2Model,
+    env::IFSV2Environment,
+    q::Vector{Vector{Float64}},
+    E_t::Float64,
+    action::Int
+)
+    efe, _ = compute_ifs_v2_policy_efe_decomposed(model, env, q, E_t, action)
+    return efe
 end
 
 function compute_ifs_v2_policy_probs(
@@ -885,6 +926,7 @@ function run_ifs_v2_condition(
                 capture, _, lambda_ctx_eff = compute_ifs_v2_capture(params, config.E_t, prior)
                 witness_precision = compute_ifs_v2_witness_precision(params, capture, lambda_ctx_eff)
                 policy_probs = compute_ifs_v2_policy_probs(model, env, prior, config.E_t)
+                _, efe_decomposition = compute_ifs_v2_policy_efe_decomposed(model, env, prior, config.E_t, action)
                 push!(steps, IFSV2StepResult(
                     t,
                     phase,
@@ -898,7 +940,12 @@ function run_ifs_v2_condition(
                     policy_probs[IFSV2_POLICY_STAY],
                     policy_probs[IFSV2_POLICY_INSPECT] + policy_probs[IFSV2_POLICY_STAY],
                     capture,
-                    witness_precision
+                    witness_precision,
+                    efe_decomposition.pragmatic_total,
+                    efe_decomposition.epistemic_total,
+                    efe_decomposition.ambiguity_total,
+                    efe_decomposition.pragmatic_per_channel,
+                    efe_decomposition.epistemic_per_channel,
                 ))
                 final_forced_belief = [copy(q) for q in prior]
                 final_forced_capture = capture
@@ -922,6 +969,7 @@ function run_ifs_v2_condition(
             )
             q_final = infer_ifs_v2_stage(prior, A, obs, stage2_weights; active_modalities=1:5)
             policy_probs = compute_ifs_v2_policy_probs(model, env, q_final, config.E_t)
+            _, efe_decomposition = compute_ifs_v2_policy_efe_decomposed(model, env, q_final, config.E_t, action)
 
             push!(steps, IFSV2StepResult(
                 t,
@@ -936,14 +984,22 @@ function run_ifs_v2_condition(
                 policy_probs[IFSV2_POLICY_STAY],
                 policy_probs[IFSV2_POLICY_INSPECT] + policy_probs[IFSV2_POLICY_STAY],
                 capture,
-                witness_precision
+                witness_precision,
+                efe_decomposition.pragmatic_total,
+                efe_decomposition.epistemic_total,
+                efe_decomposition.ambiguity_total,
+                efe_decomposition.pragmatic_per_channel,
+                efe_decomposition.epistemic_per_channel,
             ))
 
             verbose && println(
                 "t=$t phase=$phase action=$action obs=$(collect(obs)) ",
                 "self=$(round(q_final[1][2], digits=3)) threat=$(round(q_final[2][2], digits=3)) ",
                 "outcome=$(round(q_final[3][2], digits=3)) capture=$(round(capture, digits=3)) ",
-                "witness=$(round(witness_precision, digits=3)) qpi=$(round.(policy_probs, digits=3))"
+                "witness=$(round(witness_precision, digits=3)) qpi=$(round.(policy_probs, digits=3)) ",
+                "efe=(prag=$(round(efe_decomposition.pragmatic_total, digits=3)), ",
+                "epi=$(round(efe_decomposition.epistemic_total, digits=3)), ",
+                "amb=$(round(efe_decomposition.ambiguity_total, digits=3)))"
             )
 
             prior = propagate_ifs_v2_beliefs(model, q_final, action)
@@ -955,6 +1011,7 @@ function run_ifs_v2_condition(
             frozen = final_forced_belief::Vector{Vector{Float64}}
             q_probe, obs, capture, witness_precision = infer_ifs_v2_probe_beliefs(model, env, frozen, config)
             action, policy_probs = select_ifs_v2_action(model, env, q_probe, config.E_t; deterministic=deterministic_probe)
+            _, efe_decomposition = compute_ifs_v2_policy_efe_decomposed(model, env, q_probe, config.E_t, action)
             push!(steps, IFSV2StepResult(
                 t,
                 phase,
@@ -968,7 +1025,12 @@ function run_ifs_v2_condition(
                 policy_probs[IFSV2_POLICY_STAY],
                 policy_probs[IFSV2_POLICY_INSPECT] + policy_probs[IFSV2_POLICY_STAY],
                 capture,
-                witness_precision
+                witness_precision,
+                efe_decomposition.pragmatic_total,
+                efe_decomposition.epistemic_total,
+                efe_decomposition.ambiguity_total,
+                efe_decomposition.pragmatic_per_channel,
+                efe_decomposition.epistemic_per_channel,
             ))
         end
     end
