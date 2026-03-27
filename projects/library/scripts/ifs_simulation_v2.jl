@@ -47,7 +47,9 @@ using .IFSV2ScriptSupport:
     override_ifs_v2_params,
     baseline_ifs_v2_config,
     exposure_ifs_v2_config,
-    informational_ifs_v2_config
+    informational_ifs_v2_config,
+    constant_ifs_v2_schedule,
+    witnessing_onset_ifs_v2_config
 using Statistics
 
 const ENABLE_FIGURES = get(ENV, "IFS_V2_SKIP_FIGURES", "0") != "1"
@@ -165,7 +167,7 @@ function build_sweep_summary(params::IFSV2Params; architecture::Symbol=:H1, n_re
         config = IFSV2ConditionConfig(
             "Sweep $(round(E_t, digits=2))",
             IFSV2_CONTEXT_SAFE,
-            E_t,
+            constant_ifs_v2_schedule(params.T_forced, params.T_probe, E_t),
             IFSV2_POLICY_INSPECT,
             params.T_forced,
             params.T_probe,
@@ -257,6 +259,30 @@ end
 
 function time_axis(summary::IFSV2Summary)
     return collect(1:length(summary.runs[1].steps))
+end
+
+function forced_phase_indices(summary::IFSV2Summary)
+    return findall(step -> step.phase == :forced, summary.runs[1].steps)
+end
+
+function forced_time_axis(summary::IFSV2Summary)
+    return collect(1:length(forced_phase_indices(summary)))
+end
+
+function forced_step_series(summary::IFSV2Summary, getter::Function)
+    idx = forced_phase_indices(summary)
+    values, spreads = mean_step_series(summary, getter)
+    return values[idx], spreads[idx]
+end
+
+function forced_channel_series(summary::IFSV2Summary, getter::Function)
+    idx = forced_phase_indices(summary)
+    return mean_channel_series(summary, getter)[:, idx]
+end
+
+function forced_E_series(summary::IFSV2Summary)
+    idx = forced_phase_indices(summary)
+    return [summary.runs[1].steps[i].E_t for i in idx]
 end
 
 function onset_index(series::AbstractVector{<:Real}; min_fraction::Float64=0.15, floor::Float64=1e-3)
@@ -937,19 +963,21 @@ if ENABLE_FIGURES
         println("  saved ifs_v2_efe_decomposition.png")
     end
 
-    function save_channel5_epistemic(main_lookup::Dict{String,IFSV2Summary}, params::IFSV2Params)
-        exposure = condition_decomposition_payload(main_lookup["Exposure"]).epistemic_channels[5, :]
-        informational = condition_decomposition_payload(main_lookup["Informational"]).epistemic_channels[5, :]
-        relational = condition_decomposition_payload(main_lookup["Relational Depth"]).epistemic_channels[5, :]
-        x = time_axis(main_lookup["Exposure"])
-        ymax = max(maximum(vcat(exposure, informational, relational)) * 1.12, 0.02)
+    function save_witnessing_onset(summary::IFSV2Summary)
+        x = forced_time_axis(summary)
+        E_series = forced_E_series(summary)
+        channel5, channel5_std = forced_step_series(summary, step -> step.efe_epistemic_channels[5])
+        ymax = max(maximum(vcat(channel5 .+ channel5_std, E_series)) * 1.10, 1.0)
+
         p = plot(
             x,
-            exposure,
-            color=COL_GRAY,
-            linewidth=2.0,
+            channel5,
+            ribbon=channel5_std,
+            color=COL_ACCENT,
+            fillalpha=0.12,
+            linewidth=2.6,
             label="",
-            title="Witnessing Begins: Epistemic Drive on Self-State Channel",
+            title="Self-Curiosity Emerges at Relational Depth",
             xlabel="Time step",
             ylabel="Channel 5 epistemic value",
             legend=false,
@@ -958,26 +986,103 @@ if ENABLE_FIGURES
             background_color=COL_BG,
             background_color_inside=COL_BG,
         )
-        plot!(p, x, informational, color=COL_BLUE, linewidth=2.0, label="")
-        plot!(p, x, relational, color=COL_ACCENT, linewidth=2.6, label="")
-        format_panel!(p, params.T_forced, ymax, length(x))
-        annotate!(p, x[end] + 0.5, exposure[end], text("Exposure", 8, :left, COL_GRAY))
-        annotate!(p, x[end] + 0.5, informational[end], text("Informational", 8, :left, COL_BLUE))
-        annotate!(p, x[end] + 0.5, relational[end], text("Relational depth", 8, :left, COL_ACCENT))
+        plot!(
+            p,
+            x,
+            E_series,
+            color=COL_ANNOTATION,
+            linewidth=1.6,
+            linestyle=:dash,
+            alpha=0.9,
+            label="",
+        )
+        ylims!(p, (0.0, ymax))
+        xlims!(p, (1.0, length(x) + 4.0))
 
-        onset = onset_index(relational; min_fraction=0.20, floor=0.01)
+        onset = onset_index(channel5; min_fraction=0.10, floor=0.01)
         if !isnothing(onset)
-            vline!(p, [onset], color=COL_ACCENT, linestyle=:dot, linewidth=1.1, alpha=0.7, label="")
+            onset_E = E_series[onset]
+            vline!(p, [onset], color=COL_ACCENT, linestyle=:dot, linewidth=1.1, alpha=0.8, label="")
+            scatter!(p, [onset], [channel5[onset]], markersize=4, markercolor=COL_ACCENT, markerstrokewidth=0, label="")
             annotate!(
                 p,
-                onset + 0.4,
-                relational[onset] + 0.06 * ymax,
-                text("onset", 8, :left, COL_ACCENT),
+                onset + 0.5,
+                min(ymax * 0.92, channel5[onset] + 0.15 * ymax),
+                text("onset\nE_t ≈ $(round(onset_E, digits=2))", 8, :left, COL_ACCENT),
             )
+            annotate!(p, max(3, onset - 3), ymax * 0.07, text("captured", 8, :center, COL_GRAY))
+            annotate!(p, min(length(x) - 3, onset + 6), ymax * 0.90, text("witnessing", 8, :center, COL_ACCENT))
         end
 
-        savefig(p, joinpath(FIGURE_DIR, "ifs_v2_channel5_epistemic.png"))
-        println("  saved ifs_v2_channel5_epistemic.png")
+        annotate!(p, x[end] + 0.6, channel5[end], text("Channel 5", 8, :left, COL_ACCENT))
+        annotate!(p, x[end] + 0.6, E_series[end], text("Self-energy E_t", 8, :left, COL_ANNOTATION))
+
+        savefig(p, joinpath(FIGURE_DIR, "ifs_v2_witnessing_onset.png"))
+        println("  saved ifs_v2_witnessing_onset.png")
+    end
+
+    function save_epistemic_emergence(summary::IFSV2Summary)
+        series = forced_channel_series(summary, step -> step.efe_epistemic_channels)
+        x = forced_time_axis(summary)
+        total = vec(sum(series; dims=1))
+        ymax = max(maximum(total) * 1.10, 1e-3)
+
+        p = plot(
+            title="What the Agent Is Curious About Shifts as Self-Energy Rises",
+            xlabel="Time step",
+            ylabel="Epistemic value",
+            legend=false,
+            size=(750, 500),
+            grid=false,
+            background_color=COL_BG,
+            background_color_inside=COL_BG,
+        )
+
+        lower = zeros(Float64, length(x))
+        for g in 1:5
+            upper = lower .+ vec(series[g, :])
+            plot!(
+                p,
+                x,
+                upper,
+                fillrange=lower,
+                fillalpha=g == 5 ? 0.92 : 0.82,
+                color=COL_CHANNELS[g],
+                linecolor=COL_CHANNELS[g],
+                linewidth=g == 5 ? 1.8 : 1.1,
+                label="",
+            )
+            lower = upper
+        end
+
+        ylims!(p, (0.0, ymax))
+        xlims!(p, (1.0, length(x) + 4.0))
+
+        onset = onset_index(vec(series[5, :]); min_fraction=0.10, floor=0.01)
+        if !isnothing(onset)
+            vline!(p, [onset], color=COL_ACCENT, linestyle=:dot, linewidth=1.1, alpha=0.8, label="")
+            annotate!(p, onset + 0.5, min(ymax * 0.95, total[onset] + 0.10 * ymax), text("onset", 8, :left, COL_ACCENT))
+            annotate!(p, max(4, onset - 3), ymax * 0.14, text("captured", 8, :center, COL_GRAY))
+            annotate!(p, min(length(x) - 3, onset + 6), ymax * 0.95, text("witnessing", 8, :center, COL_ACCENT))
+        end
+
+        cumulative = cumsum(series; dims=1)
+        for g in 1:5
+            lower_band = g == 1 ? 0.0 : cumulative[g - 1, end]
+            upper_band = cumulative[g, end]
+            band_height = upper_band - lower_band
+            if g == 5 || band_height >= 0.06 * ymax
+                annotate!(
+                    p,
+                    x[end] + 0.6,
+                    (lower_band + upper_band) / 2,
+                    text(CHANNEL_LABELS[g], 7, :left, COL_CHANNELS[g]),
+                )
+            end
+        end
+
+        savefig(p, joinpath(FIGURE_DIR, "ifs_v2_epistemic_emergence.png"))
+        println("  saved ifs_v2_epistemic_emergence.png")
     end
 
     function save_motivation_fingerprint(main_lookup::Dict{String,IFSV2Summary}, params::IFSV2Params)
@@ -1055,6 +1160,23 @@ println("\nSelf-energy sweep ($SWEEP_REPS replications per level)")
 Es, sweep_mean, sweep_std = build_sweep_summary(params; architecture=:H1, n_replications=SWEEP_REPS)
 println("  sweep endpoints   = E=0.0 -> $(round(first(sweep_mean), digits=3)), E=1.0 -> $(round(last(sweep_mean), digits=3))")
 
+onset_config = witnessing_onset_ifs_v2_config(params)
+onset_reps = max(N_REPS, 60)
+println("\nWitnessing onset ramp ($onset_reps replications, $(onset_config.T_forced) forced steps)")
+onset_summary = run_ifs_v2_replications(
+    architecture=:H1,
+    config=onset_config,
+    params=params,
+    n_replications=onset_reps,
+    seed=SEED + 1500
+)
+onset_channel5, _ = forced_step_series(onset_summary, step -> step.efe_epistemic_channels[5])
+onset_E = forced_E_series(onset_summary)
+onset_t = onset_index(onset_channel5; min_fraction=0.10, floor=0.01)
+if !isnothing(onset_t)
+    println("  channel 5 onset  = t=$(onset_t), E_t=$(round(onset_E[onset_t], digits=3)), final=$(round(onset_channel5[end], digits=3))")
+end
+
 println("\nParameter sensitivity ($SENS_REPS replications per perturbation)")
 sensitivity_rows = run_ifs_v2_sensitivity(
     architecture=:H1,
@@ -1089,7 +1211,8 @@ if ENABLE_FIGURES
     save_epistemic_by_channel(h1_lookup, params)
     save_pragmatic_by_channel(h1_lookup, params)
     save_efe_decomposition(h1_lookup, params)
-    save_channel5_epistemic(h1_lookup, params)
+    save_witnessing_onset(onset_summary)
+    save_epistemic_emergence(onset_summary)
     save_motivation_fingerprint(h1_lookup, params)
 else
     println("\nSkipping figure generation because IFS_V2_SKIP_FIGURES=1")

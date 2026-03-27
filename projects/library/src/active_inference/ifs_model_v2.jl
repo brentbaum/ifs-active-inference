@@ -116,7 +116,7 @@ end
 struct IFSV2ConditionConfig
     name::String
     context::Int
-    E_t::Float64
+    E_schedule::Vector{Float64}
     forced_action::Int
     T_forced::Int
     T_probe::Int
@@ -153,6 +153,7 @@ end
 struct IFSV2StepResult
     timestep::Int
     phase::Symbol
+    E_t::Float64
     action::Int
     observations::NTuple{5,Int}
     p_self_revised::Float64
@@ -217,24 +218,96 @@ end
 # CONDITION HELPERS
 # ============================================================================
 
+constant_ifs_v2_schedule(T_forced::Int, T_probe::Int, E_t::Float64) = fill(E_t, T_forced + T_probe)
+
+function ramp_ifs_v2_schedule(T_forced::Int, T_probe::Int, E_start::Float64, E_end::Float64)
+    @assert T_forced > 0
+    forced = collect(range(E_start, E_end; length=T_forced))
+    return vcat(forced, fill(E_end, T_probe))
+end
+
 function baseline_ifs_v2_config(params::IFSV2Params=IFSV2Params())
-    IFSV2ConditionConfig("Baseline", IFSV2_CONTEXT_SAFE, 0.10, IFSV2_POLICY_AVOID, params.T_forced, params.T_probe, true, true)
+    IFSV2ConditionConfig(
+        "Baseline",
+        IFSV2_CONTEXT_SAFE,
+        constant_ifs_v2_schedule(params.T_forced, params.T_probe, 0.10),
+        IFSV2_POLICY_AVOID,
+        params.T_forced,
+        params.T_probe,
+        true,
+        true
+    )
 end
 
 function exposure_ifs_v2_config(params::IFSV2Params=IFSV2Params())
-    IFSV2ConditionConfig("Exposure", IFSV2_CONTEXT_SAFE, 0.15, IFSV2_POLICY_INSPECT, params.T_forced, params.T_probe, true, false)
+    IFSV2ConditionConfig(
+        "Exposure",
+        IFSV2_CONTEXT_SAFE,
+        constant_ifs_v2_schedule(params.T_forced, params.T_probe, 0.15),
+        IFSV2_POLICY_INSPECT,
+        params.T_forced,
+        params.T_probe,
+        true,
+        false
+    )
 end
 
 function informational_ifs_v2_config(params::IFSV2Params=IFSV2Params())
-    IFSV2ConditionConfig("Informational", IFSV2_CONTEXT_SAFE, 0.45, IFSV2_POLICY_INSPECT, params.T_forced, params.T_probe, true, false)
+    IFSV2ConditionConfig(
+        "Informational",
+        IFSV2_CONTEXT_SAFE,
+        constant_ifs_v2_schedule(params.T_forced, params.T_probe, 0.45),
+        IFSV2_POLICY_INSPECT,
+        params.T_forced,
+        params.T_probe,
+        true,
+        false
+    )
 end
 
 function relational_depth_ifs_v2_config(params::IFSV2Params=IFSV2Params())
-    IFSV2ConditionConfig("Relational Depth", IFSV2_CONTEXT_SAFE, 0.85, IFSV2_POLICY_INSPECT, params.T_forced, params.T_probe, true, false)
+    IFSV2ConditionConfig(
+        "Relational Depth",
+        IFSV2_CONTEXT_SAFE,
+        constant_ifs_v2_schedule(params.T_forced, params.T_probe, 0.85),
+        IFSV2_POLICY_INSPECT,
+        params.T_forced,
+        params.T_probe,
+        true,
+        false
+    )
 end
 
 function real_danger_ifs_v2_config(params::IFSV2Params=IFSV2Params())
-    IFSV2ConditionConfig("Real Danger", IFSV2_CONTEXT_DANGEROUS, 0.85, IFSV2_POLICY_INSPECT, params.T_forced, params.T_probe, true, false)
+    IFSV2ConditionConfig(
+        "Real Danger",
+        IFSV2_CONTEXT_DANGEROUS,
+        constant_ifs_v2_schedule(params.T_forced, params.T_probe, 0.85),
+        IFSV2_POLICY_INSPECT,
+        params.T_forced,
+        params.T_probe,
+        true,
+        false
+    )
+end
+
+function witnessing_onset_ifs_v2_config(
+    params::IFSV2Params=IFSV2Params();
+    E_start::Float64=0.10,
+    E_end::Float64=0.90,
+    T_forced::Int=30,
+    T_probe::Int=1
+)
+    IFSV2ConditionConfig(
+        "Witnessing Onset",
+        IFSV2_CONTEXT_SAFE,
+        ramp_ifs_v2_schedule(T_forced, T_probe, E_start, E_end),
+        IFSV2_POLICY_INSPECT,
+        T_forced,
+        T_probe,
+        true,
+        false
+    )
 end
 
 function main_ifs_v2_configs(params::IFSV2Params=IFSV2Params())
@@ -780,7 +853,7 @@ function infer_ifs_v2_probe_beliefs(
     model::IFSV2Model,
     env::IFSV2Environment,
     prior::Vector{Vector{Float64}},
-    config::IFSV2ConditionConfig
+    E_t::Float64
 )
     params = model.params
     probe_A = build_ifs_v2_A(model, env, IFSV2_POLICY_INSPECT)
@@ -792,10 +865,10 @@ function infer_ifs_v2_probe_beliefs(
         env.actual_self == IFSV2_SELF_CAPABLE_PRESENT ? IFSV2_WIT_CAPABLE_PRESENT : IFSV2_WIT_HELPLESS_ALONE,
     )
 
-    stage1_weights, _, lambda_ctx_eff = compute_ifs_v2_stage1_weights(params, config.E_t, prior; probe=true)
+    stage1_weights, _, lambda_ctx_eff = compute_ifs_v2_stage1_weights(params, E_t, prior; probe=true)
 
     q_stage1 = infer_ifs_v2_stage(prior, probe_A, probe_obs, stage1_weights; active_modalities=(1, 2, 4))
-    capture, _, lambda_ctx_eff = compute_ifs_v2_capture(params, config.E_t, q_stage1)
+    capture, _, lambda_ctx_eff = compute_ifs_v2_capture(params, E_t, q_stage1)
     witness_precision = compute_ifs_v2_witness_precision(params, capture, lambda_ctx_eff)
 
     stage2_weights = (
@@ -910,26 +983,29 @@ function run_ifs_v2_condition(
     steps = IFSV2StepResult[]
 
     total_steps = config.T_forced + config.T_probe
+    @assert length(config.E_schedule) == total_steps
     final_forced_belief = nothing
     final_forced_capture = 1.0
     final_forced_witness = 0.0
 
     for t in 1:total_steps
         phase = t <= config.T_forced ? :forced : :probe
+        E_t = config.E_schedule[t]
 
         if phase == :forced
-            action = config.forced_action > 0 ? config.forced_action : select_ifs_v2_action(model, env, prior, config.E_t; deterministic=true)[1]
+            action = config.forced_action > 0 ? config.forced_action : select_ifs_v2_action(model, env, prior, E_t; deterministic=true)[1]
             A = build_ifs_v2_A(model, env, action)
             obs = sample_ifs_v2_observation(A, env)
 
             if config.no_contact
-                capture, _, lambda_ctx_eff = compute_ifs_v2_capture(params, config.E_t, prior)
+                capture, _, lambda_ctx_eff = compute_ifs_v2_capture(params, E_t, prior)
                 witness_precision = compute_ifs_v2_witness_precision(params, capture, lambda_ctx_eff)
-                policy_probs = compute_ifs_v2_policy_probs(model, env, prior, config.E_t)
-                _, efe_decomposition = compute_ifs_v2_policy_efe_decomposed(model, env, prior, config.E_t, action)
+                policy_probs = compute_ifs_v2_policy_probs(model, env, prior, E_t)
+                _, efe_decomposition = compute_ifs_v2_policy_efe_decomposed(model, env, prior, E_t, action)
                 push!(steps, IFSV2StepResult(
                     t,
                     phase,
+                    E_t,
                     action,
                     obs,
                     prior[1][IFSV2_SELF_CAPABLE_PRESENT],
@@ -953,10 +1029,10 @@ function run_ifs_v2_condition(
                 continue
             end
 
-            stage1_weights, _, lambda_ctx_eff = compute_ifs_v2_stage1_weights(params, config.E_t, prior)
+            stage1_weights, _, lambda_ctx_eff = compute_ifs_v2_stage1_weights(params, E_t, prior)
 
             q_stage1 = infer_ifs_v2_stage(prior, A, obs, stage1_weights; active_modalities=1:4)
-            capture, _, lambda_ctx_eff = compute_ifs_v2_capture(params, config.E_t, q_stage1)
+            capture, _, lambda_ctx_eff = compute_ifs_v2_capture(params, E_t, q_stage1)
             witness_precision = compute_ifs_v2_witness_precision(params, capture, lambda_ctx_eff)
 
             witness_scale = model.architecture == :H2 ? 0.0 : 1.0
@@ -968,12 +1044,13 @@ function run_ifs_v2_condition(
                 witness_scale * witness_precision,
             )
             q_final = infer_ifs_v2_stage(prior, A, obs, stage2_weights; active_modalities=1:5)
-            policy_probs = compute_ifs_v2_policy_probs(model, env, q_final, config.E_t)
-            _, efe_decomposition = compute_ifs_v2_policy_efe_decomposed(model, env, q_final, config.E_t, action)
+            policy_probs = compute_ifs_v2_policy_probs(model, env, q_final, E_t)
+            _, efe_decomposition = compute_ifs_v2_policy_efe_decomposed(model, env, q_final, E_t, action)
 
             push!(steps, IFSV2StepResult(
                 t,
                 phase,
+                E_t,
                 action,
                 obs,
                 q_final[1][IFSV2_SELF_CAPABLE_PRESENT],
@@ -993,7 +1070,7 @@ function run_ifs_v2_condition(
             ))
 
             verbose && println(
-                "t=$t phase=$phase action=$action obs=$(collect(obs)) ",
+                "t=$t phase=$phase E_t=$(round(E_t, digits=3)) action=$action obs=$(collect(obs)) ",
                 "self=$(round(q_final[1][2], digits=3)) threat=$(round(q_final[2][2], digits=3)) ",
                 "outcome=$(round(q_final[3][2], digits=3)) capture=$(round(capture, digits=3)) ",
                 "witness=$(round(witness_precision, digits=3)) qpi=$(round.(policy_probs, digits=3)) ",
@@ -1009,12 +1086,13 @@ function run_ifs_v2_condition(
         else
             @assert final_forced_belief !== nothing "Forced phase must run before the probe."
             frozen = final_forced_belief::Vector{Vector{Float64}}
-            q_probe, obs, capture, witness_precision = infer_ifs_v2_probe_beliefs(model, env, frozen, config)
-            action, policy_probs = select_ifs_v2_action(model, env, q_probe, config.E_t; deterministic=deterministic_probe)
-            _, efe_decomposition = compute_ifs_v2_policy_efe_decomposed(model, env, q_probe, config.E_t, action)
+            q_probe, obs, capture, witness_precision = infer_ifs_v2_probe_beliefs(model, env, frozen, E_t)
+            action, policy_probs = select_ifs_v2_action(model, env, q_probe, E_t; deterministic=deterministic_probe)
+            _, efe_decomposition = compute_ifs_v2_policy_efe_decomposed(model, env, q_probe, E_t, action)
             push!(steps, IFSV2StepResult(
                 t,
                 phase,
+                E_t,
                 action,
                 obs,
                 q_probe[1][IFSV2_SELF_CAPABLE_PRESENT],
