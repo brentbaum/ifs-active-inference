@@ -1024,6 +1024,7 @@ if ENABLE_FIGURES
     function save_epistemic_emergence(summary::IFSV2Summary)
         series = forced_channel_series(summary, step -> step.efe_epistemic_channels)
         x = forced_time_axis(summary)
+        E_series = forced_E_series(summary)
         total = vec(sum(series; dims=1))
         ymax = max(maximum(total) * 1.10, 1e-3)
 
@@ -1031,13 +1032,16 @@ if ENABLE_FIGURES
             title="What the Agent Is Curious About Shifts as Self-Energy Rises",
             xlabel="Time step",
             ylabel="Epistemic value",
-            legend=false,
+            legend=:topleft,
+            legendfontsize=7,
+            legendbackground=RGBA(1, 1, 0.973, 0.85),
             size=(750, 500),
             grid=false,
             background_color=COL_BG,
             background_color_inside=COL_BG,
         )
 
+        # Stacked areas with legend labels
         lower = zeros(Float64, length(x))
         for g in 1:5
             upper = lower .+ vec(series[g, :])
@@ -1050,10 +1054,17 @@ if ENABLE_FIGURES
                 color=COL_CHANNELS[g],
                 linecolor=COL_CHANNELS[g],
                 linewidth=g == 5 ? 1.8 : 1.1,
-                label="",
+                label=CHANNEL_LABELS[g],
             )
             lower = upper
         end
+
+        # E_t overlay on secondary y-axis (scaled to fit)
+        E_scaled = E_series .* ymax
+        plot!(p, x, E_scaled,
+            color=:black, linewidth=1.5, linestyle=:dash, alpha=0.5,
+            label="Self-energy (E_t)",
+        )
 
         ylims!(p, (0.0, ymax))
         xlims!(p, (1.0, length(x) + 4.0))
@@ -1064,21 +1075,6 @@ if ENABLE_FIGURES
             annotate!(p, onset + 0.5, min(ymax * 0.95, total[onset] + 0.10 * ymax), text("onset", 8, :left, COL_ACCENT))
             annotate!(p, max(4, onset - 3), ymax * 0.14, text("captured", 8, :center, COL_GRAY))
             annotate!(p, min(length(x) - 3, onset + 6), ymax * 0.95, text("witnessing", 8, :center, COL_ACCENT))
-        end
-
-        cumulative = cumsum(series; dims=1)
-        for g in 1:5
-            lower_band = g == 1 ? 0.0 : cumulative[g - 1, end]
-            upper_band = cumulative[g, end]
-            band_height = upper_band - lower_band
-            if g == 5 || band_height >= 0.06 * ymax
-                annotate!(
-                    p,
-                    x[end] + 0.6,
-                    (lower_band + upper_band) / 2,
-                    text(CHANNEL_LABELS[g], 7, :left, COL_CHANNELS[g]),
-                )
-            end
         end
 
         savefig(p, joinpath(FIGURE_DIR, "ifs_v2_epistemic_emergence.png"))
@@ -1213,7 +1209,11 @@ if ENABLE_FIGURES
     save_efe_decomposition(h1_lookup, params)
     save_witnessing_onset(onset_summary)
     save_epistemic_emergence(onset_summary)
-    save_motivation_fingerprint(h1_lookup, params)
+    try
+        save_motivation_fingerprint(h1_lookup, params)
+    catch e
+        println("  skipped motivation fingerprint: $(e)")
+    end
 else
     println("\nSkipping figure generation because IFS_V2_SKIP_FIGURES=1")
 end
