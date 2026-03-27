@@ -24,7 +24,7 @@ The claim of this paper is direct. The decisive therapeutic variable is not acti
 
 This paper is not arguing that IFS replaces exposure, schema work, or other evidence-based approaches. The claim is narrower. Different therapies alter different inferential variables. Exposure changes what the system learns under contact with feared stimuli. IFS, at its core, changes whether the activated part takes over or can be held in context. Before translating that claim into active inference, it helps to state the clinical picture in IFS's own terms.
 
-The rest of the paper is straightforward. Section 2 explains the phenomenon in IFS language and introduces a translation between clinical and computational vocabularies. Section 3 defines the formal object — parts as identity-level precision bundles — and introduces the active inference machinery the argument needs. Sections 4–5 show how parts form and how they persist. Section 6 introduces Self-energy and the inferential regimes it governs. Sections 7–8 formalize capture, context-held activation, the relational prediction error that operates inside the context-held window, and why only this combination permits lasting change. Section 9 extends the framework to protectors and polarization. Sections 10–11 present the simulation design and results. Section 12 closes with what the model explains, where it is still thin, and what should come next.
+The rest of the paper is straightforward. Section 2 explains the phenomenon in IFS language and introduces a translation between clinical and computational vocabularies. Section 3 defines the formal object — parts as identity-level precision bundles — and introduces the active inference machinery the argument needs. Sections 4–5 show how parts form and how they persist. Section 6 introduces Self-energy and the inferential regimes it governs. Sections 7–8 formalize capture, context-held activation, and why only this combination permits lasting change. Section 9 identifies the relational prediction error that operates inside the context-held window. Section 10 extends the framework to protectors and polarization. Sections 11–12 present the simulation design and results. Section 13 closes with what the model explains, where it is still thin, and what should come next.
 
 ---
 
@@ -53,7 +53,7 @@ Table 1 states the translation between IFS and computational vocabularies for th
 |---|---|
 | **Parts** | Identity-level precision bundles: learned local models coupling self-state, world-state, policy, and expected outcome |
 | **Blending** | Clinical name for capture: the active bundle dominates inference; present context loses inferential weight |
-| **Witnessing** | Context-held activation: the same bundle remains live while present evidence — including Self's present-moment self-state — stays online, enabling relational prediction error (§8.3) |
+| **Witnessing** | Context-held activation: the same bundle remains live while present evidence — including Self's present-moment self-state — stays online, enabling relational prediction error (§9) |
 | **Self** | A regime of uncaptured inference; when this regime obtains, the system's present-moment self-state becomes available as a differentiated presence that parts can register |
 | **Self-energy** | The governing variable for which regime obtains; a composite of autonomic safety and metacognitive depth |
 | **Protectors** | Policy priors and access-control tendencies that prevent destabilizing activation of exiles |
@@ -77,7 +77,7 @@ This bundle structure has an independent precedent in object relations theory, w
 
 **What makes this an identity-level bundle — discriminant validity.** This structure may look like a relabeling, but it predicts things that nearby constructs cannot. *Schemas* can update without re-entering the identity position that organized them. *Latent contexts* select which model is operative, not who the agent is within it — a context switch says "now use model B"; a part activation says "now I am the self that model B was organized around." *Trait priors* are slowly-updated meta-parameters, not identity states coupled to world-meaning and policy in a single unit. Three things follow that none predict: (a) parts feel like whole worlds, because all four elements arrive together; (b) identity-level change generalizes while threat-level change stays local; (c) activation feels like regression to an earlier self-position, not recall of a fear memory.
 
-A part is not a fear memory. It is an identity-level precision bundle in which self-state is the organizing prior — and revision that reaches the root generalizes in ways that revision of threat meaning alone cannot. Because self-state is the organizing prior, it is also where relational contact can do what threat-level intervention cannot — a point §8.3 takes up in detail.
+A part is not a fear memory. It is an identity-level precision bundle in which self-state is the organizing prior — and revision that reaches the root generalizes in ways that revision of threat meaning alone cannot. Because self-state is the organizing prior, it is also where relational contact can do what threat-level intervention cannot — a point §9 takes up in detail.
 
 Return to the dog case. A child is attacked by a dog. Under overwhelm and low control, one bundle may consolidate around the following priors:
 
@@ -102,28 +102,22 @@ The present model does not treat parts as literally separate agents with separat
 
 A generative model is the system's model of how hidden states produce observations and how actions change what will be observed next. It supports three things at once: inferring what is happening, selecting what to do, and updating beliefs over time. This paper uses only as much of this machinery as the argument needs.
 
-The present simulations use a discrete state-space formulation with three hidden factors:
-
-1. **External context** — safe or dangerous.
-2. **Self-state** — child-helpless or adult-capable.
-3. **Threat meaning** — dangerous or safe.
-
-Observations are sampled through external cues, interoceptive arousal, outcomes, and present-context support. Policies are minimal: avoid, inspect, or stay.
+The paper uses two complementary simulations, both discrete state-space formulations. The core model (v3) is deliberately minimal: two hidden factors — **self-state** (child-helpless or adult-capable) and **threat meaning** (dangerous or safe) — observed through three channels (cue, self-evidence, outcome). It adds cross-trial Dirichlet learning with separate prior banks per stimulus, so the system can acquire and retain part-like beliefs. The extended model (v2) adds **expected outcome** as a third factor and a richer observation space of five channels including a witnessed-self-state channel. Full specifications appear in §11–12.
 
 #### Precision
 
 Precision is the main formal tool in this paper. For non-technical readers: **how much the system trusts a given source of information**. More precisely, precision weights the influence of prediction error on inference. High precision means "trust this strongly." Low precision means "weight it lightly."
 
-The paper manipulates only two precision-bearing quantities directly:
+Self-energy modulates the precision balance between part priors and present-context evidence. There is no explicit channel gating — self-evidence is always available, but its impact on inference depends on how much precision the system allocates to it versus the part bundle's prior. The paper manipulates two precision-bearing quantities directly:
 
-- **Part-bundle prior precision**: how strongly the active bundle insists on its version of self, world, and action.
-- **Present-context evidence precision**: how much inferential weight the system gives to what is true here and now.
+- **Part-bundle prior precision** (`π_part`): how strongly the active bundle insists on its version of self, world, and action.
+- **Present-context evidence precision** (`λ_ctx`): how much inferential weight the system gives to what is true here and now.
 
-Everything important in the core model falls out of their interplay.
+Everything important falls out of their interplay, governed by Self-energy.
 
 #### Scope discipline
 
-The model is deliberately minimal. Only three quantities vary in the main model:
+The model is deliberately minimal. The core test (v3) uses only two hidden factors and three observation channels. Only three quantities vary:
 
 1. `π_part`: precision on the active part bundle
 2. `λ_ctx`: precision on present-context evidence
@@ -197,7 +191,7 @@ Self is not modeled here as a homunculus. It is a regime of uncaptured inference
 
 When no part dominates, inference remains responsive across channels. Present evidence can register. Multiple action possibilities remain available. The system is not being run by one compressed local model. That is the formal content of Self in the present account.
 
-But the regime has a further consequence. When no part's self-state dominates, the system's present-moment self-state becomes available: adult, located in the current context, not organized around the original danger. That self-state is not a homunculus. It is what self-modeling yields when inference is uncaptured. Parts, however, can register it — and as §8.3 argues, that registration is load-bearing.
+But the regime has a further consequence. When no part's self-state dominates, the system's present-moment self-state becomes available: adult, located in the current context, not organized around the original danger. That self-state is not a homunculus. It is what self-modeling yields when inference is uncaptured. Parts, however, can register it — and as §9 argues, that registration is load-bearing.
 
 This regime-based translation explains why Self appears when parts stop taking over. It does not yet fully explain why Self has the positive phenomenology it does — calm, curiosity, compassion, clarity. The working interpretation here is that these qualities are the signature of sufficiently uncaptured inference under the right embodied conditions, not something the model has fully derived.
 
@@ -291,7 +285,7 @@ Capture is graded, not binary. What varies is how much of the active model becom
 
 Context-held activation is not the absence of activation. It is activation held in context. Witnessing is the therapeutically cultivated form of this state — the specific relational practice IFS uses to achieve it.
 
-The part still fires. The body may still accelerate. The old priors still come online. But the system is not captured by them. Self's present-moment self-state remains available — adult, capable, not organized around the original danger — and so does informational context: *I am in this room; this body is adult; this moment is not the original one.* The activated part becomes something the system can relate to rather than only speak from. What that relating does — and why it, more than the informational context, is the primary channel of revision — is the subject of §8.3.
+The part still fires. The body may still accelerate. The old priors still come online. But the system is not captured by them. Self's present-moment self-state remains available — adult, capable, not organized around the original danger — and so does informational context: *I am in this room; this body is adult; this moment is not the original one.* The activated part becomes something the system can relate to rather than only speak from. What that relating does — and why it, more than the informational context, is the primary channel of revision — is the subject of §9.
 
 That is why context-held activation is formally distinct from distraction, suppression, or dissociation. Distraction lowers activation. Dissociation lowers context impact. Context-held activation leaves activation live while preventing capture.
 
@@ -323,7 +317,33 @@ Under capture, the part's priors dominate too strongly for present contradiction
 
 Calm by itself is not enough. A person can be regulated, insightful, and articulate while the relevant bundle remains offline. In that case nothing is live to revise. This is one reason understanding alone often changes so little. Dormant priors do not update because they are not currently generating predictions that can be contradicted.
 
-### 8.3 Relational prediction error
+### 8.3 Unburdening as upstream revision
+
+At the algorithmic level, the paper interprets unburdening as durable revision of upstream priors. In H1, self-state sits upstream of threat meaning, which sits upstream of protective policy. A revision in self-state — from *I am helpless here* to *I am capable here* — changes what counts as dangerous. A change in threat meaning changes what policies remain necessary.
+
+This gives a formal answer to a familiar clinical observation: why does deep change sometimes feel sudden? Because once an upstream prior shifts far enough, several downstream expectations lose support together.
+
+Clinically, unburdening often does more than reduce intensity. A part that carried helplessness may, after unburdening, take on a new functional role — playfulness, healthy assertiveness, creativity. In the present model, that transition corresponds to the bundle adopting new policy priors and expected-outcome priors once the old self-state no longer constrains the solution space. The formal account predicts qualitative regime change, not merely damping.
+
+### 8.4 Exposure versus context-held activation
+
+Exposure and context-held activation both supply corrective contact under activation. The distinction developed in §9 makes the comparison precise.
+
+Exposure generates informational prediction error: the feared outcome does not occur, and threat meaning can update. But it does not generate relational prediction error, because Self-energy remains outside the witnessing regime — the person's relation to the activation is unchanged. Learning therefore occurs more locally. Threat meaning can move. Specific stimulus-safety associations can soften. Self-state can shift somewhat over time, but later, less deeply, and with less generalization.
+
+Context-held activation supplies both channels: informational context is present *and* Self's present-moment self-state is available to the part. The relational prediction error reaches self-state directly. Under H1, that allows self-state revision to occur earlier and to cascade forward.
+
+The simulations support exactly that pattern. Under H1 witnessing, self-state crosses the revision threshold first, threat meaning follows, and avoidance lags. Under exposure, all three move more slowly and with much less separation.
+
+![Figure: Witnessing vs exposure belief trajectories](figures/fig2_witnessing_vs_exposure.png)
+
+*Figure 4. Context-held activation (witnessing) versus exposure under matched contact. Witnessing produces faster and deeper revision across all three target variables. The separation is attributable to inferential regime, not privileged information — the cue structure is identical across conditions.*
+
+---
+
+## 9. Relational Prediction Error
+
+The previous sections established what parts are and what governs the therapeutic regime. This section identifies what happens inside the context-held window that produces revision.
 
 The three conditions above — activation, context, and absence of capture — specify the regime in which revision becomes possible. They do not yet specify what happens inside the window that produces revision. The answer involves a form of prediction error the paper has not yet named.
 
@@ -343,35 +363,13 @@ This distinction sharpens the difference between exposure and context-held activ
 
 Modality independence follows directly. IFS works through visual imagery, inner dialogue, and somatic felt-sense. The relational registration — the part experiencing Self's presence — can occur through any of these channels. What matters is not the sensory modality but whether the part registers that it is being met. "'Seeing' a part is not necessary in the sense that a clear visual image appears in the person's mind. Many people simply sense the presence of parts and interact with them on that basis" (Goulding & Schwartz, *Mosaic Mind*).
 
-### 8.4 Unburdening as upstream revision
-
-At the algorithmic level, the paper interprets unburdening as durable revision of upstream priors. In H1, self-state sits upstream of threat meaning, which sits upstream of protective policy. A revision in self-state — from *I am helpless here* to *I am capable here* — changes what counts as dangerous. A change in threat meaning changes what policies remain necessary.
-
-This gives a formal answer to a familiar clinical observation: why does deep change sometimes feel sudden? Because once an upstream prior shifts far enough, several downstream expectations lose support together.
-
-Clinically, unburdening often does more than reduce intensity. A part that carried helplessness may, after unburdening, take on a new functional role — playfulness, healthy assertiveness, creativity. In the present model, that transition corresponds to the bundle adopting new policy priors and expected-outcome priors once the old self-state no longer constrains the solution space. The formal account predicts qualitative regime change, not merely damping.
-
-### 8.5 Exposure versus context-held activation
-
-Exposure and context-held activation both supply corrective contact under activation. The distinction developed in §8.3 makes the comparison precise.
-
-Exposure generates informational prediction error: the feared outcome does not occur, and threat meaning can update. But it does not generate relational prediction error, because Self-energy remains outside the witnessing regime — the person's relation to the activation is unchanged. Learning therefore occurs more locally. Threat meaning can move. Specific stimulus-safety associations can soften. Self-state can shift somewhat over time, but later, less deeply, and with less generalization.
-
-Context-held activation supplies both channels: informational context is present *and* Self's present-moment self-state is available to the part. The relational prediction error reaches self-state directly. Under H1, that allows self-state revision to occur earlier and to cascade forward.
-
-The simulations support exactly that pattern. Under H1 witnessing, self-state crosses the revision threshold first, threat meaning follows, and avoidance lags. Under exposure, all three move more slowly and with much less separation.
-
-![Figure: Witnessing vs exposure belief trajectories](figures/fig2_witnessing_vs_exposure.png)
-
-*Figure 4. Context-held activation (witnessing) versus exposure under matched contact. Witnessing produces faster and deeper revision across all three target variables. The separation is attributable to inferential regime, not privileged information — the cue structure is identical across conditions.*
-
 ---
 
-## 9. Extensions: Protectors and Polarization
+## 10. Extensions: Protectors and Polarization
 
-The core argument is complete by §8. Parts form under overwhelm, persist via self-sealing loops, and revise durably only under context-held activation. The following two sections extend that framework to protectors and multi-part polarization — the next tier of IFS phenomena.
+The core argument is complete by §9. Parts form under overwhelm, persist via self-sealing loops, and revise durably only under context-held activation. The following two sections extend that framework to protectors and multi-part polarization — the next tier of IFS phenomena.
 
-### 9.1 Protectors
+### 10.1 Protectors
 
 Protectors are indispensable to clinical IFS. The model treats them minimally, but not dismissively.
 
@@ -391,7 +389,7 @@ What the model does not yet formalize is equally important. Protectors do not me
 
 ---
 
-### 9.2 Multi-Part Polarization
+### 10.2 Multi-Part Polarization
 
 Single-part dynamics are not enough to describe actual inner life. One of the most recognizable IFS phenomena is polarization: mutually incompatible parts treating one another's preferred policies as dangerous.
 
@@ -414,114 +412,145 @@ One nuance is worth stating clearly. The summary metrics show that **medium** Se
 
 ---
 
-## 10. Simulation Design
+## 11. Simulation Design
 
-The simulations are designed to test the paper's central claim in the leanest case: same part, same cue channels, same architecture, different inferential regime.
+Two complementary simulations test the paper's claims at different levels. Study 1 examines the within-trial cascade: does self-state revise first under relational depth, pulling threat meaning and policy behind it? Study 2 examines cross-trial generalization: does identity-level revision transfer to novel stimuli that threat-level revision cannot reach? Study 1 proves the mechanism. Study 2 proves why the mechanism matters.
 
-### 10.1 Main model
+### 11.1 Study 1: Within-Trial Cascade
 
-The main simulation compares five conditions:
+The first simulation tests Moves 1 and 2. A person badly frightened by a dog as a child encounters a friendly off-leash dog under three inferential regimes. The model tracks whether self-state, threat meaning, expected outcome, and policy revise in the predicted cascade order and whether that cascade depends on Self-energy depth.
 
-1. **Baseline** — safe world, low Self-energy, free policy selection
-2. **Exposure** — same safe world and cue structure, forced contact, Self-energy not elevated into the witnessing regime
-3. **Witnessing** — same contact as exposure, but with Self-energy elevated
-4. **Real danger control** — dangerous world under high Self-energy
-5. **Dissociation control** — safe world, low Self-energy, context impact reduced rather than genuinely maintained
+**Architecture.** Three hidden factors, each with two states: self-state (helpless-alone / capable-present), threat meaning (dangerous / safe), and expected outcome (avoidance-saves / contact-manageable). Context is environmental, not inferred — the dog encounter is always safe. Five observation channels deliver evidence: external cue (ambiguous / clear-safe / clear-threat), interoceptive arousal (calm / activated / panic), action outcome (relief / neutral / harm), informational context (alone-overwhelmed / supported-here-now), and witnessed self-state (helpless-alone / capable-present). The first four channels operate at standard precision. The fifth — witnessed self-state — is precision-modulated by Self-energy through inverse capture: when capture is high, Channel 5 is functionally silent; when capture drops below threshold, Channel 5 opens superlinearly. This is not a separate mechanism. It is Move 2 at sufficient depth.
 
-The part bundle begins with strong priors on child-helpless self-state, danger meaning, and avoidance policy. The key comparison matches contact across exposure and witnessing so that differences in updating are attributable to inferential regime rather than privileged information.
+**Causal structure.** H1 places self-state upstream: self-state conditions threat meaning, threat meaning conditions expected outcome, expected outcome biases policy through expected free energy. H2 reverses the chain: threat meaning is upstream and self-state follows. The comparison tests Move 1 — whether the cascade requires self-state at the root.
 
-### 10.2 H1 versus H2
+**Conditions.** Three Self-energy levels cross the regime boundary:
 
-The simulation compares two causal architectures.
+- **Exposure** (E_t = 0.15): high capture, Channel 5 off. The system contacts the stimulus but cannot observe its own present-moment self-state.
+- **Informational** (E_t = 0.50): moderate capture, Channel 5 weak. Threat meaning receives more context evidence; self-state barely budges.
+- **Relational Depth** (E_t = 0.85): low capture, Channel 5 open. The system can observe its own self-state. The relational prediction error — the part expects isolation, the system registers presence — reaches the organizing prior directly.
 
-- **H1: self-state upstream.** Present-context support informs self-state strongly; self-state conditions threat meaning; threat meaning conditions policy.
-- **H2: threat-primary.** Threat meaning is revised first; self-state follows.
+**Protocol.** Each condition runs in two phases. Phase 1 (T = 20 timesteps): forced contact with the stimulus under active learning. Phase 2 (T = 3 timesteps): free-choice probe with learning frozen. The probe is a behavioral assay — the agent acts on its revised beliefs without further updating.
 
-This is not an arbitrary graph choice. H1 is motivated by the clinical observation that parts often activate first as *who I am here* — *I am six; I am small; I am powerless* — and that deep therapeutic change is frequently experienced as a change in identity-position before the world itself fully changes meaning. H2 remains a live competitor because many fear-learning models are threat-primary. The point of the comparison is precisely to test which ordering better fits the simulated dynamics.
+### 11.2 Study 2: Cross-Trial Generalization
 
-### 10.3 Formation and polarization appendices
+The second simulation tests Move 3. It asks the question that Study 1 cannot answer: does revision at the identity root transfer to a novel stimulus?
 
-Appendix A simulates part formation under three acquisition environments: high threat plus low control, high threat plus high control, and chronic low support. Appendix B simulates polarization between two mutually threatening bundles under varying levels of Self-energy.
+The motivation is specific. Adversarial testing of Study 1 (reported in Section 11.3) revealed that replacing Channel 5's self-state content with threat content produced similar within-trial dynamics. The cascade's shape did not depend on *what* was revised — only on *when* evidence arrived. Study 2 shifts the discriminant from within-trial timing to cross-trial transfer, where content specificity is the test.
 
----
+**Architecture.** Two hidden factors: self-state (helpless / resourced) and threat (dangerous / safe). Stimulus context — dog or cat — is known, not inferred. Three observation channels: a deterministic cue channel (dog / cat), self evidence (helpless-like / resourced-like, always truthful in safe context), and outcome (harm / neutral). There is no Channel 5 gate. Self evidence is always available; its impact is governed by Self-energy through the standard precision balance. B matrices are identity — states are static within a trial, and learning occurs across trials through Dirichlet updating.
 
-## 11. Results
+**Learning structure.** Three separate Dirichlet prior banks update across trials: d_self (shared across all stimuli), d_threat_dog (dog-specific), and d_threat_cat (cat-specific). At the start of each trial, the threat prior is loaded from the stimulus-appropriate bank. This separation is the architectural claim: self-state is shared because identity is shared; threat is local because threat meaning is stimulus-specific.
 
-The simulations support the core architecture of the paper.
+**Conditions.** Three conditions produce matched dog-training performance but diverge on cat transfer:
 
-### 11.1 Same activation, different relationship
+- **H1-highE** (E_t = 0.85, self learns): both d_self and d_threat_dog update during dog training. Self evidence lands because capture is low.
+- **H2-highE** (E_t = 0.85, self frozen): only d_threat_dog updates. d_self is architecturally frozen.
+- **H1-lowE** (E_t = 0.15, self learns): the learning rule permits self-updating, but self evidence is too weak under high capture to move d_self meaningfully.
 
-The first result is the simplest and the most important. Under matched cue exposure, raising Self-energy changes the regime in which activation occurs. Context-held activation (witnessing) is not lower activation by another name. It is the same activation held in a different relation.
+**Protocol.** Phase 1: 20 dog training trials with forced contact in a safe context and active learning. Phase 2: 5 cat probe trials with free choice and learning frozen. The first cat probe is the clean discriminant. Trials 2--5 provide repeated measures for confidence intervals.
 
-In the H1 main simulation, the witnessing condition shows markedly faster and deeper revision than exposure or baseline across all three target variables. By the end of the run, witnessing reduces helpless self-state, danger meaning, and avoidance far more than exposure does, while baseline remains comparatively rigid. The separation is clear and consistent with the theory.
+### 11.3 Adversarial Design
 
-![Figure: H1 belief trajectories across conditions](figures/fig1_h1_belief_trajectories.png)
+We disclose the adversarial history that motivated the two-study design.
 
-*Figure 6. H1 belief trajectories. Witnessing (green) produces the deepest revision across self-state, threat meaning, and avoidance. Exposure (blue) learns but more slowly and uniformly. Baseline (grey) shows minimal movement. The separation is attributable to inferential regime under matched contact.*
+Study 1 was subjected to four pre-registered adversarial tests. Three passed cleanly: shuffled observation channels broke the cascade (Test 1), flat priors eliminated the depth gap (Test 2), and an intermediate-E_t condition produced intermediate results (Test 3). Test 4 did not pass. Replacing Channel 5's witnessed-self-state content with a gated threat channel produced similar within-trial dynamics — the same cascade shape, the same depth gap, the same sigmoid threshold. The model could not distinguish *where* the late-opening evidence entered the causal chain.
 
-### 11.2 H1 produces the predicted revision order
-
-Under H1 witnessing, self-state revises first. The child-helpless prior crosses the chosen threshold at trial 9. Threat meaning follows at trial 13. Avoidance declines last and only later approaches the same threshold. This is the exact ordering the model predicts if self-state is upstream of threat meaning and threat meaning is upstream of policy.
-
-The exposure condition does not show that ordering clearly. All three trajectories move together more slowly. The system learns, but it learns locally and without the same cascade.
-
-![Figure: Revision order under H1 vs H2](figures/fig6_revision_order.png)
-
-*Figure 7. Revision order comparison. H1 witnessing produces the predicted cascade: self-state first, threat meaning second, avoidance last. H2 reverses the order, with threat meaning leading. The ordering difference is the paper's main model comparison.*
-
-### 11.3 H2 flips the order
-
-The H1/H2 comparison comes out in the right place. Under H2, danger meaning moves earlier and self-state lags. That is the opposite of the IFS-consistent prediction. The bar summary of threshold crossings makes the contrast legible: H1 gives **child first, danger second**; H2 gives **danger first, child later**. This is the paper's main model comparison.
-
-![Figure: H1 vs H2 witnessing trajectories](figures/fig3_h1_vs_h2_witnessing.png)
-
-*Figure 8. H1 versus H2 under witnessing. The two architectures produce different revision cascades. H1 revises self-state upstream, consistent with IFS clinical observation. H2 revises threat meaning first, consistent with threat-primary fear-learning models.*
-
-### 11.4 Witnessing outperforms exposure without changing the task
-
-The witnessing versus exposure comparison is one of the paper's strongest results because the task is matched. The system sees the same kinds of cues and undergoes the same kind of contact. The difference is inferential regime, not information. Witnessing therefore does not win by being handed a privileged channel. It wins because Self-energy changes the precision balance between the active bundle and present context.
-
-### 11.5 Real danger preserves adaptive fear
-
-The real danger control does exactly what it needs to do. Under genuine danger, the model does not collapse into indiscriminate calm. Threat meaning remains high even under high Self-energy. This is a sanity check and a theoretical constraint. Self-energy does not abolish fear. It preserves the possibility of accurate fear.
-
-One nuance deserves explicit interpretation. In the real-danger condition, threat meaning remains high while helpless self-state still softens relative to its initial value. This is not incoherent. The system can learn *this is dangerous* without also learning *therefore I am a child and helpless*. That distinction is clinically welcome. Mature fear does not require regressive identity.
-
-### 11.6 Dissociation is not witnessing
-
-The dissociation control is equally important. It reduces disturbance without producing the same revision profile as witnessing. Self-state barely moves. Avoidance remains high. The system is quieter, but the old priors remain largely intact.
-
-That is exactly the distinction the paper needs. Calm is not enough. What matters is whether context stays online or is functionally turned down.
-
-### 11.7 Capture is a regime parameter in the current simulations
-
-The capture index figure shows the mapping from Self-energy to capture clearly. Low Self-energy places baseline, exposure, and dissociation in the capture zone; high Self-energy places witnessing in the context-held regime. In the current implementation, capture is set by the condition-level Self-energy parameter, which is why it remains constant across trials within a given condition. In this implementation, capture is best read as a **regime descriptor** rather than a learning-dependent time series.
-
-### 11.8 Formation depends strongly on low control
-
-The formation appendix supports the threat-plus-low-control claim. High threat with low control produces the strongest final bundle rigidity. Chronic low support produces an intermediate profile. High threat with high control produces substantially weaker helpless self-state consolidation.
-
-**Control chiefly gates whether threat learning hardens into identity-level bundle rigidity.** Threat meaning and avoidance rise across conditions, but low control most strongly sharpens the helpless self-state and the integrated bundle measure. High-control threat still produces learning, but much less identity-level consolidation.
-
-### 11.9 Polarization is mutual threat plus capture
-
-The polarization appendix also behaves well. Low Self-energy produces the expected oscillatory alternation between the two bundles. High Self-energy produces prolonged simultaneous representation and sharp reductions in policy switching. Medium Self-energy increases entropy and switching before the system settles into stable coexistence. Read clinically, the model suggests a transition from capture, to exploration, to negotiation.
-
-![Figure: Main simulation summary](figures/fig7_main_summary.png)
-
-*Figure 9. Main simulation summary. Final belief states across all five conditions for self-state, threat meaning, and avoidance. Witnessing produces the deepest revision. Exposure produces intermediate revision. Baseline and dissociation leave priors largely intact. Real danger preserves adaptive threat meaning.*
+That failure is informative. It means within-trial cascade timing is necessary but not sufficient for the paper's claims. The cascade proves that a depth-gated channel can drive upstream revision (Moves 1 and 2). It does not prove that the content of that channel is identity-level rather than threat-level (Move 3). Study 2 was designed specifically to close that gap. In the generalization test, content specificity is the discriminant: identity-level revision transfers to novel stimuli because d_self is shared; threat-level revision stays local because d_threat_cat was never trained. No manipulation of within-trial timing can produce that pattern without shared self-state learning.
 
 ---
 
-## 12. Discussion
+## 12. Results
+
+### 12.1 Study 1 Results: The Cascade
+
+Under relational depth, the cascade is visible and unambiguous. Self-state crosses the revision threshold first. Threat meaning follows. Expected outcome follows threat. Policy — tracked as P(approach/stay) during the free-choice probe — shifts last. The four-element diagonal is the paper's core prediction realized in posterior trajectories.
+
+![Figure: The cascade under three conditions](figures/v2/ifs_v2_one_figure.png)
+
+*The cascade diagonal. Under relational depth (E_t = 0.85), self-state revises first, pulling threat meaning, expected outcome, and policy behind it in sequence. Under informational contact (E_t = 0.50), threat meaning moves but self-state barely budges. Under exposure (E_t = 0.15), all move slowly and uniformly — no cascade, no separation.*
+
+Under exposure, the picture is different. All four bundle elements move slowly and together. There is revision — contact with a safe stimulus does produce some learning — but no separation between elements and no clear ordering. The system learns locally, without the cascade.
+
+**The relational depth gap.** The separation between informational and relational depth conditions on self-state revision is the sharpest result in Study 1. Confidence bands do not overlap. Informational contact moves threat meaning but leaves self-state largely intact. Relational depth moves self-state first and everything else follows. That gap is where Move 3 lives.
+
+![Figure: Relational depth gap](figures/v2/ifs_v2_relational_depth_gap.png)
+
+*The relational depth gap. Self-state trajectory across three conditions. The separation between informational and relational depth is where identity-level revision becomes visible.*
+
+**H1 versus H2.** Under the same relational depth condition, reversing the causal architecture eliminates the cascade. H1 (self-state upstream) produces the predicted ordering: self-state first, threat second, outcome third, policy last. H2 (threat upstream) produces the opposite — threat meaning leads and self-state lags. The cascade is not an artifact of Self-energy alone. It requires self-state at the root of the generative model. This confirms Move 1.
+
+![Figure: H1 vs H2 comparison](figures/v2/ifs_v2_h1_vs_h2.png)
+
+*H1 versus H2 under relational depth. The cascade requires self-state upstream. When threat meaning is placed at the root (H2), the ordering reverses.*
+
+**Self-energy sweep.** Sweeping E_t from 0 to 1 reveals a sharp sigmoid in self-state revision at E_t approximately 0.60--0.65. Below that threshold, self-state barely moves regardless of contact duration. Above it, self-state revision rises steeply. The threshold is not a separate parameter — it emerges from the interaction of capture dynamics and Channel 5 precision gating. Move 3 is Move 2 at sufficient depth, and the sigmoid is the signature of that continuity.
+
+![Figure: Self-energy sweep](figures/v2/ifs_v2_self_energy_sweep.png)
+
+*Self-energy sweep. Final self-state revision as a function of E_t. The sigmoid onset at E_t approximately 0.60--0.65 shows that witnessing emerges continuously from depth, not from a separate mechanism.*
+
+**Free-choice probe.** During the three-timestep free-choice phase with learning frozen, the three conditions produce cleanly separable behavioral profiles. Exposure agents predominantly avoid. Informational agents inspect — they approach tentatively but do not commit. Relational depth agents stay. The behavioral divergence follows directly from the degree of upstream revision: only when self-state has been revised does the policy prior shift enough to sustain approach under free choice.
+
+![Figure: Free-choice probe](figures/v2/ifs_v2_free_choice_probe.png)
+
+*Free-choice probe. Policy selection after forced contact. Exposure avoids. Informational inspects. Relational depth stays. Behavioral revision tracks the cascade.*
+
+**Parameter sensitivity.** The qualitative pattern — cascade ordering, depth gap, sigmoid threshold — is stable under plus or minus 20% variation in all key parameters. The exact threshold shifts; the qualitative structure does not.
+
+![Figure: Parameter sensitivity](figures/v2/ifs_v2_focused_sensitivity.png)
+
+*Parameter sensitivity. The cascade and depth gap are robust to plus or minus 20% variation in key parameters.*
+
+### 12.2 Study 2 Results: Generalization
+
+The generalization test produces the paper's headline result.
+
+**Matched dog fit.** During the 20 dog training trials, H1-highE and H2-highE both reach strong approach behavior. By the final five trials, both conditions show P(contact_dog) above 0.9 with overlapping confidence intervals. The two architectures are indistinguishable on the training stimulus. This is by design — the conditions are matched on dog performance so that any divergence on cat transfer is attributable to the mechanism, not to differential learning.
+
+**The key result.** On the first cat probe trial, P(contact_cat) is approximately 1.0 in H1-highE. It is approximately 0.0 in both H2-highE and H1-lowE. The gap is not marginal. Identity-level revision transfers completely to a novel stimulus. Threat-level revision does not transfer at all. Low Self-energy, even with the self-learning rule architecturally intact, does not transfer because self evidence never overcame capture during training.
+
+![Figure: Generalization main result](figures/v3/ifs_generalization_main_v3.png)
+
+*The generalization test. Left: dog training trajectories for self-state and threat revision across conditions — H1-highE and H2-highE converge on matched dog performance. Right: first cat probe P(contact_cat). H1-highE transfers completely. H2-highE and H1-lowE do not. The gap is Move 3.*
+
+**Stimulus specificity.** D_threat_cat is unchanged after dog training across all conditions. The Dirichlet bank for cat-specific threat was never trained and shows negligible drift. Transfer in H1-highE comes entirely through revised d_self — the shared identity prior that now encodes "resourced" rather than "helpless." The cat is still an unknown threat. But the person facing it is no longer the person who was helpless and alone.
+
+![Figure: Stimulus specificity](figures/v3/ifs_generalization_stimulus_specificity_v3.png)
+
+*Stimulus specificity. D_threat_cat is unchanged after dog training. Transfer operates through shared d_self, not through threat leakage.*
+
+**Self-learning necessity.** Setting the self-state learning rate to zero (eta_self = 0) in the H1 architecture collapses cat transfer to H2 levels. The self-learning channel is not a convenience — it is the mechanism. Without it, the architecture permits self-state revision in principle but produces none in practice, and the generalization prediction fails completely.
+
+![Figure: Self-learning necessity](figures/v3/ifs_generalization_self_learning_necessity_v3.png)
+
+*Self-learning ablation. Setting eta_self = 0 in H1 eliminates cat transfer. The shared self-state prior does not revise, and the generalization prediction collapses.*
+
+**Within-trial cascade.** Study 2 preserves the within-trial cascade from Study 1 as mechanism support. On individual dog training trials under H1-highE, self-state posterior updates before threat posterior within the sequential inference steps. This confirms that the cross-trial generalization result rests on the same upstream revision mechanism demonstrated in Study 1.
+
+![Figure: Within-trial cascade in Study 2](figures/v3/ifs_generalization_within_trial_v3.png)
+
+*Within-trial cascade on a single dog trial under H1-highE. Self-state updates before threat within the trial's inference sequence, consistent with Study 1's mechanism.*
+
+### 12.3 What Study 2 Proves That Study 1 Cannot
+
+Study 1 shows that a depth-gated channel produces a cascade with self-state leading. It does not show that the content of that channel must be identity-level. Study 2 closes that gap.
+
+The generalization test discriminates identity-level from threat-level revision. Revision at the identity root transfers to a novel stimulus because the self-state prior is shared across situations. The person who has learned "I am resourced" carries that into every new encounter. Revision at the threat level stays local because threat priors are stimulus-specific. The person who has learned "dogs are safe" knows nothing new about cats.
+
+That is the paper's distinctive claim made computational. IFS does not merely assert that Self-energy matters for within-session change. It predicts that the kind of change produced under relational depth — identity-level, not threat-level — should generalize in ways that exposure-based change does not. The two-study design tests that prediction directly. Study 1 proves the cascade exists. Study 2 proves why it matters.
+
+---
+
+## 13. Discussion
 
 The paper set out to answer a narrow but clinically important question: when a part activates, what determines whether it takes over or can be held in context, and why does only the latter permit lasting change?
 
-The answer proposed here is structural. Self-energy governs the precision balance between active part priors and present-context evidence. That balance determines inferential regime. Under capture, the part dominates the field. Under context-held activation, the same part remains active while context stays online — and, critically, Self's present-moment self-state becomes available as a differentiated presence the part can register (§8.3). That difference is enough to explain why some activations merely repeat a prior and others revise it.
+The answer proposed here is structural. Self-energy governs the precision balance between active part priors and present-context evidence. That balance determines inferential regime. Under capture, the part dominates the field. Under context-held activation, the same part remains active while context stays online — and, critically, Self's present-moment self-state becomes available as a differentiated presence the part can register (§9). That difference is enough to explain why some activations merely repeat a prior and others revise it.
 
-### 12.1 What the model explains
+### 13.1 What the model explains
 
-The account explains six things without too much machinery.
+The account explains seven things without too much machinery.
 
 First, it explains why parts feel like whole worlds rather than isolated beliefs. The bundle structure couples self-state, world-state, policy, and outcome.
 
@@ -533,25 +562,29 @@ Fourth, it distinguishes Self-led calm from dissociative quiet. Both may look re
 
 Fifth, it shows why this still counts as an IFS model despite being minimal. What makes the model specifically IFS is not plurality alone. It is the claim that the decisive therapeutic variable is the Self-mediated relation to activated part-content.
 
-Sixth, it identifies the specific prediction error that does the work inside the context-held window: the part's relational expectation — isolation, overwhelm, rejection — is contradicted by Self's present-moment self-state, generating identity-level mismatch that reaches the organizing prior directly. That is why the core of IFS change is relational, not merely informational (§8.3).
+Sixth, it identifies the specific prediction error that does the work inside the context-held window: the part's relational expectation — isolation, overwhelm, rejection — is contradicted by Self's present-moment self-state, generating identity-level mismatch that reaches the organizing prior directly. That is why the core of IFS change is relational, not merely informational (§9).
 
-### 12.2 What it does not yet explain
+Seventh, it predicts a generalization gradient: identity-level revision transfers to novel feared stimuli while threat-level revision stays local. The v3 simulation confirms this — agents whose self-state was revised during dog training approached a novel cat stimulus; agents whose only dog-specific threat meaning was revised did not.
+
+### 13.2 What it does not yet explain
 
 The paper also leaves several clinically important structures under-modeled.
 
 It does not yet formalize full protector negotiation. Protectors in clinical IFS do not merely block — they compute trust, grant permission, and have conditions under which they will step back. The current model captures the blocking function but not the relational intelligence that makes IFS's protector work distinctive. It does not distinguish genuine Self from self-like managerial imitation — a distinction that probably requires separating embodied regulation from reportable meta-awareness more sharply than a single scalar allows. It does not model the therapist as a second agent, even though the clinical process is often dyadic long before it becomes stably intra-psychic. And it does not yet scale from one activated bundle or one polarity pair to a full inner parliament.
 
-It does not yet model relational prediction error as a distinct channel; in the current simulations, Self-energy shifts precision globally rather than differentiating between relational and informational evidence.
+The v2 simulation's adversarial Test 4 revealed that within-trial cascade dynamics are not sufficient to prove content specificity — a gated threat channel produced similar dynamics to a gated self-state channel. The v3 generalization design addresses this by shifting the proof to cross-trial transfer, where the content of what gets revised demonstrably matters.
 
 These are real absences. They are also the right absences for a first model. The ambition here is not comprehensiveness. It is to get the core mechanism right before expanding the frame.
 
-### 12.3 Implications for therapy comparison
+### 13.3 Implications for therapy comparison
 
 The strongest comparative implication concerns exposure. The paper does not claim that exposure fails. The simulations show the opposite: exposure learns. What they show is that exposure and context-held activation learn differently.
 
-Exposure alters threat expectations under contact. Context-held activation alters the relation in which that contact occurs. Specifically, the relational prediction error generated when the part encounters Self's present-moment self-state reaches the identity-level organizing prior — a channel exposure does not open, because exposure does not change who is relating to the activation (§8.3). If self-state truly sits upstream, then witnessing should revise a broader class of downstream appraisals. That is the paper's clearest comparative claim and probably its cleanest empirical target.
+Exposure alters threat expectations under contact. Context-held activation alters the relation in which that contact occurs. Specifically, the relational prediction error generated when the part encounters Self's present-moment self-state reaches the identity-level organizing prior — a channel exposure does not open, because exposure does not change who is relating to the activation (§9). If self-state truly sits upstream, then witnessing should revise a broader class of downstream appraisals. That is the paper's clearest comparative claim and probably its cleanest empirical target.
 
-### 12.4 Next steps
+The formalism generates a clinical surprise that neither tradition states in these terms: identity-level revision transfers across stimuli. The v3 simulation confirms this directly — agents whose self-state revised during dog-fear witnessing subsequently approached a novel, untreated cat stimulus, while agents whose only dog-specific threat meaning revised did not transfer. The mechanism is the shared self-state prior: if multiple fears are organized around the same burdened identity (e.g., "I am helpless"), then revising that identity changes the upstream variable from which all downstream threat appraisals inherit. IFS therapists observe broad transfer anecdotally; the model specifies why (the shared organizing prior), when (only when Self-energy is sufficient for self-state to actually revise), and when not (under exposure or low Self-energy, where revision stays local to the specific stimulus-threat pairing). Standard fear-learning models, which lack identity-upstream causal structure, predict stimulus-specific improvement regardless of treatment modality. The generalization gradient is therefore a discriminating prediction: it separates the identity-bundle architecture from any model in which fears are independently learned associations.
+
+### 13.4 Next steps
 
 The paper's two most important empirical targets follow directly from the architecture.
 
@@ -559,7 +592,9 @@ The paper's two most important empirical targets follow directly from the archit
 
 **Generalization gradient prediction.** If self-state is the root of the bundle, IFS-like change should generalize to novel feared stimuli more than exposure-based change does. The test: after treatment targeting one fear, measure transfer to a structurally similar but untrained fear. The model predicts that IFS transfer will exceed exposure transfer because IFS revises the identity-level prior that organized the bundle — not merely the specific threat association. Exposure-based change, which moves threat meaning without necessarily revising the self-state root, should generalize less. This is a between-treatment prediction that standard fear-learning models do not typically make, because those models lack the identity-upstream causal structure.
 
-**Relational channel prediction.** A further prediction follows from §8.3: the relational channel (the part registering Self's present-moment self-state) should contribute more to revision than the informational channel (showing the part current-life evidence). If witnessing without explicit life-updating produces comparable revision to witnessing with it, the primary-channel claim is supported. This could be tested by comparing IFS sessions in which witnessing occurs with and without the retrieval step (showing the part the current life). The model predicts that the relational contact alone should be sufficient for identity-level revision to begin.
+**Relational channel prediction.** A further prediction follows from §9: the relational channel (the part registering Self's present-moment self-state) should contribute more to revision than the informational channel (showing the part current-life evidence). If witnessing without explicit life-updating produces comparable revision to witnessing with it, the primary-channel claim is supported. This could be tested by comparing IFS sessions in which witnessing occurs with and without the retrieval step (showing the part the current life). The model predicts that the relational contact alone should be sufficient for identity-level revision to begin. The v3 simulation provides initial support: agents receiving relational contact showed identity-level revision even without explicit informational updating.
+
+The most important empirical extension is a clinical generalization test: after IFS treatment targeting one specific fear, does improvement transfer to a structurally similar untreated fear more than after matched exposure? The v3 simulation predicts it should.
 
 Beyond these three empirical targets, the next modeling extensions are:
 
@@ -569,7 +604,7 @@ Beyond these three empirical targets, the next modeling extensions are:
 4. **Multi-part networks:** move from one polarity pair to several coupled bundles with different developmental ages and policies.
 5. **Empirical fitting:** align simulated trajectory measures with session-level data, especially revision order and generalization gradients.
 
-This paper does not finish the job. It builds the first floor. That is enough, at least for now, if the floor holds.
+This paper has defined what a part formally is — an identity-level precision bundle organized around a self-state prior — and shown that Self-energy determines whether activation of that bundle produces revision or repetition. It has identified the relational prediction error that operates inside the witnessing window and demonstrated that identity-level revision generalizes while threat-level revision stays local. The mechanism is visible, the cascade from self-state through threat meaning to policy is real, and the generalization prediction is the formalism's sharpest empirical edge. IFS therapists have long observed that the change which comes from witnessing transfers broadly while the change from exposure stays narrow. The present model explains why: witnessing reaches the identity-level root, and what changes at the root generalizes.
 
 ---
 
@@ -631,7 +666,7 @@ This table gives the full computational translation for all IFS and technical te
 | **Witnessing** | Therapeutically cultivated form of context-held activation: the part remains live while the system retains present-context contact |
 | **Capture** | The inferential regime in which an active bundle dominates; present evidence cannot gain traction; the part's beliefs feel like the whole of reality |
 | **Context-held activation** | The inferential regime in which the same bundle remains live while present evidence stays online; the part is present but not dominant |
-| **Self** | A regime of uncaptured inference: no part dominates; evidence flows across channels; the system remains responsive to context. When this regime obtains, the system's present-moment self-state becomes available as a differentiated presence that parts can register (§6.1, §8.3) |
+| **Self** | A regime of uncaptured inference: no part dominates; evidence flows across channels; the system remains responsive to context. When this regime obtains, the system's present-moment self-state becomes available as a differentiated presence that parts can register (§6.1, §9) |
 | **Self-energy** | The governing variable for which regime obtains; a composite of autonomic-social regulation and metacognitive depth; operationalized as a scalar proxy |
 | **Protectors** | Policy priors and access-control tendencies that prevent destabilizing activation of exiles; subdivided into managers (prospective) and firefighters (reactive) |
 | **Exiles** | Parts carrying high-precision bundles formed under overwhelm and low control; kept offline by protectors |
@@ -640,11 +675,11 @@ This table gives the full computational translation for all IFS and technical te
 | **Outdated beliefs** | Priors that were adaptive at formation and are anachronistic now; persist via high precision and avoidant sampling |
 | **Age regression** | Activation of a bundle carrying a developmental self-state prior; "I am six" is modeled as live inference, not retrieval |
 | **The 8 C's** | Calm, curiosity, clarity, compassion, confidence, courage, creativity, connectedness — the phenomenological signature of sufficiently uncaptured inference under high Self-energy |
-| **Exposure vs. IFS** | Exposure generates informational prediction error (threat meaning updates) without generating relational prediction error (Self's self-state is not available to the part). IFS changes the inferential regime so that both channels are open (§8.3, §8.5) |
+| **Exposure vs. IFS** | Exposure generates informational prediction error (threat meaning updates) without generating relational prediction error (Self's self-state is not available to the part). IFS changes the inferential regime so that both channels are open (§9, §8.4) |
 | **Dissociation vs. Self-led calm** | Both may appear quiet; dissociation lowers context impact while leaving capture intact; Self-led calm keeps context strongly online without capture |
 | **H1 (self-state upstream)** | The causal architecture in which self-state is revised first; threat meaning follows; protective policy lags — producing a revision cascade that generalizes |
 | **H2 (threat-primary)** | The competing architecture in which threat meaning is revised first; self-state follows; no cascade; generalization is local |
 | **Capture index** | Formal measure of inferential regime: effective part precision over the sum of effective part and context precision |
-| **Relational prediction error** | Identity-level mismatch generated when a part's relational expectation (isolation, overwhelm) encounters Self's present-moment self-state (presence, compassion); reaches the organizing prior directly; distinguished from informational prediction error, which updates threat meaning (§8.3) |
-| **Two evidence channels** | Inside the context-held window, the relational channel (part registering Self's self-state) is primary and always load-bearing; the informational channel (current life, adult body, safety of the room) is secondary and not always necessary (§8.3) |
+| **Relational prediction error** | Identity-level mismatch generated when a part's relational expectation (isolation, overwhelm) encounters Self's present-moment self-state (presence, compassion); reaches the organizing prior directly; distinguished from informational prediction error, which updates threat meaning (§9) |
+| **Two evidence channels** | Inside the context-held window, the relational channel (part registering Self's self-state) is primary and always load-bearing; the informational channel (current life, adult body, safety of the room) is secondary and not always necessary (§9) |
 | **Why change generalizes** | Under H1, revising self-state changes what counts as dangerous and what policies remain necessary — cascade predicts cross-stimulus transfer; H2 does not |
