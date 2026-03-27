@@ -184,6 +184,8 @@ Each candidate must:
 - Include a title and one-sentence description
 - Be exportable (each SVG can be copy-pasted or saved independently)
 
+**Dual rendering for flow/hierarchy diagrams:** If any candidate depicts a flow, hierarchy, causal chain, state machine, or architecture (nodes connected by edges), generate BOTH a Mermaid version and a hand-drawn SVG version of that candidate so the user can compare routing clarity vs spatial control. See Step 5c for the rendering heuristic.
+
 The HTML page itself should be beautiful:
 - Academic editorial style
 - Generous spacing between candidates
@@ -220,6 +222,80 @@ Default forbidden failure modes:
 - too many arrows
 - title text embedded in the figure unless requested
 - visual claim stronger than the paper itself
+
+### Step 5c: Choose rendering approach
+
+**Heuristic: When to use Mermaid vs SVG**
+
+Use Mermaid when:
+- The diagram has a FLOW or HIERARCHY (nodes connected by edges)
+- Automatic line routing matters (many connections that would cross in manual SVG)
+- The diagram shows a process, causal chain, state machine, or architecture
+- Math equations need to appear inside nodes (KaTeX integration)
+- The diagram will be iterated frequently (Mermaid source is text, easy to edit)
+
+Use hand-drawn SVG when:
+- The diagram is SPATIAL or COMPOSITIONAL (layout IS the meaning -- e.g., before/after panels, depth axes, stacked areas)
+- Precise control over spacing, alignment, and negative space is needed
+- The image is more illustration than diagram (metaphorical, abstract)
+- Custom shapes, gradients, or non-standard visual elements are required
+- The image needs to survive as a static export (PDF, print) without a JS runtime
+
+Use BOTH (Mermaid + SVG fallback) when:
+- Iterating on architecture diagrams (start with Mermaid for routing, refine as SVG for publication)
+
+**When generating HTML with Mermaid:**
+
+Add this to the head:
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+```
+
+Use Mermaid v11 with these settings:
+```html
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    securityLevel: 'loose',
+    htmlLabels: true,
+    fontFamily: 'Lora, Georgia, serif',
+    fontSize: 13,
+  });
+  await mermaid.run();
+  // Post-render KaTeX: find .ktx spans and render math
+  document.querySelectorAll('.ktx').forEach(function(span) {
+    var tex = span.getAttribute('data-tex');
+    if (tex) {
+      tex = tex.replace(/\\\\/g, '\\');
+      katex.render(tex, span, { throwOnError: false, displayMode: false });
+    }
+  });
+</script>
+```
+
+For LaTeX in Mermaid node labels, use data-tex spans:
+```
+node["<b>Title</b><br/><span class='ktx' data-tex='\\pi_{\\text{part}}'></span>"]
+```
+
+NOT raw `$...$` (Mermaid doesn't process them natively).
+
+**Style theming for Mermaid:**
+```
+%%{init: {'theme': 'base', 'themeVariables': {
+  'primaryColor': '#e8f0f6',
+  'primaryTextColor': '#2a2a2a',
+  'primaryBorderColor': '#4a7fa5',
+  'lineColor': '#4a7fa5'
+}}}%%
+```
+
+Use `classDef` for accent elements (e.g., Channel 5 in warm accent):
+```
+classDef gated fill:#fdf5f3,stroke:#c45a3c,stroke-width:2px,color:#c45a3c
+```
 
 ### Step 6: Ask for feedback
 After generating candidates (HTML or prompt), ask:
