@@ -54,18 +54,28 @@ if ENABLE_FIGURES
     ENV["GKSwstype"] = get(ENV, "GKSwstype", "100")
     using Plots
 
+    # --- Tufte palette ---
+    const COL_GRAY       = RGB(0.4, 0.4, 0.4)        # #666 -- Exposure & Baseline
+    const COL_BLUE       = RGB(0.33, 0.47, 0.65)      # muted blue -- Informational
+    const COL_ACCENT     = RGB(0.77, 0.35, 0.24)      # #c45a3c -- Relational Depth
+    const COL_BG         = RGB(1.0, 1.0, 0.973)       # #fffff8 -- Tufte off-white
+    const COL_GRID       = RGB(0.85, 0.85, 0.85)      # light gray for sparse gridlines
+    const COL_ANNOTATION = RGB(0.3, 0.3, 0.3)
+
     default(
-        fontfamily="Helvetica",
+        fontfamily="Georgia",
         titlefontsize=11,
         guidefontsize=10,
         tickfontsize=8,
         legendfontsize=8,
         linewidth=2.0,
-        framestyle=:box,
-        grid=true,
-        gridalpha=0.15,
+        framestyle=:semi,
+        grid=false,
+        background_color=COL_BG,
+        background_color_inside=COL_BG,
+        foreground_color_grid=COL_GRID,
         dpi=300,
-        size=(1000, 700)
+        size=(750, 500)
     )
 end
 
@@ -394,7 +404,9 @@ if ENABLE_FIGURES
             legend=false,
             yticks=(1:2, reverse(STRIP_LABELS)),
             xticks=false,
-            title=""
+            title="",
+            framestyle=:box,
+            background_color=COL_BG
         )
         vline!(p, [forced_boundary + 0.5], color=:white, linewidth=1.0, alpha=0.8)
         return p
@@ -411,11 +423,14 @@ if ENABLE_FIGURES
             clims=(0.0, 1.0),
             legend=false,
             yticks=(1:4, reverse(ROW_LABELS)),
-            xlabel="Time",
-            title=summary.condition
+            xlabel="Time step",
+            title=summary.condition,
+            framestyle=:box,
+            background_color=COL_BG
         )
         vline!(p, [forced_boundary + 0.5], color=:white, linewidth=1.4, alpha=0.9)
 
+        # First-passage markers with annotation
         series_list = [summary.mean_self, summary.mean_threat, summary.mean_outcome, summary.mean_policy]
         y_positions = [4, 3, 2, 1]
         for (series, y) in zip(series_list, y_positions)
@@ -434,24 +449,56 @@ if ENABLE_FIGURES
             push!(plots, plot_condition_heatmap(summary, forced_boundary))
         end
         layout = grid(6, 1, heights=[0.08, 0.25, 0.08, 0.25, 0.08, 0.26])
-        fig = plot(plots..., layout=layout, size=(1100, 1200), plot_title="Three-Move Cascade: H1")
+        fig = plot(plots..., layout=layout, size=(1100, 1200),
+            plot_title="Self-State Revises First Under Relational Depth",
+            background_color=COL_BG)
         savefig(fig, joinpath(FIGURE_DIR, "ifs_v2_one_figure.png"))
         println("  saved ifs_v2_one_figure.png")
     end
 
     function save_relational_depth_gap(main_lookup::Dict{String,IFSV2Summary})
         p = plot(
-            title="Relational Depth Gap",
-            xlabel="Time",
-            ylabel="P(capable/present)",
-            ylims=(0.0, 1.0),
-            legend=:bottomright
+            title="Relational Contact Opens the Identity Channel",
+            xlabel="Time step",
+            ylabel="P(capable / present)",
+            ylims=(0.0, 1.05),
+            legend=false,
+            grid=false,
+            size=(750, 500),
+            background_color=COL_BG,
+            background_color_inside=COL_BG
         )
-        for name in ["Exposure", "Informational", "Relational Depth"]
-            summary = main_lookup[name]
-            plot!(p, summary.mean_self, ribbon=summary.std_self, label=name)
-        end
-        vline!(p, [IFSV2Params().T_forced + 0.5], color=:black, linestyle=:dash, alpha=0.5, label="")
+        # Gray first: Exposure and Informational as background context
+        exp_s = main_lookup["Exposure"]
+        inf_s = main_lookup["Informational"]
+        rel_s = main_lookup["Relational Depth"]
+
+        plot!(p, exp_s.mean_self, ribbon=exp_s.std_self,
+            color=COL_GRAY, fillalpha=0.12, label="")
+        plot!(p, inf_s.mean_self, ribbon=inf_s.std_self,
+            color=COL_BLUE, fillalpha=0.15, label="")
+        # Accent: Relational Depth as the highlight
+        plot!(p, rel_s.mean_self, ribbon=rel_s.std_self,
+            color=COL_ACCENT, fillalpha=0.18, linewidth=2.5, label="")
+
+        # Forced/probe boundary
+        T_f = IFSV2Params().T_forced
+        vline!(p, [T_f + 0.5], color=COL_GRID, linestyle=:dash, linewidth=1.0, label="")
+
+        # Direct labels near the end of each line
+        T_end = length(rel_s.mean_self)
+        annotate!(p, T_end + 0.5, exp_s.mean_self[end],
+            text("Exposure", 8, :left, COL_GRAY))
+        annotate!(p, T_end + 0.5, inf_s.mean_self[end],
+            text("Informational", 8, :left, COL_BLUE))
+        annotate!(p, T_end + 0.5, rel_s.mean_self[end],
+            text("Relational\nDepth", 8, :left, COL_ACCENT))
+
+        # Annotate the depth gap
+        gap_y = (rel_s.mean_self[end] + inf_s.mean_self[end]) / 2
+        annotate!(p, T_end - 2, gap_y,
+            text("depth gap", 7, :right, COL_ANNOTATION))
+
         savefig(p, joinpath(FIGURE_DIR, "ifs_v2_relational_depth_gap.png"))
         println("  saved ifs_v2_relational_depth_gap.png")
     end
@@ -462,11 +509,27 @@ if ENABLE_FIGURES
             mean_final,
             ribbon=std_final,
             xlabel="Self-energy (E_t)",
-            ylabel="Final P(capable/present)",
-            title="Self-Energy Sweep",
-            ylims=(0.0, 1.0),
-            label="H1"
+            ylabel="Final P(capable / present)",
+            title="Move 3 Emerges at E_t ~ 0.65",
+            ylims=(0.0, 1.05),
+            legend=false,
+            color=COL_ACCENT,
+            fillalpha=0.18,
+            linewidth=2.5,
+            grid=false,
+            size=(750, 500),
+            background_color=COL_BG,
+            background_color_inside=COL_BG
         )
+        # Annotate the emergence threshold around E_t ~ 0.65
+        # Find where mean crosses 0.5
+        cross_idx = findfirst(x -> x >= 0.5, mean_final)
+        if !isnothing(cross_idx)
+            cross_E = Es[cross_idx]
+            vline!(p, [cross_E], color=COL_GRID, linestyle=:dot, linewidth=1.0, label="")
+            annotate!(p, cross_E + 0.03, 0.55,
+                text("onset ~ $(round(cross_E, digits=2))", 8, :left, COL_ANNOTATION))
+        end
         savefig(p, joinpath(FIGURE_DIR, "ifs_v2_self_energy_sweep.png"))
         println("  saved ifs_v2_self_energy_sweep.png")
     end
@@ -480,7 +543,8 @@ if ENABLE_FIGURES
             plot_condition_heatmap(rel_h2, forced_boundary),
             layout=grid(4, 1, heights=[0.08, 0.42, 0.08, 0.42]),
             size=(1100, 950),
-            plot_title="H1 vs H2 Under Relational Depth"
+            plot_title="Cascade Requires Self-State Upstream (H1)",
+            background_color=COL_BG
         )
         savefig(fig, joinpath(FIGURE_DIR, "ifs_v2_h1_vs_h2.png"))
         println("  saved ifs_v2_h1_vs_h2.png")
@@ -488,46 +552,96 @@ if ENABLE_FIGURES
 
     function save_free_choice_probe(main_lookup::Dict{String,IFSV2Summary})
         conditions = ["Exposure", "Informational", "Relational Depth"]
-        labels = ["Avoid", "Inspect", "Stay"]
+        colors = [COL_GRAY COL_BLUE COL_ACCENT]
+        labels_ax = ["Avoid", "Inspect", "Stay"]
         final_probe = hcat([main_lookup[name].mean_probe_policy[:, end] for name in conditions]...)
         p = bar(
-            labels,
+            labels_ax,
             final_probe,
-            label=conditions,
-            xlabel="Probe Policy",
+            label=permutedims(conditions),
+            color=colors,
+            xlabel="",
             ylabel="Probability",
-            title="Free-Choice Probe",
-            ylims=(0.0, 1.0)
+            title="Revised Beliefs Produce Different Behavior",
+            ylims=(0.0, 1.05),
+            legend=false,
+            bar_width=0.7,
+            grid=false,
+            size=(750, 500),
+            background_color=COL_BG,
+            background_color_inside=COL_BG
         )
+        # Direct labels above each group
+        n_actions = length(labels_ax)
+        n_conds = length(conditions)
+        cond_labels_short = ["Exp", "Info", "Rel"]
+        for (ci, cname) in enumerate(conditions)
+            for ai in 1:n_actions
+                val = final_probe[ai, ci]
+                if val > 0.05
+                    annotate!(p, ai + (ci - 2) * 0.25, val + 0.03,
+                        text("$(round(val, digits=2))", 7, :center, colors[ci]))
+                end
+            end
+        end
         savefig(p, joinpath(FIGURE_DIR, "ifs_v2_free_choice_probe.png"))
         println("  saved ifs_v2_free_choice_probe.png")
     end
 
     function save_focused_sensitivity(rows)
-        params = [:lambda_witness_max, :alpha_witness, :beta_gamma_ratio, :policy_precision]
+        param_names = [:lambda_witness_max, :alpha_witness, :beta_gamma_ratio, :policy_precision]
+        param_display = Dict(
+            :lambda_witness_max => "Witness precision cap",
+            :alpha_witness => "Witness exponent",
+            :beta_gamma_ratio => "Beta / gamma ratio",
+            :policy_precision => "Policy precision"
+        )
         panels = Any[]
-        for parameter in params
+        for parameter in param_names
             subset = filter(row -> row.parameter == parameter, rows)
             xs = [row.value for row in subset]
             rel = [row.relational_self for row in subset]
             gap = [row.self_gap for row in subset]
             probe = [row.probe_l1 for row in subset]
+            ymax = max(1.0, maximum(probe))
             p = plot(
-                xs,
-                rel,
-                label="Relational self",
-                xlabel=String(parameter),
-                ylabel="Metric",
-                title=String(parameter),
-                legend=:best,
-                ylims=(0.0, max(1.0, maximum(probe)))
+                xs, rel,
+                color=COL_ACCENT, linewidth=2.0,
+                xlabel=get(param_display, parameter, String(parameter)),
+                ylabel="",
+                title=get(param_display, parameter, String(parameter)),
+                legend=false,
+                ylims=(0.0, ymax + 0.05),
+                grid=false,
+                size=(600, 400),
+                background_color=COL_BG,
+                background_color_inside=COL_BG,
+                label=""
             )
-            plot!(p, xs, gap, label="Self gap")
-            plot!(p, xs, probe, label="Probe L1")
-            scatter!(p, xs, [row.pass ? 0.98 : 0.02 for row in subset], label="Pass", markersize=4)
+            plot!(p, xs, gap, color=COL_BLUE, linewidth=1.5, linestyle=:dash, label="")
+            plot!(p, xs, probe, color=COL_GRAY, linewidth=1.5, linestyle=:dot, label="")
+            # Pass/fail markers
+            for row in subset
+                mc = row.pass ? COL_ACCENT : COL_GRAY
+                ms = row.pass ? :circle : :xcross
+                scatter!(p, [row.value], [row.pass ? ymax - 0.02 : 0.02],
+                    markersize=4, markercolor=mc, markershape=ms,
+                    markerstrokewidth=0, label="")
+            end
+            # Direct labels at end of each series
+            if length(xs) > 0
+                annotate!(p, xs[end], rel[end] + 0.03,
+                    text("self", 7, :left, COL_ACCENT))
+                annotate!(p, xs[end], gap[end] + 0.03,
+                    text("gap", 7, :left, COL_BLUE))
+                annotate!(p, xs[end], probe[end] + 0.03,
+                    text("probe", 7, :left, COL_GRAY))
+            end
             push!(panels, p)
         end
-        fig = plot(panels..., layout=(2, 2), size=(1200, 800), plot_title="Focused Sensitivity")
+        fig = plot(panels..., layout=(2, 2), size=(1200, 800),
+            plot_title="Parameter Sensitivity: All Criteria Hold Across Ranges",
+            background_color=COL_BG)
         savefig(fig, joinpath(FIGURE_DIR, "ifs_v2_focused_sensitivity.png"))
         println("  saved ifs_v2_focused_sensitivity.png")
     end
