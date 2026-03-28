@@ -1,0 +1,40 @@
+{
+    "simulation": "sim2",
+    "config": {
+        "seeds": [
+            11
+        ],
+        "n_episodes": 2,
+        "T": 60
+    },
+    "summary_by_model": {
+        "BLTGlobal": {
+            "scene_accuracy": 0.8916666666666666,
+            "coherence": 0.6761242406520249,
+            "binding_index": 0.3573164237828508,
+            "micro_switch_rate": 0,
+            "mean_dwell": 60,
+            "confident_wrong": 0.18333333333333332,
+            "heldout_nll": 1.2994560873511563
+        },
+        "HierFixed": {
+            "scene_accuracy": 0.8916666666666666,
+            "coherence": 0.6181108539311472,
+            "binding_index": 0.4545827685907767,
+            "micro_switch_rate": 0,
+            "mean_dwell": 60,
+            "confident_wrong": 0,
+            "heldout_nll": 1.2964191615080203
+        },
+        "LocalBranch": {
+            "scene_accuracy": 0.8916666666666666,
+            "coherence": 0.640451018691925,
+            "binding_index": 0.6773380913548395,
+            "micro_switch_rate": 0,
+            "mean_dwell": 60,
+            "confident_wrong": 0.2,
+            "heldout_nll": 1.2949625052542781
+        }
+    },
+    "theory_result": "null"
+}

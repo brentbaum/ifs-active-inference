@@ -1,0 +1,110 @@
+{
+    "simulation": "sim2",
+    "config": {
+        "seeds": [
+            11,
+            23,
+            37,
+            53,
+            71,
+            97,
+            131,
+            173,
+            211,
+            251
+        ],
+        "n_episodes": 20,
+        "T": 200
+    },
+    "metric_source_for_theory": "filtered",
+    "filtered_summary_by_model": {
+        "BLTGlobal": {
+            "scene_accuracy": 0.560225,
+            "coherence": 0.5676946184092704,
+            "binding_index": 0.3097899599542293,
+            "micro_switch_rate": 0.01809045226130653,
+            "mean_dwell": 57.66666666666667,
+            "confident_wrong": 0.06500000000000002,
+            "heldout_nll": 1.350214648796086
+        },
+        "HierFixed": {
+            "scene_accuracy": 0.497725,
+            "coherence": 0.20026889965724098,
+            "binding_index": 0.13879732730389677,
+            "micro_switch_rate": 0.02864321608040201,
+            "mean_dwell": 33.75468975468975,
+            "confident_wrong": 0,
+            "heldout_nll": 1.379892008343803
+        },
+        "LocalBranch": {
+            "scene_accuracy": 0.5109250000000001,
+            "coherence": 0.4980044775199273,
+            "binding_index": 0.03498659387972857,
+            "micro_switch_rate": 0.10251256281407035,
+            "mean_dwell": 9.624624207865995,
+            "confident_wrong": 0.03949999999999999,
+            "heldout_nll": 1.3636316902704364
+        }
+    },
+    "smoothed_summary_by_model": {
+        "BLTGlobal": {
+            "scene_accuracy": 0.59345,
+            "coherence": 0.5808225357126552,
+            "binding_index": 0.518215869177735,
+            "micro_switch_rate": 0.004020100502512563,
+            "mean_dwell": 162.85714285714283,
+            "confident_wrong": 0.5185,
+            "heldout_nll": 1.350214648796086
+        },
+        "HierFixed": {
+            "scene_accuracy": 0.501875,
+            "coherence": 0.19064774325976816,
+            "binding_index": 0.23366939130653255,
+            "micro_switch_rate": 0.006030150753768844,
+            "mean_dwell": 125.66666666666666,
+            "confident_wrong": 0.006500000000000001,
+            "heldout_nll": 1.379892008343803
+        },
+        "LocalBranch": {
+            "scene_accuracy": 0.50345,
+            "coherence": 0.5245553533311795,
+            "binding_index": 0.04266902974308413,
+            "micro_switch_rate": 0.07236180904522613,
+            "mean_dwell": 13.223856209150327,
+            "confident_wrong": 0.036500000000000005,
+            "heldout_nll": 1.3636316902704364
+        }
+    },
+    "delta_by_model": {
+        "BLTGlobal": {
+            "scene_accuracy": -0.03322500000000006,
+            "coherence": -0.013127917303384806,
+            "binding_index": -0.20842590922350568,
+            "micro_switch_rate": 0.014070351758793965,
+            "mean_dwell": -105.19047619047616,
+            "confident_wrong": -0.45349999999999996,
+            "heldout_nll": 0
+        },
+        "HierFixed": {
+            "scene_accuracy": -0.004149999999999987,
+            "coherence": 0.009621156397472824,
+            "binding_index": -0.09487206400263579,
+            "micro_switch_rate": 0.022613065326633167,
+            "mean_dwell": -91.91197691197691,
+            "confident_wrong": -0.006500000000000001,
+            "heldout_nll": 0
+        },
+        "LocalBranch": {
+            "scene_accuracy": 0.0074750000000001204,
+            "coherence": -0.026550875811252206,
+            "binding_index": -0.007682435863355562,
+            "micro_switch_rate": 0.030150753768844227,
+            "mean_dwell": -3.5992320012843315,
+            "confident_wrong": 0.002999999999999989,
+            "heldout_nll": 0
+        }
+    },
+    "theory_result": "support",
+    "filtered_theory_result": "support",
+    "smoothed_theory_result": "support"
+}

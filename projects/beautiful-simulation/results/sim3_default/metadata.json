@@ -1,0 +1,84 @@
+{
+    "metric_definitions": {
+        "phase_metric": "implied_local_precision",
+        "implied_local_precision": "mean(exp(-(kappa * z_t + omega))) from inferred z_t; used for the phase diagram and theory evaluation",
+        "posterior_content_precision": "mean(1 / var_q(x_t)); retained as a comparator and explicit deviation from the original var_q(x_t)-based draft reading",
+        "first_order_precision": "backward-compatible alias for implied_local_precision"
+    },
+    "generated_at_utc": "2026-03-28T01:21:04Z",
+    "rxinfer_version": "4.7.3",
+    "spec_deviations": {
+        "first_order_precision": "The phase metric is the inferred implied_local_precision from z_t rather than only posterior variance of x_t.",
+        "scenario_defaults": "Scenario defaults were tuned relative to the original spec and are recorded explicitly in scenario_definitions.",
+        "scale_y_by_local": "Observation noise coupling scale_y_by_local remains configurable and is currently false."
+    },
+    "julia_version": "1.12.4",
+    "runtime_seconds": 19.166266918182373,
+    "git_commit_hash": "092e8ace7f7e94b4d976eff0fd32bee640077468",
+    "config_path": "/Users/brentbaum/dev/research/ifs-active-inference/projects/beautiful-simulation/configs/sim3_default.yaml",
+    "config_snapshot": {
+        "seeds": [
+            11,
+            23,
+            37
+        ],
+        "T": 180,
+        "rho": 0.95,
+        "kappa": -1,
+        "omega": 0,
+        "v_z": 0.2,
+        "base_v_h": 0.1,
+        "base_v_y": 0.1,
+        "kalman_process_var": 1,
+        "vmp_iters": 8,
+        "init_var": 5,
+        "alpha_local_values": [
+            0.25,
+            0.5,
+            1.0,
+            2.0,
+            4.0
+        ],
+        "alpha_hyper_values": [
+            0.25,
+            0.5,
+            1.0,
+            2.0,
+            4.0
+        ],
+        "input_scale_values": [
+            0.1,
+            1.0,
+            2.0
+        ],
+        "scale_y_by_local": false
+    },
+    "plots_version": "1.41.6",
+    "package_version": "0.1.0",
+    "scenario_definitions": {
+        "dream": {
+            "alpha_local": 0.5,
+            "alpha_hyper": 0.5,
+            "input_scale": 2,
+            "biased": false
+        },
+        "noetic": {
+            "alpha_local": 0.5,
+            "alpha_hyper": 4,
+            "input_scale": 0.25,
+            "biased": true
+        },
+        "mpe": {
+            "alpha_local": 0.8,
+            "alpha_hyper": 4,
+            "input_scale": 0,
+            "biased": false
+        },
+        "wake": {
+            "alpha_local": 2,
+            "alpha_hyper": 2,
+            "input_scale": 1,
+            "biased": false
+        }
+    }
+}

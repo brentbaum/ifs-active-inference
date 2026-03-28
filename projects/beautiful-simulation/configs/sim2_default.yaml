@@ -1,0 +1,31 @@
+seeds:
+  - 11
+  - 23
+  - 37
+  - 53
+  - 71
+  - 97
+  - 131
+  - 173
+  - 211
+  - 251
+n_episodes: 20
+T: 200
+g_diag: 0.97
+g_offdiag: 0.03
+g_diag_bind: 0.97
+g_diag_frag: 0.999
+phi_diag: 0.95
+phi_offdiag: 0.05
+rho_bind: 0.995
+rho_frag: 0.35
+rho_fixed: 0.45
+r_obs_bind: 0.68
+r_obs_frag: 0.97
+unambiguous_noise: 0.05
+ambiguity_noise: 0.10
+bias_g_prior: 0.90
+bias_phi_bind_prior: 0.85
+ambiguity_reveal_interval: 24
+ambiguity_reveal_len: 4
+ambiguity_frag_flip_len: 8

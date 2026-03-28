@@ -1,0 +1,31 @@
+seeds:
+  - 11
+  - 23
+  - 37
+T: 180
+rho: 0.95
+kappa: -1.0
+omega: 0.0
+v_z: 0.20
+base_v_h: 0.10
+base_v_y: 0.10
+kalman_process_var: 1.0
+vmp_iters: 8
+init_var: 5.0
+alpha_local_values:
+  - 0.25
+  - 0.5
+  - 1.0
+  - 2.0
+  - 4.0
+alpha_hyper_values:
+  - 0.25
+  - 0.5
+  - 1.0
+  - 2.0
+  - 4.0
+input_scale_values:
+  - 0.1
+  - 1.0
+  - 2.0
+scale_y_by_local: false

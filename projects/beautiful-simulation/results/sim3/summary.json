@@ -1,0 +1,47 @@
+{
+    "simulation": "sim3",
+    "config": {
+        "seeds": [
+            11
+        ],
+        "T": 80,
+        "alpha_local_values": [
+            0.5,
+            2.0
+        ],
+        "alpha_hyper_values": [
+            0.5,
+            2.0
+        ]
+    },
+    "summary_by_model": {
+        "HGF2": {
+            "heldout_nll": 0.11137701664860955,
+            "rmse_x": 0.2952878903844922,
+            "coverage_90": 0.8968750000000001,
+            "first_order_precision": 10.67150874402616,
+            "hyper_certainty": null,
+            "content_complexity": 123.4057545630759,
+            "overconfidence_90": 0.0031250000000000167
+        },
+        "BLT-HGF": {
+            "heldout_nll": 0.10954007459852637,
+            "rmse_x": 0.2949330376141938,
+            "coverage_90": 0.903125,
+            "first_order_precision": 10.484270497356608,
+            "hyper_certainty": 1.6117637138184626,
+            "content_complexity": 123.39878905843837,
+            "overconfidence_90": 0
+        },
+        "KalmanFixed": {
+            "heldout_nll": 0.24379412933468791,
+            "rmse_x": 0.33598835136664973,
+            "coverage_90": 0.8656250000000001,
+            "first_order_precision": 10.914342651087232,
+            "hyper_certainty": null,
+            "content_complexity": 121.11209733055892,
+            "overconfidence_90": 0.034375000000000044
+        }
+    },
+    "theory_result": "weak_support"
+}

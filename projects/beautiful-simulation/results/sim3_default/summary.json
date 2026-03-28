@@ -1,0 +1,102 @@
+{
+    "simulation": "sim3",
+    "config": {
+        "seeds": [
+            11,
+            23,
+            37
+        ],
+        "T": 180,
+        "alpha_local_values": [
+            0.25,
+            0.5,
+            1.0,
+            2.0,
+            4.0
+        ],
+        "alpha_hyper_values": [
+            0.25,
+            0.5,
+            1.0,
+            2.0,
+            4.0
+        ],
+        "scale_y_by_local": false
+    },
+    "summary_by_model": {
+        "HGF2": {
+            "heldout_nll": 0.11065487596466393,
+            "rmse_x": 0.3136752035770891,
+            "coverage_90": 0.8854814814814815,
+            "first_order_precision": 0.9364446773620595,
+            "implied_local_precision": 0.9364446773620595,
+            "posterior_content_precision": 11.097796657331447,
+            "hyper_certainty": null,
+            "content_complexity": 333.21707250108653,
+            "overconfidence_90": 0.01503703703703706,
+            "wrong_high_confidence_run_length": 1.7466666666666666
+        },
+        "BLT-HGF": {
+            "heldout_nll": 0.10690173058505456,
+            "rmse_x": 0.3117679764499526,
+            "coverage_90": 0.8900740740740741,
+            "first_order_precision": 0.4955660439308233,
+            "implied_local_precision": 0.4955660439308233,
+            "posterior_content_precision": 10.676452132091056,
+            "hyper_certainty": 1.738774856626429,
+            "content_complexity": 333.2579826025555,
+            "overconfidence_90": 0.010074074074074103,
+            "wrong_high_confidence_run_length": 1.6666666666666667
+        },
+        "KalmanFixed": {
+            "heldout_nll": 0.44059213501416056,
+            "rmse_x": 0.3874472804113969,
+            "coverage_90": 0.843777777777778,
+            "first_order_precision": 10.919533091655007,
+            "implied_local_precision": 10.919533091655007,
+            "posterior_content_precision": 10.919533091655007,
+            "hyper_certainty": null,
+            "content_complexity": 328.79767626972887,
+            "overconfidence_90": 0.05629629629629632,
+            "wrong_high_confidence_run_length": 2.52
+        }
+    },
+    "metric_definitions": {
+        "phase_metric": "implied_local_precision",
+        "implied_local_precision": "mean(exp(-(kappa * z_t + omega))) from inferred z_t; used for the phase diagram and theory evaluation",
+        "posterior_content_precision": "mean(1 / var_q(x_t)); retained as a comparator and explicit deviation from the original var_q(x_t)-based draft reading",
+        "first_order_precision": "backward-compatible alias for implied_local_precision"
+    },
+    "spec_deviations": {
+        "first_order_precision": "The phase metric is the inferred implied_local_precision from z_t rather than only posterior variance of x_t.",
+        "scenario_defaults": "Scenario defaults were tuned relative to the original spec and are recorded explicitly in scenario_definitions.",
+        "scale_y_by_local": "Observation noise coupling scale_y_by_local remains configurable and is currently false."
+    },
+    "scenario_definitions": {
+        "dream": {
+            "alpha_local": 0.5,
+            "alpha_hyper": 0.5,
+            "input_scale": 2,
+            "biased": false
+        },
+        "noetic": {
+            "alpha_local": 0.5,
+            "alpha_hyper": 4,
+            "input_scale": 0.25,
+            "biased": true
+        },
+        "mpe": {
+            "alpha_local": 0.8,
+            "alpha_hyper": 4,
+            "input_scale": 0,
+            "biased": false
+        },
+        "wake": {
+            "alpha_local": 2,
+            "alpha_hyper": 2,
+            "input_scale": 1,
+            "biased": false
+        }
+    },
+    "theory_result": "weak_support"
+}

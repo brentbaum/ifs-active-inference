@@ -1,0 +1,38 @@
+{
+    "simulation": "sim1",
+    "config": {
+        "seeds": [
+            11
+        ],
+        "n_episodes": 1,
+        "n_probe_episodes": 1,
+        "T": 24
+    },
+    "summary_by_model": {
+        "LocalPrecision": {
+            "world_accuracy": 0.9583333333333334,
+            "heldout_nll": 2.617871537981251,
+            "ece": 0.04673814388340662,
+            "future_reliability_brier": 0.19329010963799886,
+            "context_recovery_accuracy": null,
+            "switch_recovery_accuracy": null
+        },
+        "BLTGlobal": {
+            "world_accuracy": 0.9583333333333334,
+            "heldout_nll": 2.620915747238163,
+            "ece": 0.045788937684155824,
+            "future_reliability_brier": 0.19761744028856576,
+            "context_recovery_accuracy": 1,
+            "switch_recovery_accuracy": null
+        },
+        "FlatFixed": {
+            "world_accuracy": 0.9583333333333334,
+            "heldout_nll": 2.611883375260212,
+            "ece": 0.06315765407298848,
+            "future_reliability_brier": 0.2398913043478261,
+            "context_recovery_accuracy": null,
+            "switch_recovery_accuracy": null
+        }
+    },
+    "theory_result": "null"
+}
