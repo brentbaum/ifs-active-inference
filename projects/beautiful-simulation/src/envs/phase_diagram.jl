@@ -40,11 +40,31 @@ function load_sim3_config(path::AbstractString)
     )
 end
 
-function sim3_input_drive(rng::AbstractRNG, T::Int, input_scale::Float64)
-    return [
-        input_scale * sin(2π * t / 30) + 0.25 * input_scale * randn(rng)
+function sim3_input_drive(
+    rng::AbstractRNG,
+    T::Int,
+    input_scale::Float64;
+    mode::Symbol = :sine,
+    conflict_offset::Float64 = 0.0,
+    conflict_onset::Int = max(2, cld(T, 4))
+)
+    noise_scale = max(0.05, 0.25 * max(input_scale, abs(conflict_offset)))
+    if mode == :sine
+        return [
+            input_scale * sin(2π * t / 30) + noise_scale * randn(rng)
+            for t in 1:T
+        ]
+    elseif mode == :counterevidence
+        onset = clamp(conflict_onset, 2, T)
+        drive = zeros(Float64, T)
         for t in 1:T
-    ]
+            base = t < onset ? 0.25 * input_scale : -abs(conflict_offset)
+            drive[t] = base + noise_scale * randn(rng)
+        end
+        return drive
+    else
+        error("Unknown sim3 input mode: $(mode)")
+    end
 end
 
 function generate_sim3_sequence(
@@ -53,14 +73,23 @@ function generate_sim3_sequence(
     alpha_local::Float64,
     alpha_hyper::Float64,
     input_scale::Float64,
-    biased_priors::Bool = false
+    biased_priors::Bool = false,
+    input_mode::Symbol = :sine,
+    conflict_offset::Float64 = input_scale,
+    conflict_onset::Int = max(2, cld(config.T, 4)),
+    observation_bias::Float64 = 0.0,
+    observation_bias_onset::Int = 1,
+    prior_bias_sign::Float64 = 1.0,
+    h_prior_bias_sigma::Float64 = 6.0,
+    x_prior_bias_sigma::Float64 = 6.0,
+    prior_var_shrink::Float64 = 25.0
 )
     T = config.T
     h = zeros(Float64, T)
     z = zeros(Float64, T)
     x = zeros(Float64, T)
     y = zeros(Float64, T)
-    u = sim3_input_drive(rng, T, input_scale)
+    u = sim3_input_drive(rng, T, input_scale; mode = input_mode, conflict_offset = conflict_offset, conflict_onset = conflict_onset)
 
     v_h = config.base_v_h / alpha_hyper
     v_y = config.scale_y_by_local ? config.base_v_y / alpha_local : config.base_v_y
@@ -73,15 +102,16 @@ function generate_sim3_sequence(
         z[t] = rand(rng, Normal(h[t], sqrt(config.v_z)))
         local_var = exp(config.kappa * z[t] + config.omega)
         x[t] = rand(rng, Normal(config.rho * x_prev + u[t], sqrt(local_var)))
-        y[t] = rand(rng, Normal(x[t], sqrt(v_y)))
+        bias_t = t >= observation_bias_onset ? observation_bias : 0.0
+        y[t] = rand(rng, Normal(x[t] + bias_t, sqrt(v_y)))
         h_prev = h[t]
         x_prev = x[t]
     end
 
-    h_prior_mean = biased_priors ? h0 + 6 * sqrt(v_h) : h0
-    h_prior_var = biased_priors ? max(v_h / 25, 1e-4) : config.init_var
-    x_prior_mean = biased_priors ? 6 * sqrt(var(x) + 1e-6) : 0.0
-    x_prior_var = biased_priors ? max(var(x) / 25, 1e-4) : config.init_var
+    h_prior_mean = biased_priors ? h0 + prior_bias_sign * h_prior_bias_sigma * sqrt(v_h) : h0
+    h_prior_var = biased_priors ? max(v_h / prior_var_shrink, 1e-4) : config.init_var
+    x_prior_mean = biased_priors ? prior_bias_sign * x_prior_bias_sigma * sqrt(var(x) + 1e-6) : 0.0
+    x_prior_var = biased_priors ? max(var(x) / prior_var_shrink, 1e-4) : config.init_var
 
     return (
         h = h,
@@ -93,9 +123,18 @@ function generate_sim3_sequence(
             alpha_local = alpha_local,
             alpha_hyper = alpha_hyper,
             input_scale = input_scale,
+            input_mode = String(input_mode),
+            conflict_offset = conflict_offset,
+            conflict_onset = conflict_onset,
+            observation_bias = observation_bias,
+            observation_bias_onset = observation_bias_onset,
             v_h = v_h,
             v_y = v_y,
             biased_priors = biased_priors,
+            prior_bias_sign = prior_bias_sign,
+            h_prior_bias_sigma = h_prior_bias_sigma,
+            x_prior_bias_sigma = x_prior_bias_sigma,
+            prior_var_shrink = prior_var_shrink,
             h_prior_mean = h_prior_mean,
             h_prior_var = h_prior_var,
             x_prior_mean = x_prior_mean,

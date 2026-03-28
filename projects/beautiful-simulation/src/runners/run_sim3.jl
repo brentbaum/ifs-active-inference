@@ -97,7 +97,8 @@ function evaluate_sim3_theory(sweep_rows, scenario_rows)
         dream_row.content_complexity > mpe_row.content_complexity
 
     noetic_exists = noetic_row.hyper_certainty >= hc_q[2] &&
-        noetic_row.overconfidence_90 > 0.05
+        noetic_row.overconfidence_90 > 0.05 &&
+        noetic_row.wrong_high_confidence_run_length >= 10
 
     min_support = blt_nll < hgf_nll && blt_nll < kalman_nll && mpe_exists
     strong_support = dream_exists && noetic_exists
@@ -157,7 +158,12 @@ function run_sim3(; config_path::Union{Nothing, String} = nothing, output_dir::U
     ]
 
     for alpha_local in config.alpha_local_values, alpha_hyper in config.alpha_hyper_values, seed in config.seeds
-        seq = generate_sim3_sequence(default_rng(seed), config; alpha_local, alpha_hyper, input_scale = 1.0, biased_priors = false)
+        seq = generate_sim3_sequence(default_rng(seed), config;
+            alpha_local,
+            alpha_hyper,
+            input_scale = 1.0,
+            biased_priors = false
+        )
         for (model_name, infer_fn) in model_specs
             result = infer_fn(seq, config)
             metrics = sim3_metrics(model_name, result, seq, config)
@@ -174,10 +180,66 @@ function run_sim3(; config_path::Union{Nothing, String} = nothing, output_dir::U
     end
 
     scenario_defs = Dict(
-        "mpe" => (alpha_local = 0.8, alpha_hyper = 4.0, input_scale = 0.0, biased = false),
-        "dream" => (alpha_local = 0.5, alpha_hyper = 0.5, input_scale = 2.0, biased = false),
-        "wake" => (alpha_local = 2.0, alpha_hyper = 2.0, input_scale = 1.0, biased = false),
-        "noetic" => (alpha_local = 0.5, alpha_hyper = 4.0, input_scale = 0.25, biased = true)
+        "mpe" => (
+            alpha_local = 0.8,
+            alpha_hyper = 4.0,
+            input_scale = 0.0,
+            biased = false,
+            input_mode = "sine",
+            conflict_offset = 0.0,
+            conflict_onset = 1,
+            observation_bias = 0.0,
+            observation_bias_onset = 1,
+            prior_bias_sign = 1.0,
+            h_prior_bias_sigma = 6.0,
+            x_prior_bias_sigma = 6.0,
+            prior_var_shrink = 25.0
+        ),
+        "dream" => (
+            alpha_local = 0.5,
+            alpha_hyper = 0.5,
+            input_scale = 2.0,
+            biased = false,
+            input_mode = "sine",
+            conflict_offset = 0.0,
+            conflict_onset = 1,
+            observation_bias = 0.0,
+            observation_bias_onset = 1,
+            prior_bias_sign = 1.0,
+            h_prior_bias_sigma = 6.0,
+            x_prior_bias_sigma = 6.0,
+            prior_var_shrink = 25.0
+        ),
+        "wake" => (
+            alpha_local = 2.0,
+            alpha_hyper = 2.0,
+            input_scale = 1.0,
+            biased = false,
+            input_mode = "sine",
+            conflict_offset = 0.0,
+            conflict_onset = 1,
+            observation_bias = 0.0,
+            observation_bias_onset = 1,
+            prior_bias_sign = 1.0,
+            h_prior_bias_sigma = 6.0,
+            x_prior_bias_sigma = 6.0,
+            prior_var_shrink = 25.0
+        ),
+        "noetic" => (
+            alpha_local = 2.0,
+            alpha_hyper = 8.0,
+            input_scale = 0.0,
+            biased = true,
+            input_mode = "counterevidence",
+            conflict_offset = 0.5,
+            conflict_onset = 10,
+            observation_bias = 1.5,
+            observation_bias_onset = 10,
+            prior_bias_sign = 1.0,
+            h_prior_bias_sigma = 14.0,
+            x_prior_bias_sigma = 14.0,
+            prior_var_shrink = 100.0
+        )
     )
 
     metric_definitions = (
@@ -189,7 +251,8 @@ function run_sim3(; config_path::Union{Nothing, String} = nothing, output_dir::U
 
     spec_deviations = (
         first_order_precision = "The phase metric is the inferred implied_local_precision from z_t rather than only posterior variance of x_t.",
-        scenario_defaults = "Scenario defaults were tuned relative to the original spec and are recorded explicitly in scenario_definitions.",
+        scenario_defaults = "Scenario defaults were tuned relative to the original spec and are recorded explicitly in scenario_definitions, including explicit noetic prior-bias, sustained counterevidence, and sensory-bias controls.",
+        noetic_operationalization = "The noetic probe uses sustained latent counterevidence plus an unmodeled observation bias to operationalize a confident-but-wrong regime.",
         scale_y_by_local = "Observation noise coupling scale_y_by_local remains configurable and is currently $(config.scale_y_by_local)."
     )
 
@@ -201,7 +264,16 @@ function run_sim3(; config_path::Union{Nothing, String} = nothing, output_dir::U
             alpha_local = params.alpha_local,
             alpha_hyper = params.alpha_hyper,
             input_scale = params.input_scale,
-            biased_priors = params.biased
+            biased_priors = params.biased,
+            input_mode = Symbol(params.input_mode),
+            conflict_offset = params.conflict_offset,
+            conflict_onset = params.conflict_onset,
+            observation_bias = params.observation_bias,
+            observation_bias_onset = params.observation_bias_onset,
+            prior_bias_sign = params.prior_bias_sign,
+            h_prior_bias_sigma = params.h_prior_bias_sigma,
+            x_prior_bias_sigma = params.x_prior_bias_sigma,
+            prior_var_shrink = params.prior_var_shrink
         )
         for (model_name, infer_fn) in model_specs
             result = infer_fn(seq, config)

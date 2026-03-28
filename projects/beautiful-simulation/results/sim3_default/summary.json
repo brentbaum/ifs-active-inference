@@ -69,7 +69,8 @@
     },
     "spec_deviations": {
         "first_order_precision": "The phase metric is the inferred implied_local_precision from z_t rather than only posterior variance of x_t.",
-        "scenario_defaults": "Scenario defaults were tuned relative to the original spec and are recorded explicitly in scenario_definitions.",
+        "scenario_defaults": "Scenario defaults were tuned relative to the original spec and are recorded explicitly in scenario_definitions, including explicit noetic prior-bias, sustained counterevidence, and sensory-bias controls.",
+        "noetic_operationalization": "The noetic probe uses sustained latent counterevidence plus an unmodeled observation bias to operationalize a confident-but-wrong regime.",
         "scale_y_by_local": "Observation noise coupling scale_y_by_local remains configurable and is currently false."
     },
     "scenario_definitions": {
@@ -77,26 +78,62 @@
             "alpha_local": 0.5,
             "alpha_hyper": 0.5,
             "input_scale": 2,
-            "biased": false
+            "biased": false,
+            "input_mode": "sine",
+            "conflict_offset": 0,
+            "conflict_onset": 1,
+            "observation_bias": 0,
+            "observation_bias_onset": 1,
+            "prior_bias_sign": 1,
+            "h_prior_bias_sigma": 6,
+            "x_prior_bias_sigma": 6,
+            "prior_var_shrink": 25
         },
         "noetic": {
-            "alpha_local": 0.5,
-            "alpha_hyper": 4,
-            "input_scale": 0.25,
-            "biased": true
+            "alpha_local": 2,
+            "alpha_hyper": 8,
+            "input_scale": 0,
+            "biased": true,
+            "input_mode": "counterevidence",
+            "conflict_offset": 0.5,
+            "conflict_onset": 10,
+            "observation_bias": 1.5,
+            "observation_bias_onset": 10,
+            "prior_bias_sign": 1,
+            "h_prior_bias_sigma": 14,
+            "x_prior_bias_sigma": 14,
+            "prior_var_shrink": 100
         },
         "mpe": {
             "alpha_local": 0.8,
             "alpha_hyper": 4,
             "input_scale": 0,
-            "biased": false
+            "biased": false,
+            "input_mode": "sine",
+            "conflict_offset": 0,
+            "conflict_onset": 1,
+            "observation_bias": 0,
+            "observation_bias_onset": 1,
+            "prior_bias_sign": 1,
+            "h_prior_bias_sigma": 6,
+            "x_prior_bias_sigma": 6,
+            "prior_var_shrink": 25
         },
         "wake": {
             "alpha_local": 2,
             "alpha_hyper": 2,
             "input_scale": 1,
-            "biased": false
+            "biased": false,
+            "input_mode": "sine",
+            "conflict_offset": 0,
+            "conflict_onset": 1,
+            "observation_bias": 0,
+            "observation_bias_onset": 1,
+            "prior_bias_sign": 1,
+            "h_prior_bias_sigma": 6,
+            "x_prior_bias_sigma": 6,
+            "prior_var_shrink": 25
         }
     },
-    "theory_result": "weak_support"
+    "theory_result": "support"
 }

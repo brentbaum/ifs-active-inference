@@ -5,16 +5,17 @@
         "posterior_content_precision": "mean(1 / var_q(x_t)); retained as a comparator and explicit deviation from the original var_q(x_t)-based draft reading",
         "first_order_precision": "backward-compatible alias for implied_local_precision"
     },
-    "generated_at_utc": "2026-03-28T01:21:04Z",
+    "generated_at_utc": "2026-03-28T21:46:04Z",
     "rxinfer_version": "4.7.3",
     "spec_deviations": {
         "first_order_precision": "The phase metric is the inferred implied_local_precision from z_t rather than only posterior variance of x_t.",
-        "scenario_defaults": "Scenario defaults were tuned relative to the original spec and are recorded explicitly in scenario_definitions.",
+        "scenario_defaults": "Scenario defaults were tuned relative to the original spec and are recorded explicitly in scenario_definitions, including explicit noetic prior-bias, sustained counterevidence, and sensory-bias controls.",
+        "noetic_operationalization": "The noetic probe uses sustained latent counterevidence plus an unmodeled observation bias to operationalize a confident-but-wrong regime.",
         "scale_y_by_local": "Observation noise coupling scale_y_by_local remains configurable and is currently false."
     },
     "julia_version": "1.12.4",
-    "runtime_seconds": 19.166266918182373,
-    "git_commit_hash": "092e8ace7f7e94b4d976eff0fd32bee640077468",
+    "runtime_seconds": 20.64846682548523,
+    "git_commit_hash": "f483e234967942aabffa5edff2a8f648ddda2713",
     "config_path": "/Users/brentbaum/dev/research/ifs-active-inference/projects/beautiful-simulation/configs/sim3_default.yaml",
     "config_snapshot": {
         "seeds": [
@@ -60,25 +61,61 @@
             "alpha_local": 0.5,
             "alpha_hyper": 0.5,
             "input_scale": 2,
-            "biased": false
+            "biased": false,
+            "input_mode": "sine",
+            "conflict_offset": 0,
+            "conflict_onset": 1,
+            "observation_bias": 0,
+            "observation_bias_onset": 1,
+            "prior_bias_sign": 1,
+            "h_prior_bias_sigma": 6,
+            "x_prior_bias_sigma": 6,
+            "prior_var_shrink": 25
         },
         "noetic": {
-            "alpha_local": 0.5,
-            "alpha_hyper": 4,
-            "input_scale": 0.25,
-            "biased": true
+            "alpha_local": 2,
+            "alpha_hyper": 8,
+            "input_scale": 0,
+            "biased": true,
+            "input_mode": "counterevidence",
+            "conflict_offset": 0.5,
+            "conflict_onset": 10,
+            "observation_bias": 1.5,
+            "observation_bias_onset": 10,
+            "prior_bias_sign": 1,
+            "h_prior_bias_sigma": 14,
+            "x_prior_bias_sigma": 14,
+            "prior_var_shrink": 100
         },
         "mpe": {
             "alpha_local": 0.8,
             "alpha_hyper": 4,
             "input_scale": 0,
-            "biased": false
+            "biased": false,
+            "input_mode": "sine",
+            "conflict_offset": 0,
+            "conflict_onset": 1,
+            "observation_bias": 0,
+            "observation_bias_onset": 1,
+            "prior_bias_sign": 1,
+            "h_prior_bias_sigma": 6,
+            "x_prior_bias_sigma": 6,
+            "prior_var_shrink": 25
         },
         "wake": {
             "alpha_local": 2,
             "alpha_hyper": 2,
             "input_scale": 1,
-            "biased": false
+            "biased": false,
+            "input_mode": "sine",
+            "conflict_offset": 0,
+            "conflict_onset": 1,
+            "observation_bias": 0,
+            "observation_bias_onset": 1,
+            "prior_bias_sign": 1,
+            "h_prior_bias_sigma": 6,
+            "x_prior_bias_sigma": 6,
+            "prior_var_shrink": 25
         }
     }
 }
