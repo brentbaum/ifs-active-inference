@@ -5,7 +5,7 @@
         "posterior_content_precision": "mean(1 / var_q(x_t)); retained as a comparator and explicit deviation from the original var_q(x_t)-based draft reading",
         "first_order_precision": "backward-compatible alias for implied_local_precision"
     },
-    "generated_at_utc": "2026-03-28T21:46:04Z",
+    "generated_at_utc": "2026-03-28T22:36:18Z",
     "rxinfer_version": "4.7.3",
     "spec_deviations": {
         "first_order_precision": "The phase metric is the inferred implied_local_precision from z_t rather than only posterior variance of x_t.",
@@ -14,8 +14,8 @@
         "scale_y_by_local": "Observation noise coupling scale_y_by_local remains configurable and is currently false."
     },
     "julia_version": "1.12.4",
-    "runtime_seconds": 20.64846682548523,
-    "git_commit_hash": "f483e234967942aabffa5edff2a8f648ddda2713",
+    "runtime_seconds": 18.436035871505737,
+    "git_commit_hash": "3885691c5668d3baa784231a11dfe68760d77238",
     "config_path": "/Users/brentbaum/dev/research/ifs-active-inference/projects/beautiful-simulation/configs/sim3_default.yaml",
     "config_snapshot": {
         "seeds": [

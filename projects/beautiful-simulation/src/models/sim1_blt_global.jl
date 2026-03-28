@@ -1,9 +1,9 @@
 function build_sim1_blt_global_components(config::Sim1Config)
     A_s = make_sticky_matrix(config.n_states, config.state_diag, config.state_offdiag)
     A_phi = make_sticky_matrix(config.n_contexts, config.context_diag, config.context_offdiag)
-    table = sim1_reliability_table()
-    Bv_ctx = [make_emission(r) for r in table.r_vision]
-    Ba_ctx = [make_emission(r) for r in table.r_audio]
+    table = sim1_reliability_table(config)
+    Bv_ctx = [make_emission(table.r_vision[i], table.shift_vision[i]) for i in 1:config.n_contexts]
+    Ba_ctx = [make_emission(table.r_audio[i], table.shift_audio[i]) for i in 1:config.n_contexts]
 
     n_joint = config.n_states * config.n_contexts
     transition = zeros(Float64, n_joint, n_joint)
@@ -41,7 +41,7 @@ function sim1_blt_global_infer(episode, config::Sim1Config)
     filtered_world_posteriors = marginalize_joint_rows(bundle.filtered_joint_posteriors, dims, 1)
     filtered_phi_posteriors = marginalize_joint_rows(bundle.filtered_joint_posteriors, dims, 2)
 
-    table = sim1_reliability_table()
+    table = sim1_reliability_table(config)
     filtered_future_v = [
         sum(filtered_phi_posteriors[t, phi] * table.r_vision[phi] for phi in 1:config.n_contexts)
         for t in 1:(size(filtered_phi_posteriors, 1) - 1)

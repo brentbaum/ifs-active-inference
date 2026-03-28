@@ -20,83 +20,83 @@
     "metric_source_for_theory": "filtered",
     "filtered_summary_by_model": {
         "LocalPrecision": {
-            "world_accuracy": 0.8016458333333333,
-            "heldout_nll": 2.2340240118508237,
-            "ece": 0.04889671721164312,
-            "future_reliability_brier": 0.1854306253235059,
+            "world_accuracy": 0.9416249999999999,
+            "heldout_nll": 0.7542459119992453,
+            "ece": 0.05327420189315757,
+            "future_reliability_brier": 0.08067457336738448,
             "context_recovery_accuracy": null,
-            "switch_recovery_accuracy": 0.7436666666666667
+            "switch_recovery_accuracy": 0.9734999999999999
         },
         "BLTGlobal": {
-            "world_accuracy": 0.801375,
-            "heldout_nll": 2.2291481063676266,
-            "ece": 0.046928503698324825,
-            "future_reliability_brier": 0.18439539355184636,
-            "context_recovery_accuracy": 0.7203499999999999,
-            "switch_recovery_accuracy": 0.7406666666666667
+            "world_accuracy": 0.9503750000000002,
+            "heldout_nll": 0.7400737373427797,
+            "ece": 0.04951632249500496,
+            "future_reliability_brier": 0.0779555484396914,
+            "context_recovery_accuracy": 0.957925,
+            "switch_recovery_accuracy": 0.9758333333333333
         },
         "FlatFixed": {
-            "world_accuracy": 0.7913958333333333,
-            "heldout_nll": 2.381704329328203,
-            "ece": 0.060944362755626445,
-            "future_reliability_brier": 0.22758158995815903,
+            "world_accuracy": 0.8084791666666667,
+            "heldout_nll": 1.7077385578814794,
+            "ece": 0.11170029132973942,
+            "future_reliability_brier": 0.25,
             "context_recovery_accuracy": null,
-            "switch_recovery_accuracy": 0.7464999999999999
+            "switch_recovery_accuracy": 0.8584999999999999
         }
     },
     "smoothed_summary_by_model": {
         "LocalPrecision": {
-            "world_accuracy": 0.8605833333333335,
-            "heldout_nll": 2.2340240118508237,
-            "ece": 0.049424031082411515,
-            "future_reliability_brier": 0.16041990808941436,
+            "world_accuracy": 0.9767916666666668,
+            "heldout_nll": 0.7542459119992453,
+            "ece": 0.023908685186217055,
+            "future_reliability_brier": 0.05393789779050616,
             "context_recovery_accuracy": null,
-            "switch_recovery_accuracy": 0.8268333333333331
+            "switch_recovery_accuracy": 0.9964999999999999
         },
         "BLTGlobal": {
-            "world_accuracy": 0.8616041666666667,
-            "heldout_nll": 2.2291481063676266,
-            "ece": 0.05033170732216232,
-            "future_reliability_brier": 0.16125960112101625,
-            "context_recovery_accuracy": 0.8226749999999997,
-            "switch_recovery_accuracy": 0.827
+            "world_accuracy": 0.9811041666666667,
+            "heldout_nll": 0.7400737373427797,
+            "ece": 0.020076539987846337,
+            "future_reliability_brier": 0.05413204675517493,
+            "context_recovery_accuracy": 0.9839499999999999,
+            "switch_recovery_accuracy": 0.9964999999999999
         },
         "FlatFixed": {
-            "world_accuracy": 0.8435625,
-            "heldout_nll": 2.381704329328203,
-            "ece": 0.056299360038074106,
-            "future_reliability_brier": 0.22758158995815903,
+            "world_accuracy": 0.8151458333333335,
+            "heldout_nll": 1.7077385578814794,
+            "ece": 0.0957981447087268,
+            "future_reliability_brier": 0.25,
             "context_recovery_accuracy": null,
-            "switch_recovery_accuracy": 0.7976666666666665
+            "switch_recovery_accuracy": 0.8901666666666668
         }
     },
     "delta_by_model": {
         "LocalPrecision": {
-            "world_accuracy": -0.0589375000000002,
+            "world_accuracy": -0.0351666666666669,
             "heldout_nll": 0,
-            "ece": -0.0005273138707683964,
-            "future_reliability_brier": 0.02501071723409154,
+            "ece": 0.029365516706940514,
+            "future_reliability_brier": 0.026736675576878324,
             "context_recovery_accuracy": null,
-            "switch_recovery_accuracy": -0.08316666666666639
+            "switch_recovery_accuracy": -0.02300000000000002
         },
         "BLTGlobal": {
-            "world_accuracy": -0.06022916666666678,
+            "world_accuracy": -0.030729166666666474,
             "heldout_nll": 0,
-            "ece": -0.003403203623837496,
-            "future_reliability_brier": 0.02313579243083011,
-            "context_recovery_accuracy": -0.10232499999999978,
-            "switch_recovery_accuracy": -0.08633333333333326
+            "ece": 0.029439782507158625,
+            "future_reliability_brier": 0.02382350168451646,
+            "context_recovery_accuracy": -0.026024999999999854,
+            "switch_recovery_accuracy": -0.02066666666666661
         },
         "FlatFixed": {
-            "world_accuracy": -0.052166666666666694,
+            "world_accuracy": -0.00666666666666671,
             "heldout_nll": 0,
-            "ece": 0.004645002717552339,
+            "ece": 0.015902146621012622,
             "future_reliability_brier": 0,
             "context_recovery_accuracy": null,
-            "switch_recovery_accuracy": -0.05116666666666658
+            "switch_recovery_accuracy": -0.03166666666666684
         }
     },
-    "theory_result": "weak_support",
-    "filtered_theory_result": "weak_support",
+    "theory_result": "support",
+    "filtered_theory_result": "support",
     "smoothed_theory_result": "weak_support"
 }
