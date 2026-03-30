@@ -1,0 +1,64 @@
+{
+  "dimension": "Moral Source",
+  "options": ["Human source", "Transcendent source"],
+  "scale": {
+    "min": 1,
+    "max": 7,
+    "anchors": {
+      "1": "Strongly disagree",
+      "4": "Neutral / unsure",
+      "7": "Strongly agree"
+    }
+  },
+  "scoring": {
+    "type": "bipolar",
+    "positive": "human_source",
+    "negative": "transcendent_source",
+    "subscales": {
+      "human_source": ["MSR1", "MSR3", "MSR5", "MSR7"],
+      "transcendent_source": ["MSR2", "MSR4", "MSR6", "MSR8"]
+    }
+  },
+  "items": [
+    {
+      "id": "MSR1",
+      "polarity": "human_source",
+      "text": "Moral rules are created by societies to help people live together."
+    },
+    {
+      "id": "MSR2",
+      "polarity": "transcendent_source",
+      "text": "Moral rules ultimately come from a source beyond human society."
+    },
+    {
+      "id": "MSR3",
+      "polarity": "human_source",
+      "text": "What is moral is decided by human agreements and institutions."
+    },
+    {
+      "id": "MSR4",
+      "polarity": "transcendent_source",
+      "text": "Moral authority is grounded in a divine or transcendent reality."
+    },
+    {
+      "id": "MSR5",
+      "polarity": "human_source",
+      "text": "Morality is a human invention that can evolve over time."
+    },
+    {
+      "id": "MSR6",
+      "polarity": "transcendent_source",
+      "text": "There is a higher moral order independent of human opinions."
+    },
+    {
+      "id": "MSR7",
+      "polarity": "human_source",
+      "text": "Moral standards are established by people rather than by any higher power."
+    },
+    {
+      "id": "MSR8",
+      "polarity": "transcendent_source",
+      "text": "Moral truth is anchored in something beyond human culture."
+    }
+  ]
+}

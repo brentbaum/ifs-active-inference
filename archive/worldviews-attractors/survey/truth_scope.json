@@ -1,0 +1,77 @@
+{
+  "dimension": "Truth Scope",
+  "options": [
+    "Universal",
+    "Relative"
+  ],
+  "scale": {
+    "min": 1,
+    "max": 7,
+    "anchors": {
+      "1": "Strongly disagree",
+      "4": "Neutral / unsure",
+      "7": "Strongly agree"
+    }
+  },
+  "scoring": {
+    "type": "bipolar",
+    "positive": "universal",
+    "negative": "relative",
+    "subscales": {
+      "universal": [
+        "TS1",
+        "TS3",
+        "TS5",
+        "TS7"
+      ],
+      "relative": [
+        "TS2",
+        "TS4",
+        "TS6",
+        "TS8"
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "TS1",
+      "polarity": "universal",
+      "text": "Truth is the same for everyone everywhere."
+    },
+    {
+      "id": "TS2",
+      "polarity": "relative",
+      "text": "Truth depends on perspective or context."
+    },
+    {
+      "id": "TS3",
+      "polarity": "universal",
+      "text": "There are universal truths that apply to all."
+    },
+    {
+      "id": "TS4",
+      "polarity": "relative",
+      "text": "What is true can vary across cultures or situations."
+    },
+    {
+      "id": "TS5",
+      "polarity": "universal",
+      "text": "Truth is objective and independent of observers."
+    },
+    {
+      "id": "TS6",
+      "polarity": "relative",
+      "text": "Truth is shaped by human viewpoints."
+    },
+    {
+      "id": "TS7",
+      "polarity": "universal",
+      "text": "Facts remain true regardless of who observes them."
+    },
+    {
+      "id": "TS8",
+      "polarity": "relative",
+      "text": "Truth is relative to the observer."
+    }
+  ]
+}

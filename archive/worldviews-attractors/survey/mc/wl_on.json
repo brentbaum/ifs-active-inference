@@ -1,0 +1,80 @@
+{
+  "dimension": "Ontology",
+  "code": "WL-ON",
+  "group": "WORLD AND LIFE",
+  "format": "mc",
+  "poles": [
+    "Spiritualism",
+    "Materialism"
+  ],
+  "non_mutually_exclusive": false,
+  "items": [
+    {
+      "id": "WL-ON-1",
+      "text": "Reality fundamentally consists of:",
+      "options": {
+        "A": "Only physical matter and energy",
+        "B": "Primarily physical, possibly with emergent properties",
+        "C": "Both physical and non-physical aspects",
+        "D": "Physical and significant non-physical dimensions",
+        "E": "Primarily non-physical, with matter as secondary"
+      }
+    },
+    {
+      "id": "WL-ON-2",
+      "text": "A person has a profound experience of \"presence\" during meditation. This is:",
+      "options": {
+        "A": "A brain state with no metaphysical significance",
+        "B": "A meaningful brain state, but still just brain activity",
+        "C": "Impossible to determine its ultimate nature",
+        "D": "Possibly contact with something real beyond the physical",
+        "E": "Contact with a real non-physical dimension of reality"
+      }
+    },
+    {
+      "id": "WL-ON-3",
+      "text": "Is consciousness reducible to physical processes?",
+      "options": {
+        "A": "Yes\u2014consciousness is just brain activity, fully explained by neuroscience",
+        "B": "Probably\u2014neuroscience will eventually explain it",
+        "C": "Unknown\u2014the hard problem of consciousness is genuinely hard",
+        "D": "Probably not\u2014something essential is left out of physical accounts",
+        "E": "No\u2014consciousness points to something beyond the material"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "bipolar",
+    "questions": {
+      "WL-ON-1": {
+        "A": 2,
+        "B": 1,
+        "C": 0,
+        "D": -1,
+        "E": -2
+      },
+      "WL-ON-2": {
+        "A": 2,
+        "B": 1,
+        "C": 0,
+        "D": -1,
+        "E": -2
+      },
+      "WL-ON-3": {
+        "A": 2,
+        "B": 1,
+        "C": 0,
+        "D": -1,
+        "E": -2
+      }
+    }
+  },
+  "interpretation": {
+    "-2": "Reality is primarily spiritual/non-physical",
+    "-1": "Reality has significant spiritual dimension",
+    "0": "Both physical and non-physical aspects",
+    "1": "Reality is primarily physical with emergent properties",
+    "2": "Reality is purely physical/material"
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "dimension": "Sexuality",
+  "code": "IP-SX",
+  "group": "INTERPERSONAL",
+  "format": "mc",
+  "poles": [
+    "Procreation",
+    "Pleasure",
+    "Relationship",
+    "Sacral"
+  ],
+  "non_mutually_exclusive": true,
+  "items": [
+    {
+      "id": "IP-SX-1",
+      "text": "The primary purpose of sexuality is:",
+      "options": {
+        "A": "Reproduction and procreation",
+        "B": "Deepening intimate bonds between partners",
+        "C": "All dimensions equally\u2014reproduction, pleasure, bonding",
+        "D": "Pleasure and enjoyment between consenting people",
+        "E": "A sacred or spiritual dimension of human life"
+      }
+    },
+    {
+      "id": "IP-SX-2",
+      "text": "Is there a \"natural\" or \"correct\" purpose for sexuality?",
+      "options": {
+        "A": "Yes\u2014reproduction is the biological purpose",
+        "B": "Yes\u2014pair-bonding is the primary natural function",
+        "C": "Multiple natural purposes exist, none is primary",
+        "D": "No fixed purpose\u2014sexuality is what we make of it",
+        "E": "It transcends biology\u2014sexuality has spiritual dimensions"
+      }
+    },
+    {
+      "id": "IP-SX-3",
+      "text": "Casual sex vs. sex within committed relationships is:",
+      "options": {
+        "A": "Casual sex is inferior\u2014intimacy requires commitment",
+        "B": "Committed sex is better but casual isn't necessarily wrong",
+        "C": "Morally equivalent\u2014depends on mutual consent and respect",
+        "D": "Casual sex can be equally meaningful and valid",
+        "E": "The distinction is overstated\u2014all consensual sex is fine"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "categorical",
+    "questions": {
+      "IP-SX-1": {
+        "A": "procreation",
+        "B": "relationship",
+        "C": "mixed",
+        "D": "pleasure",
+        "E": "sacral"
+      },
+      "IP-SX-2": {
+        "A": "procreation",
+        "B": "relationship",
+        "C": "mixed",
+        "D": "pleasure",
+        "E": "sacral"
+      },
+      "IP-SX-3": {
+        "A": "relationship",
+        "B": "relationship",
+        "C": "mixed",
+        "D": "pleasure",
+        "E": "pleasure"
+      }
+    }
+  },
+  "interpretation": {
+    "procreation": "Sexuality primarily for reproduction",
+    "pleasure": "Sexuality primarily for pleasure",
+    "relationship": "Sexuality primarily for bonding",
+    "sacral": "Sexuality has spiritual dimension",
+    "mixed": "Multiple purposes equally valid"
+  }
+}

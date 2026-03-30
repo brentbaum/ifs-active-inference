@@ -1,0 +1,77 @@
+{
+  "dimension": "Well-Being",
+  "options": [
+    "Science-logic source",
+    "Transcendent source"
+  ],
+  "scale": {
+    "min": 1,
+    "max": 7,
+    "anchors": {
+      "1": "Strongly disagree",
+      "4": "Neutral / unsure",
+      "7": "Strongly agree"
+    }
+  },
+  "scoring": {
+    "type": "bipolar",
+    "positive": "science-logic_source",
+    "negative": "transcendent_source",
+    "subscales": {
+      "science-logic_source": [
+        "WB1",
+        "WB3",
+        "WB5",
+        "WB7"
+      ],
+      "transcendent_source": [
+        "WB2",
+        "WB4",
+        "WB6",
+        "WB8"
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "WB1",
+      "polarity": "science-logic source",
+      "text": "Well-being comes mainly from rational understanding."
+    },
+    {
+      "id": "WB2",
+      "polarity": "transcendent source",
+      "text": "Well-being comes mainly from a transcendent source."
+    },
+    {
+      "id": "WB3",
+      "polarity": "science-logic source",
+      "text": "Science and reason are the best guides to well-being."
+    },
+    {
+      "id": "WB4",
+      "polarity": "transcendent source",
+      "text": "Spiritual forces are the best guides to well-being."
+    },
+    {
+      "id": "WB5",
+      "polarity": "science-logic source",
+      "text": "Logical insight is the primary path to well-being."
+    },
+    {
+      "id": "WB6",
+      "polarity": "transcendent source",
+      "text": "Divine or spiritual connection is the primary path to well-being."
+    },
+    {
+      "id": "WB7",
+      "polarity": "science-logic source",
+      "text": "Well-being is achieved through rational methods."
+    },
+    {
+      "id": "WB8",
+      "polarity": "transcendent source",
+      "text": "Well-being is achieved through transcendent guidance."
+    }
+  ]
+}

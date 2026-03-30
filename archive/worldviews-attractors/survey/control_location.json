@@ -1,0 +1,126 @@
+{
+  "dimension": "Control Location",
+  "options": [
+    "Action",
+    "Personality",
+    "Luck",
+    "Chance",
+    "Fate",
+    "Society",
+    "Divinity"
+  ],
+  "scale": {
+    "min": 1,
+    "max": 7,
+    "anchors": {
+      "1": "Strongly disagree",
+      "4": "Neutral / unsure",
+      "7": "Strongly agree"
+    }
+  },
+  "scoring": {
+    "type": "multisubscale",
+    "subscales": {
+      "action": [
+        "CL1",
+        "CL2"
+      ],
+      "personality": [
+        "CL3",
+        "CL4"
+      ],
+      "luck": [
+        "CL5",
+        "CL6"
+      ],
+      "chance": [
+        "CL7",
+        "CL8"
+      ],
+      "fate": [
+        "CL9",
+        "CL10"
+      ],
+      "society": [
+        "CL11",
+        "CL12"
+      ],
+      "divinity": [
+        "CL13",
+        "CL14"
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "CL1",
+      "polarity": "action",
+      "text": "My outcomes are mainly determined by my own actions."
+    },
+    {
+      "id": "CL2",
+      "polarity": "action",
+      "text": "Effort and work are the biggest causes of life results."
+    },
+    {
+      "id": "CL3",
+      "polarity": "personality",
+      "text": "Personal charm or style strongly shapes outcomes."
+    },
+    {
+      "id": "CL4",
+      "polarity": "personality",
+      "text": "Who I am as a person largely determines what happens to me."
+    },
+    {
+      "id": "CL5",
+      "polarity": "luck",
+      "text": "Luck often decides how things turn out."
+    },
+    {
+      "id": "CL6",
+      "polarity": "luck",
+      "text": "Good or bad fortune plays a major role in outcomes."
+    },
+    {
+      "id": "CL7",
+      "polarity": "chance",
+      "text": "Random chance is a major factor in life outcomes."
+    },
+    {
+      "id": "CL8",
+      "polarity": "chance",
+      "text": "Many outcomes are simply accidental or random."
+    },
+    {
+      "id": "CL9",
+      "polarity": "fate",
+      "text": "People have a destiny that shapes outcomes."
+    },
+    {
+      "id": "CL10",
+      "polarity": "fate",
+      "text": "Events unfold according to fate."
+    },
+    {
+      "id": "CL11",
+      "polarity": "society",
+      "text": "Social systems and structures largely determine outcomes."
+    },
+    {
+      "id": "CL12",
+      "polarity": "society",
+      "text": "Institutional forces shape people\u2019s life results."
+    },
+    {
+      "id": "CL13",
+      "polarity": "divinity",
+      "text": "A divine power determines what happens in life."
+    },
+    {
+      "id": "CL14",
+      "polarity": "divinity",
+      "text": "Outcomes are guided by a higher spiritual force."
+    }
+  ]
+}

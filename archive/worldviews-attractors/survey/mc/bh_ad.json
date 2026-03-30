@@ -1,0 +1,80 @@
+{
+  "dimension": "Activity Direction",
+  "code": "BH-AD",
+  "group": "BEHAVIOR",
+  "format": "mc",
+  "poles": [
+    "Inward",
+    "Outward"
+  ],
+  "non_mutually_exclusive": true,
+  "items": [
+    {
+      "id": "BH-AD-1",
+      "text": "A fulfilling life is primarily achieved through:",
+      "options": {
+        "A": "Inner development (character, wisdom, inner peace)",
+        "B": "Primarily inner work, with some external achievement",
+        "C": "Both inner development and external achievement equally",
+        "D": "Primarily external achievement, with some inner cultivation",
+        "E": "External achievement (career, impact, recognition)"
+      }
+    },
+    {
+      "id": "BH-AD-2",
+      "text": "Person A: meditates daily, cultivates inner peace, few external accomplishments. Person B: built a successful company, transformed an industry, experiences constant anxiety. Who lived better?",
+      "options": {
+        "A": "Person A\u2014inner peace is what truly matters",
+        "B": "Person A probably, though B's impact has value",
+        "C": "Impossible to judge\u2014different but equally valid paths",
+        "D": "Person B probably, though A's peace has value",
+        "E": "Person B\u2014impact on the world is what truly matters"
+      }
+    },
+    {
+      "id": "BH-AD-3",
+      "text": "Is introspection overrated or underrated in modern society?",
+      "options": {
+        "A": "Severely underrated\u2014we need much more self-reflection",
+        "B": "Somewhat underrated\u2014more introspection would help",
+        "C": "About right\u2014current balance is reasonable",
+        "D": "Somewhat overrated\u2014action matters more",
+        "E": "Severely overrated\u2014we need less navel-gazing, more doing"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "bipolar",
+    "questions": {
+      "BH-AD-1": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "BH-AD-2": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "BH-AD-3": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      }
+    }
+  },
+  "interpretation": {
+    "-2": "Strongly inward-focused",
+    "-1": "Leans inward",
+    "0": "Balanced inner/outer",
+    "1": "Leans outward",
+    "2": "Strongly outward-focused"
+  }
+}

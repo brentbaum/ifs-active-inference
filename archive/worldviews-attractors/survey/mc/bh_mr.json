@@ -1,0 +1,80 @@
+{
+  "dimension": "Moral Relevance",
+  "code": "BH-MR",
+  "group": "BEHAVIOR",
+  "format": "mc",
+  "poles": [
+    "Relevant",
+    "Irrelevant"
+  ],
+  "non_mutually_exclusive": false,
+  "items": [
+    {
+      "id": "BH-MR-1",
+      "text": "Society's moral rules apply to me:",
+      "options": {
+        "A": "Fully\u2014I should follow them like everyone else",
+        "B": "Mostly\u2014with rare principled exceptions",
+        "C": "Generally\u2014but my situation may justify exceptions",
+        "D": "Selectively\u2014I follow those that make sense to me",
+        "E": "Optionally\u2014I decide which rules merit my compliance"
+      }
+    },
+    {
+      "id": "BH-MR-2",
+      "text": "You know you'll never be caught breaking a rule that most people follow. Does the rule still bind you?",
+      "options": {
+        "A": "Yes\u2014moral rules apply regardless of detection",
+        "B": "Yes\u2014my integrity matters even when unobserved",
+        "C": "Probably\u2014though consequences do factor into morality",
+        "D": "Depends\u2014some rules only matter because of social enforcement",
+        "E": "Not necessarily\u2014undetected rule-breaking may be rational"
+      }
+    },
+    {
+      "id": "BH-MR-3",
+      "text": "Following society's moral rules matters even when no one is watching because:",
+      "options": {
+        "A": "Moral obligations are objectively real regardless of observation",
+        "B": "Character and integrity are developed through consistent action",
+        "C": "Rules generally serve good purposes worth honoring",
+        "D": "Social fabric depends on general compliance",
+        "E": "Actually, it only matters pragmatically when detection is possible"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "bipolar",
+    "questions": {
+      "BH-MR-1": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "BH-MR-2": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "BH-MR-3": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      }
+    }
+  },
+  "interpretation": {
+    "-2": "Social moral rules fully apply to me",
+    "-1": "Moral rules mostly apply",
+    "0": "Selective application",
+    "1": "Limited personal relevance",
+    "2": "Moral rules are personally irrelevant"
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "dimension": "Cosmos",
+  "code": "WL-CM",
+  "group": "WORLD AND LIFE",
+  "format": "mc",
+  "poles": [
+    "Random",
+    "Planful"
+  ],
+  "non_mutually_exclusive": false,
+  "items": [
+    {
+      "id": "WL-CM-1",
+      "text": "The universe is:",
+      "options": {
+        "A": "The product of random processes with no inherent purpose",
+        "B": "Unguided but with emergent patterns that feel meaningful",
+        "C": "Neither random nor purposeful\u2014the question doesn't apply well",
+        "D": "Organized in ways that suggest something like purpose",
+        "E": "Organized according to some plan, intention, or telos"
+      }
+    },
+    {
+      "id": "WL-CM-2",
+      "text": "Physical constants that allow life are extraordinarily fine-tuned. This suggests:",
+      "options": {
+        "A": "Nothing\u2014we wouldn't be here otherwise (anthropic principle)",
+        "B": "We're probably one of many universes (multiverse)",
+        "C": "Fascinating but underdetermined\u2014multiple explanations work",
+        "D": "Something like design, though not necessarily a designer",
+        "E": "Design or purpose behind the universe"
+      }
+    },
+    {
+      "id": "WL-CM-3",
+      "text": "Does the universe have a direction or purpose?",
+      "options": {
+        "A": "No\u2014purpose exists only in minds, not in the cosmos",
+        "B": "No inherent purpose, but humans create meaning",
+        "C": "Unknown\u2014genuinely beyond current knowledge",
+        "D": "Possibly\u2014there may be something like cosmic purpose",
+        "E": "Yes\u2014the universe has inherent meaning or direction"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "bipolar",
+    "questions": {
+      "WL-CM-1": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "WL-CM-2": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "WL-CM-3": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      }
+    }
+  },
+  "interpretation": {
+    "-2": "Universe is random/purposeless",
+    "-1": "Universe is mostly random",
+    "0": "Uncertain about cosmic purpose",
+    "1": "Universe suggests purpose",
+    "2": "Universe is planful/purposeful"
+  }
+}

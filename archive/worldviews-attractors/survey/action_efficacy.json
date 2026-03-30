@@ -1,0 +1,66 @@
+{
+  "dimension": "Action Efficacy",
+  "options": [
+    "Direct",
+    "Thaumaturgic",
+    "Impotent"
+  ],
+  "scale": {
+    "min": 1,
+    "max": 7,
+    "anchors": {
+      "1": "Strongly disagree",
+      "4": "Neutral / unsure",
+      "7": "Strongly agree"
+    }
+  },
+  "scoring": {
+    "type": "multisubscale",
+    "subscales": {
+      "direct": [
+        "AE1",
+        "AE2"
+      ],
+      "thaumaturgic": [
+        "AE3",
+        "AE4"
+      ],
+      "impotent": [
+        "AE5",
+        "AE6"
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "AE1",
+      "polarity": "direct",
+      "text": "Direct action is the most effective way to achieve goals."
+    },
+    {
+      "id": "AE2",
+      "polarity": "direct",
+      "text": "Concrete effort produces results."
+    },
+    {
+      "id": "AE3",
+      "polarity": "thaumaturgic",
+      "text": "Appeals to supernatural forces can change outcomes."
+    },
+    {
+      "id": "AE4",
+      "polarity": "thaumaturgic",
+      "text": "Miraculous intervention can alter what happens."
+    },
+    {
+      "id": "AE5",
+      "polarity": "impotent",
+      "text": "Human action has little effect on outcomes."
+    },
+    {
+      "id": "AE6",
+      "polarity": "impotent",
+      "text": "Trying often makes no real difference."
+    }
+  ]
+}

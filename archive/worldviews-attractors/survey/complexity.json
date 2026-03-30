@@ -1,0 +1,77 @@
+{
+  "dimension": "Complexity",
+  "options": [
+    "Complex",
+    "Simple"
+  ],
+  "scale": {
+    "min": 1,
+    "max": 7,
+    "anchors": {
+      "1": "Strongly disagree",
+      "4": "Neutral / unsure",
+      "7": "Strongly agree"
+    }
+  },
+  "scoring": {
+    "type": "bipolar",
+    "positive": "complex",
+    "negative": "simple",
+    "subscales": {
+      "complex": [
+        "CP1",
+        "CP3",
+        "CP5",
+        "CP7"
+      ],
+      "simple": [
+        "CP2",
+        "CP4",
+        "CP6",
+        "CP8"
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "CP1",
+      "polarity": "complex",
+      "text": "Human nature is complicated and multifaceted."
+    },
+    {
+      "id": "CP2",
+      "polarity": "simple",
+      "text": "Human nature is straightforward and simple."
+    },
+    {
+      "id": "CP3",
+      "polarity": "complex",
+      "text": "People contain many conflicting impulses."
+    },
+    {
+      "id": "CP4",
+      "polarity": "simple",
+      "text": "Most people are easy to understand."
+    },
+    {
+      "id": "CP5",
+      "polarity": "complex",
+      "text": "Human behavior is driven by many interacting factors."
+    },
+    {
+      "id": "CP6",
+      "polarity": "simple",
+      "text": "There are only a few basic motives behind human behavior."
+    },
+    {
+      "id": "CP7",
+      "polarity": "complex",
+      "text": "A person\u2019s inner life is rich and layered."
+    },
+    {
+      "id": "CP8",
+      "polarity": "simple",
+      "text": "People are mostly predictable and simple."
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "dimension": "Unity",
+  "options": [
+    "Many",
+    "One"
+  ],
+  "scale": {
+    "min": 1,
+    "max": 7,
+    "anchors": {
+      "1": "Strongly disagree",
+      "4": "Neutral / unsure",
+      "7": "Strongly agree"
+    }
+  },
+  "scoring": {
+    "type": "bipolar",
+    "positive": "many",
+    "negative": "one",
+    "subscales": {
+      "many": [
+        "UN1",
+        "UN3",
+        "UN5",
+        "UN7"
+      ],
+      "one": [
+        "UN2",
+        "UN4",
+        "UN6",
+        "UN8"
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "UN1",
+      "polarity": "many",
+      "text": "Reality is made up of many distinct elements."
+    },
+    {
+      "id": "UN2",
+      "polarity": "one",
+      "text": "Reality is fundamentally unified."
+    },
+    {
+      "id": "UN3",
+      "polarity": "many",
+      "text": "The world consists of separate, independent parts."
+    },
+    {
+      "id": "UN4",
+      "polarity": "one",
+      "text": "All things are connected in a single whole."
+    },
+    {
+      "id": "UN5",
+      "polarity": "many",
+      "text": "The universe is a collection of separate entities."
+    },
+    {
+      "id": "UN6",
+      "polarity": "one",
+      "text": "The universe is ultimately one interconnected system."
+    },
+    {
+      "id": "UN7",
+      "polarity": "many",
+      "text": "Separation is a basic feature of reality."
+    },
+    {
+      "id": "UN8",
+      "polarity": "one",
+      "text": "Unity is a basic feature of reality."
+    }
+  ]
+}

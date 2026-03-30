@@ -1,0 +1,91 @@
+{
+  "dimension": "Purpose of Life",
+  "code": "WL-PL",
+  "group": "WORLD AND LIFE",
+  "format": "mc",
+  "poles": [
+    "Nihilism",
+    "Survival",
+    "Pleasure",
+    "Belonging",
+    "Recognition",
+    "Power",
+    "Achievement",
+    "Self-actualization",
+    "Self-transcendence"
+  ],
+  "non_mutually_exclusive": true,
+  "items": [
+    {
+      "id": "WL-PL-1",
+      "text": "The highest purpose of human life is:",
+      "options": {
+        "A": "There is no inherent purpose\u2014we make our own meaning",
+        "B": "Pleasure, happiness, and enjoyment",
+        "C": "Achievement, accomplishment, and excellence",
+        "D": "Self-actualization and full personal development",
+        "E": "Self-transcendence and service to something greater"
+      }
+    },
+    {
+      "id": "WL-PL-2",
+      "text": "On their deathbed, a person reviewing their life would feel it was well-lived primarily if they had:",
+      "options": {
+        "A": "Experienced maximum pleasure and enjoyment",
+        "B": "Achieved excellence and left lasting accomplishments",
+        "C": "Developed themselves fully as a person",
+        "D": "Made a meaningful difference in others' lives",
+        "E": "Transcended self in service to something larger"
+      }
+    },
+    {
+      "id": "WL-PL-3",
+      "text": "A life without _____ isn't really worth living:",
+      "options": {
+        "A": "Pleasure and enjoyment",
+        "B": "Meaningful work and achievement",
+        "C": "Connection and relationships",
+        "D": "Growth and self-development",
+        "E": "Purpose beyond oneself"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "categorical",
+    "questions": {
+      "WL-PL-1": {
+        "A": "nihilism",
+        "B": "pleasure",
+        "C": "achievement",
+        "D": "self-actualization",
+        "E": "self-transcendence"
+      },
+      "WL-PL-2": {
+        "A": "pleasure",
+        "B": "achievement",
+        "C": "self-actualization",
+        "D": "belonging",
+        "E": "self-transcendence"
+      },
+      "WL-PL-3": {
+        "A": "pleasure",
+        "B": "achievement",
+        "C": "belonging",
+        "D": "self-actualization",
+        "E": "self-transcendence"
+      }
+    }
+  },
+  "interpretation": {
+    "nihilism": "No inherent purpose; self-created meaning",
+    "survival": "Purpose is survival/continuation",
+    "pleasure": "Purpose is pleasure and enjoyment",
+    "belonging": "Purpose is connection and relationships",
+    "recognition": "Purpose is recognition and status",
+    "power": "Purpose is power and influence",
+    "achievement": "Purpose is accomplishment and excellence",
+    "self-actualization": "Purpose is full personal development",
+    "self-transcendence": "Purpose is transcendence and service"
+  }
+}

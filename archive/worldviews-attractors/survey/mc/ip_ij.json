@@ -1,0 +1,81 @@
+{
+  "dimension": "Interpersonal Justice",
+  "code": "IP-IJ",
+  "group": "INTERPERSONAL",
+  "format": "mc",
+  "poles": [
+    "Just",
+    "Unjust",
+    "Random"
+  ],
+  "non_mutually_exclusive": false,
+  "items": [
+    {
+      "id": "IP-IJ-1",
+      "text": "In personal relationships, people generally:",
+      "options": {
+        "A": "Get what they deserve\u2014treat others well, be treated well",
+        "B": "Mostly get what they deserve with some unfairness",
+        "C": "Experience mixed outcomes somewhat related to behavior",
+        "D": "Often get less than they deserve",
+        "E": "Experience random outcomes unrelated to merit"
+      }
+    },
+    {
+      "id": "IP-IJ-2",
+      "text": "A kind, generous person is repeatedly betrayed by those they trust. This shows:",
+      "options": {
+        "A": "They're making poor choices in whom to trust",
+        "B": "Bad luck, but kindness is still rewarded on average",
+        "C": "Relationships have significant random elements",
+        "D": "Good people often get taken advantage of",
+        "E": "There's no interpersonal justice\u2014goodness doesn't protect you"
+      }
+    },
+    {
+      "id": "IP-IJ-3",
+      "text": "\"People who treat others badly eventually\" will:",
+      "options": {
+        "A": "Face consequences\u2014karma is real in relationships",
+        "B": "Usually face consequences, with exceptions",
+        "C": "Sometimes face consequences, sometimes not",
+        "D": "Often escape consequences",
+        "E": "Face no reliable consequences\u2014there's no cosmic justice"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "bipolar",
+    "questions": {
+      "IP-IJ-1": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "IP-IJ-2": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "IP-IJ-3": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      }
+    }
+  },
+  "interpretation": {
+    "-2": "Relationships are fundamentally just",
+    "-1": "Relationships lean toward justice",
+    "0": "Mixed/random interpersonal outcomes",
+    "1": "Relationships often unjust",
+    "2": "No interpersonal justice exists"
+  }
+}

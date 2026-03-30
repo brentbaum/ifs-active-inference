@@ -1,0 +1,77 @@
+{
+  "dimension": "Truth Availability",
+  "options": [
+    "Exclusive",
+    "Inclusive"
+  ],
+  "scale": {
+    "min": 1,
+    "max": 7,
+    "anchors": {
+      "1": "Strongly disagree",
+      "4": "Neutral / unsure",
+      "7": "Strongly agree"
+    }
+  },
+  "scoring": {
+    "type": "bipolar",
+    "positive": "exclusive",
+    "negative": "inclusive",
+    "subscales": {
+      "exclusive": [
+        "TA1",
+        "TA3",
+        "TA5",
+        "TA7"
+      ],
+      "inclusive": [
+        "TA2",
+        "TA4",
+        "TA6",
+        "TA8"
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "TA1",
+      "polarity": "exclusive",
+      "text": "Only certain people have access to truth."
+    },
+    {
+      "id": "TA2",
+      "polarity": "inclusive",
+      "text": "Truth is available to anyone who seeks it."
+    },
+    {
+      "id": "TA3",
+      "polarity": "exclusive",
+      "text": "Truth is reserved for a select few."
+    },
+    {
+      "id": "TA4",
+      "polarity": "inclusive",
+      "text": "Truth is accessible to all people."
+    },
+    {
+      "id": "TA5",
+      "polarity": "exclusive",
+      "text": "Most people are not capable of knowing truth."
+    },
+    {
+      "id": "TA6",
+      "polarity": "inclusive",
+      "text": "Most people can know truth."
+    },
+    {
+      "id": "TA7",
+      "polarity": "exclusive",
+      "text": "Truth is available only to an elite."
+    },
+    {
+      "id": "TA8",
+      "polarity": "inclusive",
+      "text": "Truth does not belong to any elite."
+    }
+  ]
+}

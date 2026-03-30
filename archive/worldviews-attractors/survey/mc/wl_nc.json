@@ -1,0 +1,80 @@
+{
+  "dimension": "Nature-Consciousness",
+  "code": "WL-NC",
+  "group": "WORLD AND LIFE",
+  "format": "mc",
+  "poles": [
+    "Nature conscious",
+    "Nature nonconscious"
+  ],
+  "non_mutually_exclusive": false,
+  "items": [
+    {
+      "id": "WL-NC-1",
+      "text": "Non-human nature (plants, ecosystems, the earth):",
+      "options": {
+        "A": "Is entirely non-conscious matter and processes",
+        "B": "Has no consciousness but deserves ethical consideration",
+        "C": "Has something analogous to but different from consciousness",
+        "D": "Has some form of awareness or proto-sentience",
+        "E": "Has genuine awareness or sentience"
+      }
+    },
+    {
+      "id": "WL-NC-2",
+      "text": "Indigenous cultures treating nature as alive and aware is:",
+      "options": {
+        "A": "Primitive animism we've scientifically outgrown",
+        "B": "A useful relational metaphor",
+        "C": "Contains wisdom worth considering",
+        "D": "May capture something real we've lost sight of",
+        "E": "Closer to literal truth than modern materialism"
+      }
+    },
+    {
+      "id": "WL-NC-3",
+      "text": "Does a forest \"want\" anything? Does the earth have interests?",
+      "options": {
+        "A": "No\u2014only conscious beings have wants and interests",
+        "B": "No, but we can speak metaphorically about ecological needs",
+        "C": "Perhaps in some extended sense",
+        "D": "Probably\u2014complex systems can have something like interests",
+        "E": "Yes\u2014nature has its own aims and interests"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "bipolar",
+    "questions": {
+      "WL-NC-1": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "WL-NC-2": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "WL-NC-3": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      }
+    }
+  },
+  "interpretation": {
+    "-2": "Nature is entirely non-conscious",
+    "-1": "Nature has no consciousness but ethical standing",
+    "0": "Something analogous to consciousness",
+    "1": "Nature has some form of awareness",
+    "2": "Nature has genuine consciousness/sentience"
+  }
+}

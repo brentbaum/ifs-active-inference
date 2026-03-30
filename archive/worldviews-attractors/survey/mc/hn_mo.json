@@ -1,0 +1,80 @@
+{
+  "dimension": "Moral Orientation",
+  "code": "HN-MO",
+  "group": "HUMAN NATURE",
+  "format": "mc",
+  "poles": [
+    "Good",
+    "Evil"
+  ],
+  "non_mutually_exclusive": true,
+  "items": [
+    {
+      "id": "HN-MO-1",
+      "text": "Hobbes argued humans are naturally selfish; Rousseau argued humans are naturally good. Which view better matches reality?",
+      "options": {
+        "A": "Hobbes is clearly correct\u2014humans are fundamentally self-interested",
+        "B": "Hobbes is mostly correct, with some exceptions",
+        "C": "Both have merit\u2014humans have both good and evil tendencies",
+        "D": "Rousseau is mostly correct, with some exceptions",
+        "E": "Rousseau is clearly correct\u2014humans are fundamentally good"
+      }
+    },
+    {
+      "id": "HN-MO-2",
+      "text": "When social constraints are removed and people can act without consequences, most will:",
+      "options": {
+        "A": "Exploit others for personal gain",
+        "B": "Act selfishly but avoid actively harming others",
+        "C": "Behave much as they normally do\u2014constraints don't change nature",
+        "D": "Show more generosity than usual",
+        "E": "Reveal their natural goodness and cooperativeness"
+      }
+    },
+    {
+      "id": "HN-MO-3",
+      "text": "In the aftermath of a natural disaster, which response is more representative of \"true\" human nature?",
+      "options": {
+        "A": "Looting and opportunistic behavior predominates",
+        "B": "Self-preservation overrides concern for others",
+        "C": "Both looting and helping occur\u2014humans are morally mixed",
+        "D": "Spontaneous cooperation is more common than selfishness",
+        "E": "Humans reliably form rescue teams and help strangers"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "bipolar",
+    "questions": {
+      "HN-MO-1": {
+        "A": 2,
+        "B": 1,
+        "C": 0,
+        "D": -1,
+        "E": -2
+      },
+      "HN-MO-2": {
+        "A": 2,
+        "B": 1,
+        "C": 0,
+        "D": -1,
+        "E": -2
+      },
+      "HN-MO-3": {
+        "A": 2,
+        "B": 1,
+        "C": 0,
+        "D": -1,
+        "E": -2
+      }
+    }
+  },
+  "interpretation": {
+    "-2": "Humans are fundamentally good",
+    "-1": "Humans lean toward good",
+    "0": "Humans are morally mixed",
+    "1": "Humans lean toward evil/self-interest",
+    "2": "Humans are fundamentally evil/self-interested"
+  }
+}

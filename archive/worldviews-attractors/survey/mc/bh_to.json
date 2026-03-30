@@ -1,0 +1,83 @@
+{
+  "dimension": "Time Orientation",
+  "code": "BH-TO",
+  "group": "BEHAVIOR",
+  "format": "mc",
+  "poles": [
+    "Past",
+    "Present",
+    "Future"
+  ],
+  "non_mutually_exclusive": true,
+  "items": [
+    {
+      "id": "BH-TO-1",
+      "text": "When making major life decisions, one should primarily consider:",
+      "options": {
+        "A": "Tradition and what has worked in the past",
+        "B": "Past lessons balanced with future planning",
+        "C": "Present circumstances and immediate reality",
+        "D": "Future consequences balanced with present reality",
+        "E": "Future consequences and long-term outcomes"
+      }
+    },
+    {
+      "id": "BH-TO-2",
+      "text": "A young professional chooses between: (1) stable job honoring family tradition, (2) risky startup for future transformation, (3) world travel for immediate experience. The wisest orientation:",
+      "options": {
+        "A": "Honor tradition\u2014it embodies proven wisdom",
+        "B": "Balance tradition with prudent risk",
+        "C": "No orientation is inherently wiser\u2014depends entirely on the person",
+        "D": "Lean toward future-oriented growth",
+        "E": "Pursue future transformation\u2014growth requires risk"
+      }
+    },
+    {
+      "id": "BH-TO-3",
+      "text": "The past should influence present decisions:",
+      "options": {
+        "A": "Heavily\u2014tradition embodies accumulated wisdom",
+        "B": "Significantly\u2014history teaches important lessons",
+        "C": "Moderately\u2014as one factor among many",
+        "D": "Minimally\u2014the future matters more than the past",
+        "E": "Very little\u2014each moment is fundamentally new"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "categorical",
+    "questions": {
+      "BH-TO-1": {
+        "A": "past",
+        "B": "past-future",
+        "C": "present",
+        "D": "present-future",
+        "E": "future"
+      },
+      "BH-TO-2": {
+        "A": "past",
+        "B": "past-mixed",
+        "C": "present",
+        "D": "future",
+        "E": "future"
+      },
+      "BH-TO-3": {
+        "A": "past",
+        "B": "past",
+        "C": "mixed",
+        "D": "future",
+        "E": "present"
+      }
+    }
+  },
+  "interpretation": {
+    "past": "Past-oriented",
+    "present": "Present-oriented",
+    "future": "Future-oriented",
+    "mixed": "Balanced orientation",
+    "past-future": "Past and future balanced",
+    "past-mixed": "Past with flexibility",
+    "present-future": "Present and future balanced"
+  }
+}

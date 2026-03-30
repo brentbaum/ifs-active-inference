@@ -1,0 +1,80 @@
+{
+  "dimension": "Relation to Authority",
+  "code": "IP-RA",
+  "group": "INTERPERSONAL",
+  "format": "mc",
+  "poles": [
+    "Linear (hierarchical)",
+    "Lateral (egalitarian)"
+  ],
+  "non_mutually_exclusive": false,
+  "items": [
+    {
+      "id": "IP-RA-1",
+      "text": "Important decisions should be made by:",
+      "options": {
+        "A": "Those with the most expertise and experience (hierarchy)",
+        "B": "Experts with meaningful input from those affected",
+        "C": "Depends entirely on the type of decision",
+        "D": "Consensus with guidance from experienced members",
+        "E": "Consensus among all affected parties (egalitarian)"
+      }
+    },
+    {
+      "id": "IP-RA-2",
+      "text": "A company can have a strong CEO who makes final calls OR a flat structure where all voices are equal. Which produces better outcomes?",
+      "options": {
+        "A": "Strong leadership\u2014someone must decide",
+        "B": "Leadership usually better, with employee input",
+        "C": "Depends entirely on context and organization",
+        "D": "Flat usually better, with some coordination role",
+        "E": "Flat structure\u2014collective wisdom exceeds individual judgment"
+      }
+    },
+    {
+      "id": "IP-RA-3",
+      "text": "Authority is legitimate when:",
+      "options": {
+        "A": "Held by those with expertise, experience, or proper appointment",
+        "B": "Based on competence and accepted by those affected",
+        "C": "It serves the common good, however determined",
+        "D": "Derived from consent of those governed",
+        "E": "Distributed equally among all stakeholders"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "bipolar",
+    "questions": {
+      "IP-RA-1": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "IP-RA-2": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "IP-RA-3": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      }
+    }
+  },
+  "interpretation": {
+    "-2": "Strong preference for hierarchy",
+    "-1": "Leans toward hierarchy",
+    "0": "Context-dependent",
+    "1": "Leans toward egalitarianism",
+    "2": "Strong preference for egalitarianism"
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "dimension": "Relation to Humanity",
+  "code": "IP-RH",
+  "group": "INTERPERSONAL",
+  "format": "mc",
+  "poles": [
+    "Superior",
+    "Egalitarian",
+    "Inferior"
+  ],
+  "non_mutually_exclusive": false,
+  "items": [
+    {
+      "id": "IP-RH-1",
+      "text": "Regarding fundamental human worth:",
+      "options": {
+        "A": "All humans are equal in inherent dignity, full stop",
+        "B": "All humans have equal worth, though contributions differ",
+        "C": "Humans have equal potential but unequal actualization",
+        "D": "Worth is partially earned through character and contribution",
+        "E": "Some humans are genuinely superior to others in meaningful ways"
+      }
+    },
+    {
+      "id": "IP-RH-2",
+      "text": "A genius who contributes enormously vs. someone with severe cognitive disabilities who contributes little. Are they equal?",
+      "options": {
+        "A": "Yes\u2014equal in fundamental human dignity and worth",
+        "B": "Equal in moral worth, different in contribution",
+        "C": "Different kinds of value that are incomparable",
+        "D": "Equal in some senses but not all",
+        "E": "No\u2014contribution and capability matter for worth"
+      }
+    },
+    {
+      "id": "IP-RH-3",
+      "text": "\"All men are created equal\" actually means:",
+      "options": {
+        "A": "Equal in fundamental dignity and moral rights",
+        "B": "Equal in moral status despite differences in ability",
+        "C": "Equal in potential, different in actualization",
+        "D": "An aspirational ideal rather than factual claim",
+        "E": "A useful fiction that isn't empirically true"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "bipolar",
+    "questions": {
+      "IP-RH-1": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "IP-RH-2": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "IP-RH-3": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      }
+    }
+  },
+  "interpretation": {
+    "-2": "All humans equal in fundamental worth",
+    "-1": "Generally egalitarian with nuance",
+    "0": "Complex view on human equality",
+    "1": "Some humans have greater worth",
+    "2": "Clear hierarchy of human worth"
+  }
+}

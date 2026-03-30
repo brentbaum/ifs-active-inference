@@ -1,0 +1,77 @@
+{
+  "dimension": "Cosmos",
+  "options": [
+    "Random",
+    "Planful"
+  ],
+  "scale": {
+    "min": 1,
+    "max": 7,
+    "anchors": {
+      "1": "Strongly disagree",
+      "4": "Neutral / unsure",
+      "7": "Strongly agree"
+    }
+  },
+  "scoring": {
+    "type": "bipolar",
+    "positive": "random",
+    "negative": "planful",
+    "subscales": {
+      "random": [
+        "CO1",
+        "CO3",
+        "CO5",
+        "CO7"
+      ],
+      "planful": [
+        "CO2",
+        "CO4",
+        "CO6",
+        "CO8"
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "CO1",
+      "polarity": "random",
+      "text": "The universe is ultimately random."
+    },
+    {
+      "id": "CO2",
+      "polarity": "planful",
+      "text": "The universe follows an underlying plan."
+    },
+    {
+      "id": "CO3",
+      "polarity": "random",
+      "text": "Events in the cosmos are mostly accidental."
+    },
+    {
+      "id": "CO4",
+      "polarity": "planful",
+      "text": "There is purpose or design in the cosmos."
+    },
+    {
+      "id": "CO5",
+      "polarity": "random",
+      "text": "Cosmic events have no larger pattern."
+    },
+    {
+      "id": "CO6",
+      "polarity": "planful",
+      "text": "The cosmos reflects intentional order."
+    },
+    {
+      "id": "CO7",
+      "polarity": "random",
+      "text": "The universe has no guiding structure."
+    },
+    {
+      "id": "CO8",
+      "polarity": "planful",
+      "text": "The universe is structured by a guiding principle."
+    }
+  ]
+}

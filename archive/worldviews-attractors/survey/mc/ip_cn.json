@@ -1,0 +1,81 @@
+{
+  "dimension": "Connection",
+  "code": "IP-CN",
+  "group": "INTERPERSONAL",
+  "format": "mc",
+  "poles": [
+    "Dependent",
+    "Independent",
+    "Interdependent"
+  ],
+  "non_mutually_exclusive": false,
+  "items": [
+    {
+      "id": "IP-CN-1",
+      "text": "The healthiest human condition is:",
+      "options": {
+        "A": "Self-reliance and independence",
+        "B": "Independence with selective relationships",
+        "C": "Mutual interdependence and connection",
+        "D": "Deep embeddedness in relationships",
+        "E": "Comfortable dependence on reliable others/institutions"
+      }
+    },
+    {
+      "id": "IP-CN-2",
+      "text": "A person who \"needs no one\" and is entirely self-sufficient vs. a person deeply embedded in relationships they couldn't live without. Who is healthier?",
+      "options": {
+        "A": "The self-sufficient person\u2014independence is strength",
+        "B": "Self-sufficiency is generally healthier",
+        "C": "Both can be healthy\u2014depends on the individual",
+        "D": "The connected person is generally healthier",
+        "E": "The deeply connected person\u2014we need others fundamentally"
+      }
+    },
+    {
+      "id": "IP-CN-3",
+      "text": "Is true independence possible and desirable?",
+      "options": {
+        "A": "Yes\u2014and it should be everyone's goal",
+        "B": "Possible and good, though connection also matters",
+        "C": "Partially possible, but interdependence is healthier",
+        "D": "Not fully possible, and pursuing it is misguided",
+        "E": "No\u2014independence is illusion; we're fundamentally social beings"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "bipolar",
+    "questions": {
+      "IP-CN-1": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "IP-CN-2": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "IP-CN-3": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      }
+    }
+  },
+  "interpretation": {
+    "-2": "Strong independence ideal",
+    "-1": "Leans toward independence",
+    "0": "Interdependence ideal",
+    "1": "Leans toward dependence",
+    "2": "Comfortable dependence ideal"
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "dimension": "Moral Relevance",
+  "options": [
+    "Relevant",
+    "Irrelevant"
+  ],
+  "scale": {
+    "min": 1,
+    "max": 7,
+    "anchors": {
+      "1": "Strongly disagree",
+      "4": "Neutral / unsure",
+      "7": "Strongly agree"
+    }
+  },
+  "scoring": {
+    "type": "bipolar",
+    "positive": "relevant",
+    "negative": "irrelevant",
+    "subscales": {
+      "relevant": [
+        "MR1",
+        "MR3",
+        "MR5",
+        "MR7"
+      ],
+      "irrelevant": [
+        "MR2",
+        "MR4",
+        "MR6",
+        "MR8"
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "MR1",
+      "polarity": "relevant",
+      "text": "Society\u2019s moral rules are personally binding on individuals."
+    },
+    {
+      "id": "MR2",
+      "polarity": "irrelevant",
+      "text": "Society\u2019s moral rules do not apply to my personal choices."
+    },
+    {
+      "id": "MR3",
+      "polarity": "relevant",
+      "text": "People should treat social moral guidelines as relevant to their lives."
+    },
+    {
+      "id": "MR4",
+      "polarity": "irrelevant",
+      "text": "Moral guidelines are optional and can be ignored."
+    },
+    {
+      "id": "MR5",
+      "polarity": "relevant",
+      "text": "Moral rules matter for personal behavior."
+    },
+    {
+      "id": "MR6",
+      "polarity": "irrelevant",
+      "text": "Moral rules are mostly irrelevant to individual decisions."
+    },
+    {
+      "id": "MR7",
+      "polarity": "relevant",
+      "text": "Individuals should see moral standards as personally applicable."
+    },
+    {
+      "id": "MR8",
+      "polarity": "irrelevant",
+      "text": "Personal choices need not be guided by moral standards."
+    }
+  ]
+}

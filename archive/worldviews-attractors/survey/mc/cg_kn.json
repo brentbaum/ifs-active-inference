@@ -1,0 +1,81 @@
+{
+  "dimension": "Knowledge Sources",
+  "code": "CG-KN",
+  "group": "COGNITION",
+  "format": "mc",
+  "poles": [
+    "Multiple sources"
+  ],
+  "non_mutually_exclusive": true,
+  "items": [
+    {
+      "id": "CG-KN-1",
+      "text": "A claim is made about human psychology. The most convincing evidence would be:",
+      "options": {
+        "A": "Replicated randomized controlled trials",
+        "B": "It's logically derivable from established principles",
+        "C": "Multiple trusted experts endorse it",
+        "D": "It matches your personal observations and experience",
+        "E": "Ancient traditions across cultures agree on it"
+      }
+    },
+    {
+      "id": "CG-KN-2",
+      "text": "A study shows X causes Y. Your experience suggests the opposite. Your grandmother's folk wisdom says something different. A respected expert dismisses the methodology. You should:",
+      "options": {
+        "A": "Trust the scientific study\u2014it's the most reliable knowledge source",
+        "B": "Weigh the study heavily but consider the methodological critique",
+        "C": "Carefully weigh all sources of evidence",
+        "D": "Trust lived experience over abstract studies",
+        "E": "Value traditional wisdom that has stood the test of time"
+      }
+    },
+    {
+      "id": "CG-KN-3",
+      "text": "Can intuition reveal truths that rational analysis cannot access?",
+      "options": {
+        "A": "No\u2014intuition is just pattern matching that can be made explicit",
+        "B": "Rarely\u2014intuition sometimes detects patterns faster than analysis",
+        "C": "Sometimes\u2014intuition and reason capture different aspects of reality",
+        "D": "Often\u2014intuition accesses knowledge that defies articulation",
+        "E": "Yes\u2014there are genuine ways of knowing beyond rational analysis"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "categorical",
+    "questions": {
+      "CG-KN-1": {
+        "A": "science",
+        "B": "rationality",
+        "C": "authority",
+        "D": "senses",
+        "E": "tradition"
+      },
+      "CG-KN-2": {
+        "A": "science",
+        "B": "science",
+        "C": "mixed",
+        "D": "senses",
+        "E": "tradition"
+      },
+      "CG-KN-3": {
+        "A": "rationality",
+        "B": "rationality",
+        "C": "mixed",
+        "D": "intuition",
+        "E": "intuition"
+      }
+    }
+  },
+  "interpretation": {
+    "science": "Prioritizes scientific empiricism",
+    "rationality": "Prioritizes logical reasoning",
+    "authority": "Prioritizes expert authority",
+    "senses": "Prioritizes personal experience",
+    "tradition": "Prioritizes traditional wisdom",
+    "intuition": "Prioritizes intuitive knowing",
+    "mixed": "Values multiple sources equally"
+  }
+}

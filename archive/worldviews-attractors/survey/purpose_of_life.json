@@ -1,0 +1,156 @@
+{
+  "dimension": "Purpose of Life",
+  "options": [
+    "Nihilism",
+    "Survival",
+    "Pleasure",
+    "Belonging",
+    "Recognition",
+    "Power",
+    "Achievement",
+    "Self-actualization",
+    "Self-transcendence"
+  ],
+  "scale": {
+    "min": 1,
+    "max": 7,
+    "anchors": {
+      "1": "Strongly disagree",
+      "4": "Neutral / unsure",
+      "7": "Strongly agree"
+    }
+  },
+  "scoring": {
+    "type": "multisubscale",
+    "subscales": {
+      "nihilism": [
+        "PL1",
+        "PL2"
+      ],
+      "survival": [
+        "PL3",
+        "PL4"
+      ],
+      "pleasure": [
+        "PL5",
+        "PL6"
+      ],
+      "belonging": [
+        "PL7",
+        "PL8"
+      ],
+      "recognition": [
+        "PL9",
+        "PL10"
+      ],
+      "power": [
+        "PL11",
+        "PL12"
+      ],
+      "achievement": [
+        "PL13",
+        "PL14"
+      ],
+      "self-actualization": [
+        "PL15",
+        "PL16"
+      ],
+      "self-transcendence": [
+        "PL17",
+        "PL18"
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "PL1",
+      "polarity": "nihilism",
+      "text": "Life has no inherent purpose."
+    },
+    {
+      "id": "PL2",
+      "polarity": "nihilism",
+      "text": "There is no ultimate meaning to life."
+    },
+    {
+      "id": "PL3",
+      "polarity": "survival",
+      "text": "The primary purpose of life is to survive."
+    },
+    {
+      "id": "PL4",
+      "polarity": "survival",
+      "text": "Staying alive is the central purpose of life."
+    },
+    {
+      "id": "PL5",
+      "polarity": "pleasure",
+      "text": "The purpose of life is to experience pleasure."
+    },
+    {
+      "id": "PL6",
+      "polarity": "pleasure",
+      "text": "Maximizing enjoyment is life\u2019s main aim."
+    },
+    {
+      "id": "PL7",
+      "polarity": "belonging",
+      "text": "The purpose of life is to belong and connect."
+    },
+    {
+      "id": "PL8",
+      "polarity": "belonging",
+      "text": "Building relationships is life\u2019s central purpose."
+    },
+    {
+      "id": "PL9",
+      "polarity": "recognition",
+      "text": "The purpose of life is to be respected and admired."
+    },
+    {
+      "id": "PL10",
+      "polarity": "recognition",
+      "text": "Gaining recognition is a main aim of life."
+    },
+    {
+      "id": "PL11",
+      "polarity": "power",
+      "text": "The purpose of life is to gain influence and power."
+    },
+    {
+      "id": "PL12",
+      "polarity": "power",
+      "text": "Power is a central aim of life."
+    },
+    {
+      "id": "PL13",
+      "polarity": "achievement",
+      "text": "The purpose of life is to accomplish goals."
+    },
+    {
+      "id": "PL14",
+      "polarity": "achievement",
+      "text": "Achieving success is life\u2019s main goal."
+    },
+    {
+      "id": "PL15",
+      "polarity": "self-actualization",
+      "text": "The purpose of life is to realize one\u2019s full potential."
+    },
+    {
+      "id": "PL16",
+      "polarity": "self-actualization",
+      "text": "Developing oneself is life\u2019s central purpose."
+    },
+    {
+      "id": "PL17",
+      "polarity": "self-transcendence",
+      "text": "The purpose of life is to transcend the self."
+    },
+    {
+      "id": "PL18",
+      "polarity": "self-transcendence",
+      "text": "Serving something beyond oneself is life\u2019s central purpose."
+    }
+  ]
+}

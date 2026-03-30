@@ -1,0 +1,81 @@
+{
+  "dimension": "Deity",
+  "options": [
+    "Deism",
+    "Theism",
+    "Agnosticism",
+    "Atheism"
+  ],
+  "scale": {
+    "min": 1,
+    "max": 7,
+    "anchors": {
+      "1": "Strongly disagree",
+      "4": "Neutral / unsure",
+      "7": "Strongly agree"
+    }
+  },
+  "scoring": {
+    "type": "multisubscale",
+    "subscales": {
+      "deism": [
+        "DE1",
+        "DE2"
+      ],
+      "theism": [
+        "DE3",
+        "DE4"
+      ],
+      "agnosticism": [
+        "DE5",
+        "DE6"
+      ],
+      "atheism": [
+        "DE7",
+        "DE8"
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "DE1",
+      "polarity": "deism",
+      "text": "A creator exists but does not intervene in the world."
+    },
+    {
+      "id": "DE2",
+      "polarity": "deism",
+      "text": "A divine creator set the universe in motion but does not interfere."
+    },
+    {
+      "id": "DE3",
+      "polarity": "theism",
+      "text": "A personal God actively intervenes in the world."
+    },
+    {
+      "id": "DE4",
+      "polarity": "theism",
+      "text": "A deity answers prayers or interacts with humans."
+    },
+    {
+      "id": "DE5",
+      "polarity": "agnosticism",
+      "text": "We cannot know whether any deity exists."
+    },
+    {
+      "id": "DE6",
+      "polarity": "agnosticism",
+      "text": "The existence of a deity is unknowable."
+    },
+    {
+      "id": "DE7",
+      "polarity": "atheism",
+      "text": "No deity exists."
+    },
+    {
+      "id": "DE8",
+      "polarity": "atheism",
+      "text": "The universe has no God or gods."
+    }
+  ]
+}

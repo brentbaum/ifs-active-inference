@@ -1,0 +1,80 @@
+{
+  "dimension": "Possession",
+  "code": "TR-PO",
+  "group": "TRUTH",
+  "format": "mc",
+  "poles": [
+    "Full",
+    "Partial"
+  ],
+  "non_mutually_exclusive": false,
+  "items": [
+    {
+      "id": "TR-PO-1",
+      "text": "Human knowledge of truth is:",
+      "options": {
+        "A": "Capable of achieving complete certainty on important questions",
+        "B": "Capable of high confidence approaching certainty",
+        "C": "Growing toward but never fully reaching complete truth",
+        "D": "Always significantly incomplete",
+        "E": "Always partial and provisional"
+      }
+    },
+    {
+      "id": "TR-PO-2",
+      "text": "A scientist claims we now fully understand phenomenon X. A philosopher says all understanding is inherently incomplete. Who's right?",
+      "options": {
+        "A": "The scientist\u2014some things can be fully understood",
+        "B": "The scientist for practical purposes; the philosopher technically",
+        "C": "Both capture something\u2014knowledge is high but not absolute",
+        "D": "The philosopher mostly\u2014understanding is always partial",
+        "E": "The philosopher\u2014all human knowledge is incomplete"
+      }
+    },
+    {
+      "id": "TR-PO-3",
+      "text": "Can any person, group, or institution possess \"the Truth\"?",
+      "options": {
+        "A": "Yes\u2014some have access to complete truth",
+        "B": "Yes, in specific well-defined domains",
+        "C": "Partial truth only, never complete",
+        "D": "No\u2014all are fundamentally limited",
+        "E": "No\u2014truth is always beyond full human possession"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "bipolar",
+    "questions": {
+      "TR-PO-1": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "TR-PO-2": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "TR-PO-3": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      }
+    }
+  },
+  "interpretation": {
+    "-2": "Complete truth is achievable",
+    "-1": "High certainty is achievable",
+    "0": "Truth is approached but not fully grasped",
+    "1": "Knowledge is significantly incomplete",
+    "2": "Truth is always partial/provisional"
+  }
+}

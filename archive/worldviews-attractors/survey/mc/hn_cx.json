@@ -1,0 +1,80 @@
+{
+  "dimension": "Complexity",
+  "code": "HN-CX",
+  "group": "HUMAN NATURE",
+  "format": "mc",
+  "poles": [
+    "Complex",
+    "Simple"
+  ],
+  "non_mutually_exclusive": false,
+  "items": [
+    {
+      "id": "HN-CX-1",
+      "text": "Regarding the predictability of human behavior:",
+      "options": {
+        "A": "Human behavior contains irreducible complexity that resists full prediction",
+        "B": "Individual behavior is complex but has discoverable patterns",
+        "C": "Behavior is predictable in aggregate but not for individuals",
+        "D": "Given enough information, most behavior is fundamentally predictable",
+        "E": "People are simple\u2014they want status, security, and pleasure"
+      }
+    },
+    {
+      "id": "HN-CX-2",
+      "text": "A philanthropist is discovered to have also engaged in tax fraud. How do you make sense of this?",
+      "options": {
+        "A": "Humans contain genuine multitudes\u2014contradictory traits coexist naturally",
+        "B": "People are complex but there's usually an underlying explanation",
+        "C": "This reveals compartmentalization\u2014different contexts, different behavior",
+        "D": "One of these traits is the \"real\" person; the other is a mask",
+        "E": "This is unusual\u2014most people are consistently good or bad"
+      }
+    },
+    {
+      "id": "HN-CX-3",
+      "text": "To truly understand another person requires:",
+      "options": {
+        "A": "Accepting that full understanding is ultimately impossible",
+        "B": "Years of deep interaction, and still incomplete knowledge",
+        "C": "Careful observation and empathy over extended time",
+        "D": "Understanding their core motivations and formative history",
+        "E": "Recognizing their type and basic drives"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "bipolar",
+    "questions": {
+      "HN-CX-1": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "HN-CX-2": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "HN-CX-3": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      }
+    }
+  },
+  "interpretation": {
+    "-2": "Human nature is irreducibly complex",
+    "-1": "Human nature is largely complex",
+    "0": "Mixed complexity",
+    "1": "Human nature is largely simple",
+    "2": "Human nature is fundamentally simple"
+  }
+}

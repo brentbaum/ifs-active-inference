@@ -1,0 +1,77 @@
+{
+  "dimension": "Otherness",
+  "options": [
+    "Tolerable",
+    "Intolerable"
+  ],
+  "scale": {
+    "min": 1,
+    "max": 7,
+    "anchors": {
+      "1": "Strongly disagree",
+      "4": "Neutral / unsure",
+      "7": "Strongly agree"
+    }
+  },
+  "scoring": {
+    "type": "bipolar",
+    "positive": "tolerable",
+    "negative": "intolerable",
+    "subscales": {
+      "tolerable": [
+        "OT1",
+        "OT3",
+        "OT5",
+        "OT7"
+      ],
+      "intolerable": [
+        "OT2",
+        "OT4",
+        "OT6",
+        "OT8"
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "OT1",
+      "polarity": "tolerable",
+      "text": "Differences between people are generally acceptable."
+    },
+    {
+      "id": "OT2",
+      "polarity": "intolerable",
+      "text": "Differences between people are hard to accept."
+    },
+    {
+      "id": "OT3",
+      "polarity": "tolerable",
+      "text": "People unlike me are still easy to accept."
+    },
+    {
+      "id": "OT4",
+      "polarity": "intolerable",
+      "text": "People unlike me are difficult to tolerate."
+    },
+    {
+      "id": "OT5",
+      "polarity": "tolerable",
+      "text": "Diversity among people is fine."
+    },
+    {
+      "id": "OT6",
+      "polarity": "intolerable",
+      "text": "Diversity among people is problematic."
+    },
+    {
+      "id": "OT7",
+      "polarity": "tolerable",
+      "text": "I am comfortable with people who are very different."
+    },
+    {
+      "id": "OT8",
+      "polarity": "intolerable",
+      "text": "I am uncomfortable with people who are very different."
+    }
+  ]
+}

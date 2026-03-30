@@ -1,0 +1,66 @@
+{
+  "dimension": "Sociopolitical Justice",
+  "options": [
+    "Just",
+    "Unjust",
+    "Random"
+  ],
+  "scale": {
+    "min": 1,
+    "max": 7,
+    "anchors": {
+      "1": "Strongly disagree",
+      "4": "Neutral / unsure",
+      "7": "Strongly agree"
+    }
+  },
+  "scoring": {
+    "type": "multisubscale",
+    "subscales": {
+      "just": [
+        "SJ1",
+        "SJ2"
+      ],
+      "unjust": [
+        "SJ3",
+        "SJ4"
+      ],
+      "random": [
+        "SJ5",
+        "SJ6"
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "SJ1",
+      "polarity": "just",
+      "text": "Societal systems are generally fair."
+    },
+    {
+      "id": "SJ2",
+      "polarity": "just",
+      "text": "Political outcomes are usually just."
+    },
+    {
+      "id": "SJ3",
+      "polarity": "unjust",
+      "text": "Societal systems are largely unjust."
+    },
+    {
+      "id": "SJ4",
+      "polarity": "unjust",
+      "text": "Political outcomes are often unfair."
+    },
+    {
+      "id": "SJ5",
+      "polarity": "random",
+      "text": "Sociopolitical outcomes are mostly random."
+    },
+    {
+      "id": "SJ6",
+      "polarity": "random",
+      "text": "Politics often turns out by chance rather than justice."
+    }
+  ]
+}

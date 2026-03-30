@@ -1,0 +1,88 @@
+{
+  "dimension": "Control Location",
+  "code": "BH-CL",
+  "group": "BEHAVIOR",
+  "format": "mc",
+  "poles": [
+    "Action",
+    "Personality",
+    "Luck",
+    "Chance",
+    "Fate",
+    "Society",
+    "Divinity"
+  ],
+  "non_mutually_exclusive": true,
+  "items": [
+    {
+      "id": "BH-CL-1",
+      "text": "Life outcomes are primarily determined by:",
+      "options": {
+        "A": "Individual effort and deliberate choices",
+        "B": "Effort matters most, with some luck involved",
+        "C": "Complex mix of effort, circumstance, and chance",
+        "D": "Structural factors and luck matter more than individual effort",
+        "E": "Social circumstances and random chance"
+      }
+    },
+    {
+      "id": "BH-CL-2",
+      "text": "Two equally talented people start businesses\u2014one succeeds wildly, one fails. The difference is primarily:",
+      "options": {
+        "A": "Effort, persistence, and quality of decisions",
+        "B": "Skill differences that weren't initially apparent",
+        "C": "Complex interaction of ability, timing, and luck",
+        "D": "Market timing and circumstances beyond their control",
+        "E": "Random luck\u2014success is mostly being in the right place at the right time"
+      }
+    },
+    {
+      "id": "BH-CL-3",
+      "text": "\"You make your own luck\" vs. \"Success is mostly being in the right place at the right time.\" Which is closer to truth?",
+      "options": {
+        "A": "You make your own luck\u2014outcomes follow from effort",
+        "B": "You significantly influence your luck through preparation",
+        "C": "Both are partially true\u2014effort and circumstance both matter",
+        "D": "Timing and circumstances matter more than effort",
+        "E": "Right place, right time\u2014success is largely circumstantial"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "categorical",
+    "questions": {
+      "BH-CL-1": {
+        "A": "action",
+        "B": "action-luck",
+        "C": "mixed",
+        "D": "society-luck",
+        "E": "luck-society"
+      },
+      "BH-CL-2": {
+        "A": "action",
+        "B": "personality",
+        "C": "mixed",
+        "D": "luck",
+        "E": "luck"
+      },
+      "BH-CL-3": {
+        "A": "action",
+        "B": "action",
+        "C": "mixed",
+        "D": "luck",
+        "E": "luck"
+      }
+    }
+  },
+  "interpretation": {
+    "action": "Individual action controls outcomes",
+    "personality": "Personality traits control outcomes",
+    "luck": "Random luck/chance controls outcomes",
+    "society": "Social structures control outcomes",
+    "mixed": "Multiple factors equally important",
+    "action-luck": "Action primary with luck secondary",
+    "society-luck": "Society and luck primary",
+    "luck-society": "Luck and society control outcomes"
+  }
+}

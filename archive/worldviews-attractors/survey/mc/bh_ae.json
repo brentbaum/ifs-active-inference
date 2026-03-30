@@ -1,0 +1,81 @@
+{
+  "dimension": "Action Efficacy",
+  "code": "BH-AE",
+  "group": "BEHAVIOR",
+  "format": "mc",
+  "poles": [
+    "Direct",
+    "Thaumaturgic",
+    "Impotent"
+  ],
+  "non_mutually_exclusive": true,
+  "items": [
+    {
+      "id": "BH-AE-1",
+      "text": "Human actions influence reality:",
+      "options": {
+        "A": "Only through physical and social causal mechanisms",
+        "B": "Primarily through causal mechanisms, possibly with subtle additional effects",
+        "C": "Through known mechanisms, with some unexplained effects",
+        "D": "Through both mechanisms and intention/will in ways science can't explain",
+        "E": "Through intention, prayer, or will beyond physical mechanisms"
+      }
+    },
+    {
+      "id": "BH-AE-2",
+      "text": "A community prays for a sick child who recovers; another prayed-for child dies. This shows:",
+      "options": {
+        "A": "Prayer has no causal effect\u2014outcomes are medically determined",
+        "B": "Prayer might provide psychological comfort but no direct causal power",
+        "C": "The data is genuinely inconclusive about prayer's efficacy",
+        "D": "Prayer may work in ways we don't understand",
+        "E": "Prayer's efficacy depends on factors beyond human understanding"
+      }
+    },
+    {
+      "id": "BH-AE-3",
+      "text": "Can \"positive thinking\" or \"manifesting\" influence outcomes beyond motivation and behavior changes?",
+      "options": {
+        "A": "No\u2014any effects work entirely through psychology and behavior",
+        "B": "Probably not\u2014effects are real but fully explainable",
+        "C": "Unknown\u2014there may be unexplained effects",
+        "D": "Possibly\u2014intention may influence reality in subtle ways",
+        "E": "Yes\u2014consciousness can directly affect external reality"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "bipolar",
+    "questions": {
+      "BH-AE-1": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "BH-AE-2": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "BH-AE-3": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      }
+    }
+  },
+  "interpretation": {
+    "-2": "Only direct causal mechanisms work",
+    "-1": "Primarily direct mechanisms",
+    "0": "Uncertain about non-physical effects",
+    "1": "Some non-physical efficacy possible",
+    "2": "Thaumaturgic/magical efficacy exists"
+  }
+}

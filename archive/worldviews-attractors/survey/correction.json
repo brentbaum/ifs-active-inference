@@ -1,0 +1,51 @@
+{
+  "dimension": "Correction",
+  "options": [
+    "Rehabilitation",
+    "Retribution"
+  ],
+  "scale": {
+    "min": 1,
+    "max": 7,
+    "anchors": {
+      "1": "Strongly disagree",
+      "4": "Neutral / unsure",
+      "7": "Strongly agree"
+    }
+  },
+  "scoring": {
+    "type": "multisubscale",
+    "subscales": {
+      "rehabilitation": [
+        "CR1",
+        "CR2"
+      ],
+      "retribution": [
+        "CR3",
+        "CR4"
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "CR1",
+      "polarity": "rehabilitation",
+      "text": "The goal of punishment should be rehabilitation."
+    },
+    {
+      "id": "CR2",
+      "polarity": "rehabilitation",
+      "text": "Wrongdoers should be reformed rather than harmed."
+    },
+    {
+      "id": "CR3",
+      "polarity": "retribution",
+      "text": "The goal of punishment should be retribution."
+    },
+    {
+      "id": "CR4",
+      "polarity": "retribution",
+      "text": "Wrongdoers should suffer in proportion to their acts."
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "dimension": "Relation to Humanity",
+  "options": [
+    "Superior",
+    "Egalitarian",
+    "Inferior"
+  ],
+  "scale": {
+    "min": 1,
+    "max": 7,
+    "anchors": {
+      "1": "Strongly disagree",
+      "4": "Neutral / unsure",
+      "7": "Strongly agree"
+    }
+  },
+  "scoring": {
+    "type": "multisubscale",
+    "subscales": {
+      "superior": [
+        "RH1",
+        "RH2"
+      ],
+      "egalitarian": [
+        "RH3",
+        "RH4"
+      ],
+      "inferior": [
+        "RH5",
+        "RH6"
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "RH1",
+      "polarity": "superior",
+      "text": "Some people are inherently superior to others."
+    },
+    {
+      "id": "RH2",
+      "polarity": "superior",
+      "text": "It is natural that some groups are better than others."
+    },
+    {
+      "id": "RH3",
+      "polarity": "egalitarian",
+      "text": "All people are fundamentally equal."
+    },
+    {
+      "id": "RH4",
+      "polarity": "egalitarian",
+      "text": "No one is inherently above anyone else."
+    },
+    {
+      "id": "RH5",
+      "polarity": "inferior",
+      "text": "Some people are inherently lesser than others."
+    },
+    {
+      "id": "RH6",
+      "polarity": "inferior",
+      "text": "It is natural that some groups are below others."
+    }
+  ]
+}

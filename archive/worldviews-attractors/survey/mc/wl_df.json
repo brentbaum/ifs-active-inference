@@ -1,0 +1,80 @@
+{
+  "dimension": "Determining Factors",
+  "code": "WL-DF",
+  "group": "WILL",
+  "format": "mc",
+  "poles": [
+    "Biological determinism",
+    "Environmental determinism"
+  ],
+  "non_mutually_exclusive": true,
+  "items": [
+    {
+      "id": "WL-DF-1",
+      "text": "For explaining individual life outcome differences, the primary factor is:",
+      "options": {
+        "A": "Genetics and innate characteristics",
+        "B": "Genetics weighted more heavily than environment",
+        "C": "Roughly equal parts nature and nurture",
+        "D": "Environment and upbringing weighted more heavily",
+        "E": "Social environment and circumstances"
+      }
+    },
+    {
+      "id": "WL-DF-2",
+      "text": "Two children adopted into the same loving, wealthy family\u2014one thrives, one struggles with addiction. The most likely explanation:",
+      "options": {
+        "A": "Genetic differences in temperament and vulnerability",
+        "B": "Primarily genetics with some environmental interaction",
+        "C": "Complex interaction of genes, environment, and chance",
+        "D": "Different experiences within the same family environment",
+        "E": "Subtle differences in how each child was treated"
+      }
+    },
+    {
+      "id": "WL-DF-3",
+      "text": "The \"blank slate\" view (humans shaped entirely by environment) vs. evolutionary psychology (much behavior is innate). Which better explains human behavior?",
+      "options": {
+        "A": "Evolutionary psychology\u2014most behavior has innate roots",
+        "B": "Evolutionary psychology captures more, but environment matters",
+        "C": "Both frameworks are needed\u2014neither alone suffices",
+        "D": "Blank slate captures more, but some instincts are innate",
+        "E": "Blank slate\u2014humans are fundamentally shaped by experience"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "bipolar",
+    "questions": {
+      "WL-DF-1": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "WL-DF-2": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "WL-DF-3": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      }
+    }
+  },
+  "interpretation": {
+    "-2": "Biology/genetics is primary",
+    "-1": "Biology weighted more heavily",
+    "0": "Nature and nurture equally",
+    "1": "Environment weighted more heavily",
+    "2": "Environment is primary"
+  }
+}

@@ -2,6 +2,7 @@
 set -euo pipefail
 
 cd "$(dirname "$0")"
+repo_root="$(cd ../.. && pwd)"
 
 tmp_markdown="$(mktemp)"
 trap 'rm -f "$tmp_markdown"' EXIT
@@ -27,7 +28,7 @@ pandoc "$tmp_markdown" \
 rm -rf ./draft-v5-academic-paper-previews
 mkdir -p ./draft-v5-academic-paper-previews
 
-bash /Users/brentbaum/.agents/skills/latex-document-skill/scripts/compile_latex.sh \
+bash "$repo_root/.agents/skills/seminal/latex-document-skill/scripts/compile_latex.sh" \
   draft-v5-academic-paper.tex \
   --engine pdflatex \
   --use-latexmk \

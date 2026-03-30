@@ -1,0 +1,80 @@
+{
+  "dimension": "Unity",
+  "code": "WL-UN",
+  "group": "WORLD AND LIFE",
+  "format": "mc",
+  "poles": [
+    "Many",
+    "One"
+  ],
+  "non_mutually_exclusive": false,
+  "items": [
+    {
+      "id": "WL-UN-1",
+      "text": "At the deepest level, reality is:",
+      "options": {
+        "A": "A multiplicity of genuinely separate things",
+        "B": "Mostly separate things with interconnections",
+        "C": "Both\u2014unity at one level, multiplicity at another",
+        "D": "Fundamentally unified with apparent multiplicity",
+        "E": "A unified whole in which separation is illusion"
+      }
+    },
+    {
+      "id": "WL-UN-2",
+      "text": "A mystic claims \"all is one\" and separation is illusion. A physicist says there are distinctly separate particles. Who's right?",
+      "options": {
+        "A": "The physicist\u2014things are genuinely separate",
+        "B": "The physicist for practical purposes",
+        "C": "Both\u2014they describe different levels of reality",
+        "D": "The mystic captures something deeper",
+        "E": "The mystic\u2014separation is indeed illusion"
+      }
+    },
+    {
+      "id": "WL-UN-3",
+      "text": "The experience of fundamental unity is:",
+      "options": {
+        "A": "A cognitive glitch without validity",
+        "B": "An interesting brain state, not metaphysically significant",
+        "C": "Genuinely uncertain\u2014could be insight or artifact",
+        "D": "Probably a genuine insight into the nature of reality",
+        "E": "A genuine insight into the fundamental nature of reality"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "bipolar",
+    "questions": {
+      "WL-UN-1": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "WL-UN-2": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "WL-UN-3": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      }
+    }
+  },
+  "interpretation": {
+    "-2": "Reality is fundamentally plural/many",
+    "-1": "Reality is mostly separate things",
+    "0": "Both unity and multiplicity",
+    "1": "Fundamental unity with apparent plurality",
+    "2": "Reality is fundamentally one/unified"
+  }
+}

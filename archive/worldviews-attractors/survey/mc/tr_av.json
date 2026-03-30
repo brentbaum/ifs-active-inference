@@ -1,0 +1,80 @@
+{
+  "dimension": "Availability",
+  "code": "TR-AV",
+  "group": "TRUTH",
+  "format": "mc",
+  "poles": [
+    "Exclusive",
+    "Inclusive"
+  ],
+  "non_mutually_exclusive": false,
+  "items": [
+    {
+      "id": "TR-AV-1",
+      "text": "Deep truths about life and reality are:",
+      "options": {
+        "A": "Accessible to anyone who sincerely seeks them",
+        "B": "Accessible to most with sufficient effort",
+        "C": "Require some preparation but available to many",
+        "D": "Require special training, insight, or development",
+        "E": "Only accessible to those with special capacities or status"
+      }
+    },
+    {
+      "id": "TR-AV-2",
+      "text": "A guru claims only initiates can understand certain truths. A democrat says truth is equally available to all. Who's right?",
+      "options": {
+        "A": "The democrat\u2014truth is available to all sincere seekers",
+        "B": "Mostly the democrat\u2014basic truths are accessible to all",
+        "C": "Both partially\u2014some truths require preparation",
+        "D": "Mostly the guru\u2014deep truth requires cultivation",
+        "E": "The guru\u2014profound truths require significant development"
+      }
+    },
+    {
+      "id": "TR-AV-3",
+      "text": "Do some truths require special capacities to understand?",
+      "options": {
+        "A": "No\u2014this is just gatekeeping and elitism",
+        "B": "Rarely\u2014basic truths are widely accessible",
+        "C": "Sometimes\u2014expertise enables deeper understanding",
+        "D": "Often\u2014many truths require significant cultivation",
+        "E": "Yes\u2014profound truths require special development"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "bipolar",
+    "questions": {
+      "TR-AV-1": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "TR-AV-2": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "TR-AV-3": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      }
+    }
+  },
+  "interpretation": {
+    "-2": "Truth is available to all equally",
+    "-1": "Truth is accessible to most",
+    "0": "Some preparation needed but widely accessible",
+    "1": "Special capacities often needed",
+    "2": "Truth requires special access/development"
+  }
+}

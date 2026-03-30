@@ -1,0 +1,80 @@
+{
+  "dimension": "Relation to Group",
+  "code": "IP-RG",
+  "group": "INTERPERSONAL",
+  "format": "mc",
+  "poles": [
+    "Individualism",
+    "Collectivism"
+  ],
+  "non_mutually_exclusive": false,
+  "items": [
+    {
+      "id": "IP-RG-1",
+      "text": "When individual desires conflict with group needs:",
+      "options": {
+        "A": "Individual needs should usually take priority",
+        "B": "Individual needs often take priority with exceptions",
+        "C": "Neither has inherent priority\u2014it's entirely situational",
+        "D": "Group needs often take priority with exceptions",
+        "E": "Group needs should usually take priority"
+      }
+    },
+    {
+      "id": "IP-RG-2",
+      "text": "A talented person has an opportunity that benefits them but harms their community. They should:",
+      "options": {
+        "A": "Take the opportunity\u2014individuals must pursue their own path",
+        "B": "Probably take it, while weighing community impact",
+        "C": "Carefully weigh both factors with no presumption",
+        "D": "Probably stay, while weighing personal cost",
+        "E": "Stay\u2014community obligations take precedence"
+      }
+    },
+    {
+      "id": "IP-RG-3",
+      "text": "\"Rugged individualism\" is:",
+      "options": {
+        "A": "A virtue\u2014self-reliance is admirable and productive",
+        "B": "Mostly positive with some limitations",
+        "C": "A mixed bag\u2014valuable but can be taken too far",
+        "D": "Mostly a mask for selfishness",
+        "E": "A mask for selfishness that harms community"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "bipolar",
+    "questions": {
+      "IP-RG-1": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "IP-RG-2": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "IP-RG-3": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      }
+    }
+  },
+  "interpretation": {
+    "-2": "Strong individualism",
+    "-1": "Leans individualist",
+    "0": "Balanced individual/collective",
+    "1": "Leans collectivist",
+    "2": "Strong collectivism"
+  }
+}

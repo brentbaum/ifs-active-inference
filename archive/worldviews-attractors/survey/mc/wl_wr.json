@@ -1,0 +1,80 @@
+{
+  "dimension": "Worth of Life",
+  "code": "WL-WR",
+  "group": "WORLD AND LIFE",
+  "format": "mc",
+  "poles": [
+    "Optimism",
+    "Resignation"
+  ],
+  "non_mutually_exclusive": false,
+  "items": [
+    {
+      "id": "WL-WR-1",
+      "text": "Life is fundamentally:",
+      "options": {
+        "A": "Good and worth living",
+        "B": "More good than bad, worth living",
+        "C": "A mixture of good and bad with no clear verdict",
+        "D": "More suffering than joy, but still meaningful",
+        "E": "More suffering than joy; existence is tragic"
+      }
+    },
+    {
+      "id": "WL-WR-2",
+      "text": "Given everything\u2014joy and suffering, beauty and horror\u2014would it have been better if humans had never existed?",
+      "options": {
+        "A": "Definitely not\u2014human existence is clearly good",
+        "B": "Probably not\u2014the good outweighs the bad",
+        "C": "Genuinely uncertain\u2014hard to weigh",
+        "D": "Possibly\u2014the suffering is immense",
+        "E": "Probably yes\u2014the net balance is negative"
+      }
+    },
+    {
+      "id": "WL-WR-3",
+      "text": "Is optimism about life's worth rational, or a necessary illusion?",
+      "options": {
+        "A": "Fully rational\u2014life is genuinely good",
+        "B": "Rational\u2014evidence supports life's worth",
+        "C": "Neither fully rational nor illusion\u2014a reasonable stance",
+        "D": "Somewhat illusory but necessary for functioning",
+        "E": "Largely illusion\u2014the clear-eyed view is darker"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "bipolar",
+    "questions": {
+      "WL-WR-1": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "WL-WR-2": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "WL-WR-3": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      }
+    }
+  },
+  "interpretation": {
+    "-2": "Life is fundamentally good and worth living",
+    "-1": "Life is more good than bad",
+    "0": "Mixed/uncertain about life's worth",
+    "1": "Life has more suffering but still meaningful",
+    "2": "Life is tragic/not clearly worth living"
+  }
+}

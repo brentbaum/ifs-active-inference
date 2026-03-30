@@ -1,0 +1,80 @@
+{
+  "dimension": "Otherness",
+  "code": "IP-OT",
+  "group": "INTERPERSONAL",
+  "format": "mc",
+  "poles": [
+    "Tolerable",
+    "Intolerable"
+  ],
+  "non_mutually_exclusive": false,
+  "items": [
+    {
+      "id": "IP-OT-1",
+      "text": "People with radically different values:",
+      "options": {
+        "A": "Can coexist productively and learn from each other",
+        "B": "Can coexist with effort and mutual respect",
+        "C": "Can coexist but only by avoiding deep engagement",
+        "D": "Will have significant conflict but may coexist",
+        "E": "Will inevitably conflict in damaging ways"
+      }
+    },
+    {
+      "id": "IP-OT-2",
+      "text": "Your new neighbor holds political views you find abhorrent. You should:",
+      "options": {
+        "A": "Engage with genuine curiosity and openness",
+        "B": "Be cordial and open to finding common ground",
+        "C": "Be polite but maintain appropriate distance",
+        "D": "Minimize interaction to avoid conflict",
+        "E": "Avoid engagement\u2014some views make relationship impossible"
+      }
+    },
+    {
+      "id": "IP-OT-3",
+      "text": "Is there a limit to \"agreeing to disagree\"?",
+      "options": {
+        "A": "No\u2014dialogue is always possible and valuable",
+        "B": "Rarely\u2014almost all differences can be bridged with effort",
+        "C": "Sometimes\u2014some views make engagement very difficult",
+        "D": "Often\u2014fundamental value differences are unbridgeable",
+        "E": "Yes\u2014some beliefs make someone impossible to coexist with"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "bipolar",
+    "questions": {
+      "IP-OT-1": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "IP-OT-2": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "IP-OT-3": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      }
+    }
+  },
+  "interpretation": {
+    "-2": "Difference is highly tolerable",
+    "-1": "Difference is generally tolerable",
+    "0": "Limited tolerance for difference",
+    "1": "Difference is difficult to tolerate",
+    "2": "Difference is intolerable"
+  }
+}

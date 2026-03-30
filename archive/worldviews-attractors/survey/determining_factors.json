@@ -1,0 +1,77 @@
+{
+  "dimension": "Determining Factors",
+  "options": [
+    "Biological determinism",
+    "Environmental determinism"
+  ],
+  "scale": {
+    "min": 1,
+    "max": 7,
+    "anchors": {
+      "1": "Strongly disagree",
+      "4": "Neutral / unsure",
+      "7": "Strongly agree"
+    }
+  },
+  "scoring": {
+    "type": "bipolar",
+    "positive": "biological_determinism",
+    "negative": "environmental_determinism",
+    "subscales": {
+      "biological_determinism": [
+        "DF1",
+        "DF3",
+        "DF5",
+        "DF7"
+      ],
+      "environmental_determinism": [
+        "DF2",
+        "DF4",
+        "DF6",
+        "DF8"
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": "DF1",
+      "polarity": "biological determinism",
+      "text": "Genetics largely determine how people behave."
+    },
+    {
+      "id": "DF2",
+      "polarity": "environmental determinism",
+      "text": "Social environments largely determine how people behave."
+    },
+    {
+      "id": "DF3",
+      "polarity": "biological determinism",
+      "text": "Biological factors are the main drivers of behavior."
+    },
+    {
+      "id": "DF4",
+      "polarity": "environmental determinism",
+      "text": "Culture and upbringing are the main drivers of behavior."
+    },
+    {
+      "id": "DF5",
+      "polarity": "biological determinism",
+      "text": "Inborn traits are the strongest influence on actions."
+    },
+    {
+      "id": "DF6",
+      "polarity": "environmental determinism",
+      "text": "Situations and context shape behavior more than biology."
+    },
+    {
+      "id": "DF7",
+      "polarity": "biological determinism",
+      "text": "Biology sets firm limits on how people act."
+    },
+    {
+      "id": "DF8",
+      "polarity": "environmental determinism",
+      "text": "People are mostly products of their environment."
+    }
+  ]
+}

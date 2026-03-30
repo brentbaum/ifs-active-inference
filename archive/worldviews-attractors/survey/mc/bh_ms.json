@@ -1,0 +1,80 @@
+{
+  "dimension": "Moral Source",
+  "code": "BH-MS",
+  "group": "BEHAVIOR",
+  "format": "mc",
+  "poles": [
+    "Human source",
+    "Transcendent source"
+  ],
+  "non_mutually_exclusive": true,
+  "items": [
+    {
+      "id": "BH-MS-1",
+      "text": "Moral rules ultimately derive from:",
+      "options": {
+        "A": "Human social agreements and evolutionary pressures",
+        "B": "Primarily human conventions with some universal elements",
+        "C": "Both\u2014humans discover pre-existing moral truths",
+        "D": "Primarily transcendent principles interpreted by humans",
+        "E": "Transcendent principles (divine command, cosmic law, moral realism)"
+      }
+    },
+    {
+      "id": "BH-MS-2",
+      "text": "If an isolated society developed without contact with major religions, could they develop genuine morality?",
+      "options": {
+        "A": "Yes\u2014morality emerges naturally from human social needs",
+        "B": "Yes\u2014they'd discover universal moral truths through reason",
+        "C": "They'd develop functional ethics, unclear if \"genuine\"",
+        "D": "Only partial morality without transcendent guidance",
+        "E": "No\u2014genuine morality requires transcendent grounding"
+      }
+    },
+    {
+      "id": "BH-MS-3",
+      "text": "\"Morality would exist even if humans didn't\"\u2014this statement is:",
+      "options": {
+        "A": "False\u2014morality is a human social construction",
+        "B": "Probably false\u2014morality requires moral agents to exist",
+        "C": "Uncertain\u2014depends on whether moral realism is true",
+        "D": "Probably true\u2014moral truths exist independently",
+        "E": "True\u2014moral principles are part of the fabric of reality"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "bipolar",
+    "questions": {
+      "BH-MS-1": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "BH-MS-2": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "BH-MS-3": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      }
+    }
+  },
+  "interpretation": {
+    "-2": "Morality is entirely human-constructed",
+    "-1": "Morality is primarily human-derived",
+    "0": "Mixed human/transcendent source",
+    "1": "Morality is primarily transcendent",
+    "2": "Morality is entirely transcendent"
+  }
+}

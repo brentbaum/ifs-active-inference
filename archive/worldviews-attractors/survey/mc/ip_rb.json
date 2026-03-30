@@ -1,0 +1,80 @@
+{
+  "dimension": "Relation to Biosphere",
+  "code": "IP-RB",
+  "group": "INTERPERSONAL",
+  "format": "mc",
+  "poles": [
+    "Anthropocentrism",
+    "Vivicentrism"
+  ],
+  "non_mutually_exclusive": false,
+  "items": [
+    {
+      "id": "IP-RB-1",
+      "text": "Human interests vs. nature's interests:",
+      "options": {
+        "A": "Human welfare takes precedence over environmental concerns",
+        "B": "Humans first, but with stewardship responsibilities toward nature",
+        "C": "Balance human needs with ecosystem health",
+        "D": "Nature has significant intrinsic value beyond human utility",
+        "E": "Nature has intrinsic value equal to or exceeding human utility"
+      }
+    },
+    {
+      "id": "IP-RB-2",
+      "text": "A development project would lift 10,000 people from poverty but destroy the last habitat of an endangered species. It should:",
+      "options": {
+        "A": "Proceed\u2014human welfare is paramount",
+        "B": "Probably proceed with mitigation efforts",
+        "C": "Requires careful weighing with no presumption either way",
+        "D": "Probably not proceed\u2014species extinction is grave",
+        "E": "Not proceed\u2014we cannot justify causing extinction"
+      }
+    },
+    {
+      "id": "IP-RB-3",
+      "text": "Do animals have rights?",
+      "options": {
+        "A": "No\u2014rights are a human concept applicable only to humans",
+        "B": "Not rights, but we have duties not to cause unnecessary suffering",
+        "C": "Some protections proportional to their capacities",
+        "D": "Yes, though less extensive than human rights",
+        "E": "Yes\u2014sentient beings have rights regardless of species"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "bipolar",
+    "questions": {
+      "IP-RB-1": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "IP-RB-2": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "IP-RB-3": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      }
+    }
+  },
+  "interpretation": {
+    "-2": "Strong anthropocentrism",
+    "-1": "Leans anthropocentric",
+    "0": "Balanced human/nature value",
+    "1": "Leans vivicentric",
+    "2": "Strong vivicentrism"
+  }
+}

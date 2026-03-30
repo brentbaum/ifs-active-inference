@@ -1,0 +1,82 @@
+{
+  "dimension": "Explanation",
+  "code": "WL-EX",
+  "group": "WORLD AND LIFE",
+  "format": "mc",
+  "poles": [
+    "Formism",
+    "Mechanism",
+    "Organicism",
+    "Contextualism"
+  ],
+  "non_mutually_exclusive": false,
+  "items": [
+    {
+      "id": "WL-EX-1",
+      "text": "A person becomes an artist. The best explanation is:",
+      "options": {
+        "A": "They're the artistic type\u2014it's their nature (formism)",
+        "B": "Specific causes: genetics, training, opportunities (mechanism)",
+        "C": "Their whole self developed toward this expression (organicism)",
+        "D": "Unique confluence of factors in their particular situation (contextualism)",
+        "E": "No single framework captures it\u2014need multiple approaches"
+      }
+    },
+    {
+      "id": "WL-EX-2",
+      "text": "To understand why something happened, it's most useful to ask:",
+      "options": {
+        "A": "What category or type does this belong to?",
+        "B": "What were the causes and mechanisms?",
+        "C": "What larger pattern or whole was emerging?",
+        "D": "What was unique about this particular situation?",
+        "E": "Depends on what you're trying to understand"
+      }
+    },
+    {
+      "id": "WL-EX-3",
+      "text": "Events happen because:",
+      "options": {
+        "A": "Things act according to their nature and type",
+        "B": "Prior causes determined them through causal chains",
+        "C": "They emerged from developing wholes seeking completion",
+        "D": "Unique circumstances came together in particular ways",
+        "E": "Multiple frameworks are needed\u2014no single answer suffices"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "categorical",
+    "questions": {
+      "WL-EX-1": {
+        "A": "formism",
+        "B": "mechanism",
+        "C": "organicism",
+        "D": "contextualism",
+        "E": "mixed"
+      },
+      "WL-EX-2": {
+        "A": "formism",
+        "B": "mechanism",
+        "C": "organicism",
+        "D": "contextualism",
+        "E": "mixed"
+      },
+      "WL-EX-3": {
+        "A": "formism",
+        "B": "mechanism",
+        "C": "organicism",
+        "D": "contextualism",
+        "E": "mixed"
+      }
+    }
+  },
+  "interpretation": {
+    "formism": "Events explained by types/categories",
+    "mechanism": "Events explained by causal chains",
+    "organicism": "Events explained by organic emergence",
+    "contextualism": "Events explained by unique context",
+    "mixed": "Multiple frameworks needed"
+  }
+}

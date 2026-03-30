@@ -1,0 +1,81 @@
+{
+  "dimension": "Control Disposition",
+  "code": "BH-CD",
+  "group": "BEHAVIOR",
+  "format": "mc",
+  "poles": [
+    "Positive",
+    "Neutral",
+    "Negative"
+  ],
+  "non_mutually_exclusive": false,
+  "items": [
+    {
+      "id": "BH-CD-1",
+      "text": "The universe (or fate, or life) is:",
+      "options": {
+        "A": "Fundamentally benevolent\u2014things tend to work out",
+        "B": "Slightly favorable\u2014there's some positive tendency",
+        "C": "Fundamentally indifferent\u2014no inherent favor or disfavor",
+        "D": "Slightly hostile\u2014you must work against resistance",
+        "E": "Fundamentally hostile\u2014you must struggle against it"
+      }
+    },
+    {
+      "id": "BH-CD-2",
+      "text": "\"The arc of the moral universe is long, but it bends toward justice.\" This is:",
+      "options": {
+        "A": "True\u2014there is a positive direction to history",
+        "B": "Probably true\u2014progress is real despite setbacks",
+        "C": "A hopeful belief, neither clearly true nor false",
+        "D": "Probably false\u2014history shows no clear direction",
+        "E": "False\u2014the universe is indifferent to justice"
+      }
+    },
+    {
+      "id": "BH-CD-3",
+      "text": "When bad things happen to good people, it shows that:",
+      "options": {
+        "A": "There's a larger plan we can't understand",
+        "B": "Good and bad are not perfectly balanced but tend toward good",
+        "C": "The universe is morally neutral\u2014goodness doesn't guarantee good outcomes",
+        "D": "Life is often unfair with no cosmic balance",
+        "E": "The universe is indifferent or hostile to human welfare"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "bipolar",
+    "questions": {
+      "BH-CD-1": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "BH-CD-2": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "BH-CD-3": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      }
+    }
+  },
+  "interpretation": {
+    "-2": "Universe is benevolent/positive",
+    "-1": "Universe leans positive",
+    "0": "Universe is neutral/indifferent",
+    "1": "Universe leans negative",
+    "2": "Universe is hostile/negative"
+  }
+}

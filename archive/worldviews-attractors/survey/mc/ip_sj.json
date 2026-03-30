@@ -1,0 +1,81 @@
+{
+  "dimension": "Sociopolitical Justice",
+  "code": "IP-SJ",
+  "group": "INTERPERSONAL",
+  "format": "mc",
+  "poles": [
+    "Just",
+    "Unjust",
+    "Random"
+  ],
+  "non_mutually_exclusive": false,
+  "items": [
+    {
+      "id": "IP-SJ-1",
+      "text": "The current social order is:",
+      "options": {
+        "A": "Basically fair\u2014people mostly get what they merit",
+        "B": "Somewhat fair with room for improvement",
+        "C": "A mix\u2014some fairness, some systemic problems",
+        "D": "Significantly unfair\u2014success correlates poorly with merit",
+        "E": "Systematically unfair\u2014the system is rigged"
+      }
+    },
+    {
+      "id": "IP-SJ-2",
+      "text": "A billionaire and a homeless person in the same city. This outcome is:",
+      "options": {
+        "A": "Fair\u2014reflects differences in effort and ability",
+        "B": "Mostly fair with some role for luck",
+        "C": "Complex\u2014results from many factors, not simply fair or unfair",
+        "D": "Mostly unfair\u2014luck and structure matter more than merit",
+        "E": "Unjust\u2014no one deserves billions while others starve"
+      }
+    },
+    {
+      "id": "IP-SJ-3",
+      "text": "\"The system is rigged\" vs. \"Anyone can make it if they try hard enough\":",
+      "options": {
+        "A": "Anyone can make it\u2014success is available to all who work hard",
+        "B": "Hard work usually pays off, with some barriers",
+        "C": "Both have truth\u2014effort matters but so do barriers",
+        "D": "System is largely rigged, with some exceptions",
+        "E": "System is rigged\u2014\"anyone can make it\" is a myth"
+      }
+    }
+  ],
+  "scoring": {
+    "mode": "choice",
+    "type": "bipolar",
+    "questions": {
+      "IP-SJ-1": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "IP-SJ-2": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      },
+      "IP-SJ-3": {
+        "A": -2,
+        "B": -1,
+        "C": 0,
+        "D": 1,
+        "E": 2
+      }
+    }
+  },
+  "interpretation": {
+    "-2": "Social order is fundamentally just",
+    "-1": "Social order leans toward justice",
+    "0": "Mixed view of social justice",
+    "1": "Social order is significantly unjust",
+    "2": "Social order is systematically unjust"
+  }
+}
