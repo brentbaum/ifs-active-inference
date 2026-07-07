@@ -1,5 +1,7 @@
 # Draft v11 — Claim-Architecture Outline
 
+> **Status (2026-07-06):** `draft-v11-theory.md` — the theory-first colleague artifact — is drafted §§1–10 (§9 stubbed), reviewed by a fresh full-read pass, and review-applied (commits 7639390, 6b1529f). Its section numbering differs from this outline: protection is its §5 (see the RESTRUCTURE NOTE at §8 below). Remaining before send: abstract; Brent's own Gendlin read; reference verification (Gershman years, Anderson, Porges, Friston 2017, Kernberg 1976, Fairbairn 1952); §9 insertion when sim artifacts are relocated. This outline remains the spec for the eventual full paper.
+
 Working title: **Self-Energy, Witnessing, and the Revision of Part Beliefs: An Active Inference Account of Internal Family Systems**
 
 This is an outline of claims, not topics. Every bullet is an assertion the paper makes (or scaffolding it needs). Reorder freely — the tags travel with the nodes.
@@ -289,6 +291,10 @@ Rules extracted from Brent's feedback while drafting §1–§4 of draft-v11-theo
 
 **Parataxis for narrative; restrained hypotaxis for derivation; paratactic landings.** Clinical/methodological storytelling is paratactic: one clause of information per sentence, coordinated not subordinated, events in the order they happen, no callbacks or gloss mid-scene, negations doing scene-work ("Nothing about the scene is corrected."), the climactic line isolated ("The part says: *she sees me now.*" / "The catastrophe is predicted. The contact happens. The catastrophe does not arrive."). Theory keeps subordination — because-under-condition IS the content — but restrained (~one subordination per sentence; when a theory paragraph turns to mush, unstack it toward parataxis) and lands paragraphs on paratactic kernels ("A part believes what its formation was."). §8 v2 is the benchmark for the mix.
 
+**Definitional asides in plain speech.** When the paper must police its own language, phrase it as "When we say X, we mean…" — not as cleverness ("X is not a homunculus verb"). Plain over clever, always.
+
+**No triumphal summary landings.** "None of it is procedural convention" as a paragraph-closer got cut for the same reason "we register gladly" did — the paper congratulating itself on its own result. Let the derivation land; don't take a bow. (Related: give scenes one concrete axis — *whose eyes the room is seen through* beat two abstract sentences about "the room coming back.")
+
 **No metadiscourse / signposting.** Kill sentences whose subject is the essay rather than the mind: "What witnessing does must be said carefully…", "Three words, then, one boundary each", "The shape of this claim has a lineage", "C3 named it in §1; here is the mechanism in full", "Each word is doing work", "Two guards, before the argument proceeds", "two things should be noted before we use it". The real claim is always hiding in the subordinate clause — promote it to the lead and delete the frame ("must be said carefully, because the regime and the revision run on different clocks" → "The regime and the revision run on different clocks"). Enumeration about the *subject* (First, the update spawns…) is fine; narration about the *text* is not.
 
 **No editorializing intensifiers.** Don't tell the reader a claim is striking/remarkable/powerful/elegant — show the claim and let it strike ("IFS makes a striking claim about that position" → "IFS holds that this position is not another part"). Same for performative authorial stances ("we register the asymmetry gladly" → "the asymmetry is worth stating plainly"). Significance adjectives are a tell of AI prose; the content carries or it doesn't.
@@ -312,3 +318,13 @@ Rules extracted from Brent's feedback while drafting §1–§4 of draft-v11-theo
 **Cost accepted:** the paper becomes quotably revisionist ("the part is created by the freeze"); "why this is still an IFS model" (§10) must carry more weight — it holds because the model reproduces the clinical phenomenology the innateness claim was invented to explain, including post-unburdening persistence.
 
 **Where it landed:** §3 scope line + pointer; §6 BMR selectivity + mechanized role transformation; §7 melt = decoupling-not-deletion; §10 named-departure node (replaces the agnostic line). Full prose staged in frozen-process-insert.md.
+
+### 2026-07-06 (evening) — Full-read review applied; two author vetoes
+
+A fresh-eyes full-read review (Fable subagent, no session context) was run on draft-v11-theory.md and applied in two tranches (commit 6b1529f). Notable rulings by Brent, binding on future passes:
+
+- **Derivation register stands.** The reviewer proposed hedging "falls out of the architecture at every step" with a consistency-not-proof clause; declined. The paper keeps its derivation language; the §10 hard-cases paragraph and the §9 epistemology already bound it.
+- **"None of it is procedural convention" cut** — not softened, removed. Triumphal summary landings are now a style-guide violation.
+- **The agentive idiom is translated, not abandoned.** §8 keeps parts that register/see/believe, with one plain-speech translation paragraph ("When we say the part registers contact, we mean…") and a §10 hard-case acknowledging the formal gap (what it is for evidence to arrive *at a bundle*). This is the paper's answer to the reviewer's biggest objection.
+- **Dedup direction reversed on one item:** §3 keeps the full collapsed-reflexivity treatment (it carries the definition of *frozen*); §4's trait 2 was compressed instead — against the reviewer's suggestion, deliberately.
+- **§6's missing scene** resolved with Brent's own wording: blended client seeing the room through the part's eyes; therapist steady in her own Self bringing curiosity, compassion, and co-regulation; the room seen through adult eyes again.
