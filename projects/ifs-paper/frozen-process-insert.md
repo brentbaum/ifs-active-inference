@@ -202,6 +202,18 @@ felt interaction with the present — may likewise anticipate the melt-under-rel
 story of §7; close-read before the prose pass (see Open items) so the citation is
 load-bearing rather than decorative.
 
+*Citation strategy (resolved 2026-07-06; details in the outline's Open items).* The Aletheia
+convergence is cited to March (2021), the public white paper — which supports, in March's own
+words: parts as "structurally consolidated emotional learnings" against fluid process (p. 6);
+the mismatch line "what is arising freshly in the unfolding process of the present moment
+never exactly matches existing structurally consolidated emotional learnings" (p. 6); "when
+the part feels seen and understood, predictably it will release and unfold" (p. 20); the
+paradox of change (pp. 14, 21); and the explicit anchoring of the Depth of Parts to IFS
+(p. 7). The verbatim "crystallized/frozen process" metaphor is manual-only — Gendlin (1964)
+carries all frozen-language in the paper. March (2021) is cited as a phenomenological
+practitioner source only, never for mechanism (its reconsolidation and EEG material is
+popularized and would import the over-claims §7 hedges against).
+
 The Aletheia framework reaches the same ontology from clinical phenomenology rather than
 formalism: a Part as "crystallized process," a complete object-relation (self-, other-, cause-,
 effect-image bound by affect) that fluid experience freezes into and that "melts back into felt
