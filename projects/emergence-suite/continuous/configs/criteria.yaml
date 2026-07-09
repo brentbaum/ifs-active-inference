@@ -1,0 +1,34 @@
+criteria:
+  - id: T2.4.1
+    description: "A self-sustaining high-depth fixed point exists across the full preregistered bundle-strength x volatility-sensitivity grid; missing cells are reported rather than hidden."
+    metric_path: metrics.basin.self_fixed_point_grid_fraction
+    comparator: "=="
+    threshold: 1.0
+    weak_threshold: 0.96
+    opposite_threshold: 0.80
+    kind: success
+  - id: T2.4.2
+    description: "A competing capture basin exists in part of the preregistered grid and its boundary is mapped."
+    metric_path: metrics.basin.capture_basin_grid_fraction
+    comparator: ">="
+    threshold: 0.20
+    weak_threshold: 0.08
+    opposite_threshold: 0.0
+    kind: success
+  - id: T2.4.3
+    description: "Volatility bursts produce dose-dependent collapse and recovery across at least four burst magnitudes, with no direct writes from the burst schedule to h."
+    metric_path: metrics.collapse.dose_recoverable_and_audit_ok
+    comparator: "=="
+    threshold: 1.0
+    weak_threshold: 1.0
+    opposite_threshold: 0.0
+    kind: success
+  - id: T2.4.4
+    description: "The full run contract is emitted and the RxInfer convergence probe completes without divergence."
+    metric_path: metrics.contract.contract_and_rxinfer_ok
+    comparator: "=="
+    threshold: 1.0
+    weak_threshold: 1.0
+    opposite_threshold: 0.0
+    kind: success
+
