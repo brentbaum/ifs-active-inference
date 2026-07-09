@@ -87,6 +87,12 @@ for the report is:
 rg -n "logistic|sigmoid" projects/emergence-suite/suite/src/sims/sim6a/Sim6a.jl
 ```
 
+## Stage 2 Result
+
+![Stage 2 EFE decomposition crossover](../../../runs/sim6a/stage2-preregistered/figures/stage2-efe-crossover.svg)
+
+Stage 2 adds two mental actions, `allocate-to-reflexive` and `allocate-to-threat`, selected by expected free energy from the current depth posterior, cause-bank threat belief, learned reflexive-safety contingency, and fixed survival-relevant preferences. In the preregistered run, acute-threat beliefs select `allocate-to-threat`; the ranking is carried by pragmatic value, with epistemic value favoring reflexive allocation until threat belief crosses the figure's zero line. Under activation, `allocate-to-reflexive` is initially EFE-dominated, then becomes optimal after 4 safe/co-regulated evidence observations. With policies enabled, the Stage-1 dose-response collapse and recovery checks still meet their registered tolerances.
+
 ## Outputs
 
 - `summary.json`: config snapshot, imported bundle inventory, model contract,

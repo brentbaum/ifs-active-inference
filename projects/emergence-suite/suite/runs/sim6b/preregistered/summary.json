@@ -1,0 +1,234 @@
+{
+    "experiment": "sim6b",
+    "config": {
+        "experiment": "sim6b",
+        "seeds": [
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019,
+            1020,
+            1021,
+            1022,
+            1023,
+            1024
+        ],
+        "output_dir": "projects/emergence-suite/suite/runs",
+        "label": "preregistered",
+        "model_params": {
+            "E0": 1,
+            "accessible_formation_old_count": 0.4,
+            "accessible_relational_count_good": 1,
+            "accessible_relational_count_old": 0.08,
+            "acute_kappa": 0.05,
+            "acute_omega": 1.65,
+            "ambiguity_weight": 0.1,
+            "arousal_pe_scale": 5.2,
+            "attenuation_cost": 0.8,
+            "attenuation_info_scale": 0.18,
+            "attenuation_precision_scale": 0.34,
+            "aversive_preference": -2.35,
+            "baseline_trials": 8,
+            "beta": 1,
+            "clamp_depth_prior": [
+                0,
+                0.01,
+                0.03,
+                0.16,
+                0.8
+            ],
+            "clamp_yoke_tolerance": 12,
+            "collapse_E_threshold": 0.35,
+            "crp_concentration": 0.34,
+            "crp_threshold_base": 0.085,
+            "cue_learning_weight": 0.55,
+            "dark_kappa": 0.05,
+            "dark_omega": 1.15,
+            "depth_grid": [
+                0,
+                0.25,
+                0.5,
+                0.75,
+                1
+            ],
+            "epistemic_weight": 0.28,
+            "freeze_revision_threshold": 10,
+            "full_prior_alone": 12,
+            "full_prior_met": 2,
+            "gamma": 1.15,
+            "high_E_threshold": 0.7,
+            "initial_depth_prior": [
+                0.03,
+                0.05,
+                0.1,
+                0.27,
+                0.55
+            ],
+            "lambda_ctx": 0.9,
+            "learning_rate_arousal_gain": 26,
+            "learning_rate_base": 0.16,
+            "observation_precision_base": 0.42,
+            "observation_precision_gain": 1.05,
+            "ordinary_probe_trials": 24,
+            "overt_action_cost": 0.03,
+            "overwhelm_trials": 18,
+            "pi_part": 4,
+            "postformation_trials": 12,
+            "prior_log_odds": -5,
+            "reduced_prior_alone": 7,
+            "reduced_prior_met": 7,
+            "rescue_revision_floor": 25,
+            "revision_learning_rate": 2,
+            "revision_score_scale": 1,
+            "safe_kappa": 0.7,
+            "safe_omega": 0.2,
+            "safe_preference": 1.35,
+            "safety_depth_prior": [
+                0.02,
+                0.04,
+                0.09,
+                0.25,
+                0.6
+            ],
+            "safety_recovery_trials": 24,
+            "spawn_pressure_decay": 0.72,
+            "spawn_pressure_threshold": 2.45,
+            "transition_mix": 0.06,
+            "witnessed_contact_trials": 60
+        },
+        "sweep_grid": {
+        },
+        "criteria_path": "projects/emergence-suite/suite/configs/sim6b-criteria.yaml"
+    },
+    "model_contract": {
+        "own_module": "EmergenceSuite.Sim6b",
+        "depth_source": "Sim6a categorical depth filtering and D1 effective precision readouts",
+        "clamp": "intervention: q(d) fixed to the high-depth posterior; downstream writes and probes still read q(d)",
+        "yoked_control": "same arousal and PE stream; volatility observation withheld from level 3",
+        "write_coupling": "structural write learning rate follows realized PE; accessible statistics write at the D1 depth-discounted relational rate",
+        "no_direct_depth_assignment_in_unclamped": true
+    },
+    "preregistration": {
+        "sim1_revision_anchor": {
+            "source": "suite/runs/sim1/sim1-t1-2/per_seed_metrics.csv",
+            "ordinary_nonfrozen_aversive_mean": 36.765,
+            "ordinary_nonfrozen_aversive_max": 85.087,
+            "frozen_mean": 5.787,
+            "frozen_max": 9.993,
+            "selected_rescue_floor": 25
+        }
+    },
+    "metrics": {
+        "arms": {
+            "unclamped": {
+                "arm": "unclamped",
+                "seed_count": 24,
+                "spawn_rate": 0,
+                "target_spawn_rate": 0,
+                "mean_write_time_depth": 0.8958853380047777,
+                "min_mean_E_t": 0.2654856659937621,
+                "mean_postformation_approach_rate": 0,
+                "mean_accessible_root_counts_met": 0,
+                "mean_accessible_root_counts_alone": 14.102765915571313,
+                "mean_structural_precision": 238.86771191546748,
+                "mean_ordinary_revision_percent": 0,
+                "ordinary_revision_rate_over_floor": 0
+            },
+            "clamped": {
+                "arm": "clamped",
+                "seed_count": 24,
+                "spawn_rate": 0,
+                "target_spawn_rate": 0,
+                "mean_write_time_depth": 0.9375,
+                "min_mean_E_t": 0.9375,
+                "mean_postformation_approach_rate": 0,
+                "mean_accessible_root_counts_met": 0,
+                "mean_accessible_root_counts_alone": 15.200000000000005,
+                "mean_structural_precision": 238.86771191546748,
+                "mean_ordinary_revision_percent": 0,
+                "ordinary_revision_rate_over_floor": 0
+            },
+            "yoked_control": {
+                "arm": "yoked-control",
+                "seed_count": 24,
+                "spawn_rate": 0,
+                "target_spawn_rate": 0,
+                "mean_write_time_depth": 0.8267426429387128,
+                "min_mean_E_t": 0.8166499999999997,
+                "mean_postformation_approach_rate": 0,
+                "mean_accessible_root_counts_met": 0,
+                "mean_accessible_root_counts_alone": 13.888129182020258,
+                "mean_structural_precision": 238.86771191546748,
+                "mean_ordinary_revision_percent": 0,
+                "ordinary_revision_rate_over_floor": 0
+            }
+        },
+        "clamp_control": {
+            "clamped_revision_rescue_margin": 0,
+            "yoked_revision_rescue_margin": 0,
+            "clamped_yoked_revision_abs_diff": 0,
+            "verdict_rescued": 0,
+            "verdict_falsified": 1,
+            "verdict": "falsified",
+            "rescue_revision_floor": 25,
+            "floor_basis": "Sim 1 run sim1-t1-2: non-frozen aversive rows mean 36.765%, max 85.087%; frozen rows mean 5.787%. Floor set to 25%, below the ordinary mean and above frozen range."
+        },
+        "recovery": {
+            "mean_recovery_witnessed_revision_percent": 70.60346052441967,
+            "recovery_revision_rescue_margin": 7.060346052441967e13,
+            "mean_recovered_E_t": 0.9907635432430754,
+            "full_circle_pass": 1
+        },
+        "traits": {
+            "unclamped_freeze_signature": {
+                "spawn_rate": 0,
+                "mean_write_time_depth": 0.8958853380047777,
+                "mean_postformation_approach_rate": 0,
+                "mean_ordinary_revision_percent": 0
+            },
+            "clamped_ordinary_signature": {
+                "spawn_rate": 0,
+                "mean_write_time_depth": 0.9375,
+                "mean_ordinary_revision_percent": 0
+            },
+            "yoked_ordinary_signature": {
+                "spawn_rate": 0,
+                "mean_write_time_depth": 0.8267426429387128,
+                "mean_ordinary_revision_percent": 0
+            }
+        },
+        "stability": {
+            "oscillating_seed_arm_count": 0,
+            "seed_arm_count": 72,
+            "oscillation_rate": 0,
+            "effective_precision_min": 1.2213392471550681,
+            "effective_precision_max": 3.0673337384083488
+        },
+        "controls": {
+            "max_learning_rate_stream_diff": 0,
+            "max_pe_stream_diff": 0,
+            "all_labels_shipped": 1
+        }
+    },
+    "outputs": {
+        "depth_recovery_figure": "projects/emergence-suite/suite/runs/sim6b/preregistered/figures/depth_recovery.svg",
+        "depth_recovery_figure_written": 1
+    },
+    "per_seed_metric_count": 72,
+    "trace_row_count": 4752
+}

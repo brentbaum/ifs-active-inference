@@ -1,0 +1,121 @@
+criteria:
+  - id: S6.3.unclamped.spawn
+    description: "Unclamped acute-overwhelm arm spawns a target cause in at least 80% of seeds."
+    metric_path: metrics.arms.unclamped.spawn_rate
+    comparator: ">="
+    threshold: 0.80
+    weak_threshold: 0.60
+    opposite_threshold: 0.20
+    kind: success
+  - id: S6.3.unclamped.depth
+    description: "Unclamped write-time inferred depth is collapsed."
+    metric_path: metrics.arms.unclamped.mean_write_time_depth
+    comparator: "<="
+    threshold: 0.35
+    weak_threshold: 0.45
+    opposite_threshold: 0.70
+    kind: success
+  - id: S6.3.unclamped.sampling
+    description: "Unclamped target has near-zero postformation epistemic approach sampling."
+    metric_path: metrics.arms.unclamped.mean_postformation_approach_rate
+    comparator: "<="
+    threshold: 0.05
+    weak_threshold: 0.10
+    opposite_threshold: 0.30
+    kind: success
+  - id: S6.3.unclamped.revision
+    description: "Unclamped ordinary disconfirming probe stays under the frozen revision ceiling."
+    metric_path: metrics.arms.unclamped.mean_ordinary_revision_percent
+    comparator: "<"
+    threshold: 10.0
+    weak_threshold: 12.0
+    opposite_threshold: 25.0
+    kind: success
+  - id: S6.3.clamped.depth
+    description: "Clamped arm writes with high inferred depth by intervention."
+    metric_path: metrics.arms.clamped.mean_write_time_depth
+    comparator: ">="
+    threshold: 0.70
+    weak_threshold: 0.60
+    opposite_threshold: 0.35
+    kind: success
+  - id: S6.3.clamped.floor
+    description: "Clamped ordinary revision exceeds the preregistered Sim-1-anchored rescue floor."
+    metric_path: metrics.arms.clamped.mean_ordinary_revision_percent
+    comparator: ">="
+    threshold: 25.0
+    weak_threshold: 20.0
+    opposite_threshold: 10.0
+    kind: success
+  - id: S6.3.clamped.margin
+    description: "Clamped revision is at least 3x the unclamped ordinary revision."
+    metric_path: metrics.clamp_control.clamped_revision_rescue_margin
+    comparator: ">="
+    threshold: 3.0
+    weak_threshold: 2.0
+    opposite_threshold: 1.2
+    kind: success
+  - id: S6.3.yoked.depth
+    description: "Yoked control stays high by inference with volatility observation withheld."
+    metric_path: metrics.arms.yoked_control.mean_write_time_depth
+    comparator: ">="
+    threshold: 0.70
+    weak_threshold: 0.60
+    opposite_threshold: 0.35
+    kind: success
+  - id: S6.3.yoked.pattern
+    description: "Yoked control patterns with clamp rather than unclamped collapse."
+    metric_path: metrics.clamp_control.clamped_yoked_revision_abs_diff
+    comparator: "<="
+    threshold: 12.0
+    weak_threshold: 18.0
+    opposite_threshold: 35.0
+    kind: success
+  - id: S6.3.verdict
+    description: "Clamp-control verdict is rescued, not falsified."
+    metric_path: metrics.clamp_control.verdict_rescued
+    comparator: "=="
+    threshold: 1.0
+    weak_threshold: 1.0
+    opposite_threshold: 0.0
+    kind: success
+  - id: S6.3.recovery
+    description: "After safety recovery, witnessed-contact trials make the unclamped frozen cause revisable."
+    metric_path: metrics.recovery.full_circle_pass
+    comparator: "=="
+    threshold: 1.0
+    weak_threshold: 1.0
+    opposite_threshold: 0.0
+    kind: success
+  - id: S6.3.stability
+    description: "No second-order oscillation appears across seed-arm traces."
+    metric_path: metrics.stability.oscillation_rate
+    comparator: "<="
+    threshold: 0.0
+    weak_threshold: 0.05
+    opposite_threshold: 0.20
+    kind: success
+  - id: S6.3.pe.yoke
+    description: "All three arms share identical realized PE streams and learning-rate streams."
+    metric_path: metrics.controls.max_pe_stream_diff
+    comparator: "<="
+    threshold: 0.0
+    weak_threshold: 1.0e-9
+    opposite_threshold: 1.0e-4
+    kind: success
+  - id: S6.3.lr.yoke
+    description: "All three arms share identical realized learning-rate streams."
+    metric_path: metrics.controls.max_learning_rate_stream_diff
+    comparator: "<="
+    threshold: 0.0
+    weak_threshold: 1.0e-9
+    opposite_threshold: 1.0e-4
+    kind: success
+  - id: S6.3.labels
+    description: "Every preregistered label is shipped in criteria-results.json."
+    metric_path: metrics.controls.all_labels_shipped
+    comparator: "=="
+    threshold: 1.0
+    weak_threshold: 1.0
+    opposite_threshold: 0.0
+    kind: success

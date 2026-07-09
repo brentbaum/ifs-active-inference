@@ -1,0 +1,85 @@
+experiment: sim6b
+label: preregistered
+output_dir: ../runs
+criteria_path: sim6b-criteria.yaml
+seeds:
+  - 1001
+  - 1002
+  - 1003
+  - 1004
+  - 1005
+  - 1006
+  - 1007
+  - 1008
+  - 1009
+  - 1010
+  - 1011
+  - 1012
+  - 1013
+  - 1014
+  - 1015
+  - 1016
+  - 1017
+  - 1018
+  - 1019
+  - 1020
+  - 1021
+  - 1022
+  - 1023
+  - 1024
+model_params:
+  baseline_trials: 8
+  overwhelm_trials: 18
+  postformation_trials: 12
+  ordinary_probe_trials: 24
+  safety_recovery_trials: 24
+  witnessed_contact_trials: 60
+  acute_omega: 1.65
+  acute_kappa: 0.05
+  dark_omega: 1.15
+  dark_kappa: 0.05
+  safe_omega: 0.20
+  safe_kappa: 0.70
+  observation_precision_base: 0.42
+  observation_precision_gain: 1.05
+  attenuation_precision_scale: 0.34
+  safe_preference: 1.35
+  aversive_preference: -2.35
+  ambiguity_weight: 0.10
+  epistemic_weight: 0.28
+  attenuation_info_scale: 0.18
+  attenuation_cost: 0.80
+  overt_action_cost: 0.03
+  arousal_pe_scale: 5.2
+  crp_concentration: 0.34
+  crp_threshold_base: 0.085
+  spawn_pressure_threshold: 2.45
+  spawn_pressure_decay: 0.72
+  learning_rate_base: 0.16
+  learning_rate_arousal_gain: 26.0
+  cue_learning_weight: 0.55
+  revision_learning_rate: 2.0
+  accessible_relational_count_good: 1.0
+  accessible_relational_count_old: 0.08
+  accessible_formation_old_count: 0.40
+  pi_part: 4.0
+  lambda_ctx: 0.90
+  beta: 1.00
+  gamma: 1.15
+  E0: 1.0
+  full_prior_met: 2.0
+  full_prior_alone: 12.0
+  reduced_prior_met: 7.0
+  reduced_prior_alone: 7.0
+  prior_log_odds: -5.0
+  revision_score_scale: 1.0
+  collapse_E_threshold: 0.35
+  high_E_threshold: 0.70
+  freeze_revision_threshold: 10.0
+  rescue_revision_floor: 25.0
+  clamp_yoke_tolerance: 12.0
+  depth_grid: [0.0, 0.25, 0.50, 0.75, 1.0]
+  initial_depth_prior: [0.03, 0.05, 0.10, 0.27, 0.55]
+  safety_depth_prior: [0.02, 0.04, 0.09, 0.25, 0.60]
+  clamp_depth_prior: [0.00, 0.01, 0.03, 0.16, 0.80]
+  transition_mix: 0.06
