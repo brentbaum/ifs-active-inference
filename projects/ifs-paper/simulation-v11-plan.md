@@ -109,7 +109,9 @@
 
 ---
 
-## Phase 2 — Make E_t honest
+## Phase 2 — Make E_t honest ✅ RESOLVED (2026-07-09; gate G2 passed with one obstruction; §9 carries a stub for the hyper-model per author rule)
+
+**Outcomes:** T2.1 accepted (11 support / 1 null — emergent collapse via volatility inference, D1 validated in-model at 1.9e-16 + 15.9% broken-collinearity probe, identifiability r=0.84; D3 null with interpretation: C_t is analytically logistic in E_t, support covers only the concave side — the emergent-sigmoid claim rests on Sim 3's transfer threshold). T2.2 accepted (13/13 — collapse is EFE-selected, pragmatic term carries it while epistemic favors introspection throughout; witnessing flips to optimal after 4 co-regulated observations). T2.4 accepted (U2 supported: Self attractor 25/25 grid cells, capture basin 6/25 in the predicted corner, hysteresis as basin-hopping; dose-grading criterion falsified on saturation — floor effect). **T2.5 OBSTRUCTION:** CRP spawn never fired inside the hyper-model (existing cause assimilated acute evidence before posterior-predictive pressure crossed threshold); clamp test of §3's invariant never ran, in either direction; v12 requirement documented in src/sims/sim6b/OBSTRUCTION.md (pre-write proposal scoring against hyper-model state). Full-circle probe salvaged: post-recovery witnessed contact reached 70.6% revision. T2.3 (four-timescales figure) not run — bands 1–3 have data; awaiting author decision.
 
 ### T2.1 — Sim 6a-discrete, Stage 1: inferred depth, inference-face collapse
 **Depends:** T0.4 (stability envelope), T1.3 (bundle + melt machinery). **Spec: Appendix A.1–A.4, A.6 Stage 1.**

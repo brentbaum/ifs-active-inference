@@ -191,6 +191,8 @@ The third simulation carries the claim spine. A two-factor architecture — shar
 
 What the suite shows is that the architecture of §§3–8 produces the clinical shape of IFS — the formation boundary, the protectors-shaped cost structure, the ordering of what revises and what transfers — from the three ingredients the account permits itself. What it cannot show is that human change works this way. The confirmatory tests are §10's.
 
+*[Stub — hyper-model extension; not claimed in this paper's results. Status 2026-07-09: E_t as an inferred variable is demonstrated in isolation — collapse under arousal emerges from volatility inference alone (dose-dependent, recoverable, identifiable from behavior at r = 0.84); the tilt equation of §7 is recovered in-model as the exact mean-field message under log-precision messaging (error 1e-16; 16% when collinearity is deliberately broken, confirming the approximation analysis); precision-allocation policies make the collapse EFE-optimal under threat (pragmatic value carries it; the epistemic term favors introspection throughout), with witnessing becoming the optimal mental policy after a short course of co-regulated evidence; and a continuous variant locates Self as a fixed point that exists across the entire parameter grid, with capture as a metastable competing basin. Not yet demonstrated: the formation coupling. CRP spawning inside the hyper-model never reached threshold (documented obstruction — spawn proposals must be scored against the hyper-model's state before the write), so the clamp test of §3's collapsed-reflexivity invariant has not run, in either direction. Until it does, this section claims none of the hyper-model results; prose to be written when the coupling lands.]*
+
 ---
 
 ## 10. Discussion
