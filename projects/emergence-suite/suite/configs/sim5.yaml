@@ -1,0 +1,62 @@
+experiment: sim5
+label: preregistered
+output_dir: ../runs
+criteria_path: sim5-criteria.yaml
+seeds:
+  - 1001
+  - 1002
+  - 1003
+  - 1004
+  - 1005
+  - 1006
+  - 1007
+  - 1008
+  - 1009
+  - 1010
+  - 1011
+  - 1012
+  - 1013
+  - 1014
+  - 1015
+  - 1016
+  - 1017
+  - 1018
+  - 1019
+  - 1020
+  - 1021
+  - 1022
+  - 1023
+  - 1024
+model_params:
+  n_session_trials: 60
+  contact_start_trial: 6
+  bmr_interval: 5
+  depth_grid: [0.0, 0.25, 0.50, 0.75, 1.0]
+  low_baseline_prior: [0.46, 0.28, 0.16, 0.07, 0.03]
+  medium_baseline_prior: [0.20, 0.24, 0.26, 0.20, 0.10]
+  high_baseline_prior: [0.04, 0.08, 0.16, 0.30, 0.42]
+  dyad_baseline_prior: [0.18, 0.22, 0.24, 0.22, 0.14]
+  transition_mix: 0.08
+  pi_part: 4.0
+  lambda_ctx: 0.90
+  beta: 1.00
+  gamma: 1.15
+  activation_drive: 0.86
+  activation_jitter: 0.04
+  volatility_precision: 1.35
+  coreg_precision: 2.35
+  regulated_coreg_by_depth: [0.08, 0.16, 0.36, 0.74, 0.93]
+  relational_count_good: 1.0
+  relational_count_old: 0.08
+  ordinary_learning_rate: 1.0
+  attenuation_learning_rate: 0.18
+  full_prior_met: 2.0
+  full_prior_alone: 12.0
+  reduced_prior_met: 7.0
+  reduced_prior_alone: 7.0
+  prior_log_odds: -5.0
+  E0: 1.0
+  ownership_prior_concentration: 24.0
+  ownership_learning_rate: 0.72
+  ownership_revision_floor: 8.0
+  ownership_max_sessions: 12

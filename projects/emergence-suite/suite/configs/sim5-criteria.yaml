@@ -1,0 +1,97 @@
+criteria:
+  - id: S5.1a
+    description: "Regulated dyad root revision exceeds dysregulated dyad revision by the preregistered margin on matched protocols."
+    metric_path: metrics.revision.regulated_minus_dysregulated
+    comparator: ">="
+    threshold: 8.0
+    weak_threshold: 4.0
+    opposite_threshold: 0.0
+    kind: success
+  - id: S5.1b
+    description: "Regulated dyad root revision exceeds fluent-but-threatened revision by the preregistered margin with identical words."
+    metric_path: metrics.revision.regulated_minus_fluent_threatened
+    comparator: ">="
+    threshold: 8.0
+    weak_threshold: 4.0
+    opposite_threshold: 0.0
+    kind: success
+  - id: S5.1c
+    description: "The content-identity audit for the regulated/fluent-but-threatened contrast passes."
+    metric_path: metrics.revision.fluent_content_identity_audit
+    comparator: "=="
+    threshold: 1.0
+    weak_threshold: 1.0
+    opposite_threshold: 0.0
+    kind: success
+  - id: S5.2
+    description: "Ablating the fluent-but-threatened regulation channel to the regulated distribution makes it approximate the regulated condition."
+    metric_path: metrics.ablation.fluent_regulation_ablation_relative_gap
+    comparator: "<="
+    threshold: 0.15
+    weak_threshold: 0.25
+    opposite_threshold: 0.60
+    kind: success
+  - id: S5.3a
+    description: "Early low-baseline self-practice fails to reach the root-revision floor."
+    metric_path: metrics.borrowed_then_owned.early_low_self_revision
+    comparator: "<="
+    threshold: 4.0
+    weak_threshold: 6.0
+    opposite_threshold: 10.0
+    kind: success
+  - id: S5.3b
+    description: "After repeated regulated sessions, low-baseline self-practice reaches the ownership revision floor."
+    metric_path: metrics.borrowed_then_owned.late_low_self_revision
+    comparator: ">="
+    threshold: 8.0
+    weak_threshold: 6.0
+    opposite_threshold: 4.0
+    kind: success
+  - id: S5.3c
+    description: "Borrowed depth becomes owned within the registered maximum number of regulated sessions."
+    metric_path: metrics.borrowed_then_owned.session_count_to_ownership
+    comparator: "<="
+    threshold: 12.0
+    weak_threshold: 16.0
+    opposite_threshold: 0.0
+    kind: success
+  - id: A5.1
+    description: "Content-only therapist with perfect parts-language but no regulation channel fails to enable root revision."
+    metric_path: metrics.adversarial.content_only_revision_ratio
+    comparator: "<="
+    threshold: 0.15
+    weak_threshold: 0.25
+    opposite_threshold: 0.75
+    kind: adversarial
+  - id: A5.2a
+    description: "Regulation-only therapist does not fully match the full regulated dyad; content still contributes."
+    metric_path: metrics.adversarial.regulation_only_revision_ratio
+    comparator: "<="
+    threshold: 0.85
+    weak_threshold: 0.95
+    opposite_threshold: 1.05
+    kind: adversarial
+  - id: A5.2b
+    description: "Regulation-only therapist produces at least a partial root-revision effect if the model grants revision without words."
+    metric_path: metrics.adversarial.regulation_only_revision_ratio
+    comparator: ">="
+    threshold: 0.10
+    weak_threshold: 0.05
+    opposite_threshold: 0.0
+    kind: adversarial
+  - id: S5.trace
+    description: "The money figure for client capture index is written."
+    metric_path: metrics.outputs.capture_figure_written
+    comparator: "=="
+    threshold: 1.0
+    weak_threshold: 1.0
+    opposite_threshold: 0.0
+    kind: success
+  - id: S5.audit
+    description: "Depth update audit path routes activation through volatility evidence and co-regulation through the same Bayesian update."
+    metric_path: metrics.audit.depth_update_path_ok
+    comparator: "=="
+    threshold: 1.0
+    weak_threshold: 1.0
+    opposite_threshold: 0.0
+    kind: success

@@ -1,0 +1,162 @@
+{
+    "experiment": "sim5",
+    "config": {
+        "experiment": "sim5",
+        "seeds": [
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019,
+            1020,
+            1021,
+            1022,
+            1023,
+            1024
+        ],
+        "output_dir": "projects/emergence-suite/suite/runs",
+        "label": "preregistered",
+        "model_params": {
+            "E0": 1,
+            "activation_drive": 0.86,
+            "activation_jitter": 0.04,
+            "attenuation_learning_rate": 0.18,
+            "beta": 1,
+            "bmr_interval": 5,
+            "contact_start_trial": 6,
+            "coreg_precision": 2.35,
+            "depth_grid": [
+                0,
+                0.25,
+                0.5,
+                0.75,
+                1
+            ],
+            "dyad_baseline_prior": [
+                0.18,
+                0.22,
+                0.24,
+                0.22,
+                0.14
+            ],
+            "full_prior_alone": 12,
+            "full_prior_met": 2,
+            "gamma": 1.15,
+            "high_baseline_prior": [
+                0.04,
+                0.08,
+                0.16,
+                0.3,
+                0.42
+            ],
+            "lambda_ctx": 0.9,
+            "low_baseline_prior": [
+                0.46,
+                0.28,
+                0.16,
+                0.07,
+                0.03
+            ],
+            "medium_baseline_prior": [
+                0.2,
+                0.24,
+                0.26,
+                0.2,
+                0.1
+            ],
+            "n_session_trials": 60,
+            "ordinary_learning_rate": 1,
+            "ownership_learning_rate": 0.72,
+            "ownership_max_sessions": 12,
+            "ownership_prior_concentration": 24,
+            "ownership_revision_floor": 8,
+            "pi_part": 4,
+            "prior_log_odds": -5,
+            "reduced_prior_alone": 7,
+            "reduced_prior_met": 7,
+            "regulated_coreg_by_depth": [
+                0.08,
+                0.16,
+                0.36,
+                0.74,
+                0.93
+            ],
+            "relational_count_good": 1,
+            "relational_count_old": 0.08,
+            "transition_mix": 0.08,
+            "volatility_precision": 1.35
+        },
+        "sweep_grid": {
+        },
+        "criteria_path": "projects/emergence-suite/suite/configs/sim5-criteria.yaml"
+    },
+    "model": {
+        "client": "Sim2 root revision with Sim6a categorical inferred depth",
+        "therapist": "independent content and regulation source",
+        "audit_path": "activation -> volatility likelihood; therapist regulation -> co-regulation likelihood; both enter update_depth_with_evidence; E_t enters only effective_precisions"
+    },
+    "metrics": {
+        "revision": {
+            "regulated_mean": 18.097701736099406,
+            "dysregulated_mean": 0,
+            "fluent_threatened_mean": 0,
+            "regulated_minus_dysregulated": 18.097701736099406,
+            "regulated_minus_fluent_threatened": 18.097701736099406,
+            "fluent_content_identity_audit": 1,
+            "self_low_mean": 0,
+            "self_medium_mean": 0,
+            "self_high_mean": 14.948691313805588,
+            "ablation_mean": 18.097701736099406
+        },
+        "contrast": {
+            "regulated_mean_capture": 0.4421232318010034,
+            "fluent_threatened_mean_capture": 0.8024688674710543,
+            "capture_gap_fluent_minus_regulated": 0.3603456356700509,
+            "regulated_final_E_t": 0.8035746171228206,
+            "fluent_threatened_final_E_t": 0.034509884350779
+        },
+        "ablation": {
+            "fluent_regulation_ablation_revision": 18.097701736099406,
+            "fluent_regulation_ablation_relative_gap": 0
+        },
+        "borrowed_then_owned": {
+            "early_low_self_revision": 0,
+            "late_low_self_revision": 26.16495513795013,
+            "session_count_to_ownership": 6.958333333333333,
+            "final_learned_prior_E_t": 0.7165535372690105
+        },
+        "adversarial": {
+            "content_only_revision_mean": 0,
+            "content_only_revision_ratio": 0,
+            "regulation_only_revision_mean": 0,
+            "regulation_only_revision_ratio": 0,
+            "regulation_only_capture_drop_vs_content_only": 0.3342596902565627,
+            "regulation_only_interpretation": "depth-support-without-root-revision"
+        },
+        "audit": {
+            "depth_update_path_ok": 1,
+            "no_direct_depth_write": 1,
+            "structural_effective_precision_separated": 1
+        },
+        "outputs": {
+            "capture_figure_written": 1,
+            "capture_figure": "projects/emergence-suite/suite/runs/sim5/preregistered/figures/capture-index.svg"
+        }
+    },
+    "per_seed_metric_count": 216,
+    "trace_row_count": 12960
+}

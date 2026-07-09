@@ -1,0 +1,150 @@
+{
+    "criteria_path": "/Users/brentbaum/dev/research/ifs-active-inference/projects/emergence-suite/suite/configs/sim5-criteria.yaml",
+    "summary_path": "/Users/brentbaum/dev/research/ifs-active-inference/projects/emergence-suite/suite/runs/sim5/preregistered/summary.json",
+    "results": [
+        {
+            "id": "S5.1a",
+            "description": "Regulated dyad root revision exceeds dysregulated dyad revision by the preregistered margin on matched protocols.",
+            "kind": "success",
+            "metric_path": "metrics.revision.regulated_minus_dysregulated",
+            "comparator": ">=",
+            "threshold": 8,
+            "weak_threshold": 4,
+            "opposite_threshold": 0,
+            "value": 18.097701736099406,
+            "label": "support"
+        },
+        {
+            "id": "S5.1b",
+            "description": "Regulated dyad root revision exceeds fluent-but-threatened revision by the preregistered margin with identical words.",
+            "kind": "success",
+            "metric_path": "metrics.revision.regulated_minus_fluent_threatened",
+            "comparator": ">=",
+            "threshold": 8,
+            "weak_threshold": 4,
+            "opposite_threshold": 0,
+            "value": 18.097701736099406,
+            "label": "support"
+        },
+        {
+            "id": "S5.1c",
+            "description": "The content-identity audit for the regulated/fluent-but-threatened contrast passes.",
+            "kind": "success",
+            "metric_path": "metrics.revision.fluent_content_identity_audit",
+            "comparator": "==",
+            "threshold": 1,
+            "weak_threshold": 1,
+            "opposite_threshold": 0,
+            "value": 1,
+            "label": "support"
+        },
+        {
+            "id": "S5.2",
+            "description": "Ablating the fluent-but-threatened regulation channel to the regulated distribution makes it approximate the regulated condition.",
+            "kind": "success",
+            "metric_path": "metrics.ablation.fluent_regulation_ablation_relative_gap",
+            "comparator": "<=",
+            "threshold": 0.15,
+            "weak_threshold": 0.25,
+            "opposite_threshold": 0.6,
+            "value": 0,
+            "label": "support"
+        },
+        {
+            "id": "S5.3a",
+            "description": "Early low-baseline self-practice fails to reach the root-revision floor.",
+            "kind": "success",
+            "metric_path": "metrics.borrowed_then_owned.early_low_self_revision",
+            "comparator": "<=",
+            "threshold": 4,
+            "weak_threshold": 6,
+            "opposite_threshold": 10,
+            "value": 0,
+            "label": "support"
+        },
+        {
+            "id": "S5.3b",
+            "description": "After repeated regulated sessions, low-baseline self-practice reaches the ownership revision floor.",
+            "kind": "success",
+            "metric_path": "metrics.borrowed_then_owned.late_low_self_revision",
+            "comparator": ">=",
+            "threshold": 8,
+            "weak_threshold": 6,
+            "opposite_threshold": 4,
+            "value": 26.16495513795013,
+            "label": "support"
+        },
+        {
+            "id": "S5.3c",
+            "description": "Borrowed depth becomes owned within the registered maximum number of regulated sessions.",
+            "kind": "success",
+            "metric_path": "metrics.borrowed_then_owned.session_count_to_ownership",
+            "comparator": "<=",
+            "threshold": 12,
+            "weak_threshold": 16,
+            "opposite_threshold": 0,
+            "value": 6.958333333333333,
+            "label": "support"
+        },
+        {
+            "id": "A5.1",
+            "description": "Content-only therapist with perfect parts-language but no regulation channel fails to enable root revision.",
+            "kind": "adversarial",
+            "metric_path": "metrics.adversarial.content_only_revision_ratio",
+            "comparator": "<=",
+            "threshold": 0.15,
+            "weak_threshold": 0.25,
+            "opposite_threshold": 0.75,
+            "value": 0,
+            "label": "support"
+        },
+        {
+            "id": "A5.2a",
+            "description": "Regulation-only therapist does not fully match the full regulated dyad; content still contributes.",
+            "kind": "adversarial",
+            "metric_path": "metrics.adversarial.regulation_only_revision_ratio",
+            "comparator": "<=",
+            "threshold": 0.85,
+            "weak_threshold": 0.95,
+            "opposite_threshold": 1.05,
+            "value": 0,
+            "label": "support"
+        },
+        {
+            "id": "A5.2b",
+            "description": "Regulation-only therapist produces at least a partial root-revision effect if the model grants revision without words.",
+            "kind": "adversarial",
+            "metric_path": "metrics.adversarial.regulation_only_revision_ratio",
+            "comparator": ">=",
+            "threshold": 0.1,
+            "weak_threshold": 0.05,
+            "opposite_threshold": 0,
+            "value": 0,
+            "label": "falsified"
+        },
+        {
+            "id": "S5.trace",
+            "description": "The money figure for client capture index is written.",
+            "kind": "success",
+            "metric_path": "metrics.outputs.capture_figure_written",
+            "comparator": "==",
+            "threshold": 1,
+            "weak_threshold": 1,
+            "opposite_threshold": 0,
+            "value": 1,
+            "label": "support"
+        },
+        {
+            "id": "S5.audit",
+            "description": "Depth update audit path routes activation through volatility evidence and co-regulation through the same Bayesian update.",
+            "kind": "success",
+            "metric_path": "metrics.audit.depth_update_path_ok",
+            "comparator": "==",
+            "threshold": 1,
+            "weak_threshold": 1,
+            "opposite_threshold": 0,
+            "value": 1,
+            "label": "support"
+        }
+    ]
+}

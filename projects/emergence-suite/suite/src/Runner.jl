@@ -11,6 +11,8 @@ using ..Reproducibility: build_reproducibility_metadata
 using ..Sim1: run_sim1
 using ..Sim2: run_sim2_config
 using ..Sim3: run_sim3_config
+using ..Sim4: run_sim4_config
+using ..Sim5: run_sim5_config
 using ..Sim6a: run_sim6a_config
 using ..Sim6b: run_sim6b_config
 
@@ -82,6 +84,14 @@ function run_config(config::ExperimentConfig; config_path::Union{Nothing, Abstra
 
     if config.experiment == "sim2"
         return run_sim2_config(config; config_path = config_path, output_dir = output_dir)
+    end
+
+    if config.experiment == "sim4"
+        return run_sim4_config(config; config_path = config_path, output_dir = output_dir)
+    end
+
+    if config.experiment == "sim5"
+        return run_sim5_config(config; config_path = config_path, output_dir = output_dir)
     end
 
     if config.experiment == "sim6a"
