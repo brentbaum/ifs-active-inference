@@ -167,6 +167,20 @@
 **Timebox:** if the CRP-inside-hyper-model coupling cannot be made to run after a bounded attempt, deliver the obstruction note (what breaks: message schedule, state-space growth mid-inference, etc.) — that documents the v12 research problem and is a valid completion.
 **Rules:** no commit; no Pkg.add; own module + minimal dispatch hook; do not modify sims 1/2/3/6a or shared modules.
 
+## Phase 3 — To the journey model (added 2026-07-09 by author direction: "all simulations, push till full journey model or we find it doesn't work")
+
+### T3.1 — Sim 4: trust ledger (spec §3 Sim 4)
+Own module `src/sims/sim4/`. Stack GROWN via Sim 1 machinery (exile + breakthrough-spawned + slow-accumulated protector causes; taxonomy = preregistered readout rules, R1). Each protector cause carries relational Dirichlet counts over what contact yields (trust). Gate = computed net policy output, never a represented state. Self-process (high E_t) selects contact targets by EFE. Must EMERGE: protectors-first ordering (S4.1, no ordering term in the objective — A4.2 audit); forced direct access → flood → spawn/thicken (S4.2); trust asymmetry, rupture setback / attuned gain > 5 (S4.3); habit control (S4.4: policy-only avoidance yields to practice, protector doesn't); methods-not-mission bank-rate dissociation. A4.1 ablation: remove relational banks → descent ordering should degrade. Descent figure.
+
+### T3.2 — Sim 5: dyad (spec §3 Sim 5)
+Own module `src/sims/sim5/`. Client = Sim 2 bundle machinery + Sim 6a inferred depth (collapses under activation via volatility pathway); co-regulation channel = observations of therapist regulation entering the client's level-3 inference as evidence. Conditions: (1) regulated, (2) dysregulated, (3) fluent-but-threatened (parts-language content + threat in regulation channel), (4) self-practice at varying baseline capacity. Criteria: S5.1 revision (1) ≫ (2),(3); S5.2 the (3)-failure is regulation-channel-driven (ablation check); S5.3 borrowed-then-owned (repeated (1) sessions raise standalone depth capacity so late (4) succeeds where early (4) failed). A5.1 content-only therapist fails; A5.2 regulation-only partially succeeds (report honestly wherever it lands).
+
+### T3.3 — Sim 7: one simulated life (spec §3 Sim 7; compose only accepted machinery)
+Composition decision (orchestrator): formation uses Tier-A logged reflexivity (Sim 1) since 6b's inferred-depth formation is obstructed; therapy phase uses inferred depth (6a), dyadic scaffolding (Sim 5), trust/descent (Sim 4), melt (Sim 2), transfer probe (Sim 3). Only the WORLD is scripted. Preregister taxonomy readout rules before the run. Controls: H2 life; resilient-world life. S7.1 blind-rule taxonomy recovery; S7.2 melt order inverts formation order; S7.3 controls fail in their two distinct predicted ways. Seed-robust (majority of seeds).
+
+### T3.4 — Figures (after simulation limit reached)
+Codex figure passes over existing run CSVs: paper-grade phase diagram, hysteresis, transfer gradient (Chamberlin rules, per figure-inspiration.md patterns: identical axes, annotated events, first-passage markers); U3 four-timescales figure (bands from sims 1/2/6a + spawn/prune events from the life run if it exists).
+
 ## Ticket order
 
 T0.1 → T0.5 → {T0.2, T0.3, T0.4 in parallel with T0.5} → T1.1 → T1.2 → T1.3 → **G1 (§9 stub)** → T2.1 → T2.2 → T2.3 → **G2**.
