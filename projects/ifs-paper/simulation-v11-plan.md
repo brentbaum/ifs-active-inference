@@ -203,8 +203,11 @@ Codex figure passes over existing run CSVs: paper-grade phase diagram, hysteresi
 - **T4.5 — Sim 7 as one life, actually**: a single state object from childhood to probe; adult capture lived, not computed; no root-bank replacement; no condition-specific control flow — H1/H2 differ only in graph direction under identical rules; everything inherited from prior events. If the biography does not survive de-authoring, that is the result.
 - **T4.8 — Continuous model nulls**: bifurcation map over self-loop gain / intercept / depth cost / capture penalty; no-self-loop and reversed-loop nulls; hysteresis under identical dynamics across phases (no phase-specific parameter changes).
 
-### Wave 4 — Convergence
-- **T4.9 — sol re-review**: gpt-5.6-sol re-runs the where-is-the-conclusion-built-in review on the reworked suite. FATAL/SERIOUS findings → another wave. Clean (or honestly-dead results) → §9 rewritten from whatever survived, in the conditional register the results actually earn.
+### Wave 4 — Convergence loop (author direction 2026-07-10: run the full cycle TWICE; be extra ambitious; the goal is valid simulations of the whole system)
+- **T4.9 — sol re-review #1**: gpt-5.6-sol re-runs the where-is-the-conclusion-built-in review on the reworked suite.
+- **T4.10 — incorporate + rerun**: every FATAL/SERIOUS (and high-priority MODERATE) finding becomes a fix ticket under the Step A/B protocol; confirmatory reruns on fresh seeds.
+- **T4.11 — orchestrator synthesis**: a first-person what-are-we-learning / what's-working note (not agent-written): which claims survived de-authoring and why, which died and what that says about the theory, what the de-authoring process itself taught us about simulating this system. Written to projects/emergence-suite/reviews/synthesis-<date>.md.
+- **T4.12 — the ambitious loop**: one more full cycle, raising the target — including a second attempt at the 6b formation coupling (pre-write spawn-proposal scoring against hyper-model state, per OBSTRUCTION.md), since "the whole system" includes the freeze happening BECAUSE depth collapses; plus any strongest-version upgrades the synthesis identifies (e.g., H1/H2 out-of-sample model comparison suite-wide). Then sol re-review #2 → final honest accounting. §9 is rewritten only after this, from whatever is actually true.
 
 ## Ticket order
 
