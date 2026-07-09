@@ -1,0 +1,96 @@
+criteria:
+  - id: S6.2a
+    description: "Arousal dose-response monotonically collapses hyper-layer posterior precision across at least four dose levels."
+    metric_path: metrics.collapse.monotone_dose_response
+    comparator: "=="
+    threshold: 1.0
+    weak_threshold: 1.0
+    opposite_threshold: 0.0
+    kind: success
+  - id: S6.2b
+    description: "After burst offset, posterior precision recovers to at least 80% of baseline inside the registered safety window."
+    metric_path: metrics.collapse.recovery_fraction_of_baseline
+    comparator: ">="
+    threshold: 0.80
+    weak_threshold: 0.70
+    opposite_threshold: 0.50
+    kind: success
+  - id: S6.2c
+    description: "Audit path: arousal reaches E_t only through volatility-observation likelihood evaluation and Bayesian depth updating."
+    metric_path: metrics.collapse.audit_path_ok
+    comparator: "=="
+    threshold: 1.0
+    weak_threshold: 1.0
+    opposite_threshold: 0.0
+    kind: success
+  - id: S6.2d
+    description: "The strongest burst lowers posterior precision by at least the registered collapse fraction."
+    metric_path: metrics.collapse.max_collapse_fraction
+    comparator: ">="
+    threshold: 0.35
+    weak_threshold: 0.25
+    opposite_threshold: 0.05
+    kind: success
+  - id: S6.self.1
+    description: "Within one run, bundle-active transparent trials occur below the preregistered o_self sharpness threshold."
+    metric_path: metrics.self_observation.transparent_bundle_trials
+    comparator: ">="
+    threshold: 1.0
+    weak_threshold: 1.0
+    opposite_threshold: 0.0
+    kind: success
+  - id: S6.self.2
+    description: "Within the same run, bundle-active opacified trials occur above the preregistered o_self sharpness threshold."
+    metric_path: metrics.self_observation.opacified_bundle_trials
+    comparator: ">="
+    threshold: 1.0
+    weak_threshold: 1.0
+    opposite_threshold: 0.0
+    kind: success
+  - id: S6.fig.1
+    description: "One-variable biography figure is written with E_t, C_t, and o_self sharpness on one time axis."
+    metric_path: metrics.outputs.biography_figure_written
+    comparator: "=="
+    threshold: 1.0
+    weak_threshold: 1.0
+    opposite_threshold: 0.0
+    kind: success
+  - id: D3
+    description: "C_t as a function of inferred E_t meets the preregistered S-curve fit criterion without using such a function in model code."
+    metric_path: metrics.d3.s_curve_support
+    comparator: "=="
+    threshold: 1.0
+    weak_threshold: 1.0
+    kind: success
+  - id: D1.exact
+    description: "Log-precision message passing matches the closed-form affine tilt within one percent in the collinear regime."
+    metric_path: metrics.d1.max_relative_error_exact
+    comparator: "<="
+    threshold: 0.01
+    weak_threshold: 0.02
+    opposite_threshold: 0.05
+    kind: success
+  - id: D1.probe
+    description: "Deliberately broken collinearity produces a measurable deviation from the one-scalar closed-form tilt."
+    metric_path: metrics.d1.broken_collinearity_max_relative_error
+    comparator: ">="
+    threshold: 0.03
+    weak_threshold: 0.01
+    opposite_threshold: 0.001
+    kind: adversarial
+  - id: A6.2
+    description: "Simulated inversion from behavior and observations recovers the hidden depth trajectory."
+    metric_path: metrics.identifiability.mean_truth_correlation
+    comparator: ">="
+    threshold: 0.80
+    weak_threshold: 0.70
+    opposite_threshold: 0.40
+    kind: success
+  - id: S6.stability.1
+    description: "No second-order oscillation occurs inside the verified precision and learning-rate envelope."
+    metric_path: metrics.stability.oscillation_rate_inside_envelope
+    comparator: "<="
+    threshold: 0.0
+    weak_threshold: 0.05
+    opposite_threshold: 0.20
+    kind: success
