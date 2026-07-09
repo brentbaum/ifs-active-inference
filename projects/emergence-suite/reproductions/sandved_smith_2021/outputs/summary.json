@@ -1,0 +1,54 @@
+{
+  "params": {
+    "n_steps": 34,
+    "gamma_l1_focused": 5.0,
+    "gamma_l1_distracted": 0.65,
+    "gamma_l2_high_meta": 1.5,
+    "gamma_l2_low_meta": 0.85,
+    "gamma_l2_min": 0.5,
+    "gamma_l2_max": 8.0,
+    "gamma_l2_lr": 0.0,
+    "policy_horizon": 3,
+    "refocus_cost": 5.0,
+    "policy_precision": 8.0,
+    "spontaneous_switch": 0.0,
+    "seed": 11
+  },
+  "figure_8": {
+    "mean_dwell": 2.0,
+    "max_dwell": 2.0,
+    "refocus_count": 1,
+    "policy_switches": 2,
+    "gamma_l2_min": 1.5,
+    "gamma_l2_max": 1.5
+  },
+  "figure_10_high_meta": {
+    "mean_dwell": 2.0,
+    "max_dwell": 2.0,
+    "refocus_count": 2,
+    "policy_switches": 4,
+    "gamma_l2_min": 1.5,
+    "gamma_l2_max": 1.5
+  },
+  "figure_10_low_meta": {
+    "mean_dwell": 3.0,
+    "max_dwell": 3.0,
+    "refocus_count": 2,
+    "policy_switches": 4,
+    "gamma_l2_min": 0.85,
+    "gamma_l2_max": 0.85
+  },
+  "stability_sweep": {
+    "rows": 280,
+    "stable_rows": 120,
+    "stable_fraction": 0.42857142857142855,
+    "stable_lr_max": 0.8,
+    "stable_horizon_max": 12,
+    "safe_precision_bounds_observed": [
+      "0.2-14",
+      "0.3-6",
+      "0.5-8",
+      "0.8-10"
+    ]
+  }
+}

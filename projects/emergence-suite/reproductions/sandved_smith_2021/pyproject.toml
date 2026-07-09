@@ -1,0 +1,13 @@
+[project]
+name = "sandved-smith-2021-reproduction"
+version = "0.1.0"
+description = "Standalone reproduction of Sandved-Smith et al. 2021 deep parametric active inference dynamics"
+requires-python = ">=3.10"
+dependencies = [
+  "matplotlib>=3.7",
+  "numpy>=1.24",
+  "pandas>=2.0",
+]
+
+[tool.uv]
+package = false

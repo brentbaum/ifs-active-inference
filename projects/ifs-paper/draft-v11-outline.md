@@ -305,6 +305,10 @@ Rules extracted from Brent's feedback while drafting §1–§4 of draft-v11-theo
 
 ## Decision log
 
+### 2026-07-09 — T0.1 framework decision: Julia v10-core port
+
+**Decision:** Sims 1–4 run on a Julia port of the v10 discrete active-inference core, keeping the `beautiful-simulation`/RxInfer run contract at the boundary (adapters, not a shared engine). Runner-up discrete-in-RxInfer disqualified: mid-run latent-cause growth (the Sim 1/4 requirement) forces graph reconstruction per spawn, putting the real substrate outside RxInfer anyway; pymdp loses on wall-clock (~2×), Agent-reinit-per-spawn, and a Python/Julia boundary through Sim 7. Evidence: `projects/emergence-suite/decisions/framework-memo.md` + runnable spikes (both learn, both survive trial-100 state growth). Orchestrator fix during review: both spikes' BMR helper replaced — count-averaging comparison (no Occam term, ΔF≡0 on symmetric data) → pooled-evidence tying comparison + canonical Friston-2017 prior-swap form matching `derivations/d2_toy_demo.py`.
+
 ### 2026-07-09 — Simulation program reset: v11 Emergence Suite
 
 **Decision:** the v10 simulation program (personal repo) no longer serves the paper; `simulation-v11-spec.md` is the program of record. Verdict on old assets: v3's transfer design and adversarial protocol are kept (skeleton of new Sim 3); v2's Channel 5 and v4/v9's gate-as-hidden-factor are retired as ontology conflicts with §7 ("no channel opens") and §5 (gate = net policy output, not a part); polarization stays parked per §10. Governing constraint: **nothing scripted, everything grown** — every derived IFS construct (taxonomy, orderings, ritual timing) must emerge from precision dynamics + spawn/prune structure learning + one depth variable, or the sim contradicts the paper's derivation register. Suite: (1) freezing phase diagram, (2) hysteresis loop with BMR melt, (3) generalization gradient, (4) trust ledger, (5) dyad/borrowed depth, (6) inferred-E_t hyper-model on the beautiful-simulation stack, (7) one-simulated-life flagship. Minimum viable §9 = sims 3+1+2. The spec also carries the collected falsifiable-experiments list for Edmundo & Ruben.
