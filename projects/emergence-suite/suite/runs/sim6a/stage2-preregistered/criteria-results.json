@@ -1,0 +1,162 @@
+{
+    "criteria_path": "/Users/brentbaum/dev/research/ifs-active-inference/projects/emergence-suite/suite/configs/sim6a-stage2-criteria.yaml",
+    "summary_path": "/Users/brentbaum/dev/research/ifs-active-inference/projects/emergence-suite/suite/runs/sim6a/stage2-preregistered/summary.json",
+    "results": [
+        {
+            "id": "S2s.1.rank",
+            "description": "Under acute threat beliefs, EFE ranks allocate-to-threat above allocate-to-reflexive.",
+            "kind": "success",
+            "metric_path": "metrics.stage2.collapse_selected.acute_threat_rank_support",
+            "comparator": "==",
+            "threshold": 1,
+            "weak_threshold": 1,
+            "opposite_threshold": 0,
+            "value": 1,
+            "label": "support"
+        },
+        {
+            "id": "S2s.1.term",
+            "description": "The acute-threat ranking is carried by pragmatic value rather than epistemic value.",
+            "kind": "success",
+            "metric_path": "metrics.stage2.collapse_selected.pragmatic_term_carries_ranking",
+            "comparator": "==",
+            "threshold": 1,
+            "weak_threshold": 1,
+            "opposite_threshold": 0,
+            "value": 1,
+            "label": "support"
+        },
+        {
+            "id": "S2s.1.figure",
+            "description": "The single Stage-2 figure is the EFE decomposition across threat level and shows the policy crossover.",
+            "kind": "success",
+            "metric_path": "metrics.stage2.outputs.efe_crossover_figure_written",
+            "comparator": "==",
+            "threshold": 1,
+            "weak_threshold": 1,
+            "opposite_threshold": 0,
+            "value": 1,
+            "label": "support"
+        },
+        {
+            "id": "S2s.1.robust",
+            "description": "The acute-threat ranking survives all three preregistered aversive-cost settings.",
+            "kind": "success",
+            "metric_path": "metrics.stage2.collapse_selected.preference_sweep_support_count",
+            "comparator": ">=",
+            "threshold": 3,
+            "weak_threshold": 2,
+            "opposite_threshold": 0,
+            "value": 3,
+            "label": "support"
+        },
+        {
+            "id": "S2s.2.initial",
+            "description": "Under activation before safe co-regulated evidence, allocate-to-reflexive is EFE-dominated.",
+            "kind": "success",
+            "metric_path": "metrics.stage2.witnessing_policy.initial_reflexive_dominated",
+            "comparator": "==",
+            "threshold": 1,
+            "weak_threshold": 1,
+            "opposite_threshold": 0,
+            "value": 1,
+            "label": "support"
+        },
+        {
+            "id": "S2s.2.flip",
+            "description": "After the preregistered safe/co-regulated evidence course, allocate-to-reflexive becomes EFE-optimal.",
+            "kind": "success",
+            "metric_path": "metrics.stage2.witnessing_policy.reflexive_flip_observed",
+            "comparator": "==",
+            "threshold": 1,
+            "weak_threshold": 1,
+            "opposite_threshold": 0,
+            "value": 1,
+            "label": "support"
+        },
+        {
+            "id": "S2s.2.bound",
+            "description": "The witnessing-policy flip occurs within the preregistered evidence grid.",
+            "kind": "success",
+            "metric_path": "metrics.stage2.witnessing_policy.flip_point_evidence",
+            "comparator": "<=",
+            "threshold": 36,
+            "weak_threshold": 36,
+            "opposite_threshold": 0,
+            "value": 4,
+            "label": "support"
+        },
+        {
+            "id": "S2s.3.dose",
+            "description": "With policies enabled, the Stage-1 arousal dose-response collapse remains monotone.",
+            "kind": "success",
+            "metric_path": "metrics.stage1_replication.collapse.monotone_dose_response",
+            "comparator": "==",
+            "threshold": 1,
+            "weak_threshold": 1,
+            "opposite_threshold": 0,
+            "value": 1,
+            "label": "support"
+        },
+        {
+            "id": "S2s.3.collapse",
+            "description": "With policies enabled, the strongest burst still reaches the Stage-1 collapse tolerance.",
+            "kind": "success",
+            "metric_path": "metrics.stage1_replication.collapse.max_collapse_fraction",
+            "comparator": ">=",
+            "threshold": 0.35,
+            "weak_threshold": 0.25,
+            "opposite_threshold": 0.05,
+            "value": 0.9527847020936911,
+            "label": "support"
+        },
+        {
+            "id": "S2s.3.recovery",
+            "description": "With policies enabled, posterior precision recovers to at least 80% of baseline inside the safety window.",
+            "kind": "success",
+            "metric_path": "metrics.stage1_replication.collapse.recovery_fraction_of_baseline",
+            "comparator": ">=",
+            "threshold": 0.8,
+            "weak_threshold": 0.7,
+            "opposite_threshold": 0.5,
+            "value": 0.9826383111683582,
+            "label": "support"
+        },
+        {
+            "id": "S2s.3.self.transparent",
+            "description": "With policies enabled, the Stage-1 transparent active-bundle regime still occurs.",
+            "kind": "success",
+            "metric_path": "metrics.stage1_replication.self_observation.transparent_bundle_trials",
+            "comparator": ">=",
+            "threshold": 1,
+            "weak_threshold": 1,
+            "opposite_threshold": 0,
+            "value": 23,
+            "label": "support"
+        },
+        {
+            "id": "S2s.3.self.opacified",
+            "description": "With policies enabled, the Stage-1 opacified active-bundle regime still occurs.",
+            "kind": "success",
+            "metric_path": "metrics.stage1_replication.self_observation.opacified_bundle_trials",
+            "comparator": ">=",
+            "threshold": 1,
+            "weak_threshold": 1,
+            "opposite_threshold": 0,
+            "value": 5,
+            "label": "support"
+        },
+        {
+            "id": "S2s.3.d1",
+            "description": "With policies enabled, D1 exact effective precisions remain within one percent.",
+            "kind": "success",
+            "metric_path": "metrics.stage1_replication.d1.max_relative_error_exact",
+            "comparator": "<=",
+            "threshold": 0.01,
+            "weak_threshold": 0.02,
+            "opposite_threshold": 0.05,
+            "value": 1.9097194105149045e-16,
+            "label": "support"
+        }
+    ]
+}

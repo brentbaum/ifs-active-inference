@@ -1,0 +1,400 @@
+{
+    "experiment": "sim6a",
+    "config": {
+        "experiment": "sim6a",
+        "seeds": [
+            2001,
+            2002,
+            2003,
+            2004,
+            2005,
+            2006,
+            2007,
+            2008,
+            2009,
+            2010,
+            2011,
+            2012,
+            2013,
+            2014,
+            2015,
+            2016,
+            2017,
+            2018,
+            2019,
+            2020,
+            2021,
+            2022,
+            2023,
+            2024
+        ],
+        "output_dir": "projects/emergence-suite/suite/runs",
+        "label": "stage2-preregistered",
+        "model_params": {
+            "activation_threat_level": 0.65,
+            "acute_threat_level": 0.9,
+            "ambiguity_weight": 0.25,
+            "aversive_cost": 10,
+            "aversive_cost_sweep": [
+                8,
+                10,
+                12
+            ],
+            "baseline_trials": 12,
+            "beta": 1,
+            "broken_collinearity_curvature": 0.85,
+            "bundle_active_threshold": 0.6,
+            "bundle_dir": "../runs/sim1/sim1-t1-2/artifacts",
+            "bundle_files": [
+                "bundle_seed1020_omega1p4_kappa0p0.json",
+                "bundle_seed1001_omega1p4_kappa0p1.json",
+                "bundle_seed1008_omega1p4_kappa0p1.json",
+                "bundle_seed1013_omega1p4_kappa0p1.json",
+                "bundle_seed1004_omega1p6_kappa0p0.json",
+                "bundle_slow_seed1001_trial105.json",
+                "bundle_slow_seed1002_trial95.json"
+            ],
+            "collapse_threshold_fraction": 0.35,
+            "context_threat_probability": 0.14,
+            "control_saturation": 1.5,
+            "cue_activation_safe": 1,
+            "cue_activation_threat": 1.35,
+            "dark_stop": 36,
+            "depth_grid": [
+                0,
+                0.25,
+                0.5,
+                0.75,
+                1
+            ],
+            "dose_levels": [
+                0.12,
+                0.32,
+                0.52,
+                0.72,
+                0.92
+            ],
+            "epistemic_value_weight": 1.9,
+            "formation_start": 13,
+            "formation_stop": 18,
+            "gamma": 1.15,
+            "identifiability_threshold": 0.8,
+            "initial_depth_prior": [
+                0.03,
+                0.05,
+                0.1,
+                0.27,
+                0.55
+            ],
+            "lambda_ctx": 0.9,
+            "n_trials": 72,
+            "opacified_sharpness_min": 0.62,
+            "opacified_stop": 48,
+            "pi_part": 4,
+            "policy_mode": true,
+            "reflexive_control_gain": 0.55,
+            "reflexive_policy_depth_precision": 1.25,
+            "reflexive_policy_self_precision": 1.55,
+            "reflexive_policy_threat_precision": 0.85,
+            "reflexive_safety_prior_alpha": 1,
+            "reflexive_safety_prior_beta": 9,
+            "safety_depth_prior": [
+                0.02,
+                0.04,
+                0.09,
+                0.25,
+                0.6
+            ],
+            "safety_recovery_window": 18,
+            "self_reliability": [
+                0.52,
+                0.58,
+                0.68,
+                0.83,
+                0.94
+            ],
+            "stage2_enabled": true,
+            "threat_control_base": 0.15,
+            "threat_control_gain": 0.5,
+            "threat_level_grid": [
+                0.05,
+                0.15,
+                0.3,
+                0.45,
+                0.6,
+                0.75,
+                0.9
+            ],
+            "threat_policy_depth_precision": 1,
+            "threat_policy_self_precision": 0.35,
+            "threat_policy_threat_precision": 2.4,
+            "transition_mix": 0.06,
+            "transparent_sharpness_max": 0.22,
+            "witnessing_evidence_grid": [
+                0,
+                2,
+                4,
+                6,
+                8,
+                10,
+                12,
+                14,
+                16,
+                18,
+                20,
+                24,
+                28,
+                32,
+                36
+            ]
+        },
+        "sweep_grid": {
+        },
+        "criteria_path": "projects/emergence-suite/suite/configs/sim6a-stage2-criteria.yaml"
+    },
+    "imported_bundles": {
+        "manifest_dir": "projects/emergence-suite/suite/runs/sim1/sim1-t1-2/artifacts",
+        "bundle_count": 7,
+        "bundles": [
+            {
+                "file": "bundle_seed1020_omega1p4_kappa0p0.json",
+                "seed": 1020,
+                "route": "initial_cause",
+                "family": "acute",
+                "structural_precision": 726.8865893563584,
+                "threat_probability": 0.49311670485550746
+            },
+            {
+                "file": "bundle_seed1001_omega1p4_kappa0p1.json",
+                "seed": 1001,
+                "route": "initial_cause",
+                "family": "acute",
+                "structural_precision": 707.1839435416532,
+                "threat_probability": 0.4598963178753958
+            },
+            {
+                "file": "bundle_seed1008_omega1p4_kappa0p1.json",
+                "seed": 1008,
+                "route": "initial_cause",
+                "family": "acute",
+                "structural_precision": 725.7739906385775,
+                "threat_probability": 0.47872210103291746
+            },
+            {
+                "file": "bundle_seed1013_omega1p4_kappa0p1.json",
+                "seed": 1013,
+                "route": "initial_cause",
+                "family": "acute",
+                "structural_precision": 679.2225626277732,
+                "threat_probability": 0.42920201968839566
+            },
+            {
+                "file": "bundle_seed1004_omega1p6_kappa0p0.json",
+                "seed": 1004,
+                "route": "initial_cause",
+                "family": "acute",
+                "structural_precision": 783.7328008669289,
+                "threat_probability": 0.5391430191469735
+            },
+            {
+                "file": "bundle_slow_seed1001_trial105.json",
+                "seed": 1001,
+                "route": "slow_accumulation",
+                "family": "slow_accumulation",
+                "structural_precision": 3619.6633897361817,
+                "threat_probability": 0.449883816140074
+            },
+            {
+                "file": "bundle_slow_seed1002_trial95.json",
+                "seed": 1002,
+                "route": "slow_accumulation",
+                "family": "slow_accumulation",
+                "structural_precision": 3592.1741486881315,
+                "threat_probability": 0.4486876988842782
+            }
+        ]
+    },
+    "model_contract": {
+        "depth_states": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+        ],
+        "beta": 1,
+        "gamma": 1.15,
+        "message_convention": "effective precision = exp(E_q[log precision])",
+        "collapse_path": "arousal is evaluated only as a volatility observation before depth filtering",
+        "transparent_sharpness_max": 0.22,
+        "opacified_sharpness_min": 0.62,
+        "stage2_policy_mode": 1,
+        "policy_efe_inputs": "current depth posterior, current cause-bank threat belief, learned reflexive-safety contingency, fixed preferences"
+    },
+    "metrics": {
+        "collapse": {
+            "dose_levels": [
+                0.12,
+                0.32,
+                0.52,
+                0.72,
+                0.92
+            ],
+            "mean_depth_precision_by_dose": [
+                0.5857393682908523,
+                0.3320690187822763,
+                0.1139459580213893,
+                0.03495780624056814,
+                0.01868934024506566
+            ],
+            "mean_collapse_fraction_by_dose": [
+                -0.7698232762337144,
+                -0.003353215734571508,
+                0.6557099972169415,
+                0.8943742856978255,
+                0.9435297827433304
+            ],
+            "monotone_dose_response": 1,
+            "max_collapse_fraction": 0.9527847020936911,
+            "recovery_fraction_of_baseline": 0.9826383111683582,
+            "mean_first_recovery_trial": 39.166666666666664,
+            "audit_path_ok": 1,
+            "audit_path": "arousal -> volatility_observation -> update_depth_with_evidence -> effective_precisions -> E_t"
+        },
+        "self_observation": {
+            "transparent_bundle_trials": 23,
+            "opacified_bundle_trials": 5
+        },
+        "outputs": {
+            "biography_figure_written": 1,
+            "biography_figure": "projects/emergence-suite/suite/runs/sim6a/stage2-preregistered/figures/biography.svg"
+        },
+        "d1": {
+            "max_relative_error_exact": 1.9097194105149045e-16,
+            "broken_collinearity_max_relative_error": 0.1585349699773781
+        },
+        "d3": {
+            "s_curve_support": 0,
+            "raw_linear_r2": 0.9790381944736282,
+            "log_odds_linear_r2": 0.9279179063680465,
+            "r2_gap": -0.05112028810558167,
+            "monotone_descending": 1,
+            "grid_capture_index": [
+                0.8571428571428571,
+                0.778036324700579,
+                0.6718930313641581,
+                0.5446952450997373,
+                0.4113855504528569
+            ],
+            "grid_second_difference_min": -0.027036760894142864,
+            "grid_second_difference_max": -0.006111908382459563,
+            "curvature_sign_change": 0
+        },
+        "identifiability": {
+            "mean_truth_correlation": 0.8403393928203484,
+            "min_truth_correlation": 0.8403393928203486
+        },
+        "stability": {
+            "oscillating_seed_count": 0,
+            "seed_count": 24,
+            "oscillation_rate_inside_envelope": 0,
+            "effective_precision_min": 0.9103760123486823,
+            "effective_precision_max": 12.83145922119394
+        },
+        "stage1_replication": {
+            "collapse": {
+                "dose_levels": [
+                    0.12,
+                    0.32,
+                    0.52,
+                    0.72,
+                    0.92
+                ],
+                "mean_depth_precision_by_dose": [
+                    0.5857393682908523,
+                    0.3320690187822763,
+                    0.1139459580213893,
+                    0.03495780624056814,
+                    0.01868934024506566
+                ],
+                "mean_collapse_fraction_by_dose": [
+                    -0.7698232762337144,
+                    -0.003353215734571508,
+                    0.6557099972169415,
+                    0.8943742856978255,
+                    0.9435297827433304
+                ],
+                "monotone_dose_response": 1,
+                "max_collapse_fraction": 0.9527847020936911,
+                "recovery_fraction_of_baseline": 0.9826383111683582,
+                "mean_first_recovery_trial": 39.166666666666664,
+                "audit_path_ok": 1,
+                "audit_path": "arousal -> volatility_observation -> update_depth_with_evidence -> effective_precisions -> E_t"
+            },
+            "self_observation": {
+                "transparent_bundle_trials": 23,
+                "opacified_bundle_trials": 5
+            },
+            "outputs": {
+                "biography_figure_written": 1,
+                "biography_figure": "projects/emergence-suite/suite/runs/sim6a/stage2-preregistered/figures/biography.svg"
+            },
+            "d1": {
+                "max_relative_error_exact": 1.9097194105149045e-16,
+                "broken_collinearity_max_relative_error": 0.1585349699773781
+            },
+            "d3": {
+                "s_curve_support": 0,
+                "raw_linear_r2": 0.9790381944736282,
+                "log_odds_linear_r2": 0.9279179063680465,
+                "r2_gap": -0.05112028810558167,
+                "monotone_descending": 1,
+                "grid_capture_index": [
+                    0.8571428571428571,
+                    0.778036324700579,
+                    0.6718930313641581,
+                    0.5446952450997373,
+                    0.4113855504528569
+                ],
+                "grid_second_difference_min": -0.027036760894142864,
+                "grid_second_difference_max": -0.006111908382459563,
+                "curvature_sign_change": 0
+            },
+            "identifiability": {
+                "mean_truth_correlation": 0.8403393928203484,
+                "min_truth_correlation": 0.8403393928203486
+            },
+            "stability": {
+                "oscillating_seed_count": 0,
+                "seed_count": 24,
+                "oscillation_rate_inside_envelope": 0,
+                "effective_precision_min": 0.9103760123486823,
+                "effective_precision_max": 12.83145922119394
+            }
+        },
+        "stage2": {
+            "collapse_selected": {
+                "acute_threat_rank_support": 1,
+                "pragmatic_term_carries_ranking": 1,
+                "acute_delta_total_reflexive_minus_threat": 0.8269959354923078,
+                "acute_delta_pragmatic_reflexive_minus_threat": 1.3695720225620018,
+                "acute_delta_epistemic_contribution_reflexive_minus_threat": -0.6800799314750194,
+                "crossover_threat_level": 0.45,
+                "preference_sweep_support_count": 3
+            },
+            "witnessing_policy": {
+                "initial_reflexive_dominated": 1,
+                "reflexive_flip_observed": 1,
+                "flip_point_evidence": 4,
+                "final_selected_policy": "allocate-to-reflexive",
+                "final_reflexive_safety_belief": 0.8043478260869565
+            },
+            "outputs": {
+                "efe_crossover_figure_written": 1,
+                "efe_crossover_figure": "projects/emergence-suite/suite/runs/sim6a/stage2-preregistered/figures/stage2-efe-crossover.svg"
+            }
+        }
+    },
+    "per_seed_metric_count": 24,
+    "trace_row_count": 1728
+}
