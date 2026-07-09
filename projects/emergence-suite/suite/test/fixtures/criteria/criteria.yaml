@@ -1,0 +1,33 @@
+criteria:
+  - id: strong
+    description: strong support
+    kind: success
+    metric_path: metrics.strong
+    comparator: ">="
+    threshold: 1.0
+    weak_threshold: 0.5
+    opposite_threshold: -0.25
+  - id: weak
+    description: weak support
+    kind: success
+    metric_path: metrics.weak
+    comparator: ">="
+    threshold: 1.0
+    weak_threshold: 0.5
+    opposite_threshold: -0.25
+  - id: none
+    description: null result
+    kind: success
+    metric_path: metrics.none
+    comparator: ">="
+    threshold: 1.0
+    weak_threshold: 0.5
+    opposite_threshold: -0.25
+  - id: opposite
+    description: falsified result
+    kind: success
+    metric_path: metrics.opposite
+    comparator: ">="
+    threshold: 1.0
+    weak_threshold: 0.5
+    opposite_threshold: -0.25

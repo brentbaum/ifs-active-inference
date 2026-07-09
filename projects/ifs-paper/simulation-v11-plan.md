@@ -14,7 +14,9 @@
 
 ---
 
-## Phase 0 — Foundations
+## Phase 0 — Foundations ✅ COMPLETE (2026-07-09; all five tickets Codex-executed, orchestrator-reviewed, committed)
+
+**Gate G0 outcomes:** framework = Julia v10-core port (memo in `projects/emergence-suite/decisions/`); D1 landed exactly under log-precision messaging (β/γ = map slopes; natural-precision caveat constrains T2.1); D2 landed architecturally + conditionally-inferentially (T1.3 must use reflexively-accessible counts for a derived gate); Sandved-Smith reproduced with stability envelope (A(2) precision [0.5,8.0], LR ≤ 0.8, horizon ≤ 5; provisional if T2.1 changes the update scheme); harness live at `projects/emergence-suite/suite/` (33 tests green; run + criteria-evaluator contract verified). Review fixes applied during acceptance: both T0.1 spikes' BMR helpers corrected (count-averaging → pooled-evidence tying + canonical prior-swap); canonical BMR now lives in the suite's `BMR` module, pinned to D2 demo values.
 
 ### T0.1 — Framework decision spike
 **Depends:** none. **Timebox: 3 days.**

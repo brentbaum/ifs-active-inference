@@ -1,0 +1,10 @@
+experiment: dummy
+label: smoke
+output_dir: ../../runs
+seeds: [11, 23, 37]
+model_params:
+  trials: 120
+  growth_trial: 60
+sweep_grid:
+  condition: [baseline]
+criteria_path: criteria.yaml

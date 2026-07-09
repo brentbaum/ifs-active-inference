@@ -1,0 +1,25 @@
+criteria:
+  - id: DUMMY-S1
+    description: Every seed exercises dynamic growth in the toy POMDP.
+    kind: success
+    metric_path: metrics.growth_rate
+    comparator: ">="
+    threshold: 1.0
+    weak_threshold: 0.66
+    opposite_threshold: 0.0
+  - id: DUMMY-S2
+    description: Cross-trial A evidence improves on average.
+    kind: success
+    metric_path: metrics.mean_concentration_gain
+    comparator: ">"
+    threshold: 0.005
+    weak_threshold: 0.001
+    opposite_threshold: -0.001
+  - id: DUMMY-A1
+    description: Final A entropy must not explode above the uninformative two-outcome baseline.
+    kind: adversarial
+    metric_path: metrics.mean_final_A_entropy
+    comparator: "<"
+    threshold: 0.7
+    weak_threshold: 0.75
+    opposite_threshold: 1.0
