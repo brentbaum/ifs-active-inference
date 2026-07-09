@@ -61,7 +61,9 @@
 
 ---
 
-## Phase 1 — Minimum viable §9
+## Phase 1 — Minimum viable §9 ✅ COMPLETE (2026-07-09; Gate G1 passed — §9 written into draft-v11-theory.md)
+
+**Outcomes:** all three sims accepted after one redesign cycle each. Sim 3: 16 support / 1 weak (matched-fit 0.102) / 1 null (A3.2 gap +0.038, correct direction below margin); redesign fixed lobotomized H2 → genuine reversed root, and decoupled perceptual_similarity from root_coupling. Sim 1: 7 support / 2 falsified-with-interpretation (revisable-region threshold arithmetically unreachable at these budgets — criteria lesson; attenuation localizes to a low-control band scaling with ω, a boundary curve not a box); redesign replaced closed-form readouts with real trial loops; slow path crosses without spawning in all seeds. Sim 2: 14/14 support with the D2-derived melt gate (no imposed E_t block) after de-scripting the witnessed_contact flag (observations route by likelihood content; relational weight = channel effective precision under E_t); content-swap does not melt (C3 survives); emergent nuance: capture banks relational evidence (~34% weight) that BMR cannot access until depth rises.
 
 ### T1.1 — Sim 3: generalization gradient
 **Depends:** T0.5. **Spec: §3 Sim 3.** Reference implementation: v10's `ifs_simulation_v3.jl` + `simulation-v3-spec.md` (port the design, not the code style).
