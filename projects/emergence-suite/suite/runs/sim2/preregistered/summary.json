@@ -1,0 +1,282 @@
+{
+    "experiment": "sim2",
+    "config": {
+        "experiment": "sim2",
+        "seeds": [
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019,
+            1020,
+            1021,
+            1022,
+            1023,
+            1024
+        ],
+        "output_dir": "projects/emergence-suite/suite/runs",
+        "label": "preregistered",
+        "model_params": {
+            "E0": 1,
+            "E0_sweep": [
+                0.5,
+                1.0,
+                2.0
+            ],
+            "attenuation_learning_rate": 0.18,
+            "beta_se": 1,
+            "bmr_interval": 5,
+            "bundle_dir": "../runs/sim1/sim1-t1-2/artifacts",
+            "bundle_files": [
+                "bundle_seed1020_omega1p4_kappa0p0.json",
+                "bundle_seed1001_omega1p4_kappa0p1.json",
+                "bundle_seed1008_omega1p4_kappa0p1.json",
+                "bundle_seed1013_omega1p4_kappa0p1.json",
+                "bundle_seed1004_omega1p6_kappa0p0.json",
+                "bundle_slow_seed1001_trial105.json",
+                "bundle_slow_seed1002_trial95.json"
+            ],
+            "competence_policy_floor": 0.12,
+            "danger_avoidance_bias": 0.55,
+            "early_prompt_max_trial": 10,
+            "flip_trial": 3,
+            "full_prior_alone": 12,
+            "full_prior_met": 2,
+            "gamma_se": 1.2,
+            "high_E": 0.9,
+            "lambda_ctx": 1,
+            "late_prompt_trial": 45,
+            "low_E": 0.05,
+            "n_melt_trials": 60,
+            "ordinary_learning_rate": 1,
+            "pi_part": 4,
+            "policy_learning_rate": 0.25,
+            "policy_precision": 3,
+            "prior_log_odds": -5,
+            "prior_odds_offsets": [
+                -1,
+                0,
+                1
+            ],
+            "reduced_prior_alone": 7,
+            "reduced_prior_met": 7,
+            "relational_count_good": 1,
+            "relational_count_old": 0.08,
+            "root_avoidance_bias": 0.48
+        },
+        "sweep_grid": {
+        },
+        "criteria_path": "projects/emergence-suite/suite/configs/sim2-criteria.yaml"
+    },
+    "imported_bundles": {
+        "manifest_dir": "projects/emergence-suite/suite/runs/sim1/sim1-t1-2/artifacts",
+        "bundle_count": 7,
+        "acute_bundle_count": 5,
+        "slow_accumulation_bundle_count": 2,
+        "bundles": [
+            {
+                "file": "bundle_seed1020_omega1p4_kappa0p0.json",
+                "seed": 1020,
+                "route": "initial_cause",
+                "family": "acute",
+                "structural_precision": 726.8865893563584
+            },
+            {
+                "file": "bundle_seed1001_omega1p4_kappa0p1.json",
+                "seed": 1001,
+                "route": "initial_cause",
+                "family": "acute",
+                "structural_precision": 707.1839435416532
+            },
+            {
+                "file": "bundle_seed1008_omega1p4_kappa0p1.json",
+                "seed": 1008,
+                "route": "initial_cause",
+                "family": "acute",
+                "structural_precision": 725.7739906385775
+            },
+            {
+                "file": "bundle_seed1013_omega1p4_kappa0p1.json",
+                "seed": 1013,
+                "route": "initial_cause",
+                "family": "acute",
+                "structural_precision": 679.2225626277732
+            },
+            {
+                "file": "bundle_seed1004_omega1p6_kappa0p0.json",
+                "seed": 1004,
+                "route": "initial_cause",
+                "family": "acute",
+                "structural_precision": 783.7328008669289
+            },
+            {
+                "file": "bundle_slow_seed1001_trial105.json",
+                "seed": 1001,
+                "route": "slow_accumulation",
+                "family": "slow_accumulation",
+                "structural_precision": 3619.6633897361817
+            },
+            {
+                "file": "bundle_slow_seed1002_trial95.json",
+                "seed": 1002,
+                "route": "slow_accumulation",
+                "family": "slow_accumulation",
+                "structural_precision": 3592.1741486881315
+            }
+        ]
+    },
+    "d2_melt_gate": {
+        "implementation": "canonical prior-swap BMR over reflexively accessible counts",
+        "posterior": "a_E = b_F + rho(E_t) * n",
+        "rho": "E_t / (E_t + E_0)",
+        "E0": 1,
+        "prior_log_odds": -5,
+        "delta_at_E0_zero": 0
+    },
+    "metrics": {
+        "regimes": {
+            "root_revision_mean_by_regime": {
+                "contact-under-capture": 0,
+                "dissociative-quiet": 0,
+                "informational": 0,
+                "witnessing": 16.199999999999992
+            },
+            "informational_root_revision_mean": 0,
+            "contact_under_capture_root_revision_mean": 0,
+            "dissociative_quiet_root_revision_mean": 0,
+            "witnessing_root_revision_mean": 16.199999999999992,
+            "max_non_witnessing_root_revision_ratio": 0
+        },
+        "relational_accumulation": {
+            "root_counts_met_mean_by_regime": {
+                "contact-under-capture": 20.320702204100357,
+                "dissociative-quiet": 3.6577263967380653,
+                "informational": 0,
+                "witnessing": 15
+            },
+            "root_counts_alone_mean_by_regime": {
+                "contact-under-capture": 1.6256561763280244,
+                "dissociative-quiet": 0.2926181117390448,
+                "informational": 0,
+                "witnessing": 1.1999999999999995
+            },
+            "root_observation_weight_by_regime": {
+                "contact-under-capture": 0.33867837006833895,
+                "dissociative-quiet": 0.06096210661230101,
+                "informational": 0,
+                "witnessing": 1
+            },
+            "contact_under_capture_weight_fraction_of_witnessing": 0.33867837006833895,
+            "dissociative_quiet_weight_fraction_of_witnessing": 0.06096210661230101,
+            "informational_weight_fraction_of_witnessing": 0,
+            "contact_under_capture_met_fraction_of_witnessing": 1.3547134802733571,
+            "dissociative_quiet_met_fraction_of_witnessing": 0.24384842644920435,
+            "informational_met_fraction_of_witnessing": 0
+        },
+        "melt_discreteness": {
+            "melt_rate": 1,
+            "mean_prune_trial": 15,
+            "max_drop_fraction_in_window": 1,
+            "window_fraction": 0.0833333333333333
+        },
+        "selective_prune": {
+            "threat_bank_precision_survival_ratio": 1.079676234765304,
+            "policy_bank_precision_survival_ratio": 1.0934611369936647,
+            "min_bank_precision_survival_ratio": 1.079676234765304,
+            "compulsive_avoidance_drop": 0.28680192603048127,
+            "post_approach_rate": 0.4114765119959718
+        },
+        "premature_late": {
+            "early_fail_rate": 1,
+            "late_success_rate": 1,
+            "failure_residual_accuracy_correlation": 0.9411759793598641,
+            "failure_prompt_count_abs_correlation": 0
+        },
+        "real_danger": {
+            "adaptive_fear_preserved_rate": 0.875,
+            "post_avoidance_rate": 0.8645627431326517,
+            "post_threat_danger_probability": 0.5101121760225498,
+            "root_revision_mean": 16.199999999999992
+        },
+        "content_swap": {
+            "melt_rate": 0,
+            "root_revision_mean": 0
+        },
+        "et_flip": {
+            "structural_counts_bit_identical_rate": 1,
+            "low_pi_part_eff": 3.8049176980028547,
+            "high_pi_part_eff": 1.6262786389623967,
+            "low_lambda_ctx_eff": 1.061836546545359,
+            "high_lambda_ctx_eff": 2.9446795510655246
+        },
+        "prior_odds_sweep": {
+            "min_max_drop_fraction_in_window": 1,
+            "max_window_fraction": 0.0833333333333333,
+            "rows": [
+                {
+                    "prior_log_odds": -6,
+                    "offset": -1,
+                    "melt_rate": 1,
+                    "mean_prune_trial": 25,
+                    "max_drop_fraction_in_window": 1,
+                    "window_fraction": 0.0833333333333333
+                },
+                {
+                    "prior_log_odds": -5,
+                    "offset": 0,
+                    "melt_rate": 1,
+                    "mean_prune_trial": 15,
+                    "max_drop_fraction_in_window": 1,
+                    "window_fraction": 0.0833333333333333
+                },
+                {
+                    "prior_log_odds": -4,
+                    "offset": 1,
+                    "melt_rate": 1,
+                    "mean_prune_trial": 15,
+                    "max_drop_fraction_in_window": 1,
+                    "window_fraction": 0.0833333333333333
+                }
+            ]
+        },
+        "E0_sweep": [
+            {
+                "E0": 0.5,
+                "melt_rate": 1,
+                "mean_prune_trial": 15,
+                "mean_root_revision": 16.199999999999992,
+                "mean_drop_fraction_in_window": 1
+            },
+            {
+                "E0": 1,
+                "melt_rate": 1,
+                "mean_prune_trial": 15,
+                "mean_root_revision": 16.199999999999992,
+                "mean_drop_fraction_in_window": 1
+            },
+            {
+                "E0": 2,
+                "melt_rate": 1,
+                "mean_prune_trial": 25,
+                "mean_root_revision": 27,
+                "mean_drop_fraction_in_window": 1
+            }
+        ]
+    },
+    "per_seed_metric_count": 96,
+    "trace_row_count": 5856
+}

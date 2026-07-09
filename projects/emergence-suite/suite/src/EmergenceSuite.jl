@@ -10,6 +10,7 @@ include("BMR.jl")
 include("Criteria.jl")
 include("DummyExperiment.jl")
 include("sims/sim1/Sim1.jl")
+include("sims/sim2/Sim2.jl")
 include("sims/sim3/Sim3.jl")
 include("Runner.jl")
 

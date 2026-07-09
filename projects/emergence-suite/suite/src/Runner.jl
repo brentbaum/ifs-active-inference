@@ -9,6 +9,7 @@ using ..DummyExperiment: run_dummy_seed
 using ..IO: ensure_dir, write_json, write_placeholder_svg, write_rows_csv
 using ..Reproducibility: build_reproducibility_metadata
 using ..Sim1: run_sim1
+using ..Sim2: run_sim2_config
 using ..Sim3: run_sim3_config
 
 export run_config
@@ -75,6 +76,10 @@ function run_config(config::ExperimentConfig; config_path::Union{Nothing, Abstra
 
     if config.experiment == "sim3"
         return run_sim3_config(config; config_path = config_path, output_dir = output_dir)
+    end
+
+    if config.experiment == "sim2"
+        return run_sim2_config(config; config_path = config_path, output_dir = output_dir)
     end
 
     started = time()
