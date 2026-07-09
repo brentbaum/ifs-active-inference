@@ -16,6 +16,7 @@ include("sims/sim4/Sim4.jl")
 include("sims/sim5/Sim5.jl")
 include("sims/sim6a/Sim6a.jl")
 include("sims/sim6b/Sim6b.jl")
+include("sims/sim7/Sim7.jl")
 include("Runner.jl")
 
 using .Config: ExperimentConfig, load_config, config_snapshot

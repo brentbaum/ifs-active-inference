@@ -1,0 +1,273 @@
+{
+    "experiment": "sim7",
+    "config": {
+        "experiment": "sim7",
+        "seeds": [
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019,
+            1020,
+            1021,
+            1022,
+            1023,
+            1024
+        ],
+        "output_dir": "projects/emergence-suite/suite/runs",
+        "label": "preregistered",
+        "model_params": {
+            "E0": 1,
+            "activation_drive": 0.86,
+            "activation_jitter": 0.04,
+            "adult_baseline_trials": 8,
+            "arousal_pe_scale": 5.2,
+            "assimilation_capacity": 1,
+            "attenuation_learning_rate": 0.18,
+            "avoid_bias": 0.03,
+            "beta": 1,
+            "beta_se": 1,
+            "bmr_interval": 5,
+            "capture_threshold": 0.7,
+            "contact_self_bias": 0.08,
+            "contact_start_trial": 6,
+            "continuum_perceptual_similarities": [
+                1,
+                0.35,
+                0.2,
+                0.7,
+                0.45
+            ],
+            "continuum_root_couplings": [
+                1,
+                0.8,
+                0.6,
+                0.4,
+                0.2
+            ],
+            "coreg_precision": 2.35,
+            "crp_concentration": 0.34,
+            "crp_threshold_base": 0.085,
+            "d_self_helpless": 18,
+            "d_self_resourced": 2,
+            "d_threat_dangerous": 17,
+            "d_threat_safe": 3,
+            "depth_grid": [
+                0,
+                0.25,
+                0.5,
+                0.75,
+                1
+            ],
+            "developmental_trials": 180,
+            "disconfirming_trials": 24,
+            "dyad_baseline_prior": [
+                0.18,
+                0.22,
+                0.24,
+                0.22,
+                0.14
+            ],
+            "efe_information_weight": 5,
+            "efe_settled_cost": 1.05,
+            "efe_utility_bad": -1.15,
+            "efe_utility_catastrophic": -4.8,
+            "efe_utility_good": 2.2,
+            "eta_self": 1,
+            "eta_threat": 1.6,
+            "flat_transfer_slope_threshold": 0.03,
+            "flood_precision": 3.2,
+            "flood_predictive": 0.01,
+            "formation_trials": 288,
+            "frozen_precision_threshold": 260,
+            "full_prior_alone": 12,
+            "full_prior_met": 2,
+            "gamma": 1.15,
+            "gamma_se": 1.2,
+            "h2_threat_to_self_coupling": 1.35,
+            "high_E": 0.9,
+            "high_baseline_prior": [
+                0.04,
+                0.08,
+                0.16,
+                0.3,
+                0.42
+            ],
+            "lambda_ctx": 0.9,
+            "lambda_self": 0.7,
+            "learning_rate_arousal_gain": 26,
+            "learning_rate_base": 0.16,
+            "low_E": 0.05,
+            "low_baseline_prior": [
+                0.46,
+                0.28,
+                0.16,
+                0.07,
+                0.03
+            ],
+            "mandate_learning_rate": 0,
+            "medium_baseline_prior": [
+                0.2,
+                0.24,
+                0.26,
+                0.2,
+                0.1
+            ],
+            "melt_window_fraction_threshold": 0.1,
+            "n_probe_trials": 1,
+            "n_session_trials": 60,
+            "n_training_trials": 20,
+            "ordinary_learning_rate": 1,
+            "outcome_precision": 1.6,
+            "permission_trust_threshold": 0.56,
+            "pi_part": 4,
+            "policy_learning_rate": 0.45,
+            "policy_practice_rate": 0.8,
+            "policy_precision": 3.2,
+            "post_melt_original_cue_threshold": 0.62,
+            "prior_log_odds": -5,
+            "reduced_prior_alone": 7,
+            "reduced_prior_met": 7,
+            "reflexivity_arousal_slope": 0.88,
+            "regulated_coreg_by_depth": [
+                0.08,
+                0.16,
+                0.36,
+                0.74,
+                0.93
+            ],
+            "relational_count_good": 1,
+            "relational_count_old": 0.08,
+            "resilient_kappa": 1,
+            "resilient_omega": 1.4,
+            "revision_learning_rate": 2,
+            "self_to_threat_coupling": 1.35,
+            "self_truthfulness": 0.88,
+            "slow_duration_min": 20,
+            "spawn_pressure_decay": 0.72,
+            "spawn_pressure_threshold": 2.45,
+            "structural_confound_perceptual_similarity": 0.9,
+            "structural_confound_root_coupling": 0,
+            "therapy_session_cap": 96,
+            "therapy_sessions": 64,
+            "threat_policy_weight": 2.4,
+            "training_parity_epsilon": 0.05,
+            "transfer_slope_threshold": 0.08,
+            "transition_mix": 0.08,
+            "trust_attuned_count": 8,
+            "trust_catastrophic_residual": 0.05,
+            "trust_rupture_count": 80,
+            "volatility_precision": 1.35
+        },
+        "sweep_grid": {
+        },
+        "criteria_path": "projects/emergence-suite/suite/configs/sim7-criteria.yaml"
+    },
+    "preregistration": {
+        "criteria_file": "projects/emergence-suite/suite/configs/sim7-criteria.yaml",
+        "run_order": "configs/sim7-criteria.yaml and the taxonomy readout rules were written before the first Sim 7 full run.",
+        "taxonomy_readout_rules": {
+            "rule_1": "early acute cause: spawned == true; formation_duration <= 2; route contains early/acute; and position_index is the deepest node in the computed access graph.",
+            "rule_2": "reactive flood-spawned cause: spawned == true; formation_duration <= 2; route or source contains flood/avoidance_failure; and position_index is above the earliest acute node in the computed access graph.",
+            "rule_3": "slow-accumulated proactive cause: slow_accumulation == true or spawned == false with formation_duration >= slow_duration_min; and position_index is the outermost node in the computed access graph.",
+            "rule_scope": "The classifier receives only formation kinetics and computed access-graph position; taxonomy words are output labels only."
+        },
+        "world_script": {
+            "act_i": "ambient misattunement, acute overwhelm, avoidance learning, avoidance failure flood, chronic management",
+            "act_ii": "adult cue encounters; transfer-probe cues present but unencountered",
+            "act_iii": "regulated dyadic therapy; EFE-selected contact; witnessed contact; BMR checks; inferred depth from co-regulation",
+            "act_iv": "transfer probe over root-coupled cue continuum; original-cue re-encounter"
+        }
+    },
+    "metrics": {
+        "taxonomy_recovery": {
+            "majority_rate": 1,
+            "recovered_seed_count": 24,
+            "n_seeds": 24
+        },
+        "melt_order": {
+            "inverted_rate": 1,
+            "root_prune_rate": 1
+        },
+        "controls": {
+            "h2_life_control_pass_rate": 1,
+            "h2_no_cascade_no_melt_rate": 1,
+            "h2_transfer_flat_rate": 1,
+            "resilient_world_control_pass_rate": 1,
+            "resilient_no_frozen_stack_rate": 1,
+            "resilient_ordinary_revisable_fear_rate": 1
+        },
+        "composition_integrity": {
+            "adult_capture": {
+                "present": true,
+                "number": 0.7992566492093194,
+                "label": "support"
+            },
+            "permission_precedes_contact": {
+                "present": true,
+                "number": 1,
+                "label": "support"
+            },
+            "discrete_melt": {
+                "present": true,
+                "number": 1,
+                "label": "support"
+            },
+            "transfer_gradient_root_coupling": {
+                "present": true,
+                "number": 1.4761284744046863,
+                "label": "support"
+            },
+            "adult_capture_rate": 1,
+            "mean_adult_capture_index": 0.7992566492093194,
+            "permission_precedes_contact_rate": 1,
+            "discrete_melt_rate": 1,
+            "transfer_gradient_rate": 1,
+            "mean_transfer_slope": 1.4761284744046863
+        },
+        "seed_robustness": {
+            "biography_complete_rate": 1,
+            "biography_outcome_distribution": {
+                "spawn_stratify_descend_melt_transfer": 24
+            }
+        }
+    },
+    "controls": {
+        "h2": {
+            "no_cascade_no_melt_rate": 1,
+            "transfer_flat_rate": 1,
+            "distinct_failure_rate": 1,
+            "mean_transfer_slope": 0
+        },
+        "resilient": {
+            "no_frozen_stack_rate": 1,
+            "ordinary_revisable_fear_rate": 1,
+            "distinct_failure_rate": 1,
+            "spawn_rate": 0,
+            "frozen_rate": 0,
+            "mean_later_revision_percent": 1.19685934044741
+        }
+    },
+    "composition_map": {
+        "formation": "Sim 4 developmental schedule with Sim 1 Tier-A write-time reflexivity readout",
+        "descent": "Sim 4 EFE contact choice, computed access, and relational trust banks",
+        "dyad_depth": "Sim 5 regulated co-presence updates to inferred depth",
+        "melt": "Sim 5's composed Sim 2 BMR root-revision machinery",
+        "transfer": "Sim 3 root-coupled cue continuum and H2 reversed-root control",
+        "adaptation": "Sim 7 wraps component functions locally; Sims 1-6 and shared modules are unchanged."
+    }
+}

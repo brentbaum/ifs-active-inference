@@ -1,0 +1,114 @@
+{
+    "criteria_path": "/Users/brentbaum/dev/research/ifs-active-inference/projects/emergence-suite/suite/configs/sim7-criteria.yaml",
+    "summary_path": "/Users/brentbaum/dev/research/ifs-active-inference/projects/emergence-suite/suite/runs/sim7/preregistered/summary.json",
+    "results": [
+        {
+            "id": "S7.1",
+            "description": "Blind fixed taxonomy readout recovers early acute, reactive flood-spawned, and slow-accumulated proactive causes in a majority of seeds.",
+            "kind": "success",
+            "metric_path": "metrics.taxonomy_recovery.majority_rate",
+            "comparator": ">=",
+            "threshold": 0.51,
+            "weak_threshold": 0.4,
+            "opposite_threshold": 0.25,
+            "value": 1,
+            "label": "support"
+        },
+        {
+            "id": "S7.2",
+            "description": "Layer first-passage order in therapy inverts formation order: outermost slow layer, then flood layer, then earliest acute root.",
+            "kind": "success",
+            "metric_path": "metrics.melt_order.inverted_rate",
+            "comparator": ">=",
+            "threshold": 0.51,
+            "weak_threshold": 0.4,
+            "opposite_threshold": 0.25,
+            "value": 1,
+            "label": "support"
+        },
+        {
+            "id": "S7.3a",
+            "description": "H2 life fails in the predicted way: no cascade/no melt and a flat transfer probe.",
+            "kind": "success",
+            "metric_path": "metrics.controls.h2_life_control_pass_rate",
+            "comparator": ">=",
+            "threshold": 0.8,
+            "weak_threshold": 0.65,
+            "opposite_threshold": 0.35,
+            "value": 1,
+            "label": "support"
+        },
+        {
+            "id": "S7.3b",
+            "description": "Resilient-world life fails in the predicted way: no frozen stack forms and adult cue learning remains ordinary/revisable at most.",
+            "kind": "success",
+            "metric_path": "metrics.controls.resilient_world_control_pass_rate",
+            "comparator": ">=",
+            "threshold": 0.8,
+            "weak_threshold": 0.65,
+            "opposite_threshold": 0.35,
+            "value": 1,
+            "label": "support"
+        },
+        {
+            "id": "S7.4a",
+            "description": "Component signature reappears: adult baseline cue encounters are captured under low depth.",
+            "kind": "success",
+            "metric_path": "metrics.composition_integrity.mean_adult_capture_index",
+            "comparator": ">=",
+            "threshold": 0.7,
+            "weak_threshold": 0.62,
+            "opposite_threshold": 0.5,
+            "value": 0.7992566492093194,
+            "label": "support"
+        },
+        {
+            "id": "S7.4b",
+            "description": "Component signature reappears: permission precedes direct root contact in therapy.",
+            "kind": "success",
+            "metric_path": "metrics.composition_integrity.permission_precedes_contact_rate",
+            "comparator": ">=",
+            "threshold": 0.51,
+            "weak_threshold": 0.4,
+            "opposite_threshold": 0.25,
+            "value": 1,
+            "label": "support"
+        },
+        {
+            "id": "S7.4c",
+            "description": "Component signature reappears: structural melt is a discrete BMR event.",
+            "kind": "success",
+            "metric_path": "metrics.composition_integrity.discrete_melt_rate",
+            "comparator": ">=",
+            "threshold": 0.51,
+            "weak_threshold": 0.4,
+            "opposite_threshold": 0.25,
+            "value": 1,
+            "label": "support"
+        },
+        {
+            "id": "S7.4d",
+            "description": "Component signature reappears: post-melt transfer follows root coupling on the Sim 3 cue continuum.",
+            "kind": "success",
+            "metric_path": "metrics.composition_integrity.transfer_gradient_rate",
+            "comparator": ">=",
+            "threshold": 0.51,
+            "weak_threshold": 0.4,
+            "opposite_threshold": 0.25,
+            "value": 1,
+            "label": "support"
+        },
+        {
+            "id": "A7.1",
+            "description": "Seed robustness: complete spawn-stratify-descend-melt-transfer biography appears in a majority of at least 20 seeds.",
+            "kind": "adversarial",
+            "metric_path": "metrics.seed_robustness.biography_complete_rate",
+            "comparator": ">=",
+            "threshold": 0.51,
+            "weak_threshold": 0.4,
+            "opposite_threshold": 0.25,
+            "value": 1,
+            "label": "support"
+        }
+    ]
+}

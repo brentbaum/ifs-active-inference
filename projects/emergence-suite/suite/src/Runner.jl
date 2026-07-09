@@ -15,6 +15,7 @@ using ..Sim4: run_sim4_config
 using ..Sim5: run_sim5_config
 using ..Sim6a: run_sim6a_config
 using ..Sim6b: run_sim6b_config
+using ..Sim7: run_sim7_config
 
 export run_config
 
@@ -100,6 +101,10 @@ function run_config(config::ExperimentConfig; config_path::Union{Nothing, Abstra
 
     if config.experiment == "sim6b"
         return run_sim6b_config(config; config_path = config_path, output_dir = output_dir)
+    end
+
+    if config.experiment == "sim7"
+        return run_sim7_config(config; config_path = config_path, output_dir = output_dir)
     end
 
     started = time()

@@ -1,0 +1,131 @@
+experiment: sim7
+label: preregistered
+output_dir: ../runs
+criteria_path: sim7-criteria.yaml
+seeds:
+  - 1001
+  - 1002
+  - 1003
+  - 1004
+  - 1005
+  - 1006
+  - 1007
+  - 1008
+  - 1009
+  - 1010
+  - 1011
+  - 1012
+  - 1013
+  - 1014
+  - 1015
+  - 1016
+  - 1017
+  - 1018
+  - 1019
+  - 1020
+  - 1021
+  - 1022
+  - 1023
+  - 1024
+model_params:
+  therapy_session_cap: 96
+  adult_baseline_trials: 8
+  resilient_omega: 1.40
+  resilient_kappa: 1.00
+  capture_threshold: 0.70
+  transfer_slope_threshold: 0.08
+  flat_transfer_slope_threshold: 0.03
+  post_melt_original_cue_threshold: 0.62
+  melt_window_fraction_threshold: 0.10
+  slow_duration_min: 20
+
+  # Sim 1 / formation readout
+  assimilation_capacity: 1.0
+  crp_concentration: 0.34
+  crp_threshold_base: 0.085
+  formation_trials: 288
+  disconfirming_trials: 24
+  frozen_precision_threshold: 260.0
+  spawn_pressure_threshold: 2.45
+  spawn_pressure_decay: 0.72
+  learning_rate_base: 0.16
+  learning_rate_arousal_gain: 26.0
+  revision_learning_rate: 2.0
+  reflexivity_arousal_slope: 0.88
+
+  # Sim 4 / stack and descent
+  developmental_trials: 180
+  therapy_sessions: 64
+  high_E: 0.90
+  low_E: 0.05
+  pi_part: 4.0
+  beta_se: 1.0
+  gamma_se: 1.2
+  permission_trust_threshold: 0.56
+  trust_attuned_count: 8.0
+  trust_rupture_count: 80.0
+  trust_catastrophic_residual: 0.05
+  policy_learning_rate: 0.45
+  policy_practice_rate: 0.80
+  mandate_learning_rate: 0.0
+  flood_predictive: 0.01
+  flood_precision: 3.2
+  arousal_pe_scale: 5.2
+  efe_utility_good: 2.2
+  efe_utility_bad: -1.15
+  efe_utility_catastrophic: -4.8
+  efe_information_weight: 5.0
+  efe_settled_cost: 1.05
+
+  # Sim 5 / dyadic inferred depth and Sim 2-style BMR
+  n_session_trials: 60
+  contact_start_trial: 6
+  bmr_interval: 5
+  depth_grid: [0.0, 0.25, 0.50, 0.75, 1.0]
+  dyad_baseline_prior: [0.18, 0.22, 0.24, 0.22, 0.14]
+  low_baseline_prior: [0.46, 0.28, 0.16, 0.07, 0.03]
+  medium_baseline_prior: [0.20, 0.24, 0.26, 0.20, 0.10]
+  high_baseline_prior: [0.04, 0.08, 0.16, 0.30, 0.42]
+  transition_mix: 0.08
+  lambda_ctx: 0.90
+  beta: 1.00
+  gamma: 1.15
+  activation_drive: 0.86
+  activation_jitter: 0.04
+  volatility_precision: 1.35
+  coreg_precision: 2.35
+  regulated_coreg_by_depth: [0.08, 0.16, 0.36, 0.74, 0.93]
+  relational_count_good: 1.0
+  relational_count_old: 0.08
+  ordinary_learning_rate: 1.0
+  attenuation_learning_rate: 0.18
+  full_prior_met: 2.0
+  full_prior_alone: 12.0
+  reduced_prior_met: 7.0
+  reduced_prior_alone: 7.0
+  prior_log_odds: -5.0
+  E0: 1.0
+
+  # Sim 3 / transfer probe
+  n_training_trials: 20
+  n_probe_trials: 1
+  training_parity_epsilon: 0.05
+  continuum_root_couplings: [1.0, 0.8, 0.6, 0.4, 0.2]
+  continuum_perceptual_similarities: [1.0, 0.35, 0.20, 0.70, 0.45]
+  structural_confound_perceptual_similarity: 0.90
+  structural_confound_root_coupling: 0.0
+  lambda_self: 0.7
+  eta_self: 1.0
+  eta_threat: 1.6
+  self_to_threat_coupling: 1.35
+  h2_threat_to_self_coupling: 1.35
+  outcome_precision: 1.6
+  policy_precision: 3.2
+  threat_policy_weight: 2.4
+  contact_self_bias: 0.08
+  avoid_bias: 0.03
+  d_self_helpless: 18.0
+  d_self_resourced: 2.0
+  d_threat_dangerous: 17.0
+  d_threat_safe: 3.0
+  self_truthfulness: 0.88

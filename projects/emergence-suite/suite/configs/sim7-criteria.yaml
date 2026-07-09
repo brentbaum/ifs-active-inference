@@ -1,0 +1,79 @@
+preregistered_taxonomy_readout_rules:
+  rule_1: "early acute cause: spawned == true; formation_duration <= 2; route contains early/acute; and position_index is the deepest node in the computed access graph."
+  rule_2: "reactive flood-spawned cause: spawned == true; formation_duration <= 2; route or source contains flood/avoidance_failure; and position_index is above the earliest acute node in the computed access graph."
+  rule_3: "slow-accumulated proactive cause: slow_accumulation == true or spawned == false with formation_duration >= slow_duration_min; and position_index is the outermost node in the computed access graph."
+  rule_scope: "The classifier receives only formation kinetics and computed access-graph position; taxonomy words are output labels only."
+
+criteria:
+  - id: S7.1
+    description: "Blind fixed taxonomy readout recovers early acute, reactive flood-spawned, and slow-accumulated proactive causes in a majority of seeds."
+    metric_path: metrics.taxonomy_recovery.majority_rate
+    comparator: ">="
+    threshold: 0.51
+    weak_threshold: 0.40
+    opposite_threshold: 0.25
+    kind: success
+  - id: S7.2
+    description: "Layer first-passage order in therapy inverts formation order: outermost slow layer, then flood layer, then earliest acute root."
+    metric_path: metrics.melt_order.inverted_rate
+    comparator: ">="
+    threshold: 0.51
+    weak_threshold: 0.40
+    opposite_threshold: 0.25
+    kind: success
+  - id: S7.3a
+    description: "H2 life fails in the predicted way: no cascade/no melt and a flat transfer probe."
+    metric_path: metrics.controls.h2_life_control_pass_rate
+    comparator: ">="
+    threshold: 0.80
+    weak_threshold: 0.65
+    opposite_threshold: 0.35
+    kind: success
+  - id: S7.3b
+    description: "Resilient-world life fails in the predicted way: no frozen stack forms and adult cue learning remains ordinary/revisable at most."
+    metric_path: metrics.controls.resilient_world_control_pass_rate
+    comparator: ">="
+    threshold: 0.80
+    weak_threshold: 0.65
+    opposite_threshold: 0.35
+    kind: success
+  - id: S7.4a
+    description: "Component signature reappears: adult baseline cue encounters are captured under low depth."
+    metric_path: metrics.composition_integrity.mean_adult_capture_index
+    comparator: ">="
+    threshold: 0.70
+    weak_threshold: 0.62
+    opposite_threshold: 0.50
+    kind: success
+  - id: S7.4b
+    description: "Component signature reappears: permission precedes direct root contact in therapy."
+    metric_path: metrics.composition_integrity.permission_precedes_contact_rate
+    comparator: ">="
+    threshold: 0.51
+    weak_threshold: 0.40
+    opposite_threshold: 0.25
+    kind: success
+  - id: S7.4c
+    description: "Component signature reappears: structural melt is a discrete BMR event."
+    metric_path: metrics.composition_integrity.discrete_melt_rate
+    comparator: ">="
+    threshold: 0.51
+    weak_threshold: 0.40
+    opposite_threshold: 0.25
+    kind: success
+  - id: S7.4d
+    description: "Component signature reappears: post-melt transfer follows root coupling on the Sim 3 cue continuum."
+    metric_path: metrics.composition_integrity.transfer_gradient_rate
+    comparator: ">="
+    threshold: 0.51
+    weak_threshold: 0.40
+    opposite_threshold: 0.25
+    kind: success
+  - id: A7.1
+    description: "Seed robustness: complete spawn-stratify-descend-melt-transfer biography appears in a majority of at least 20 seeds."
+    metric_path: metrics.seed_robustness.biography_complete_rate
+    comparator: ">="
+    threshold: 0.51
+    weak_threshold: 0.40
+    opposite_threshold: 0.25
+    kind: adversarial
