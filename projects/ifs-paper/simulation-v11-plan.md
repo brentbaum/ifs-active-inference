@@ -185,6 +185,27 @@ Composition decision (orchestrator): formation uses Tier-A logged reflexivity (S
 ### T3.4 — Figures (after simulation limit reached)
 Codex figure passes over existing run CSVs: paper-grade phase diagram, hysteresis, transfer gradient (Chamberlin rules, per figure-inspiration.md patterns: identical axes, annotated events, first-passage markers); U3 four-timescales figure (bands from sims 1/2/6a + spawn/prune events from the life run if it exists).
 
+## Phase 4 — De-authoring (2026-07-10; response to the verified gpt-5.6-sol review in projects/emergence-suite/reviews/. Author direction: "iterate till it works." The draft waits.)
+
+**New protocol (all Phase 4 tickets).** Two-step execution: **Step A** — agent implements + writes criteria + runs PILOT seeds only (1001–1010, labeled pilot, results quarantined in runs/<sim>/pilot/), then STOPS. **Step B** — orchestrator audits (initializations, metric definitions, condition branches, state handoffs — the four blind spots), commits the frozen criteria + code, then a separate execution runs CONFIRMATORY on fresh orchestrator-supplied seeds with a git-clean check (any diff between commit and run = invalid). Convergence loop: after each wave, the gpt-5.6-sol reviewer re-examines the reworked sims; iterate until it finds no FATAL/SERIOUS conclusion-building or a result honestly dies.
+
+### Wave 1 (parallel, disjoint modules)
+- **T4.6 — Sim 1 de-confounding**: yoke evidence exposure across κ (κ changes action efficacy only, not aversive-evidence frequency/severity — currently ω and κ both move the evidence stream); revisability = posterior-predictive behavior change, not scaled-KL score; chronic path, learning gain, and classification scale frozen at Step B and tested on fresh seeds; A1.x battery rerun.
+- **T4.2 — Sim 3 de-authoring**: real sequential crossings (multi-step inference within trials OR trial-resolution only; NO architecture-label tie-breaking — ties reported as ties); root coupling LEARNED from co-occurrence structure in training data, not supplied as coefficient-and-axis; a genuine perceptual-generalization channel so A3.2 is live both directions; H1/H2 as competing generative models with all pathways active, differing only in conditioning direction, matched out-of-sample likelihood.
+- **T4.3 — Sim 2 single-gate**: resolve the R2 violation — E_t modulates the evidence write ONCE; BMR then runs over the actually-written counts (no second ρ-access gate) OR the access premise replaces the write modulation entirely; justify the choice against D2 and document. Informational content gets a nonzero (weakly-informative or learned) root likelihood so the content-swap CAN fail. Relational priors imported from Sim 1 formation output, not fixed [2,12]. Compare raw-count vs access-weighted BMR and ≥2 independently motivated accessibility functions.
+
+### Wave 2 (after Wave 1 lands)
+- **T4.1 — Sim 4 grown-for-real**: the stack must come out of (reworked) Sim 1's formation machinery run on a neutral developmental schedule — no authored causes, routes, counts, or positions; classifier frozen at Step B before seeing outputs; initial relational forecasts equalized or randomized across positions + a forecast-permutation control; rupture asymmetry must arise from accumulated history (sweep per-event write sizes; the 80:8 ratio is retired); methods/mandate rates measured from actual update pathways.
+- **T4.4 — Sim 5 de-aliasing**: fluent-but-threatened ≠ dysregulated (distinct generative tuples); the S5.2 ablation is a real intervention, not a renamed condition; therapist = noisy generative source, client LEARNS the co-regulation mapping (misleading bodies/words, unreliable and reversed mappings as controls); contact events generate relational root evidence when they occur regardless of therapist content (so regulation-only CAN produce self-led revision and A5.2 is live).
+- **T4.7 — Sim 6a robustness**: observations generated from an independently evolving latent depth (schedule decoupled from true_depth); flat/reversed/non-monotone volatility-mapping nulls; joint (not ±20% local) sweeps over safety prior, likelihood matrix, β/γ, policy gains; held-out identifiability.
+
+### Wave 3 (after Wave 2)
+- **T4.5 — Sim 7 as one life, actually**: a single state object from childhood to probe; adult capture lived, not computed; no root-bank replacement; no condition-specific control flow — H1/H2 differ only in graph direction under identical rules; everything inherited from prior events. If the biography does not survive de-authoring, that is the result.
+- **T4.8 — Continuous model nulls**: bifurcation map over self-loop gain / intercept / depth cost / capture penalty; no-self-loop and reversed-loop nulls; hysteresis under identical dynamics across phases (no phase-specific parameter changes).
+
+### Wave 4 — Convergence
+- **T4.9 — sol re-review**: gpt-5.6-sol re-runs the where-is-the-conclusion-built-in review on the reworked suite. FATAL/SERIOUS findings → another wave. Clean (or honestly-dead results) → §9 rewritten from whatever survived, in the conditional register the results actually earn.
+
 ## Ticket order
 
 T0.1 → T0.5 → {T0.2, T0.3, T0.4 in parallel with T0.5} → T1.1 → T1.2 → T1.3 → **G1 (§9 stub)** → T2.1 → T2.2 → T2.3 → **G2**.
