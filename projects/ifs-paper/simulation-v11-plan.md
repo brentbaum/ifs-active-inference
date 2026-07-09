@@ -142,6 +142,29 @@
 
 ---
 
+## Phase 2b — Sim 6 Stages 3–4 (added 2026-07-09 by author direction; pulled forward from Phases 3–4)
+
+### T2.4 — Sim 6a-continuous, Stage 3: the Φ-bridge and the basin map (U2)
+**Depends:** T0.5 only (independent of T2.1 — may run in parallel). **Spec: Appendix A.2 (continuous column), A.4 (empirical-prior resolution), A.7 U2.**
+**Task:** Build a continuous three-layer hyper-model in RxInfer as a NEW Julia project at `projects/emergence-suite/continuous/` (read `projects/beautiful-simulation/` for the GCV/3-layer patterns — read-only, do not modify it). Structure: depth layer `h_t` → precision layer `z_t` → content layer, where `h_t` governs the balance between a bundle-prior stream and a present-evidence stream via the **empirical-prior** resolution (top-down precision message; no reflexive observation channel in this variant — regime-face only, per A.4). Arousal/volatility bursts enter as evidence; collapse and recovery of the depth posterior must be inference-driven (no assignment from burst schedule to `h`).
+**Deliverables:** (1) collapse/recovery traces (continuous analogue of T2.1's biography); (2) **U2 basin map**: the (depth, capture) phase portrait — numerically integrate the coupled expected-dynamics over a preregistered parameter grid, mark fixed points and basins; (3) hysteresis-as-basin-hopping figure (drive the system around Sim 2's loop in the continuous model).
+**Success criteria (preregister in `continuous/configs/`):**
+- [ ] A self-sustaining high-depth fixed point (accurate self-modeling keeps volatility estimates low, keeping depth cheap) exists across the FULL preregistered parameter grid — U2's "everyone has Self" as a dynamical fact; report any grid cells where it vanishes.
+- [ ] A competing capture basin exists in part of the grid (occlusion as metastability); basin boundary mapped.
+- [ ] Collapse under volatility bursts is dose-dependent and recovers; no direct writes to `h`.
+- [ ] The run contract (summary/status/metadata/criteria-results) is emitted; RxInfer inference converges (document iteration counts / divergences).
+**Rules:** no commit; no edits outside `projects/emergence-suite/continuous/`; may `Pkg.add` RxInfer + deps INSIDE the new project only.
+
+### T2.5 — Sim 6b, Stage 4: spawn-in-hyper-model + the clamp control
+**Depends:** T2.1 (its level-3 machinery) and Sim 1 (spawn machinery). **Spec: Appendix A.6 Stage 4, A.8. RESEARCH-GRADE: a precisely-documented obstruction is a successful outcome; do not fake a result to close the ticket.**
+**Task:** Couple Sim 1's CRP formation to Sim 6a's inferred depth in `src/sims/sim6b/`: run formation schedules (acute overwhelm; safe control) where reflexivity-at-write is the INFERRED level-3 posterior (replacing Sim 1's logged arousal-linked input). Then the causal test of §3's invariant:
+- **Unclamped:** under acute overwhelm, the depth posterior collapses (via T2.1's volatility pathway) and the spawned cause acquires the frozen signature (Sim 1's trait battery + Sim 2's revision probe).
+- **Clamped:** identical overwhelm schedule, with the depth posterior held high by intervention (clamp = fix q(d) at the high state; document as an intervention, not a model change). If the spawned/updated cause is then ORDINARY — revisable by Sim 2's disconfirming protocol — the invariant is supported: overwhelm freezes VIA reflexivity collapse. If it still freezes, §3's invariant is WRONG IN THE MODEL — report as falsified; this is the "stage fails → paper gets a stub" case.
+- **Yoked arousal control:** matched arousal stream with volatility evidence withheld from level 3 (so depth stays high by inference, not clamp) — separates the clamp intervention from an evidence artifact.
+**Success criteria (preregister):** [ ] unclamped freezes (traits + <10% revision); [ ] clamped rescues (>preregistered revision threshold — state it against Sim 1's measured revisable ceiling, NOT the unreachable 80%); [ ] yoked control patterns with clamp; [ ] no second-order oscillation; [ ] every label shipped.
+**Timebox:** if the CRP-inside-hyper-model coupling cannot be made to run after a bounded attempt, deliver the obstruction note (what breaks: message schedule, state-space growth mid-inference, etc.) — that documents the v12 research problem and is a valid completion.
+**Rules:** no commit; no Pkg.add; own module + minimal dispatch hook; do not modify sims 1/2/3/6a or shared modules.
+
 ## Ticket order
 
 T0.1 → T0.5 → {T0.2, T0.3, T0.4 in parallel with T0.5} → T1.1 → T1.2 → T1.3 → **G1 (§9 stub)** → T2.1 → T2.2 → T2.3 → **G2**.
