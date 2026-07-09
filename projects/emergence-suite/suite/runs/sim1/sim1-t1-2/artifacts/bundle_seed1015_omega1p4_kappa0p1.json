@@ -1,0 +1,57 @@
+{
+    "schema_version": "sim1.bundle.v2",
+    "seed": 1015,
+    "route": "initial_cause",
+    "formation": {
+        "omega": 1.4,
+        "kappa": 0.1,
+        "arousal_at_write": 1,
+        "reflexivity_at_write": 0.12,
+        "spawned": false,
+        "spawn_count": 0,
+        "posterior_predictive_min": 0.002946622738402286,
+        "crp_threshold_last": 0.07681716417910447
+    },
+    "revision_probe": {
+        "disconfirming_trials_measured": true,
+        "later_revision_percent": 9.515935296246662,
+        "pre_probe_aversive_mean": 0.47452456248281594,
+        "post_probe_aversive_mean": 0.4384510778835169,
+        "normalized_kl_from_pre_probe": 0.0026291743544573365,
+        "structural_precision": 699.8820890704629
+    },
+    "cause_banks": {
+        "cue_counts": {
+            "safe": 14,
+            "threat": 318.77580627987805
+        },
+        "affect_counts": {
+            "safe": 306.56791762472386,
+            "threat": 276.84263924778173
+        },
+        "policy_counts": {
+            "approach": 7,
+            "flee": 18,
+            "appease": 59,
+            "attenuate": 1
+        },
+        "outcome_counts": {
+            "approach": {
+                "safe": 21.828890139281437,
+                "threat": 23.424956931530264
+            },
+            "flee": {
+                "safe": 67.6453171266464,
+                "threat": 66.65942156428775
+            },
+            "appease": {
+                "safe": 229.0937103587961,
+                "threat": 190.75826075196375
+            },
+            "attenuate": {
+                "safe": 6,
+                "threat": 6
+            }
+        }
+    }
+}

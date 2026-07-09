@@ -1,0 +1,710 @@
+{
+    "experiment": "sim3",
+    "config": {
+        "experiment": "sim3",
+        "seeds": [
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019,
+            1020,
+            1021,
+            1022,
+            1023,
+            1024
+        ],
+        "output_dir": "projects/emergence-suite/suite/runs",
+        "label": "preregistered",
+        "model_params": {
+            "continuum_perceptual_similarities": [
+                1,
+                0.35,
+                0.2,
+                0.7,
+                0.45
+            ],
+            "continuum_root_couplings": [
+                1,
+                0.8,
+                0.6,
+                0.4,
+                0.2
+            ],
+            "e_sweep": [
+                0.05,
+                0.15,
+                0.25,
+                0.35,
+                0.45,
+                0.55,
+                0.65,
+                0.75,
+                0.85,
+                0.95
+            ],
+            "high_E": 0.85,
+            "low_E": 0.15,
+            "n_probe_trials": 1,
+            "n_training_trials": 20,
+            "structural_confound_perceptual_similarity": 0.9,
+            "structural_confound_root_coupling": 0,
+            "training_parity_epsilon": 0.05
+        },
+        "sweep_grid": {
+        },
+        "criteria_path": "projects/emergence-suite/suite/configs/sim3-criteria.yaml"
+    },
+    "design": {
+        "cues": [
+            {
+                "label": "cue_1",
+                "perceptual_similarity": 1,
+                "root_coupling": 1,
+                "root_id": 1,
+                "trained": true,
+                "structural_confound": false
+            },
+            {
+                "label": "cue_2",
+                "perceptual_similarity": 0.35,
+                "root_coupling": 0.8,
+                "root_id": 1,
+                "trained": false,
+                "structural_confound": false
+            },
+            {
+                "label": "cue_3",
+                "perceptual_similarity": 0.2,
+                "root_coupling": 0.6,
+                "root_id": 1,
+                "trained": false,
+                "structural_confound": false
+            },
+            {
+                "label": "cue_4",
+                "perceptual_similarity": 0.7,
+                "root_coupling": 0.4,
+                "root_id": 1,
+                "trained": false,
+                "structural_confound": false
+            },
+            {
+                "label": "cue_5",
+                "perceptual_similarity": 0.45,
+                "root_coupling": 0.2,
+                "root_id": 1,
+                "trained": false,
+                "structural_confound": false
+            },
+            {
+                "label": "structural_confound",
+                "perceptual_similarity": 0.9,
+                "root_coupling": 0,
+                "root_id": 2,
+                "trained": false,
+                "structural_confound": true
+            }
+        ],
+        "h2_architecture": "threat root; self-state bank updates downstream from inferred threat and relational evidence; policy ignores self-state",
+        "perceptual_generalization_channel": "none; exposure has no added stimulus-generalization channel in this preregistered run",
+        "relational_modality": {
+            "always_on": true,
+            "always_truthful": true,
+            "weight_varies_by": "D1 effective-precision balance"
+        },
+        "structural_precision_logged_separately": true,
+        "effective_precision_logged_separately": true
+    },
+    "conditions": {
+        "H1-exposure": {
+            "n_seeds": 24,
+            "mean_training_log_evidence": -42.19937954931186,
+            "ordered_cascade_rate": 0,
+            "mean_trained_cue_contact": 7.935892507244263e-10,
+            "mean_untrained_contact": 1.8573338430710062e-9,
+            "mean_confound_contact": 5.9108332884188903e-8,
+            "max_untrained_threat_l1_shift": 0,
+            "mean_final_self_resourced": 0.0510965361786806,
+            "mean_final_trained_threat_safe": 0.42169295114829525,
+            "cues": [
+                {
+                    "cue": "cue_1",
+                    "perceptual_similarity": 1,
+                    "root_coupling": 1,
+                    "root_id": 1,
+                    "trained": true,
+                    "structural_confound": false,
+                    "mean_contact": 7.935892507244266e-10,
+                    "ci95_contact": 1.6902949913094944e-25
+                },
+                {
+                    "cue": "cue_2",
+                    "perceptual_similarity": 0.35,
+                    "root_coupling": 0.8,
+                    "root_id": 1,
+                    "trained": false,
+                    "structural_confound": false,
+                    "mean_contact": 2.584183323019329e-10,
+                    "ci95_contact": 2.112868739136868e-26
+                },
+                {
+                    "cue": "cue_3",
+                    "perceptual_similarity": 0.2,
+                    "root_coupling": 0.6,
+                    "root_id": 1,
+                    "trained": false,
+                    "structural_confound": false,
+                    "mean_contact": 4.600734656346808e-10,
+                    "ci95_contact": 6.338606217410604e-26
+                },
+                {
+                    "cue": "cue_4",
+                    "perceptual_similarity": 0.7,
+                    "root_coupling": 0.4,
+                    "root_id": 1,
+                    "trained": false,
+                    "structural_confound": false,
+                    "mean_contact": 1.1922181407064735e-9,
+                    "ci95_contact": 1.6902949913094944e-25
+                },
+                {
+                    "cue": "cue_5",
+                    "perceptual_similarity": 0.45,
+                    "root_coupling": 0.2,
+                    "root_id": 1,
+                    "trained": false,
+                    "structural_confound": false,
+                    "mean_contact": 5.5186254336409344e-9,
+                    "ci95_contact": 0
+                },
+                {
+                    "cue": "structural_confound",
+                    "perceptual_similarity": 0.9,
+                    "root_coupling": 0,
+                    "root_id": 2,
+                    "trained": false,
+                    "structural_confound": true,
+                    "mean_contact": 5.9108332884188903e-8,
+                    "ci95_contact": 8.113415958285573e-24
+                }
+            ]
+        },
+        "H1-witnessing": {
+            "n_seeds": 24,
+            "mean_training_log_evidence": -1.4831836580751636,
+            "ordered_cascade_rate": 1,
+            "mean_trained_cue_contact": 0.9999999854240681,
+            "mean_untrained_contact": 0.23333352095244744,
+            "mean_confound_contact": 9.104100710273223e-8,
+            "max_untrained_threat_l1_shift": 0,
+            "mean_final_self_resourced": 0.4999407752311746,
+            "mean_final_trained_threat_safe": 0.6692694370912199,
+            "cues": [
+                {
+                    "cue": "cue_1",
+                    "perceptual_similarity": 1,
+                    "root_coupling": 1,
+                    "root_id": 1,
+                    "trained": true,
+                    "structural_confound": false,
+                    "mean_contact": 0.9999999854240679,
+                    "ci95_contact": 4.537351067666802e-17
+                },
+                {
+                    "cue": "cue_2",
+                    "perceptual_similarity": 0.35,
+                    "root_coupling": 0.8,
+                    "root_id": 1,
+                    "trained": false,
+                    "structural_confound": false,
+                    "mean_contact": 0.8949189988133567,
+                    "ci95_contact": 1.3612053203000405e-16
+                },
+                {
+                    "cue": "cue_3",
+                    "perceptual_similarity": 0.2,
+                    "root_coupling": 0.6,
+                    "root_id": 1,
+                    "trained": false,
+                    "structural_confound": false,
+                    "mean_contact": 0.03817687037053776,
+                    "ci95_contact": 2.835844417291751e-18
+                },
+                {
+                    "cue": "cue_4",
+                    "perceptual_similarity": 0.7,
+                    "root_coupling": 0.4,
+                    "root_id": 1,
+                    "trained": false,
+                    "structural_confound": false,
+                    "mean_contact": 0.00023510092796839418,
+                    "ci95_contact": 1.1077517255045903e-20
+                },
+                {
+                    "cue": "cue_5",
+                    "perceptual_similarity": 0.45,
+                    "root_coupling": 0.2,
+                    "root_id": 1,
+                    "trained": false,
+                    "structural_confound": false,
+                    "mean_contact": 3.1136979265850662e-6,
+                    "ci95_contact": 3.4617241422018446e-22
+                },
+                {
+                    "cue": "structural_confound",
+                    "perceptual_similarity": 0.9,
+                    "root_coupling": 0,
+                    "root_id": 2,
+                    "trained": false,
+                    "structural_confound": true,
+                    "mean_contact": 9.104100710273223e-8,
+                    "ci95_contact": 0
+                }
+            ]
+        },
+        "H1-witnessing-counterbalanced": {
+            "n_seeds": 24,
+            "mean_training_log_evidence": -1.9263396688262662,
+            "ordered_cascade_rate": 1,
+            "mean_trained_cue_contact": 0.9999999617185109,
+            "mean_untrained_contact": 0.25960376167873606,
+            "mean_confound_contact": 9.104100710273223e-8,
+            "max_untrained_threat_l1_shift": 1.0363157828701035,
+            "mean_final_self_resourced": 0.4999407752311746,
+            "mean_final_trained_threat_safe": 0.6681578914350514,
+            "cues": [
+                {
+                    "cue": "cue_1",
+                    "perceptual_similarity": 1,
+                    "root_coupling": 1,
+                    "root_id": 1,
+                    "trained": true,
+                    "structural_confound": false,
+                    "mean_contact": 0.9991548423789552,
+                    "ci95_contact": 1.3612053203000405e-16
+                },
+                {
+                    "cue": "cue_2",
+                    "perceptual_similarity": 0.35,
+                    "root_coupling": 0.8,
+                    "root_id": 1,
+                    "trained": false,
+                    "structural_confound": false,
+                    "mean_contact": 0.999999961718511,
+                    "ci95_contact": 9.074702135333603e-17
+                },
+                {
+                    "cue": "cue_3",
+                    "perceptual_similarity": 0.2,
+                    "root_coupling": 0.6,
+                    "root_id": 1,
+                    "trained": false,
+                    "structural_confound": false,
+                    "mean_contact": 0.03817687037053776,
+                    "ci95_contact": 2.835844417291751e-18
+                },
+                {
+                    "cue": "cue_4",
+                    "perceptual_similarity": 0.7,
+                    "root_coupling": 0.4,
+                    "root_id": 1,
+                    "trained": false,
+                    "structural_confound": false,
+                    "mean_contact": 0.00023510092796839418,
+                    "ci95_contact": 1.1077517255045903e-20
+                },
+                {
+                    "cue": "cue_5",
+                    "perceptual_similarity": 0.45,
+                    "root_coupling": 0.2,
+                    "root_id": 1,
+                    "trained": false,
+                    "structural_confound": false,
+                    "mean_contact": 3.1136979265850662e-6,
+                    "ci95_contact": 3.4617241422018446e-22
+                },
+                {
+                    "cue": "structural_confound",
+                    "perceptual_similarity": 0.9,
+                    "root_coupling": 0,
+                    "root_id": 2,
+                    "trained": false,
+                    "structural_confound": true,
+                    "mean_contact": 9.104100710273223e-8,
+                    "ci95_contact": 0
+                }
+            ]
+        },
+        "H1-witnessing-eta-self-0": {
+            "n_seeds": 24,
+            "mean_training_log_evidence": -5.084592724592657,
+            "ordered_cascade_rate": 0,
+            "mean_trained_cue_contact": 0.9999732601957506,
+            "mean_untrained_contact": 9.814919704743064e-7,
+            "mean_confound_contact": 9.104100710273223e-8,
+            "max_untrained_threat_l1_shift": 0,
+            "mean_final_self_resourced": 0.10000000000000003,
+            "mean_final_trained_threat_safe": 0.6642780652304796,
+            "cues": [
+                {
+                    "cue": "cue_1",
+                    "perceptual_similarity": 1,
+                    "root_coupling": 1,
+                    "root_id": 1,
+                    "trained": true,
+                    "structural_confound": false,
+                    "mean_contact": 0.9999732601957504,
+                    "ci95_contact": 1.3612053203000405e-16
+                },
+                {
+                    "cue": "cue_2",
+                    "perceptual_similarity": 0.35,
+                    "root_coupling": 0.8,
+                    "root_id": 1,
+                    "trained": false,
+                    "structural_confound": false,
+                    "mean_contact": 2.378453792382297e-6,
+                    "ci95_contact": 0
+                },
+                {
+                    "cue": "cue_3",
+                    "perceptual_similarity": 0.2,
+                    "root_coupling": 0.6,
+                    "root_id": 1,
+                    "trained": false,
+                    "structural_confound": false,
+                    "mean_contact": 9.528355331924657e-7,
+                    "ci95_contact": 4.327155177752306e-23
+                },
+                {
+                    "cue": "cue_4",
+                    "perceptual_similarity": 0.7,
+                    "root_coupling": 0.4,
+                    "root_id": 1,
+                    "trained": false,
+                    "structural_confound": false,
+                    "mean_contact": 4.0803618873976997e-7,
+                    "ci95_contact": 8.654310355504611e-23
+                },
+                {
+                    "cue": "cue_5",
+                    "perceptual_similarity": 0.45,
+                    "root_coupling": 0.2,
+                    "root_id": 1,
+                    "trained": false,
+                    "structural_confound": false,
+                    "mean_contact": 1.8664236758269182e-7,
+                    "ci95_contact": 0
+                },
+                {
+                    "cue": "structural_confound",
+                    "perceptual_similarity": 0.9,
+                    "root_coupling": 0,
+                    "root_id": 2,
+                    "trained": false,
+                    "structural_confound": true,
+                    "mean_contact": 9.104100710273223e-8,
+                    "ci95_contact": 0
+                }
+            ]
+        },
+        "H1-witnessing-eta-threat-0": {
+            "n_seeds": 24,
+            "mean_training_log_evidence": -7.20845090735897,
+            "ordered_cascade_rate": 0,
+            "mean_trained_cue_contact": 0.9991548423789555,
+            "mean_untrained_contact": 0.23333352095244744,
+            "mean_confound_contact": 9.104100710273223e-8,
+            "max_untrained_threat_l1_shift": 0,
+            "mean_final_self_resourced": 0.4999407752311746,
+            "mean_final_trained_threat_safe": 0.14999999999999994,
+            "cues": [
+                {
+                    "cue": "cue_1",
+                    "perceptual_similarity": 1,
+                    "root_coupling": 1,
+                    "root_id": 1,
+                    "trained": true,
+                    "structural_confound": false,
+                    "mean_contact": 0.9991548423789552,
+                    "ci95_contact": 1.3612053203000405e-16
+                },
+                {
+                    "cue": "cue_2",
+                    "perceptual_similarity": 0.35,
+                    "root_coupling": 0.8,
+                    "root_id": 1,
+                    "trained": false,
+                    "structural_confound": false,
+                    "mean_contact": 0.8949189988133567,
+                    "ci95_contact": 1.3612053203000405e-16
+                },
+                {
+                    "cue": "cue_3",
+                    "perceptual_similarity": 0.2,
+                    "root_coupling": 0.6,
+                    "root_id": 1,
+                    "trained": false,
+                    "structural_confound": false,
+                    "mean_contact": 0.03817687037053776,
+                    "ci95_contact": 2.835844417291751e-18
+                },
+                {
+                    "cue": "cue_4",
+                    "perceptual_similarity": 0.7,
+                    "root_coupling": 0.4,
+                    "root_id": 1,
+                    "trained": false,
+                    "structural_confound": false,
+                    "mean_contact": 0.00023510092796839418,
+                    "ci95_contact": 1.1077517255045903e-20
+                },
+                {
+                    "cue": "cue_5",
+                    "perceptual_similarity": 0.45,
+                    "root_coupling": 0.2,
+                    "root_id": 1,
+                    "trained": false,
+                    "structural_confound": false,
+                    "mean_contact": 3.1136979265850662e-6,
+                    "ci95_contact": 3.4617241422018446e-22
+                },
+                {
+                    "cue": "structural_confound",
+                    "perceptual_similarity": 0.9,
+                    "root_coupling": 0,
+                    "root_id": 2,
+                    "trained": false,
+                    "structural_confound": true,
+                    "mean_contact": 9.104100710273223e-8,
+                    "ci95_contact": 0
+                }
+            ]
+        },
+        "H1-witnessing-fake-content": {
+            "n_seeds": 24,
+            "mean_training_log_evidence": -0.9991728770783533,
+            "ordered_cascade_rate": 0,
+            "mean_trained_cue_contact": 0.9999794042027107,
+            "mean_untrained_contact": 9.814919704743217e-7,
+            "mean_confound_contact": 9.104100710273223e-8,
+            "max_untrained_threat_l1_shift": 0,
+            "mean_final_self_resourced": 0.1000000000000001,
+            "mean_final_trained_threat_safe": 0.6727327308984669,
+            "cues": [
+                {
+                    "cue": "cue_1",
+                    "perceptual_similarity": 1,
+                    "root_coupling": 1,
+                    "root_id": 1,
+                    "trained": true,
+                    "structural_confound": false,
+                    "mean_contact": 0.9999794042027109,
+                    "ci95_contact": 1.3612053203000405e-16
+                },
+                {
+                    "cue": "cue_2",
+                    "perceptual_similarity": 0.35,
+                    "root_coupling": 0.8,
+                    "root_id": 1,
+                    "trained": false,
+                    "structural_confound": false,
+                    "mean_contact": 2.3784537923823387e-6,
+                    "ci95_contact": 3.4617241422018446e-22
+                },
+                {
+                    "cue": "cue_3",
+                    "perceptual_similarity": 0.2,
+                    "root_coupling": 0.6,
+                    "root_id": 1,
+                    "trained": false,
+                    "structural_confound": false,
+                    "mean_contact": 9.528355331924827e-7,
+                    "ci95_contact": 4.327155177752306e-23
+                },
+                {
+                    "cue": "cue_4",
+                    "perceptual_similarity": 0.7,
+                    "root_coupling": 0.4,
+                    "root_id": 1,
+                    "trained": false,
+                    "structural_confound": false,
+                    "mean_contact": 4.0803618873977304e-7,
+                    "ci95_contact": 2.163577588876153e-23
+                },
+                {
+                    "cue": "cue_5",
+                    "perceptual_similarity": 0.45,
+                    "root_coupling": 0.2,
+                    "root_id": 1,
+                    "trained": false,
+                    "structural_confound": false,
+                    "mean_contact": 1.866423675826925e-7,
+                    "ci95_contact": 1.0817887944380764e-23
+                },
+                {
+                    "cue": "structural_confound",
+                    "perceptual_similarity": 0.9,
+                    "root_coupling": 0,
+                    "root_id": 2,
+                    "trained": false,
+                    "structural_confound": true,
+                    "mean_contact": 9.104100710273223e-8,
+                    "ci95_contact": 0
+                }
+            ]
+        },
+        "H2-witnessing": {
+            "n_seeds": 24,
+            "mean_training_log_evidence": -0.9991728770783533,
+            "ordered_cascade_rate": 0,
+            "mean_trained_cue_contact": 0.9960627150758338,
+            "mean_untrained_contact": 8.370224116017358e-8,
+            "mean_confound_contact": 8.370224116017358e-8,
+            "max_untrained_threat_l1_shift": 0,
+            "mean_final_self_resourced": 0.5466349220095951,
+            "mean_final_trained_threat_safe": 0.6727327308984669,
+            "cues": [
+                {
+                    "cue": "cue_1",
+                    "perceptual_similarity": 1,
+                    "root_coupling": 1,
+                    "root_id": 1,
+                    "trained": true,
+                    "structural_confound": false,
+                    "mean_contact": 0.9960627150758339,
+                    "ci95_contact": 4.537351067666802e-17
+                },
+                {
+                    "cue": "cue_2",
+                    "perceptual_similarity": 0.35,
+                    "root_coupling": 0.8,
+                    "root_id": 1,
+                    "trained": false,
+                    "structural_confound": false,
+                    "mean_contact": 8.370224116017356e-8,
+                    "ci95_contact": 5.408943972190382e-24
+                },
+                {
+                    "cue": "cue_3",
+                    "perceptual_similarity": 0.2,
+                    "root_coupling": 0.6,
+                    "root_id": 1,
+                    "trained": false,
+                    "structural_confound": false,
+                    "mean_contact": 8.370224116017356e-8,
+                    "ci95_contact": 5.408943972190382e-24
+                },
+                {
+                    "cue": "cue_4",
+                    "perceptual_similarity": 0.7,
+                    "root_coupling": 0.4,
+                    "root_id": 1,
+                    "trained": false,
+                    "structural_confound": false,
+                    "mean_contact": 8.370224116017356e-8,
+                    "ci95_contact": 5.408943972190382e-24
+                },
+                {
+                    "cue": "cue_5",
+                    "perceptual_similarity": 0.45,
+                    "root_coupling": 0.2,
+                    "root_id": 1,
+                    "trained": false,
+                    "structural_confound": false,
+                    "mean_contact": 8.370224116017356e-8,
+                    "ci95_contact": 5.408943972190382e-24
+                },
+                {
+                    "cue": "structural_confound",
+                    "perceptual_similarity": 0.9,
+                    "root_coupling": 0,
+                    "root_id": 2,
+                    "trained": false,
+                    "structural_confound": true,
+                    "mean_contact": 8.370224116017356e-8,
+                    "ci95_contact": 5.408943972190382e-24
+                }
+            ]
+        }
+    },
+    "metrics": {
+        "training_parity": {
+            "abs_log_evidence_diff": 0.024200539049840514,
+            "epsilon": 0.05
+        },
+        "cascade": {
+            "witnessing_order_rate": 1,
+            "exposure_order_rate": 0
+        },
+        "transfer": {
+            "h1_witnessing_mean": 0.23333352095244744,
+            "exposure_mean": 1.8573338430710062e-9,
+            "h2_mean": 8.370224116017358e-8,
+            "h1_witnessing_minus_exposure_mean": 0.2333335190951136,
+            "h1_witnessing_minus_h2_mean": 0.23333343725020628,
+            "h1_witnessing_monotone_gradient": 1,
+            "exposure_abs_slope": 8.256382989544398e-9,
+            "h2_abs_slope": 0
+        },
+        "leakage": {
+            "max_untrained_threat_l1_shift": 0
+        },
+        "ablations": {
+            "eta_self_zero_transfer_drop": 0.23333253946047697,
+            "eta_threat_zero_transfer_ratio": 1
+        },
+        "e_t_readout": {
+            "E_values": [
+                0.05,
+                0.15,
+                0.25,
+                0.35,
+                0.45,
+                0.55,
+                0.65,
+                0.75,
+                0.85,
+                0.95
+            ],
+            "transfer_values": [
+                -3.775551132932199e-12,
+                0.0,
+                1.2240419942324791e-11,
+                5.6877306663331175e-11,
+                2.97994536690406e-10,
+                6.699846149736916e-9,
+                0.0072059715633854896,
+                0.19165382168945666,
+                0.2333335190951136,
+                0.2452388415217878
+            ],
+            "shape_score": 1
+        },
+        "adversarial": {
+            "fake_content_transfer_drop": 0.23333253946047697,
+            "counterbalanced_transfer_gap": 0.2596037598214022,
+            "real_danger_avoidance": 0.9999999996721446,
+            "sensitivity_support_rate": 1,
+            "training_trajectory_gap": 0.10164322069189191,
+            "structural_confound_gap": 0.03817677932953066
+        }
+    },
+    "per_seed_metric_count": 168,
+    "trace_row_count": 1440
+}

@@ -1,0 +1,297 @@
+{
+    "experiment": "sim1",
+    "config": {
+        "experiment": "sim1",
+        "seeds": [
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019,
+            1020
+        ],
+        "output_dir": "projects/emergence-suite/suite/runs",
+        "label": "sim1-t1-2",
+        "model_params": {
+            "acute_region_omega_min": 1.18,
+            "ambiguity_weight": 0.1,
+            "arousal_pe_scale": 5.2,
+            "assimilation_capacity": 1,
+            "attenuation_cost": 0.8,
+            "attenuation_extreme_omega": 2.65,
+            "attenuation_flat_kappa": 0.16,
+            "attenuation_info_scale": 0.18,
+            "attenuation_precision_scale": 0.34,
+            "aversive_cause_threshold": 0.42,
+            "aversive_preference": -2.35,
+            "bundle_seed_count": 8,
+            "crp_concentration": 0.34,
+            "crp_threshold_base": 0.085,
+            "crp_threshold_control_relief": 0,
+            "cue_learning_weight": 0.55,
+            "disconfirming_trials": 24,
+            "epistemic_weight": 0.28,
+            "formation_trials": 72,
+            "frozen_precision_threshold": 260,
+            "learning_rate_arousal_gain": 26,
+            "learning_rate_base": 0.16,
+            "observation_precision_base": 0.42,
+            "observation_precision_gain": 1.05,
+            "overt_action_cost": 0.03,
+            "post_formation_trials": 18,
+            "reflexivity_arousal_slope": 0.88,
+            "revision_kl_scale": 0.025,
+            "revision_learning_rate": 2,
+            "safe_preference": 1.35,
+            "slow_path_kappa": 0,
+            "slow_path_omega": 0.9,
+            "slow_path_trials": 600,
+            "spawn_pressure_decay": 0.72,
+            "spawn_pressure_threshold": 2.45
+        },
+        "sweep_grid": {
+            "kappa": {
+                "count": 15,
+                "max": 1.4,
+                "min": 0
+            },
+            "omega": {
+                "count": 15,
+                "max": 3,
+                "min": 0.2
+            }
+        },
+        "criteria_path": "projects/emergence-suite/suite/configs/sim1-criteria.yaml"
+    },
+    "grid": {
+        "omega": [
+            0.2,
+            0.4,
+            0.6,
+            0.8,
+            1.0,
+            1.2,
+            1.4,
+            1.6,
+            1.8,
+            2.0,
+            2.2,
+            2.4,
+            2.6,
+            2.8,
+            3.0
+        ],
+        "kappa": [
+            0,
+            0.1,
+            0.2,
+            0.3,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.8,
+            0.9,
+            1,
+            1.1,
+            1.2,
+            1.3,
+            1.4
+        ],
+        "cell_count": 225,
+        "seeds_per_cell": 20
+    },
+    "metrics": {
+        "spawn_rate_mean": 0.0033333333333333335,
+        "frozen_cell_count": 17,
+        "frozen_largest_component": 17,
+        "revisable_cell_count": 0,
+        "revisable_largest_component": 0,
+        "high_omega_high_kappa_spawn_rate": 0,
+        "slow_cross_rate": 1,
+        "slow_max_per_trial_pe": 4.257953447866817,
+        "acute_region_min_pe": 4.426012973618448,
+        "attenuate_corner_rate": 0.7758680555555556,
+        "attenuate_max_outside_rate": 0.9131944444444446,
+        "representative_bundle_count": 10
+    },
+    "three_traits_log": {
+        "spawn_events": 15,
+        "write_time_reflexivity_mean": 0.24589012861773507,
+        "postformation_sampling_rate_mean": 0.021471574721574727,
+        "frozen_region_postformation_sampling_rate_mean": 0.007834757834757834
+    },
+    "phase_boundary": {
+        "frozen_boundary_min_omega_by_kappa": [
+            null,
+            1.6,
+            2.0,
+            2.4,
+            2.8,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "revisable_boundary_min_omega_by_kappa": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "smoothness": 0.14285714285714282,
+        "connected_frozen": 1,
+        "connected_revisable": 0
+    },
+    "slow_path": {
+        "crossed_rate": 1,
+        "first_seed_cross_trial": 105,
+        "first_seed_cross_structural_precision": 752.5357485138697,
+        "max_per_trial_pe": 4.257953447866817,
+        "acute_region_min_pe": 4.426012973618448,
+        "shuffle_cross_rate": 1,
+        "no_spawn_cross_rate": 1
+    },
+    "adversarial": {
+        "a11_omega_only_frozen_region": 0,
+        "a12_boundary_smoothness_traces": [
+            {
+                "concentration_factor": 0.5,
+                "smoothness": 0.14285714285714282,
+                "frozen_boundary_min_omega_by_kappa": [
+                    null,
+                    1.6,
+                    2.0,
+                    2.4,
+                    2.8,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ]
+            },
+            {
+                "concentration_factor": 1,
+                "smoothness": 0.14285714285714282,
+                "frozen_boundary_min_omega_by_kappa": [
+                    null,
+                    1.6,
+                    2.0,
+                    2.4,
+                    2.8,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ]
+            },
+            {
+                "concentration_factor": 1.5,
+                "smoothness": 0.14285714285714282,
+                "frozen_boundary_min_omega_by_kappa": [
+                    null,
+                    1.6,
+                    2.0,
+                    2.4,
+                    2.8,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ]
+            }
+        ],
+        "a13_shuffle_cross_rate": 1
+    },
+    "sensitivity": [
+        {
+            "aversive_preference_scale": 0.85,
+            "attenuate_corner_only": 0,
+            "corner_rate": 0.5670138888888889,
+            "max_outside_rate": 0.6666666666666667
+        },
+        {
+            "aversive_preference_scale": 1,
+            "attenuate_corner_only": 0,
+            "corner_rate": 0.7758680555555556,
+            "max_outside_rate": 0.9131944444444446
+        },
+        {
+            "aversive_preference_scale": 1.15,
+            "attenuate_corner_only": 0,
+            "corner_rate": 0.8487847222222223,
+            "max_outside_rate": 0.9444444444444446
+        }
+    ],
+    "criteria": {
+        "connected_frozen_region": 1,
+        "connected_revisable_region": 0,
+        "high_omega_high_kappa_spawn_rate": 0,
+        "slow_path_crosses_below_acute_min": 1,
+        "attenuate_corner_only": 0,
+        "three_traits_logged": 1,
+        "a11_omega_only_frozen_region": 0,
+        "a12_boundary_smoothness_max_jump": 0.14285714285714282,
+        "a13_shuffle_cross_rate": 1
+    },
+    "artifacts": {
+        "bundle_dir": "projects/emergence-suite/suite/runs/sim1/sim1-t1-2/artifacts",
+        "bundle_manifest": "projects/emergence-suite/suite/runs/sim1/sim1-t1-2/artifacts/bundle-manifest.json",
+        "bundle_schema": "sim1.bundle.v2"
+    },
+    "criteria_amendments": {
+        "s11_scope": "frozen/revisable measured on the dominant aversive cause, spawned or accumulated",
+        "revision_readout": "later_revision_percent is measured as normalized KL after disconfirming safe trials over copied Dirichlet banks"
+    },
+    "per_seed_metric_count": 4500,
+    "cell_metric_count": 225
+}

@@ -1,0 +1,25 @@
+{
+    "schema_version": "sim1.bundle.v1",
+    "seed": 1007,
+    "formation": {
+        "omega": 2,
+        "kappa": 0,
+        "arousal_at_write": 0.7142857142857143,
+        "reflexivity_at_write": 0.3571428571428571,
+        "spawn_trial": 1,
+        "posterior_predictive": 0.1353352832366127,
+        "crp_threshold": 0.38
+    },
+    "cause_banks": {
+        "cue_counts": {
+            "safe": 1,
+            "threat": 2.5142857142857142
+        },
+        "policy_counts": {
+            "approach": 1,
+            "flee": 2.757142857142857,
+            "appease": 1,
+            "attenuate": 1
+        }
+    }
+}

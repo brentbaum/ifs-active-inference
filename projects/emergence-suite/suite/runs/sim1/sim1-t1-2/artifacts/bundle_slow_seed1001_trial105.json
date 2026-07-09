@@ -1,0 +1,52 @@
+{
+    "schema_version": "sim1.bundle.v2",
+    "seed": 1001,
+    "route": "slow_accumulation",
+    "formation": {
+        "omega": "chronic_low",
+        "kappa": "chronic_low",
+        "spawned": false,
+        "cross_trial": 105,
+        "cross_structural_precision": 752.5357485138697,
+        "max_per_trial_pe": 3.6791700524387765
+    },
+    "revision_probe": {
+        "disconfirming_trials_measured": true,
+        "later_revision_percent": 0.396493634401908,
+        "structural_precision": 3619.6633897361817
+    },
+    "cause_banks": {
+        "cue_counts": {
+            "safe": 14,
+            "threat": 1665.4254627714045
+        },
+        "affect_counts": {
+            "safe": 1667.877716489204,
+            "threat": 1363.9867612769863
+        },
+        "policy_counts": {
+            "approach": 548,
+            "flee": 59,
+            "appease": 5,
+            "attenuate": 1
+        },
+        "outcome_counts": {
+            "approach": {
+                "safe": 1518.0368135598233,
+                "threat": 1167.6461355788051
+            },
+            "flee": {
+                "safe": 152.8409029293805,
+                "threat": 185.51126903952692
+            },
+            "appease": {
+                "safe": 9,
+                "threat": 14.829356658653886
+            },
+            "attenuate": {
+                "safe": 6,
+                "threat": 6
+            }
+        }
+    }
+}

@@ -38,10 +38,11 @@ Base.@kwdef struct Sim1Params
     spawn_pressure_threshold::Float64 = 2.45
     spawn_pressure_decay::Float64 = 0.72
     learning_rate_base::Float64 = 0.16
-    learning_rate_arousal_gain::Float64 = 15.0
+    learning_rate_arousal_gain::Float64 = 26.0
     cue_learning_weight::Float64 = 0.55
     revision_learning_rate::Float64 = 2.0
-    revision_kl_scale::Float64 = 0.04
+    revision_kl_scale::Float64 = 0.025
+    aversive_cause_threshold::Float64 = 0.42
     arousal_pe_scale::Float64 = 5.2
     reflexivity_arousal_slope::Float64 = 0.88
     observation_precision_base::Float64 = 0.42
@@ -99,10 +100,11 @@ function sim1_params(raw::Dict{String, Any})
         spawn_pressure_threshold = Float64(get(raw, "spawn_pressure_threshold", 2.45)),
         spawn_pressure_decay = Float64(get(raw, "spawn_pressure_decay", 0.72)),
         learning_rate_base = Float64(get(raw, "learning_rate_base", 0.16)),
-        learning_rate_arousal_gain = Float64(get(raw, "learning_rate_arousal_gain", 15.0)),
+        learning_rate_arousal_gain = Float64(get(raw, "learning_rate_arousal_gain", 26.0)),
         cue_learning_weight = Float64(get(raw, "cue_learning_weight", 0.55)),
         revision_learning_rate = Float64(get(raw, "revision_learning_rate", 2.0)),
-        revision_kl_scale = Float64(get(raw, "revision_kl_scale", 0.04)),
+        revision_kl_scale = Float64(get(raw, "revision_kl_scale", 0.025)),
+        aversive_cause_threshold = Float64(get(raw, "aversive_cause_threshold", 0.42)),
         arousal_pe_scale = Float64(get(raw, "arousal_pe_scale", 5.2)),
         reflexivity_arousal_slope = Float64(get(raw, "reflexivity_arousal_slope", 0.88)),
         observation_precision_base = Float64(get(raw, "observation_precision_base", 0.42)),
@@ -180,7 +182,7 @@ function cause_banks(cause::Cause)
     A_cue = reshape(copy(cause.cue_counts), 2, 1)
     A_affect = reshape(copy(cause.affect_counts), 2, 1)
     B_policy = reshape(copy(cause.outcome_counts), 2, 1, length(POLICY_NAMES))
-    return DirichletBanks([A_cue, A_affect], [B_policy])
+    return DirichletBanks(Array{Float64}[A_cue, A_affect], Array{Float64, 3}[B_policy])
 end
 
 function posterior_mean(counts::AbstractVector{Float64}, idx::Int)
@@ -421,8 +423,9 @@ function run_seed_cell(seed::Int, omega::Float64, kappa::Float64, params::Sim1Pa
     sampling = postformation_sampling_rate(trial_logs, target.id, params)
     spawned_logs = [row for row in trial_logs if row.spawned]
     write_log = isempty(spawned_logs) ? trial_logs[argmax([row.arousal for row in trial_logs])] : first(spawned_logs)
-    is_frozen = revision.pre_structural_precision >= params.frozen_precision_threshold && revision.percent < 10.0
-    is_revisable = revision.percent > 80.0
+    target_is_aversive = revision.pre_aversive_mean >= params.aversive_cause_threshold
+    is_frozen = target_is_aversive && revision.pre_structural_precision >= params.frozen_precision_threshold && revision.percent < 10.0
+    is_revisable = target_is_aversive && revision.percent > 80.0
     target_spawned = get(target.formation, "spawned", false) == true
     return (
         seed = seed,
@@ -445,6 +448,7 @@ function run_seed_cell(seed::Int, omega::Float64, kappa::Float64, params::Sim1Pa
         post_probe_aversive_mean = revision.post_aversive_mean,
         revision_normalized_kl = revision.normalized_kl,
         structural_precision = revision.pre_structural_precision,
+        target_aversive = target_is_aversive,
         frozen = is_frozen,
         revisable = is_revisable,
         posterior_predictive_min = minimum(row.posterior_predictive for row in trial_logs),
@@ -596,7 +600,9 @@ function run_slow_path(seed::Int, params::Sim1Params; shuffle::Bool = false)
         spawn_seen |= log.spawned
         target = dominant_aversive_cause(agent)
         revision = measure_revision(target, params)
-        is_frozen = revision.pre_structural_precision >= params.frozen_precision_threshold && revision.percent < 10.0
+        is_frozen = revision.pre_aversive_mean >= params.aversive_cause_threshold &&
+            revision.pre_structural_precision >= params.frozen_precision_threshold &&
+            revision.percent < 10.0
         if !crossed && is_frozen
             crossed = true
             cross_trial = trial
@@ -865,7 +871,7 @@ function write_run_readme(path::AbstractString, summary)
         println(io, "## Criteria Amendments")
         println(io)
         println(io, "- S1.1a/S1.1b metric definitions now apply `frozen` and `revisable` to the dominant aversive cause whether it was acutely spawned or hardened by accumulation. Reason: the review found spawned-only readouts made the revisable region empty by construction and excluded slow hardening.")
-        println(io, "- Later revisability is now the measured shift in the target cause's aversive posterior mean after `disconfirming_trials` safe probe trials. Reason: the previous implementation used a formula over condition variables.")
+        println(io, "- Later revisability is now the measured normalized KL change in the target cause's affect bank after `disconfirming_trials` safe probe trials, with pre/post aversive means logged. Reason: the previous implementation used a formula over condition variables.")
         println(io)
         println(io, "## Headline Metrics")
         println(io)
@@ -901,8 +907,7 @@ function run_sim1(config::ExperimentConfig; config_path::Union{Nothing, Abstract
     shuffle_cross_rate = mean(row.crossed ? 1.0 : 0.0 for row in shuffle_runs)
     slow_max_pe = maximum(row.max_per_trial_pe for row in slow_runs)
     frozen_rows = [row for row in seed_rows if row.frozen]
-    acute_frozen_rows = [row for row in frozen_rows if row.spawned || row.target_spawned]
-    acute_min = isempty(acute_frozen_rows) ? params.acute_region_omega_min : minimum(row.max_precision_weighted_pe for row in acute_frozen_rows)
+    acute_min = isempty(frozen_rows) ? params.acute_region_omega_min : minimum(row.max_precision_weighted_pe for row in frozen_rows)
     trait_measurement_count = count(row.spawned for row in seed_rows)
 
     criteria_metrics = (
@@ -978,7 +983,7 @@ function run_sim1(config::ExperimentConfig; config_path::Union{Nothing, Abstract
         ),
         criteria_amendments = (
             s11_scope = "frozen/revisable measured on the dominant aversive cause, spawned or accumulated",
-            revision_readout = "later_revision_percent is measured by disconfirming safe trials over copied Dirichlet banks"
+            revision_readout = "later_revision_percent is measured as normalized KL after disconfirming safe trials over copied Dirichlet banks"
         ),
         per_seed_metric_count = length(seed_rows),
         cell_metric_count = length(cell_rows)

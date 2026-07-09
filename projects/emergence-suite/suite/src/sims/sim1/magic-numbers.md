@@ -12,17 +12,18 @@ Every hand-set constant in `Sim1.jl` and `configs/sim1.yaml` is listed here.
 | `disconfirming_trials` | 24 | Derivation: ticket minimum for the ordinary safe-evidence revision probe. |
 | `post_formation_trials` | 18 | IOU: final target-cause window for measured epistemic sampling rate. |
 | `slow_path_trials` | 600 | Derivation: ticket requires a single chronic run of at least 500 trials; 600 leaves room for crossing plus post-cross persistence. |
-| `slow_path_omega` | 0.74 | Derivation: below the acute frozen region's per-trial PE after precision weighting. |
-| `slow_path_kappa` | 0.18 | Derivation: low-control chronic condition, near but above the shutdown-corner cutoff. |
+| `slow_path_omega` | 0.90 | Derivation: below the acute frozen region's per-trial PE after precision weighting, but high enough for chronic aversive accumulation. |
+| `slow_path_kappa` | 0.0 | Derivation: uncontrollable chronic condition for the slow-kinetics route; crossing occurs by count accrual without a spawn. |
 | `bundle_seed_count` | 8 | IOU: acute frozen bundles exported before adding up to 2 slow-route bundles, enough for T1.3 without bloating artifacts. |
 | `frozen_precision_threshold` | 260.0 | IOU: structural precision cutoff separating hardened banks from ordinary learned causes; paired with measured revision <10%. |
 | `spawn_pressure_threshold` | 2.45 | IOU: prevents single unlucky prediction errors from spawning while allowing persistent posterior-predictive failure. |
 | `spawn_pressure_decay` | 0.72 | IOU: CRP pressure memory over recent failures; A1.2 indirectly checks sensitivity through boundary smoothness. |
 | `learning_rate_base` | 0.16 | Derivation: nonzero ordinary Dirichlet learning at low arousal. |
-| `learning_rate_arousal_gain` | 15.0 | IOU: maps high precision-weighted PE into high structural write, enabling acute freezing by learned counts. |
+| `learning_rate_arousal_gain` | 26.0 | IOU: maps high precision-weighted PE into high structural write, enabling acute freezing by learned counts. |
 | `cue_learning_weight` | 0.55 | IOU: cue banks learn more slowly than affect banks so the revision probe targets affective likelihood rather than cue identity. |
 | `revision_learning_rate` | 2.0 | Derivation: ordinary safe evidence has fixed moderate learning strength across all probes; revision is measured, not formulaic. |
-| `revision_kl_scale` | 0.12 | IOU: converts measured KL divergence between pre/post affect-bank posteriors into a 0-100 revision percentage for the preregistered thresholds. |
+| `revision_kl_scale` | 0.025 | IOU: converts measured KL divergence between pre/post affect-bank posteriors into a 0-100 revision percentage for the preregistered thresholds. |
+| `aversive_cause_threshold` | 0.42 | IOU: frozen/revisable labels only apply when the measured target cause predicts aversive outcomes above the controlled-cell range; chronic slow-path seeds sit just above this value. |
 | `arousal_pe_scale` | 5.2 | IOU: maps realized precision-weighted surprise into the 0-1 arousal scale. |
 | `reflexivity_arousal_slope` | 0.88 | Derivation: Tier A reflexivity is the logged arousal-linked input; Sim 6 later makes this inferred. |
 | `observation_precision_base` | 0.42 | IOU: nonzero precision for low-omega trials. |

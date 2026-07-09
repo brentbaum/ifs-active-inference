@@ -35,17 +35,18 @@ model_params:
   disconfirming_trials: 24
   post_formation_trials: 18
   slow_path_trials: 600
-  slow_path_omega: 0.74
-  slow_path_kappa: 0.18
+  slow_path_omega: 0.90
+  slow_path_kappa: 0.0
   bundle_seed_count: 8
   frozen_precision_threshold: 260.0
   spawn_pressure_threshold: 2.45
   spawn_pressure_decay: 0.72
   learning_rate_base: 0.16
-  learning_rate_arousal_gain: 15.0
+  learning_rate_arousal_gain: 26.0
   cue_learning_weight: 0.55
   revision_learning_rate: 2.0
-  revision_kl_scale: 0.12
+  revision_kl_scale: 0.025
+  aversive_cause_threshold: 0.42
   arousal_pe_scale: 5.2
   reflexivity_arousal_slope: 0.88
   observation_precision_base: 0.42
