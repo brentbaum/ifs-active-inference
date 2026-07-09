@@ -8,6 +8,8 @@ using ..Criteria: write_criteria_results
 using ..DummyExperiment: run_dummy_seed
 using ..IO: ensure_dir, write_json, write_placeholder_svg, write_rows_csv
 using ..Reproducibility: build_reproducibility_metadata
+using ..Sim1: run_sim1
+using ..Sim3: run_sim3_config
 
 export run_config
 
@@ -66,6 +68,15 @@ function theory_label(results)
 end
 
 function run_config(config::ExperimentConfig; config_path::Union{Nothing, AbstractString} = nothing, output_dir::Union{Nothing, AbstractString} = nothing)
+    if config.experiment == "sim1"
+        outdir = isnothing(output_dir) ? run_output_dir(config) : output_dir
+        return run_sim1(config; config_path = config_path, output_dir = outdir)
+    end
+
+    if config.experiment == "sim3"
+        return run_sim3_config(config; config_path = config_path, output_dir = output_dir)
+    end
+
     started = time()
     outdir = isnothing(output_dir) ? run_output_dir(config) : output_dir
     ensure_dir(outdir)

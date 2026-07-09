@@ -1,0 +1,73 @@
+criteria:
+  - id: S1.1a
+    description: Connected frozen region exists with dominant aversive causes above structural precision threshold and under 10% measured later structural revision.
+    metric_path: criteria.connected_frozen_region
+    comparator: ">="
+    threshold: 1.0
+    weak_threshold: 0.5
+    opposite_threshold: 0.0
+    kind: success
+  - id: S1.1b
+    description: Connected revisable region exists with dominant aversive causes over 80% measured later structural revision.
+    metric_path: criteria.connected_revisable_region
+    comparator: ">="
+    threshold: 1.0
+    weak_threshold: 0.5
+    opposite_threshold: 0.0
+    kind: success
+  - id: S1.2
+    description: High-overwhelm/high-control cells do not spawn.
+    metric_path: criteria.high_omega_high_kappa_spawn_rate
+    comparator: "<="
+    threshold: 0.05
+    weak_threshold: 0.10
+    opposite_threshold: 0.50
+    kind: success
+  - id: S1.3
+    description: Slow path crosses the frozen boundary below the acute region's minimum per-trial PE.
+    metric_path: criteria.slow_path_crosses_below_acute_min
+    comparator: ">="
+    threshold: 1.0
+    weak_threshold: 0.5
+    opposite_threshold: 0.0
+    kind: success
+  - id: S1.4
+    description: Attenuate is selected only in the omega-extreme/kappa-near-zero corner.
+    metric_path: criteria.attenuate_corner_only
+    comparator: ">="
+    threshold: 1.0
+    weak_threshold: 0.5
+    opposite_threshold: 0.0
+    kind: success
+  - id: S1.traits
+    description: Three formation traits are logged as measurements in summary.json.
+    metric_path: criteria.three_traits_logged
+    comparator: ">="
+    threshold: 1.0
+    weak_threshold: 0.5
+    opposite_threshold: 0.0
+    kind: success
+  - id: A1.1
+    description: Omega-only sweep at moderate kappa does not produce a frozen region.
+    metric_path: criteria.a11_omega_only_frozen_region
+    comparator: "<="
+    threshold: 0.0
+    weak_threshold: 0.10
+    opposite_threshold: 0.50
+    kind: adversarial
+  - id: A1.2
+    description: Boundary moves smoothly under CRP concentration plus/minus 50%.
+    metric_path: criteria.a12_boundary_smoothness_max_jump
+    comparator: "<="
+    threshold: 0.20
+    weak_threshold: 0.30
+    opposite_threshold: 0.60
+    kind: adversarial
+  - id: A1.3
+    description: Slow-path trial-order shuffle still crosses the frozen boundary.
+    metric_path: criteria.a13_shuffle_cross_rate
+    comparator: ">="
+    threshold: 0.80
+    weak_threshold: 0.60
+    opposite_threshold: 0.20
+    kind: adversarial
