@@ -1,0 +1,30 @@
+criteria:
+  - id: Sc.nulls
+    description: "Pilot specificity requires the frozen theory mapping to produce collapse-and-persistent-capture in at least 8/10 seeds while flat, reversed, and non-monotone generative mappings each do so in at most 2/10; per-mapping driven basin maps are reported regardless."
+    metric_path: metrics.nulls.specificity_pass
+    comparator: "=="
+    threshold: 1.0
+    weak_threshold: 1.0
+    opposite_threshold: 0.0
+    kind: success
+  - id: Sc.bifurcation
+    description: "At least one 6-neighbor-connected bistable region exists on the preregistered beta x gamma x safety-prior-mass grid and contains the historical continuous hysteresis-reference default (1.05, 1.25, 0.60); its volume fraction is descriptive, not thresholded."
+    metric_path: metrics.bifurcation.connected_default_inside
+    comparator: "=="
+    threshold: 1.0
+    weak_threshold: 1.0
+    opposite_threshold: 0.0
+    kind: success
+  - id: Sc.decoupled
+    description: "Collapse basin capture followed by persistent capture after latent-depth recovery occurs in at least 8/10 pilot seeds under an independently evolving reflected latent-depth drive."
+    metric_path: metrics.decoupled.signature_seed_count
+    comparator: ">="
+    threshold: 8.0
+    weak_threshold: 6.0
+    opposite_threshold: 2.0
+    kind: success
+
+analysis_rules:
+  noise_hysteresis_death: "The first preregistered observation-noise SD with fewer than 8/10 collapse-and-persistent-capture signatures; if none, report no death within the swept range."
+  null_reporting: "Report every mapping separately even when the aggregate criterion fails."
+  pilot_only: "Stop after these 10 seeds; do not run confirmatory seeds or retune after observing outcomes."
