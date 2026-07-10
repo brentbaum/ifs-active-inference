@@ -934,12 +934,16 @@ function run_sim5_config(config::ExperimentConfig; config_path::Union{Nothing, A
     if !isnothing(config.criteria_path) && isfile(config.criteria_path)
         criteria_results = write_criteria_results(config.criteria_path, summary_path, joinpath(outdir, "criteria-results.json"))
     end
+    # Step B fix (orchestrator, 2026-07-10): the agent's Step A status block
+    # hardcoded pilot values, so the first confirmatory run reported
+    # implementation_passed=false with run_class="pilot" despite valid metrics.
+    # Seed validity itself is enforced by the label-aware guard at entry.
     status = (
-        implementation_passed = config.label == "pilot" && config.seeds == collect(1001:1010) && isfile(figure_path) && length(metrics) == 15 * length(config.seeds),
+        implementation_passed = isfile(figure_path) && length(metrics) == 15 * length(config.seeds),
         theory_result = theory_label(criteria_results),
         criteria_results_path = criteria_results === nothing ? nothing : joinpath(outdir, "criteria-results.json"),
-        run_class = "pilot",
-        stop_after_pilot = true,
+        run_class = config.label,
+        stop_after_pilot = config.label == "pilot",
     )
     write_json(joinpath(outdir, "status.json"), status)
     metadata = build_reproducibility_metadata(

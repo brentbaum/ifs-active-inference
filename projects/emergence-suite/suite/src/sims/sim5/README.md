@@ -80,3 +80,15 @@ confirmatory preregistered at configs/sim5-confirmatory.yaml (fresh seeds
 (configs/sim5-criteria-confirmatory.yaml). Pilot fragility to watch: S5.signature
 passed at exactly 8/10, and regulation-only revised 0/10 (live but null) — the
 confirmatory reports both honestly whichever way they land.
+
+## Step B confirmatory verdict (2026-07-10, fresh seeds 5001-5020): SUPPORT
+
+All eight criteria pass at the scaled thresholds: signature 18/20 (the pilot's
+zero-margin 8/10 resolved upward), reversed mapping flips it 19/20, unreliable
+degrades it 20/20, lesion 20/20, contact-root evidence live 20/20, audit clean.
+The A5.2 result replicates in its earnable form: regulation-only lowers capture
+by 0.275 yet revises 0/20 — co-regulation changes the REGIME, witnessing
+supplies the EVIDENCE; separately necessary, jointly sufficient. This converges
+with Sim 2's accessibility-premise result from the opposite direction. (The
+first confirmatory execution reported a stale pilot-only status flag; fixed and
+rerun — criteria values bit-identical across both executions.)

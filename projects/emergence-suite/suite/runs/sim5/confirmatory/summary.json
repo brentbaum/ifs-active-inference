@@ -1,0 +1,200 @@
+{
+    "experiment": "sim5",
+    "config": {
+        "experiment": "sim5",
+        "seeds": [
+            5001,
+            5002,
+            5003,
+            5004,
+            5005,
+            5006,
+            5007,
+            5008,
+            5009,
+            5010,
+            5011,
+            5012,
+            5013,
+            5014,
+            5015,
+            5016,
+            5017,
+            5018,
+            5019,
+            5020
+        ],
+        "output_dir": "projects/emergence-suite/suite/runs",
+        "label": "confirmatory",
+        "model_params": {
+            "E0": 1,
+            "activation_drive": 0.86,
+            "activation_jitter": 0.04,
+            "attenuation_learning_rate": 0.18,
+            "beta": 1,
+            "bmr_interval": 5,
+            "contact_root_evidence_fraction": 0.3,
+            "contact_start_trial": 6,
+            "coreg_precision": 2.35,
+            "depth_grid": [
+                0,
+                0.25,
+                0.5,
+                0.75,
+                1
+            ],
+            "dyad_baseline_prior": [
+                0.18,
+                0.22,
+                0.24,
+                0.22,
+                0.14
+            ],
+            "dysregulated_channel_safe_probability": 0.1,
+            "dysregulated_surface_coherent_probability": 0.1,
+            "fluent_threatened_channel_safe_probability": 0.1,
+            "fluent_threatened_surface_coherent_probability": 0.92,
+            "full_prior_alone": 12,
+            "full_prior_met": 2,
+            "gamma": 1.15,
+            "high_baseline_prior": [
+                0.04,
+                0.08,
+                0.16,
+                0.3,
+                0.42
+            ],
+            "lambda_ctx": 0.9,
+            "learned_mapping_tail_trials": 15,
+            "learned_signature_margin": 0.15,
+            "lesion_degradation_ratio": 0.5,
+            "low_baseline_prior": [
+                0.46,
+                0.28,
+                0.16,
+                0.07,
+                0.03
+            ],
+            "mapping_learning_rate": 1,
+            "mapping_lesion_trial": 31,
+            "mapping_prior_count": 1,
+            "mapping_settle_probability_by_signal": [
+                0.9,
+                0.6,
+                0.64,
+                0.1
+            ],
+            "medium_baseline_prior": [
+                0.2,
+                0.24,
+                0.26,
+                0.2,
+                0.1
+            ],
+            "n_session_trials": 60,
+            "ordinary_learning_rate": 1,
+            "ownership_learning_rate": 0.72,
+            "ownership_max_sessions": 12,
+            "ownership_prior_concentration": 24,
+            "ownership_revision_floor": 8,
+            "pi_part": 4,
+            "prior_log_odds": -5,
+            "reduced_prior_alone": 7,
+            "reduced_prior_met": 7,
+            "regulated_channel_safe_probability": 0.9,
+            "regulated_coreg_by_depth": [
+                0.08,
+                0.16,
+                0.36,
+                0.74,
+                0.93
+            ],
+            "regulated_surface_coherent_probability": 0.92,
+            "relational_count_good": 1,
+            "relational_count_old": 0.08,
+            "transition_mix": 0.08,
+            "unreliable_degradation_ratio": 0.6,
+            "unreliable_mapping_noise": 0.75,
+            "volatility_precision": 1.35
+        },
+        "sweep_grid": {
+        },
+        "criteria_path": "projects/emergence-suite/suite/configs/sim5-criteria-confirmatory.yaml"
+    },
+    "model": {
+        "client": "Sim2 root revision with Sim6a categorical inferred depth",
+        "therapist": "stochastic joint surface/co-regulation emitter",
+        "audit_path": "joint therapist signal + observed own-state change -> client Dirichlet counts -> learned soft likelihood -> depth posterior; no condition label enters the learned update"
+    },
+    "metrics": {
+        "revision": {
+            "regulated_mean": 18.59825385466333,
+            "dysregulated_mean": 0,
+            "fluent_threatened_mean": 3.372172871047064,
+            "regulated_minus_dysregulated": 18.59825385466333,
+            "regulated_minus_fluent_threatened": 15.226080983616265,
+            "emission_tuple_identity_audit": 0,
+            "self_low_mean": 0,
+            "self_medium_mean": 0,
+            "self_high_mean": 15.431079949654901,
+            "mapping_lesion_mean": 0
+        },
+        "contrast": {
+            "regulated_mean_capture": 0.501459681541567,
+            "fluent_threatened_mean_capture": 0.7122457063349049,
+            "capture_gap_fluent_minus_regulated": 0.21078602479333797,
+            "regulated_final_E_t": 0.7492152165826377,
+            "fluent_threatened_final_E_t": 0.20917447514185042
+        },
+        "learned_mapping": {
+            "signature_seed_count": 18,
+            "reversed_signature_seed_count": 19,
+            "unreliable_degraded_seed_count": 20,
+            "lesion_degraded_seed_count": 20,
+            "regulated_mean_learned": 0.8450324204506732,
+            "fluent_threatened_mean_learned": 0.578534793874965,
+            "dysregulated_mean_learned": 0.211250475207256,
+            "regulated_unreliable_mean_learned": 0.5831518775784553,
+            "fluent_unreliable_mean_learned": 0.5107749458403558,
+            "dysregulated_unreliable_mean_learned": 0.42600602498824014,
+            "regulated_reversed_mean_learned": 0.14527437010268945,
+            "fluent_reversed_mean_learned": 0.4157030416842159,
+            "dysregulated_reversed_mean_learned": 0.7981087388549264,
+            "lesioned_fluent_mean_learned": 0.5
+        },
+        "borrowed_then_owned": {
+            "early_low_self_revision": 0,
+            "late_low_self_revision": 0,
+            "session_count_to_ownership": 13,
+            "final_learned_prior_E_t": 0.6754251284159017
+        },
+        "adversarial": {
+            "content_only_revision_mean": 0,
+            "content_only_revision_ratio": 0,
+            "regulation_only_revision_mean": 0,
+            "regulation_only_revision_ratio": 0,
+            "regulation_only_capture_drop_vs_content_only": 0.27492542236298045,
+            "regulation_only_contact_root_evidence_seed_count": 20,
+            "regulation_only_revision_seed_count": 0,
+            "regulated_plus_witnessing_revision_mean": 18.59825385466333,
+            "regulation_only_minus_regulation_plus_witnessing": -18.59825385466333,
+            "regulation_only_interpretation": "depth-support-without-root-revision"
+        },
+        "audit": {
+            "depth_update_path_ok": 1,
+            "no_direct_depth_write": 1,
+            "structural_effective_precision_separated": 1,
+            "distinct_emission_tuple_count": 3,
+            "supplied_condition_labels_used_as_likelihood": 0,
+            "old_fluent_dysregulated_alias_valid": 0,
+            "old_ablation_regulated_alias_valid": 0,
+            "contact_evidence_content_gated": 0
+        },
+        "outputs": {
+            "capture_figure_written": 1,
+            "capture_figure": "projects/emergence-suite/suite/runs/sim5/confirmatory/figures/capture-index.svg"
+        }
+    },
+    "per_seed_metric_count": 300,
+    "trace_row_count": 18000
+}
