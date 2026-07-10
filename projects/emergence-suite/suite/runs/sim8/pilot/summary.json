@@ -25,12 +25,12 @@
         },
         "coupling": {
             "directional_seed_count": 4,
-            "mean_directional_fraction": 0.5714285714285714
+            "mean_directional_fraction": 0.6666666666666666
         },
         "descent": {
-            "baseline_pass_count": 3,
+            "baseline_pass_count": 4,
             "shuffled_pass_count": 2,
-            "shuffle_degradation": 1
+            "shuffle_degradation": 2
         }
     },
     "per_seed": [
@@ -68,11 +68,11 @@
             "seed": 1004,
             "n_causes": 4,
             "spawns": 3,
-            "directional_pairs": 4,
+            "directional_pairs": 6,
             "total_pairs": 6,
-            "descent": false,
+            "descent": true,
             "shuffled_descent": false,
-            "first_selections": "1:3 2:10 3:2 4:1"
+            "first_selections": "1:7 2:3 3:2 4:1"
         },
         {
             "seed": 1005,
@@ -102,7 +102,7 @@
             "total_pairs": 3,
             "descent": false,
             "shuffled_descent": false,
-            "first_selections": "1:1 2:4 3:8"
+            "first_selections": "1:2 2:1 3:7"
         },
         {
             "seed": 1008,
@@ -118,11 +118,11 @@
             "seed": 1009,
             "n_causes": 4,
             "spawns": 3,
-            "directional_pairs": 0,
+            "directional_pairs": 2,
             "total_pairs": 6,
             "descent": false,
             "shuffled_descent": false,
-            "first_selections": "1:1 2:4 3:7 4:12"
+            "first_selections": "1:1 2:12 3:8 4:9"
         },
         {
             "seed": 1010,
@@ -132,7 +132,7 @@
             "total_pairs": 1,
             "descent": false,
             "shuffled_descent": true,
-            "first_selections": "1:1 2:3"
+            "first_selections": "1:1 2:4"
         }
     ]
 }

@@ -68,3 +68,65 @@ own policy contributed to (actor vs bystander — uses only quantities already
 in the trial log); (b) lag the attribution window past the acute cluster; (c)
 weight attribution by counterfactual exposure (needs the relief bookkeeping
 Sim 1 already logs). Whichever is chosen: preregister, run once, log here.
+
+### Iteration 6 (preregistered 2026-07-10, BEFORE running)
+
+Chosen mechanism: attribution forms from UNASSIMILABLE events only. Internal
+aversive mass is weighted by (1 + excess), where excess = max(0, pe -
+assimilation_capacity) — the identical quantity that gates spawning; no new
+concept enters. Rationale is §4's own language: the part absorbs what cannot
+be assimilated, so the attribution content IS the unassimilable event. An
+expected storm (a mid-cluster catastrophe arriving after beliefs have adapted,
+pe ~0.6 < capacity 1.0) is assimilated and carries no attribution — which is
+precisely the mid-cluster blame the reversal seeds collect. The raw severity
+multiplier and arousal-scaled rate leave the internal write rule (severity
+already enters pe multiplicatively, so excess carries it by the principled
+route); baseline uses the identical rule so the contrast stays
+apples-to-apples. Predictions, falsifiable both ways: reversal seeds (1009,
+1010, 1007) should lose their backwards attribution; if instead spawn-to-spawn
+chains lose their coupling too (episode-2 events may all be assimilable once
+beliefs have adapted), directional fraction will DROP and that is the honest
+result. Exactly one run, logged below either way.
+
+**Iteration 6 RESULT: prediction falsified.** Directional fell to 1/10 and
+seed 1001's perfect descent was destroyed. Diagnosis: excess-gating killed the
+mid-cluster blame (excess is exactly zero for assimilated events — that part
+worked) AND the formative attribution, whose weight fell from ~36x (iteration
+5's arousal x severity) to ~3x (1 + excess of 2), too weak against hundreds of
+ordinary co-existence writes at 1x. The two effects need different scales.
+
+### Iteration 7 (preregistered before running)
+
+weight = 1 + internal_excess_gain x excess, internal_excess_gain = 30 — chosen
+to restore the formative write to the personal banks' own formative scale
+((1 + 60 x 0.44 / 5.2) x severity 6 ~ 36), documented in magic-numbers.md.
+Because excess is IDENTICALLY ZERO for assimilated events, no value of the
+gain can resurrect the mid-cluster blame iteration 6 killed — the constant
+only restores formative dominance. Prediction: 1001's descent returns;
+reversal seeds stay decoupled or flip to directional. If instead reversals
+return WITH the gain, the excess mechanism is wrong, not mis-scaled, and
+candidate (a) (actor-vs-bystander) is next. One run, logged either way.
+
+**Iteration 7 RESULT: best state; prediction partially confirmed.** Coupling
+4/10 directional seeds but mean directional fraction 0.67 (was 0.57), descent
+4/10 with shuffle degradation 2. The marquee: seed 1004 grew a FOUR-layer
+stack, 6/6 pairs directional, and descended it perfectly outside-in
+(4->3->2->1, sessions 1/2/3/7); the shuffle destroys it. Seed 1001 likewise
+(3/3, perfect, shuffle-destroyed). Against prediction: seeds 1009/1010 did not
+decouple — their backwards attribution persisted THROUGH the excess gate
+(identical 2/6 and 0/1 in iterations 6 and 7), meaning genuinely unassimilable
+events landed while a spawn was carrying the moment in those worlds. The
+excess mechanism is therefore necessary but not sufficient; per the
+preregistration, candidate (a) actor-vs-bystander attribution is next: the
+exile's activity precedes danger it cannot act on, the protector's precedes
+relief its own policies produce — attribution should discount outcomes the
+observed cause's own activity was managing. NOT yet implemented; next
+session's first preregistration.
+
+### Standing state after iteration 7
+
+Stacks 7/10; coupling 4/10 directional (fraction 0.67); descent 4/10
+(including one four-deep chain); shuffle degradation 2. All exploratory. The
+chain world -> coupling -> gate -> ordering is proven functional and
+bidirectionally honest; the single open question remains why two worlds grow
+reversed attribution, with a preregistered next mechanism.

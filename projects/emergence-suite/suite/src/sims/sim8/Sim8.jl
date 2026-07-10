@@ -64,6 +64,7 @@ Base.@kwdef struct Sim8Params
     episodes::Vector{NTuple{4, Float64}} = [(2.6, 0.2, 72.0, 128.0), (2.2, 0.35, 48.0, 96.0)]
     # New Sim 8 constants (pilot provenance in sim8/magic-numbers.md)
     internal_write_rate::Float64 = 0.16
+    internal_excess_gain::Float64 = 30.0
     internal_conf_k::Float64 = 4.0
     block_gain::Float64 = 1.0
     contact_write::Float64 = 6.0
@@ -92,6 +93,7 @@ function sim8_params(raw::AbstractDict)
         attenuation_cost = getf("attenuation_cost", base.attenuation_cost),
         episodes = episodes,
         internal_write_rate = getf("internal_write_rate", base.internal_write_rate),
+        internal_excess_gain = getf("internal_excess_gain", base.internal_excess_gain),
         internal_conf_k = getf("internal_conf_k", base.internal_conf_k),
         block_gain = getf("block_gain", base.block_gain),
         contact_write = getf("contact_write", base.contact_write),
@@ -206,27 +208,31 @@ function run_formation_trial!(rng::AbstractRNG, agent::AgentState, world, potent
     # not mere valence; both epochs share the ordinary hazard rate, so severity
     # is the only quantity the world makes asymmetric between them). One
     # symmetric rule; any direction must be grown by the epoch structure.
-    # Iteration 4: internal observation uses the SAME arousal-scaled write rule
-    # as the personal banks (using a flat rate was the inconsistency, not a
-    # missing dial). The formative attribution then does the directional work:
-    # at a spawn trial, the activation ENTERING the catastrophe is the old
-    # cause's, written at ~12x arousal weight and severity 6 into the newborn's
-    # bank about it — while the old cause records nothing about the newborn
-    # (its entering activation was zero). Ordinary co-existence trials write at
-    # ~1x and cannot wash that out. Same lag rule for everyone; direction can
-    # only come from who was active entering the unassimilable moments.
-    sev_w = outcome == AVERSIVE ? severity : 1.0
-    ilr = params.internal_write_rate * (1.0 + params.learning_rate_arousal_gain * arousal / params.arousal_pe_scale)
+    # Iteration 6 (see README preregistration): attribution forms from
+    # UNASSIMILABLE events only. Internal aversive mass is weighted by
+    # (1 + excess), excess = max(0, pe - assimilation_capacity) — the same
+    # quantity that gates spawning. An expected storm (mid-cluster catastrophe
+    # after beliefs adapt, pe below capacity) is assimilated and carries no
+    # attribution; that expected-storm blame is what reversed the coupling in
+    # seeds 1009/1010. Severity enters through pe, the principled route. The
+    # baseline uses the identical rule so the contrast stays apples-to-apples.
+    # Same lag rule for everyone; direction can only come from who was active
+    # ENTERING the unassimilable moments.
+    # Iteration 7: excess gain restores the formative write to the personal
+    # banks' own formative scale (~36x); excess is identically zero for
+    # assimilated events, so no gain value can resurrect mid-cluster blame.
+    excess = max(0.0, pe - params.assimilation_capacity)
+    out_w = outcome == AVERSIVE ? 1.0 + params.internal_excess_gain * excess : 1.0
     for (jk, j) in enumerate(agent.causes)
         # Unconditional baseline: what j's world is like, same rule, weight 1.
-        j.witness_baseline[outcome] += ilr * sev_w
+        j.witness_baseline[outcome] += params.internal_write_rate * out_w
         for (ik, i) in enumerate(agent.causes)
             jk == ik && continue
             ik <= length(agent.activation) || continue
-            w = ilr * agent.activation[ik]
+            w = params.internal_write_rate * agent.activation[ik]
             w <= EPS && continue
             bank = get!(j.internal, i.id, fill(0.5, 2))
-            bank[outcome] += w * sev_w
+            bank[outcome] += w * out_w
         end
     end
     agent.activation = r

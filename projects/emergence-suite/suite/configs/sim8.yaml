@@ -33,6 +33,7 @@ model_params:
     - [2.2, 0.35, 48, 96]
   # New Sim 8 constants (pilot provenance in sim8/magic-numbers.md)
   internal_write_rate: 0.16
+  internal_excess_gain: 30.0
   internal_conf_k: 4.0
   block_gain: 1.0
   contact_write: 6.0

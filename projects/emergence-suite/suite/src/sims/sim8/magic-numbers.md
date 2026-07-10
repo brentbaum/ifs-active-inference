@@ -24,3 +24,5 @@ no constant was tuned against pilot outcomes (mechanism STRUCTURE was iterated
 instead, which is exactly why this sim is exploratory — see README iteration
 log). Anything promoted to a confirmatory cycle must re-freeze this table
 first and run fresh seeds under a scaled criteria file.
+
+| internal_excess_gain | 30.0 | Iteration 7: restores the formative internal write to the personal banks' own formative scale ((1 + 60 x 0.44/5.2) x severity 6 ~ 36); excess is identically zero for assimilated events, so this gain cannot resurrect the mid-cluster blame iteration 6 removed. Chosen by derivation from existing constants, not swept. |
