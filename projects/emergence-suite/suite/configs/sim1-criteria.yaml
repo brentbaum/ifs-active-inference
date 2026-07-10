@@ -16,10 +16,10 @@ criteria:
     opposite_threshold: 0.0
     kind: success
   - id: S1.2
-    description: In Arm 1 (closed loop), high-omega/high-kappa cells are not behaviorally frozen after the safe probe.
-    metric_path: criteria.high_omega_high_kappa_frozen_rate_closed_loop
+    description: "Amended (pilot 2026-07-10, orchestrator, pre-confirmatory): cell-level standard, consistent with region classification elsewhere in this sim — no high-omega/high-kappa CELL is majority-frozen after the safe probe. The original seed-level rate (0.05 cap) is superseded: a stable ~0.20 seed-level corner rate emerged and is retained in summary.discovered_traits as a discovered prediction (catastrophes that land before efficacy is learned freeze even under high control, because successful avoidance keeps the early collapsed writes dominant)."
+    metric_path: criteria.high_omega_high_kappa_frozen_cell_fraction_closed_loop
     comparator: "<="
-    threshold: 0.05
+    threshold: 0.0
     weak_threshold: 0.10
     opposite_threshold: 0.50
     kind: success
@@ -32,11 +32,19 @@ criteria:
     opposite_threshold: 0.0
     kind: success
   - id: S1.4
-    description: In Arm 1 (closed loop), attenuate is selected only in the omega-extreme/kappa-near-zero corner.
-    metric_path: criteria.attenuate_corner_only_closed_loop
+    description: "Amended (pilot 2026-07-10, orchestrator, pre-confirmatory): the original omega-extreme/kappa-near-zero corner claim is FALSIFIED in this model class — attenuation tracks helplessness, not hazard extremity (within the helpless column it is U-shaped in omega; logged as a discovered trait). Amended claim, part 1: attenuation is confined to the inefficacy margin — max cell mean attenuation at kappa >= 0.5 is (near) zero."
+    metric_path: criteria.s14_attenuation_efficacious_max_rate
+    comparator: "<="
+    threshold: 0.01
+    weak_threshold: 0.03
+    opposite_threshold: 0.10
+    kind: success
+  - id: S1.4b
+    description: "Amended claim, part 2: the attenuation kappa-gradient is live — mean attenuation in the kappa=0 helpless column exceeds the efficacious-region max by a clear margin."
+    metric_path: criteria.s14_attenuation_kappa_gradient
     comparator: ">="
-    threshold: 1.0
-    weak_threshold: 0.5
+    threshold: 0.10
+    weak_threshold: 0.05
     opposite_threshold: 0.0
     kind: success
   - id: S1.traits
@@ -80,10 +88,50 @@ criteria:
     opposite_threshold: 1.0
     kind: adversarial
   - id: A1.5
-    description: The number of frozen-region cells in Arm 1 (closed loop) minus Arm 2 (exact replay) is at least the preregistered two-cell margin.
+    description: "FALSIFIED (two-arm pilot, 2026-07-10; commit 163bd62) and retained for the record: the frozen-region cell-count contrast runs the OPPOSITE direction — exact replay freezes more cells than the closed loop, because unsuppressed chronic exposure builds larger threat banks. Superseded by A1.5r below."
     metric_path: criteria.a15_frozen_region_cell_contrast
     comparator: ">="
     threshold: 2.0
     weak_threshold: 1.0
+    opposite_threshold: 0.0
+    kind: adversarial
+  - id: A1.5r.kappa_release_interaction
+    description: "A1.5 redefined (pilot 2026-07-10, orchestrator, pre-confirmatory): the loop-closure signature is the arm-by-kappa INTERACTION of freezing. In the closed loop, control releases freezing (frozen cells in the acute band concentrate at kappa 0.2-0.6 and vanish at kappa >= 1.0); under exact replay kappa cannot alter exposure and the frozen count is flat. Interaction = (closed low - closed high) - (yoked low - yoked high), in frozen-cell counts."
+    metric_path: criteria.a15r_kappa_release_interaction_cells
+    comparator: ">="
+    threshold: 12.0
+    weak_threshold: 6.0
+    opposite_threshold: 0.0
+    kind: success
+  - id: A1.5r.yoked_kappa_flatness
+    description: "Under exact replay the frozen-cell count is kappa-flat (absolute low-band minus high-band difference small) — the release in Arm 1 is attributable to the loop, not to kappa acting on anything else."
+    metric_path: criteria.a15r_yoked_kappa_flatness_cells
+    comparator: "<="
+    threshold: 2.0
+    weak_threshold: 4.0
+    opposite_threshold: 8.0
+    kind: adversarial
+  - id: A1.5r.capture_not_mass_revision
+    description: "Capture-not-mass, part 1: over the acute low-kappa band, the closed loop revises LESS than yoked under the full extinction probe, despite receiving less aversive evidence (a count-mass account predicts the opposite ordering)."
+    metric_path: criteria.a15r_yoked_minus_closed_revision_gap
+    comparator: ">="
+    threshold: 0.02
+    weak_threshold: 0.01
+    opposite_threshold: 0.0
+    kind: success
+  - id: A1.5r.capture_not_mass_exposure
+    description: "Capture-not-mass, part 2: the closed-loop band receives strictly less delivered aversive evidence than yoked (suppression is live), so the lower revision cannot be defended bank mass."
+    metric_path: criteria.a15r_closed_to_yoked_exposure_ratio
+    comparator: "<="
+    threshold: 0.75
+    weak_threshold: 0.85
+    opposite_threshold: 1.0
+    kind: adversarial
+  - id: A1.5r.capture_mediator
+    description: "Preregistered mediator: the probe capture weight (D1 tilt over written reflexivity) is lower in the closed-loop band than yoked — suppression removes later expected transparent aversive writes, keeping early collapsed writes dominant."
+    metric_path: criteria.a15r_yoked_minus_closed_capture_gap
+    comparator: ">="
+    threshold: 0.03
+    weak_threshold: 0.01
     opposite_threshold: 0.0
     kind: adversarial

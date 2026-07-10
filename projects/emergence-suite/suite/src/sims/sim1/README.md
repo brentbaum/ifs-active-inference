@@ -113,17 +113,49 @@ do not imply spawning.
 - `artifacts/`: Arm 1 formation bundles and v3 manifest.
 - `figures/phase_diagram.svg`: side-by-side closed-loop and yoked phase maps.
 
-## T4.6 step C status (orchestrator hands-on, 2026-07-10 — NOT frozen for confirmatory)
+## T4.6 step C follow-up (orchestrator hands-on, 2026-07-10): consolidation epoch and redefined A1.5
 
-State: closed-loop connected frozen region exists (omega 2.4-2.8, kappa 0.1-0.6, boundary
-rising in kappa); spawning alive (274 events) via surprise-excess pressure + EFE-flatness
-fork; kappa=0 closed-loop == yoked at the corner (coherence check passes).
+The young-spawn anomaly is resolved by a world-side schedule change, not an
+agent-side gate: after the acute epoch (72 trials, catastrophe channel live), a
+consolidation epoch follows (128 trials, same omega, channel silent). Spawning
+then stops on its own — ordinary hazards never exceed `assimilation_capacity` —
+and late-spawned causes keep operating under the same loop, accruing capture
+mass before the probe. Developmentally this is the theory's own story: acute
+overwhelm, then years of ordinary adversity under the same avoidance loop.
 
-OPEN ANOMALY (next iteration's first target): freshly-spawned causes are the probe target
-at kappa=0 and revise at ~0.33 relative — a ~75-count bank moves under any nonzero probe
-weight. The theory's own answer: freezing = write + the self-sealing loop (§4); late
-spawns get no consolidation window in a 200-trial schedule. Candidate fix: extend the
-formation schedule so spawned causes accrue loop-hardened mass before probing (world-side
-change), then re-check the kappa profile and the two-arm contrast (A1.5 needs redefining
-as the kappa-GRADIENT of freezing: present in closed loop, flat under yoking).
-All step-C constants are pilot-provenance and unfrozen; sweep before Step B.
+What the model produced under this schedule (pilot seeds 1001-1010):
+
+- **Kappa release (A1.5r)**: in the closed loop, control releases freezing —
+  22 frozen cells in the acute low-kappa band (omega >= 2.0, kappa 0.2-0.6),
+  zero at kappa >= 1.0. Under exact replay the frozen count is kappa-flat
+  (30 vs 30). Interaction: 22 cells. Kappa can only matter through the loop,
+  and it does.
+- **Capture, not mass**: over the same band the closed loop receives 37% of
+  yoked's delivered aversive evidence yet revises HALF as much (0.057 vs 0.107)
+  — the count-mass account predicts the opposite ordering. Preregistered
+  mediator: probe capture weight 0.176 (closed) vs 0.284 (yoked). Suppression
+  removes the later, expected, transparent aversive writes, so the early
+  collapsed writes stay dominant. This is the self-sealing loop stated in
+  count arithmetic.
+- **Uncontrollable adversity does not freeze**: at kappa=0 spawned causes keep
+  tracking the world in both arms and revise under the probe. Freezing requires
+  partial control — enough efficacy for avoidance to prevent disconfirmation.
+- **Original A1.5 stays falsified** (retained in the criteria as a record):
+  replay freezes MORE cells than the closed loop (-141 contrast), because
+  unsuppressed chronic exposure builds larger banks. The redefined claim is the
+  interaction, which no bank-size account produces.
+- **S1.2 amended to the cell-level standard** (no corner cell majority-frozen;
+  passes at 0.0). The ~0.20 seed-level corner rate is kept as a discovered
+  trait: catastrophes that land before efficacy is learned freeze even under
+  high control, because successful avoidance keeps early collapsed writes
+  dominant.
+- **S1.4 corner claim falsified and amended**: attenuation tracks helplessness,
+  not hazard extremity — mean cell attenuation is exactly 0 for kappa >= 0.5 at
+  every omega, monotone-decreasing from 0.195 at kappa=0. Within the helpless
+  column it is U-shaped in omega (traps at LOW omega where attenuated evidence
+  cannot resolve; high rates under relentless extreme hazard). Trap seeds are
+  never frozen — a distinct dissociative mode, not the freezing mechanism.
+
+All constants and thresholds above are pilot-provenance, recorded in
+`magic-numbers.md`, and frozen before Step B confirmatory (fresh seeds
+4001-4020, disjoint from the pilot).

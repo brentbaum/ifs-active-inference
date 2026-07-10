@@ -15,7 +15,7 @@
             1009,
             1010
         ],
-        "output_dir": "runs",
+        "output_dir": "projects/emergence-suite/suite/runs",
         "label": "pilot",
         "model_params": {
             "acute_region_omega_min": 1.18,
@@ -33,11 +33,12 @@
             "bundle_seed_count": 8,
             "cell_classification_rate": 0.5,
             "connected_region_min_cells": 2,
+            "consolidation_trials": 128,
             "crp_concentration": 0.34,
             "crp_threshold_base": 0.085,
             "crp_threshold_control_relief": 0,
             "cue_learning_weight": 0.55,
-            "disconfirming_trials": 24,
+            "disconfirming_trials": 96,
             "epistemic_weight": 0.28,
             "evidence_precision": 1,
             "formation_trials": 72,
@@ -57,7 +58,7 @@
             "slow_path_omega": 1,
             "slow_path_trials": 600,
             "spawn_pressure_decay": 0.72,
-            "spawn_pressure_threshold": 2.45,
+            "spawn_pressure_threshold": 1.2,
             "threat_prediction_threshold": 0.4
         },
         "sweep_grid": {
@@ -72,7 +73,7 @@
                 "min": 0.2
             }
         },
-        "criteria_path": "configs/sim1-criteria.yaml"
+        "criteria_path": "projects/emergence-suite/suite/configs/sim1-criteria.yaml"
     },
     "grid": {
         "omega": [
@@ -113,34 +114,34 @@
         "seeds_per_cell": 10
     },
     "arm_1_closed_loop": {
-        "spawn_rate_mean": 0,
-        "spawn_events": 0,
-        "frozen_cell_count": 1,
-        "frozen_region_cell_count": 0,
-        "frozen_largest_component": 1,
-        "revisable_cell_count": 11,
-        "revisable_region_cell_count": 10,
-        "revisable_largest_component": 7,
-        "mixed_cell_count": 1,
-        "high_omega_high_kappa_frozen_rate": 0,
-        "mean_potential_aversive_count": 40.76666666666656,
-        "mean_delivered_aversive_count": 17.979111111111113,
-        "mean_suppressed_aversive_count": 22.78755555555552,
+        "spawn_rate_mean": 0.05511111111111108,
+        "spawn_events": 130,
+        "frozen_cell_count": 48,
+        "frozen_region_cell_count": 48,
+        "frozen_largest_component": 48,
+        "revisable_cell_count": 4,
+        "revisable_region_cell_count": 4,
+        "revisable_largest_component": 4,
+        "mixed_cell_count": 0,
+        "high_omega_high_kappa_frozen_rate": 0.20000000000000007,
+        "mean_potential_aversive_count": 115.31333333333352,
+        "mean_delivered_aversive_count": 50.98355555555553,
+        "mean_suppressed_aversive_count": 64.32977777777774,
         "max_potential_count_range_across_kappa": 0,
-        "max_exposure_accounting_error": 7.105427357601002e-15,
-        "attenuation_corner_rate": 0.18368055555555554,
-        "attenuation_max_outside_rate": 0.2791666666666667
+        "max_exposure_accounting_error": 2.842170943040401e-14,
+        "attenuation_corner_rate": 0.20862499999999998,
+        "attenuation_max_outside_rate": 0.38299999999999995
     },
     "arm_2_yoked": {
-        "spawn_rate_mean": 0,
-        "spawn_events": 0,
-        "frozen_cell_count": 2,
-        "frozen_region_cell_count": 0,
-        "frozen_largest_component": 1,
-        "revisable_cell_count": 21,
-        "revisable_region_cell_count": 20,
-        "revisable_largest_component": 16,
-        "mixed_cell_count": 1,
+        "spawn_rate_mean": 0.06133333333333332,
+        "spawn_events": 147,
+        "frozen_cell_count": 189,
+        "frozen_region_cell_count": 189,
+        "frozen_largest_component": 189,
+        "revisable_cell_count": 5,
+        "revisable_region_cell_count": 5,
+        "revisable_largest_component": 5,
+        "mixed_cell_count": 0,
         "exact_replay": {
             "exact_yoking": 1,
             "complete_groups": true,
@@ -152,10 +153,48 @@
         }
     },
     "two_arm_contrast": {
-        "frozen_region_cell_contrast": 0,
+        "frozen_region_cell_contrast": -141,
         "preregistered_margin_cells": 2,
         "margin_met": false,
-        "interpretation": "closed-loop minus exact-replay frozen-region cells"
+        "interpretation": "closed-loop minus exact-replay frozen-region cells (original A1.5, falsified 2026-07-10, retained for the record)"
+    },
+    "discovered_traits": {
+        "high_kappa_seed_level_freezing": {
+            "rate": 0.20000000000000007,
+            "cell_fraction": 0,
+            "note": "seeds whose catastrophes land before efficacy is learned freeze even at high kappa: successful avoidance keeps the early collapsed writes dominant. Control prevents chronic freezing, not freezing outright. No corner CELL reaches majority-frozen."
+        },
+        "attenuation_traps": {
+            "note": "per-seed attenuation rates above 0.5 occur only for kappa < 0.5, concentrated at LOW omega in the helpless margin: attenuated evidence is too sparse to resolve, so attenuation self-sustains. None of these seeds are frozen; the trap is a distinct dissociative mode, not the freezing mechanism.",
+            "helpless_column_mean_rate": 0.1945,
+            "efficacious_max_rate": 0
+        },
+        "uncontrollable_adversity_revises": "at kappa=0 the spawned causes keep tracking the world (no avoidance loop can seal them) and revise under the probe in BOTH arms: uncontrollable adversity produces honest suffering, not frozen parts. Freezing requires partial control."
+    },
+    "kappa_release": {
+        "closed_low_kappa_frozen_cells": 22,
+        "closed_high_kappa_frozen_cells": 0,
+        "yoked_low_kappa_frozen_cells": 30,
+        "yoked_high_kappa_frozen_cells": 30,
+        "interaction_cells": 22,
+        "closed_band_mean_revision": 0.05730080244467046,
+        "yoked_band_mean_revision": 0.10677059615709861,
+        "yoked_minus_closed_revision_gap": 0.04946979371242815,
+        "closed_band_mean_aversive_exposure": 63.46666666666667,
+        "yoked_band_mean_aversive_exposure": 169.48333333333332,
+        "closed_to_yoked_exposure_ratio": 0.37447143278591805,
+        "closed_band_mean_capture_weight": 0.17648414232213863,
+        "yoked_band_mean_capture_weight": 0.2838759531752935,
+        "yoked_minus_closed_capture_gap": 0.10739181085315488,
+        "bands": {
+            "omega_min": 2,
+            "low_kappa": [
+                0.2,
+                0.6
+            ],
+            "high_kappa_min": 1
+        },
+        "interpretation": "A1.5 redefined: arm-by-kappa interaction of freezing (control releases in closed loop, kappa-flat under replay) plus capture-not-mass (closed loop frozen harder on less delivered aversive evidence, mediated by probe capture weight)"
     },
     "behavioral_revision": {
         "frozen_max_change": 0.15,
@@ -172,19 +211,19 @@
             "attenuate": 0
         },
         "potential_stream_exact_across_kappa": true,
-        "max_exposure_accounting_error": 7.105427357601002e-15,
+        "max_exposure_accounting_error": 2.842170943040401e-14,
         "per_cell_log": "action_mediation.csv"
     },
     "spawn_diagnostic": {
-        "outcome": "formation_by_spawning_dead_in_binary_environment_class",
+        "outcome": "spawning_present_at_original_scale",
         "crp_threshold_base": 0.085,
-        "total_spawn_events": 0,
-        "total_prediction_failures": 452,
-        "global_min_posterior_predictive": 0.040274047087452226,
-        "global_max_spawn_pressure": 0.6177015404517628,
-        "spawn_pressure_threshold": 2.45,
-        "closed_loop_spawn_events": 0,
-        "yoked_spawn_events": 0,
+        "total_spawn_events": 277,
+        "total_prediction_failures": 1763,
+        "global_min_posterior_predictive": 7.585547476777898e-5,
+        "global_max_spawn_pressure": 8.486681650712203,
+        "spawn_pressure_threshold": 1.2,
+        "closed_loop_spawn_events": 130,
+        "yoked_spawn_events": 147,
         "pilot_cutoff_candidates": [
             0.085,
             0.12,
@@ -225,27 +264,27 @@
     },
     "three_traits_log": {
         "closed_loop": {
-            "spawn_events": 0,
-            "write_time_reflexivity_mean": 0.6297606468137532,
-            "postformation_sampling_rate_mean": 0.041456790123456815,
-            "frozen_postformation_sampling_rate_mean": 0.7606837606837608
+            "spawn_events": 130,
+            "write_time_reflexivity_mean": 0.5551341817944716,
+            "postformation_sampling_rate_mean": 0.006148148148148148,
+            "frozen_postformation_sampling_rate_mean": 0.019516728624535316
         },
         "yoked": {
-            "spawn_events": 0,
-            "write_time_reflexivity_mean": 0.6193825555898406,
-            "postformation_sampling_rate_mean": 0.0383456790123457,
-            "frozen_postformation_sampling_rate_mean": 0.6734234234234233
+            "spawn_events": 147,
+            "write_time_reflexivity_mean": 0.46952218587803113,
+            "postformation_sampling_rate_mean": 0.006641975308641975,
+            "frozen_postformation_sampling_rate_mean": 0.0066428713067618475
         }
     },
     "phase_boundary": {
         "closed_loop_frozen_min_omega_by_kappa": [
-            1,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
+            0.6,
+            0.8,
+            1.2,
+            1.6,
+            2.2,
+            2.4,
+            2.8,
             null,
             null,
             null,
@@ -256,25 +295,25 @@
             null
         ],
         "yoked_frozen_min_omega_by_kappa": [
-            1,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6
         ],
         "closed_loop_revisable_min_omega_by_kappa": [
-            1.2,
-            2.0,
+            2.4,
+            null,
             null,
             null,
             null,
@@ -289,16 +328,16 @@
             null,
             null
         ],
-        "closed_loop_smoothness": 0
+        "closed_loop_smoothness": 0.21428571428571433
     },
     "slow_path": {
         "arm": "closed_loop",
         "crossed_rate": 0.8,
-        "first_seed_cross_trial": 11,
-        "first_seed_cross_structural_precision": 196.80294176273864,
-        "max_per_trial_pe": 2.521985430051201,
-        "max_crossing_trial_pe": 0.8857042607152195,
-        "acute_region_min_pe": 2.0206010416569025,
+        "first_seed_cross_trial": 90,
+        "first_seed_cross_structural_precision": 1040.9141628786786,
+        "max_per_trial_pe": 2.570775594220633,
+        "max_crossing_trial_pe": 0.8646524853813903,
+        "acute_region_min_pe": 2.0693912058263346,
         "below_acute_min": true,
         "pe_comparison": "maximum PE on each crossed seed's crossing trial versus minimum max-per-trial PE among acute closed-loop frozen seed-cells",
         "shuffle_cross_rate": 0.8,
@@ -309,15 +348,15 @@
         "a12_boundary_smoothness_traces_closed_loop": [
             {
                 "concentration_factor": 0.5,
-                "smoothness": 0,
+                "smoothness": 0.21428571428571433,
                 "frozen_boundary_min_omega_by_kappa": [
-                    1,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
+                    0.6,
+                    0.8,
+                    1.2,
+                    1.6,
+                    2.2,
+                    2.4,
+                    2.8,
                     null,
                     null,
                     null,
@@ -330,15 +369,15 @@
             },
             {
                 "concentration_factor": 1,
-                "smoothness": 0,
+                "smoothness": 0.21428571428571433,
                 "frozen_boundary_min_omega_by_kappa": [
-                    1,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
+                    0.6,
+                    0.8,
+                    1.2,
+                    1.6,
+                    2.2,
+                    2.4,
+                    2.8,
                     null,
                     null,
                     null,
@@ -351,15 +390,15 @@
             },
             {
                 "concentration_factor": 1.5,
-                "smoothness": 0,
+                "smoothness": 0.21428571428571433,
                 "frozen_boundary_min_omega_by_kappa": [
-                    1,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
+                    0.6,
+                    0.8,
+                    1.2,
+                    1.6,
+                    2.2,
+                    2.4,
+                    2.8,
                     null,
                     null,
                     null,
@@ -381,48 +420,56 @@
             "max_aversive_severity_range": 0,
             "max_observation_precision_range": 0
         },
-        "a15_frozen_region_cell_contrast": 0
+        "a15_frozen_region_cell_contrast": -141
     },
     "sensitivity": {
         "attenuation_preference_scale_closed_loop": [
             {
                 "aversive_preference_scale": 0.85,
                 "attenuate_corner_only": 0,
-                "corner_rate": 0.0125,
-                "max_outside_rate": 0.125
+                "corner_rate": 0.21662499999999996,
+                "max_outside_rate": 0.375
             },
             {
                 "aversive_preference_scale": 1,
                 "attenuate_corner_only": 0,
-                "corner_rate": 0.18368055555555554,
-                "max_outside_rate": 0.2791666666666667
+                "corner_rate": 0.20862499999999998,
+                "max_outside_rate": 0.38299999999999995
             },
             {
                 "aversive_preference_scale": 1.15,
                 "attenuate_corner_only": 0,
-                "corner_rate": 0.38125000000000003,
-                "max_outside_rate": 0.32916666666666666
+                "corner_rate": 0.33,
+                "max_outside_rate": 0.62
             }
         ]
     },
     "criteria": {
-        "connected_frozen_region_closed_loop": 0,
+        "connected_frozen_region_closed_loop": 1,
         "connected_revisable_region_closed_loop": 1,
-        "high_omega_high_kappa_frozen_rate_closed_loop": 0,
+        "high_omega_high_kappa_frozen_rate_closed_loop": 0.20000000000000007,
+        "high_omega_high_kappa_frozen_cell_fraction_closed_loop": 0,
         "slow_path_crosses_below_acute_min_closed_loop": 1,
         "attenuate_corner_only_closed_loop": 0,
+        "s14_attenuation_efficacious_max_rate": 0,
+        "s14_attenuation_kappa_gradient": 0.1945,
         "three_traits_logged": 1,
         "a11_omega_only_frozen_region_closed_loop": 0,
-        "a12_boundary_smoothness_max_jump_closed_loop": 0,
+        "a12_boundary_smoothness_max_jump_closed_loop": 0.21428571428571433,
         "a13_shuffle_cross_rate_closed_loop": 0.8,
         "a14_yoked_max_count_range": 0,
-        "a15_frozen_region_cell_contrast": 0
+        "a15_frozen_region_cell_contrast": -141,
+        "a15r_kappa_release_interaction_cells": 22,
+        "a15r_yoked_kappa_flatness_cells": 0,
+        "a15r_yoked_minus_closed_revision_gap": 0.04946979371242815,
+        "a15r_closed_to_yoked_exposure_ratio": 0.37447143278591805,
+        "a15r_yoked_minus_closed_capture_gap": 0.10739181085315488
     },
     "artifacts": {
-        "bundle_dir": "runs/sim1/pilot/artifacts",
-        "bundle_manifest": "runs/sim1/pilot/artifacts/bundle-manifest.json",
+        "bundle_dir": "projects/emergence-suite/suite/runs/sim1/pilot/artifacts",
+        "bundle_manifest": "projects/emergence-suite/suite/runs/sim1/pilot/artifacts/bundle-manifest.json",
         "bundle_schema": "sim1.bundle.v3",
-        "representative_bundle_count": 7,
+        "representative_bundle_count": 10,
         "source_arm": "closed_loop"
     },
     "criteria_amendments": {

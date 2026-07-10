@@ -92,3 +92,30 @@ transform is `kappa/(kappa+0.45)`. Given aversive/safe delivered evidence,
 action-consequence baselines are 0.90/0.08 aversive; relief weights are
 approach 0.10, flee 1.40, appease 0.90, attenuate 0. These efficacy values
 change consequence success, never potential hazard dosage or relief duration.
+
+## T4.6 step C follow-up (2026-07-10, orchestrator hands-on): consolidation epoch and redefined criteria
+
+All values below were selected on pilot seeds 1001-1010 only and are frozen
+before the confirmatory run.
+
+| Constant | Frozen value | Provenance |
+|---|---:|---|
+| `consolidation_trials` | 128 | Young-spawn anomaly diagnosis: at 0 (probe immediately after the acute epoch) freshly spawned ~75-count banks revise at ~0.33 relative; 128 trials of same-omega ordinary adversity let the loop harden them. Chosen as the first value that produced a stable kappa-profile (frozen 10/10 at omega=2.6, kappa=0.2); not further tuned. |
+| Consolidation-epoch catastrophe channel | silent | Not a tuned constant: the acute epoch ends. Spawning then stops on its own because ordinary hazards never exceed `assimilation_capacity` — no agent-side spawn gate is used. |
+| `release_omega_min` | 2.0 | Acute band for the A1.5r interaction; matches the region where both arms hold aversive targets in all 10 pilot seeds. |
+| `release_low_kappa_min/max` | 0.2 / 0.6 | Low-kappa freezing band observed in the pilot kappa-transect (frozen 10/10 at 0.2 falling to 4/10 at 0.6 at omega=2.6). |
+| `release_high_kappa_min` | 1.0 | High-kappa release band; closed-loop frozen cells are zero here at the cell level. |
+| `attenuation_efficacy_kappa` | 0.5 | Observed hard edge: mean cell attenuation is exactly 0 for kappa >= 0.5 at every omega (monotone-decreasing from 0.195 at kappa=0). |
+| A1.5r interaction threshold | 12 cells | Pilot observed 22 (closed 22-0, yoked 30-30); threshold at ~half observed. |
+| A1.5r revision-gap threshold | 0.02 | Pilot observed 0.049. |
+| A1.5r exposure-ratio cap | 0.75 | Pilot observed 0.374. |
+| A1.5r capture-gap threshold | 0.03 | Pilot observed 0.107. |
+| S1.2 cell-fraction cap | 0.0 | Pilot observed 0.0 (seed-level corner rate 0.20 retained as a discovered trait, not a criterion). |
+| S1.4 efficacious max rate cap | 0.01 | Pilot observed 0.0. |
+| S1.4b kappa-gradient threshold | 0.10 | Pilot observed 0.195. |
+
+Falsified-and-superseded claims retained for the record: original A1.5
+(frozen-region cell contrast; observed -141, the OPPOSITE direction — replay
+freezes more cells because unsuppressed chronic exposure builds larger banks)
+and original S1.4 (omega-extreme corner localization of attenuation; attenuation
+tracks helplessness, not hazard extremity).

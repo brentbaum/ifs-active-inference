@@ -27,6 +27,14 @@ Base.@kwdef struct Sim1Params
     crp_threshold_base::Float64 = 0.085
     crp_threshold_control_relief::Float64 = 0.0
     formation_trials::Int = 72
+    # Consolidation epoch (T4.6 step C follow-up): after the acute epoch the world's
+    # catastrophe channel goes silent at the same omega. Ordinary hazards are
+    # assimilable, so spawn pressure never exceeds capacity and formation stops on
+    # its own — no agent-side spawn gate. Existing causes, including late spawns,
+    # keep operating under the same loop and accrue capture mass before the probe
+    # (§4's self-sealing loop needs time to run; probing mid-formation probes a
+    # wound, not a part).
+    consolidation_trials::Int = 128
     disconfirming_trials::Int = 96
     post_formation_trials::Int = 18
     slow_path_trials::Int = 600
@@ -80,6 +88,15 @@ Base.@kwdef struct Sim1Params
     assimilation_capacity::Float64 = 1.0
     severity_prior_ordinary::Float64 = 1.0
     severity_prior_catastrophic::Float64 = 0.05
+    # A1.5 redefinition (post two-arm falsification of the region-count contrast):
+    # bands for the arm-by-kappa interaction of freezing. Pilot provenance in
+    # magic-numbers.md; frozen before confirmatory.
+    release_omega_min::Float64 = 2.0
+    release_low_kappa_min::Float64 = 0.2
+    release_low_kappa_max::Float64 = 0.6
+    release_high_kappa_min::Float64 = 1.0
+    # S1.4 amendment: attenuation is confined to kappa below this efficacy level.
+    attenuation_efficacy_kappa::Float64 = 0.5
 end
 
 mutable struct Cause
@@ -142,6 +159,7 @@ function sim1_params(raw::Dict{String, Any})
         crp_threshold_base = Float64(get(raw, "crp_threshold_base", 0.085)),
         crp_threshold_control_relief = Float64(get(raw, "crp_threshold_control_relief", 0.0)),
         formation_trials = Int(get(raw, "formation_trials", get(raw, "post_formation_trials", 72) * 4)),
+        consolidation_trials = Int(get(raw, "consolidation_trials", 128)),
         disconfirming_trials = Int(get(raw, "disconfirming_trials", 96)),
         post_formation_trials = Int(get(raw, "post_formation_trials", 18)),
         slow_path_trials = Int(get(raw, "slow_path_trials", 600)),
@@ -191,7 +209,12 @@ function sim1_params(raw::Dict{String, Any})
         assimilation_capacity = Float64(get(raw, "assimilation_capacity", 1.0)),
         catastrophe_severity = Float64(get(raw, "catastrophe_severity", 6.0)),
         severity_prior_ordinary = Float64(get(raw, "severity_prior_ordinary", 1.0)),
-        severity_prior_catastrophic = Float64(get(raw, "severity_prior_catastrophic", 0.05))
+        severity_prior_catastrophic = Float64(get(raw, "severity_prior_catastrophic", 0.05)),
+        release_omega_min = Float64(get(raw, "release_omega_min", 2.0)),
+        release_low_kappa_min = Float64(get(raw, "release_low_kappa_min", 0.2)),
+        release_low_kappa_max = Float64(get(raw, "release_low_kappa_max", 0.6)),
+        release_high_kappa_min = Float64(get(raw, "release_high_kappa_min", 1.0)),
+        attenuation_efficacy_kappa = Float64(get(raw, "attenuation_efficacy_kappa", 0.5))
     )
 end
 
@@ -314,15 +337,18 @@ function relief_trials(policy_idx::Int, params::Sim1Params)
     )[policy_idx]
 end
 
-function sample_evidence(rng::AbstractRNG, omega::Float64, params::Sim1Params)
+function sample_evidence(rng::AbstractRNG, omega::Float64, params::Sim1Params; catastrophes::Bool = true)
     p_av = base_aversive_probability(omega)
     outcome = rand(rng) < p_av ? AVERSIVE : SAFE
     # Acute-overwhelm channel (T4.6 step C, orchestrator): rare catastrophic-severity
     # hazards above an omega floor. Binary outcomes bound surprise, which killed both
     # spawning and collapsed writes; severity restores genuinely unassimilable events
     # (§4: "input no explanation on hand can absorb"). Stream is precomputed per
-    # (seed, omega), so the yoked arm replays severity exactly.
-    p_cata = clamp(params.catastrophe_rate * (omega - params.catastrophe_omega_floor), 0.0, params.catastrophe_max)
+    # (seed, omega), so the yoked arm replays severity exactly. During the
+    # consolidation epoch the channel is silent (catastrophes = false); the rand
+    # draw is kept unconditional so outcome streams match across epoch structures.
+    p_cata = catastrophes ?
+        clamp(params.catastrophe_rate * (omega - params.catastrophe_omega_floor), 0.0, params.catastrophe_max) : 0.0
     severity = (outcome == AVERSIVE && rand(rng) < p_cata) ? params.catastrophe_severity : 1.0
     return (
         outcome = outcome,
@@ -335,6 +361,18 @@ end
 function evidence_stream(seed::Int, omega::Float64, trials::Int, params::Sim1Params)
     rng = MersenneTwister(seed)
     return [sample_evidence(rng, omega, params) for _ in 1:trials]
+end
+
+"""
+Two-epoch potential-hazard stream: an acute epoch (catastrophe channel live) followed
+by a consolidation epoch at the same omega with the channel silent. Shared per
+(seed, omega) across arms and kappa, so yoking replays both epochs exactly.
+"""
+function formation_stream(seed::Int, omega::Float64, params::Sim1Params)
+    rng = MersenneTwister(seed)
+    acute = [sample_evidence(rng, omega, params) for _ in 1:params.formation_trials]
+    chronic = [sample_evidence(rng, omega, params; catastrophes = false) for _ in 1:params.consolidation_trials]
+    return vcat(acute, chronic)
 end
 
 function observe_environment(rng::AbstractRNG, potential, kappa::Float64, policy_idx::Int,
@@ -551,6 +589,7 @@ function measure_revision(cause::Cause, params::Sim1Params)
     behavior_change = max(predicted_aversive_reduction, approach_probability_increase)
     return (
         behavior_change = behavior_change,
+        capture_weight = capture_weight,
         predicted_aversive_reduction = predicted_aversive_reduction,
         approach_probability_increase = approach_probability_increase,
         pre_predicted_aversive = pre_predicted_aversive,
@@ -633,13 +672,15 @@ end
 function run_seed_cell(seed::Int, omega::Float64, kappa::Float64, params::Sim1Params; concentration_factor::Float64 = 1.0,
                        preference_scale::Float64 = 1.0, arm::Symbol = :closed_loop)
     action_rng = MersenneTwister(seed + 1_000_003)
-    potential_stream = evidence_stream(seed, omega, params.formation_trials, params)
+    potential_stream = formation_stream(seed, omega, params)
+    total_trials = params.formation_trials + params.consolidation_trials
     agent = init_agent()
     world = WorldState(0, 0, 0, false)
     trial_logs = NamedTuple[]
-    for trial in 1:params.formation_trials
-        push!(trial_logs, run_trial!(action_rng, agent, world, potential_stream[trial], kappa, params, trial, seed;
-                                    arm, concentration_factor, preference_scale))
+    for trial in 1:total_trials
+        row = run_trial!(action_rng, agent, world, potential_stream[trial], kappa, params, trial, seed;
+                         arm, concentration_factor, preference_scale)
+        push!(trial_logs, merge(row, (phase = trial <= params.formation_trials ? "acute" : "consolidation",)))
     end
     target = dominant_aversive_cause(agent)
     revision = measure_revision(target, params)
@@ -701,6 +742,7 @@ function run_seed_cell(seed::Int, omega::Float64, kappa::Float64, params::Sim1Pa
         max_precision_weighted_pe = maximum(row.precision_weighted_pe for row in trial_logs),
         mean_precision_weighted_pe = mean(row.precision_weighted_pe for row in trial_logs),
         revision_behavior_change = revision.behavior_change,
+        probe_capture_weight = revision.capture_weight,
         predicted_aversive_reduction = revision.predicted_aversive_reduction,
         approach_probability_increase = revision.approach_probability_increase,
         pre_probe_predicted_aversive = revision.pre_predicted_aversive,
@@ -985,11 +1027,87 @@ function run_slow_path(seed::Int, params::Sim1Params; shuffle::Bool = false)
     )
 end
 
+"""
+A1.5 redefined (post two-arm falsification of the frozen-region cell-count
+contrast, which is retained falsified in the criteria for the record): the
+loop-closure signature is the arm-by-kappa INTERACTION of freezing, plus a
+capture-not-mass check.
+
+1. kappa release: in the closed loop, control releases freezing — frozen cells
+   in the acute band (omega >= release_omega_min) concentrate at low kappa and
+   vanish at high kappa. Under exact replay, kappa cannot alter exposure, so the
+   frozen count is flat across kappa. The interaction is
+   (closed_low - closed_high) - (yoked_low - yoked_high), in frozen-cell counts.
+2. capture-not-mass: over the same acute low-kappa band, the closed loop
+   receives strictly LESS delivered aversive evidence than yoked (suppression),
+   yet revises LESS. A count-mass account predicts the opposite ordering. The
+   preregistered mediator is the probe capture weight (D1 tilt over written
+   reflexivity): suppression removes later expected transparent aversive writes,
+   so early collapsed writes stay dominant and capture stays low.
+"""
+function kappa_release_metrics(closed_seed_rows, yoked_seed_rows, params::Sim1Params)
+    in_band(row, lo, hi) = row.omega >= params.release_omega_min && lo <= row.kappa <= hi
+    frozen_cells(rows, lo, hi) = begin
+        cells = Dict{Tuple{Float64, Float64}, Vector{Bool}}()
+        for row in rows
+            in_band(row, lo, hi) || continue
+            push!(get!(cells, (row.omega, row.kappa), Bool[]), row.frozen)
+        end
+        count(mean(flags) >= params.cell_classification_rate for flags in values(cells))
+    end
+    low = (params.release_low_kappa_min, params.release_low_kappa_max)
+    high = (params.release_high_kappa_min, Inf)
+    closed_low = frozen_cells(closed_seed_rows, low...)
+    closed_high = frozen_cells(closed_seed_rows, high...)
+    yoked_low = frozen_cells(yoked_seed_rows, low...)
+    yoked_high = frozen_cells(yoked_seed_rows, high...)
+    band_rows(rows) = [row for row in rows if in_band(row, low...)]
+    closed_band = band_rows(closed_seed_rows)
+    yoked_band = band_rows(yoked_seed_rows)
+    closed_change = mean(row.revision_behavior_change for row in closed_band)
+    yoked_change = mean(row.revision_behavior_change for row in yoked_band)
+    closed_exposure = mean(row.aversive_evidence_count for row in closed_band)
+    yoked_exposure = mean(row.aversive_evidence_count for row in yoked_band)
+    closed_capture = mean(row.probe_capture_weight for row in closed_band)
+    yoked_capture = mean(row.probe_capture_weight for row in yoked_band)
+    return (
+        closed_low_kappa_frozen_cells = closed_low,
+        closed_high_kappa_frozen_cells = closed_high,
+        yoked_low_kappa_frozen_cells = yoked_low,
+        yoked_high_kappa_frozen_cells = yoked_high,
+        interaction_cells = (closed_low - closed_high) - (yoked_low - yoked_high),
+        closed_band_mean_revision = closed_change,
+        yoked_band_mean_revision = yoked_change,
+        yoked_minus_closed_revision_gap = yoked_change - closed_change,
+        closed_band_mean_aversive_exposure = closed_exposure,
+        yoked_band_mean_aversive_exposure = yoked_exposure,
+        closed_to_yoked_exposure_ratio = yoked_exposure > 0 ? closed_exposure / yoked_exposure : 1.0,
+        closed_band_mean_capture_weight = closed_capture,
+        yoked_band_mean_capture_weight = yoked_capture,
+        yoked_minus_closed_capture_gap = yoked_capture - closed_capture
+    )
+end
+
 function high_high_frozen_rate(cell_rows, omegas, kappas)
     omega_cut = quantile(omegas, 0.80)
     kappa_cut = quantile(kappas, 0.80)
     rows = [row for row in cell_rows if row.omega >= omega_cut && row.kappa >= kappa_cut]
     return isempty(rows) ? 0.0 : mean(row.frozen_rate for row in rows)
+end
+
+"""
+S1.2 amended (pilot 2026-07-10): cell-level version, consistent with the region
+classification standard used everywhere else in this sim. The seed-level rate in
+the corner is nonzero (~0.20) and is retained in the summary as a discovered
+trait: seeds whose catastrophes land before efficacy is learned freeze even at
+high kappa, because successful avoidance then keeps the early collapsed writes
+dominant — control prevents chronic freezing, not freezing outright.
+"""
+function high_high_frozen_cell_fraction(cell_rows, omegas, kappas, params::Sim1Params)
+    omega_cut = quantile(omegas, 0.80)
+    kappa_cut = quantile(kappas, 0.80)
+    rows = [row for row in cell_rows if row.omega >= omega_cut && row.kappa >= kappa_cut]
+    return isempty(rows) ? 0.0 : mean(row.frozen_rate >= params.cell_classification_rate ? 1.0 : 0.0 for row in rows)
 end
 
 function kappa_yoking_metrics(seed_rows, omegas, kappas)
@@ -1055,6 +1173,28 @@ function action_mediation_rows(closed_cells)
         exposure_rate_after_attenuate = row.exposure_rate_after_attenuate,
         exposure_accounting_error = row.mean_potential_aversive_count - row.mean_aversive_evidence_count - row.mean_suppressed_aversive_count
     ) for row in closed_cells]
+end
+
+"""
+S1.4 amended (pilot 2026-07-10): the original omega-extreme/kappa-near-zero corner
+claim is falsified in this model class — attenuation tracks HELPLESSNESS, not
+hazard extremity. Observed: mean attenuation is monotone-decreasing in kappa
+(0.195 at kappa=0) and exactly zero for kappa >= 0.5, at every omega. Within the
+helpless column it is U-shaped in omega (traps at low omega where evidence is too
+sparse to resolve; high rates at extreme omega under relentless hazard) — logged
+as a discovered trait, not a criterion. The amended claim: attenuation is
+confined to the inefficacy margin.
+"""
+function attenuation_kappa_localization(cell_rows, params::Sim1Params)
+    helpless = [row for row in cell_rows if row.kappa == 0.0]
+    efficacious = [row for row in cell_rows if row.kappa >= params.attenuation_efficacy_kappa]
+    helpless_rate = isempty(helpless) ? 0.0 : mean(row.attenuation_rate for row in helpless)
+    outside_max = isempty(efficacious) ? 0.0 : maximum(row.attenuation_rate for row in efficacious)
+    return (
+        helpless_column_mean_rate = helpless_rate,
+        efficacious_max_rate = outside_max,
+        kappa_gradient = helpless_rate - outside_max
+    )
 end
 
 function attenuation_corner_metric(cell_rows, params::Sim1Params)
@@ -1329,14 +1469,23 @@ function write_bundle_artifacts(outdir::AbstractString, seed_rows, slow_runs, pa
     return artifacts_dir, bundle_paths
 end
 
+# Verdict aggregation matches the suite convention (Runner.theory_label): only
+# success-kind criteria gate the headline result. Adversarial rows never gate —
+# including deliberately retained falsified records like the original A1.5 —
+# but any adversarial falsification is surfaced in status.json so a genuinely
+# failed control cannot hide behind this rule.
 function theory_label(results)
     isempty(results.results) && return "null"
-    labels = [row.label for row in results.results]
+    labels = [row.label for row in results.results if row.kind == "success"]
+    isempty(labels) && return "null"
     any(==("falsified"), labels) && return "falsified"
     all(==("support"), labels) && return "support"
     any(==("weak_support"), labels) && return "weak_support"
     return "null"
 end
+
+adversarial_falsified_ids(results) =
+    [row.id for row in results.results if row.kind == "adversarial" && row.label == "falsified"]
 
 function write_run_readme(path::AbstractString, summary)
     phase_title = summary.run_phase == "pilot" ? "Step A Pilot" : "Step B Confirmatory"
@@ -1389,7 +1538,10 @@ function run_sim1(config::ExperimentConfig; config_path::Union{Nothing, Abstract
     artifacts_dir, bundle_paths = write_bundle_artifacts(outdir, closed_seed_rows, slow_runs, params)
 
     high_high_frozen = high_high_frozen_rate(closed_cell_rows, omegas, kappas)
+    high_high_cells = high_high_frozen_cell_fraction(closed_cell_rows, omegas, kappas, params)
     yoking = kappa_yoking_metrics(yoked_seed_rows, omegas, kappas)
+    release = kappa_release_metrics(closed_seed_rows, yoked_seed_rows, params)
+    attenuation_kappa = attenuation_kappa_localization(closed_cell_rows, params)
     closed_potential_ranges = [maximum(row.potential_aversive_count for row in closed_seed_rows if row.seed == seed && row.omega == omega) -
                                minimum(row.potential_aversive_count for row in closed_seed_rows if row.seed == seed && row.omega == omega)
                                for seed in config.seeds, omega in omegas]
@@ -1416,14 +1568,22 @@ function run_sim1(config::ExperimentConfig; config_path::Union{Nothing, Abstract
         connected_frozen_region_closed_loop = closed_classification.frozen_largest_component >= params.connected_region_min_cells ? 1.0 : 0.0,
         connected_revisable_region_closed_loop = closed_classification.revisable_largest_component >= params.connected_region_min_cells ? 1.0 : 0.0,
         high_omega_high_kappa_frozen_rate_closed_loop = high_high_frozen,
+        high_omega_high_kappa_frozen_cell_fraction_closed_loop = high_high_cells,
         slow_path_crosses_below_acute_min_closed_loop = (acute_region_present && slow_cross_rate >= 0.80 && slow_max_crossing_pe < acute_min) ? 1.0 : 0.0,
         attenuate_corner_only_closed_loop = attenuation.pass,
+        s14_attenuation_efficacious_max_rate = attenuation_kappa.efficacious_max_rate,
+        s14_attenuation_kappa_gradient = attenuation_kappa.kappa_gradient,
         three_traits_logged = 1.0,
         a11_omega_only_frozen_region_closed_loop = a11,
         a12_boundary_smoothness_max_jump_closed_loop = a12_smoothness,
         a13_shuffle_cross_rate_closed_loop = shuffle_cross_rate,
         a14_yoked_max_count_range = yoking.max_aversive_count_range,
-        a15_frozen_region_cell_contrast = frozen_region_contrast
+        a15_frozen_region_cell_contrast = frozen_region_contrast,
+        a15r_kappa_release_interaction_cells = Float64(release.interaction_cells),
+        a15r_yoked_kappa_flatness_cells = Float64(abs(release.yoked_low_kappa_frozen_cells - release.yoked_high_kappa_frozen_cells)),
+        a15r_yoked_minus_closed_revision_gap = release.yoked_minus_closed_revision_gap,
+        a15r_closed_to_yoked_exposure_ratio = release.closed_to_yoked_exposure_ratio,
+        a15r_yoked_minus_closed_capture_gap = release.yoked_minus_closed_capture_gap
     )
 
     arm_summary(cell_rows_for_arm, seed_rows_for_arm, classification) = (
@@ -1458,8 +1618,31 @@ function run_sim1(config::ExperimentConfig; config_path::Union{Nothing, Abstract
             frozen_region_cell_contrast = frozen_region_contrast,
             preregistered_margin_cells = params.arm_contrast_margin_cells,
             margin_met = frozen_region_contrast >= params.arm_contrast_margin_cells,
-            interpretation = "closed-loop minus exact-replay frozen-region cells"
+            interpretation = "closed-loop minus exact-replay frozen-region cells (original A1.5, falsified 2026-07-10, retained for the record)"
         ),
+        discovered_traits = (
+            high_kappa_seed_level_freezing = (
+                rate = high_high_frozen,
+                cell_fraction = high_high_cells,
+                note = "seeds whose catastrophes land before efficacy is learned freeze even at high kappa: successful avoidance keeps the early collapsed writes dominant. Control prevents chronic freezing, not freezing outright. No corner CELL reaches majority-frozen."
+            ),
+            attenuation_traps = (
+                note = "per-seed attenuation rates above 0.5 occur only for kappa < 0.5, concentrated at LOW omega in the helpless margin: attenuated evidence is too sparse to resolve, so attenuation self-sustains. None of these seeds are frozen; the trap is a distinct dissociative mode, not the freezing mechanism.",
+                helpless_column_mean_rate = attenuation_kappa.helpless_column_mean_rate,
+                efficacious_max_rate = attenuation_kappa.efficacious_max_rate
+            ),
+            uncontrollable_adversity_revises = (
+                note = "at kappa=0 the spawned causes keep tracking the world (no avoidance loop can seal them) and revise under the probe in BOTH arms: uncontrollable adversity produces honest suffering, not frozen parts. Freezing requires partial control."
+            )
+        ),
+        kappa_release = merge(release, (
+            bands = (
+                omega_min = params.release_omega_min,
+                low_kappa = (params.release_low_kappa_min, params.release_low_kappa_max),
+                high_kappa_min = params.release_high_kappa_min
+            ),
+            interpretation = "A1.5 redefined: arm-by-kappa interaction of freezing (control releases in closed loop, kappa-flat under replay) plus capture-not-mass (closed loop frozen harder on less delivered aversive evidence, mediated by probe capture weight)"
+        )),
         behavioral_revision = (
             frozen_max_change = params.behavior_frozen_max_change,
             revisable_min_change = params.behavior_revisable_min_change,
@@ -1569,6 +1752,7 @@ function run_sim1(config::ExperimentConfig; config_path::Union{Nothing, Abstract
             isfile(joinpath(outdir, "figures", "phase_diagram.svg")) &&
             isfile(joinpath(artifacts_dir, "bundle-manifest.json")),
         theory_result = isnothing(criteria_results) ? "null" : theory_label(criteria_results),
+        adversarial_falsified = isnothing(criteria_results) ? String[] : adversarial_falsified_ids(criteria_results),
         run_phase = run_phase,
         criteria_results_path = isnothing(criteria_results) ? nothing : joinpath(outdir, "criteria-results.json")
     )
