@@ -159,3 +159,23 @@ What the model produced under this schedule (pilot seeds 1001-1010):
 All constants and thresholds above are pilot-provenance, recorded in
 `magic-numbers.md`, and frozen before Step B confirmatory (fresh seeds
 4001-4020, disjoint from the pilot).
+
+## Step B confirmatory verdict (2026-07-10, fresh seeds 4001-4020)
+
+The redefined formation claim REPLICATES in full: kappa-release interaction 22
+cells (identical to pilot), yoked flatness 0, revision gap 0.063, exposure
+ratio 0.418, capture mediator 0.116, S1.2 cell fraction 0.0, S1.4 amended
+localization 0.0005 / gradient 0.247. S1.1a/b regions present.
+
+One preregistered criterion FAILED at threshold: S1.3 chronic slow-path
+crossing rate came in at 0.70 (14/20) against the preregistered 0.80. The
+pilot's 8/10 sat exactly on the threshold — too fragile a margin. The PE leg of
+the claim held everywhere (all crossings below the acute frozen-region PE
+minimum; crossings spawn-free), so the slow route exists but is not as reliable
+as preregistered. Per protocol this is recorded as a criterion failure, NOT
+retuned post hoc; overall status.json therefore reads theory_result=falsified
+under the all-success-criteria aggregation, and the honest per-claim reading is:
+formation claim (A1.5r family) CONFIRMED on fresh seeds; chronic-route rate
+claim (S1.3) below threshold. Any revised S1.3 (e.g. majority crossing) would
+need a fresh preregistration cycle on new seeds (5001+); this record stands
+either way.
