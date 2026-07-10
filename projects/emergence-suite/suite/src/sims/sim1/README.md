@@ -112,3 +112,18 @@ do not imply spawning.
 - `posterior_traces.csv`: closed-loop chronic trace for pilot seed 1001.
 - `artifacts/`: Arm 1 formation bundles and v3 manifest.
 - `figures/phase_diagram.svg`: side-by-side closed-loop and yoked phase maps.
+
+## T4.6 step C status (orchestrator hands-on, 2026-07-10 — NOT frozen for confirmatory)
+
+State: closed-loop connected frozen region exists (omega 2.4-2.8, kappa 0.1-0.6, boundary
+rising in kappa); spawning alive (274 events) via surprise-excess pressure + EFE-flatness
+fork; kappa=0 closed-loop == yoked at the corner (coherence check passes).
+
+OPEN ANOMALY (next iteration's first target): freshly-spawned causes are the probe target
+at kappa=0 and revise at ~0.33 relative — a ~75-count bank moves under any nonzero probe
+weight. The theory's own answer: freezing = write + the self-sealing loop (§4); late
+spawns get no consolidation window in a 200-trial schedule. Candidate fix: extend the
+formation schedule so spawned causes accrue loop-hardened mass before probing (world-side
+change), then re-check the kappa profile and the two-arm contrast (A1.5 needs redefining
+as the kappa-GRADIENT of freezing: present in closed loop, flat under yoking).
+All step-C constants are pilot-provenance and unfrozen; sweep before Step B.
