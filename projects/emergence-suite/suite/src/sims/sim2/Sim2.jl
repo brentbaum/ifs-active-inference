@@ -620,8 +620,12 @@ function run_sim2_config(config::ExperimentConfig; config_path::Union{Nothing, A
     started = time()
     params = params_from_config(config, config_path)
     config.label in ("pilot", "confirmatory") || error("Sim 2 runs only as pilot (Step A) or confirmatory (Step B, orchestrator-executed)")
-    config.seeds == collect(1001:1010) || error("T4.3 STEP A is restricted to pilot seeds 1001-1010")
-    outdir = output_dir === nothing ? normpath(joinpath(config.output_dir, config.experiment, "pilot")) : output_dir
+    if config.label == "pilot"
+        config.seeds == collect(1001:1010) || error("T4.3 STEP A is restricted to pilot seeds 1001-1010")
+    else
+        isempty(intersect(config.seeds, 1001:1010)) || error("Confirmatory seeds must be disjoint from pilot seeds 1001-1010")
+    end
+    outdir = output_dir === nothing ? normpath(joinpath(config.output_dir, config.experiment, config.label)) : output_dir
     occursin(joinpath("runs", "sim2", "preregistered"), normpath(outdir)) && error("T4.3 STEP A must not write preregistered outputs")
     ensure_dir(outdir)
 
