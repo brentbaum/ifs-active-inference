@@ -1314,7 +1314,7 @@ function run_sim6a_robustness(config::ExperimentConfig, params::Sim6aParams, out
     )
     summary = (
         experiment = "sim6a",
-        analysis = "T4.7 robustness pilot",
+        analysis = config.label == "pilot" ? "T4.7 robustness pilot" : "T4.7 robustness confirmatory",
         config = config_snapshot(config),
         model_contract = (
             latent_process = "autonomous reflected stochastic depth trajectory; no trial_spec or biography phase input",
@@ -1346,7 +1346,7 @@ function run_sim6a_robustness(config::ExperimentConfig, params::Sim6aParams, out
         implementation_passed = evaluable_count == length(config.seeds) && length(joint_rows) == length(safety_grid) * length(likelihood_grid) * length(slope_grid) * length(policy_grid),
         theory_result = theory_label(criteria_results),
         criteria_results_path = criteria_results === nothing ? nothing : joinpath(outdir, "criteria-results.json"),
-        protocol = "pilot-only",
+        protocol = config.label == "pilot" ? "pilot-only" : "confirmatory",
     )
     write_json(joinpath(outdir, "status.json"), status)
     metadata = build_reproducibility_metadata(
@@ -1354,7 +1354,8 @@ function run_sim6a_robustness(config::ExperimentConfig, params::Sim6aParams, out
         config_path = config_path,
         runtime_seconds = time() - started,
         repo_root = normpath(joinpath(@__DIR__, "..", "..", "..", "..", "..")),
-        extra = (output_dir = abspath(outdir), sim_module = "EmergenceSuite.Sim6a", protocol = "T4.7 Step A pilot-only"),
+        extra = (output_dir = abspath(outdir), sim_module = "EmergenceSuite.Sim6a",
+                 protocol = config.label == "pilot" ? "T4.7 Step A pilot-only" : "T4.7 Step B confirmatory"),
     )
     write_json(joinpath(outdir, "metadata.json"), metadata)
     return (output_dir = outdir, summary = summary, status = status, criteria_results = criteria_results)

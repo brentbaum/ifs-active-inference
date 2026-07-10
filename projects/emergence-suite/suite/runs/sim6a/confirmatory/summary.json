@@ -1,6 +1,6 @@
 {
     "experiment": "sim6a",
-    "analysis": "T4.7 robustness pilot",
+    "analysis": "T4.7 robustness confirmatory",
     "config": {
         "experiment": "sim6a",
         "seeds": [
@@ -115,7 +115,7 @@
             "transition_volume_fraction": 0.06172839506172839,
             "surviving_grid_points": 5,
             "total_grid_points": 81,
-            "per_grid_seed_requirement": 8
+            "per_grid_seed_requirement": 16
         },
         "heldout": {
             "mean_truth_correlation": 0.7060169128890671,
