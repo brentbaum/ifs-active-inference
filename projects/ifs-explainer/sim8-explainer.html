@@ -1,0 +1,1128 @@
+<meta charset="utf-8">
+<title>Sim 8: Parts That Observe Parts</title>
+<style>
+  :root{
+    --paper:#F6F6F1;
+    --paper-inset:#EFEFE7;
+    --ink:#232820;
+    --ink-soft:#5A6055;
+    --rule:#DCDCD0;
+    --rule-dark:#B9B9A8;
+    --safe:#3A7D5B;
+    --safe-tint:#E3EEE7;
+    --aversive:#B5472B;
+    --aversive-tint:#F3E4DE;
+    --p1:#B07E28;
+    --p2:#5A6FB5;
+    --p3:#9A5E93;
+    --p4:#3F8E8A;
+    --p5:#7A8450;
+    --p6:#A04E62;
+    --serif:"Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;
+    --sans:"Seravek","Avenir Next","Segoe UI",system-ui,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  }
+  html{background:var(--paper);}
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:var(--serif);
+    font-size:18px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  .col{max-width:700px;margin:0 auto;padding:0 22px;}
+  .colwide{max-width:880px;margin:0 auto;padding:0 22px;}
+
+  /* ---------- header ---------- */
+  header{padding:72px 0 8px;}
+  .register-banner{
+    font-family:var(--sans);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--aversive);border:1px solid var(--aversive);border-radius:3px;
+    display:inline-block;padding:4px 10px;margin-bottom:28px;background:var(--aversive-tint);
+  }
+  .eyebrow{font-family:var(--sans);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 14px;}
+  h1{
+    font-size:clamp(38px,6vw,56px);line-height:1.06;margin:0 0 20px;font-weight:600;
+    letter-spacing:-.01em;text-wrap:balance;
+  }
+  .dek{font-size:21px;line-height:1.55;color:var(--ink-soft);margin:0 0 30px;max-width:34em;text-wrap:balance;}
+  .whofor{
+    border-left:3px solid var(--rule-dark);padding:2px 0 2px 18px;margin:34px 0 0;
+    font-size:16.5px;color:var(--ink-soft);
+  }
+
+  /* ---------- legend ---------- */
+  .legend{
+    margin:44px 0 0;border:1px solid var(--rule);border-radius:6px;background:#FBFBF7;
+    padding:18px 20px;font-family:var(--sans);font-size:14px;line-height:1.6;
+  }
+  .legend h2{font-size:13px;letter-spacing:.12em;text-transform:uppercase;margin:0 0 10px;color:var(--ink-soft);font-weight:600;}
+  .legend-row{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;}
+  .chip{
+    font-family:var(--sans);font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;font-weight:600;
+    padding:2px 8px;border-radius:3px;white-space:nowrap;vertical-align:baseline;
+  }
+  .chip.grown{background:var(--ink);color:var(--paper);}
+  .chip.assumed{border:1.5px dashed var(--rule-dark);color:var(--ink-soft);background:transparent;}
+  .chip.super{border:1.5px solid #C9A85C;color:#7A5A18;background:#F1E8D2;}
+  .pdot{display:inline-block;width:11px;height:11px;border-radius:50%;vertical-align:-1px;margin-right:5px;}
+  .pdot.p1{background:var(--p1);} .pdot.p2{background:var(--p2);} .pdot.p3{background:var(--p3);} .pdot.p4{background:var(--p4);}
+  .pdot.p5{background:var(--p5);} .pdot.p6{background:var(--p6);}
+
+  /* ---------- toc ---------- */
+  nav.toc{margin:40px 0 0;font-family:var(--sans);font-size:14.5px;}
+  nav.toc ol{margin:8px 0 0;padding-left:0;list-style:none;columns:2;column-gap:36px;}
+  nav.toc li{margin:0 0 7px;break-inside:avoid;}
+  nav.toc a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--rule-dark);}
+  nav.toc a:hover,nav.toc a:focus{border-bottom-color:var(--ink);}
+  nav.toc .n{font-family:var(--mono);font-size:12px;color:var(--ink-soft);margin-right:8px;}
+
+  /* ---------- sections ---------- */
+  section{padding:34px 0 6px;}
+  .secnum{font-family:var(--mono);font-size:13px;color:var(--ink-soft);letter-spacing:.06em;display:block;margin-bottom:6px;}
+  h2.sec{font-size:31px;line-height:1.15;margin:0 0 20px;font-weight:600;letter-spacing:-.005em;text-wrap:balance;
+    padding-top:28px;border-top:1px solid var(--rule);}
+  h3{font-size:20px;margin:34px 0 12px;font-weight:600;}
+  p{margin:0 0 18px;}
+  p.clinical{font-style:italic;color:#3E463E;}
+  em{font-style:italic;}
+  strong{font-weight:600;}
+  ul,ol{margin:0 0 18px;padding-left:26px;}
+  li{margin-bottom:9px;}
+  a{color:var(--ink);}
+  .num{font-family:var(--mono);font-size:.88em;font-variant-numeric:tabular-nums;background:var(--paper-inset);padding:1px 4px;border-radius:3px;white-space:nowrap;}
+  .iter{
+    font-family:var(--sans);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;
+    color:#7A5A18;background:#F1E8D2;border-radius:3px;padding:2px 8px;margin-right:8px;white-space:nowrap;
+  }
+  .aside{
+    border-left:3px solid var(--rule-dark);padding:4px 0 4px 18px;margin:26px 0;
+    font-size:16px;color:var(--ink-soft);
+  }
+  blockquote.solq{
+    margin:26px 0;padding:16px 22px;border-left:3px solid var(--aversive);
+    background:#FAF6F3;font-size:16.5px;line-height:1.6;font-style:italic;color:#463A34;
+  }
+  blockquote.solq cite{display:block;margin-top:10px;font-style:normal;font-family:var(--sans);font-size:12.5px;color:var(--ink-soft);}
+  ol.findings{counter-reset:fnd;margin:26px 0;padding:0;list-style:none;}
+  ol.findings>li{counter-increment:fnd;border-top:1px solid var(--rule);padding:18px 0 10px;}
+  ol.findings>li::before{content:"Finding " counter(fnd);font-family:var(--sans);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--aversive);display:block;margin-bottom:6px;}
+  ol.findings h4{margin:0 0 8px;font-size:17px;font-weight:600;}
+  ol.findings p{font-size:15.5px;margin-bottom:10px;}
+  ol.findings .fix{font-size:14.5px;color:var(--ink-soft);}
+  ol.findings .fix b{color:var(--safe);font-weight:600;}
+
+  /* ---------- worked math boxes ---------- */
+  .worked{
+    background:#FBFBF7;border:1px solid var(--rule);border-radius:6px;
+    padding:18px 22px;margin:24px 0;font-size:16px;
+  }
+  .worked .wt{font-family:var(--sans);font-size:12px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-soft);font-weight:600;margin:0 0 12px;}
+  .worked .line{font-family:var(--mono);font-size:14.5px;line-height:1.9;font-variant-numeric:tabular-nums;overflow-x:auto;}
+  .worked .gloss{font-size:15px;color:var(--ink-soft);margin-top:10px;}
+
+  /* ---------- figures ---------- */
+  figure.fig{
+    margin:34px 0;border:1px solid var(--rule);border-radius:8px;background:#FCFCF9;
+    padding:0;overflow:hidden;
+  }
+  .fig-head{
+    padding:14px 22px 12px;border-bottom:1px solid var(--rule);
+    display:flex;justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap;
+  }
+  .fig-head .ft{font-family:var(--sans);font-weight:600;font-size:15.5px;}
+  .fig-head .fn{font-family:var(--mono);font-size:12px;color:var(--ink-soft);}
+  .fig-body{padding:20px 22px;font-family:var(--sans);font-size:14.5px;}
+  .fig-notice{
+    padding:13px 22px 15px;border-top:1px solid var(--rule);background:#F7F7F0;
+    font-family:var(--sans);font-size:13.5px;color:#454B41;line-height:1.55;
+  }
+  .fig-notice b{font-weight:600;color:var(--ink);}
+  button{
+    font-family:var(--sans);font-size:13.5px;font-weight:600;color:var(--ink);
+    background:#FFF;border:1px solid var(--rule-dark);border-radius:5px;
+    padding:7px 13px;cursor:pointer;
+  }
+  button:hover{background:var(--paper-inset);}
+  button:focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
+  button.on{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+  button.subtle{font-weight:400;color:var(--ink-soft);}
+  input[type=range]{width:100%;accent-color:#4A5FA5;}
+  input[type=range]:focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
+  .ctl-label{font-size:12.5px;letter-spacing:.04em;color:var(--ink-soft);display:flex;justify-content:space-between;margin-bottom:2px;}
+  .ctl-label .v{font-family:var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;}
+
+  /* tally toy */
+  .tally-wrap{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+  @media(max-width:640px){.tally-wrap{grid-template-columns:1fr;}}
+  .tally{border:1px solid var(--rule);border-radius:6px;padding:16px 16px 14px;background:#FFF;}
+  .tally h4{margin:0 0 4px;font-size:14.5px;font-weight:600;}
+  .tally .sub{font-size:12.5px;color:var(--ink-soft);margin:0 0 12px;}
+  .beliefbar{height:26px;border-radius:4px;overflow:hidden;display:flex;border:1px solid var(--rule);}
+  .beliefbar .sf{background:var(--safe);height:100%;}
+  .beliefbar .av{background:var(--aversive);height:100%;}
+  .tally .readout{font-family:var(--mono);font-size:13px;margin:9px 0 3px;font-variant-numeric:tabular-nums;}
+  .massline{font-size:12px;color:var(--ink-soft);margin:2px 0 12px;}
+  .massbar{height:7px;background:var(--paper-inset);border-radius:4px;overflow:hidden;margin-top:3px;}
+  .massbar>div{height:100%;background:var(--rule-dark);}
+  .tally .btns{display:flex;gap:8px;flex-wrap:wrap;}
+  .tally button.sf{border-color:var(--safe);color:var(--safe);}
+  .tally button.av{border-color:var(--aversive);color:var(--aversive);}
+  .tally button.sf:hover{background:var(--safe-tint);}
+  .tally button.av:hover{background:var(--aversive-tint);}
+  .nudge{font-size:12px;color:var(--ink-soft);margin-top:10px;min-height:1.2em;}
+
+  /* responsibility toy */
+  .resp-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-bottom:18px;}
+  @media(max-width:640px){.resp-grid{grid-template-columns:1fr;}}
+  .resp-part{border:1px solid var(--rule);border-radius:6px;padding:14px 16px;background:#FFF;}
+  .resp-part h4{margin:0 0 12px;font-size:14px;font-weight:600;}
+  .splitbar{height:38px;border-radius:5px;overflow:hidden;display:flex;border:1px solid var(--rule);font-family:var(--mono);font-size:12.5px;color:#FFF;}
+  .splitbar>div{display:flex;align-items:center;justify-content:center;min-width:0;overflow:hidden;white-space:nowrap;}
+  .ghostbar{height:16px;border-radius:4px;overflow:hidden;display:flex;border:1px dashed var(--rule-dark);opacity:.65;margin-top:8px;}
+  .barlab{font-size:12px;color:var(--ink-soft);margin:12px 0 4px;letter-spacing:.03em;}
+  .resp-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:14px;font-variant-numeric:tabular-nums;}
+  .resp-table th{font-weight:600;text-align:left;border-bottom:1px solid var(--rule);padding:4px 10px 4px 0;font-size:12px;color:var(--ink-soft);letter-spacing:.03em;}
+  .resp-table td{padding:5px 10px 5px 0;border-bottom:1px solid var(--paper-inset);font-family:var(--mono);}
+  .resp-table td:first-child{font-family:var(--sans);}
+  .presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+
+  /* contrast toy */
+  .meter{margin:14px 0;}
+  .meter .mlab{display:flex;justify-content:space-between;font-size:12.5px;color:var(--ink-soft);margin-bottom:3px;}
+  .meter .mlab .v{font-family:var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;}
+  .mtrack{position:relative;height:20px;background:var(--paper-inset);border-radius:4px;overflow:hidden;border:1px solid var(--rule);}
+  .mtrack>.fill{height:100%;border-radius:0;}
+  .mtrack>.mark{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);}
+  .readout-pair{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:22px;}
+  @media(max-width:640px){.readout-pair{grid-template-columns:1fr;}}
+  .readbox{border:1px solid var(--rule);border-radius:6px;padding:14px 16px;background:#FFF;}
+  .readbox h4{margin:0 0 3px;font-size:13.5px;font-weight:600;}
+  .readbox .verdict{font-family:var(--mono);font-size:15px;margin-top:8px;font-variant-numeric:tabular-nums;}
+  .readbox .why{font-size:12.5px;color:var(--ink-soft);margin-top:6px;min-height:2.6em;}
+
+  /* seeds walkthrough */
+  .seed-tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+  .seed-note{font-size:14px;line-height:1.6;margin:0 0 18px;color:var(--ink);}
+  table.coupling{border-collapse:collapse;font-family:var(--mono);font-size:12.5px;font-variant-numeric:tabular-nums;}
+  table.coupling th{font-family:var(--sans);font-weight:600;font-size:11.5px;color:var(--ink-soft);padding:5px 8px;text-align:center;}
+  table.coupling td{border:1px solid var(--rule);padding:8px 8px;text-align:center;min-width:74px;}
+  table.coupling td.diag{background:repeating-linear-gradient(45deg,#F1F1E9,#F1F1E9 4px,#FAFAF4 4px,#FAFAF4 8px);}
+  .coupling-wrap{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-start;}
+  .coupling-side{font-size:13px;max-width:300px;color:var(--ink);line-height:1.55;}
+  .strip-scroll{overflow-x:auto;margin-top:8px;padding-bottom:4px;}
+  .verdict-line{font-family:var(--sans);font-size:13.5px;margin-top:14px;padding:10px 14px;border-radius:5px;background:var(--paper-inset);}
+  .verdict-line b{font-weight:600;}
+
+  /* status table */
+  table.status{width:100%;border-collapse:collapse;font-size:15px;margin:20px 0 26px;font-variant-numeric:tabular-nums;}
+  table.status th{font-family:var(--sans);font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);text-align:left;padding:6px 14px 6px 0;border-bottom:1px solid var(--rule-dark);font-weight:600;}
+  table.status td{padding:9px 14px 9px 0;border-bottom:1px solid var(--rule);vertical-align:top;}
+  table.status td.n{font-family:var(--mono);white-space:nowrap;}
+  .statwrap{overflow-x:auto;}
+
+  /* audit list */
+  .audit{counter-reset:aud;margin:26px 0;padding:0;list-style:none;}
+  .audit>li{
+    counter-increment:aud;border-top:1px solid var(--rule);padding:20px 0 14px;margin:0;position:relative;
+  }
+  .audit>li::before{
+    content:counter(aud,decimal-leading-zero);font-family:var(--mono);font-size:12px;color:var(--ink-soft);
+    display:block;margin-bottom:6px;letter-spacing:.06em;
+  }
+  .audit h4{margin:0 0 8px;font-size:17.5px;font-weight:600;}
+  .audit p{font-size:15.5px;margin-bottom:10px;}
+  .audit .alt{font-size:14.5px;color:var(--ink-soft);}
+  .audit .alt b{color:var(--ink);font-weight:600;}
+
+  footer{margin-top:70px;border-top:1px solid var(--rule-dark);padding:26px 0 60px;font-family:var(--sans);font-size:13px;color:var(--ink-soft);line-height:1.7;}
+  footer code{font-family:var(--mono);font-size:11.5px;background:var(--paper-inset);padding:1px 5px;border-radius:3px;word-break:break-all;}
+
+  svg text{font-family:var(--sans);}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
+</style>
+
+<header class="col">
+  <div class="register-banner">Exploratory · pilot seeds 1001–1010 · nothing here is confirmatory evidence</div>
+  <p class="eyebrow">Emergence Suite · Sim 8 · design audit briefing</p>
+  <h1>Parts that observe parts</h1>
+  <p class="dek">How Sim 8 lets a protector learn on a live exile — the mechanism, the hostile review that cut it down to its honest core, and the rebuild that broke in the one place the theory says it should.</p>
+  <div class="whofor">
+    <p style="margin:0 0 10px;">Written for Brent, as research director. You approved “mechanism 2 on substrate 1” on 2026-07-10; this document shows you exactly what that approval built, so you can audit it. It now covers the full arc: five build iterations, an adversarial review (verdict: REJECT), the four-iteration Occam pass the review forced, and a unified rebuild whose legible failure is the most interesting result so far. Every rule below is tagged as either <span class="chip grown">grown</span> — produced by the run, earnable either way — or <span class="chip assumed">assumed</span> — a design judgment made on your behalf. The assumed ones are collected at the end for your pushback.</p>
+    <p style="margin:0;">Nothing here needs more math than Bayes’ rule. Every formula appears as a worked example with the real constants.</p>
+  </div>
+
+  <div class="legend" role="note">
+    <h2>Reading key</h2>
+    <div class="legend-row" style="margin-bottom:10px;">
+      <span><span class="chip grown">grown</span>&nbsp; learned from the run; could have come out the other way</span>
+      <span><span class="chip assumed">assumed</span>&nbsp; a design choice; audit it</span>
+    </div>
+    <div class="legend-row">
+      <span><span class="pdot p1"></span>Part 1 — the root, oldest (the exile position)</span>
+      <span><span class="pdot p2"></span>Part 2</span>
+      <span><span class="pdot p3"></span>Part 3</span>
+      <span><span class="pdot p4"></span>Part 4</span>
+      <span><span class="pdot p5"></span>Part 5</span>
+      <span><span class="pdot p6"></span>Part 6 — newest</span>
+    </div>
+    <div class="legend-row" style="margin-top:10px;">
+      <span style="color:var(--safe);font-weight:600;">safe evidence</span>
+      <span style="color:var(--aversive);font-weight:600;">aversive evidence</span>
+      <span><span class="iter">Iteration n</span> a step in the thirteen-iteration log — each one preregistered, run once, logged either way</span>
+      <span><span class="chip super">superseded</span> an earlier iteration’s rule or result, kept because the story needs it</span>
+    </div>
+  </div>
+
+  <nav class="toc" aria-label="Contents">
+    <h2 style="font-size:13px;letter-spacing:.12em;text-transform:uppercase;margin:0;color:var(--ink-soft);font-weight:600;">Contents</h2>
+    <ol>
+      <li><span class="n">01</span><a href="#s1">The problem this sim exists to solve</a></li>
+      <li><span class="n">02</span><a href="#s2">Tallies as beliefs</a></li>
+      <li><span class="n">03</span><a href="#s3">Soft responsibility</a></li>
+      <li><span class="n">04</span><a href="#s4">Parts observing parts</a></li>
+      <li><span class="n">05</span><a href="#s5">What a moment weighs</a></li>
+      <li><span class="n">06</span><a href="#s6">“Worse than my normal”</a></li>
+      <li><span class="n">07</span><a href="#s7">The iteration-5 gate</a></li>
+      <li><span class="n">08</span><a href="#s8">Two seeds, both directions</a></li>
+      <li><span class="n">09</span><a href="#s9">The adversarial review</a></li>
+      <li><span class="n">10</span><a href="#s10">The Occam pass</a></li>
+      <li><span class="n">11</span><a href="#s11">The rebuild, and the deadlock</a></li>
+      <li><span class="n">12</span><a href="#s12">Where this actually stands</a></li>
+      <li><span class="n">13</span><a href="#s13">Where to push back</a></li>
+    </ol>
+  </nav>
+</header>
+
+<main>
+
+<!-- ================================================================ 1 -->
+<section id="s1" class="col">
+  <span class="secnum">01</span>
+  <h2 class="sec">The problem this sim exists to solve</h2>
+
+  <p class="clinical">In the room, a protector does not step back because you out-argue it. It steps back when it learns — in its own terms — that the pain it stands over can be contacted without the catastrophe recurring. Its map of that pain was written while standing over it: the firefighter formed <em>during</em> the exile’s live distress, and everything it believes about the exile is dated to that moment. “Protectors before exiles” is not etiquette. It is what a system does when one part’s working model says that another part’s activation predicts disaster.</p>
+
+  <p>Computationally, the old architecture could not contain that sentence. Sims 1 through 7 allow exactly <strong>one active part per moment</strong>: each trial, the population’s best explanation wins, acts, and receives all the learning. So consider the moment a protector spawns. It spawns precisely because the old part’s explanation is failing — and the instant it exists, <em>it</em> becomes the active part. The exile goes silent in the ledger. The protector never accumulates a single observation tagged “the exile was active when this happened,” because in a winner-take-all world, no two parts are ever active at once.</p>
+
+  <p>Sim 4 measured the consequence, three preregistered cycles deep. It grew stacks honestly, removed an authored ordering rule that an audit caught (a literal <span class="num">id &gt;</span> comparison), and then asked whether grown coupling would order therapy from the outside in. It would not: complete newest-to-oldest descent in <span class="num">1/10</span> seeds, in every arm, gated or ungated. The verdict was architectural, not parametric: <em>the theory’s own mechanism for sequencing — a protector that learned on the exile’s live distress and therefore gates it — requires concurrent activation, and this model class never writes it.</em> The descent claim was closed as unearned for that class, and the missing carrier was named.</p>
+
+  <p>Sim 8 is the missing carrier, built. Two changes, nothing else:</p>
+  <ul>
+    <li><strong>Soft responsibility</strong> — every part is a little bit active every moment, in proportion to how well it explains what is happening. Winner-take-all was always the approximation; this is the mixture it approximated.</li>
+    <li><strong>Internal observation</strong> — every part keeps evidence about every other part: “what is the world like when <em>you</em> are the one carrying it?”</li>
+  </ul>
+
+  <p>Everything else is frozen. Formation runs inside Sim 1’s exact epoch-structured world — acute phases where catastrophes can land, then consolidation phases with the same ordinary hazard but no catastrophes — imported read-only, with Sim 1’s constants unchanged. The one thing this document should leave you able to verify: <strong>no rule anywhere says which direction the coupling should point.</strong> If protectors end up gating exiles rather than the reverse, that direction has to have been grown by the structure of events. Section 8 shows one seed where it grew the theory’s way and one where the world grew it backwards — and the machinery faithfully expressed both.</p>
+
+  <p>And a word about where this is going, because the ending is not the one anyone designed for. The mechanism you are about to learn was built, produced a marquee result, was torn apart by a hostile reviewer whose findings were confirmed against the code, was rebuilt with every confound removed, and then — reduced to its most principled form — <em>stopped working</em>, in a way that reads like the theory talking back: the rebuilt system deadlocks exactly where IFS says a parts system should, absent a therapist it trusts. Sections 9 through 11 walk that arc; whether the ending is a derivation or an artifact is one of the questions this document equips you to press on.</p>
+</section>
+
+<!-- ================================================================ 2 -->
+<section id="s2" class="col">
+  <span class="secnum">02</span>
+  <h2 class="sec">Tallies as beliefs</h2>
+
+  <p>Every belief in this simulation is a pair of counts. A part’s sense of the world is literally two numbers — <span class="num">[safe so far, aversive so far]</span> — and its current belief is just the fraction:</p>
+
+  <div class="worked">
+    <p class="wt">The only belief formula in the sim</p>
+    <p class="line">belief that the next moment is aversive&nbsp;=&nbsp;aversive count ÷ (safe count + aversive count)</p>
+    <p class="gloss">This is the Dirichlet (here: Beta) posterior mean you already know from basic Bayes — counts as pseudo-observations. The root part starts life with <span class="num">[6 safe, 4 aversive]</span>: mild, symmetric prior knowledge, belief 0.40. A newborn part starts at <span class="num">[1, 1]</span>: belief 0.50 and almost no conviction.</p>
+  </div>
+
+  <p>The property that carries this entire simulation is what mass does. Counts are not just a belief — they are an <em>amount of lived experience</em>, and experience resists revision. Try it:</p>
+
+  <figure class="fig colwide" style="max-width:880px;">
+    <div class="fig-head"><span class="ft">Two experience tallies</span><span class="fn">Fig. 1 · interactive</span></div>
+    <div class="fig-body">
+      <div class="tally-wrap">
+        <div class="tally">
+          <h4>Newly spawned part</h4>
+          <p class="sub">starts at [1 safe, 1 aversive] — the sim’s actual newborn prior</p>
+          <div class="beliefbar" id="t1bar" role="img" aria-label="belief bar for young part"><div class="sf"></div><div class="av"></div></div>
+          <p class="readout" id="t1read"></p>
+          <div class="massline">accumulated mass (resistance to change)<div class="massbar"><div id="t1mass"></div></div></div>
+          <div class="btns">
+            <button class="sf" id="t1s">+ 1 safe moment</button>
+            <button class="av" id="t1a">+ 1 aversive moment</button>
+          </div>
+          <p class="nudge" id="t1nudge"></p>
+        </div>
+        <div class="tally">
+          <h4>Long-standing part</h4>
+          <p class="sub">same belief machinery, but carrying [60 safe, 40 aversive]</p>
+          <div class="beliefbar" id="t2bar" role="img" aria-label="belief bar for old part"><div class="sf"></div><div class="av"></div></div>
+          <p class="readout" id="t2read"></p>
+          <div class="massline">accumulated mass (resistance to change)<div class="massbar"><div id="t2mass"></div></div></div>
+          <div class="btns">
+            <button class="sf" id="t2s">+ 1 safe moment</button>
+            <button class="av" id="t2a">+ 1 aversive moment</button>
+          </div>
+          <p class="nudge" id="t2nudge"></p>
+        </div>
+      </div>
+      <div style="margin-top:16px;"><button class="subtle" id="treset">Reset both tallies</button></div>
+    </div>
+    <div class="fig-notice"><b>What to notice:</b> give each part the same three aversive moments. The newborn swings from 50% to 80%; the veteran barely moves. Mass is conviction. Everything that follows — why formative moments dominate, why old parts change slowly in therapy, why one catastrophe can define a protector’s whole map — is this one asymmetry, applied everywhere.</div>
+  </figure>
+
+  <p>Each part carries several tallies of this exact shape: its world-belief above, an outcome tally per policy (“when I flee, how does it go?”), a policy-use tally, and — new in Sim 8 — one tally <em>about each other part</em>. Same arithmetic in every bank. When you audit anything below, you are always auditing “who wrote how much into which tally.” (In the current unified build, Section 11, these all collapse into rows of a single conditional table — but the arithmetic of each row is exactly what you just clicked through.)</p>
+</section>
+
+<!-- ================================================================ 3 -->
+<section id="s3" class="col">
+  <span class="secnum">03</span>
+  <h2 class="sec">Soft responsibility: every part gets a share of every moment</h2>
+
+  <p>Winner-take-all asked, each trial, “which part best explains this?” and gave that part everything — the action, the learning, the moment. Sim 8 replaces the argmax with the full posterior it was approximating. Each moment, every part receives a <strong>responsibility share</strong>: the probability, under Bayes’ rule, that this part is the one explaining the current experience.</p>
+
+  <div class="worked">
+    <p class="wt">Responsibility, in words and numbers</p>
+    <p class="line">share of part k&nbsp;∝&nbsp;(k’s accumulated mass)&nbsp;×&nbsp;(how well k predicted this outcome)</p>
+    <p class="gloss">Prior: mass, i.e. the size of the part’s experience tally — bigger parts are more likely to be the explanation before anything happens. Likelihood: the part’s own belief evaluated against what actually occurred (a part believing 70% aversive scores 0.70 on an aversive moment, 0.30 on a safe one). Normalize so the shares sum to 1. That is the whole rule — Bayes with tallies as both prior and likelihood. <span class="chip grown">grown</span> both inputs come from the run; <span class="chip assumed">assumed</span> that mass is the right prior (it falls out of Dirichlet bookkeeping, but it is still a modeling commitment).</p>
+  </div>
+
+  <p>Every write in Section 2’s tallies is then scaled by this share: a part at 85% responsibility absorbs 85% of the moment’s evidence; a part at 4% absorbs 4%. Action works the same way — the policy scores are a responsibility-weighted mixture of every part’s preferences, so a barely-active part still tugs on behavior a little. No thresholds, no gates, no “active flag.” Activation stops being a binary and becomes a live, continuous quantity — which is exactly what Section 4 needs to observe.</p>
+
+  <figure class="fig colwide" style="max-width:880px;">
+    <div class="fig-head"><span class="ft">Who is explaining this moment?</span><span class="fn">Fig. 2 · interactive</span></div>
+    <div class="fig-body">
+      <div class="presets">
+        <span style="font-size:12.5px;color:var(--ink-soft);align-self:center;">Presets:</span>
+        <button id="rpre1">Spawn moment</button>
+        <button id="rpre2">Veteran caught off guard</button>
+        <button id="rpre3">Evenly matched</button>
+      </div>
+      <div class="resp-grid">
+        <div class="resp-part">
+          <h4><span class="pdot p1"></span>Part A (older)</h4>
+          <div class="ctl-label"><span>believes the world is aversive</span><span class="v" id="rAbv"></span></div>
+          <input type="range" id="rAb" min="5" max="95" value="55" aria-label="Part A belief aversive percent">
+          <div class="ctl-label" style="margin-top:10px;"><span>accumulated mass (experience)</span><span class="v" id="rAmv"></span></div>
+          <input type="range" id="rAm" min="2" max="100" value="40" aria-label="Part A mass">
+        </div>
+        <div class="resp-part">
+          <h4><span class="pdot p2"></span>Part B (newer)</h4>
+          <div class="ctl-label"><span>believes the world is aversive</span><span class="v" id="rBbv"></span></div>
+          <input type="range" id="rBb" min="5" max="95" value="50" aria-label="Part B belief aversive percent">
+          <div class="ctl-label" style="margin-top:10px;"><span>accumulated mass (experience)</span><span class="v" id="rBmv"></span></div>
+          <input type="range" id="rBm" min="2" max="100" value="2" aria-label="Part B mass">
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap;">
+        <span style="font-size:12.5px;color:var(--ink-soft);">This moment turns out:</span>
+        <button id="routS">safe</button>
+        <button id="routA" class="on">aversive</button>
+      </div>
+      <p class="barlab">Responsibility split (Sim 8 — the mixture)</p>
+      <div class="splitbar" id="rbar"><div style="background:var(--p1);"></div><div style="background:var(--p2);"></div></div>
+      <p class="barlab">What winner-take-all would have done (Sims 1–7)</p>
+      <div class="ghostbar" id="rghost"><div style="background:var(--p1);"></div><div style="background:var(--p2);"></div></div>
+      <table class="resp-table">
+        <thead><tr><th></th><th>prior (mass share)</th><th>× likelihood</th><th>= responsibility</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pdot p1"></span>Part A</td><td id="rtA1"></td><td id="rtA2"></td><td id="rtA3"></td></tr>
+          <tr><td><span class="pdot p2"></span>Part B</td><td id="rtB1"></td><td id="rtB2"></td><td id="rtB3"></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="fig-notice"><b>What to notice:</b> in the spawn-moment preset, the newborn takes a real, nonzero share the moment it exists — but the older part keeps most of the moment, because mass dominates. That coexistence is the entire point: under winner-take-all the newborn would have taken 100% and the older part would have vanished from the record. Here both are live at once, so one can observe the other.</div>
+  </figure>
+
+  <p>One bookkeeping detail matters enough to say now: the “activation” that Section 4 uses is <strong>last trial’s responsibility vector</strong>. Each trial computes new shares from the new outcome, but the internal observations are weighted by who was carrying the system <em>entering</em> the trial. Hold that thought — the lag is doing real work at the spawn moment, and it is also a design choice you should audit (Section 13, item 1).</p>
+
+  <div class="aside">
+    <p style="margin:0;"><strong style="color:var(--ink);">Honesty note (from the adversarial review, Section 9):</strong> in practice this concurrency is shallower than the word “mixture” suggests. Because mass is the prior, old parts dominate: across the multi-part pilot seeds the reviewer measured mean maximum responsibility of 0.77–0.95, an effective number of active parts of only 1.11–1.63, and one globally selected action per trial that every part then learns. Soft responsibility is real fractional attribution — but “concurrent-activation architecture” is a stronger phrase than the dynamics fully earn, and that register correction stands.</p>
+  </div>
+</section>
+
+<!-- ================================================================ 4 -->
+<section id="s4" class="col">
+  <span class="secnum">04</span>
+  <h2 class="sec">Parts observing parts</h2>
+
+  <p>Here is the new mechanism, in one sentence: <strong>every part keeps a tally about every other part — “when you are the one carrying the moment, is the world safe or aversive?” — and each write is weighted by both ends of the observation: the observer’s own share of the current trial, times how active the observed part was entering it.</strong></p>
+
+  <p><span class="iter">Iteration 8</span>That two-sided weighting is called the <em>bilinear</em> rule, and the second factor did not survive by default — Section 9 tells that story. Concretely: each trial, each part <em>j</em> takes the outcome that just landed and writes it into its tally about part <em>i</em>, scaled by (<em>j</em>’s own responsibility this trial) × (<em>i</em>’s activation coming in). If the exile was carrying 90% of the system when the blow landed and a protector holds 60% of the aftermath, the protector’s tally about the exile absorbs 0.6 × 0.9 of a write. A dormant observer learns almost nothing; a dormant subject is almost nothing to learn about. Each part’s unconditional expectation — “my normal” — is simply the sum of all these context tallies (in the current build they are literally rows of one conditional table whose row-sum is the part’s experience bank), which Section 6 will need.</p>
+
+  <p>Read the rule again and notice what is <em>not</em> in it. No “protector,” no “exile,” no formation order, no id comparison, no direction. It is one symmetric rule applied to all ordered pairs. So where could asymmetry possibly come from?</p>
+
+  <h3>The spawn moment writes one-way</h3>
+
+  <p>From the epoch structure of the world — specifically, from who exists when. Walk the spawn trial through slowly:</p>
+
+  <figure class="fig colwide" style="max-width:880px;">
+    <div class="fig-head"><span class="ft">The spawn trial, step by step</span><span class="fn">Fig. 3 · diagram (activation values illustrative)</span></div>
+    <div class="fig-body" style="padding-bottom:8px;">
+      <div class="strip-scroll">
+      <svg viewBox="0 0 800 330" width="800" style="max-width:100%;height:auto;display:block;" role="img" aria-label="Diagram of the spawn trial showing one-way writes">
+        <!-- timeline -->
+        <line x1="40" y1="52" x2="770" y2="52" stroke="#B9B9A8" stroke-width="1"/>
+        <text x="40" y="30" font-size="12" fill="#5A6055">trial t−1 (entering state)</text>
+        <text x="330" y="30" font-size="12" fill="#5A6055">trial t — catastrophe lands, Part 2 spawns</text>
+        <circle cx="60" cy="52" r="4" fill="#232820"/>
+        <circle cx="350" cy="52" r="5" fill="#B5472B"/>
+        <text x="362" y="46" font-size="12" fill="#B5472B" font-weight="600">unassimilable outcome, severity 6</text>
+        <!-- entering activation -->
+        <g>
+          <circle cx="120" cy="130" r="26" fill="#B07E28"/>
+          <text x="120" y="135" font-size="13" fill="#FFF" text-anchor="middle" font-weight="600">P1</text>
+          <text x="120" y="176" font-size="12" fill="#232820" text-anchor="middle">entering activation ≈ 0.9</text>
+          <text x="120" y="193" font-size="12" fill="#5A6055" text-anchor="middle">(it was carrying the moment)</text>
+        </g>
+        <g>
+          <circle cx="120" cy="252" r="26" fill="none" stroke="#B9B9A8" stroke-dasharray="4 4" stroke-width="1.5"/>
+          <text x="120" y="257" font-size="13" fill="#8A9083" text-anchor="middle" font-weight="600">P2</text>
+          <text x="120" y="296" font-size="12" fill="#5A6055" text-anchor="middle">did not exist entering the trial</text>
+          <text x="120" y="313" font-size="12" fill="#5A6055" text-anchor="middle">entering activation = 0</text>
+        </g>
+        <!-- born parts at trial t -->
+        <g>
+          <circle cx="560" cy="130" r="26" fill="#B07E28"/>
+          <text x="560" y="135" font-size="13" fill="#FFF" text-anchor="middle" font-weight="600">P1</text>
+        </g>
+        <g>
+          <circle cx="560" cy="252" r="26" fill="#5A6FB5"/>
+          <text x="560" y="257" font-size="13" fill="#FFF" text-anchor="middle" font-weight="600">P2</text>
+          <text x="612" y="257" font-size="12" fill="#5A6055">newborn</text>
+        </g>
+        <!-- write arrows -->
+        <defs>
+          <marker id="arrA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" fill="#B5472B"/>
+          </marker>
+          <marker id="arrG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" fill="#B9B9A8"/>
+          </marker>
+        </defs>
+        <path d="M545 228 C 490 195, 490 187, 545 154" fill="none" stroke="#B5472B" stroke-width="4.5" marker-end="url(#arrA)"/>
+        <text x="400" y="172" font-size="12.5" fill="#B5472B" font-weight="600">P2 writes about P1:</text>
+        <text x="400" y="189" font-size="12" fill="#B5472B">(its own share of the trial) × 0.9 × the arousal-scaled rate</text>
+        <text x="400" y="206" font-size="12" fill="#B5472B">“the world was catastrophic while P1 carried it”</text>
+        <path d="M600 154 C 655 187, 655 195, 600 228" fill="none" stroke="#B9B9A8" stroke-width="1.5" stroke-dasharray="4 4" marker-end="url(#arrG)"/>
+        <text x="668" y="186" font-size="12" fill="#5A6055">P1 writes about P2:</text>
+        <text x="668" y="203" font-size="12" fill="#5A6055">… × (P2 entering = 0) = 0</text>
+      </svg>
+      </div>
+    </div>
+    <div class="fig-notice"><b>What to notice:</b> the one-way write at the spawn moment. The newborn’s very first entry about the older part is “catastrophe, while you were active” (Section 5 does the weight arithmetic). The older part writes nothing about the newborn — not because a rule forbids it, but because the newborn’s activation entering the trial was zero. It wasn’t there yet. The newborn’s own share of that trial — the other half of the bilinear weight — is the contested quantity: keep reading.</div>
+  </figure>
+
+  <p>This is the computational shape of a clinical fact: the protector’s knowledge of the exile is dated to the crisis, because that is the only moment it was ever guaranteed to be watching. The exile’s knowledge of the protector, by contrast, comes from the aftermath — the ordinary, mostly-suppressed trials where both coexist at low intensity. Two different samples of each other, from one symmetric rule.</p>
+
+  <h3>Was the birth asymmetry earned, or built in?</h3>
+
+  <p>For the first seven iterations, the honest answer was: partly built in. The write rule then had only one weight — the <em>observed</em> part’s entering activation — so the newborn observed its own birth trial at full strength no matter how little of the moment it actually explained, while the reverse write was structurally zero. The adversarial review (Section 9) called this the fatal finding: an asymmetric birth transition supplying the very arrow the result claimed to grow. The defense — a part cannot be observed before it exists, and the part <em>is</em> the system’s explanation of its birth event — is partly right, but the review’s point stands: the asymmetry’s <em>strength</em> was a design choice, and the burden was to earn it with the confound removed.</p>
+
+  <p>Iteration 8 removed it: the bilinear rule above weights every write by the observer’s own grown responsibility, newborns included. The result is the single most encouraging fact in this whole record: <strong>coupling got stronger, not weaker</strong> — directional seeds rose from 4/10 to <span class="num">5/10</span> (mean directional fraction 0.57 → <span class="num">0.69</span>), shuffle degradation from 2 to 3. The newborn’s formative write survives being weighted by its own posterior share because that share is genuinely high: it spawned precisely to explain the event no older part could claim. <span class="chip grown">grown</span> — the birth write is now earned by inference, not by append order. (The current unified build handles the same moment differently — Sim 1’s frozen spawn semantic assigns the spawn trial wholly to the newborn — which is <span class="chip assumed">assumed</span> and flagged for your audit in Section 13.)</p>
+
+  <p>And the honest caveat, stated now rather than in Section 9’s fine print: this asymmetry is only a <em>tendency</em>. If catastrophes cluster, a part that spawned at catastrophe #1 can be highly active entering catastrophe #2 — and then the <em>older</em> parts write blame about <em>it</em>. The world can grow the coupling backwards. In the pilot it sometimes did, and Section 8 treats one such seed as a headline rather than a footnote, because a mechanism that could only produce the theory’s answer would prove nothing.</p>
+</section>
+
+<!-- ================================================================ 5 -->
+<section id="s5" class="col">
+  <span class="secnum">05</span>
+  <h2 class="sec">What a moment weighs</h2>
+
+  <p>Not all writes are equal, and the inequality is where the clinical texture lives. One rule survived all thirteen iterations untouched; the question of how much <em>extra</em> weight a catastrophe deserves turned out to be the most fought-over quantity in the whole record, and its history is worth following closely because it ends in the strongest single finding this sim has produced.</p>
+
+  <p><strong>Arousal scales the learning rate — the survivor.</strong> The write rate is <span class="num">0.16 × (1 + 60 × arousal ÷ 5.2)</span> — base rate 0.16, arousal gain 60, arousal scale 5.2, all from Sim 1’s magic-number table. Arousal itself comes from surprise: the less the mixture predicted this outcome, and the more severe it was, the higher the arousal.</p>
+
+  <div class="worked">
+    <p class="wt">Worked: an ordinary moment vs. a formative one</p>
+    <p class="line">Ordinary safe trial, well predicted → arousal ≈ 0<br>
+    &nbsp;&nbsp;rate = 0.16 × (1 + 0) = <b>0.16</b>&nbsp;&nbsp;(call this 1×)<br><br>
+    Catastrophe the mixture gave ~10% odds, severity 6:<br>
+    &nbsp;&nbsp;surprise = −ln(0.10) × 6 ≈ 13.8 → arousal = 1 − e<sup>−13.8/5.2</sup> ≈ 0.93<br>
+    &nbsp;&nbsp;rate = 0.16 × (1 + 60 × 0.93 ÷ 5.2) ≈ <b>1.9</b>&nbsp;&nbsp;(≈ 12×)</p>
+    <p class="gloss">A formative moment writes roughly twelve ordinary moments’ worth of evidence in one trial. This is Sim 1’s existing account of why wounds dominate personal history — nothing new yet.</p>
+  </div>
+
+  <h3>The rise and fall of the severity multiplier</h3>
+
+  <p><span class="chip super">superseded</span>&nbsp; The early builds made catastrophes write harder by <em>multiplying</em>. Iteration 2 scaled aversive internal writes by the outcome’s severity (catastrophes carry <span class="num">6</span>) — the diagnosis was sound and still stands: both epochs of the world share the same ordinary hazard rate, consolidation only removes catastrophes, so severity is the only quantity the world makes asymmetric between “before the protector existed” and “after.” Iteration 4 unified the internal and personal learning rates so the formative moment carried arousal ×12 as well — roughly <span class="num">70×</span> an ordinary co-existence write, compounding. Iterations 6–7 refined this into an <em>excess</em> gate (attribution only from unassimilable events, weight <span class="num">1 + 30 × excess</span>, where excess is surprise beyond the assimilation capacity of 1.0 — the same quantity that triggers spawning). It worked — but the adversarial review showed the “derivation” of that gain 30 was unfaithful to the code it cited, and named it what it was: an outcome-shaped scale chosen to recover a lost pilot trace.</p>
+
+  <p><span class="iter">Iteration 12</span><strong>So the rebuild deleted all of it</strong> — severity multipliers, excess gain, every amplification constant — on the hypothesis that contrastive readouts (Section 6) would discount expected storms automatically. The result was unambiguous: coupling collapsed from 5/10 directional seeds to <span class="num">1/10</span>. With no amplification, the newborn’s formative write — now weighted by its mass-prior responsibility of roughly <span class="num">0.5%</span> at its own birth — drowned in the priors. That collapse is a real finding, arguably the paper’s most direct one: <strong>formative amplification is not removable.</strong> Unassimilable events must write harder, or parts never form maps of each other at all. That is the capture principle — the same arithmetic that makes personal wounds dominant — showing up as a load-bearing necessity rather than a modeling flourish.</p>
+
+  <p><span class="iter">Iteration 13</span><strong>The current route: severity as belief, not multiplier.</strong> Instead of a gain constant, each part now keeps Sim 1’s severity tally — “given an aversive moment, was it ordinary or catastrophic?” — with the frozen ordinary-biased prior <span class="num">[1.0, 0.05]</span> for established parts. Newborns start flat, <span class="num">[0.5, 0.5]</span>, because they are born of precisely the event the ordinary-adapted world model could not claim. Separation then <em>grows</em> out of prediction:</p>
+
+  <div class="worked">
+    <p class="wt">Worked: why the newborn owns the catastrophe (iteration 13)</p>
+    <p class="line">established part: P(catastrophic | aversive) = 0.05 ÷ 1.05 ≈ <b>0.048</b><br>
+    newborn: P(catastrophic | aversive) = 0.5 ÷ 1.0 = <b>0.50</b> — about 10× better on a catastrophic trial<br><br>
+    so when catastrophe #2 lands, responsibility (mass × predictive fit, Section 3)<br>
+    tilts hard toward the catastrophe-shaped part — and every write follows it.<br>
+    The spawn trial itself is assigned wholly to the newborn (Sim 1’s frozen<br>
+    spawn semantic), at the ordinary arousal-scaled rate: ≈ 1.9 vs 0.16, ~12×.</p>
+    <p class="gloss">No gain constants anywhere in the current build. The ~10× is <span class="chip grown">grown</span> — it is what a flat prior does against an ordinary-adapted one, and it fades as the newborn’s own severity tally fills in. The flat prior itself and the whole-trial spawn assignment are <span class="chip assumed">assumed</span> (defended as Sim 1 frozen semantics; audited in Section 13).</p>
+  </div>
+
+  <p>Note the register of each piece: the constants <span class="num">0.16 / 60 / 5.2</span> and the severity priors are <span class="chip assumed">assumed</span> — inherited from Sim 1 unchanged, unswept here. What the weights <em>produce</em> — which pairs end up with heavy banks about which — is <span class="chip grown">grown</span>. And the reference model (iteration 11, Section 10) still carries the excess-gain machinery; the two builds are alternative answers to “how do formative moments get their weight,” and only one of them currently completes therapy.</p>
+</section>
+
+<!-- ================================================================ 6 -->
+<section id="s6" class="col">
+  <span class="secnum">06</span>
+  <h2 class="sec">“Worse than my normal”: the contrastive readout</h2>
+
+  <p><span class="iter">Iteration 3</span>Suppose part <em>j</em>’s bank about part <em>i</em> now holds its counts. How should <em>j</em> decide whether <em>i</em> is dangerous? The obvious readout — “is the aversive fraction above one half?” — turns out to be wrong in an instructive way, and the pilot caught it.</p>
+
+  <p>This is a world containing avoidance. The parts’ own policies — flee, appease, attenuate — actively suppress exposure, so the <em>delivered</em> experience of every part is mostly safe even when the underlying situation is not. At the pilot’s coordinates, suppression pushed everyone’s delivered aversive fraction below 50%. Against an absolute 0.5 baseline, <strong>no bank anywhere crossed the line</strong>, and every coupling read as zero. The mechanism looked dead; actually the ruler was broken.</p>
+
+  <p>The fix is the question a Dirichlet observer should have been asking all along: not “is your world bad?” but <strong>“when you are active, is my world worse than my normal?”</strong> — conditional risk against the observer’s own unconditional expectation (in the current build, literally the marginal of its one conditional table):</p>
+
+  <div class="worked">
+    <p class="wt">The aversion readout (current form, iteration 9 onward)</p>
+    <p class="line">shrunk fraction = (bank’s aversive count + 4 × my normal) ÷ (bank’s total + 4)<br>
+    aversion of j about i = max(0, 2 × (shrunk fraction − my normal))</p>
+    <p class="gloss">“My normal” is j’s own marginal aversive fraction. The 4 is a pseudo-count (<span class="chip assumed">assumed</span>, constant <span class="num">internal_conf_k = 4</span>, unswept — it has survived every iteration): a thin bank is pulled toward “no news,” so two lucky observations can’t scream. The subtraction is the substance — it measures <em>excess</em> risk attributable to i’s activity, which survives any amount of across-the-board suppression.</p>
+  </div>
+
+  <p>The form matters as much as the idea, and it changed once for a reason you should know. <span class="chip super">superseded</span>&nbsp; The original readout multiplied the raw contrast by a separate confidence factor, n ÷ (n + 4). The adversarial review caught what that does: because old parts stay active more (mass is the prior), banks <em>about</em> old parts are simply bigger — and a confidence multiplier converts that exposure asymmetry into directional strength even when the underlying risks are identical. Iteration 9 replaced it with the shrinkage form above, which is exposure-fair by construction: <strong>equal risk reads zero contrast at any exposure.</strong> Same clinical idea, confound removed. (Iteration 12 additionally hoped this contrast would discount expected mid-cluster storms automatically — a marginal <em>is</em> the part’s expectation — and as Section 5 records, that hypothesis failed as a <em>replacement</em> for formative amplification; as a readout, the contrastive form stands.)</p>
+
+  <figure class="fig colwide" style="max-width:880px;">
+    <div class="fig-head"><span class="ft">Same counts, two rulers</span><span class="fn">Fig. 4 · interactive</span></div>
+    <div class="fig-body">
+      <p style="margin:0 0 14px;font-size:13.5px;color:var(--ink-soft);">A world where moments carried by part <em>i</em> genuinely go worse (underlying rates: 65% aversive when i is active, 35% otherwise). Now let the system’s protective policies suppress delivered experience, and watch each readout.</p>
+      <div class="ctl-label"><span>how much the system’s avoidance suppresses delivered aversive experience</span><span class="v" id="csupv"></span></div>
+      <input type="range" id="csup" min="0" max="80" value="0" aria-label="suppression percent">
+      <div class="meter">
+        <div class="mlab"><span>delivered aversive fraction, moments carried by <em>i</em></span><span class="v" id="cfi"></span></div>
+        <div class="mtrack"><div class="fill" id="cfib" style="background:var(--aversive);"></div><div class="mark" style="left:50%;" title="the absolute 0.5 line"></div></div>
+      </div>
+      <div class="meter">
+        <div class="mlab"><span>observer’s own baseline (“my normal”)</span><span class="v" id="cfb"></span></div>
+        <div class="mtrack"><div class="fill" id="cfbb" style="background:var(--rule-dark);"></div><div class="mark" style="left:50%;"></div></div>
+      </div>
+      <div class="readout-pair">
+        <div class="readbox">
+          <h4>Absolute readout (iterations 1–2)</h4>
+          <p style="margin:0;font-size:12px;color:var(--ink-soft);">danger = how far the fraction sits above 0.5</p>
+          <p class="verdict" id="cabs"></p>
+          <p class="why" id="cabswhy"></p>
+        </div>
+        <div class="readbox">
+          <h4>Contrastive readout (iteration 3, kept)</h4>
+          <p style="margin:0;font-size:12px;color:var(--ink-soft);">danger = excess over the observer’s own normal</p>
+          <p class="verdict" id="ccon"></p>
+          <p class="why" id="cconwhy"></p>
+        </div>
+      </div>
+    </div>
+    <div class="fig-notice"><b>What to notice:</b> drag suppression up past ~23% and the absolute readout goes to zero — the black 0.5 tick is never crossed again — while the contrastive readout shrinks but stays positive, because both fractions fell together and the <em>gap</em> is what it measures. This is the pilot’s iteration-2 failure reproduced on a slider: avoidance hides absolute danger, but it cannot hide “things are worse than my normal when you are active.”</div>
+  </figure>
+
+  <p>Clinically, this should feel familiar: a protector in a well-defended system rarely reports that life is objectively terrible. What it reports is contrast — <em>when that one gets stirred up, everything gets worse</em>. The readout is that sentence, in counts.</p>
+</section>
+
+<!-- ================================================================ 7 -->
+<section id="s7" class="col">
+  <span class="secnum">07</span>
+  <h2 class="sec">The iteration-5 gate: aim from the tallies, magnitude from the wound</h2>
+
+  <p><span class="chip super">superseded</span>&nbsp; This section and the next teach the design as it stood at iteration 5 — the version that produced the result everyone got briefly excited about. It is no longer the current rule, but you need it for three reasons: it is the ancestor of the iteration-11 reference gate; three of the adversarial review’s confirmed findings live inside this very arithmetic (watch for them); and Section 8’s two-seed demonstration — still the cleanest picture of what “earnable both ways” means — ran on it.</p>
+
+  <p><span class="iter">Iteration 5</span>The payoff question: when a therapist-like process tries to contact a part, what stands in the way? Iteration 5’s answer was a clean division of labor: <strong>the internal tally supplies the <em>target</em> of a protector’s fear; the protector’s own personal banks supply the <em>magnitude</em>.</strong> The catastrophe made the protector what it is — its dread lives in its own counts. The internal bank only tells it where to aim.</p>
+
+  <div class="worked">
+    <p class="wt">Blocking of target i by another part j (iteration 5, superseded)</p>
+    <p class="line">block = (j’s protective policy share) × (j’s own aversive expectation) × (share of j’s danger-attribution aimed at i)</p>
+    <p class="gloss">Protective policy share, nominally <span class="chip grown">grown</span>: the fraction of j’s policy tally spent on flee + appease + attenuate. The review later showed this read 0.94–0.99 for <em>every</em> part — the one global action per trial is credited to everyone — so it did no role-differentiating work (finding 3; replaced in iteration 10 by a genuinely counterfactual “what would I do from my own banks”). Own aversive expectation <span class="chip grown">grown</span>: j’s personal belief from Section 2. Attribution <span class="chip grown">grown</span>: j’s aversion about i divided by j’s total aversion about everyone, plus a 0.01 smoothing constant <span class="chip assumed">assumed</span> — the constant this document’s first edition flagged as non-negligible, which the reviewer confirmed independently (finding 4; the whole normalization layer was deleted in iteration 9). The multiplication itself, and the overall gain of 1.0, are <span class="chip assumed">assumed</span> structure.</p>
+  </div>
+
+  <div class="worked">
+    <p class="wt">Worked with the iteration-5 run’s numbers (seed 1001, session 2)</p>
+    <p class="line">access to a target = ∏ over blockers j of (1 − block by j)<br>
+    target: Part 2 → delivered access = <b>0.862</b> (from that run’s session log)<br>
+    contact write = 6.0 × access ≈ <b>5.2 counts of safe evidence</b></p>
+    <p class="gloss">Access multiplies across blockers — two parts each blocking 30% leave 0.7 × 0.7 = 49% access. No all-or-nothing gate: every contact happens, scaled by access (the “Arm W” rule from Sim 4’s identifying experiment). The fixed 6.0-count write hides the review’s finding 5: a fixed-size write moves a small young bank far more than a heavy old one, so part of the “descent” was peeling, not gating — iteration 11 made contact writes proportional to the target’s bank mass (5% of it) to kill exactly that.</p>
+  </div>
+
+  <p>Each of 40 sessions, the process picks its target by <strong>draw-toward-pain gated by access</strong>: score = access × the part’s own aversive belief, ties broken by a shuffled visit order so no id comparison can sneak direction in. Then the contact writes safe evidence two places at once:</p>
+
+  <ul>
+    <li><strong>Into the target’s own tally</strong> — the contacted part learns the world can be safe (this is the slow unwinding you watched in Fig. 1: heavy banks move slowly, which is why Part 1 needs many sessions).</li>
+    <li><strong>Into every witness’s tally about the target</strong> — each other part records “that one was contacted, and nothing catastrophic happened.” Survived contact relaxes the gate: the witnesses’ aversion about the target falls, their blocking falls, access rises next session.</li>
+  </ul>
+
+  <p>That second write is the loop IFS calls <em>the system witnessing an unburdening</em>: the protector does not take anyone’s word that the exile is safe to approach — it watches a contact survive, and its own tally about the exile updates by the same arithmetic as everything else. No trust variable, no announcement channel. Just evidence, landing in the observers’ banks. This witnessing loop is the one piece of the therapy design that has survived, unchanged in spirit, into every later build.</p>
+</section>
+
+<!-- ================================================================ 8 -->
+<section id="s8" class="col">
+  <span class="secnum">08</span>
+  <h2 class="sec">Two seeds, both directions</h2>
+
+  <p>This section is the epistemic heart of the program, so let the run guard speak first: Sim 8 refuses to run under any label but <span class="num">pilot</span>, on any seeds but <span class="num">1001–1010</span>. Everything below is exploratory. What these two seeds demonstrate is not “the theory is right” — it is that <strong>the gate expresses whatever coupling the world grew, in whichever direction it grew it.</strong> The mechanism cannot manufacture the theory’s answer, which is precisely what makes it capable of testing the theory later.</p>
+
+  <p><span class="chip super">superseded</span>&nbsp; Provenance note: every number in Fig. 5 is from the <em>iteration-5</em> run, retained from the log. The pilot directory on disk now holds iteration-13 output (Sections 11–12), in which these same seeds grow different stacks under a richer world. The demonstration below is kept at full length because “earnable both ways” was a preregistration obligation from the day this design was approved, and this remains its clearest showing.</p>
+
+  <figure class="fig colwide" style="max-width:880px;">
+    <div class="fig-head"><span class="ft">What grew, and what the gate did with it</span><span class="fn">Fig. 5 · iteration-5 run (superseded)</span></div>
+    <div class="fig-body">
+      <div class="seed-tabs" role="tablist">
+        <button id="tab1001" class="on" role="tab" aria-selected="true">Seed 1001 — descent, earned</button>
+        <button id="tab1009" role="tab" aria-selected="false">Seed 1009 — the world said no</button>
+      </div>
+      <p class="seed-note" id="seednote"></p>
+      <div class="coupling-wrap">
+        <div>
+          <p class="barlab" style="margin-top:0;">Grown coupling: each row is an observer’s fear about each column <span style="font-family:var(--mono);font-size:11px;">(aversion × 1000)</span></p>
+          <div class="strip-scroll"><table class="coupling" id="ctable"></table></div>
+        </div>
+        <div class="coupling-side" id="cside"></div>
+      </div>
+      <p class="barlab" style="margin-top:26px;">All 40 therapy sessions — each cell is one session, colored by which part was contacted. Flags mark first contacts.</p>
+      <div class="strip-scroll" id="stripwrap"></div>
+      <div class="verdict-line" id="seedverdict"></div>
+    </div>
+    <div class="fig-notice" id="seednotice"></div>
+  </figure>
+
+  <p>Read the two seeds side by side and the claim becomes precise. In 1001 the acute epochs happened to land their catastrophes on trials the root was carrying, so every later part’s formative write pointed at an earlier part: the coupling matrix fills its lower triangle and the reverse cells are exactly zero. The gate then produces textbook IFS: newest part first, then inward, session by session, with the oldest, heaviest part reached only once its blockers have witnessed enough survived contact. Shuffle the internal banks across pairs — keep every count, scramble who they are about — and the descent is destroyed. The ordering was living in the grown attributions, nowhere else.</p>
+
+  <p>In 1009 the catastrophes clustered. Parts that spawned at one catastrophe were still highly active entering the next, so the <em>older</em> parts collected the blame — every pair’s coupling points backwards, earlier-about-later. And the gate, fed reversed coupling, faithfully descends <strong>oldest-first</strong>: 1, then 2, then 3, then 4, in perfect birth order. That run’s summary scores this seed’s descent as <span class="num">false</span>, because the frozen readout asks for newest-first — but as evidence about the <em>mechanism</em>, it is the more important seed of the two. “Earnable in both directions” was a preregistration obligation from the day you approved this design. Here it is, demonstrated inside one pilot.</p>
+
+  <p>What became of these two seeds is a preview of everything that follows. Seed 1001’s descent survived the entire confound-removal pass: at iteration 11 it is the <em>only</em> seed in the pilot whose ordering demonstrably requires the grown coupling — it descends with the gate, fails without it, and the shuffle destroys it. Seed 1009’s backwards attribution survived everything too — the excess gate, the gain restoration, and the unified rebuild have all left it reversed. One world the mechanism can genuinely order; one world no iteration has ever flipped. Both are doing exactly what an honest testbed should: refusing to flatter the theory.</p>
+</section>
+
+<!-- ================================================================ 9 -->
+<section id="s9" class="col">
+  <span class="secnum">09</span>
+  <h2 class="sec">The adversarial review: what a hostile reader found</h2>
+
+  <p>After iteration 7 — the high-water mark — the pilot went to an adversarial reviewer (GPT-5.6-sol) with the code, the configs, the criteria files, and the run outputs, and license to re-execute the committed model read-only. The verdict was <strong>REJECT</strong> of the paper-register claim, and the one-sentence version deserves to be read whole, because it is the sentence the next four iterations were built to answer:</p>
+
+  <blockquote class="solq">In a repeatedly pilot-redesigned exploratory simulator, a lagged and excess-amplified internal-bank rule followed by access-times-aversion selection produced newest-to-oldest first selection in 4 of 7 multi-cause pilot seeds versus 2 of 7 after a confounded whole-bank permutation, demonstrating behavior of the chosen rules but not emergence of protector-before-exile therapy ordering.
+    <cite>— reviews/2026-07-10-gpt56sol-sim8-review.md, verified against the code by the orchestrator; every finding below CONFIRMED</cite>
+  </blockquote>
+
+  <p>Five findings were confirmed. Each one is an asymmetric weighting rule quietly doing the work the theory was supposed to do — and each became a <em>removal</em>, not a rebuttal:</p>
+
+  <ol class="findings">
+    <li>
+      <h4>The unreciprocated birth observation</h4>
+      <p>The newborn wrote about older parts on its own birth trial at full rate — the write rule had no observer-side weight — while the reverse write was structurally zero. The claimed direction was being inserted at the cause-birth boundary: “later sees earlier on the birth event; earlier cannot see later,” by construction. The review called this fatal, and it was.</p>
+      <p class="fix"><b>Removed by iteration 8:</b> the bilinear rule — every write weighted by the observer’s own grown responsibility. Coupling <em>strengthened</em> (Section 4): the honest version of the asymmetry was better than the authored one.</p>
+    </li>
+    <li>
+      <h4>Exposure laundered into direction</h4>
+      <p>Old parts stay active more (mass is the prior), so banks about them are simply bigger; the n/(n+4) confidence multiplier then scored later-about-earlier banks as more directional <em>even at identical conditional risk</em>. In seed 1004, young parts held 33–57 effective observations about the root; the root held 2–10 about each of them.</p>
+      <p class="fix"><b>Removed by iteration 9:</b> shrinkage-to-baseline contrast (Section 6) — equal risk reads zero at any exposure.</p>
+    </li>
+    <li>
+      <h4>“Protective share” did no work</h4>
+      <p>Because one global action is selected per trial and credited to every part by responsibility, the protective-policy share read 0.94–0.99 for <em>every</em> part in every measured seed. The putative exile was exactly as “protective” as the putative protector; the role variable was bookkeeping, not role.</p>
+      <p class="fix"><b>Replaced by iteration 10:</b> a counterfactual readout — what would this part do, scoring policies from its own banks alone (softmax, sharpness 4). Then deleted entirely in the rebuild, where protectiveness becomes a vote (Section 11).</p>
+    </li>
+    <li>
+      <h4>The 0.01 smoothing was a hidden dial</h4>
+      <p>Zero-division was already guarded elsewhere, so the constant’s real effect was undocumented shrinkage — at the same order as the contrasts it divided (seed 1004’s “6/6 directional” included contrasts of 0.0009). This document’s first edition flagged the same constant independently, which is worth a sentence of satisfaction and no more.</p>
+      <p class="fix"><b>Removed by iteration 9:</b> the entire attribution-normalization layer was deleted with it.</p>
+    </li>
+    <li>
+      <h4>Peeling: descent without a gate</h4>
+      <p>The reviewer ran a diagnostic arm with access pinned to 1 — no gate at all — and 3 of 7 seeds still “descended,” versus 4 of 7 at baseline. Fixed-size safe writes move small young banks much faster than heavy old ones (seed 1004’s masses ran 112.9 / 21.4 / 8.9 / 6.7, oldest to newest), so the selector was peeling banks by size, not expressing coupling. Only seed 1004’s order actually required the gate.</p>
+      <p class="fix"><b>Removed by iteration 11:</b> contact writes proportional to target bank mass, and the no-gate arm promoted to a <em>standing control inside the metric</em>: descent only counts where the baseline passes and the no-gate arm fails — the “gate_earned” standard.</p>
+    </li>
+  </ol>
+
+  <p>Two more verdicts matter for calibration. The review rejected the shuffle control as non-diagnostic — permuting whole banks moves mass and calibration along with direction, so a degradation proves less than it appears to. And it named the deeper problem with the whole seven-iteration path: <em>structural</em> tuning against the same ten seeds is more dangerous than tuning a constant, because it changes what causal quantity exists and what counts as success. “Exploratory” labels the risk; it does not remove it. One point was contested and stands contested: the birth boundary is partly time’s arrow — a part genuinely cannot be observed before it exists, and the part <em>is</em> the system’s explanation of its birth event. But the burden the review set was accepted: earn the direction with the confounds controlled. That is the Occam pass.</p>
+</section>
+
+<!-- ================================================================ 10 -->
+<section id="s10" class="col">
+  <span class="secnum">10</span>
+  <h2 class="sec">The Occam pass: fixing by deletion</h2>
+
+  <p>The unifying diagnosis of the review is elegant once you see it: <strong>every confirmed confound was an asymmetric weighting rule.</strong> So the repair plan — preregistered as iterations 8 through 11, one run each — added nothing. It only removed:</p>
+
+  <ul>
+    <li><span class="iter">It 8</span><strong>Bilinear observation.</strong> One write rule, no observer special case. Coupling rose to <span class="num">5/10</span> directional (fraction <span class="num">0.69</span>), shuffle degradation 3 — the strongest coupling state in the record, achieved by deleting the confound said to explain it.</li>
+    <li><span class="iter">It 9</span><strong>Exposure-fair contrast; normalization and the 0.01 deleted.</strong> Coupling unchanged (the readout is now fair); descent fell to 3 with <em>zero</em> shuffle degradation. Logged verbatim as “the honest cost of deleting the laundering layer”: raw contrasts of 0.007–0.04 were too weak to carry ordering on their own.</li>
+    <li><span class="iter">It 10</span><strong>Grown roles.</strong> Protective preference now read counterfactually from each part’s own banks. Metrics unchanged, pending gate magnitude.</li>
+    <li><span class="iter">It 11</span><strong>Peeling-proof therapy.</strong> Contact writes at <span class="num">5%</span> of target bank mass (<span class="chip assumed">assumed</span>, unswept); gate strength restored with <span class="num">block_gain = 12</span> — derived as ≈ 1/(2 × the observed maximum contrast of 0.039), which is to say <em>openly scaled to pilot outputs</em>, the one constant in the current record that is honestly outcome-shaped (<span class="chip assumed">assumed</span>; Section 13, item 5); and the no-gate arm standing inside the metric.</li>
+  </ul>
+
+  <div class="worked">
+    <p class="wt">The honest headline after iteration 11</p>
+    <p class="line">descent 4/10 · shuffle degradation 3 · no-gate arm passes 3<br>
+    gate_earned = <b>1/7</b> — seed 1001 alone: descends with the gate,<br>
+    fails without it, and the shuffle destroys it</p>
+    <p class="gloss">The two-cause seeds descend gate-free — a catastrophe-born spawn simply starts with the highest own-pain score, which is initial-condition ordering, not coupling. Seed 1004’s four-layer order muddles under strong gating (the root is held out to session 17, but Part 2 comes before Part 3). One seed, fully earned, is the true current size of the descent result in this model class.</p>
+  </div>
+
+  <p>Read that headline with both eyes. It is one seventh of the marquee number the iteration-5 story suggested — and it is the first number in this record that survives every control it has. The architecture now satisfies every obligation the review set: bilinear symmetric observation, exposure-fair contrast, grown roles, no normalization layer, mass-relative therapy, and a standing no-gate control. <strong>This iteration-11 architecture is the program’s reference model</strong> — a status it holds by preregistered fallback, as the next section explains. Smaller, and real.</p>
+</section>
+
+<!-- ================================================================ 11 -->
+<section id="s11" class="col">
+  <span class="secnum">11</span>
+  <h2 class="sec">The rebuild, and the deadlock that reads like the theory</h2>
+
+  <p>You approved one more pass, with the hardest constraint yet: <strong>no new machinery.</strong> Iteration 12 replaced every remaining special-purpose structure with the agent’s ordinary machinery, on the argument that a mechanism the paper wants to call “just active inference over internal context” should survive being built that way literally:</p>
+
+  <ul>
+    <li><strong>Internal state is context.</strong> The internal banks, the witness baseline, and the personal experience bank collapse into <em>one conditional table per part</em>: outcome counts conditioned on which part was active entering the trial. The table’s row-sum (marginal) <em>is</em> the experience bank — fear, predictive fit, and mass are all reads of one structure. “Parts observe parts” becomes ordinary contextual learning whose context happens to be internal.</li>
+    <li><strong>No amplification constants.</strong> Severity multipliers and the excess gain deleted, on the marginal-auto-discount hypothesis — Section 5 told you how that ended (coupling 1/10; the capture principle is not removable; iteration 13 restored formative weight through Sim 1’s frozen spawn semantic and severity beliefs, with zero gain constants).</li>
+    <li><strong>Access is a policy, not a formula.</strong> Contacting part i is an ordinary action. Each part scores “allow contact with i” from its own conditional about i (shrunk toward its marginal) versus “leave things as they are” (its marginal), using the suite’s standard preferences (<span class="num">+1.35</span> safe, <span class="num">−2.35</span> aversive); the mass-weighted mixture aggregates the votes; access is the softmax share of <em>allow</em> at temperature 1. Deleted: block_gain, protective_share, the whole multiplication chain. A protector is now just a part whose conditional about the target is worse than its own normal, voting no. <span class="chip grown">grown</span> as disposition, <span class="chip assumed">assumed</span> as policy form.</li>
+    <li><strong>Richer worlds.</strong> Four crises instead of two (episode ω’s 2.6 / 2.2 / 2.7 / 2.3), because two acute clusters starve the coupling regardless of mechanism. Formation now yields <span class="num">8/10</span> multi-part seeds, 23 spawns, stacks up to six parts.</li>
+  </ul>
+
+  <p>Iteration 13 (spawn semantic and severity beliefs restored) preregistered three predictions: coupling recovers to ≥ 4/10 with no gain constants; never-contacted parts resolve; gate_earned ≥ 2. And one fallback: if the unified table dilutes the signal anyway, iteration 11 stands as the reference model. The result: coupling recovered only partway — <span class="num">2/10</span> directional, mean fraction <span class="num">0.42</span> — so the fallback governs, and iteration 11 is the reference architecture while the rebuild is retained as the more principled design awaiting its missing piece. But the run’s real finding is what therapy did. Descent: <span class="num">0/8</span>. Not reversed — <strong>deadlocked</strong>, and deadlocked in a theoretically legible way:</p>
+
+  <ul>
+    <li><strong>Gated parts are never reached, so gates never relax.</strong> Session selection is access × own pain. A part whose access the votes hold down never wins selection; because it is never contacted, no safe evidence is ever written <em>about</em> it; its gate cannot move. The multiplicative gate never had this failure mode — access-scaled writes always leaked some safety through. The softmax policy does not leak.</li>
+    <li><strong>Contacting a protector makes it more protective.</strong> A contact writes safe evidence into every table under the contacted part’s context — including the contacted part’s own row, which feeds its marginal. So the protector’s world-expectation gets safer. But safety raises the utility of <em>leave things as they are</em> in every vote that part casts, while its conditional about the exile — the frozen map from Section 4 — never updates, because the exile is never the active context. Reassure the protector about its own world and you widen the gap its vote is based on. The gate tightens.</li>
+  </ul>
+
+  <div class="worked">
+    <p class="wt">Worked: the vote, before and after reassurance (one-voter system for clarity)</p>
+    <p class="line">protector’s normal = 0.30 aversive; its frozen map of the exile = 0.45<br>
+    allow  = 1.35 × 0.55 − 2.35 × 0.45 = <b>−0.32</b><br>
+    leave  = 1.35 × 0.70 − 2.35 × 0.30 = <b>+0.24</b>  → access ≈ 0.36<br><br>
+    now contact the protector until its normal falls to 0.25:<br>
+    allow  = unchanged (its map of the exile never updates) = <b>−0.32</b><br>
+    leave  = 1.35 × 0.75 − 2.35 × 0.25 = <b>+0.42</b>  → access ≈ <b>0.32 — lower</b></p>
+    <p class="gloss">Illustrative single voter; the pilot’s delivered access mixes every part’s votes, mass-weighted. The direction is the point: safe evidence that does not touch the frozen conditional strengthens the status quo it votes for.</p>
+  </div>
+
+  <figure class="fig colwide" style="max-width:880px;">
+    <div class="fig-head"><span class="ft">The deadlock, in the current run’s own sessions</span><span class="fn">Fig. 6 · iteration-13 pilot data (current)</span></div>
+    <div class="fig-body">
+      <p style="margin:0 0 16px;font-size:13.5px;color:var(--ink-soft);">All 40 therapy sessions for the two seeds you already know, in the iteration-13 run. Colors are parts; flags mark first contacts; the access numbers under each block are the run’s logged values.</p>
+      <div id="dl1001"></div>
+      <div id="dl1009" style="margin-top:26px;"></div>
+    </div>
+    <div class="fig-notice"><b>What to notice:</b> the strips are monotone blocks — therapy grinds on the one accessible young part for twenty-plus sessions, moves to the root, and never once reaches the middle of either stack. Access to the newest part climbs slowly as witnesses accumulate safe evidence about it; access to the root sits pinned at the softmax’s point of indifference (≈ 0.50); the gated middle parts never appear at all. Forty sessions, and the system’s interior is untouched.</div>
+  </figure>
+
+  <p class="clinical">Here is the careful way to say what this is. The most principled build of this mechanism — one table, one write rule, one ordinary policy, no gain constants — arrived, by arithmetic nobody chose for the purpose, at a claim IFS states as clinical bedrock: <em>a system of parts cannot open itself from inside.</em> Safety delivered to the accessible parts consolidates the arrangement; the parts holding the gates are exactly the parts the process cannot reach; and reassuring a protector about its own world, without changing what it expects contact with the exile to bring, makes it more sure that things should stay as they are. Every experienced IFS clinician has watched that loop. The model did not quote it; it produced it.</p>
+
+  <p>And the same arithmetic specifies the exit. What the protector needs is not more safety in general — it is a changed expectation of <em>what contact with the exile leads to</em>, which its own history cannot supply because its history is exactly what froze. In the theory’s terms: permission comes through the protector’s trust in something outside the parts’ own ledgers — the therapist relationship, Self. The suite already grows that quantity: Sim 5’s learned co-regulation regime. The next preregistration, already written into the log, is to couple it in: <strong>the protector scores contact-with-the-exile under co-regulated expected outcomes, not raw ones.</strong> That is a theory-derived requirement, not a patch — and if adding it does <em>not</em> unlock the deadlock, that will be a finding against the theory’s own account of permission. Register, as always: exploratory, pilot-shaped, one run when it comes, logged either way.</p>
+</section>
+
+<!-- ================================================================ 12 -->
+<section id="s12" class="col">
+  <span class="secnum">12</span>
+  <h2 class="sec">Where this actually stands</h2>
+
+  <p>Now the numbers without the narrative — two architectures side by side, because per the preregistered fallback the program currently holds both: iteration 11 as the reference model, the unified rebuild as the more principled design awaiting its missing piece.</p>
+
+  <div class="statwrap">
+  <table class="status">
+    <thead><tr><th>Quantity</th><th>It 11 — reference</th><th>It 13 — unified (current code &amp; pilot dir)</th><th>Bar</th></tr></thead>
+    <tbody>
+      <tr><td>World</td><td class="n">2 crises</td><td class="n">4 crises</td><td class="n">—</td></tr>
+      <tr><td>Multi-part stacks formed</td><td class="n">7 / 10</td><td class="n">8 / 10 (23 spawns; stacks to six)</td><td class="n">—</td></tr>
+      <tr><td>Coupling directional (later-onto-earlier)</td><td class="n">5 / 10</td><td class="n">2 / 10</td><td class="n">8 / 10</td></tr>
+      <tr><td>Mean directional fraction of pairs</td><td class="n">0.69</td><td class="n">0.42</td><td class="n">—</td></tr>
+      <tr><td>Complete newest-to-oldest descent</td><td class="n">4 / 10</td><td class="n">0 / 8 (deadlocked)</td><td class="n">8 / 10</td></tr>
+      <tr><td>Shuffle degradation</td><td class="n">3</td><td class="n">−1</td><td class="n">≥ 3</td></tr>
+      <tr><td>Gate-earned descent (passes with gate, fails without)</td><td class="n">1 / 7</td><td class="n">0</td><td class="n">—</td></tr>
+      <tr><td>Amplification constants</td><td class="n">excess gain 30 · block_gain 12</td><td class="n">none</td><td class="n">—</td></tr>
+      <tr><td>theory_result in the run record</td><td class="n">null</td><td class="n">null</td><td class="n">—</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>Three honesty notes on that table. First, the mechanism <em>structure</em> has now been iterated thirteen times against these same ten seeds. The review’s warning about that stands permanently: structural selection is more dangerous than tuning a constant, and no amount of preregistering the next step launders the path that led to it. Nothing here counts as evidence until the surviving architecture is frozen, the criteria file rescaled, and fresh seeds run once. Second, the two columns are not before-and-after; they are two answers the program currently holds at once, by preregistered fallback — the reference model completes therapy and carries one fully earned seed; the unified model is more principled and deadlocks. Third, the deadlock row is a <em>result</em>, not merely a failure: Section 11 is the argument, and the planned coupling of Sim 5’s therapist-trust regime into the access policy is its test.</p>
+
+  <h3>The open problems, named</h3>
+
+  <ol>
+    <li><strong>Coupling direction remains unreliable in both architectures</strong> (5/10 and 2/10 against a preregistered bar of 8). Seed 1009’s mid-cluster reversal — older parts blaming a spawn that was highly active entering the next clustered catastrophe — has survived every mechanism change ever aimed at it. The theory’s own distinction (the exile’s activity precedes danger; the protector’s precedes relief) still awaits its implementation, with actor-vs-bystander discounting first in the parsimony order.</li>
+    <li><strong>The deadlock’s exit is specified but unbuilt:</strong> couple Sim 5’s learned co-regulation into the access policy, so the protector evaluates contact under accompanied expectations. Preregister, run once, log either way.</li>
+    <li><strong>A predictive out-of-sample standard</strong> — the grown map versus a shuffled map predicting held-out gating behavior — is the planned upgrade to replace threshold-counting, and it is not in any run yet.</li>
+  </ol>
+</section>
+
+<!-- ================================================================ 13 -->
+<section id="s13" class="col">
+  <span class="secnum">13</span>
+  <h2 class="sec">Where to push back</h2>
+
+  <p>Everything above marked <span class="chip assumed">assumed</span> is a place where design judgment — not derivation — chose the rule, on your behalf and between your reviews. This section earned its keep once already: the first edition flagged the 0.01 smoothing constant that the adversarial review independently confirmed as a hidden dial. Here is the current list — what survived thirteen iterations, and the new judgment calls the rebuild introduced — each with why it was chosen and what an alternative would look like.</p>
+
+  <ol class="audit">
+    <li>
+      <h4>The one-trial lag on activation</h4>
+      <p>Internal writes are weighted by the observed part’s responsibility <em>entering</em> the trial — last trial’s posterior. Chosen because the blow should attach to whoever was carrying the system when it landed; using the same trial’s posterior would let the outcome pick its own attribution (a catastrophe inflates the catastrophe-believer’s share, which then absorbs the blame for it — circular). Survived all thirteen iterations.</p>
+      <p class="alt"><b>Alternative:</b> a decaying multi-trial trace (the sketch’s mechanism 3, set aside as adding a dial) — worth running as a comparison arm to show the coupling is content-based rather than an artifact of exactly-one-trial timing. The lag length is still a hidden “1” that has never been on the magic-numbers table.</p>
+    </li>
+    <li>
+      <h4>The spawn-trial one-hot assignment (new in iteration 13)</h4>
+      <p>The trial that triggers a spawn is assigned <em>wholly</em> to the newborn — responsibility 1.0, by rule. Defended as Sim 1’s frozen spawn semantic: in latent-cause terms, spawning <em>is</em> the assignment of the unassimilable event to a new cause. But note what it bypasses: iteration 8 proved the newborn’s share can be <em>earned</em> by inference — that was the Occam pass’s best result — and the one-hot rule replaces that grown quantity with a fiat 1.0.</p>
+      <p class="alt"><b>Alternative:</b> run the unified build with iteration 8’s earned posterior share at the spawn trial instead of one-hot. If coupling collapses again, the earned share was only viable with amplification, which sharpens the capture-principle finding; if it holds, the fiat rule is unnecessary and should go.</p>
+    </li>
+    <li>
+      <h4>The newborn’s flat severity prior (new in iteration 13)</h4>
+      <p>Established parts carry Sim 1’s ordinary-biased severity prior <span class="num">[1.0, 0.05]</span>; newborns start flat <span class="num">[0.5, 0.5]</span>. Defended as the same frozen semantic — the newborn is born of the event the ordinary-adapted model could not claim. But the flat prior is what hands the newborn its ~10× predictive edge on catastrophic trials (Section 5); the “grown separation” rides on an assumed initial condition.</p>
+      <p class="alt"><b>Alternative:</b> give newborns the same ordinary-biased prior and let the separation grow from their first catastrophic write — slower and fully earned — or sweep the prior and report coupling as a function of it.</p>
+    </li>
+    <li>
+      <h4>internal_conf_k = 4 — the constant that survived everything</h4>
+      <p>Originally a confidence damper, now the shrinkage pseudo-count in the exposure-fair contrast and the access policy. It is the only Sim-8-specific constant present in every iteration from 1 to 13, and it has never been swept. At pilot bank sizes it materially sets how fast a thin conditional can diverge from the marginal — which is to say, how fast anything in this sim can learn to fear anything.</p>
+      <p class="alt"><b>Alternative:</b> sweep it in the confirmatory cycle, or derive it from the marginal’s own mass so the damping scales with the observer’s experience instead of sitting at a fixed 4.</p>
+    </li>
+    <li>
+      <h4>The reference model’s two scale constants: block_gain 12 and excess gain 30</h4>
+      <p>Both live only in the iteration-11 reference architecture, and both have compromised provenance, openly recorded: block_gain 12 was derived as ≈ 1/(2 × the maximum contrast <em>observed in pilot output</em>) — the one constant in the record that is honestly outcome-scaled — and the review showed excess gain 30’s claimed derivation from Sim 1’s formative scale was unfaithful to the code it cited. The unified build deleted both; the reference model’s gate_earned 1/7 inherits their provenance.</p>
+      <p class="alt"><b>Alternative:</b> any confirmatory promotion of iteration 11 must re-derive or sweep both constants on fresh seeds first. If the descent result needs exactly these values, that is the answer.</p>
+    </li>
+    <li>
+      <h4>The access policy’s form — is the deadlock a derivation or an artifact?</h4>
+      <p>The rebuild’s access is a softmax over allow-vs-leave at temperature 1.0 (<span class="chip assumed">assumed</span>). The deadlock finding partly hangs on this form: softmax access never fully closes, but unlike the old access-scaled writes it never leaks meaningful safety through a low gate either. Section 11’s clinical reading is only as strong as this choice is principled.</p>
+      <p class="alt"><b>Alternative:</b> the sharpest audit available on the whole page — sweep the temperature, and run the unified build with access-scaled writes (Sim 4’s Arm W rule) instead of softmax selection. If the deadlock survives both, “a parts system cannot open itself from inside” is a robust property of the grown structure, not of one policy formula, and the derivation claim strengthens enormously. If it dissolves, Section 11 gets rewritten.</p>
+    </li>
+    <li>
+      <h4>The four-crisis episode schedule (new in iteration 12)</h4>
+      <p>Expanded from two crises because “two acute clusters starve the coupling regardless of mechanism” — a diagnosis made by looking at pilot outcomes, which makes the world itself outcome-informed now. And the mid-cluster reversal (seed 1009’s unresolved backwards attribution) is partly a property of exactly this clustering.</p>
+      <p class="alt"><b>Alternative:</b> vary crisis spacing as an explicit factor and check whether the reversal rate tracks it. If it does, the mid-cluster story gains independent support before any mechanism change is spent on it.</p>
+    </li>
+    <li>
+      <h4>The therapist model itself</h4>
+      <p>Draw-toward-pain selection (access × own pain, shuffled tie-break), contact writes at 5% of target bank mass (<span class="num">contact_fraction 0.05</span>, unswept), 40 sessions, and full-strength witness writes — every part attends fully to every contact. A stylized therapist, not a derived one; and in the unified build, the entity whose absence the deadlock is now understood to be about.</p>
+      <p class="alt"><b>Alternative:</b> the planned Sim 5 coupling makes the therapist relationship a grown quantity inside the access policy — the theory-derived next step. Beyond that: witness writes scaled by attention, or a full EFE therapist (Sim 2 lineage), which opens the attention-appraisal extension the design sketch reserved.</p>
+    </li>
+    <li>
+      <h4>Inheriting Sim 1’s constants wholesale, unswept</h4>
+      <p>0.16 base rate, 60 arousal gain, 5.2 arousal scale, capacity 1.0, spawn threshold 1.2, decay 0.72, preferences +1.35/−2.35 — taken as-is for comparability and so no fresh dial could be tuned toward the result. Defensible, but Sim 8’s conclusions remain hostage to Sim 1’s coordinates: nobody knows whether 2/10-vs-5/10 directional coupling is the mechanism or the neighborhood.</p>
+      <p class="alt"><b>Alternative:</b> a small sensitivity sweep in the confirmatory cycle — vary the write-weighting constants and report the directional fraction as a surface rather than a point.</p>
+    </li>
+  </ol>
+
+  <p>One closing register note. Figures 1–4 are faithful to the model’s arithmetic but simplified in scope — two parts instead of stacks, illustrative activations in Fig. 3. Fig. 5 is the iteration-5 run’s logged output, kept under a superseded flag; Fig. 6 is the current iteration-13 run’s logged output, cell for cell. Where you want to check the source directly: the implementation is ~470 commented lines, the constants table is one page, the iteration log now runs to thirteen entries with preregistrations and results for each, and the adversarial review is filed in full. Paths below.</p>
+</section>
+
+</main>
+
+<footer class="col">
+  <p style="margin:0 0 8px;"><strong style="color:var(--ink);">Provenance.</strong> Written 2026-07-10 for design audit; updated the same day through iteration 13 and the adversarial review. Sim 8 register: EXPLORATORY under the sol re-review convention; run guard restricts execution to label <code>pilot</code>, seeds 1001–1010. The pilot directory on disk holds the iteration-13 run; iteration-5 numbers in Fig. 5 are retained from the log under a superseded flag.</p>
+  <p style="margin:0;">
+    Implementation (iteration-12/13 unified rebuild) <code>projects/emergence-suite/suite/src/sims/sim8/Sim8.jl</code> ·
+    iteration log with preregistrations <code>sim8/README.md</code> ·
+    constants <code>sim8/magic-numbers.md</code> ·
+    adversarial review <code>projects/emergence-suite/reviews/2026-07-10-gpt56sol-sim8-review.md</code> ·
+    decision record <code>projects/emergence-suite/concurrent-activation-sketch.md</code> ·
+    current pilot data <code>suite/runs/sim8/pilot/</code> (summary.json, pair_metrics.csv, therapy_sessions.csv) ·
+    context <code>suite/src/sims/sim4/README.md</code>
+  </p>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var f1=function(x){return (Math.round(x*10)/10).toFixed(1);};
+  var pc=function(x){return (x*100).toFixed(1)+"%";};
+  var pc0=function(x){return Math.round(x*100)+"%";};
+
+  /* ---------------- Fig 1: tallies ---------------- */
+  var T={a:{s:1,av:1,s0:1,av0:1},b:{s:60,av:40,s0:60,av0:40}};
+  function tRender(key,ids){
+    var t=T[key],tot=t.s+t.av,bel=t.av/tot;
+    var bar=document.getElementById(ids.bar);
+    bar.children[0].style.width=((1-bel)*100)+"%";
+    bar.children[1].style.width=(bel*100)+"%";
+    document.getElementById(ids.read).textContent=
+      "["+f1(t.s)+" safe, "+f1(t.av)+" aversive]  →  believes aversive: "+pc(bel);
+    document.getElementById(ids.mass).style.width=Math.min(100,tot/140*100)+"%";
+    var nextBel=(t.av+1)/(tot+1);
+    document.getElementById(ids.nudge).textContent=
+      "one more aversive moment would move this belief by +"+((nextBel-bel)*100).toFixed(1)+" points";
+  }
+  function tAll(){tRender("a",{bar:"t1bar",read:"t1read",mass:"t1mass",nudge:"t1nudge"});
+                  tRender("b",{bar:"t2bar",read:"t2read",mass:"t2mass",nudge:"t2nudge"});}
+  document.getElementById("t1s").onclick=function(){T.a.s++;tAll();};
+  document.getElementById("t1a").onclick=function(){T.a.av++;tAll();};
+  document.getElementById("t2s").onclick=function(){T.b.s++;tAll();};
+  document.getElementById("t2a").onclick=function(){T.b.av++;tAll();};
+  document.getElementById("treset").onclick=function(){
+    T.a.s=T.a.s0;T.a.av=T.a.av0;T.b.s=T.b.s0;T.b.av=T.b.av0;tAll();};
+  tAll();
+
+  /* ---------------- Fig 2: responsibility ---------------- */
+  var R={out:"aversive"};
+  var rAb=document.getElementById("rAb"),rAm=document.getElementById("rAm"),
+      rBb=document.getElementById("rBb"),rBm=document.getElementById("rBm");
+  function rRender(){
+    var bA=rAb.value/100,mA=+rAm.value,bB=rBb.value/100,mB=+rBm.value;
+    document.getElementById("rAbv").textContent=pc0(bA);
+    document.getElementById("rAmv").textContent=mA+" counts";
+    document.getElementById("rBbv").textContent=pc0(bB);
+    document.getElementById("rBmv").textContent=mB+" counts";
+    var pA=mA/(mA+mB),pB=mB/(mA+mB);
+    var lA=R.out==="aversive"?bA:1-bA, lB=R.out==="aversive"?bB:1-bB;
+    var uA=pA*lA,uB=pB*lB,s=uA+uB;
+    var qA=s>0?uA/s:pA, qB=1-qA;
+    var bar=document.getElementById("rbar");
+    bar.children[0].style.width=(qA*100)+"%";
+    bar.children[1].style.width=(qB*100)+"%";
+    bar.children[0].textContent=qA>0.12?("A  "+pc(qA)):"";
+    bar.children[1].textContent=qB>0.12?("B  "+pc(qB)):"";
+    var g=document.getElementById("rghost");
+    var winA=uA>=uB;
+    g.children[0].style.width=winA?"100%":"0%";
+    g.children[1].style.width=winA?"0%":"100%";
+    document.getElementById("rtA1").textContent=pc(pA);
+    document.getElementById("rtA2").textContent=lA.toFixed(2);
+    document.getElementById("rtA3").textContent=pc(qA);
+    document.getElementById("rtB1").textContent=pc(pB);
+    document.getElementById("rtB2").textContent=lB.toFixed(2);
+    document.getElementById("rtB3").textContent=pc(qB);
+  }
+  [rAb,rAm,rBb,rBm].forEach(function(el){el.addEventListener("input",rRender);});
+  var routS=document.getElementById("routS"),routA=document.getElementById("routA");
+  routS.onclick=function(){R.out="safe";routS.classList.add("on");routA.classList.remove("on");rRender();};
+  routA.onclick=function(){R.out="aversive";routA.classList.add("on");routS.classList.remove("on");rRender();};
+  function preset(bA,mA,bB,mB,out){rAb.value=bA;rAm.value=mA;rBb.value=bB;rBm.value=mB;
+    R.out=out;routA.classList.toggle("on",out==="aversive");routS.classList.toggle("on",out==="safe");rRender();}
+  document.getElementById("rpre1").onclick=function(){preset(55,40,50,2,"aversive");};
+  document.getElementById("rpre2").onclick=function(){preset(20,60,50,2,"aversive");};
+  document.getElementById("rpre3").onclick=function(){preset(70,30,30,30,"aversive");};
+  rRender();
+
+  /* ---------------- Fig 4: contrast ---------------- */
+  var csup=document.getElementById("csup");
+  function cRender(){
+    var s=csup.value/100;
+    var fi=0.65*(1-s), fb=0.35*(1-s);
+    document.getElementById("csupv").textContent=Math.round(s*100)+"%";
+    document.getElementById("cfi").textContent=pc(fi);
+    document.getElementById("cfb").textContent=pc(fb);
+    document.getElementById("cfib").style.width=(fi*100)+"%";
+    document.getElementById("cfbb").style.width=(fb*100)+"%";
+    var abs=Math.max(0,(fi-0.5)*2);
+    var con=Math.max(0,2*(fi-fb));
+    document.getElementById("cabs").textContent="danger reading: "+abs.toFixed(2);
+    document.getElementById("ccon").textContent="danger reading: "+con.toFixed(2);
+    document.getElementById("cabswhy").textContent = abs>0 ?
+      "fraction still above the 0.5 line — coupling visible" :
+      "fraction pushed below 0.5 by avoidance — coupling reads as ZERO despite the real underlying difference";
+    document.getElementById("cconwhy").textContent =
+      "the gap between the two fractions ("+pc(fi)+" − "+pc(fb)+") survives suppression; excess risk is still attributed to i";
+  }
+  csup.addEventListener("input",cRender);
+  cRender();
+
+  /* ---------------- Fig 5: two seeds (real pilot data) ---------------- */
+  var PCOL={1:"#B07E28",2:"#5A6FB5",3:"#9A5E93",4:"#3F8E8A",5:"#7A8450",6:"#A04E62"};
+  var SEEDS={
+    "1001":{
+      n:3,
+      note:"Three parts formed: the root (Part 1) plus two spawned during the acute epochs. Every catastrophe landed while an earlier part was carrying the system, so every formative write pointed later-onto-earlier.",
+      aversion:{"2,1":13.4,"3,1":0.2,"3,2":15.1,"1,2":0,"1,3":0,"2,3":0},
+      targets:[3,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,3,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,2,3,1,1,1,1],
+      access:{2:0.862,4:0.856},
+      first:{3:1,2:2,1:4},
+      side:"<b>Direction, grown:</b> all three pairs point later-onto-earlier (lower-left triangle); every reverse cell is exactly zero. Part 3’s heaviest fear is about Part 2 (15.1) — the part that was carrying the system at Part 3’s formative catastrophe.",
+      verdict:"<b>Descent readout: PASS — newest to oldest, complete.</b> First contacts: Part 3 at session 1, Part 2 at session 2, Part 1 at session 4. Access dipped exactly where blockers stood (0.862, 0.856) and recovered as witnesses saw contacts survive. <b>Shuffle control:</b> permuting the internal banks across pairs — same counts, scrambled targets — destroys this ordering (shuffled arm fails descent). The order lived in the grown attributions.",
+      notice:"<b>What to notice:</b> the long runs of ochre after session 4 are the heavy root being slowly unwound — Fig. 1’s mass resistance, live. And the order of the three flags was never written anywhere: no rule in the code mentions birth order. It is read out of who feared whom."
+    },
+    "1009":{
+      n:4,
+      note:"Four parts formed — and the catastrophes clustered. Parts that spawned at one catastrophe were still highly active entering the next, so older parts wrote severity-6 blame about newer ones: the coupling grew backwards.",
+      aversion:{"2,1":0,"3,1":0,"3,2":2.7,"4,1":0,"4,2":2.7,"4,3":4.1,
+                "1,2":2.0,"1,3":0,"1,4":2.3,"2,3":4.1,"2,4":8.4,"3,4":13.8},
+      targets:[1,1,1,2,1,1,3,1,1,1,2,4,1,4,1,1,3,1,1,1,1,1,1,1,2,1,1,1,1,1,4,1,1,3,1,1,1,2,1,1],
+      access:{4:0.830,7:0.811,12:0.692},
+      first:{1:1,2:4,3:7,4:12},
+      side:"<b>Direction, grown — backwards:</b> the upper-right triangle dominates every pair. The heaviest fear in the system is Part 3’s about Part 4 (13.8): Part 3 watched Part 4 be born into a catastrophe and blamed it. Earlier parts now gate later ones.",
+      verdict:"<b>Descent readout: recorded as FAIL</b> — the frozen criterion asks for newest-first. But look at what actually happened: first contacts at sessions 1, 4, 7, 12 — Parts 1, 2, 3, 4, perfect OLDEST-first order, with access dips (0.830, 0.811, 0.692) exactly where the reversed blockers stood. The gate faithfully expressed the reversed coupling it was given.",
+      notice:"<b>What to notice:</b> this seed is the proof that nothing directional is coded. The same mechanism that produced textbook IFS in 1001 produces its mirror image here, because the world grew the fear the other way. A mechanism that can be wrong is the only kind whose being right will ever mean something."
+    }
+  };
+  function renderSeed(key){
+    var S=SEEDS[key];
+    document.getElementById("tab1001").classList.toggle("on",key==="1001");
+    document.getElementById("tab1009").classList.toggle("on",key==="1009");
+    document.getElementById("tab1001").setAttribute("aria-selected",key==="1001");
+    document.getElementById("tab1009").setAttribute("aria-selected",key==="1009");
+    document.getElementById("seednote").textContent=S.note;
+    document.getElementById("cside").innerHTML=S.side;
+    document.getElementById("seedverdict").innerHTML=S.verdict;
+    document.getElementById("seednotice").innerHTML=S.notice;
+    /* coupling table */
+    var maxv=0,k;
+    for(k in S.aversion){ if(S.aversion[k]>maxv) maxv=S.aversion[k]; }
+    var html="<thead><tr><th style='text-align:left;'>observer ↓ · about →</th>";
+    for(var i=1;i<=S.n;i++) html+="<th><span class='pdot p"+i+"'></span>P"+i+"</th>";
+    html+="</tr></thead><tbody>";
+    for(var j=1;j<=S.n;j++){
+      html+="<tr><th style='text-align:left;'><span class='pdot p"+j+"'></span>Part "+j+(j===1?" (oldest)":(j===S.n?" (newest)":""))+"</th>";
+      for(var i2=1;i2<=S.n;i2++){
+        if(i2===j){ html+="<td class='diag' aria-label='self'></td>"; continue; }
+        var v=S.aversion[j+","+i2]; v=(v===undefined)?0:v;
+        var a=maxv>0? (v/maxv)*0.82 : 0;
+        var later = j>i2; /* observer formed later than observed: theory's direction */
+        var bgcol = "rgba(181,71,43,"+a.toFixed(2)+")";
+        var tcol = a>0.45? "#FFF" : "#232820";
+        html+="<td style='background:"+bgcol+";color:"+tcol+";' title='Part "+j+"’s aversion about Part "+i2+(later?" (later about earlier)":" (earlier about later)")+"'>"+(v===0?"0":v.toFixed(1))+"</td>";
+      }
+      html+="</tr>";
+    }
+    html+="</tbody>";
+    document.getElementById("ctable").innerHTML=html;
+    /* session strip svg */
+    var cw=19,ch=40,left=8,top=42,w=left*2+cw*40,h=top+ch+58;
+    var s="<svg viewBox='0 0 "+w+" "+h+"' width='"+w+"' style='display:block;' role='img' aria-label='forty therapy sessions for seed "+key+"'>";
+    for(var sn=1;sn<=40;sn++){
+      var t=S.targets[sn-1],x=left+(sn-1)*cw;
+      s+="<rect x='"+(x+1)+"' y='"+top+"' width='"+(cw-2)+"' height='"+ch+"' rx='2' fill='"+PCOL[t]+"'";
+      var isFirst=(S.first[t]===sn);
+      if(isFirst) s+=" stroke='#232820' stroke-width='2'";
+      s+="><title>session "+sn+": contacted Part "+t+(S.access[sn]!==undefined?" (access "+S.access[sn].toFixed(3)+")":" (access 1.0)")+"</title></rect>";
+      if(isFirst){
+        s+="<line x1='"+(x+cw/2)+"' y1='"+(top-14)+"' x2='"+(x+cw/2)+"' y2='"+(top-2)+"' stroke='#232820' stroke-width='1'/>";
+        s+="<text x='"+(x+cw/2)+"' y='"+(top-19)+"' font-size='11' text-anchor='middle' fill='#232820' font-weight='600'>P"+t+"</text>";
+      }
+      if(sn===1||sn%10===0){
+        s+="<text x='"+(x+cw/2)+"' y='"+(top+ch+16)+"' font-size='10' text-anchor='middle' fill='#5A6055'>"+sn+"</text>";
+      }
+      if(S.access[sn]!==undefined){
+        s+="<text x='"+(x+cw/2)+"' y='"+(top+ch+34)+"' font-size='9.5' text-anchor='middle' fill='#B5472B'>"+S.access[sn].toFixed(2)+"</text>";
+      }
+    }
+    s+="<text x='"+left+"' y='"+(top+ch+52)+"' font-size='10.5' fill='#5A6055'>flags = first contact per part · red numbers = sessions where access dipped below 1.0 (a blocker stood in the way)</text>";
+    s+="</svg>";
+    document.getElementById("stripwrap").innerHTML=s;
+  }
+  document.getElementById("tab1001").onclick=function(){renderSeed("1001");};
+  document.getElementById("tab1009").onclick=function(){renderSeed("1009");};
+  renderSeed("1001");
+
+  /* ---------------- Fig 6: iteration-13 deadlock (real pilot data) ---------------- */
+  var DL=[
+    {el:"dl1001",seed:"1001",n:5,never:[2,3,4],
+     blocks:[{p:5,s:1,e:25,a0:"0.53",a1:"0.68"},{p:1,s:26,e:40,a0:"0.48",a1:"0.50"}]},
+    {el:"dl1009",seed:"1009",n:6,never:[2,3,4,5],
+     blocks:[{p:6,s:1,e:21,a0:"0.52",a1:"0.65"},{p:1,s:22,e:40,a0:"0.49",a1:"0.50"}]}
+  ];
+  DL.forEach(function(d){
+    var cw=19,ch=40,left=8,top=46,w=left*2+cw*40,h=top+ch+30;
+    var s="<p class='barlab' style='margin-top:0;'>Seed "+d.seed+" — "+d.n+" parts grown</p>";
+    s+="<div class='strip-scroll'><svg viewBox='0 0 "+w+" "+h+"' width='"+w+"' style='display:block;' role='img' aria-label='iteration 13 therapy sessions for seed "+d.seed+"'>";
+    d.blocks.forEach(function(b){
+      for(var sn=b.s;sn<=b.e;sn++){
+        var x=left+(sn-1)*cw;
+        s+="<rect x='"+(x+1)+"' y='"+top+"' width='"+(cw-2)+"' height='"+ch+"' rx='2' fill='"+PCOL[b.p]+"'";
+        if(sn===b.s) s+=" stroke='#232820' stroke-width='2'";
+        s+="><title>session "+sn+": contacted Part "+b.p+"</title></rect>";
+        if(sn===b.s){
+          s+="<line x1='"+(x+cw/2)+"' y1='"+(top-16)+"' x2='"+(x+cw/2)+"' y2='"+(top-2)+"' stroke='#232820' stroke-width='1'/>";
+          s+="<text x='"+(x+cw/2)+"' y='"+(top-21)+"' font-size='11' text-anchor='middle' fill='#232820' font-weight='600'>P"+b.p+" · s"+sn+"</text>";
+        }
+      }
+      var mid=left+((b.s+b.e)/2-1)*cw+cw/2;
+      s+="<text x='"+mid+"' y='"+(top+ch+18)+"' font-size='10.5' text-anchor='middle' fill='#5A6055'>access "+b.a0+" → "+b.a1+"</text>";
+    });
+    s+="</svg></div>";
+    s+="<div class='verdict-line' style='margin-top:8px;'><b>Never contacted in 40 sessions:</b> "+
+       d.never.map(function(p){return "<span class='pdot p"+p+"'></span>Part "+p;}).join(", ")+
+       " — no safe evidence is ever written about them, so their gates never move.</div>";
+    document.getElementById(d.el).innerHTML=s;
+  });
+})();
+</script>
