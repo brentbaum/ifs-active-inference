@@ -40,3 +40,39 @@
 | Control saturation | `1.5` | policy outcome model | Bounded-ratio denominator for predicted control, chosen so low evidence favors threat allocation and accumulated safe evidence can flip the policy. |
 | Threat-allocation precisions | threat `2.40`, self `0.35`, depth `1.00` | mental action | Boosts first-order threat-channel precision and starves the `o_self` channel while preserving Stage-1 volatility updating. |
 | Reflexive-allocation precisions | threat `0.85`, self `1.55`, depth `1.25` | mental action | Holds/boosts `o_self` and depth-evidence precision while reducing first-order threat-channel priority. |
+
+## T4.7 Robustness Pilot (preregistered before execution)
+
+These constants apply only when `robustness_mode: true`. They were fixed in
+`configs/sim6a-robustness-pilot.yaml` before running seeds 1001–1010. Their
+provenance is the 2026-07-10 adversarial review and T4.7 Step A; no
+confirmatory seed was inspected or run.
+
+| Constant | Pilot value | Status | Rationale / provenance |
+| --- | ---: | --- | --- |
+| Autonomous latent initial depth | `0.90` | pilot-only design | Begins inside the high-depth region so the first autonomous excursion has a measurable pre-transition baseline. |
+| Autonomous latent speed | `0.055` per trial | pilot-only design | A reflected first-order trajectory crosses both registered depth regions and returns within the inherited 72-trial biography length without using biography phase labels. |
+| Latent process noise | `0.012` SD per trial | pilot-only design | Adds seed-specific path variation while retaining an evaluable down-and-back excursion in the 72-trial pilot. |
+| Reflecting depth bounds | `[0.08, 0.92]` | pilot-only design | Avoids degenerate endpoints and makes the latent dynamics autonomous rather than reset by a phase schedule. |
+| Observation availability | `0.82` Bernoulli probability | pilot-only design | Observation timing is sampled from its own RNG stream and never reads latent depth or trial phase. |
+| Likelihood-fit smoothing | `0.50` per cell | pilot-only estimator | Jeffreys-style pseudocount prevents zero held-out likelihoods in the five-seed training split. |
+| Complete collapse signature | precision drop `>=0.20`; inferred-depth drop `>=0.18`; capture rise `>=0.04`; recovery `>=0.75` of baseline | preregistered pilot readout | Requires collapse, its D1 direction, and recovery jointly; fixed before the pilot so a null cannot pass on entropy fluctuation alone. |
+| Null matrices | `flat`, column-reversed, column order `[1,4,2,5,3]` | preregistered adversarial mappings | Respectively remove, reverse, or break monotonic volatility-to-depth ordering while leaving all observation pathways active. |
+| Safety-prior grid | high-state mass `[0.35, 0.60, 0.80]` | preregistered coarse sweep | Spans substantially below and above the original `0.60` high-state mass. |
+| Likelihood-matrix grid | theory columns exponentiated by `[0.55, 1.00, 1.80]` then normalized | preregistered coarse sweep | Tests diffuse, original, and concentrated full matrices, rather than cellwise ±20% perturbations. |
+| `beta/gamma` grid | common scale `[0.50, 1.00, 2.00]` | preregistered coarse sweep | Spans half to double both D1 slopes while retaining their registered sign. |
+| Policy-control-gain grid | `[0.50, 1.00, 2.00]` | preregistered coarse sweep | Jointly scales the registered threat and reflexive control gains before EFE policy selection; the selected policy then determines depth-evidence precision. |
+| Joint-volume gate | `>=0.50` of `3^4 = 81` grid points, each supported in `>=8/10` seeds | preregistered success gate | Implements T4.7's required Cartesian joint-volume report. |
+| Held-out split | train `1001–1005`; evaluate `1006–1010` | preregistered split | Fits the volatility likelihood on half the trajectories and reports recovery only on unseen seed trajectories. |
+
+### Pilot implementation adjustment after attempt 1
+
+Attempt 1 used the historical safety-prior transition inside the held-out
+filter. That was structurally mismatched to the new autonomous reflected
+process and produced mean held-out `r = 0.4997` (including `r = 0.0624` for
+seed 1009). Before the final pilot rerun, the held-out estimator was changed to
+fit both categorical emission and transition matrices on seeds 1001–1005 and
+to recover the unseen trajectories with ordinary forward–backward smoothing.
+The `r >= 0.6` criterion, seed split, pseudocount, generative constants, nulls,
+joint grid, and collapse-signature thresholds were not changed. Attempt 1 is
+retained under `runs/sim6a/pilot-attempt1/`.

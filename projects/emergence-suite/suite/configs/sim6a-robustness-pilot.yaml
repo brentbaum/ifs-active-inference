@@ -1,0 +1,42 @@
+experiment: sim6a
+label: pilot
+output_dir: ../runs
+criteria_path: sim6a-robustness-criteria.yaml
+seeds:
+  - 1001
+  - 1002
+  - 1003
+  - 1004
+  - 1005
+  - 1006
+  - 1007
+  - 1008
+  - 1009
+  - 1010
+model_params:
+  robustness_mode: true
+  n_trials: 72
+  depth_grid: [0.0, 0.25, 0.50, 0.75, 1.0]
+  initial_depth_prior: [0.03, 0.05, 0.10, 0.27, 0.55]
+  safety_depth_prior: [0.02, 0.04, 0.09, 0.25, 0.60]
+  transition_mix: 0.06
+  pi_part: 4.0
+  lambda_ctx: 0.90
+  beta: 1.00
+  gamma: 1.15
+  observation_probability: 0.82
+  latent_initial_depth: 0.90
+  latent_velocity: 0.055
+  latent_process_noise: 0.012
+  latent_lower_bound: 0.08
+  latent_upper_bound: 0.92
+  likelihood_fit_smoothing: 0.50
+  signature_precision_drop: 0.20
+  signature_depth_drop: 0.18
+  signature_capture_rise: 0.04
+  signature_recovery_fraction: 0.75
+sweep_grid:
+  safety_high_state_mass: [0.35, 0.60, 0.80]
+  likelihood_matrix: [diffuse, theory, concentrated]
+  beta_gamma_scale: [0.50, 1.00, 2.00]
+  policy_gain_scale: [0.50, 1.00, 2.00]

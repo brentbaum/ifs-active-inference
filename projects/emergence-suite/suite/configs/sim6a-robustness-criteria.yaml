@@ -1,0 +1,33 @@
+criteria:
+  - id: S6a.decoupled
+    description: "The complete collapse signature survives independently evolving latent depth and depth-independent observation timing in at least 8 of 10 pilot seeds."
+    metric_path: metrics.decoupled.signature_seed_count
+    comparator: ">="
+    threshold: 8.0
+    weak_threshold: 6.0
+    opposite_threshold: 2.0
+    kind: success
+  - id: A6a.nulls
+    description: "Flat, reversed, and non-monotone generative volatility mappings each produce the complete collapse signature in at most 2 of 10 pilot seeds."
+    metric_path: metrics.nulls.max_signature_seed_count
+    comparator: "<="
+    threshold: 2.0
+    weak_threshold: 3.0
+    opposite_threshold: 5.0
+    kind: success
+  - id: S6a.joint
+    description: "At least half of the preregistered 3x3x3x3 joint safety-prior, likelihood-matrix, beta/gamma, and policy-gain grid retains the transition in at least 8 of 10 seeds."
+    metric_path: metrics.joint.transition_volume_fraction
+    comparator: ">="
+    threshold: 0.50
+    weak_threshold: 0.35
+    opposite_threshold: 0.15
+    kind: success
+  - id: A6a.heldout
+    description: "A likelihood fit on seeds 1001-1005 recovers autonomous latent depth on held-out seeds 1006-1010 with mean trajectory correlation at least 0.6."
+    metric_path: metrics.heldout.mean_truth_correlation
+    comparator: ">="
+    threshold: 0.60
+    weak_threshold: 0.50
+    opposite_threshold: 0.20
+    kind: success

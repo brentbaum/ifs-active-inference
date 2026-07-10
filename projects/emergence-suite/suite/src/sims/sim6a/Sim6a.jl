@@ -2,6 +2,7 @@ module Sim6a
 
 using Dates
 using JSON3
+using Random
 using Statistics
 
 using ...Config: ExperimentConfig, config_snapshot
@@ -50,6 +51,18 @@ Base.@kwdef struct Sim6aParams
     identifiability_threshold::Float64 = 0.80
     broken_collinearity_curvature::Float64 = 0.85
     dose_levels::Vector{Float64} = [0.12, 0.32, 0.52, 0.72, 0.92]
+    robustness_mode::Bool = false
+    observation_probability::Float64 = 0.82
+    latent_initial_depth::Float64 = 0.90
+    latent_velocity::Float64 = 0.055
+    latent_process_noise::Float64 = 0.012
+    latent_lower_bound::Float64 = 0.08
+    latent_upper_bound::Float64 = 0.92
+    likelihood_fit_smoothing::Float64 = 0.50
+    signature_precision_drop::Float64 = 0.20
+    signature_depth_drop::Float64 = 0.18
+    signature_capture_rise::Float64 = 0.04
+    signature_recovery_fraction::Float64 = 0.75
     stage2_enabled::Bool = false
     policy_mode::Bool = false
     threat_level_grid::Vector{Float64} = [0.05, 0.15, 0.30, 0.45, 0.60, 0.75, 0.90]
@@ -180,6 +193,18 @@ function params_from_config(config::ExperimentConfig, config_path::Union{Nothing
         identifiability_threshold = get_float(raw, "identifiability_threshold", base.identifiability_threshold),
         broken_collinearity_curvature = get_float(raw, "broken_collinearity_curvature", base.broken_collinearity_curvature),
         dose_levels = get_float_vector(raw, "dose_levels", base.dose_levels),
+        robustness_mode = get_bool(raw, "robustness_mode", base.robustness_mode),
+        observation_probability = get_float(raw, "observation_probability", base.observation_probability),
+        latent_initial_depth = get_float(raw, "latent_initial_depth", base.latent_initial_depth),
+        latent_velocity = get_float(raw, "latent_velocity", base.latent_velocity),
+        latent_process_noise = get_float(raw, "latent_process_noise", base.latent_process_noise),
+        latent_lower_bound = get_float(raw, "latent_lower_bound", base.latent_lower_bound),
+        latent_upper_bound = get_float(raw, "latent_upper_bound", base.latent_upper_bound),
+        likelihood_fit_smoothing = get_float(raw, "likelihood_fit_smoothing", base.likelihood_fit_smoothing),
+        signature_precision_drop = get_float(raw, "signature_precision_drop", base.signature_precision_drop),
+        signature_depth_drop = get_float(raw, "signature_depth_drop", base.signature_depth_drop),
+        signature_capture_rise = get_float(raw, "signature_capture_rise", base.signature_capture_rise),
+        signature_recovery_fraction = get_float(raw, "signature_recovery_fraction", base.signature_recovery_fraction),
         stage2_enabled = get_bool(raw, "stage2_enabled", base.stage2_enabled),
         policy_mode = get_bool(raw, "policy_mode", base.policy_mode),
         threat_level_grid = get_float_vector(raw, "threat_level_grid", base.threat_level_grid),
@@ -218,6 +243,12 @@ function validate_params(params::Sim6aParams)
     isempty(params.witnessing_evidence_grid) && error("Stage 2 requires at least one witnessing evidence point")
     all(x -> x >= 0.0, params.witnessing_evidence_grid) || error("witnessing_evidence_grid values must be non-negative")
     all(x -> 0.0 <= x <= 1.0, params.threat_level_grid) || error("threat_level_grid values must be probabilities")
+    0.0 < params.observation_probability <= 1.0 || error("observation_probability must lie in (0, 1]")
+    0.0 <= params.latent_lower_bound < params.latent_upper_bound <= 1.0 || error("latent depth bounds must be ordered inside [0, 1]")
+    params.latent_lower_bound <= params.latent_initial_depth <= params.latent_upper_bound || error("latent_initial_depth must lie inside latent bounds")
+    params.latent_velocity > 0.0 || error("latent_velocity must be positive")
+    params.latent_process_noise >= 0.0 || error("latent_process_noise must be non-negative")
+    params.likelihood_fit_smoothing > 0.0 || error("likelihood_fit_smoothing must be positive")
     return nothing
 end
 
@@ -277,6 +308,21 @@ function volatility_likelihood(params::Sim6aParams)
     return raw
 end
 
+function normalize_likelihood(matrix::AbstractMatrix{<:Real})
+    return hcat([normalize_probs(matrix[:, col]) for col in axes(matrix, 2)]...)
+end
+
+function mapped_volatility_likelihood(params::Sim6aParams, mapping::AbstractString)
+    theory = volatility_likelihood(params)
+    mapping == "theory" && return theory
+    mapping == "flat" && return repeat(mean(theory; dims = 2), 1, size(theory, 2))
+    mapping == "reversed" && return theory[:, end:-1:1]
+    mapping == "nonmonotone" && return theory[:, [1, 4, 2, 5, 3]]
+    mapping == "diffuse" && return normalize_likelihood(theory .^ 0.55)
+    mapping == "concentrated" && return normalize_likelihood(theory .^ 1.80)
+    error("Unknown volatility mapping: $mapping")
+end
+
 function volatility_observation(arousal::Float64)
     value = clamp(arousal, 0.0, 1.0)
     value < 0.18 && return OBS_LOW
@@ -290,10 +336,10 @@ function predict_depth(params::Sim6aParams, q::AbstractVector{<:Real})
     return normalize_probs((1.0 - params.transition_mix) .* normalize_probs(q) .+ params.transition_mix .* safety_prior(params))
 end
 
-function update_depth_with_evidence(params::Sim6aParams, q::AbstractVector{<:Real}, volatility_obs::Int; depth_precision::Float64 = 1.0)
-    predicted = predict_depth(params, q)
+function update_depth_with_evidence(params::Sim6aParams, q::AbstractVector{<:Real}, volatility_obs::Int; depth_precision::Float64 = 1.0, likelihood = volatility_likelihood(params), prior = safety_prior(params))
+    predicted = normalize_probs((1.0 - params.transition_mix) .* normalize_probs(q) .+ params.transition_mix .* normalize_probs(prior))
     precision = max(depth_precision, params.min_probability)
-    like = volatility_likelihood(params)[volatility_obs, :] .^ precision
+    like = likelihood[volatility_obs, :] .^ precision
     return normalize_probs(predicted .* like)
 end
 
@@ -929,6 +975,391 @@ function write_biography_svg(path::AbstractString, traces)
     return path
 end
 
+function sample_categorical(probs::AbstractVector{<:Real}, u::Float64)
+    cumulative = 0.0
+    for (idx, probability) in enumerate(normalize_probs(probs))
+        cumulative += probability
+        u <= cumulative && return idx
+    end
+    return length(probs)
+end
+
+function emission_probabilities(params::Sim6aParams, likelihood, depth::Float64)
+    grid = params.depth_grid
+    depth <= first(grid) && return likelihood[:, 1]
+    depth >= last(grid) && return likelihood[:, end]
+    upper = findfirst(value -> value >= depth, grid)
+    lower = upper - 1
+    weight = (depth - grid[lower]) / (grid[upper] - grid[lower])
+    return normalize_probs((1.0 - weight) .* likelihood[:, lower] .+ weight .* likelihood[:, upper])
+end
+
+"""Generate depth, observation timing, and emissions without consulting the biography schedule."""
+function latent_trajectory(seed::Int, params::Sim6aParams, mapping::AbstractString)
+    latent_rng = MersenneTwister(seed + 61_000)
+    availability_rng = MersenneTwister(seed + 62_000)
+    emission_rng = MersenneTwister(seed + 63_000)
+    generative_likelihood = mapped_volatility_likelihood(params, mapping)
+    depth = params.latent_initial_depth
+    velocity = -params.latent_velocity * (0.90 + 0.20 * rand(latent_rng))
+    rows = NamedTuple[]
+
+    for trial in 1:params.n_trials
+        if trial > 1
+            candidate = depth + velocity + params.latent_process_noise * randn(latent_rng)
+            if candidate <= params.latent_lower_bound
+                candidate = params.latent_lower_bound + (params.latent_lower_bound - candidate)
+                velocity = abs(velocity)
+            elseif candidate >= params.latent_upper_bound
+                candidate = params.latent_upper_bound - (candidate - params.latent_upper_bound)
+                velocity = -abs(velocity)
+            end
+            depth = clamp(candidate, params.latent_lower_bound, params.latent_upper_bound)
+        end
+        observed = rand(availability_rng) <= params.observation_probability
+        observation = sample_categorical(
+            emission_probabilities(params, generative_likelihood, depth),
+            rand(emission_rng),
+        )
+        push!(rows, (
+            seed = seed,
+            trial = trial,
+            mapping = mapping,
+            true_depth = depth,
+            observation_available = observed,
+            volatility_observation = observed ? observation : 0,
+        ))
+    end
+    return rows
+end
+
+function safety_prior_at_mass(params::Sim6aParams, high_mass::Float64)
+    0.0 < high_mass < 1.0 || error("safety high-state mass must lie in (0, 1)")
+    remainder = normalize_probs(params.safety_depth_prior[1:(end - 1)])
+    return vcat((1.0 - high_mass) .* remainder, high_mass)
+end
+
+function predict_depth_with_prior(params::Sim6aParams, q, prior)
+    return normalize_probs((1.0 - params.transition_mix) .* normalize_probs(q) .+ params.transition_mix .* normalize_probs(prior))
+end
+
+function scaled_capture_index(params::Sim6aParams, q, beta_gamma_scale::Float64)
+    probs = normalize_probs(q)
+    depth = params.depth_grid
+    pi_eff = exp(sum(probs .* (log(params.pi_part) .- beta_gamma_scale * params.beta .* depth)))
+    lambda_eff = exp(sum(probs .* (log(params.lambda_ctx) .+ beta_gamma_scale * params.gamma .* depth)))
+    return pi_eff / (pi_eff + lambda_eff)
+end
+
+function params_with_policy_gain_scale(params::Sim6aParams, scale::Float64)
+    overrides = Dict{Symbol, Any}(
+        :threat_control_gain => params.threat_control_gain * scale,
+        :reflexive_control_gain => params.reflexive_control_gain * scale,
+    )
+    pairs = (name => get(overrides, name, getfield(params, name)) for name in fieldnames(Sim6aParams))
+    return Sim6aParams(; pairs...)
+end
+
+function filter_latent_trajectory(
+    data,
+    params::Sim6aParams;
+    likelihood = mapped_volatility_likelihood(params, "theory"),
+    prior = safety_prior(params),
+    beta_gamma_scale::Float64 = 1.0,
+    policy_gain_scale::Float64 = 1.0,
+)
+    q = depth_prior(params)
+    policy_params = params_with_policy_gain_scale(params, policy_gain_scale)
+    safe_evidence = 0.0
+    traces = NamedTuple[]
+    for row in data
+        pre_capture = scaled_capture_index(params, q, beta_gamma_scale)
+        policy = select_policy(policy_params, q, pre_capture, safe_evidence)
+        q = row.observation_available ?
+            update_depth_with_evidence(params, q, row.volatility_observation; depth_precision = policy.depth_precision, likelihood = likelihood, prior = prior) :
+            predict_depth_with_prior(params, q, prior)
+        row.observation_available && row.volatility_observation == OBS_LOW && (safe_evidence += 1.0)
+        push!(traces, merge(row, (
+            policy = policy.name,
+            policy_depth_precision = policy.depth_precision,
+            safe_evidence_count = safe_evidence,
+            inferred_depth = expected_depth(params, q),
+            depth_posterior_precision = posterior_precision(q),
+            capture_index = scaled_capture_index(params, q, beta_gamma_scale),
+        )))
+    end
+    return traces
+end
+
+function unevaluable_signature(seed::Int)
+    return (seed = seed, signature = 0.0, baseline_precision = 0.0, transition_precision = 0.0, precision_drop_fraction = 0.0, inferred_depth_drop = 0.0, capture_rise = 0.0, recovery_fraction = 0.0, structurally_evaluable = 0.0)
+end
+
+function collapse_signature(seed::Int, traces, params::Sim6aParams)
+    first_low = findfirst(row -> row.true_depth <= 0.25, traces)
+    first_low === nothing && return unevaluable_signature(seed)
+    pre_candidates = [idx for idx in 1:(first_low - 1) if traces[idx].true_depth >= 0.70]
+    first_recovery = findfirst(idx -> idx > first_low && traces[idx].true_depth >= 0.70, eachindex(traces))
+    (isempty(pre_candidates) || first_recovery === nothing) && return unevaluable_signature(seed)
+
+    pre_indices = pre_candidates[max(1, length(pre_candidates) - 4):end]
+    low_stop = first_recovery - 1
+    low_indices = [idx for idx in first_low:low_stop if traces[idx].true_depth <= 0.35]
+    isempty(low_indices) && (low_indices = collect(first_low:low_stop))
+    transition_start = max(first(pre_indices) + 1, first_low - 7)
+    transition_indices = transition_start:min(first_low + 3, length(traces))
+    recovery_indices = first_recovery:min(first_recovery + 4, length(traces))
+
+    baseline_precision = mean(traces[idx].depth_posterior_precision for idx in pre_indices)
+    transition_precision = minimum(traces[idx].depth_posterior_precision for idx in transition_indices)
+    precision_drop = (baseline_precision - transition_precision) / max(baseline_precision, eps(Float64))
+    depth_drop = mean(traces[idx].inferred_depth for idx in pre_indices) - mean(traces[idx].inferred_depth for idx in low_indices)
+    capture_rise = mean(traces[idx].capture_index for idx in low_indices) - mean(traces[idx].capture_index for idx in pre_indices)
+    recovery = maximum(traces[idx].depth_posterior_precision for idx in recovery_indices) / max(baseline_precision, eps(Float64))
+    signature = precision_drop >= params.signature_precision_drop &&
+        depth_drop >= params.signature_depth_drop &&
+        capture_rise >= params.signature_capture_rise &&
+        recovery >= params.signature_recovery_fraction
+    return (
+        seed = seed,
+        signature = signature ? 1.0 : 0.0,
+        baseline_precision = baseline_precision,
+        transition_precision = transition_precision,
+        precision_drop_fraction = precision_drop,
+        inferred_depth_drop = depth_drop,
+        capture_rise = capture_rise,
+        recovery_fraction = recovery,
+        structurally_evaluable = 1.0,
+    )
+end
+
+function fit_volatility_likelihood(training_data, params::Sim6aParams)
+    counts = fill(params.likelihood_fit_smoothing, 5, length(params.depth_grid))
+    for rows in training_data, row in rows
+        row.observation_available || continue
+        depth_idx = argmin(abs.(params.depth_grid .- row.true_depth))
+        counts[row.volatility_observation, depth_idx] += 1.0
+    end
+    return normalize_likelihood(counts)
+end
+
+function fit_depth_transition(training_data, params::Sim6aParams)
+    n_states = length(params.depth_grid)
+    counts = fill(params.likelihood_fit_smoothing, n_states, n_states)
+    for rows in training_data
+        state_indices = [argmin(abs.(params.depth_grid .- row.true_depth)) for row in rows]
+        for trial in 2:length(state_indices)
+            counts[state_indices[trial], state_indices[trial - 1]] += 1.0
+        end
+    end
+    return normalize_likelihood(counts)
+end
+
+function smooth_heldout_trajectory(data, params::Sim6aParams, likelihood, transition)
+    n_states = length(params.depth_grid)
+    n_trials = length(data)
+    emissions = ones(Float64, n_states, n_trials)
+    for (trial, row) in enumerate(data)
+        row.observation_available && (emissions[:, trial] = likelihood[row.volatility_observation, :])
+    end
+
+    forward = zeros(Float64, n_states, n_trials)
+    backward = ones(Float64, n_states, n_trials)
+    forward[:, 1] = normalize_probs(fill(1.0 / n_states, n_states) .* emissions[:, 1])
+    for trial in 2:n_trials
+        forward[:, trial] = normalize_probs(emissions[:, trial] .* (transition * forward[:, trial - 1]))
+    end
+    for trial in (n_trials - 1):-1:1
+        backward[:, trial] = normalize_probs(transpose(transition) * (emissions[:, trial + 1] .* backward[:, trial + 1]))
+    end
+
+    traces = NamedTuple[]
+    for trial in 1:n_trials
+        posterior = normalize_probs(forward[:, trial] .* backward[:, trial])
+        push!(traces, merge(data[trial], (
+            inferred_depth = expected_depth(params, posterior),
+            depth_posterior_precision = posterior_precision(posterior),
+        )))
+    end
+    return traces
+end
+
+function likelihood_rows(matrix)
+    return [(volatility_observation = obs, depth_state = depth, probability = matrix[obs, depth]) for depth in axes(matrix, 2) for obs in axes(matrix, 1)]
+end
+
+function transition_rows(matrix)
+    return [(from_depth_state = from, to_depth_state = to, probability = matrix[to, from]) for from in axes(matrix, 2) for to in axes(matrix, 1)]
+end
+
+function grid_float_values(config::ExperimentConfig, key::String, default)
+    haskey(config.sweep_grid, key) || return Float64.(default)
+    return Float64.(config.sweep_grid[key])
+end
+
+function grid_string_values(config::ExperimentConfig, key::String, default)
+    haskey(config.sweep_grid, key) || return string.(default)
+    return string.(config.sweep_grid[key])
+end
+
+function run_sim6a_robustness(config::ExperimentConfig, params::Sim6aParams, outdir::AbstractString; config_path = nothing, started = time())
+    # Step B guard lift (orchestrator, 2026-07-10): label-aware, matching the
+    # sim1/sim2/sim5 convention.
+    config.label in ("pilot", "confirmatory") || error("Sim 6a robustness runs use label pilot or confirmatory")
+    if config.label == "pilot"
+        config.seeds == collect(1001:1010) || error("Sim 6a robustness pilot is restricted to seeds 1001-1010")
+    else
+        (length(config.seeds) >= 20 && iseven(length(config.seeds)) && isempty(intersect(config.seeds, collect(1001:1010)))) ||
+            error("Sim 6a robustness confirmatory requires >= 20 (even) seeds disjoint from pilot seeds 1001-1010")
+    end
+
+    base_data = Dict(seed => latent_trajectory(seed, params, "theory") for seed in config.seeds)
+    decoupled_traces = Dict(seed => filter_latent_trajectory(base_data[seed], params) for seed in config.seeds)
+    decoupled_rows = [collapse_signature(seed, decoupled_traces[seed], params) for seed in config.seeds]
+
+    null_rows = NamedTuple[]
+    null_counts = Dict{String, Int}()
+    for mapping in ("flat", "reversed", "nonmonotone")
+        mapping_rows = NamedTuple[]
+        for seed in config.seeds
+            data = latent_trajectory(seed, params, mapping)
+            traces = filter_latent_trajectory(data, params)
+            result = collapse_signature(seed, traces, params)
+            push!(mapping_rows, merge((mapping = mapping,), result))
+        end
+        append!(null_rows, mapping_rows)
+        null_counts[mapping] = count(row -> row.signature == 1.0, mapping_rows)
+    end
+
+    safety_grid = grid_float_values(config, "safety_high_state_mass", [0.35, 0.60, 0.80])
+    likelihood_grid = grid_string_values(config, "likelihood_matrix", ["diffuse", "theory", "concentrated"])
+    slope_grid = grid_float_values(config, "beta_gamma_scale", [0.50, 1.00, 2.00])
+    policy_grid = grid_float_values(config, "policy_gain_scale", [0.50, 1.00, 2.00])
+    joint_rows = NamedTuple[]
+    joint_dataset_cache = Dict((mapping, seed) => latent_trajectory(seed, params, mapping) for mapping in likelihood_grid for seed in config.seeds)
+    for safety_mass in safety_grid, likelihood_name in likelihood_grid, slope_scale in slope_grid, policy_scale in policy_grid
+        prior = safety_prior_at_mass(params, safety_mass)
+        likelihood = mapped_volatility_likelihood(params, likelihood_name)
+        seed_support = 0
+        evaluable = 0
+        for seed in config.seeds
+            traces = filter_latent_trajectory(
+                joint_dataset_cache[(likelihood_name, seed)],
+                params;
+                likelihood = likelihood,
+                prior = prior,
+                beta_gamma_scale = slope_scale,
+                policy_gain_scale = policy_scale,
+            )
+            result = collapse_signature(seed, traces, params)
+            seed_support += Int(result.signature)
+            evaluable += Int(result.structurally_evaluable)
+        end
+        push!(joint_rows, (
+            safety_high_state_mass = safety_mass,
+            likelihood_matrix = likelihood_name,
+            beta_gamma_scale = slope_scale,
+            policy_gain_scale = policy_scale,
+            support_seed_count = seed_support,
+            evaluable_seed_count = evaluable,
+            # Step B scaling (orchestrator, 2026-07-10): the per-point gate is the
+            # preregistered 0.8 seed FRACTION, not a hardcoded count of 8, so a
+            # 20-seed confirmatory keeps the same standard (>= 16/20).
+            transition_survives = seed_support >= ceil(Int, 0.8 * length(config.seeds)) ? 1.0 : 0.0,
+        ))
+    end
+
+    split = length(config.seeds) ÷ 2
+    training_seeds = config.seeds[1:split]
+    heldout_seeds = config.seeds[(split + 1):end]
+    training_data = [base_data[seed] for seed in training_seeds]
+    fitted_likelihood = fit_volatility_likelihood(training_data, params)
+    fitted_transition = fit_depth_transition(training_data, params)
+    heldout_rows = NamedTuple[]
+    for seed in heldout_seeds
+        traces = smooth_heldout_trajectory(base_data[seed], params, fitted_likelihood, fitted_transition)
+        push!(heldout_rows, (
+            seed = seed,
+            truth_correlation = safe_correlation([row.true_depth for row in traces], [row.inferred_depth for row in traces]),
+            observed_trial_count = count(row -> row.observation_available, traces),
+        ))
+    end
+
+    decoupled_count = count(row -> row.signature == 1.0, decoupled_rows)
+    evaluable_count = count(row -> row.structurally_evaluable == 1.0, decoupled_rows)
+    metrics = (
+        decoupled = (
+            signature_seed_count = decoupled_count,
+            evaluable_seed_count = evaluable_count,
+            seed_count = length(config.seeds),
+        ),
+        nulls = (
+            flat_signature_seed_count = null_counts["flat"],
+            reversed_signature_seed_count = null_counts["reversed"],
+            nonmonotone_signature_seed_count = null_counts["nonmonotone"],
+            max_signature_seed_count = maximum(values(null_counts)),
+        ),
+        joint = (
+            transition_volume_fraction = mean(row.transition_survives for row in joint_rows),
+            surviving_grid_points = count(row -> row.transition_survives == 1.0, joint_rows),
+            total_grid_points = length(joint_rows),
+            per_grid_seed_requirement = 8,
+        ),
+        heldout = (
+            mean_truth_correlation = mean(row.truth_correlation for row in heldout_rows),
+            min_truth_correlation = minimum(row.truth_correlation for row in heldout_rows),
+            training_seeds = training_seeds,
+            heldout_seeds = heldout_seeds,
+        ),
+    )
+    summary = (
+        experiment = "sim6a",
+        analysis = "T4.7 robustness pilot",
+        config = config_snapshot(config),
+        model_contract = (
+            latent_process = "autonomous reflected stochastic depth trajectory; no trial_spec or biography phase input",
+            observation_schedule = "Bernoulli availability sampled independently of latent depth; emissions sampled from P(volatility | latent depth)",
+            null_evaluation = "null-generated emissions evaluated by the frozen theory-mapping agent",
+            heldout_protocol = "emission and transition matrices fitted on first five seed trajectories; forward-backward recovery evaluated on the other five",
+            collapse_signature = "precision drop AND inferred-depth drop AND capture rise AND precision recovery",
+        ),
+        metrics = metrics,
+        per_seed_metric_count = length(decoupled_rows),
+        trace_row_count = sum(length(rows) for rows in values(decoupled_traces)),
+    )
+
+    summary_path = joinpath(outdir, "summary.json")
+    write_json(summary_path, summary)
+    write_rows_csv(joinpath(outdir, "per_seed_metrics.csv"), decoupled_rows)
+    write_rows_csv(joinpath(outdir, "posterior_traces.csv"), reduce(vcat, [decoupled_traces[seed] for seed in config.seeds]))
+    write_rows_csv(joinpath(outdir, "null_mapping_metrics.csv"), null_rows)
+    write_rows_csv(joinpath(outdir, "joint_sweep_metrics.csv"), joint_rows)
+    write_rows_csv(joinpath(outdir, "heldout_identifiability.csv"), heldout_rows)
+    write_rows_csv(joinpath(outdir, "fitted_likelihood.csv"), likelihood_rows(fitted_likelihood))
+    write_rows_csv(joinpath(outdir, "fitted_transition.csv"), transition_rows(fitted_transition))
+
+    criteria_results = nothing
+    if !isnothing(config.criteria_path) && isfile(config.criteria_path)
+        criteria_results = write_criteria_results(config.criteria_path, summary_path, joinpath(outdir, "criteria-results.json"))
+    end
+    status = (
+        implementation_passed = evaluable_count == length(config.seeds) && length(joint_rows) == length(safety_grid) * length(likelihood_grid) * length(slope_grid) * length(policy_grid),
+        theory_result = theory_label(criteria_results),
+        criteria_results_path = criteria_results === nothing ? nothing : joinpath(outdir, "criteria-results.json"),
+        protocol = "pilot-only",
+    )
+    write_json(joinpath(outdir, "status.json"), status)
+    metadata = build_reproducibility_metadata(
+        config;
+        config_path = config_path,
+        runtime_seconds = time() - started,
+        repo_root = normpath(joinpath(@__DIR__, "..", "..", "..", "..", "..")),
+        extra = (output_dir = abspath(outdir), sim_module = "EmergenceSuite.Sim6a", protocol = "T4.7 Step A pilot-only"),
+    )
+    write_json(joinpath(outdir, "metadata.json"), metadata)
+    return (output_dir = outdir, summary = summary, status = status, criteria_results = criteria_results)
+end
+
 function theory_label(criteria_results)
     criteria_results === nothing && return "null"
     labels = [row.label for row in criteria_results.results if row.kind == "success"]
@@ -945,6 +1376,8 @@ function run_sim6a_config(config::ExperimentConfig; config_path::Union{Nothing, 
     validate_params(params)
     outdir = output_dir === nothing ? normpath(joinpath(config.output_dir, config.experiment, config.label === nothing ? Dates.format(Dates.now(Dates.UTC), Dates.dateformat"yyyymmddTHHMMSSZ") : config.label)) : output_dir
     ensure_dir(outdir)
+
+    params.robustness_mode && return run_sim6a_robustness(config, params, outdir; config_path = config_path, started = started)
 
     length(config.seeds) >= 20 || error("Sim 6a requires at least 20 seeds")
     bundles = load_bundles(params)

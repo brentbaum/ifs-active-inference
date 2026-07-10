@@ -109,3 +109,46 @@ Stage 2 adds two mental actions, `allocate-to-reflexive` and `allocate-to-threat
   `o_self` sharpness.
 - `criteria-results.json`: labels emitted from
   `configs/sim6a-criteria.yaml`.
+
+## T4.7 robustness pilot
+
+`configs/sim6a-robustness-pilot.yaml` selects an isolated robustness path; it
+does not alter the historical Stage 1 or Stage 2 runs. The path replaces
+`trial_spec` as the data generator with an autonomous, reflected stochastic
+latent-depth trajectory. Observation availability has a separate RNG stream
+and never reads latent depth or biography phase. Available observations are
+sampled from the selected volatility mapping.
+
+The complete collapse signature requires all four registered components:
+posterior-precision loss, inferred-depth loss, the D1 capture shift, and
+posterior-precision recovery. Null worlds use flat, reversed, or non-monotone
+generative mappings while the agent's theory mapping remains frozen. The
+Cartesian robustness sweep has 81 points over safety-prior mass, full
+likelihood matrices, beta/gamma scale, and EFE policy-control gain. Held-out
+identifiability fits emission and transition matrices on seeds 1001–1005 and
+uses forward–backward inference on seeds 1006–1010 without reading held-out
+latent depth during recovery.
+
+The final Step A pilot is mixed: decoupling passes at 8/10 seeds and held-out
+recovery passes at mean `r = 0.718`; the null criterion is weak because the
+non-monotone mapping produces 3/10 signatures, and the joint-volume result is
+40/81 (`0.494`), just below the registered `0.50` gate. The earlier held-out
+estimator attempt is retained in `runs/sim6a/pilot-attempt1/`; no confirmatory
+seeds were run.
+
+Additional robustness outputs are `null_mapping_metrics.csv`,
+`joint_sweep_metrics.csv`, `heldout_identifiability.csv`,
+`fitted_likelihood.csv`, and `fitted_transition.csv`.
+
+## T4.7 Step B (orchestrator, 2026-07-10)
+
+Pilot verdict weak/mixed and frozen as-is: decoupled signature 8/10 at the gate;
+non-monotone null leaked 3/10 (vs <=2/10); joint volume 0.494 vs 0.50 (diffuse
+likelihood kills the transition entirely — a real robustness limit, recorded);
+held-out recovery 0.718 passes. Deliberate Step B acts: guard lifted label-aware;
+per-point joint gate changed from hardcoded >=8 seeds to the preregistered 0.8
+seed fraction so a 20-seed confirmatory keeps the same standard; confirmatory
+preregistered at configs/sim6a-robustness-confirmatory.yaml (fresh seeds
+6001-6020, train/held-out = first/second half) with scaled criteria. The pilot's
+estimator attempt-1 (mismatched historical transition, r=0.50) is retained at
+runs/sim6a/pilot-attempt1/ as an audit record.

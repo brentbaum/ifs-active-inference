@@ -1,0 +1,54 @@
+{
+    "criteria_path": "/Users/brentbaum/dev/research/ifs-active-inference/projects/emergence-suite/suite/configs/sim6a-robustness-criteria.yaml",
+    "summary_path": "/Users/brentbaum/dev/research/ifs-active-inference/projects/emergence-suite/suite/runs/sim6a/pilot/summary.json",
+    "results": [
+        {
+            "id": "S6a.decoupled",
+            "description": "The complete collapse signature survives independently evolving latent depth and depth-independent observation timing in at least 8 of 10 pilot seeds.",
+            "kind": "success",
+            "metric_path": "metrics.decoupled.signature_seed_count",
+            "comparator": ">=",
+            "threshold": 8,
+            "weak_threshold": 6,
+            "opposite_threshold": 2,
+            "value": 8,
+            "label": "support"
+        },
+        {
+            "id": "A6a.nulls",
+            "description": "Flat, reversed, and non-monotone generative volatility mappings each produce the complete collapse signature in at most 2 of 10 pilot seeds.",
+            "kind": "success",
+            "metric_path": "metrics.nulls.max_signature_seed_count",
+            "comparator": "<=",
+            "threshold": 2,
+            "weak_threshold": 3,
+            "opposite_threshold": 5,
+            "value": 3,
+            "label": "weak_support"
+        },
+        {
+            "id": "S6a.joint",
+            "description": "At least half of the preregistered 3x3x3x3 joint safety-prior, likelihood-matrix, beta/gamma, and policy-gain grid retains the transition in at least 8 of 10 seeds.",
+            "kind": "success",
+            "metric_path": "metrics.joint.transition_volume_fraction",
+            "comparator": ">=",
+            "threshold": 0.5,
+            "weak_threshold": 0.35,
+            "opposite_threshold": 0.15,
+            "value": 0.49382716049382713,
+            "label": "weak_support"
+        },
+        {
+            "id": "A6a.heldout",
+            "description": "A likelihood fit on seeds 1001-1005 recovers autonomous latent depth on held-out seeds 1006-1010 with mean trajectory correlation at least 0.6.",
+            "kind": "success",
+            "metric_path": "metrics.heldout.mean_truth_correlation",
+            "comparator": ">=",
+            "threshold": 0.6,
+            "weak_threshold": 0.5,
+            "opposite_threshold": 0.2,
+            "value": 0.717907823131038,
+            "label": "support"
+        }
+    ]
+}
