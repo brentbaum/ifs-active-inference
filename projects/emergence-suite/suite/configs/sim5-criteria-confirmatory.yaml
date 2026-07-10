@@ -1,43 +1,46 @@
-# T4.4 Step A preregistration, written before executing pilot seeds 1001-1010.
+# T4.4 Step B confirmatory criteria (orchestrator, 2026-07-10), preregistered
+# BEFORE the confirmatory run. Identical claims and fractions to the pilot
+# preregistration, with seed-count thresholds scaled 10 -> 20 seeds
+# (8/10 -> 16/20, 6 -> 12, 2 -> 4, 10 -> 20, 9 -> 18). No other change.
 criteria:
   - id: S5.signature
-    description: "The learned self-like-part signature orders regulated > fluent-but-threatened > dysregulated by at least 0.15 learned settling probability on both contrasts in at least 8/10 pilot seeds."
+    description: "The learned self-like-part signature orders regulated > fluent-but-threatened > dysregulated by at least 0.15 learned settling probability on both contrasts in at least 16/20 confirmatory seeds."
     metric_path: metrics.learned_mapping.signature_seed_count
     comparator: ">="
-    threshold: 8.0
-    weak_threshold: 6.0
-    opposite_threshold: 2.0
+    threshold: 16.0
+    weak_threshold: 12.0
+    opposite_threshold: 4.0
     kind: success
   - id: A5.learned-reversed
-    description: "Under the REVERSED contingency mapping, the learned signature reverses to regulated < fluent-but-threatened < dysregulated by the registered margin in at least 8/10 pilot seeds."
+    description: "Under the REVERSED contingency mapping, the learned signature reverses to regulated < fluent-but-threatened < dysregulated by the registered margin in at least 16/20 confirmatory seeds."
     metric_path: metrics.learned_mapping.reversed_signature_seed_count
     comparator: ">="
-    threshold: 8.0
-    weak_threshold: 6.0
-    opposite_threshold: 2.0
+    threshold: 16.0
+    weak_threshold: 12.0
+    opposite_threshold: 4.0
     kind: adversarial
   - id: A5.learned-unreliable
-    description: "With 75% outcome noise toward chance, the regulated-to-dysregulated learned-mapping span is at most 60% of its reliable counterpart in at least 8/10 pilot seeds."
+    description: "With 75% outcome noise toward chance, the regulated-to-dysregulated learned-mapping span is at most 60% of its reliable counterpart in at least 16/20 confirmatory seeds."
     metric_path: metrics.learned_mapping.unreliable_degraded_seed_count
     comparator: ">="
-    threshold: 8.0
-    weak_threshold: 6.0
-    opposite_threshold: 2.0
+    threshold: 16.0
+    weak_threshold: 12.0
+    opposite_threshold: 4.0
     kind: adversarial
   - id: S5.2-lesion
-    description: "A real mid-run lesion resets learned co-regulation Dirichlet counts and blocks subsequent mapping writes; the fluent signal's tail estimate moves at least halfway back toward chance in at least 8/10 pilot seeds."
+    description: "A real mid-run lesion resets learned co-regulation Dirichlet counts and blocks subsequent mapping writes; the fluent signal's tail estimate moves at least halfway back toward chance in at least 16/20 confirmatory seeds."
     metric_path: metrics.learned_mapping.lesion_degraded_seed_count
     comparator: ">="
-    threshold: 8.0
-    weak_threshold: 6.0
-    opposite_threshold: 2.0
+    threshold: 16.0
+    weak_threshold: 12.0
+    opposite_threshold: 4.0
     kind: adversarial
   - id: A5.2-live
-    description: "Regulation-only has contact-generated relational root evidence in all 10 pilot seeds, so its contrast with regulation-plus-witnessing is live rather than content-gated. The direction is reported, not threshold-selected."
+    description: "Regulation-only has contact-generated relational root evidence in all 20 confirmatory seeds, so its contrast with regulation-plus-witnessing is live rather than content-gated. The direction is reported, not threshold-selected."
     metric_path: metrics.adversarial.regulation_only_contact_root_evidence_seed_count
     comparator: "=="
-    threshold: 10.0
-    weak_threshold: 9.0
+    threshold: 20.0
+    weak_threshold: 18.0
     opposite_threshold: 0.0
     kind: adversarial
   - id: S5.emissions

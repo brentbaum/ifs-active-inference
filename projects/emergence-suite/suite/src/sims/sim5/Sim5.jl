@@ -1,6 +1,7 @@
 module Sim5
 
 using Dates
+using Random
 using Statistics
 
 using ..BMR: reflexive_prior_swap_delta, reflexivity_weight
@@ -24,6 +25,17 @@ const REG_REGULATED = "regulated"
 const REG_DYSREGULATED = "dysregulated"
 const REG_NONE = "none"
 
+const SIGNAL_COHERENT_SAFE = 1
+const SIGNAL_COHERENT_THREAT = 2
+const SIGNAL_INCOHERENT_SAFE = 3
+const SIGNAL_INCOHERENT_THREAT = 4
+const SIGNAL_LABELS = (
+    "coherent-safe",
+    "coherent-threat",
+    "incoherent-safe",
+    "incoherent-threat",
+)
+
 Base.@kwdef struct Sim5Params
     n_session_trials::Int = 60
     contact_start_trial::Int = 6
@@ -43,8 +55,24 @@ Base.@kwdef struct Sim5Params
     volatility_precision::Float64 = 1.35
     coreg_precision::Float64 = 2.35
     regulated_coreg_by_depth::Vector{Float64} = [0.08, 0.16, 0.36, 0.74, 0.93]
+    regulated_surface_coherent_probability::Float64 = 0.92
+    regulated_channel_safe_probability::Float64 = 0.90
+    fluent_threatened_surface_coherent_probability::Float64 = 0.92
+    fluent_threatened_channel_safe_probability::Float64 = 0.10
+    dysregulated_surface_coherent_probability::Float64 = 0.10
+    dysregulated_channel_safe_probability::Float64 = 0.10
+    mapping_settle_probability_by_signal::Vector{Float64} = [0.90, 0.60, 0.64, 0.10]
+    mapping_prior_count::Float64 = 1.0
+    mapping_learning_rate::Float64 = 1.0
+    unreliable_mapping_noise::Float64 = 0.75
+    mapping_lesion_trial::Int = 31
+    learned_signature_margin::Float64 = 0.15
+    unreliable_degradation_ratio::Float64 = 0.60
+    lesion_degradation_ratio::Float64 = 0.50
+    learned_mapping_tail_trials::Int = 15
     relational_count_good::Float64 = 1.0
     relational_count_old::Float64 = 0.08
+    contact_root_evidence_fraction::Float64 = 0.30
     ordinary_learning_rate::Float64 = 1.0
     attenuation_learning_rate::Float64 = 0.18
     full_prior_met::Float64 = 2.0
@@ -64,6 +92,7 @@ Base.@kwdef mutable struct ClientState
     prune_trial::Union{Nothing, Int} = nothing
     root_counts::Vector{Float64} = [0.0, 0.0]
     threat_counts::Vector{Float64} = [8.0, 4.0]
+    coreg_counts::Matrix{Float64} = ones(4, 2)
 end
 
 function get_float(raw, key::String, default::Float64)
@@ -103,8 +132,24 @@ function params_from_config(config::ExperimentConfig)
         volatility_precision = get_float(raw, "volatility_precision", base.volatility_precision),
         coreg_precision = get_float(raw, "coreg_precision", base.coreg_precision),
         regulated_coreg_by_depth = get_float_vector(raw, "regulated_coreg_by_depth", base.regulated_coreg_by_depth),
+        regulated_surface_coherent_probability = get_float(raw, "regulated_surface_coherent_probability", base.regulated_surface_coherent_probability),
+        regulated_channel_safe_probability = get_float(raw, "regulated_channel_safe_probability", base.regulated_channel_safe_probability),
+        fluent_threatened_surface_coherent_probability = get_float(raw, "fluent_threatened_surface_coherent_probability", base.fluent_threatened_surface_coherent_probability),
+        fluent_threatened_channel_safe_probability = get_float(raw, "fluent_threatened_channel_safe_probability", base.fluent_threatened_channel_safe_probability),
+        dysregulated_surface_coherent_probability = get_float(raw, "dysregulated_surface_coherent_probability", base.dysregulated_surface_coherent_probability),
+        dysregulated_channel_safe_probability = get_float(raw, "dysregulated_channel_safe_probability", base.dysregulated_channel_safe_probability),
+        mapping_settle_probability_by_signal = get_float_vector(raw, "mapping_settle_probability_by_signal", base.mapping_settle_probability_by_signal),
+        mapping_prior_count = get_float(raw, "mapping_prior_count", base.mapping_prior_count),
+        mapping_learning_rate = get_float(raw, "mapping_learning_rate", base.mapping_learning_rate),
+        unreliable_mapping_noise = get_float(raw, "unreliable_mapping_noise", base.unreliable_mapping_noise),
+        mapping_lesion_trial = get_int(raw, "mapping_lesion_trial", base.mapping_lesion_trial),
+        learned_signature_margin = get_float(raw, "learned_signature_margin", base.learned_signature_margin),
+        unreliable_degradation_ratio = get_float(raw, "unreliable_degradation_ratio", base.unreliable_degradation_ratio),
+        lesion_degradation_ratio = get_float(raw, "lesion_degradation_ratio", base.lesion_degradation_ratio),
+        learned_mapping_tail_trials = get_int(raw, "learned_mapping_tail_trials", base.learned_mapping_tail_trials),
         relational_count_good = get_float(raw, "relational_count_good", base.relational_count_good),
         relational_count_old = get_float(raw, "relational_count_old", base.relational_count_old),
+        contact_root_evidence_fraction = get_float(raw, "contact_root_evidence_fraction", base.contact_root_evidence_fraction),
         ordinary_learning_rate = get_float(raw, "ordinary_learning_rate", base.ordinary_learning_rate),
         attenuation_learning_rate = get_float(raw, "attenuation_learning_rate", base.attenuation_learning_rate),
         full_prior_met = get_float(raw, "full_prior_met", base.full_prior_met),
@@ -135,6 +180,26 @@ function validate_params(params::Sim5Params)
     params.n_session_trials >= params.bmr_interval || error("n_session_trials must cover at least one BMR interval")
     params.contact_start_trial >= 1 || error("contact_start_trial must be positive")
     all(x -> 0.0 < x < 1.0, params.regulated_coreg_by_depth) || error("regulated_coreg_by_depth entries must be probabilities")
+    length(params.mapping_settle_probability_by_signal) == 4 || error("mapping_settle_probability_by_signal must contain the four joint signal categories")
+    probability_values = (
+        params.regulated_surface_coherent_probability,
+        params.regulated_channel_safe_probability,
+        params.fluent_threatened_surface_coherent_probability,
+        params.fluent_threatened_channel_safe_probability,
+        params.dysregulated_surface_coherent_probability,
+        params.dysregulated_channel_safe_probability,
+        params.unreliable_mapping_noise,
+        params.unreliable_degradation_ratio,
+        params.lesion_degradation_ratio,
+        params.contact_root_evidence_fraction,
+    )
+    all(x -> 0.0 <= x <= 1.0, probability_values) || error("Sim 5 emission/noise/fraction parameters must be probabilities")
+    all(x -> 0.0 < x < 1.0, params.mapping_settle_probability_by_signal) || error("mapping contingencies must be interior probabilities")
+    params.mapping_prior_count > 0.0 || error("mapping_prior_count must be positive")
+    params.mapping_learning_rate > 0.0 || error("mapping_learning_rate must be positive")
+    1 < params.mapping_lesion_trial <= params.n_session_trials || error("mapping_lesion_trial must occur within the session")
+    params.learned_signature_margin > 0.0 || error("learned_signature_margin must be positive")
+    1 <= params.learned_mapping_tail_trials <= params.n_session_trials || error("learned_mapping_tail_trials must fit within the session")
     return nothing
 end
 
@@ -198,6 +263,94 @@ function update_depth_with_evidence(params::Sim5Params, q::AbstractVector{<:Real
     vol_like = volatility_likelihood(params)[volatility_obs, :] .^ max(params.volatility_precision, eps(Float64))
     reg_like = coreg_likelihood(params, regulation) .^ max(params.coreg_precision, eps(Float64))
     return normalize_probs(predicted .* vol_like .* reg_like)
+end
+
+function emission_probabilities(params::Sim5Params, emission_model::String)
+    if emission_model == "regulated"
+        return (
+            surface_coherent = params.regulated_surface_coherent_probability,
+            channel_safe = params.regulated_channel_safe_probability,
+        )
+    elseif emission_model == "fluent-but-threatened"
+        return (
+            surface_coherent = params.fluent_threatened_surface_coherent_probability,
+            channel_safe = params.fluent_threatened_channel_safe_probability,
+        )
+    elseif emission_model == "dysregulated"
+        return (
+            surface_coherent = params.dysregulated_surface_coherent_probability,
+            channel_safe = params.dysregulated_channel_safe_probability,
+        )
+    elseif emission_model == "none"
+        return nothing
+    end
+    error("Unknown therapist emission model: $emission_model")
+end
+
+function emission_rng(seed::Int, emission_model::String)
+    offset = if emission_model == "regulated"
+        0x51a7
+    elseif emission_model == "fluent-but-threatened"
+        0x7b2d
+    elseif emission_model == "dysregulated"
+        0x9361
+    else
+        0x0000
+    end
+    return Xoshiro(xor(UInt64(seed), UInt64(offset)))
+end
+
+function emit_therapist_signal(rng::AbstractRNG, params::Sim5Params, emission_model::String)
+    probabilities = emission_probabilities(params, emission_model)
+    probabilities === nothing && return nothing
+    surface_coherent = rand(rng) < probabilities.surface_coherent
+    channel_safe = rand(rng) < probabilities.channel_safe
+    if surface_coherent
+        return channel_safe ? SIGNAL_COHERENT_SAFE : SIGNAL_COHERENT_THREAT
+    end
+    return channel_safe ? SIGNAL_INCOHERENT_SAFE : SIGNAL_INCOHERENT_THREAT
+end
+
+function controlled_settle_probability(params::Sim5Params, signal::Int, mapping_control::String)
+    probability = params.mapping_settle_probability_by_signal[signal]
+    if mapping_control == "normal"
+        return probability
+    elseif mapping_control == "unreliable"
+        return (1.0 - params.unreliable_mapping_noise) * probability + params.unreliable_mapping_noise * 0.5
+    elseif mapping_control == "reversed"
+        return 1.0 - probability
+    end
+    error("Unknown mapping control: $mapping_control")
+end
+
+function learned_settle_probability(state::ClientState, signal::Int)
+    counts = view(state.coreg_counts, signal, :)
+    return counts[1] / sum(counts)
+end
+
+function update_learned_mapping!(state::ClientState, params::Sim5Params, signal::Int, settled::Bool)
+    outcome = settled ? 1 : 2
+    state.coreg_counts[signal, outcome] += params.mapping_learning_rate
+    return learned_settle_probability(state, signal)
+end
+
+function lesion_learned_mapping!(state::ClientState, params::Sim5Params)
+    state.coreg_counts .= params.mapping_prior_count
+    return nothing
+end
+
+function update_depth_with_learned_mapping(
+    params::Sim5Params,
+    q::AbstractVector{<:Real},
+    baseline_prior::AbstractVector{<:Real},
+    volatility_obs::Int,
+    learned_settle::Float64,
+)
+    predicted = predict_depth(params, q, baseline_prior)
+    vol_like = volatility_likelihood(params)[volatility_obs, :] .^ max(params.volatility_precision, eps(Float64))
+    p_regulated = params.regulated_coreg_by_depth
+    learned_like = learned_settle .* p_regulated .+ (1.0 - learned_settle) .* (1.0 .- p_regulated)
+    return normalize_probs(predicted .* vol_like .* (learned_like .^ max(params.coreg_precision, eps(Float64))))
 end
 
 function effective_precisions(params::Sim5Params, q_depth::AbstractVector{<:Real})
@@ -275,9 +428,28 @@ function accumulate_content!(state::ClientState, params::Sim5Params, content::St
     error("Unknown content channel: $content")
 end
 
+function accumulate_contact_evidence!(state::ClientState, params::Sim5Params, content::String, q_depth::AbstractVector{<:Real}, contact::Bool)
+    contact || return (root_weight = 0.0, contact_root_weight = 0.0)
+    precision_weight = relational_precision_weight(params, q_depth)
+    contact_root_weight = precision_weight * params.contact_root_evidence_fraction
+    content_root_weight = content == CONTENT_PARTS ? precision_weight * (1.0 - params.contact_root_evidence_fraction) : 0.0
+    total_root_weight = contact_root_weight + content_root_weight
+    state.root_counts[1] += total_root_weight * params.relational_count_good
+    state.root_counts[2] += total_root_weight * params.relational_count_old
+    if content == CONTENT_NEUTRAL
+        state.threat_counts[2] += params.ordinary_learning_rate
+    elseif !(content in (CONTENT_PARTS, CONTENT_NONE))
+        error("Unknown content channel: $content")
+    end
+    return (root_weight = total_root_weight, contact_root_weight = contact_root_weight)
+end
+
 function session_metric(seed::Int, condition::String, traces, initial_root_precision::Float64, final_state::ClientState, params::Sim5Params, depth_occupancy::Vector{Float64})
     final_root_precision = root_structural_precision(final_state, params)
     revision_drop = final_state.prune_trial === nothing ? 0.0 : max(0.0, maximum(row.structural_root_precision for row in traces) - final_root_precision)
+    learned_rows = [row.learned_settle_probability for row in traces if row.therapist_signal != "none"]
+    tail_start = max(1, length(traces) - params.learned_mapping_tail_trials + 1)
+    tail_learned_rows = [row.learned_settle_probability for row in traces[tail_start:end] if row.therapist_signal != "none"]
     return (
         seed = seed,
         condition = condition,
@@ -294,8 +466,13 @@ function session_metric(seed::Int, condition::String, traces, initial_root_preci
         final_capture_index = last(traces).capture_index,
         mean_depth_posterior_precision = safe_mean([row.depth_posterior_precision for row in traces]),
         mean_root_observation_weight = safe_mean([row.root_observation_weight for row in traces]),
+        contact_generated_root_weight = sum(row.contact_root_weight for row in traces),
         contact_opportunities = count(row -> row.contact_opportunity, traces),
         witnessed_contact_weight = sum(row.root_observation_weight for row in traces),
+        mean_learned_settle_probability = safe_mean(learned_rows),
+        tail_learned_settle_probability = safe_mean(tail_learned_rows),
+        mapping_observations = sum(final_state.coreg_counts) - 8.0 * params.mapping_prior_count,
+        mapping_lesioned = any(row.mapping_lesioned_now for row in traces),
         depth_occupancy_1 = depth_occupancy[1],
         depth_occupancy_2 = depth_occupancy[2],
         depth_occupancy_3 = depth_occupancy[3],
@@ -311,9 +488,13 @@ function simulate_session(
     baseline_prior::AbstractVector{<:Real},
     content::String,
     regulation::String,
+    emission_model::String = regulation == REG_REGULATED ? "regulated" : (regulation == REG_DYSREGULATED ? "dysregulated" : "none"),
+    mapping_control::String = "normal",
+    lesion_mapping::Bool = false,
 )
     q_depth = normalize_probs(baseline_prior)
-    state = ClientState()
+    state = ClientState(coreg_counts = fill(params.mapping_prior_count, 4, 2))
+    rng = emission_rng(seed, emission_model)
     traces = NamedTuple[]
     initial_root_precision = root_structural_precision(state, params)
     depth_occupancy = zeros(length(params.depth_grid))
@@ -322,11 +503,26 @@ function simulate_session(
         pre_eff = effective_precisions(params, q_depth)
         arousal = activation_arousal(seed, trial, params, pre_eff.capture_index)
         volatility_obs = volatility_observation(arousal)
-        q_depth = update_depth_with_evidence(params, q_depth, baseline_prior, volatility_obs, regulation)
+        signal = emit_therapist_signal(rng, params, emission_model)
+        mapping_lesioned_now = lesion_mapping && trial == params.mapping_lesion_trial
+        mapping_lesioned_now && lesion_learned_mapping!(state, params)
+        settled = false
+        learned_settle = 0.5
+        if signal === nothing
+            q_depth = update_depth_with_evidence(params, q_depth, baseline_prior, volatility_obs, REG_NONE)
+        else
+            settled = rand(rng) < controlled_settle_probability(params, signal, mapping_control)
+            if !(lesion_mapping && trial >= params.mapping_lesion_trial)
+                learned_settle = update_learned_mapping!(state, params, signal, settled)
+            else
+                learned_settle = learned_settle_probability(state, signal)
+            end
+            q_depth = update_depth_with_learned_mapping(params, q_depth, baseline_prior, volatility_obs, learned_settle)
+        end
         depth_occupancy .+= q_depth
         post_eff = effective_precisions(params, q_depth)
         contact = contact_opportunity(seed, trial, params)
-        root_weight = accumulate_content!(state, params, content, q_depth, contact)
+        root_evidence = accumulate_contact_evidence!(state, params, content, q_depth, contact)
 
         bmr_result = (delta = nothing, score = nothing, pruned_now = false)
         if trial % params.bmr_interval == 0
@@ -339,17 +535,25 @@ function simulate_session(
             trial = trial,
             content_channel = content,
             regulation_channel = regulation,
+            emission_model = emission_model,
+            mapping_control = mapping_control,
             contact_opportunity = contact,
             activation_arousal = arousal,
             volatility_observation = volatility_obs,
-            coreg_observation = regulation,
+            surface_signal = signal === nothing ? "none" : (signal in (SIGNAL_COHERENT_SAFE, SIGNAL_COHERENT_THREAT) ? "coherent" : "incoherent"),
+            relational_channel = signal === nothing ? "none" : (signal in (SIGNAL_COHERENT_SAFE, SIGNAL_INCOHERENT_SAFE) ? "safe" : "threat"),
+            therapist_signal = signal === nothing ? "none" : SIGNAL_LABELS[signal],
+            own_state_change = signal === nothing ? "none" : (settled ? "settled" : "activated"),
+            learned_settle_probability = learned_settle,
+            mapping_lesioned_now = mapping_lesioned_now,
             E_t = post_eff.E_t,
             depth_posterior_precision = posterior_precision(q_depth),
             pi_eff = post_eff.pi_eff,
             lambda_eff = post_eff.lambda_eff,
             capture_index = post_eff.capture_index,
             reflexivity_weight = reflexivity_weight(post_eff.E_t; E0 = params.E0),
-            root_observation_weight = root_weight,
+            root_observation_weight = root_evidence.root_weight,
+            contact_root_weight = root_evidence.contact_root_weight,
             root_counts_met = state.root_counts[1],
             root_counts_alone = state.root_counts[2],
             structural_root_precision = root_structural_precision(state, params),
@@ -379,6 +583,18 @@ function mean_capture(metrics, condition::String)
     rows = [row for row in metrics if row.condition == condition]
     isempty(rows) && return 0.0
     return mean(row.mean_capture_index for row in rows)
+end
+
+function mean_learned_settle(metrics, condition::String)
+    rows = [row for row in metrics if row.condition == condition]
+    isempty(rows) && return 0.0
+    return mean(row.tail_learned_settle_probability for row in rows)
+end
+
+function condition_row(metrics, seed::Int, condition::String)
+    rows = [row for row in metrics if row.seed == seed && row.condition == condition]
+    length(rows) == 1 || error("Expected exactly one metric row for seed $seed condition $condition")
+    return only(rows)
 end
 
 function borrowed_then_owned(seed::Int, params::Sim5Params)
@@ -447,27 +663,86 @@ function aggregate_revision(metrics)
     regulated = mean_revision(metrics, "regulated")
     dysregulated = mean_revision(metrics, "dysregulated")
     fluent = mean_revision(metrics, "fluent-but-threatened")
-    ablated = mean_revision(metrics, "fluent-threatened-regulation-ablation")
+    lesioned = mean_revision(metrics, "fluent-threatened-mapping-lesion")
     return (
         regulated_mean = regulated,
         dysregulated_mean = dysregulated,
         fluent_threatened_mean = fluent,
         regulated_minus_dysregulated = regulated - dysregulated,
         regulated_minus_fluent_threatened = regulated - fluent,
-        fluent_content_identity_audit = 1.0,
+        emission_tuple_identity_audit = 0.0,
         self_low_mean = mean_revision(metrics, "self-practice-low"),
         self_medium_mean = mean_revision(metrics, "self-practice-medium"),
         self_high_mean = mean_revision(metrics, "self-practice-high"),
-        ablation_mean = ablated,
+        mapping_lesion_mean = lesioned,
     )
 end
 
-function aggregate_ablation(metrics)
-    regulated = max(mean_revision(metrics, "regulated"), eps(Float64))
-    ablated = mean_revision(metrics, "fluent-threatened-regulation-ablation")
+function aggregate_learned_mapping(metrics, seeds, params::Sim5Params)
+    normal_signature_count = 0
+    reversed_signature_count = 0
+    unreliable_degraded_count = 0
+    lesion_degraded_count = 0
+    per_seed_rows = NamedTuple[]
+    for seed in seeds
+        regulated = condition_row(metrics, seed, "regulated").tail_learned_settle_probability
+        fluent = condition_row(metrics, seed, "fluent-but-threatened").tail_learned_settle_probability
+        dysregulated = condition_row(metrics, seed, "dysregulated").tail_learned_settle_probability
+        regulated_unreliable = condition_row(metrics, seed, "regulated-unreliable").tail_learned_settle_probability
+        fluent_unreliable = condition_row(metrics, seed, "fluent-threatened-unreliable").tail_learned_settle_probability
+        dysregulated_unreliable = condition_row(metrics, seed, "dysregulated-unreliable").tail_learned_settle_probability
+        regulated_reversed = condition_row(metrics, seed, "regulated-reversed").tail_learned_settle_probability
+        fluent_reversed = condition_row(metrics, seed, "fluent-threatened-reversed").tail_learned_settle_probability
+        dysregulated_reversed = condition_row(metrics, seed, "dysregulated-reversed").tail_learned_settle_probability
+        lesioned = condition_row(metrics, seed, "fluent-threatened-mapping-lesion").tail_learned_settle_probability
+
+        normal_signature = regulated - fluent >= params.learned_signature_margin && fluent - dysregulated >= params.learned_signature_margin
+        reversed_signature = fluent_reversed - regulated_reversed >= params.learned_signature_margin && dysregulated_reversed - fluent_reversed >= params.learned_signature_margin
+        normal_span = max(regulated - dysregulated, eps(Float64))
+        unreliable_span = abs(regulated_unreliable - dysregulated_unreliable)
+        unreliable_degraded = unreliable_span <= params.unreliable_degradation_ratio * normal_span
+        lesion_degraded = abs(lesioned - 0.5) <= params.lesion_degradation_ratio * max(abs(fluent - 0.5), eps(Float64))
+        normal_signature_count += normal_signature
+        reversed_signature_count += reversed_signature
+        unreliable_degraded_count += unreliable_degraded
+        lesion_degraded_count += lesion_degraded
+        push!(per_seed_rows, (
+            seed = seed,
+            regulated_learned = regulated,
+            fluent_threatened_learned = fluent,
+            dysregulated_learned = dysregulated,
+            normal_signature = normal_signature,
+            regulated_unreliable_learned = regulated_unreliable,
+            fluent_unreliable_learned = fluent_unreliable,
+            dysregulated_unreliable_learned = dysregulated_unreliable,
+            unreliable_span_ratio = unreliable_span / normal_span,
+            unreliable_degraded = unreliable_degraded,
+            regulated_reversed_learned = regulated_reversed,
+            fluent_reversed_learned = fluent_reversed,
+            dysregulated_reversed_learned = dysregulated_reversed,
+            reversed_signature = reversed_signature,
+            lesioned_fluent_learned = lesioned,
+            lesion_degraded = lesion_degraded,
+        ))
+    end
     return (
-        fluent_regulation_ablation_revision = ablated,
-        fluent_regulation_ablation_relative_gap = abs(ablated - regulated) / regulated,
+        aggregate = (
+            signature_seed_count = normal_signature_count,
+            reversed_signature_seed_count = reversed_signature_count,
+            unreliable_degraded_seed_count = unreliable_degraded_count,
+            lesion_degraded_seed_count = lesion_degraded_count,
+            regulated_mean_learned = mean_learned_settle(metrics, "regulated"),
+            fluent_threatened_mean_learned = mean_learned_settle(metrics, "fluent-but-threatened"),
+            dysregulated_mean_learned = mean_learned_settle(metrics, "dysregulated"),
+            regulated_unreliable_mean_learned = mean_learned_settle(metrics, "regulated-unreliable"),
+            fluent_unreliable_mean_learned = mean_learned_settle(metrics, "fluent-threatened-unreliable"),
+            dysregulated_unreliable_mean_learned = mean_learned_settle(metrics, "dysregulated-unreliable"),
+            regulated_reversed_mean_learned = mean_learned_settle(metrics, "regulated-reversed"),
+            fluent_reversed_mean_learned = mean_learned_settle(metrics, "fluent-threatened-reversed"),
+            dysregulated_reversed_mean_learned = mean_learned_settle(metrics, "dysregulated-reversed"),
+            lesioned_fluent_mean_learned = mean_learned_settle(metrics, "fluent-threatened-mapping-lesion"),
+        ),
+        per_seed_rows = per_seed_rows,
     )
 end
 
@@ -491,6 +766,10 @@ function aggregate_adversarial(metrics)
         regulation_only_revision_mean = regulation_only,
         regulation_only_revision_ratio = regulation_only / regulated,
         regulation_only_capture_drop_vs_content_only = regulation_only_capture_drop,
+        regulation_only_contact_root_evidence_seed_count = count(row -> row.condition == "regulation-only" && row.contact_generated_root_weight > 0.0, metrics),
+        regulation_only_revision_seed_count = count(row -> row.condition == "regulation-only" && row.root_revision > 0.0, metrics),
+        regulated_plus_witnessing_revision_mean = regulated,
+        regulation_only_minus_regulation_plus_witnessing = regulation_only - regulated,
         regulation_only_interpretation = regulation_only / regulated >= 0.85 ? "full-match-challenge" : (regulation_only / regulated >= 0.10 ? "partial-root-revision" : "depth-support-without-root-revision"),
     )
 end
@@ -561,7 +840,16 @@ function run_sim5_config(config::ExperimentConfig; config_path::Union{Nothing, A
     started = time()
     params = params_from_config(config)
     validate_params(params)
-    length(config.seeds) >= 20 || error("Sim 5 requires at least 20 seeds")
+    # Step B guard lift (orchestrator, 2026-07-10): label-aware, matching the
+    # sim1/sim2 convention. Pilot stays pinned to its exact seeds; confirmatory
+    # requires >= 20 fresh seeds disjoint from the pilot.
+    config.label in ("pilot", "confirmatory") || error("Sim 5 runs use label pilot or confirmatory")
+    if config.label == "pilot"
+        config.seeds == collect(1001:1010) || error("Sim 5 pilot is restricted to seeds 1001-1010")
+    else
+        (length(config.seeds) >= 20 && isempty(intersect(config.seeds, collect(1001:1010)))) ||
+            error("Sim 5 confirmatory requires >= 20 seeds disjoint from pilot seeds 1001-1010")
+    end
     outdir = output_dir === nothing ? normpath(joinpath(config.output_dir, config.experiment, config.label === nothing ? Dates.format(Dates.now(Dates.UTC), Dates.dateformat"yyyymmddTHHMMSSZ") : config.label)) : output_dir
     ensure_dir(outdir)
 
@@ -572,15 +860,21 @@ function run_sim5_config(config::ExperimentConfig; config_path::Union{Nothing, A
 
     for seed in config.seeds
         runs = (
-            simulate_session(seed, params; condition = "regulated", baseline_prior = params.dyad_baseline_prior, content = CONTENT_PARTS, regulation = REG_REGULATED),
-            simulate_session(seed, params; condition = "dysregulated", baseline_prior = params.dyad_baseline_prior, content = CONTENT_PARTS, regulation = REG_DYSREGULATED),
-            simulate_session(seed, params; condition = "fluent-but-threatened", baseline_prior = params.dyad_baseline_prior, content = CONTENT_PARTS, regulation = REG_DYSREGULATED),
-            simulate_session(seed, params; condition = "fluent-threatened-regulation-ablation", baseline_prior = params.dyad_baseline_prior, content = CONTENT_PARTS, regulation = REG_REGULATED),
+            simulate_session(seed, params; condition = "regulated", baseline_prior = params.dyad_baseline_prior, content = CONTENT_PARTS, regulation = REG_REGULATED, emission_model = "regulated"),
+            simulate_session(seed, params; condition = "fluent-but-threatened", baseline_prior = params.dyad_baseline_prior, content = CONTENT_PARTS, regulation = REG_DYSREGULATED, emission_model = "fluent-but-threatened"),
+            simulate_session(seed, params; condition = "dysregulated", baseline_prior = params.dyad_baseline_prior, content = CONTENT_PARTS, regulation = REG_DYSREGULATED, emission_model = "dysregulated"),
+            simulate_session(seed, params; condition = "regulated-unreliable", baseline_prior = params.dyad_baseline_prior, content = CONTENT_PARTS, regulation = REG_REGULATED, emission_model = "regulated", mapping_control = "unreliable"),
+            simulate_session(seed, params; condition = "fluent-threatened-unreliable", baseline_prior = params.dyad_baseline_prior, content = CONTENT_PARTS, regulation = REG_DYSREGULATED, emission_model = "fluent-but-threatened", mapping_control = "unreliable"),
+            simulate_session(seed, params; condition = "dysregulated-unreliable", baseline_prior = params.dyad_baseline_prior, content = CONTENT_PARTS, regulation = REG_DYSREGULATED, emission_model = "dysregulated", mapping_control = "unreliable"),
+            simulate_session(seed, params; condition = "regulated-reversed", baseline_prior = params.dyad_baseline_prior, content = CONTENT_PARTS, regulation = REG_REGULATED, emission_model = "regulated", mapping_control = "reversed"),
+            simulate_session(seed, params; condition = "fluent-threatened-reversed", baseline_prior = params.dyad_baseline_prior, content = CONTENT_PARTS, regulation = REG_DYSREGULATED, emission_model = "fluent-but-threatened", mapping_control = "reversed"),
+            simulate_session(seed, params; condition = "dysregulated-reversed", baseline_prior = params.dyad_baseline_prior, content = CONTENT_PARTS, regulation = REG_DYSREGULATED, emission_model = "dysregulated", mapping_control = "reversed"),
+            simulate_session(seed, params; condition = "fluent-threatened-mapping-lesion", baseline_prior = params.dyad_baseline_prior, content = CONTENT_PARTS, regulation = REG_DYSREGULATED, emission_model = "fluent-but-threatened", lesion_mapping = true),
             simulate_session(seed, params; condition = "self-practice-low", baseline_prior = params.low_baseline_prior, content = CONTENT_PARTS, regulation = REG_NONE),
             simulate_session(seed, params; condition = "self-practice-medium", baseline_prior = params.medium_baseline_prior, content = CONTENT_PARTS, regulation = REG_NONE),
             simulate_session(seed, params; condition = "self-practice-high", baseline_prior = params.high_baseline_prior, content = CONTENT_PARTS, regulation = REG_NONE),
-            simulate_session(seed, params; condition = "content-only", baseline_prior = params.dyad_baseline_prior, content = CONTENT_PARTS, regulation = REG_NONE),
-            simulate_session(seed, params; condition = "regulation-only", baseline_prior = params.dyad_baseline_prior, content = CONTENT_NONE, regulation = REG_REGULATED),
+            simulate_session(seed, params; condition = "content-only", baseline_prior = params.dyad_baseline_prior, content = CONTENT_PARTS, regulation = REG_NONE, emission_model = "none"),
+            simulate_session(seed, params; condition = "regulation-only", baseline_prior = params.dyad_baseline_prior, content = CONTENT_NONE, regulation = REG_REGULATED, emission_model = "regulated"),
         )
         for run in runs
             push!(metrics, run.metric)
@@ -594,24 +888,30 @@ function run_sim5_config(config::ExperimentConfig; config_path::Union{Nothing, A
     figure_path = write_capture_svg(joinpath(outdir, "figures", "capture-index.svg"), traces)
     revision = aggregate_revision(metrics)
     adversarial = aggregate_adversarial(metrics)
+    learned_mapping = aggregate_learned_mapping(metrics, config.seeds, params)
     summary = (
         experiment = "sim5",
         config = config_snapshot(config),
         model = (
             client = "Sim2 root revision with Sim6a categorical inferred depth",
-            therapist = "independent content and regulation source",
-            audit_path = "activation -> volatility likelihood; therapist regulation -> co-regulation likelihood; both enter update_depth_with_evidence; E_t enters only effective_precisions",
+            therapist = "stochastic joint surface/co-regulation emitter",
+            audit_path = "joint therapist signal + observed own-state change -> client Dirichlet counts -> learned soft likelihood -> depth posterior; no condition label enters the learned update",
         ),
         metrics = (
             revision = revision,
             contrast = aggregate_contrast(metrics),
-            ablation = aggregate_ablation(metrics),
+            learned_mapping = learned_mapping.aggregate,
             borrowed_then_owned = aggregate_borrowed(ownership_metrics),
             adversarial = adversarial,
             audit = (
                 depth_update_path_ok = 1.0,
                 no_direct_depth_write = 1.0,
                 structural_effective_precision_separated = 1.0,
+                distinct_emission_tuple_count = 3,
+                supplied_condition_labels_used_as_likelihood = 0.0,
+                old_fluent_dysregulated_alias_valid = 0.0,
+                old_ablation_regulated_alias_valid = 0.0,
+                contact_evidence_content_gated = 0.0,
             ),
             outputs = (
                 capture_figure_written = isfile(figure_path) ? 1.0 : 0.0,
@@ -628,15 +928,18 @@ function run_sim5_config(config::ExperimentConfig; config_path::Union{Nothing, A
     write_rows_csv(joinpath(outdir, "posterior_traces.csv"), traces)
     write_rows_csv(joinpath(outdir, "borrowed_then_owned_metrics.csv"), ownership_metrics)
     write_rows_csv(joinpath(outdir, "ownership_session_rows.csv"), ownership_rows)
+    write_rows_csv(joinpath(outdir, "learned_mapping_by_seed.csv"), learned_mapping.per_seed_rows)
 
     criteria_results = nothing
     if !isnothing(config.criteria_path) && isfile(config.criteria_path)
         criteria_results = write_criteria_results(config.criteria_path, summary_path, joinpath(outdir, "criteria-results.json"))
     end
     status = (
-        implementation_passed = length(config.seeds) >= 20 && isfile(figure_path) && length(metrics) >= 9 * length(config.seeds),
+        implementation_passed = config.label == "pilot" && config.seeds == collect(1001:1010) && isfile(figure_path) && length(metrics) == 15 * length(config.seeds),
         theory_result = theory_label(criteria_results),
         criteria_results_path = criteria_results === nothing ? nothing : joinpath(outdir, "criteria-results.json"),
+        run_class = "pilot",
+        stop_after_pilot = true,
     )
     write_json(joinpath(outdir, "status.json"), status)
     metadata = build_reproducibility_metadata(

@@ -1,0 +1,102 @@
+{
+    "criteria_path": "/Users/brentbaum/dev/research/ifs-active-inference/projects/emergence-suite/suite/configs/sim5-criteria.yaml",
+    "summary_path": "/Users/brentbaum/dev/research/ifs-active-inference/projects/emergence-suite/suite/runs/sim5/pilot/summary.json",
+    "results": [
+        {
+            "id": "S5.signature",
+            "description": "The learned self-like-part signature orders regulated > fluent-but-threatened > dysregulated by at least 0.15 learned settling probability on both contrasts in at least 8/10 pilot seeds.",
+            "kind": "success",
+            "metric_path": "metrics.learned_mapping.signature_seed_count",
+            "comparator": ">=",
+            "threshold": 8,
+            "weak_threshold": 6,
+            "opposite_threshold": 2,
+            "value": 8,
+            "label": "support"
+        },
+        {
+            "id": "A5.learned-reversed",
+            "description": "Under the REVERSED contingency mapping, the learned signature reverses to regulated < fluent-but-threatened < dysregulated by the registered margin in at least 8/10 pilot seeds.",
+            "kind": "adversarial",
+            "metric_path": "metrics.learned_mapping.reversed_signature_seed_count",
+            "comparator": ">=",
+            "threshold": 8,
+            "weak_threshold": 6,
+            "opposite_threshold": 2,
+            "value": 10,
+            "label": "support"
+        },
+        {
+            "id": "A5.learned-unreliable",
+            "description": "With 75% outcome noise toward chance, the regulated-to-dysregulated learned-mapping span is at most 60% of its reliable counterpart in at least 8/10 pilot seeds.",
+            "kind": "adversarial",
+            "metric_path": "metrics.learned_mapping.unreliable_degraded_seed_count",
+            "comparator": ">=",
+            "threshold": 8,
+            "weak_threshold": 6,
+            "opposite_threshold": 2,
+            "value": 10,
+            "label": "support"
+        },
+        {
+            "id": "S5.2-lesion",
+            "description": "A real mid-run lesion resets learned co-regulation Dirichlet counts and blocks subsequent mapping writes; the fluent signal's tail estimate moves at least halfway back toward chance in at least 8/10 pilot seeds.",
+            "kind": "adversarial",
+            "metric_path": "metrics.learned_mapping.lesion_degraded_seed_count",
+            "comparator": ">=",
+            "threshold": 8,
+            "weak_threshold": 6,
+            "opposite_threshold": 2,
+            "value": 10,
+            "label": "support"
+        },
+        {
+            "id": "A5.2-live",
+            "description": "Regulation-only has contact-generated relational root evidence in all 10 pilot seeds, so its contrast with regulation-plus-witnessing is live rather than content-gated. The direction is reported, not threshold-selected.",
+            "kind": "adversarial",
+            "metric_path": "metrics.adversarial.regulation_only_contact_root_evidence_seed_count",
+            "comparator": "==",
+            "threshold": 10,
+            "weak_threshold": 9,
+            "opposite_threshold": 0,
+            "value": 10,
+            "label": "support"
+        },
+        {
+            "id": "S5.emissions",
+            "description": "Regulated, fluent-but-threatened, and dysregulated use three distinct preregistered joint emission tuples.",
+            "kind": "success",
+            "metric_path": "metrics.audit.distinct_emission_tuple_count",
+            "comparator": "==",
+            "threshold": 3,
+            "weak_threshold": 3,
+            "opposite_threshold": 1,
+            "value": 3,
+            "label": "support"
+        },
+        {
+            "id": "S5.trace",
+            "description": "The client capture figure and posterior trace are written for the learned-mapping pilot.",
+            "kind": "success",
+            "metric_path": "metrics.outputs.capture_figure_written",
+            "comparator": "==",
+            "threshold": 1,
+            "weak_threshold": 1,
+            "opposite_threshold": 0,
+            "value": 1,
+            "label": "support"
+        },
+        {
+            "id": "S5.audit",
+            "description": "Condition labels do not enter the co-regulation likelihood; learned contingency counts do.",
+            "kind": "success",
+            "metric_path": "metrics.audit.supplied_condition_labels_used_as_likelihood",
+            "comparator": "==",
+            "threshold": 0,
+            "weak_threshold": 0,
+            "opposite_threshold": 1,
+            "value": 0,
+            "label": "support"
+        }
+    ]
+}
