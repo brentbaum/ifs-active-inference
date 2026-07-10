@@ -1,126 +1,114 @@
-# Sim 1: De-confounded Freezing Phase Diagram
+# Sim 1: Two-Arm Action-Mediated Formation Test
 
-This is T4.6 Step A. The checked-in configuration is a pilot configuration:
-seeds 1001–1010, label `pilot`, output `runs/sim1/pilot/`. No confirmatory
-seeds have been run. Step B must audit and commit this code and its frozen
-criteria before a separate process supplies fresh confirmatory seeds.
+This is the T4.6 Step A continued criteria amendment, recorded before any
+confirmatory run. The checked-in configuration remains PILOT only: seeds
+1001–1010, label `pilot`, output `runs/sim1/pilot/`. The prior Step A pilot is
+superseded and its pilot directory is overwritten by this two-arm run.
 
-## De-confounded generative design
+## Criteria amendment and claim status
 
-Each `(seed, omega)` generates one exogenous challenge stream and replays it
-unchanged at every kappa. The stream fixes, trial by trial:
+The original S1.1a-as-stated died under full evidence yoking: its frozen cells
+did not form a connected region. That null is retained as the expected result
+of Arm 2, not reclassified as support for the original claim. The formation
+claim is reformulated here, before confirmatory execution, as a paired
+mechanism claim:
 
-- whether challenge evidence is aversive or safe;
-- aversive-event severity (1.0); and
-- delivered observation precision (1.0).
+> Control-dependent freezing is carried by action-mediated evidence sampling.
+> Low-efficacy action can write threat evidence but cannot change the evidence
+> stream enough to generate a test; exact replay removes this action-to-evidence
+> loop and should remove the cross-kappa freezing difference.
 
-The challenge outcome updates the cause's cue and affect banks and is the only
-input to cause assignment, precision-weighted prediction error, arousal, CRP
-pressure, and the arousal-scaled write rate. Kappa is absent from that path.
+The two arms use identical agent learning, priors, policy scoring, potential
+hazard schedules, observation precision, safe-probe revision, grid, and seeds.
+They differ only in whether realized action success can suppress later hazard
+exposure.
 
-After the challenge, the selected action produces a separate consequence.
-Kappa changes only how much overt flee, appease, and approach reduce the
-probability of an aversive action consequence. Those consequences update only
-the policy-specific outcome banks. Covert attenuation has no world-outcome
-efficacy. Thus control can change learned action forecasts and policy without
-changing which aversive challenges the agent was exposed to.
+## Arm 1 — closed loop (primary)
 
-Omega has one evidence coupling: it changes exogenous challenge frequency via
-`clamp(0.08 + 0.31*omega, 0.06, 0.97)`. Observation precision is fixed, so
-omega is no longer routed through both event probability and precision.
-Overwhelm in this implementation means repeated precision-weighted prediction
-error from the omega-governed challenge stream, not an omega multiplier on
-precision.
+For each `(seed, omega)`, the world generates a fixed trial-by-trial sequence of
+potential hazards with probability `clamp(0.08 + 0.31*omega, 0.06, 0.97)`.
+This potential-hazard schedule is identical at every kappa. At trial `t`, an
+unsuppressed potential hazard is delivered as aversive evidence; otherwise the
+delivered observation is safe. Observation precision and aversive severity are
+fixed at 1.0.
 
-A1.4 checks the de-confound directly. For every fixed seed and omega it reports
-the maximum across-kappa range of aversive counts, summed aversive severity,
-and mean delivered precision. Exact equality (range zero) is stronger than the
-registered statistical-equality requirement.
+After observing and choosing a policy, the agent receives a stochastic action
+consequence. Kappa enters only this efficacy calculation. A safe consequence
+while responding to delivered aversive evidence is a realized success. A
+successful overt action suppresses subsequent potential hazards for a fixed
+world-contingency window: approach 1 trial, flee 3 trials, appease 2 trials.
+Attenuation suppresses 0 trials. Relief windows do not vary with kappa, omega,
+seed, arm, or experimenter-selected dosage. Failed or ineffective actions add
+no relief, leaving subsequent potential hazards exposed. Relief is consumed by
+elapsed trials, and the world does not chase or replace suppressed hazards.
 
-## Posterior-predictive behavioral revision
+Thus all differences between potential and delivered exposure in Arm 1 are
+mediated by the agent's realized policy and success. `per_seed_metrics.csv` and
+`cell_metrics.csv` log potential, delivered, and suppressed hazard counts;
+realized policy counts; successful relief actions; and exposure after each
+prior policy. `action_mediation.csv` is the closed-loop per-cell audit table.
 
-The safe probe runs on a copied cause for 24 trials. Before and after it, the
-module computes:
+## Arm 2 — exact-replay yoked control
 
-- predicted aversive probability under approach from the learned
-  policy-specific outcome bank; and
-- approach probability from a softmax over the learned EFE policy scores.
+Arm 2 retains the prior Step A environment. The fixed potential-hazard stream
+is delivered exactly, trial by trial, at every kappa. Actions still receive
+kappa-dependent consequences and update policy-specific outcome banks, but
+they cannot alter later exposure. A1.4 requires exact equality of potential and
+delivered aversive counts, severity, and precision across kappa for every
+fixed `(seed, omega)`.
 
-The revision readout is
-`max(pre_aversive - post_aversive, post_approach - pre_approach, 0)`.
-KL divergence is neither computed nor used. A target is threat-relevant when
-its pre-probe predicted aversive probability is at least 0.40. It is frozen at
-behavior change at most 0.15 and revisable at change at least 0.25. Values in
-between are deliberately unclassified. A grid cell is classified when at
-least 5/10 pilot seeds share the label; a connected region requires at least
-two orthogonally adjacent cells.
+The expected mechanism demonstration is a connected high-omega/low-kappa
+frozen region in Arm 1 and disappearance of the cross-kappa region in Arm 2.
+A1.5 preregisters the arm contrast as closed-loop frozen-region cells minus
+yoked frozen-region cells >= 2. Two cells is the minimum nontrivial margin
+consistent with S1.1a's independently required connected component size >= 2.
 
-All classification values, the chronic path (`omega=1.00`, `kappa=0.0`, 600
-trials), and arousal learning gain (60.0) are frozen after pilot calibration.
-Their full provenance is in `magic-numbers.md`.
+## Behavioral revision and criteria
 
-## Criteria battery
+The safe probe runs for 24 trials on a copied cause. Revision is
+`max(pre-post predicted aversive probability under approach,
+post-pre softmax approach probability, 0)`. KL is not used. A target is
+threat-relevant at pre-probe predicted aversive probability >= 0.40, frozen at
+behavior change <= 0.15, and revisable at change >= 0.25. Values in the gap are
+unclassified. A cell needs at least 5/10 seeds with a label; a 5/10 frozen and
+5/10 revisable tie is mixed and enters neither region. Regions use orthogonal
+adjacency and require at least two cells.
 
-`configs/sim1-criteria.yaml` retains S1.1a/S1.1b and S1.2–S1.4, rewrites them
-against behavioral revision under yoked evidence, retains A1.1–A1.3, and adds
-A1.4. Unsupported criteria are reported as unsupported; pilot tuning does not
-change their registered 0.80 or other success margins.
+`configs/sim1-criteria.yaml` now defines S1.1a–S1.4 and A1.1–A1.3 on Arm 1,
+A1.4 on Arm 2, and A1.5 on their contrast. S1.3 compares the chronic
+closed-loop path with the acute closed-loop frozen region on the same
+precision-weighted-PE scale. Specifically, it compares the maximum PE on the
+crossing trial among crossed chronic seeds with the minimum acute seed-cell
+maximum; it does not use the maximum surprise anywhere in an arbitrarily long
+chronic history. This crossing-event clarification was made during pilot
+calibration, before confirmatory work. The three formation traits—spawn, reflexivity at
+write, and postformation sampling—are logged by arm.
 
-## Bundle schema v3
+## Spawn diagnosis
 
-Representative causes produced by the real formation loop are exported under
-`runs/sim1/pilot/artifacts/`. The manifest is
-`sim1.bundle-manifest.v3`; each bundle is `sim1.bundle.v3`.
+The superseding pilot must diagnose the zero spawn rate. The report and
+`spawn_diagnostic` block distinguish a posterior-predictive threshold that is
+mis-scaled for the binary observation model from an environment that produces
+no persistent unassimilable error. Any threshold rescaling is selected only on
+pilot seeds, recorded with candidate results and provenance in
+`magic-numbers.md`, then frozen before confirmatory work. If no defensible
+rescaling produces prediction failures, formation-by-spawning is reported dead
+in this environment class.
 
-V3 preserves the learned sufficient statistics in `cause_banks`, adds the
-evidence-yoking key and delivered/action-outcome counts to `formation`, and
-replaces the v2 KL fields with behavioral posterior-predictive fields:
+## Bundle schema v3 and outputs
 
-```json
-{
-  "schema_version": "sim1.bundle.v3",
-  "seed": 1001,
-  "route": "acute_spawn",
-  "formation": {
-    "omega": 1.8,
-    "kappa": 0.0,
-    "evidence_yoking_key": "seed=1001;omega=1.8",
-    "aversive_evidence_count": 45,
-    "aversive_evidence_severity_sum": 45.0,
-    "mean_evidence_precision": 1.0,
-    "aversive_action_outcome_count": 42
-  },
-  "revision_probe": {
-    "metric": "posterior_predictive_behavior",
-    "behavior_change": 0.08,
-    "predicted_aversive_reduction": 0.08,
-    "approach_probability_increase": 0.03,
-    "pre_probe_predicted_aversive": 0.62,
-    "post_probe_predicted_aversive": 0.54,
-    "pre_probe_approach_probability": 0.12,
-    "post_probe_approach_probability": 0.15
-  },
-  "cause_banks": {
-    "cue_counts": {"safe": 1.0, "threat": 26.0},
-    "affect_counts": {"safe": 3.0, "threat": 380.0},
-    "policy_counts": {},
-    "outcome_counts": {}
-  }
-}
-```
+Representative Arm 1 causes produced by the formation loop are exported as
+`sim1.bundle.v3`. Formation provenance includes arm, potential/delivered/
+suppressed exposure, policy-mediated exposure counts, spawn diagnostics, and
+all three traits. Hardened initial causes are labeled honestly; route strings
+do not imply spawning.
 
-The bundle is formation output, not a hand-authored Sim 4 stack. T4.1 may
-consume the cause banks and formation provenance; it must still run its own
-neutral developmental schedule and may not infer authored taxonomy from route
-strings.
-
-## Outputs
-
-- `summary.json`: headline, behavioral-boundary, yoking, sensitivity, chronic,
-  and criteria metrics.
-- `per_seed_metrics.csv`: one row per seed/cell, including both evidence and
-  action-consequence counts and all pre/post behavior values.
-- `cell_metrics.csv`: cell aggregates.
-- `posterior_traces.csv`: chronic trace for pilot seed 1001.
-- `artifacts/`: real formation bundles and v3 manifest.
-- `figures/phase_diagram.svg`: behavioral frozen/revisable phase diagram.
+- `summary.json`: two-arm headline, mechanism contrast, spawn diagnosis,
+  chronic path, traits, sensitivities, and criteria metrics.
+- `per_seed_metrics.csv`: raw seed/cell values for both arms.
+- `cell_metrics.csv`: per-arm cell aggregates.
+- `action_mediation.csv`: closed-loop exposure as a function of realized
+  policy, per cell.
+- `posterior_traces.csv`: closed-loop chronic trace for pilot seed 1001.
+- `artifacts/`: Arm 1 formation bundles and v3 manifest.
+- `figures/phase_diagram.svg`: side-by-side closed-loop and yoked phase maps.

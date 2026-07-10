@@ -44,6 +44,11 @@ Base.@kwdef struct Sim1Params
     threat_prediction_threshold::Float64 = 0.40
     cell_classification_rate::Float64 = 0.50
     connected_region_min_cells::Int = 2
+    arm_contrast_margin_cells::Int = 2
+    relief_trials_approach::Int = 1
+    relief_trials_flee::Int = 3
+    relief_trials_appease::Int = 2
+    relief_trials_attenuate::Int = 0
     policy_softmax_temperature::Float64 = 1.0
     arousal_pe_scale::Float64 = 5.2
     reflexivity_arousal_slope::Float64 = 0.88
@@ -79,12 +84,26 @@ end
 
 struct TrialObservation
     cue::Int
+    potential_outcome::Int
     evidence_outcome::Int
     action_outcome::Int
+    exposure_suppressed::Bool
+    prior_policy_idx::Int
+    prior_action_success::Bool
+    action_success::Bool
+    relief_trials_added::Int
+    relief_remaining_after::Int
     evidence_aversive_probability::Float64
     action_aversive_probability::Float64
     evidence_severity::Float64
     precision::Float64
+end
+
+mutable struct WorldState
+    relief_remaining::Int
+    relief_policy_idx::Int
+    previous_policy_idx::Int
+    previous_action_success::Bool
 end
 
 function sim1_params(raw::Dict{String, Any})
@@ -110,6 +129,11 @@ function sim1_params(raw::Dict{String, Any})
         threat_prediction_threshold = Float64(get(raw, "threat_prediction_threshold", 0.40)),
         cell_classification_rate = Float64(get(raw, "cell_classification_rate", 0.50)),
         connected_region_min_cells = Int(get(raw, "connected_region_min_cells", 2)),
+        arm_contrast_margin_cells = Int(get(raw, "arm_contrast_margin_cells", 2)),
+        relief_trials_approach = Int(get(raw, "relief_trials_approach", 1)),
+        relief_trials_flee = Int(get(raw, "relief_trials_flee", 3)),
+        relief_trials_appease = Int(get(raw, "relief_trials_appease", 2)),
+        relief_trials_attenuate = Int(get(raw, "relief_trials_attenuate", 0)),
         policy_softmax_temperature = Float64(get(raw, "policy_softmax_temperature", 1.0)),
         arousal_pe_scale = Float64(get(raw, "arousal_pe_scale", 5.2)),
         reflexivity_arousal_slope = Float64(get(raw, "reflexivity_arousal_slope", 0.88)),
@@ -222,6 +246,15 @@ function action_aversive_probabilities(evidence_outcome::Int, kappa::Float64)
     ]
 end
 
+function relief_trials(policy_idx::Int, params::Sim1Params)
+    return (
+        params.relief_trials_approach,
+        params.relief_trials_flee,
+        params.relief_trials_appease,
+        params.relief_trials_attenuate
+    )[policy_idx]
+end
+
 function sample_evidence(rng::AbstractRNG, omega::Float64, params::Sim1Params)
     p_av = base_aversive_probability(omega)
     return (
@@ -237,18 +270,43 @@ function evidence_stream(seed::Int, omega::Float64, trials::Int, params::Sim1Par
     return [sample_evidence(rng, omega, params) for _ in 1:trials]
 end
 
-function observe_environment(rng::AbstractRNG, evidence, kappa::Float64, policy_idx::Int)
-    probs = action_aversive_probabilities(evidence.outcome, kappa)
+function observe_environment(rng::AbstractRNG, potential, kappa::Float64, policy_idx::Int,
+                             arm::Symbol, world::WorldState, params::Sim1Params)
+    arm in (:closed_loop, :yoked) || error("Unknown Sim 1 arm: $arm")
+    prior_policy_idx = world.previous_policy_idx
+    prior_action_success = world.previous_action_success
+    exposure_suppressed = arm == :closed_loop && potential.outcome == AVERSIVE && world.relief_remaining > 0
+    evidence_outcome = exposure_suppressed ? SAFE : potential.outcome
+    if arm == :closed_loop && world.relief_remaining > 0
+        world.relief_remaining -= 1
+        world.relief_remaining == 0 && (world.relief_policy_idx = 0)
+    end
+    probs = action_aversive_probabilities(evidence_outcome, kappa)
     action_p_av = probs[policy_idx]
     action_outcome = rand(rng) < action_p_av ? AVERSIVE : SAFE
+    action_success = evidence_outcome == AVERSIVE && action_outcome == SAFE && relief_trials(policy_idx, params) > 0
+    relief_added = arm == :closed_loop && action_success ? relief_trials(policy_idx, params) : 0
+    if relief_added > 0
+        world.relief_remaining = max(world.relief_remaining, relief_added)
+        world.relief_policy_idx = policy_idx
+    end
+    world.previous_policy_idx = policy_idx
+    world.previous_action_success = action_success
     return TrialObservation(
         AVERSIVE,
-        evidence.outcome,
+        potential.outcome,
+        evidence_outcome,
         action_outcome,
-        evidence.aversive_probability,
+        exposure_suppressed,
+        prior_policy_idx,
+        prior_action_success,
+        action_success,
+        relief_added,
+        world.relief_remaining,
+        potential.aversive_probability,
         action_p_av,
-        evidence.severity,
-        evidence.precision
+        potential.severity,
+        potential.precision
     )
 end
 
@@ -403,11 +461,13 @@ function measure_revision(cause::Cause, params::Sim1Params)
     )
 end
 
-function run_trial!(rng::AbstractRNG, agent::AgentState, evidence, kappa::Float64, params::Sim1Params, trial::Int, seed::Int;
-                    concentration_factor::Float64 = 1.0, allow_spawn::Bool = true, preference_scale::Float64 = 1.0)
+function run_trial!(rng::AbstractRNG, agent::AgentState, world::WorldState, potential, kappa::Float64,
+                    params::Sim1Params, trial::Int, seed::Int; arm::Symbol = :closed_loop,
+                    concentration_factor::Float64 = 1.0, allow_spawn::Bool = true,
+                    preference_scale::Float64 = 1.0)
     current = dominant_aversive_cause(agent)
     policy_idx, scores = select_policy(current, params; preference_scale)
-    obs = observe_environment(rng, evidence, kappa, policy_idx)
+    obs = observe_environment(rng, potential, kappa, policy_idx, arm, world, params)
     best_idx, raw_pp, weighted_pp = best_predictive(agent, obs)
     arousal, pe = arousal_from_prediction(raw_pp, obs.precision, params)
     reflexivity = write_reflexivity(arousal, params)
@@ -424,8 +484,16 @@ function run_trial!(rng::AbstractRNG, agent::AgentState, evidence, kappa::Float6
         trial = trial,
         policy_idx = policy_idx,
         policy = POLICY_NAMES[policy_idx],
+        potential_outcome = obs.potential_outcome == AVERSIVE ? "aversive" : "safe",
         evidence_outcome = obs.evidence_outcome == AVERSIVE ? "aversive" : "safe",
         action_outcome = obs.action_outcome == AVERSIVE ? "aversive" : "safe",
+        exposure_suppressed = obs.exposure_suppressed,
+        prior_policy_idx = obs.prior_policy_idx,
+        prior_policy = obs.prior_policy_idx == 0 ? "none" : POLICY_NAMES[obs.prior_policy_idx],
+        prior_action_success = obs.prior_action_success,
+        action_success = obs.action_success,
+        relief_trials_added = obs.relief_trials_added,
+        relief_remaining_after = obs.relief_remaining_after,
         evidence_aversive_probability = obs.evidence_aversive_probability,
         action_aversive_probability = obs.action_aversive_probability,
         evidence_severity = obs.evidence_severity,
@@ -452,13 +520,15 @@ function postformation_sampling_rate(trial_logs, target_id::Int, params::Sim1Par
 end
 
 function run_seed_cell(seed::Int, omega::Float64, kappa::Float64, params::Sim1Params; concentration_factor::Float64 = 1.0,
-                       preference_scale::Float64 = 1.0)
+                       preference_scale::Float64 = 1.0, arm::Symbol = :closed_loop)
     action_rng = MersenneTwister(seed + 1_000_003)
-    evidence = evidence_stream(seed, omega, params.formation_trials, params)
+    potential_stream = evidence_stream(seed, omega, params.formation_trials, params)
     agent = init_agent()
+    world = WorldState(0, 0, 0, false)
     trial_logs = NamedTuple[]
     for trial in 1:params.formation_trials
-        push!(trial_logs, run_trial!(action_rng, agent, evidence[trial], kappa, params, trial, seed; concentration_factor, preference_scale))
+        push!(trial_logs, run_trial!(action_rng, agent, world, potential_stream[trial], kappa, params, trial, seed;
+                                    arm, concentration_factor, preference_scale))
     end
     target = dominant_aversive_cause(agent)
     revision = measure_revision(target, params)
@@ -469,7 +539,21 @@ function run_seed_cell(seed::Int, omega::Float64, kappa::Float64, params::Sim1Pa
     is_frozen = target_is_aversive && revision.behavior_change <= params.behavior_frozen_max_change
     is_revisable = target_is_aversive && revision.behavior_change >= params.behavior_revisable_min_change
     target_spawned = get(target.formation, "spawned", false) == true
+    potential_aversive_count = count(row.potential_outcome == "aversive" for row in trial_logs)
+    aversive_evidence_count = count(row.evidence_outcome == "aversive" for row in trial_logs)
+    suppressed_aversive_count = count(row.exposure_suppressed for row in trial_logs)
+    potential_aversive_count == aversive_evidence_count + suppressed_aversive_count ||
+        error("Sim 1 exposure accounting invariant failed for seed=$seed omega=$omega kappa=$kappa arm=$arm")
+    exposure_after = Dict(policy => (potential = 0, exposed = 0) for policy in ("none", POLICY_NAMES...))
+    for row in trial_logs
+        row.potential_outcome == "aversive" || continue
+        key = row.prior_policy
+        counts = exposure_after[key]
+        exposure_after[key] = (potential = counts.potential + 1, exposed = counts.exposed + (row.evidence_outcome == "aversive" ? 1 : 0))
+    end
+    exposure_rate_after(policy) = exposure_after[policy].potential == 0 ? 0.0 : exposure_after[policy].exposed / exposure_after[policy].potential
     return (
+        arm = String(arm),
         seed = seed,
         omega = omega,
         kappa = kappa,
@@ -480,6 +564,26 @@ function run_seed_cell(seed::Int, omega::Float64, kappa::Float64, params::Sim1Pa
         target_spawned = target_spawned,
         dominant_policy = POLICY_NAMES[argmax(target.policy_counts)],
         attenuation_rate = mean(row.policy_idx == ATTENUATE ? 1.0 : 0.0 for row in trial_logs),
+        policy_approach_count = count(row.policy_idx == APPROACH for row in trial_logs),
+        policy_flee_count = count(row.policy_idx == FLEE for row in trial_logs),
+        policy_appease_count = count(row.policy_idx == APPEASE for row in trial_logs),
+        policy_attenuate_count = count(row.policy_idx == ATTENUATE for row in trial_logs),
+        successful_relief_action_count = count(row.action_success && row.relief_trials_added > 0 for row in trial_logs),
+        potential_aversive_count = potential_aversive_count,
+        suppressed_aversive_count = suppressed_aversive_count,
+        exposure_rate = potential_aversive_count == 0 ? 0.0 : aversive_evidence_count / potential_aversive_count,
+        potential_after_approach_count = exposure_after["approach"].potential,
+        exposed_after_approach_count = exposure_after["approach"].exposed,
+        exposure_rate_after_approach = exposure_rate_after("approach"),
+        potential_after_flee_count = exposure_after["flee"].potential,
+        exposed_after_flee_count = exposure_after["flee"].exposed,
+        exposure_rate_after_flee = exposure_rate_after("flee"),
+        potential_after_appease_count = exposure_after["appease"].potential,
+        exposed_after_appease_count = exposure_after["appease"].exposed,
+        exposure_rate_after_appease = exposure_rate_after("appease"),
+        potential_after_attenuate_count = exposure_after["attenuate"].potential,
+        exposed_after_attenuate_count = exposure_after["attenuate"].exposed,
+        exposure_rate_after_attenuate = exposure_rate_after("attenuate"),
         approach_sampling_rate = sampling,
         reflexivity_at_write = write_log.reflexivity,
         arousal_at_write = write_log.arousal,
@@ -498,11 +602,13 @@ function run_seed_cell(seed::Int, omega::Float64, kappa::Float64, params::Sim1Pa
         target_aversive = target_is_aversive,
         frozen = is_frozen,
         revisable = is_revisable,
-        aversive_evidence_count = count(row.evidence_outcome == "aversive" for row in trial_logs),
+        aversive_evidence_count = aversive_evidence_count,
         aversive_evidence_severity_sum = sum(row.evidence_outcome == "aversive" ? row.evidence_severity : 0.0 for row in trial_logs),
         mean_evidence_precision = mean(row.evidence_precision for row in trial_logs),
         aversive_action_outcome_count = count(row.action_outcome == "aversive" for row in trial_logs),
         posterior_predictive_min = minimum(row.posterior_predictive for row in trial_logs),
+        prediction_failure_count = count(row.posterior_predictive < row.crp_threshold for row in trial_logs),
+        max_spawn_pressure = maximum(row.spawn_pressure for row in trial_logs),
         crp_threshold_last = last(trial_logs).crp_threshold,
         cause_bank_cue_safe = target.cue_counts[SAFE],
         cause_bank_cue_threat = target.cue_counts[AVERSIVE],
@@ -535,6 +641,7 @@ end
 
 function summarize_cell(rows)
     return (
+        arm = first(rows).arm,
         omega = first(rows).omega,
         kappa = first(rows).kappa,
         n_seeds = length(rows),
@@ -554,7 +661,29 @@ function summarize_cell(rows)
         mean_pre_probe_approach_probability = mean_field(rows, :pre_probe_approach_probability),
         mean_post_probe_approach_probability = mean_field(rows, :post_probe_approach_probability),
         mean_aversive_evidence_count = mean_field(rows, :aversive_evidence_count),
+        mean_potential_aversive_count = mean_field(rows, :potential_aversive_count),
+        mean_suppressed_aversive_count = mean_field(rows, :suppressed_aversive_count),
+        mean_exposure_rate = mean_field(rows, :exposure_rate),
         mean_aversive_action_outcome_count = mean_field(rows, :aversive_action_outcome_count),
+        mean_successful_relief_action_count = mean_field(rows, :successful_relief_action_count),
+        mean_policy_approach_count = mean_field(rows, :policy_approach_count),
+        mean_policy_flee_count = mean_field(rows, :policy_flee_count),
+        mean_policy_appease_count = mean_field(rows, :policy_appease_count),
+        mean_policy_attenuate_count = mean_field(rows, :policy_attenuate_count),
+        potential_after_approach_count = sum(row.potential_after_approach_count for row in rows),
+        exposed_after_approach_count = sum(row.exposed_after_approach_count for row in rows),
+        exposure_rate_after_approach = sum(row.potential_after_approach_count for row in rows) == 0 ? 0.0 : sum(row.exposed_after_approach_count for row in rows) / sum(row.potential_after_approach_count for row in rows),
+        potential_after_flee_count = sum(row.potential_after_flee_count for row in rows),
+        exposed_after_flee_count = sum(row.exposed_after_flee_count for row in rows),
+        exposure_rate_after_flee = sum(row.potential_after_flee_count for row in rows) == 0 ? 0.0 : sum(row.exposed_after_flee_count for row in rows) / sum(row.potential_after_flee_count for row in rows),
+        potential_after_appease_count = sum(row.potential_after_appease_count for row in rows),
+        exposed_after_appease_count = sum(row.exposed_after_appease_count for row in rows),
+        exposure_rate_after_appease = sum(row.potential_after_appease_count for row in rows) == 0 ? 0.0 : sum(row.exposed_after_appease_count for row in rows) / sum(row.potential_after_appease_count for row in rows),
+        potential_after_attenuate_count = sum(row.potential_after_attenuate_count for row in rows),
+        exposed_after_attenuate_count = sum(row.exposed_after_attenuate_count for row in rows),
+        exposure_rate_after_attenuate = sum(row.potential_after_attenuate_count for row in rows) == 0 ? 0.0 : sum(row.exposed_after_attenuate_count for row in rows) / sum(row.potential_after_attenuate_count for row in rows),
+        mean_prediction_failure_count = mean_field(rows, :prediction_failure_count),
+        max_spawn_pressure = maximum(row.max_spawn_pressure for row in rows),
         mean_structural_precision = mean_field(rows, :structural_precision),
         max_precision_weighted_pe = maximum(row.max_precision_weighted_pe for row in rows)
     )
@@ -606,30 +735,38 @@ end
 function classify_grid(cell_rows, omegas, kappas, params::Sim1Params)
     frozen = falses(length(omegas), length(kappas))
     revisable = falses(length(omegas), length(kappas))
+    mixed = falses(length(omegas), length(kappas))
     for row in cell_rows
         i = findfirst(==(row.omega), omegas)
         j = findfirst(==(row.kappa), kappas)
-        frozen[i, j] = row.frozen_rate >= params.cell_classification_rate
-        revisable[i, j] = row.revisable_rate >= params.cell_classification_rate
+        frozen_majority = row.frozen_rate >= params.cell_classification_rate
+        revisable_majority = row.revisable_rate >= params.cell_classification_rate
+        mixed[i, j] = frozen_majority && revisable_majority
+        frozen[i, j] = frozen_majority && !mixed[i, j]
+        revisable[i, j] = revisable_majority && !mixed[i, j]
     end
     frozen_components = component_sizes(frozen)
     revisable_components = component_sizes(revisable)
     return (
         frozen = frozen,
         revisable = revisable,
+        mixed = mixed,
         frozen_largest_component = isempty(frozen_components) ? 0 : maximum(frozen_components),
         revisable_largest_component = isempty(revisable_components) ? 0 : maximum(revisable_components),
         frozen_cell_count = count(frozen),
-        revisable_cell_count = count(revisable)
+        frozen_region_cell_count = sum(size for size in frozen_components if size >= params.connected_region_min_cells),
+        revisable_cell_count = count(revisable),
+        revisable_region_cell_count = sum(size for size in revisable_components if size >= params.connected_region_min_cells),
+        mixed_cell_count = count(mixed)
     )
 end
 
 function run_sweep(seeds, omegas, kappas, params::Sim1Params; concentration_factor::Float64 = 1.0,
-                   preference_scale::Float64 = 1.0)
+                   preference_scale::Float64 = 1.0, arm::Symbol = :closed_loop)
     seed_rows = NamedTuple[]
     cell_rows = NamedTuple[]
     for omega in omegas, kappa in kappas
-        rows = [run_seed_cell(seed, omega, kappa, params; concentration_factor, preference_scale) for seed in seeds]
+        rows = [run_seed_cell(seed, omega, kappa, params; concentration_factor, preference_scale, arm) for seed in seeds]
         append!(seed_rows, rows)
         push!(cell_rows, summarize_cell(rows))
     end
@@ -650,16 +787,25 @@ function run_slow_path(seed::Int, params::Sim1Params; shuffle::Bool = false)
     omegas = slow_condition_sequence(params)
     shuffle && Random.shuffle!(shuffle_rng, omegas)
     agent = init_agent()
+    world = WorldState(0, 0, 0, false)
     rows = NamedTuple[]
     crossed = false
     cross_trial = 0
     cross_precision = NaN
+    cross_trial_pe = NaN
     max_pe = 0.0
     spawn_seen = false
+    write_reflexivity_value = 1.0
+    write_arousal_value = 0.0
     for (trial, omega_t) in enumerate(omegas)
-        evidence = sample_evidence(evidence_rng, omega_t, params)
-        log = run_trial!(action_rng, agent, evidence, params.slow_path_kappa, params, trial, seed; allow_spawn = true)
+        potential = sample_evidence(evidence_rng, omega_t, params)
+        log = run_trial!(action_rng, agent, world, potential, params.slow_path_kappa, params, trial, seed;
+                         arm = :closed_loop, allow_spawn = true)
         spawn_seen |= log.spawned
+        if log.spawned || log.arousal > write_arousal_value
+            write_reflexivity_value = log.reflexivity
+            write_arousal_value = log.arousal
+        end
         target = dominant_aversive_cause(agent)
         revision = measure_revision(target, params)
         is_frozen = revision.pre_predicted_aversive >= params.threat_prediction_threshold &&
@@ -668,6 +814,7 @@ function run_slow_path(seed::Int, params::Sim1Params; shuffle::Bool = false)
             crossed = true
             cross_trial = trial
             cross_precision = revision.pre_structural_precision
+            cross_trial_pe = log.precision_weighted_pe
         end
         max_pe = max(max_pe, log.precision_weighted_pe)
         push!(rows, (
@@ -676,6 +823,7 @@ function run_slow_path(seed::Int, params::Sim1Params; shuffle::Bool = false)
             per_trial_omega = omega_t,
             kappa = params.slow_path_kappa,
             target_cause_id = target.id,
+            cause_id = log.cause_id,
             structural_precision = revision.pre_structural_precision,
             revision_behavior_change = revision.behavior_change,
             predicted_aversive_reduction = revision.predicted_aversive_reduction,
@@ -683,7 +831,12 @@ function run_slow_path(seed::Int, params::Sim1Params; shuffle::Bool = false)
             pre_probe_predicted_aversive = revision.pre_predicted_aversive,
             pre_probe_approach_probability = revision.pre_approach_probability,
             precision_weighted_pe = log.precision_weighted_pe,
+            potential_outcome = log.potential_outcome,
             evidence_outcome = log.evidence_outcome,
+            exposure_suppressed = log.exposure_suppressed,
+            policy_idx = log.policy_idx,
+            policy = log.policy,
+            action_success = log.action_success,
             spawned = spawn_seen,
             crossed = crossed
         ))
@@ -698,8 +851,16 @@ function run_slow_path(seed::Int, params::Sim1Params; shuffle::Bool = false)
         crossed = crossed,
         cross_trial = crossed ? cross_trial : nothing,
         cross_structural_precision = crossed ? cross_precision : nothing,
+        cross_trial_pe = crossed ? cross_trial_pe : nothing,
         max_per_trial_pe = max_pe,
         spawned = spawn_seen,
+        potential_aversive_count = count(row.potential_outcome == "aversive" for row in rows),
+        aversive_evidence_count = count(row.evidence_outcome == "aversive" for row in rows),
+        suppressed_aversive_count = count(row.exposure_suppressed for row in rows),
+        successful_relief_action_count = count(row.action_success for row in rows),
+        arousal_at_write = write_arousal_value,
+        reflexivity_at_write = write_reflexivity_value,
+        postformation_sampling_rate = postformation_sampling_rate(rows, target.id, params),
         final_revision_behavior_change = revision.behavior_change,
         final_predicted_aversive_reduction = revision.predicted_aversive_reduction,
         final_approach_probability_increase = revision.approach_probability_increase,
@@ -721,7 +882,9 @@ function high_high_frozen_rate(cell_rows, omegas, kappas)
 end
 
 function kappa_yoking_metrics(seed_rows, omegas, kappas)
+    potential_count_ranges = Float64[]
     count_ranges = Float64[]
+    suppressed_counts = Float64[]
     severity_ranges = Float64[]
     precision_ranges = Float64[]
     complete_groups = true
@@ -729,20 +892,58 @@ function kappa_yoking_metrics(seed_rows, omegas, kappas)
         rows = [row for row in seed_rows if row.omega == omega && row.seed == seed]
         complete_groups &= length(rows) == length(kappas)
         isempty(rows) && continue
+        push!(potential_count_ranges, maximum(row.potential_aversive_count for row in rows) - minimum(row.potential_aversive_count for row in rows))
         push!(count_ranges, maximum(row.aversive_evidence_count for row in rows) - minimum(row.aversive_evidence_count for row in rows))
+        append!(suppressed_counts, Float64[row.suppressed_aversive_count for row in rows])
         push!(severity_ranges, maximum(row.aversive_evidence_severity_sum for row in rows) - minimum(row.aversive_evidence_severity_sum for row in rows))
         push!(precision_ranges, maximum(row.mean_evidence_precision for row in rows) - minimum(row.mean_evidence_precision for row in rows))
     end
+    max_potential_count_range = isempty(potential_count_ranges) ? Inf : maximum(potential_count_ranges)
     max_count_range = isempty(count_ranges) ? Inf : maximum(count_ranges)
+    max_suppressed_count = isempty(suppressed_counts) ? Inf : maximum(suppressed_counts)
     max_severity_range = isempty(severity_ranges) ? Inf : maximum(severity_ranges)
     max_precision_range = isempty(precision_ranges) ? Inf : maximum(precision_ranges)
     return (
-        exact_yoking = complete_groups && max_count_range == 0.0 && max_severity_range <= EPS && max_precision_range <= EPS ? 1.0 : 0.0,
+        exact_yoking = complete_groups && max_potential_count_range == 0.0 && max_count_range == 0.0 &&
+            max_suppressed_count == 0.0 && max_severity_range <= EPS && max_precision_range <= EPS ? 1.0 : 0.0,
         complete_groups = complete_groups,
+        max_potential_aversive_count_range = max_potential_count_range,
         max_aversive_count_range = max_count_range,
+        max_suppressed_aversive_count = max_suppressed_count,
         max_aversive_severity_range = max_severity_range,
         max_observation_precision_range = max_precision_range
     )
+end
+
+function action_mediation_rows(closed_cells)
+    return [(
+        arm = row.arm,
+        omega = row.omega,
+        kappa = row.kappa,
+        n_seeds = row.n_seeds,
+        mean_potential_aversive_count = row.mean_potential_aversive_count,
+        mean_delivered_aversive_count = row.mean_aversive_evidence_count,
+        mean_suppressed_aversive_count = row.mean_suppressed_aversive_count,
+        mean_exposure_rate = row.mean_exposure_rate,
+        mean_successful_relief_action_count = row.mean_successful_relief_action_count,
+        mean_policy_approach_count = row.mean_policy_approach_count,
+        mean_policy_flee_count = row.mean_policy_flee_count,
+        mean_policy_appease_count = row.mean_policy_appease_count,
+        mean_policy_attenuate_count = row.mean_policy_attenuate_count,
+        potential_after_approach_count = row.potential_after_approach_count,
+        exposed_after_approach_count = row.exposed_after_approach_count,
+        exposure_rate_after_approach = row.exposure_rate_after_approach,
+        potential_after_flee_count = row.potential_after_flee_count,
+        exposed_after_flee_count = row.exposed_after_flee_count,
+        exposure_rate_after_flee = row.exposure_rate_after_flee,
+        potential_after_appease_count = row.potential_after_appease_count,
+        exposed_after_appease_count = row.exposed_after_appease_count,
+        exposure_rate_after_appease = row.exposure_rate_after_appease,
+        potential_after_attenuate_count = row.potential_after_attenuate_count,
+        exposed_after_attenuate_count = row.exposed_after_attenuate_count,
+        exposure_rate_after_attenuate = row.exposure_rate_after_attenuate,
+        exposure_accounting_error = row.mean_potential_aversive_count - row.mean_aversive_evidence_count - row.mean_suppressed_aversive_count
+    ) for row in closed_cells]
 end
 
 function attenuation_corner_metric(cell_rows, params::Sim1Params)
@@ -796,40 +997,45 @@ function attenuation_preference_sensitivity(seeds, omegas, kappas, params::Sim1P
     return traces
 end
 
-function write_phase_svg(path::AbstractString, cell_rows, slow_path_rows, omegas, kappas)
-    width, height = 900, 640
-    left, top = 82, 48
-    plot_w, plot_h = 680, 500
+function write_phase_svg(path::AbstractString, closed_cells, yoked_cells, slow_path_rows, omegas, kappas)
+    width, height = 1560, 650
+    left, top = 82, 70
+    plot_w, plot_h = 620, 500
+    panel_gap = 92
     cell_w = plot_w / length(omegas)
     cell_h = plot_h / length(kappas)
     omega_min, omega_max = extrema(omegas)
     kappa_min, kappa_max = extrema(kappas)
-    x_for(omega) = left + (omega - omega_min) / max(omega_max - omega_min, EPS) * plot_w
+    x_for(omega, panel_left) = panel_left + (omega - omega_min) / max(omega_max - omega_min, EPS) * plot_w
     y_for(kappa) = top + plot_h - (kappa - kappa_min) / max(kappa_max - kappa_min, EPS) * plot_h
     open(path, "w") do io
         println(io, "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"$width\" height=\"$height\" viewBox=\"0 0 $width $height\">")
         println(io, "<rect width=\"100%\" height=\"100%\" fill=\"#fbfaf7\"/>")
-        println(io, "<text x=\"$left\" y=\"28\" font-family=\"Arial\" font-size=\"20\" fill=\"#202020\">Sim 1 freezing phase diagram</text>")
-        for row in cell_rows
-            i = findfirst(==(row.omega), omegas)
-            j = findfirst(==(row.kappa), kappas)
-            x = left + (i - 1) * cell_w
-            y = top + (length(kappas) - j) * cell_h
-            fill = row.frozen_rate >= 0.5 ? "#8f2d2d" : row.revisable_rate >= 0.5 ? "#2f7d59" : row.spawn_rate >= 0.5 ? "#d9a441" : "#e8e3d7"
-            opacity = 0.32 + 0.62 * max(row.frozen_rate, row.revisable_rate, row.spawn_rate)
-            println(io, "<rect x=\"$x\" y=\"$y\" width=\"$cell_w\" height=\"$cell_h\" fill=\"$fill\" fill-opacity=\"$opacity\" stroke=\"#ffffff\" stroke-width=\"1\"/>")
+        println(io, "<text x=\"$left\" y=\"30\" font-family=\"Arial\" font-size=\"20\" fill=\"#202020\">Sim 1 two-arm freezing phase diagram</text>")
+        for (panel, rows, title) in ((0, closed_cells, "Arm 1 — closed loop"), (1, yoked_cells, "Arm 2 — exact replay"))
+            panel_left = left + panel * (plot_w + panel_gap)
+            println(io, "<text x=\"$panel_left\" y=\"57\" font-family=\"Arial\" font-size=\"16\" fill=\"#202020\">$title</text>")
+            for row in rows
+                i = findfirst(==(row.omega), omegas)
+                j = findfirst(==(row.kappa), kappas)
+                x = panel_left + (i - 1) * cell_w
+                y = top + (length(kappas) - j) * cell_h
+                fill = row.frozen_rate >= 0.5 && row.revisable_rate >= 0.5 ? "#705191" : row.frozen_rate >= 0.5 ? "#8f2d2d" : row.revisable_rate >= 0.5 ? "#2f7d59" : row.spawn_rate >= 0.5 ? "#d9a441" : "#e8e3d7"
+                opacity = 0.32 + 0.62 * max(row.frozen_rate, row.revisable_rate, row.spawn_rate)
+                println(io, "<rect x=\"$x\" y=\"$y\" width=\"$cell_w\" height=\"$cell_h\" fill=\"$fill\" fill-opacity=\"$opacity\" stroke=\"#ffffff\" stroke-width=\"1\"/>")
+            end
+            println(io, "<rect x=\"$panel_left\" y=\"$top\" width=\"$plot_w\" height=\"$plot_h\" fill=\"none\" stroke=\"#333\" stroke-width=\"1.5\"/>")
+            println(io, "<text x=\"$(panel_left + 220)\" y=\"$(top + plot_h + 38)\" font-family=\"Arial\" font-size=\"14\" fill=\"#333333\">overwhelm omega</text>")
         end
-        path_points = join(["$(x_for(row.per_trial_omega)),$(y_for(row.kappa))" for row in slow_path_rows], " ")
+        path_points = join(["$(x_for(row.per_trial_omega, left)),$(y_for(row.kappa))" for row in slow_path_rows], " ")
         println(io, "<polyline points=\"$path_points\" fill=\"none\" stroke=\"#1f4e79\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>")
-        println(io, "<circle cx=\"$(x_for(2.85))\" cy=\"$(y_for(0.00))\" r=\"7\" fill=\"#111111\"/>")
-        println(io, "<text x=\"$(x_for(2.85) - 112)\" y=\"$(y_for(0.00) - 12)\" font-family=\"Arial\" font-size=\"12\" fill=\"#111111\">single-strike corner</text>")
-        println(io, "<text x=\"$(left + 250)\" y=\"$(top + plot_h + 42)\" font-family=\"Arial\" font-size=\"14\" fill=\"#333333\">overwhelm omega</text>")
         println(io, "<text x=\"22\" y=\"$(top + 280)\" font-family=\"Arial\" font-size=\"14\" fill=\"#333333\" transform=\"rotate(-90 22 $(top + 280))\">control kappa</text>")
-        println(io, "<rect x=\"790\" y=\"90\" width=\"20\" height=\"20\" fill=\"#8f2d2d\"/><text x=\"818\" y=\"106\" font-family=\"Arial\" font-size=\"13\" fill=\"#333\">frozen</text>")
-        println(io, "<rect x=\"790\" y=\"124\" width=\"20\" height=\"20\" fill=\"#2f7d59\"/><text x=\"818\" y=\"140\" font-family=\"Arial\" font-size=\"13\" fill=\"#333\">revisable</text>")
-        println(io, "<rect x=\"790\" y=\"158\" width=\"20\" height=\"20\" fill=\"#d9a441\"/><text x=\"818\" y=\"174\" font-family=\"Arial\" font-size=\"13\" fill=\"#333\">spawned</text>")
-        println(io, "<line x1=\"790\" y1=\"204\" x2=\"830\" y2=\"204\" stroke=\"#1f4e79\" stroke-width=\"4\"/><text x=\"838\" y=\"208\" font-family=\"Arial\" font-size=\"13\" fill=\"#333\">slow path</text>")
-        println(io, "<rect x=\"$left\" y=\"$top\" width=\"$plot_w\" height=\"$plot_h\" fill=\"none\" stroke=\"#333\" stroke-width=\"1.5\"/>")
+        legend_x = left + plot_w + 16
+        println(io, "<rect x=\"$legend_x\" y=\"110\" width=\"20\" height=\"20\" fill=\"#8f2d2d\"/><text x=\"$(legend_x + 25)\" y=\"126\" font-family=\"Arial\" font-size=\"12\" fill=\"#333\">frozen</text>")
+        println(io, "<rect x=\"$legend_x\" y=\"144\" width=\"20\" height=\"20\" fill=\"#2f7d59\"/><text x=\"$(legend_x + 25)\" y=\"160\" font-family=\"Arial\" font-size=\"12\" fill=\"#333\">revisable</text>")
+        println(io, "<rect x=\"$legend_x\" y=\"178\" width=\"20\" height=\"20\" fill=\"#d9a441\"/><text x=\"$(legend_x + 25)\" y=\"194\" font-family=\"Arial\" font-size=\"12\" fill=\"#333\">spawned</text>")
+        println(io, "<rect x=\"$legend_x\" y=\"212\" width=\"20\" height=\"20\" fill=\"#705191\"/><text x=\"$(legend_x + 25)\" y=\"228\" font-family=\"Arial\" font-size=\"12\" fill=\"#333\">mixed</text>")
+        println(io, "<line x1=\"$legend_x\" y1=\"270\" x2=\"$(legend_x + 38)\" y2=\"270\" stroke=\"#1f4e79\" stroke-width=\"4\"/><text x=\"$(legend_x + 42)\" y=\"274\" font-family=\"Arial\" font-size=\"12\" fill=\"#333\">slow</text>")
         println(io, "</svg>")
     end
     return path
@@ -841,18 +1047,38 @@ function bundle_artifact(row)
         seed = row.seed,
         route = row.target_route,
         formation = (
+            arm = row.arm,
             omega = row.omega,
             kappa = row.kappa,
-            evidence_yoking_key = "seed=$(row.seed);omega=$(row.omega)",
+            potential_stream_key = "seed=$(row.seed);omega=$(row.omega)",
+            potential_aversive_count = row.potential_aversive_count,
             aversive_evidence_count = row.aversive_evidence_count,
+            suppressed_aversive_count = row.suppressed_aversive_count,
+            exposure_rate = row.exposure_rate,
             aversive_evidence_severity_sum = row.aversive_evidence_severity_sum,
             mean_evidence_precision = row.mean_evidence_precision,
             aversive_action_outcome_count = row.aversive_action_outcome_count,
+            realized_policy_counts = (
+                approach = row.policy_approach_count,
+                flee = row.policy_flee_count,
+                appease = row.policy_appease_count,
+                attenuate = row.policy_attenuate_count
+            ),
+            successful_relief_action_count = row.successful_relief_action_count,
+            exposure_after_realized_policy = (
+                approach = (potential = row.potential_after_approach_count, exposed = row.exposed_after_approach_count, rate = row.exposure_rate_after_approach),
+                flee = (potential = row.potential_after_flee_count, exposed = row.exposed_after_flee_count, rate = row.exposure_rate_after_flee),
+                appease = (potential = row.potential_after_appease_count, exposed = row.exposed_after_appease_count, rate = row.exposure_rate_after_appease),
+                attenuate = (potential = row.potential_after_attenuate_count, exposed = row.exposed_after_attenuate_count, rate = row.exposure_rate_after_attenuate)
+            ),
             arousal_at_write = row.arousal_at_write,
             reflexivity_at_write = row.reflexivity_at_write,
+            postformation_sampling_rate = row.approach_sampling_rate,
             spawned = row.target_spawned,
             spawn_count = row.spawn_count,
             posterior_predictive_min = row.posterior_predictive_min,
+            prediction_failure_count = row.prediction_failure_count,
+            max_spawn_pressure = row.max_spawn_pressure,
             crp_threshold_last = row.crp_threshold_last
         ),
         revision_probe = (
@@ -894,13 +1120,22 @@ function slow_bundle_artifact(run)
         seed = run.seed,
         route = "slow_accumulation",
         formation = (
+            arm = "closed_loop",
             omega = run.omega_center,
             kappa = run.kappa,
             trials = run.trials,
             spawned = run.spawned,
             cross_trial = run.cross_trial,
             cross_structural_precision = run.cross_structural_precision,
-            max_per_trial_pe = run.max_per_trial_pe
+            cross_trial_pe = run.cross_trial_pe,
+            max_per_trial_pe = run.max_per_trial_pe,
+            potential_aversive_count = run.potential_aversive_count,
+            aversive_evidence_count = run.aversive_evidence_count,
+            suppressed_aversive_count = run.suppressed_aversive_count,
+            successful_relief_action_count = run.successful_relief_action_count,
+            arousal_at_write = run.arousal_at_write,
+            reflexivity_at_write = run.reflexivity_at_write,
+            postformation_sampling_rate = run.postformation_sampling_rate
         ),
         revision_probe = (
             disconfirming_trials_measured = true,
@@ -943,10 +1178,13 @@ function write_bundle_artifacts(outdir::AbstractString, seed_rows, slow_runs, pa
     for name in readdir(artifacts_dir)
         startswith(name, "bundle") && endswith(name, ".json") && rm(joinpath(artifacts_dir, name))
     end
-    frozen_cells = Set(
-        (row.omega, row.kappa) for row in seed_rows
-        if mean(other.frozen for other in seed_rows if other.omega == row.omega && other.kappa == row.kappa) >= params.cell_classification_rate
-    )
+    frozen_cells = Set{Tuple{Float64, Float64}}()
+    for row in seed_rows
+        cell = [other for other in seed_rows if other.omega == row.omega && other.kappa == row.kappa]
+        frozen_rate = mean(other.frozen for other in cell)
+        revisable_rate = mean(other.revisable for other in cell)
+        frozen_rate >= params.cell_classification_rate && revisable_rate < params.cell_classification_rate && push!(frozen_cells, (row.omega, row.kappa))
+    end
     frozen = sort(
         [row for row in seed_rows if row.frozen && (row.omega, row.kappa) in frozen_cells];
         by = row -> (row.target_spawned ? 0 : 1, row.omega, row.kappa, row.seed)
@@ -990,10 +1228,11 @@ function theory_label(results)
 end
 
 function write_run_readme(path::AbstractString, summary)
+    phase_title = summary.run_phase == "pilot" ? "Step A Pilot" : "Step B Confirmatory"
     open(path, "w") do io
-        println(io, "# Sim 1 T4.6 Step A Pilot")
+        println(io, "# Sim 1 T4.6 $phase_title")
         println(io)
-        println(io, "Pilot seeds only. The exogenous aversive-evidence stream is replayed exactly across kappa; kappa changes only post-challenge overt-action efficacy. Omega changes challenge frequency while delivered observation precision is fixed.")
+        println(io, "Run phase: $(summary.run_phase). Arm 1 lets successful overt action suppress later potential hazards; Arm 2 replays the potential-hazard stream exactly. Kappa changes action efficacy only.")
         println(io)
         println(io, "## Behavioral Revision")
         println(io)
@@ -1001,79 +1240,114 @@ function write_run_readme(path::AbstractString, summary)
         println(io)
         println(io, "## Headline Metrics")
         println(io)
-        println(io, "- Frozen cells: $(summary.metrics.frozen_cell_count)")
-        println(io, "- Revisable cells: $(summary.metrics.revisable_cell_count)")
+        println(io, "- Closed-loop frozen region cells: $(summary.arm_1_closed_loop.frozen_region_cell_count)")
+        println(io, "- Closed-loop largest frozen component: $(summary.arm_1_closed_loop.frozen_largest_component)")
+        println(io, "- Yoked frozen region cells: $(summary.arm_2_yoked.frozen_region_cell_count)")
+        println(io, "- Yoked largest frozen component: $(summary.arm_2_yoked.frozen_largest_component)")
+        println(io, "- A1.5 cell contrast: $(summary.two_arm_contrast.frozen_region_cell_contrast)")
         println(io, "- Slow-path crossed rate: $(summary.slow_path.crossed_rate)")
-        println(io, "- Attenuate corner rate: $(summary.metrics.attenuate_corner_rate)")
-        println(io, "- Attenuate max outside rate: $(summary.metrics.attenuate_max_outside_rate)")
-        println(io, "- Kappa yoking max aversive-count range: $(summary.evidence_yoking.max_aversive_count_range)")
+        println(io, "- Spawn diagnosis: $(summary.spawn_diagnostic.outcome)")
+        println(io, "- Yoked max delivered aversive-count range: $(summary.arm_2_yoked.exact_replay.max_aversive_count_range)")
         println(io, "- Bundle schema: $(summary.artifacts.bundle_schema)")
     end
 end
 
 function run_sim1(config::ExperimentConfig; config_path::Union{Nothing, AbstractString} = nothing, output_dir::Union{Nothing, AbstractString} = nothing)
     started = time()
+    run_phase = config.label == "pilot" ? "pilot" : "confirmatory"
     params = sim1_params(config.model_params)
     omegas = linspace_from_grid(config.sweep_grid, "omega")
     kappas = linspace_from_grid(config.sweep_grid, "kappa")
     outdir = ensure_dir(output_dir)
 
-    seed_rows, cell_rows = run_sweep(config.seeds, omegas, kappas, params)
-    classification = classify_grid(cell_rows, omegas, kappas, params)
+    closed_seed_rows, closed_cell_rows = run_sweep(config.seeds, omegas, kappas, params; arm = :closed_loop)
+    yoked_seed_rows, yoked_cell_rows = run_sweep(config.seeds, omegas, kappas, params; arm = :yoked)
+    seed_rows = vcat(closed_seed_rows, yoked_seed_rows)
+    cell_rows = vcat(closed_cell_rows, yoked_cell_rows)
+    mediation_rows = action_mediation_rows(closed_cell_rows)
+    closed_classification = classify_grid(closed_cell_rows, omegas, kappas, params)
+    yoked_classification = classify_grid(yoked_cell_rows, omegas, kappas, params)
+
     slow_runs = [run_slow_path(seed, params) for seed in config.seeds]
     shuffle_runs = [run_slow_path(seed, params; shuffle = true) for seed in config.seeds]
     slow_path = first(slow_runs).path
-    attenuation = attenuation_corner_metric(cell_rows, params)
+    attenuation = attenuation_corner_metric(closed_cell_rows, params)
     a11 = omega_only_frozen_metric(config.seeds, omegas, params)
     a12_smoothness, a12_traces = concentration_boundary_smoothness(config.seeds, omegas, kappas, params)
     attenuation_sensitivity = attenuation_preference_sensitivity(config.seeds, omegas, kappas, params)
-    artifacts_dir, bundle_paths = write_bundle_artifacts(outdir, seed_rows, slow_runs, params)
+    artifacts_dir, bundle_paths = write_bundle_artifacts(outdir, closed_seed_rows, slow_runs, params)
 
-    high_high_frozen = high_high_frozen_rate(cell_rows, omegas, kappas)
-    yoking = kappa_yoking_metrics(seed_rows, omegas, kappas)
+    high_high_frozen = high_high_frozen_rate(closed_cell_rows, omegas, kappas)
+    yoking = kappa_yoking_metrics(yoked_seed_rows, omegas, kappas)
+    closed_potential_ranges = [maximum(row.potential_aversive_count for row in closed_seed_rows if row.seed == seed && row.omega == omega) -
+                               minimum(row.potential_aversive_count for row in closed_seed_rows if row.seed == seed && row.omega == omega)
+                               for seed in config.seeds, omega in omegas]
+    closed_accounting_error = maximum(abs(row.exposure_accounting_error) for row in mediation_rows)
     slow_cross_rate = mean(row.crossed ? 1.0 : 0.0 for row in slow_runs)
     shuffle_cross_rate = mean(row.crossed ? 1.0 : 0.0 for row in shuffle_runs)
     slow_max_pe = maximum(row.max_per_trial_pe for row in slow_runs)
-    frozen_rows = [row for row in seed_rows if row.frozen]
-    acute_frozen_rows = [row for row in frozen_rows if row.omega >= params.acute_region_omega_min]
+    slow_crossing_pes = [row.cross_trial_pe for row in slow_runs if row.crossed]
+    slow_max_crossing_pe = isempty(slow_crossing_pes) ? Inf : maximum(slow_crossing_pes)
+    closed_frozen_rows = [row for row in closed_seed_rows if row.frozen]
+    yoked_frozen_rows = [row for row in yoked_seed_rows if row.frozen]
+    acute_frozen_rows = [row for row in closed_frozen_rows if row.omega >= params.acute_region_omega_min]
     acute_region_present = !isempty(acute_frozen_rows)
     acute_min = acute_region_present ? minimum(row.max_precision_weighted_pe for row in acute_frozen_rows) : 0.0
+    frozen_region_contrast = closed_classification.frozen_region_cell_count - yoked_classification.frozen_region_cell_count
+
+    all_prediction_failures = sum(row.prediction_failure_count for row in seed_rows)
+    total_spawn_events = sum(row.spawn_count for row in seed_rows)
+    spawn_outcome = total_spawn_events > 0 ?
+        (params.crp_threshold_base == 0.085 ? "spawning_present_at_original_scale" : "posterior_predictive_threshold_rescaled_on_pilot") :
+        "formation_by_spawning_dead_in_binary_environment_class"
 
     criteria_metrics = (
-        connected_frozen_region = classification.frozen_largest_component >= params.connected_region_min_cells ? 1.0 : 0.0,
-        connected_revisable_region = classification.revisable_largest_component >= params.connected_region_min_cells ? 1.0 : 0.0,
-        high_omega_high_kappa_frozen_rate = high_high_frozen,
-        slow_path_crosses_below_acute_min = (acute_region_present && slow_cross_rate >= 0.80 && slow_max_pe < acute_min) ? 1.0 : 0.0,
-        attenuate_corner_only = attenuation.pass,
+        connected_frozen_region_closed_loop = closed_classification.frozen_largest_component >= params.connected_region_min_cells ? 1.0 : 0.0,
+        connected_revisable_region_closed_loop = closed_classification.revisable_largest_component >= params.connected_region_min_cells ? 1.0 : 0.0,
+        high_omega_high_kappa_frozen_rate_closed_loop = high_high_frozen,
+        slow_path_crosses_below_acute_min_closed_loop = (acute_region_present && slow_cross_rate >= 0.80 && slow_max_crossing_pe < acute_min) ? 1.0 : 0.0,
+        attenuate_corner_only_closed_loop = attenuation.pass,
         three_traits_logged = 1.0,
-        a11_omega_only_frozen_region = a11,
-        a12_boundary_smoothness_max_jump = a12_smoothness,
-        a13_shuffle_cross_rate = shuffle_cross_rate,
-        a14_kappa_yoking_max_count_range = yoking.max_aversive_count_range
+        a11_omega_only_frozen_region_closed_loop = a11,
+        a12_boundary_smoothness_max_jump_closed_loop = a12_smoothness,
+        a13_shuffle_cross_rate_closed_loop = shuffle_cross_rate,
+        a14_yoked_max_count_range = yoking.max_aversive_count_range,
+        a15_frozen_region_cell_contrast = frozen_region_contrast
+    )
+
+    arm_summary(cell_rows_for_arm, seed_rows_for_arm, classification) = (
+        spawn_rate_mean = mean(row.spawn_rate for row in cell_rows_for_arm),
+        spawn_events = sum(row.spawn_count for row in seed_rows_for_arm),
+        frozen_cell_count = classification.frozen_cell_count,
+        frozen_region_cell_count = classification.frozen_region_cell_count,
+        frozen_largest_component = classification.frozen_largest_component,
+        revisable_cell_count = classification.revisable_cell_count,
+        revisable_region_cell_count = classification.revisable_region_cell_count,
+        revisable_largest_component = classification.revisable_largest_component,
+        mixed_cell_count = classification.mixed_cell_count
     )
 
     summary = (
         experiment = config.experiment,
+        run_phase = run_phase,
         config = config_snapshot(config),
-        grid = (
-            omega = omegas,
-            kappa = kappas,
-            cell_count = length(cell_rows),
-            seeds_per_cell = length(config.seeds)
-        ),
-        metrics = (
-            spawn_rate_mean = mean(row.spawn_rate for row in cell_rows),
-            frozen_cell_count = classification.frozen_cell_count,
-            frozen_largest_component = classification.frozen_largest_component,
-            revisable_cell_count = classification.revisable_cell_count,
-            revisable_largest_component = classification.revisable_largest_component,
+        grid = (omega = omegas, kappa = kappas, cells_per_arm = length(closed_cell_rows), seeds_per_cell = length(config.seeds)),
+        arm_1_closed_loop = merge(arm_summary(closed_cell_rows, closed_seed_rows, closed_classification), (
             high_omega_high_kappa_frozen_rate = high_high_frozen,
-            slow_cross_rate = slow_cross_rate,
-            slow_max_per_trial_pe = slow_max_pe,
-            acute_region_min_pe = acute_min,
-            attenuate_corner_rate = attenuation.corner_rate,
-            attenuate_max_outside_rate = attenuation.max_outside_rate,
-            representative_bundle_count = length(bundle_paths)
+            mean_potential_aversive_count = mean(row.mean_potential_aversive_count for row in closed_cell_rows),
+            mean_delivered_aversive_count = mean(row.mean_aversive_evidence_count for row in closed_cell_rows),
+            mean_suppressed_aversive_count = mean(row.mean_suppressed_aversive_count for row in closed_cell_rows),
+            max_potential_count_range_across_kappa = maximum(closed_potential_ranges),
+            max_exposure_accounting_error = closed_accounting_error,
+            attenuation_corner_rate = attenuation.corner_rate,
+            attenuation_max_outside_rate = attenuation.max_outside_rate
+        )),
+        arm_2_yoked = merge(arm_summary(yoked_cell_rows, yoked_seed_rows, yoked_classification), (exact_replay = yoking,)),
+        two_arm_contrast = (
+            frozen_region_cell_contrast = frozen_region_contrast,
+            preregistered_margin_cells = params.arm_contrast_margin_cells,
+            margin_met = frozen_region_contrast >= params.arm_contrast_margin_cells,
+            interpretation = "closed-loop minus exact-replay frozen-region cells"
         ),
         behavioral_revision = (
             frozen_max_change = params.behavior_frozen_max_change,
@@ -1081,48 +1355,82 @@ function run_sim1(config::ExperimentConfig; config_path::Union{Nothing, Abstract
             threat_prediction_threshold = params.threat_prediction_threshold,
             change_definition = "max(pre-minus-post predicted aversive probability, post-minus-pre approach policy probability, zero)"
         ),
-        evidence_yoking = yoking,
+        action_mediation = (
+            mechanism = "a successful overt response to delivered aversive evidence suppresses subsequent potential hazards for policy-fixed relief trials",
+            relief_trials = (approach = params.relief_trials_approach, flee = params.relief_trials_flee, appease = params.relief_trials_appease, attenuate = params.relief_trials_attenuate),
+            potential_stream_exact_across_kappa = maximum(closed_potential_ranges) == 0,
+            max_exposure_accounting_error = closed_accounting_error,
+            per_cell_log = "action_mediation.csv"
+        ),
+        spawn_diagnostic = (
+            outcome = spawn_outcome,
+            crp_threshold_base = params.crp_threshold_base,
+            total_spawn_events = total_spawn_events,
+            total_prediction_failures = all_prediction_failures,
+            global_min_posterior_predictive = minimum(row.posterior_predictive_min for row in seed_rows),
+            global_max_spawn_pressure = maximum(row.max_spawn_pressure for row in seed_rows),
+            spawn_pressure_threshold = params.spawn_pressure_threshold,
+            closed_loop_spawn_events = sum(row.spawn_count for row in closed_seed_rows),
+            yoked_spawn_events = sum(row.spawn_count for row in yoked_seed_rows),
+            pilot_cutoff_candidates = [0.085, 0.12, 0.16, 0.20, 0.24, 0.30, 0.40, 0.50, 0.60, 0.80],
+            closed_loop_candidate_spawn_events = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            closed_loop_candidate_max_pressures = [0.6177015404517628, 0.6177015404517628, 0.6177015404517628, 0.6177015404517628, 0.6999321874451618, 0.6999321874451618, 0.6999321874451618, 0.6999328267474814, 0.7393009031293605, 0.7806154926545406],
+            diagnosis = "raising the posterior-predictive cutoff through 0.80 created many flagged failures but no sustained arousal pressure; the original 0.085 cutoff is retained"
+        ),
         three_traits_log = (
-            spawn_events = count(row.spawned for row in seed_rows),
-            write_time_reflexivity_mean = mean(row.reflexivity_at_write for row in seed_rows),
-            postformation_sampling_rate_mean = mean(row.approach_sampling_rate for row in seed_rows),
-            frozen_region_postformation_sampling_rate_mean = isempty(frozen_rows) ? 0.0 : mean(row.approach_sampling_rate for row in frozen_rows)
+            closed_loop = (
+                spawn_events = sum(row.spawn_count for row in closed_seed_rows),
+                write_time_reflexivity_mean = mean(row.reflexivity_at_write for row in closed_seed_rows),
+                postformation_sampling_rate_mean = mean(row.approach_sampling_rate for row in closed_seed_rows),
+                frozen_postformation_sampling_rate_mean = isempty(closed_frozen_rows) ? 0.0 : mean(row.approach_sampling_rate for row in closed_frozen_rows)
+            ),
+            yoked = (
+                spawn_events = sum(row.spawn_count for row in yoked_seed_rows),
+                write_time_reflexivity_mean = mean(row.reflexivity_at_write for row in yoked_seed_rows),
+                postformation_sampling_rate_mean = mean(row.approach_sampling_rate for row in yoked_seed_rows),
+                frozen_postformation_sampling_rate_mean = isempty(yoked_frozen_rows) ? 0.0 : mean(row.approach_sampling_rate for row in yoked_frozen_rows)
+            )
         ),
         phase_boundary = (
-            frozen_boundary_min_omega_by_kappa = boundary_by_kappa(cell_rows, omegas, kappas; threshold = params.cell_classification_rate),
-            revisable_boundary_min_omega_by_kappa = boundary_by_kappa(cell_rows, omegas, kappas; field = :revisable_rate, threshold = params.cell_classification_rate),
-            smoothness = boundary_smoothness(cell_rows, omegas, kappas; threshold = params.cell_classification_rate),
-            connected_frozen = criteria_metrics.connected_frozen_region,
-            connected_revisable = criteria_metrics.connected_revisable_region
+            closed_loop_frozen_min_omega_by_kappa = boundary_by_kappa(closed_cell_rows, omegas, kappas; threshold = params.cell_classification_rate),
+            yoked_frozen_min_omega_by_kappa = boundary_by_kappa(yoked_cell_rows, omegas, kappas; threshold = params.cell_classification_rate),
+            closed_loop_revisable_min_omega_by_kappa = boundary_by_kappa(closed_cell_rows, omegas, kappas; field = :revisable_rate, threshold = params.cell_classification_rate),
+            closed_loop_smoothness = boundary_smoothness(closed_cell_rows, omegas, kappas; threshold = params.cell_classification_rate)
         ),
         slow_path = (
+            arm = "closed_loop",
             crossed_rate = slow_cross_rate,
             first_seed_cross_trial = first(slow_runs).cross_trial,
             first_seed_cross_structural_precision = first(slow_runs).cross_structural_precision,
             max_per_trial_pe = slow_max_pe,
+            max_crossing_trial_pe = slow_max_crossing_pe,
             acute_region_min_pe = acute_min,
+            below_acute_min = acute_region_present && slow_max_crossing_pe < acute_min,
+            pe_comparison = "maximum PE on each crossed seed's crossing trial versus minimum max-per-trial PE among acute closed-loop frozen seed-cells",
             shuffle_cross_rate = shuffle_cross_rate,
             no_spawn_cross_rate = mean((row.crossed && !row.spawned) ? 1.0 : 0.0 for row in slow_runs)
         ),
         adversarial = (
-            a11_omega_only_frozen_region = a11,
-            a12_boundary_smoothness_traces = a12_traces,
-            a13_shuffle_cross_rate = shuffle_cross_rate,
-            a14_kappa_yoking = yoking
+            a11_omega_only_frozen_region_closed_loop = a11,
+            a12_boundary_smoothness_traces_closed_loop = a12_traces,
+            a13_shuffle_cross_rate_closed_loop = shuffle_cross_rate,
+            a14_exact_yoking = yoking,
+            a15_frozen_region_cell_contrast = frozen_region_contrast
         ),
-        sensitivity = (
-            attenuation_preference_scale = attenuation_sensitivity
-        ),
+        sensitivity = (attenuation_preference_scale_closed_loop = attenuation_sensitivity,),
         criteria = criteria_metrics,
         artifacts = (
             bundle_dir = artifacts_dir,
             bundle_manifest = joinpath(artifacts_dir, "bundle-manifest.json"),
-            bundle_schema = "sim1.bundle.v3"
+            bundle_schema = "sim1.bundle.v3",
+            representative_bundle_count = length(bundle_paths),
+            source_arm = "closed_loop"
         ),
         criteria_amendments = (
-            deconfound = "exogenous challenge evidence is exactly replayed across kappa; kappa changes only overt-action consequence probabilities",
-            omega_coupling = "omega changes exogenous challenge frequency; evidence precision is fixed",
-            revision_readout = "behavioral change in approach outcome prediction or approach policy probability after the disconfirming probe; KL is not computed"
+            original_s11a_status = "died under full evidence yoking in the superseded Step A pilot",
+            reformulated_claim = "control-dependent formation is carried by action-mediated evidence sampling; the two-arm contrast is the claim",
+            amendment_timing = "before any confirmatory run",
+            a15_preregistered_margin_cells = params.arm_contrast_margin_cells
         ),
         per_seed_metric_count = length(seed_rows),
         cell_metric_count = length(cell_rows)
@@ -1133,8 +1441,9 @@ function run_sim1(config::ExperimentConfig; config_path::Union{Nothing, Abstract
     write_rows_csv(joinpath(outdir, "per_seed_metrics.csv"), seed_rows)
     write_rows_csv(joinpath(outdir, "posterior_traces.csv"), slow_path)
     write_rows_csv(joinpath(outdir, "cell_metrics.csv"), cell_rows)
+    write_rows_csv(joinpath(outdir, "action_mediation.csv"), mediation_rows)
     ensure_dir(joinpath(outdir, "figures"))
-    write_phase_svg(joinpath(outdir, "figures", "phase_diagram.svg"), cell_rows, slow_path, omegas, kappas)
+    write_phase_svg(joinpath(outdir, "figures", "phase_diagram.svg"), closed_cell_rows, yoked_cell_rows, slow_path, omegas, kappas)
     write_run_readme(joinpath(outdir, "README.md"), summary)
 
     criteria_results = nothing
@@ -1142,14 +1451,14 @@ function run_sim1(config::ExperimentConfig; config_path::Union{Nothing, Abstract
         criteria_results = write_criteria_results(config.criteria_path, summary_path, joinpath(outdir, "criteria-results.json"))
     end
     status = (
-        implementation_passed = length(config.seeds) == 10 &&
-            config.seeds == collect(1001:1010) &&
+        implementation_passed = (run_phase == "pilot" ? config.seeds == collect(1001:1010) : (length(config.seeds) >= 20 && isempty(intersect(config.seeds, collect(1001:1010))))) &&
             length(omegas) >= 15 &&
             length(kappas) >= 15 &&
+            isfile(joinpath(outdir, "action_mediation.csv")) &&
             isfile(joinpath(outdir, "figures", "phase_diagram.svg")) &&
             isfile(joinpath(artifacts_dir, "bundle-manifest.json")),
         theory_result = isnothing(criteria_results) ? "null" : theory_label(criteria_results),
-        run_phase = "pilot",
+        run_phase = run_phase,
         criteria_results_path = isnothing(criteria_results) ? nothing : joinpath(outdir, "criteria-results.json")
     )
     write_json(joinpath(outdir, "status.json"), status)
@@ -1162,6 +1471,7 @@ function run_sim1(config::ExperimentConfig; config_path::Union{Nothing, Abstract
         extra = (
             output_dir = abspath(outdir),
             sim_module = "EmergenceSuite.Sim1",
+            design = "two-arm closed-loop versus exact-replay",
             criteria_preregistered = config.criteria_path
         )
     )

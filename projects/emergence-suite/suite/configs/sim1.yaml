@@ -38,6 +38,11 @@ model_params:
   threat_prediction_threshold: 0.40
   cell_classification_rate: 0.50
   connected_region_min_cells: 2
+  arm_contrast_margin_cells: 2
+  relief_trials_approach: 1
+  relief_trials_flee: 3
+  relief_trials_appease: 2
+  relief_trials_attenuate: 0
   policy_softmax_temperature: 1.0
   arousal_pe_scale: 5.2
   reflexivity_arousal_slope: 0.88

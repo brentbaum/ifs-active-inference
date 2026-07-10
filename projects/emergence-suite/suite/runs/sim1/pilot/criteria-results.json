@@ -1,0 +1,138 @@
+{
+    "criteria_path": "/Users/brentbaum/dev/research/ifs-active-inference/projects/emergence-suite/suite/configs/sim1-criteria.yaml",
+    "summary_path": "/Users/brentbaum/dev/research/ifs-active-inference/projects/emergence-suite/suite/runs/sim1/pilot/summary.json",
+    "results": [
+        {
+            "id": "S1.1a",
+            "description": "In Arm 1 (closed loop), a connected behaviorally frozen region of at least two cells exists under action-mediated evidence exposure.",
+            "kind": "success",
+            "metric_path": "criteria.connected_frozen_region_closed_loop",
+            "comparator": ">=",
+            "threshold": 1,
+            "weak_threshold": 0.5,
+            "opposite_threshold": 0,
+            "value": 0,
+            "label": "falsified"
+        },
+        {
+            "id": "S1.1b",
+            "description": "In Arm 1 (closed loop), a connected behaviorally revisable region of at least two cells exists under action-mediated evidence exposure.",
+            "kind": "success",
+            "metric_path": "criteria.connected_revisable_region_closed_loop",
+            "comparator": ">=",
+            "threshold": 1,
+            "weak_threshold": 0.5,
+            "opposite_threshold": 0,
+            "value": 1,
+            "label": "support"
+        },
+        {
+            "id": "S1.2",
+            "description": "In Arm 1 (closed loop), high-omega/high-kappa cells are not behaviorally frozen after the safe probe.",
+            "kind": "success",
+            "metric_path": "criteria.high_omega_high_kappa_frozen_rate_closed_loop",
+            "comparator": "<=",
+            "threshold": 0.05,
+            "weak_threshold": 0.1,
+            "opposite_threshold": 0.5,
+            "value": 0,
+            "label": "support"
+        },
+        {
+            "id": "S1.3",
+            "description": "In Arm 1 (closed loop), at least 80 percent of chronic low-omega/low-kappa paths cross the behavioral frozen threshold and the maximum PE on their crossing trials is below the acute closed-loop frozen-region minimum.",
+            "kind": "success",
+            "metric_path": "criteria.slow_path_crosses_below_acute_min_closed_loop",
+            "comparator": ">=",
+            "threshold": 1,
+            "weak_threshold": 0.5,
+            "opposite_threshold": 0,
+            "value": 1,
+            "label": "support"
+        },
+        {
+            "id": "S1.4",
+            "description": "In Arm 1 (closed loop), attenuate is selected only in the omega-extreme/kappa-near-zero corner.",
+            "kind": "success",
+            "metric_path": "criteria.attenuate_corner_only_closed_loop",
+            "comparator": ">=",
+            "threshold": 1,
+            "weak_threshold": 0.5,
+            "opposite_threshold": 0,
+            "value": 0,
+            "label": "falsified"
+        },
+        {
+            "id": "S1.traits",
+            "description": "The three formation traits are logged separately by arm and exported in bundle-v3 provenance.",
+            "kind": "success",
+            "metric_path": "criteria.three_traits_logged",
+            "comparator": ">=",
+            "threshold": 1,
+            "weak_threshold": 0.5,
+            "opposite_threshold": 0,
+            "value": 1,
+            "label": "support"
+        },
+        {
+            "id": "A1.1",
+            "description": "In Arm 1 (closed loop), an omega-only sweep at moderate kappa does not produce a behaviorally frozen region.",
+            "kind": "adversarial",
+            "metric_path": "criteria.a11_omega_only_frozen_region_closed_loop",
+            "comparator": "<=",
+            "threshold": 0,
+            "weak_threshold": 0.1,
+            "opposite_threshold": 0.5,
+            "value": 0,
+            "label": "support"
+        },
+        {
+            "id": "A1.2",
+            "description": "In Arm 1 (closed loop), the behavioral frozen boundary moves smoothly under CRP concentration plus/minus 50 percent.",
+            "kind": "adversarial",
+            "metric_path": "criteria.a12_boundary_smoothness_max_jump_closed_loop",
+            "comparator": "<=",
+            "threshold": 0.2,
+            "weak_threshold": 0.3,
+            "opposite_threshold": 0.6,
+            "value": 0,
+            "label": "support"
+        },
+        {
+            "id": "A1.3",
+            "description": "In Arm 1 (closed loop), slow-path trial-order shuffle still crosses the behavioral frozen boundary.",
+            "kind": "adversarial",
+            "metric_path": "criteria.a13_shuffle_cross_rate_closed_loop",
+            "comparator": ">=",
+            "threshold": 0.8,
+            "weak_threshold": 0.6,
+            "opposite_threshold": 0.2,
+            "value": 0.8,
+            "label": "support"
+        },
+        {
+            "id": "A1.4",
+            "description": "In Arm 2 (yoked control), at every fixed seed and omega the potential and delivered aversive-evidence counts are exactly identical across all kappa levels.",
+            "kind": "adversarial",
+            "metric_path": "criteria.a14_yoked_max_count_range",
+            "comparator": "<=",
+            "threshold": 0,
+            "weak_threshold": 0,
+            "opposite_threshold": 1,
+            "value": 0,
+            "label": "support"
+        },
+        {
+            "id": "A1.5",
+            "description": "The number of frozen-region cells in Arm 1 (closed loop) minus Arm 2 (exact replay) is at least the preregistered two-cell margin.",
+            "kind": "adversarial",
+            "metric_path": "criteria.a15_frozen_region_cell_contrast",
+            "comparator": ">=",
+            "threshold": 2,
+            "weak_threshold": 1,
+            "opposite_threshold": 0,
+            "value": 0,
+            "label": "falsified"
+        }
+    ]
+}
