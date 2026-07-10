@@ -37,7 +37,7 @@ Base.@kwdef struct Sim3Params
     gamma_se::Float64 = 1.2
     eta_self::Float64 = 7.0
     eta_threat::Float64 = 1.6
-    cross_level_coupling::Float64 = 2.0
+    cross_level_coupling::Float64 = 1.35
     outcome_precision::Float64 = 1.6
     policy_precision::Float64 = 3.2
     threat_policy_weight::Float64 = 2.4
@@ -108,11 +108,12 @@ Base.@kwdef struct SeedMetric
     condition::String
     architecture::String
     E_t::Float64
-    first_passage_self::Union{Nothing, Float64}
-    first_passage_threat::Union{Nothing, Float64}
-    first_passage_policy::Union{Nothing, Float64}
+    first_passage_self::Union{Nothing, Int}
+    first_passage_threat::Union{Nothing, Int}
+    first_passage_policy::Union{Nothing, Int}
     ordered_cascade::Bool
     cascade_tie::Bool
+    cascade_failed::Bool
     training_mean_log_likelihood::Float64
     heldout_mean_log_likelihood::Float64
     trained_cue_contact::Float64
@@ -340,7 +341,6 @@ function trial_step!(
     pi_part_eff, lambda_self_eff = effective_precisions(params, E_t)
     observed_resourced = rand(rng) < params.self_truthfulness
 
-    # Identical bookkeeping: self is micro-step 1 and threat is micro-step 2.
     if architecture == :H1
         q_self_after = direct_relational_update(params, q_self_prior, observed_resourced, pi_part_eff, lambda_self_eff)
         q_threat_after = condition_threat_on_self(params, q_threat_generalized, q_self_after)
@@ -349,7 +349,6 @@ function trial_step!(
         q_threat_after = direct_relational_update(params, q_threat_generalized, observed_resourced, pi_part_eff, lambda_self_eff)
     end
 
-    # Identical bookkeeping and policy equation: policy is micro-step 3.
     qpi = policy_probs(params, q_self_after, q_threat_after)
     action = POLICY_CONTACT
     neutral_probability = params.outcome_safe_contact_neutral
@@ -428,15 +427,14 @@ function first_passage(rows::Vector{TrialRow}, params::Sim3Params)
     policy_time = nothing
     for row in rows
         row.phase == "training" || continue
-        base = 3.0 * (row.trial - 1)
         if self_time === nothing && row.q_self_after_resourced >= params.first_passage_threshold
-            self_time = base + 1.0
+            self_time = row.trial
         end
         if threat_time === nothing && row.q_threat_after_relational_safe >= params.first_passage_threshold
-            threat_time = base + 2.0
+            threat_time = row.trial
         end
         if policy_time === nothing && row.p_contact >= params.policy_threshold
-            policy_time = base + 3.0
+            policy_time = row.trial
         end
     end
     return self_time, threat_time, policy_time
@@ -444,9 +442,10 @@ end
 
 function cascade_flags(self_time, threat_time, policy_time)
     complete = self_time !== nothing && threat_time !== nothing && policy_time !== nothing
-    complete || return false, false
+    complete || return false, false, true
     tie = self_time == threat_time || self_time == policy_time || threat_time == policy_time
-    return self_time < threat_time && threat_time < policy_time, tie
+    ordered = self_time < threat_time && threat_time < policy_time
+    return ordered, tie, !ordered && !tie
 end
 
 function run_condition_seed(seed::Int, params::Sim3Params, cue_rows::Vector{Cue}; condition::String, architecture::Symbol, E_t::Float64)
@@ -465,7 +464,7 @@ function run_condition_seed(seed::Int, params::Sim3Params, cue_rows::Vector{Cue}
 
     probe_results = Dict(cue.label => probe_cue(state, cue, params, architecture, E_t; cue_rows = cue_rows) for cue in cue_rows)
     self_time, threat_time, policy_time = first_passage(rows, params)
-    ordered, tie = cascade_flags(self_time, threat_time, policy_time)
+    ordered, tie, failed = cascade_flags(self_time, threat_time, policy_time)
     training_ll = [row.log_likelihood for row in rows if row.phase == "training"]
     heldout_ll = [row.log_likelihood for row in rows if row.phase == "heldout"]
     untrained = [probe_results[cue.label].p_contact for cue in cue_rows if !cue.trained && !cue.structural_confound]
@@ -484,6 +483,7 @@ function run_condition_seed(seed::Int, params::Sim3Params, cue_rows::Vector{Cue}
         first_passage_policy = policy_time,
         ordered_cascade = ordered,
         cascade_tie = tie,
+        cascade_failed = failed,
         training_mean_log_likelihood = mean(training_ll),
         heldout_mean_log_likelihood = mean(heldout_ll),
         trained_cue_contact = probe_results[train_cue.label].p_contact,
@@ -520,8 +520,14 @@ function summarize_condition(seed_metrics::Vector{SeedMetric}, probe_maps, cue_r
         n_seeds = length(seed_metrics),
         mean_training_log_likelihood = mean(row.training_mean_log_likelihood for row in seed_metrics),
         mean_heldout_log_likelihood = mean(row.heldout_mean_log_likelihood for row in seed_metrics),
+        ordered_cascade_count = count(row -> row.ordered_cascade, seed_metrics),
+        cascade_tie_count = count(row -> row.cascade_tie, seed_metrics),
+        cascade_failed_count = count(row -> row.cascade_failed, seed_metrics),
+        self_before_threat_count = count(row -> row.first_passage_self !== nothing && row.first_passage_threat !== nothing && row.first_passage_self < row.first_passage_threat, seed_metrics),
+        threat_policy_same_trial_count = count(row -> row.first_passage_threat !== nothing && row.first_passage_policy !== nothing && row.first_passage_threat == row.first_passage_policy, seed_metrics),
         ordered_cascade_rate = mean(row.ordered_cascade for row in seed_metrics),
         cascade_tie_rate = mean(row.cascade_tie for row in seed_metrics),
+        cascade_failed_rate = mean(row.cascade_failed for row in seed_metrics),
         mean_trained_cue_contact = mean(row.trained_cue_contact for row in seed_metrics),
         mean_untrained_contact = mean(row.mean_untrained_contact for row in seed_metrics),
         mean_confound_contact = mean(row.confound_contact for row in seed_metrics),
@@ -726,10 +732,29 @@ function run_sim3_config(config::ExperimentConfig; config_path::Union{Nothing, A
             h1_minus_h2_mean_log_likelihood = h1_summary.mean_heldout_log_likelihood - h2_summary.mean_heldout_log_likelihood,
         ),
         cascade = (
+            resolution = "trial",
+            witnessing_earned_count = h1_summary.ordered_cascade_count,
+            witnessing_self_before_threat_count = h1_summary.self_before_threat_count,
+            witnessing_threat_policy_same_trial_count = h1_summary.threat_policy_same_trial_count,
+            exposure_self_before_threat_count = exposure_summary.self_before_threat_count,
+            h2_self_before_threat_count = h2_summary.self_before_threat_count,
+            witnessing_tie_count = h1_summary.cascade_tie_count,
+            witnessing_failed_count = h1_summary.cascade_failed_count,
             witnessing_order_rate = h1_summary.ordered_cascade_rate,
             witnessing_tie_rate = h1_summary.cascade_tie_rate,
+            witnessing_failed_rate = h1_summary.cascade_failed_rate,
+            exposure_earned_count = exposure_summary.ordered_cascade_count,
+            exposure_tie_count = exposure_summary.cascade_tie_count,
+            exposure_failed_count = exposure_summary.cascade_failed_count,
             exposure_order_rate = exposure_summary.ordered_cascade_rate,
             exposure_tie_rate = exposure_summary.cascade_tie_rate,
+            exposure_failed_rate = exposure_summary.cascade_failed_rate,
+            h2_earned_count = h2_summary.ordered_cascade_count,
+            h2_tie_count = h2_summary.cascade_tie_count,
+            h2_failed_count = h2_summary.cascade_failed_count,
+            h2_order_rate = h2_summary.ordered_cascade_rate,
+            h2_tie_rate = h2_summary.cascade_tie_rate,
+            h2_failed_rate = h2_summary.cascade_failed_rate,
         ),
         transfer = (
             h1_witnessing_mean = h1_summary.mean_untrained_contact,
@@ -784,7 +809,7 @@ function run_sim3_config(config::ExperimentConfig; config_path::Union{Nothing, A
             root_pathway = "agent-learned Dirichlet P(root | cue) from pre-training co-occurrences",
             perceptual_generalization_channel = "feature-overlap-weighted sharing of learned cue-local threat evidence at inference; target banks are not mutated",
             architecture_difference = "conditioning direction only: H1 self→threat; H2 threat→self",
-            microstep_schedule = ["self", "threat", "policy"],
+            first_passage_resolution = "integer training-trial index; same-trial crossings are ties",
             heldout_design = "frozen-bank predictive likelihood on subsequent training-cue trials",
             structural_test_cue = structural_cue.label,
             perceptual_root_poor_cue = confound_cue.label,

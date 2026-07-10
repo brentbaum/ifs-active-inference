@@ -18,21 +18,57 @@ criteria:
     kind: success
 
   - id: S3.cascade.honest_witnessing_order
-    description: Under the architecture-invariant self/threat/policy micro-step schedule, witnessing produces strict self-before-threat-before-policy crossings in at least 8 of 10 pilot seeds.
-    metric_path: metrics.cascade.witnessing_order_rate
+    description: At integer trial resolution, witnessing produces strict self-before-threat-before-policy crossings in at least 8 of 10 pilot seeds; same-trial crossings do not count.
+    metric_path: metrics.cascade.witnessing_earned_count
     comparator: ">="
-    threshold: 0.80
-    weak_threshold: 0.60
-    opposite_threshold: 0.30
+    threshold: 8
+    weak_threshold: 6
+    opposite_threshold: 3
+    kind: success
+
+  - id: S3.cascade.witnessing_ties
+    description: Same-trial witnessing crossings are reported separately and remain uncommon rather than being credited as ordered cascades.
+    metric_path: metrics.cascade.witnessing_tie_count
+    comparator: "<="
+    threshold: 2
+    weak_threshold: 4
+    opposite_threshold: 7
+    kind: adversarial
+
+  - id: S3.cascade.two_way_self_before_threat
+    description: "Step B amendment (2026-07-10, orchestrator, pre-confirmatory): policy is a deterministic readout of current beliefs in this model, so the three-way strict cascade is structurally unearnable (threat and policy cross together by construction); it is retained above for the record. The evidential cascade claim at this model scale is identity-before-threat: witnessing produces strictly earlier self-state crossings than threat crossings (trial resolution, no offsets) in at least 8 of 10 seeds."
+    metric_path: metrics.cascade.witnessing_self_before_threat_count
+    comparator: ">="
+    threshold: 8
+    weak_threshold: 6
+    opposite_threshold: 3
+    kind: success
+
+  - id: S3.cascade.two_way_exposure_control
+    description: "Step B amendment: matched exposure does not produce the self-before-threat ordering in a majority of seeds."
+    metric_path: metrics.cascade.exposure_self_before_threat_count
+    comparator: "<="
+    threshold: 5
+    weak_threshold: 6
+    opposite_threshold: 8
+    kind: success
+
+  - id: S3.cascade.two_way_h2_control
+    description: "Step B amendment: the reversed-root architecture does not produce the self-before-threat ordering in a majority of seeds."
+    metric_path: metrics.cascade.h2_self_before_threat_count
+    comparator: "<="
+    threshold: 5
+    weak_threshold: 6
+    opposite_threshold: 8
     kind: success
 
   - id: S3.cascade.exposure_control
     description: Low-depth exposure does not produce the strict cascade in a majority of seeds.
-    metric_path: metrics.cascade.exposure_order_rate
+    metric_path: metrics.cascade.exposure_earned_count
     comparator: "<="
-    threshold: 0.50
-    weak_threshold: 0.60
-    opposite_threshold: 0.80
+    threshold: 5
+    weak_threshold: 6
+    opposite_threshold: 8
     kind: success
 
   - id: S3.transfer.learned_association_correlation

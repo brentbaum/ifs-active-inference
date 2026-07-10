@@ -6,19 +6,23 @@ This module implements T4.2 Step A. It may run only seeds 1001–1010 into
 ## Architecture comparison
 
 H1 and H2 receive the same cue stream, relational observations, outcome stream,
-learning rates (including the shared pilot-tuned self rate), feature-overlap messages, policy equation, and self → threat →
-policy micro-step clock. Both self and threat banks learn. Their one substantive
+learning rates (including the shared pilot-tuned self rate), feature-overlap
+messages, and policy equation. Both self and threat banks learn. Their one substantive
 difference is conditioning direction:
 
-- H1: relational evidence updates self at micro-step 1; threat conditions on
-  self at micro-step 2.
-- H2: self conditions on the prior threat message at micro-step 1; the same
-  relational evidence updates threat at micro-step 2.
+- H1: relational evidence updates self; threat conditions on self.
+- H2: self conditions on the prior threat message; the same relational evidence
+  updates threat.
 
-Policy is micro-step 3 in both models and reads both inferred states. First
-passage uses these shared micro-step numbers directly. There are no architecture
-labels or offsets in the metric. Equal timestamps are ties and never satisfy the
-strict cascade test.
+The model has one inference update per training trial, so first passage is logged
+at the resolution the dynamics genuinely have: the integer training-trial index.
+This is design (a), trial-resolution measurement. The sequential-inference design
+(b) was rejected because the model has no iterative message-passing loop; adding
+iteration labels without updating beliefs would recreate the audited defect.
+Crossings on the same trial are ties and never satisfy the strict
+`self < threat < policy` cascade test. Complete non-strict orderings and incomplete
+crossing triples are failures. Pilot output reports earned, tied, and failed counts
+separately for H1 witnessing, H1 exposure, and H2 witnessing.
 
 Training fit is the mean online outcome log likelihood on learned training-cue
 trials. A difference above 0.05 nats/trial is a hard stop. Out-of-sample model
@@ -49,3 +53,16 @@ show positive threat-level generalization without a write to its local bank. Sep
 predeclared low-perceptual, root-associated `cue_3` must exceed that perceptual
 baseline, and contact must track learned root association after controlling for
 perceptual similarity.
+
+## Criteria amendment (Step B, orchestrator, 2026-07-10 — pre-confirmatory)
+
+The preregistered three-way strict cascade (self < threat < policy at trial resolution) is
+structurally unearnable in this model: `policy_probs` is a deterministic softmax over the
+CURRENT q_self/q_threat, with no independent policy state, so the policy crossing co-occurs
+with the threat crossing by construction (pilot: 10/10 same-trial). The three-way criterion
+and the tie-count adversarial are RETAINED and remain falsified for the record. The amended
+evidential claim is the two-way ordering the model can actually resolve: identity-level
+revision strictly precedes threat-level revision (S3.cascade.two_way_*), with exposure and
+reversed-root controls. Pilot: witnessing 10/10, exposure 0/10, H2 0/10. Metric addition
+(self_before_threat_count, threat_policy_same_trial_count) touched summary bookkeeping only;
+no dynamics changed. Confirmatory runs on orchestrator seeds 3001-3020 against the freeze.
