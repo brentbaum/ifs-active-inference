@@ -1,0 +1,1055 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How a Part Freezes: The Simulation</title>
+<style>
+  :root {
+    --paper: #EEF1F2;
+    --card: #F8FAFA;
+    --ink: #1B2429;
+    --muted: #56676F;
+    --line: #C7D1D5;
+    --frost: #2F5D7C;
+    --frost-deep: #1E4560;
+    --frost-light: #A9C3D4;
+    --ember: #B05C22;
+    --ember-deep: #8C4415;
+    --sand: #E4E0D5;
+    --serif-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --serif-body: Charter, "Iowan Old Style", Georgia, "Times New Roman", serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--paper); }
+  body {
+    margin: 0;
+    color: var(--ink);
+    font-family: var(--serif-body);
+    font-size: 1.09rem;
+    line-height: 1.68;
+    -webkit-font-smoothing: antialiased;
+  }
+  .col { max-width: 41.5rem; margin: 0 auto; padding: 0 1.25rem; }
+  .wide { max-width: 54rem; margin: 2.2rem auto; padding: 0 1.25rem; }
+
+  /* ---------- hero ---------- */
+  .hero { position: relative; padding: 4.5rem 0 3rem; overflow: hidden; }
+  .hero-map { position: absolute; right: -2rem; top: 1.5rem; opacity: 0.5; pointer-events: none; }
+  @media (max-width: 1180px) { .hero-map { display: none; } }
+  .hero-inner { position: relative; }
+  .kicker {
+    font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 1.4rem;
+  }
+  h1 {
+    font-family: var(--serif-display); font-weight: 700;
+    font-size: clamp(2.3rem, 6vw, 3.4rem); line-height: 1.08;
+    margin: 0 0 1.1rem; letter-spacing: -0.012em; text-wrap: balance;
+  }
+  h1 .frozen-word { color: var(--frost); }
+  .thermo {
+    height: 3px; width: 9.5rem; margin: 1.5rem 0 1.6rem; border-radius: 2px;
+    background: linear-gradient(90deg, var(--frost) 0%, var(--frost-light) 55%, var(--ember) 100%);
+  }
+  .lede { font-size: 1.22rem; line-height: 1.6; color: var(--ink); max-width: 34rem; }
+  .lede em { font-style: italic; }
+
+  /* ---------- structure ---------- */
+  section { margin-top: 3.6rem; }
+  .eyebrow {
+    font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--frost); margin-bottom: 0.45rem;
+  }
+  h2 {
+    font-family: var(--serif-display); font-weight: 700;
+    font-size: 1.72rem; line-height: 1.2; margin: 0 0 1.1rem;
+    letter-spacing: -0.008em; text-wrap: balance;
+  }
+  h3 {
+    font-family: var(--serif-display); font-weight: 700;
+    font-size: 1.14rem; margin: 2rem 0 0.6rem;
+  }
+  p { margin: 0 0 1.1rem; }
+  .num { font-family: var(--mono); font-size: 0.88em; font-variant-numeric: tabular-nums; }
+  .formula {
+    font-family: var(--mono); font-size: 0.86rem; line-height: 1.7;
+    background: var(--card); border: 1px solid var(--line); border-radius: 6px;
+    padding: 0.85rem 1.1rem; margin: 1.2rem 0; overflow-x: auto; white-space: pre;
+  }
+  .aside {
+    border-left: 3px solid var(--frost-light); padding: 0.15rem 0 0.15rem 1.05rem;
+    color: var(--muted); font-size: 0.98rem; margin: 1.4rem 0;
+  }
+  .aside p:last-child { margin-bottom: 0; }
+
+  /* ---------- widget chrome ---------- */
+  .widget {
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    padding: 1.5rem 1.6rem 1.6rem;
+  }
+  .widget-title {
+    font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--muted); margin: 0 0 1rem;
+  }
+  .widget-note { font-size: 0.9rem; color: var(--muted); margin-top: 1rem; line-height: 1.55; }
+  button.ctl {
+    font-family: var(--mono); font-size: 0.8rem; color: var(--ink);
+    background: var(--paper); border: 1px solid var(--line); border-radius: 6px;
+    padding: 0.45rem 0.85rem; cursor: pointer;
+  }
+  button.ctl:hover { border-color: var(--muted); }
+  button.ctl:focus-visible, input:focus-visible {
+    outline: 2px solid var(--frost); outline-offset: 2px;
+  }
+  button.ctl.primary { background: var(--frost); border-color: var(--frost); color: #fff; }
+  button.ctl.primary:hover { background: var(--frost-deep); }
+  button.ctl[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .btnrow { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .readout { font-family: var(--mono); font-size: 0.84rem; font-variant-numeric: tabular-nums; }
+  .verdict {
+    display: inline-block; font-family: var(--mono); font-size: 0.72rem;
+    letter-spacing: 0.08em; text-transform: uppercase; border-radius: 4px;
+    padding: 0.18rem 0.55rem; font-variant-numeric: tabular-nums;
+  }
+  .verdict.frozen { background: var(--frost); color: #fff; }
+  .verdict.revisable { background: var(--ember); color: #fff; }
+  .verdict.between { background: var(--sand); color: var(--ink); }
+  .verdict.idle { background: transparent; border: 1px dashed var(--line); color: var(--muted); }
+
+  /* tally toy */
+  .tally-banks { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; margin: 0.4rem 0 1.2rem; }
+  @media (max-width: 640px) { .tally-banks { grid-template-columns: 1fr; } }
+  .bank-name { font-family: var(--serif-display); font-weight: 700; font-size: 1rem; margin-bottom: 0.2rem; }
+  .bank-sub { font-size: 0.85rem; color: var(--muted); margin-bottom: 0.6rem; }
+  .countbar { display: flex; height: 22px; border-radius: 4px; overflow: hidden; border: 1px solid var(--line); background: var(--paper); }
+  .countbar .threat { background: var(--frost); }
+  .countbar .safe { background: var(--sand); }
+  .bank-read { margin-top: 0.55rem; }
+  .beliefline { position: relative; height: 8px; background: var(--paper); border: 1px solid var(--line); border-radius: 4px; margin-top: 0.55rem; }
+  .beliefline .dot { position: absolute; top: -5px; width: 16px; height: 16px; border-radius: 50%; background: var(--frost); border: 2px solid var(--card); transform: translateX(-8px); transition: left 0.25s ease; }
+
+  /* world dial */
+  .dial-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+  @media (max-width: 900px) { .dial-grid { grid-template-columns: 1fr; } }
+  .slider-label { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 0.8rem; margin-bottom: 0.3rem; }
+  input[type=range] { width: 100%; accent-color: var(--frost); }
+  .stat-rows { margin-top: 1rem; }
+  .stat-row { display: flex; align-items: baseline; gap: 0.7rem; padding: 0.32rem 0; border-top: 1px solid var(--line); }
+  .stat-row:first-child { border-top: none; }
+  .stat-label { flex: 0 0 10rem; font-size: 0.88rem; }
+  .stat-bar-wrap { flex: 1; height: 9px; background: var(--paper); border-radius: 4px; overflow: hidden; align-self: center; }
+  .stat-bar { display: block; height: 100%; width: 0; background: var(--frost); border-radius: 4px; transition: width 0.2s ease; }
+  .stat-bar.warm { background: var(--ember); }
+  .stat-val { flex: 0 0 3.4rem; text-align: right; }
+
+  /* capture demo */
+  .cap-banks { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; margin-bottom: 1.1rem; }
+  @media (max-width: 700px) { .cap-banks { grid-template-columns: 1fr; } }
+  .cap-card { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 1rem 1.1rem; }
+  .cap-derived { margin: 0.7rem 0; padding: 0.6rem 0.75rem; background: var(--card); border-radius: 6px; border: 1px solid var(--line); }
+  .cap-derived div { display: flex; justify-content: space-between; padding: 0.12rem 0; }
+  .sparkline { display: block; width: 100%; height: 92px; margin-top: 0.6rem; }
+
+  /* phase map */
+  .pm-layout { display: grid; grid-template-columns: minmax(0, 1fr) 15rem; gap: 1.6rem; align-items: start; }
+  @media (max-width: 780px) { .pm-layout { grid-template-columns: 1fr; } }
+  .pm-svg-wrap { overflow-x: auto; }
+  .pm-cellinfo { font-family: var(--mono); font-size: 0.78rem; line-height: 1.75; font-variant-numeric: tabular-nums; background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 0.9rem 1rem; min-height: 13.5rem; }
+  .pm-cellinfo .hd { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
+  .pm-legend { display: flex; align-items: center; gap: 0.55rem; margin-top: 0.8rem; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .pm-legend .ramp { height: 10px; width: 9rem; border-radius: 3px; border: 1px solid var(--line); }
+  .headline-stats { display: flex; flex-wrap: wrap; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin: 1.6rem 0; }
+  .hstat { background: var(--card); padding: 0.9rem 1rem; flex: 1 1 11rem; }
+  .hstat .v { font-family: var(--mono); font-size: 1.5rem; font-variant-numeric: tabular-nums; }
+  .hstat .v.cold { color: var(--frost); } .hstat .v.warm { color: var(--ember); }
+  .hstat .k { font-size: 0.8rem; color: var(--muted); line-height: 1.4; margin-top: 0.2rem; }
+
+  /* matched pair */
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; margin: 1.6rem 0; }
+  @media (max-width: 640px) { .pair { grid-template-columns: 1fr; } }
+  .pair-col { background: var(--card); padding: 1.2rem 1.3rem; }
+  .pair-col h4 { font-family: var(--serif-display); font-size: 1.02rem; margin: 0 0 0.2rem; }
+  .pair-col .tag { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+  .pair-rows { margin-top: 0.8rem; font-size: 0.92rem; }
+  .pair-rows div { display: flex; justify-content: space-between; gap: 1rem; padding: 0.3rem 0; border-top: 1px solid var(--paper); }
+
+  /* clinical + audit lists */
+  .claims { padding-left: 0; list-style: none; counter-reset: claim; }
+  .claims li { position: relative; padding-left: 2.5rem; margin-bottom: 1.15rem; }
+  .claims li::before {
+    counter-increment: claim; content: counter(claim);
+    position: absolute; left: 0; top: 0.1rem;
+    font-family: var(--mono); font-size: 0.8rem; color: var(--frost);
+    width: 1.6rem; height: 1.6rem; border: 1px solid var(--frost-light); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .audit { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  @media (max-width: 700px) { .audit { grid-template-columns: 1fr; } }
+  .audit-col { background: var(--card); padding: 1.3rem 1.4rem; }
+  .audit-col h4 { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; margin: 0 0 0.9rem; }
+  .audit-col.chosen h4 { color: var(--muted); } .audit-col.emerges h4 { color: var(--ember-deep); }
+  .audit-col ul { margin: 0; padding-left: 1.1rem; font-size: 0.92rem; line-height: 1.55; }
+  .audit-col li { margin-bottom: 0.55rem; }
+
+  footer { margin: 4.5rem 0 3rem; color: var(--muted); font-size: 0.9rem; }
+  footer .thermo { margin: 0 0 1.2rem; }
+  a { color: var(--frost); }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+
+<header class="hero">
+  <div class="col hero-inner">
+    <svg class="hero-map" id="heroMap" width="330" height="330" aria-hidden="true"></svg>
+    <div class="kicker">An interactive explainer &middot; parts, precision, and ordinary learning</div>
+    <h1>How a Part <span class="frozen-word">Freezes</span></h1>
+    <div class="thermo" aria-hidden="true"></div>
+    <p class="lede">
+      A part-like belief is one that stops updating — it goes on predicting danger after the
+      world turns safe. The simulation asks whether such a belief can emerge from ordinary
+      learning in an ordinary world, with nothing scripted: no freeze switch, no trauma flag,
+      no rule that says <em>now stop revising</em>. It can. This is a tour of exactly how,
+      with the real arithmetic and the real data at every step.
+    </p>
+  </div>
+</header>
+
+<main>
+
+<section class="col" id="question">
+  <div class="eyebrow">1 &middot; The question</div>
+  <h2>Can freezing emerge, rather than be installed?</h2>
+  <p>
+    In Internal Family Systems terms, a part carries a belief formed in a hard moment — and the
+    signature of the burdened part is that the belief is <em>frozen</em>: decades of safe evidence
+    arrive and the prediction of danger barely moves. It is easy to build a model that freezes
+    because you told it to. The interesting question is whether freezing falls out of
+    ingredients that are each individually unremarkable: a learner that tallies experience, a
+    world where bad things happen at some rate, actions that sometimes work, and one
+    psychologically honest assumption — that what you learn <em>while overwhelmed</em> is written
+    differently than what you learn while composed.
+  </p>
+  <p>
+    The simulation places a learning agent in a world defined by two dials: <strong>adversity</strong>
+    (written <span class="num">&omega;</span> — how often bad things happen, including rare
+    catastrophic ones) and <strong>control</strong> (written <span class="num">&kappa;</span> — how much
+    the agent's actions actually work). It lets the agent live a two-epoch life in that world,
+    then gives its dominant threat belief a long course of purely safe evidence and measures how
+    much the belief moves. Run across the whole adversity-by-control plane, twice — once where
+    actions matter and once where the same events replay regardless — the experiment shows where
+    frozen beliefs live, and why.
+  </p>
+</section>
+
+<section class="col" id="agent">
+  <div class="eyebrow">2 &middot; The agent</div>
+  <h2>Beliefs are tallies</h2>
+  <p>
+    The agent's knowledge is a set of <strong>explanations</strong> (latent causes — candidate answers
+    to "what kind of situation is this?"). Each explanation holds a few banks of
+    <strong>Dirichlet counts</strong>: running tallies of experience. One bank tallies outcomes
+    (<span class="num">safe</span> vs <span class="num">threat</span>), one tallies how strongly the
+    threat cue accompanied it, one tallies what happened after each action, one tallies how often
+    each action was used, and one tallies how severe the bad outcomes were (ordinary vs
+    catastrophic).
+  </p>
+  <p>
+    A tally is the entire belief. The probability the explanation assigns to a bad outcome is just
+    the threat count divided by the total, and its confidence is the total itself. That gives
+    Dirichlet learning its one crucial property: <strong>big tallies resist change</strong>. Adding one
+    observation to a bank of twelve moves the belief a lot; adding it to a bank of five hundred
+    moves it almost nothing. This is ordinary Bayes — the prior counts are pseudo-observations, and
+    new evidence competes against all of them at once.
+  </p>
+
+  <div class="wide">
+    <div class="widget" id="tallyWidget">
+      <div class="widget-title">Interactive &middot; the tally is the belief</div>
+      <p style="font-size:0.95rem; margin-top:0;">
+        Two banks, same ratio of threat to safe, different totals. Feed the same evidence to
+        both and watch who moves.
+      </p>
+      <div class="tally-banks">
+        <div>
+          <div class="bank-name">Young bank</div>
+          <div class="bank-sub readout" id="tallyAsub"></div>
+          <div class="countbar" id="tallyAbar" aria-hidden="true"></div>
+          <div class="beliefline"><div class="dot" id="tallyAdot"></div></div>
+          <div class="bank-read readout" id="tallyAread"></div>
+        </div>
+        <div>
+          <div class="bank-name">Old bank</div>
+          <div class="bank-sub readout" id="tallyBsub"></div>
+          <div class="countbar" id="tallyBbar" aria-hidden="true"></div>
+          <div class="beliefline"><div class="dot" id="tallyBdot"></div></div>
+          <div class="bank-read readout" id="tallyBread"></div>
+        </div>
+      </div>
+      <div class="btnrow">
+        <button class="ctl primary" id="tallySafe">+1 safe day</button>
+        <button class="ctl primary" id="tallySafe10">+10 safe days</button>
+        <button class="ctl" id="tallyThreat">+1 bad day</button>
+        <button class="ctl" id="tallyReset">Reset</button>
+      </div>
+      <p class="widget-note" id="tallyNote">
+        Both banks start believing a bad day is <span class="num">58%</span> likely. Add safe days and
+        the young bank melts while the old one barely acknowledges them.
+      </p>
+    </div>
+  </div>
+
+  <h3>Four things it can do</h3>
+  <p>
+    Each moment, the agent picks one of four policies: <strong>approach</strong> (engage the
+    situation), <strong>flee</strong>, <strong>appease</strong>, or <strong>attenuate</strong> — the covert
+    move of turning down the gain on experience itself, the model's numbing. It scores each policy
+    by expected outcome: the predicted chance of safe versus threat under that action, weighted by
+    preferences of <span class="num">+1.35</span> for safe and <span class="num">&minus;2.35</span> for
+    threat, minus a small penalty for uncertain predictions
+    (<span class="num">0.10&nbsp;&times;</span> the outcome entropy), plus a small curiosity bonus for
+    actions it knows little about (<span class="num">0.28&nbsp;&times;</span> entropy, shrinking with
+    the square root of that action's evidence). Overt actions cost
+    <span class="num">0.03</span>; attenuation costs <span class="num">0.80</span> and, because it
+    dampens the feed, only <span class="num">34%</span> of the outcome stakes and
+    <span class="num">18%</span> of the information bonus reach its score. It is a genuinely bad
+    deal that becomes the best remaining deal only when every overt action is expected to fail.
+  </p>
+  <div class="aside">
+    <p>
+      One structural detail matters later: the expected outcome of <em>approach</em> is conditioned
+      on the explanation's own threat tally (its outcome bank blended with half the affect bank).
+      What-this-is predicts what-happens-if-I-go-toward-it. Without that link, an avoidant agent's
+      approach column would be a nearly empty bank that trivially revises the first time it is
+      tested, and frozenness would be impossible by construction.
+    </p>
+  </div>
+</section>
+
+<section class="col" id="world">
+  <div class="eyebrow">3 &middot; The world</div>
+  <h2>Adversity, control, and avoidance that works</h2>
+  <p>
+    The world is defined by its two dials. Adversity sets the rate of bad events: the chance that
+    a given trial's potential event is aversive is
+    <span class="num">0.08 + 0.31&omega;</span> (kept between <span class="num">6%</span> and
+    <span class="num">97%</span>). Control sets efficacy through a saturating transform,
+    <span class="num">c&nbsp;=&nbsp;&kappa;/(&kappa;+0.45)</span>: at
+    <span class="num">&kappa;=0</span> actions never help; at high <span class="num">&kappa;</span> a
+    well-chosen action usually does.
+  </p>
+  <p>
+    The agent lives a <strong>two-epoch life</strong>. First an <strong>acute epoch</strong> of
+    <span class="num">72</span> trials in which catastrophes are possible: above an adversity floor
+    of <span class="num">&omega;&nbsp;=&nbsp;1.2</span>, each bad event has a chance of up to
+    <span class="num">8%</span> (specifically <span class="num">0.015&nbsp;&times;&nbsp;(&omega;&nbsp;&minus;&nbsp;1.2)</span>)
+    of arriving at <strong>severity 6</strong> — six times the ordinary weight, the kind of event no
+    prior expects. Then a <strong>consolidation epoch</strong> of <span class="num">128</span> trials
+    at the same adversity with the catastrophe channel silent: the long stretch of ordinary
+    hardship that follows an acute period. Life, in this model, is a bad year followed by a
+    difficult decade.
+  </p>
+  <p>
+    The crucial mechanic is that <strong>when an action succeeds, the world actually delivers
+    relief</strong>. A successful overt response to a bad event suppresses upcoming potential
+    hazards for a fixed window: approach buys <span class="num">1</span> quiet trial, flee
+    <span class="num">3</span>, appease <span class="num">2</span>, attenuation none. Avoidance
+    <em>works</em> — and working avoidance changes what the agent gets to learn, because a
+    suppressed hazard is an observation that never happens. The evidence stream is not given to
+    the agent; the agent's own successes edit it.
+  </p>
+
+  <div class="wide">
+    <div class="widget" id="worldWidget">
+      <div class="widget-title">Interactive &middot; the world's arithmetic</div>
+      <div class="dial-grid">
+        <div>
+          <div class="slider-label"><span>adversity &omega;</span><span id="wOmegaVal">1.8</span></div>
+          <input type="range" id="wOmega" min="0.2" max="3.0" step="0.1" value="1.8" aria-label="adversity omega">
+          <div class="slider-label" style="margin-top:1rem;"><span>control &kappa;</span><span id="wKappaVal">0.4</span></div>
+          <input type="range" id="wKappa" min="0" max="1.4" step="0.1" value="0.4" aria-label="control kappa">
+          <div class="stat-rows">
+            <div class="stat-row">
+              <span class="stat-label">chance a trial is bad</span>
+              <span class="stat-bar-wrap"><span class="stat-bar" id="wPavBar"></span></span>
+              <span class="stat-val readout" id="wPav"></span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">catastrophe risk per bad event<br><span style="font-size:0.78rem;color:var(--muted)">(acute epoch only, severity 6)</span></span>
+              <span class="stat-bar-wrap"><span class="stat-bar" id="wPcatBar"></span></span>
+              <span class="stat-val readout" id="wPcat"></span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">action efficacy c</span>
+              <span class="stat-bar-wrap"><span class="stat-bar warm" id="wCtlBar"></span></span>
+              <span class="stat-val readout" id="wCtl"></span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-family:var(--mono); font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-bottom:0.5rem;">
+            During a bad event: chance the action works &middot; relief window
+          </div>
+          <div class="stat-rows" id="wPolicies"></div>
+          <p class="widget-note" style="margin-top:1.2rem;">
+            Success chance is <span class="num">1 &minus; (0.90 &minus; weight&times;c)</span> with weights
+            <span class="num">0.10 / 1.40 / 0.90 / 0</span> for approach, flee, appease, attenuate.
+            Flee is the strongest lever &mdash; and buys the longest silence.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="col" id="spawn">
+  <div class="eyebrow">4 &middot; New parts</div>
+  <h2>When experience exceeds what can be absorbed</h2>
+  <p>
+    Learning normally means bending an existing explanation toward the data. But some experience
+    exceeds what any explanation on hand can absorb. The simulation makes that literal with a
+    running <strong>spawn pressure</strong>: each trial's surprise — how improbable the observed
+    event was under the best current explanation, weighted by observation precision — is compared
+    to an <strong>assimilation capacity</strong> of <span class="num">1.0</span>. Only the excess
+    counts, and it accumulates in a leaky store that keeps <span class="num">72%</span> of itself
+    each trial:
+  </p>
+  <div class="formula">surprise  = &minus;ln p(what happened | best explanation)
+excess    = max(0, surprise &minus; 1.0)
+pressure  = 0.72 &times; pressure + excess</div>
+  <p>
+    An ordinary bad day at a moderately trained explanation yields surprise near
+    <span class="num">1</span>&ndash;<span class="num">2</span> — a little excess, quickly leaking away.
+    A catastrophe is different. Because the explanation's severity tally starts at
+    <span class="num">[1.0, 0.05]</span> — it treats catastrophic form as roughly a 1-in-21
+    possibility — a severity-6 event is wildly improbable, surprise
+    jumps to around <span class="num">5</span>, and pressure clears its threshold of
+    <span class="num">1.2</span> in a single blow.
+  </p>
+  <p>
+    Pressure alone is not enough. A new explanation is born only when a second condition holds:
+    <strong>no action stands out</strong>. If the scores of approach, flee, and appease are spread by
+    less than <span class="num">0.55</span> — a flat landscape, nothing-I-do-is-expected-to-help —
+    then the agent stops bending old explanations and infers a new cause to carry the experience.
+    This is the model's rendering of overwhelm in the clinical sense: not a large error, but a
+    large error <em>with no handle on it</em>. An agent who has learned that fleeing works never
+    spawns, however hard the blow, because its action landscape is not flat.
+  </p>
+  <p>
+    The newborn explanation is nearly a blank slate with a scar: cue tally
+    <span class="num">[1, 2]</span> (leaning toward the threat cue), outcome tally
+    <span class="num">[1, 1]</span>, one count in every action bank. Everything it will ever believe,
+    it learns from the moment of its birth forward — and it is born into the worst moment of the
+    agent's life, learning at the highest write-weight the system can produce. What that
+    write-weight does is the heart of the matter.
+  </p>
+</section>
+
+<section class="col" id="capture">
+  <div class="eyebrow">5 &middot; Capture</div>
+  <h2>Not how much was written — how it was written</h2>
+  <p>
+    Every observation is written into the tallies with a weight set by <strong>arousal</strong>. The
+    surprise of the moment, scaled by <span class="num">5.2</span> and capped at
+    <span class="num">1</span>, is the arousal; the write-weight is
+    <span class="num">0.16&nbsp;+&nbsp;60&times;arousal</span>. And arousal has a second effect: it
+    collapses <strong>watching</strong> — the knowing-that-I-know, the vantage point outside the
+    experience — as <span class="num">1&nbsp;&minus;&nbsp;0.88&times;arousal</span>. Two worked
+    examples, straight from the arithmetic:
+  </p>
+  <div class="formula">ordinary bad day    p = 0.126   surprise 2.07   arousal 0.40
+                    write-weight 24.1    watching 0.65
+
+catastrophe (sev 6) p = 0.006   surprise 5.06   arousal 0.97
+                    write-weight 58.6    watching 0.14</div>
+  <p>
+    A calm write carries <span class="num">0.16</span>; a fully overwhelmed one carries about
+    <span class="num">60</span> — several hundred ordinary units of belief laid down in one moment,
+    at watching near zero. The explanation keeps a ledger of exactly this: for its threat content,
+    it accumulates both the total mass written and the mass-weighted watching level at which it was
+    written. The ratio — call it <span class="num">r&#772;</span>, the <strong>written watching</strong> of
+    the threat evidence — is the belief's memory of its own formation.
+  </p>
+  <h3>The tilt at test time</h3>
+  <p>
+    Here is the load-bearing assumption, imported whole from the theory: at test time, evidence
+    reaches a belief in proportion to how transparently that belief's contents were written.
+    Contents written with watching intact can be held as an object — <em>a part of me, not the
+    whole of me</em> — and disconfirming evidence lands on them. Contents written in a collapsed
+    state are transparent: when reactivated they are not perceived <em>as a belief</em> but function
+    as the architecture of the moment, and present evidence is discounted accordingly. The
+    simulation states this as a precision balance between the part's priors and present context:
+  </p>
+  <div class="formula">E      = 3 &times; r&#772;                       (witnessing depth available)
+&pi;_eff  = (precision / 2) &times; e^(&minus;E)       (the belief's effective grip)
+&lambda;_eff  = e^(1.2 &times; E)                   (present context's effective weight)
+
+capture C = &pi;_eff / (&pi;_eff + &lambda;_eff)
+each safe trial lands with weight (1 &minus; C)</div>
+  <p>
+    The exponentials do the work. Because <span class="num">r&#772;</span> sits in an exponent with a
+    combined slope of <span class="num">6.6</span>, modest differences in how the evidence was
+    written become order-of-magnitude differences in whether new evidence lands. Two banks can
+    hold <em>identical totals</em> — the same threat counts, the same confidence — and respond to the
+    same safe-evidence course in opposite ways, because one's threat mass was written at watching
+    <span class="num">0.9</span> and the other's at <span class="num">0.25</span>. Frozen, in this
+    model, is not a property of how much evidence a belief has. It is a property of the state the
+    evidence was written in.
+  </p>
+
+  <div class="wide">
+    <div class="widget" id="capWidget">
+      <div class="widget-title">Interactive &middot; identical totals, different histories</div>
+      <p style="font-size:0.95rem; margin-top:0;">
+        Both banks hold the same counts: <span class="num">100 safe / 260 threat</span> — both say
+        a bad outcome is <span class="num">72%</span> likely, with equal confidence. The only
+        difference is the watching level at which the threat evidence was written. Run the same
+        <span class="num">96</span>-trial safe course into both.
+      </p>
+      <div class="cap-banks">
+        <div class="cap-card">
+          <div class="bank-name">Bank A &mdash; written while held</div>
+          <div class="slider-label" style="margin-top:0.6rem;"><span>written watching r&#772;</span><span id="capAr">0.95</span></div>
+          <input type="range" id="capAslider" min="0" max="1" step="0.05" value="0.95" aria-label="Bank A written watching">
+          <div class="cap-derived readout" id="capAderived"></div>
+          <svg class="sparkline" id="capAspark" viewBox="0 0 300 92" preserveAspectRatio="none" aria-hidden="true"></svg>
+          <div style="margin-top:0.6rem; display:flex; justify-content:space-between; align-items:center;">
+            <span class="readout" id="capAread"></span>
+            <span class="verdict idle" id="capAverdict">not yet probed</span>
+          </div>
+        </div>
+        <div class="cap-card">
+          <div class="bank-name">Bank B &mdash; written in collapse</div>
+          <div class="slider-label" style="margin-top:0.6rem;"><span>written watching r&#772;</span><span id="capBr">0.25</span></div>
+          <input type="range" id="capBslider" min="0" max="1" step="0.05" value="0.25" aria-label="Bank B written watching">
+          <div class="cap-derived readout" id="capBderived"></div>
+          <svg class="sparkline" id="capBspark" viewBox="0 0 300 92" preserveAspectRatio="none" aria-hidden="true"></svg>
+          <div style="margin-top:0.6rem; display:flex; justify-content:space-between; align-items:center;">
+            <span class="readout" id="capBread"></span>
+            <span class="verdict idle" id="capBverdict">not yet probed</span>
+          </div>
+        </div>
+      </div>
+      <div class="btnrow">
+        <button class="ctl primary" id="capRun">Run the safe course (96 trials)</button>
+        <button class="ctl" id="capReset">Reset</button>
+      </div>
+      <p class="widget-note">
+        Each safe trial tries to add <span class="num">2.0</span> counts to the safe side; what
+        actually lands is <span class="num">2.0 &times; (1 &minus; C)</span>. Verdicts use the
+        simulation's own thresholds on the <em>relative</em> drop in predicted threat: frozen at
+        <span class="num">&le; 15%</span>, revisable at <span class="num">&ge; 25%</span>. For this toy
+        the bank's precision is its total count; in the full model it also includes the cue tally.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="col" id="experiment">
+  <div class="eyebrow">6 &middot; The experiment</div>
+  <h2>The same worlds, run twice</h2>
+  <p>
+    The full experiment sweeps a <span class="num">15&nbsp;&times;&nbsp;15</span> grid — adversity
+    <span class="num">&omega;</span> from <span class="num">0.2</span> to <span class="num">3.0</span>,
+    control <span class="num">&kappa;</span> from <span class="num">0</span> to
+    <span class="num">1.4</span> — with <span class="num">20</span> independently seeded worlds per
+    cell. Each agent lives its two-epoch life; then its dominant threat belief receives the
+    <span class="num">96</span>-trial safe course, and the belief is classified: <strong>frozen</strong>
+    if the predicted threat drops by <span class="num">15%</span> or less (relative), <strong>revisable</strong>
+    at <span class="num">25%</span> or more, provided it predicted threat at
+    <span class="num">&ge; 0.40</span> to begin with.
+  </p>
+  <p>
+    And every world runs <strong>twice</strong>. In the <strong>closed loop</strong>, the agent's
+    successes suppress upcoming hazards — actions edit the evidence stream. In the
+    <strong>exact replay</strong>, the identical trial-by-trial event sequence is delivered no matter
+    what the agent does; actions still have consequences for the agent's own action-outcome
+    learning, but they cannot change what the world shows it. Same seeds, same learner, same
+    priors, same probe. If the two arms differ, the difference can only have come through the
+    loop between action and evidence. That is <span class="num">9,000</span> simulated lives in
+    total. Here is all of them:
+  </p>
+
+  <div class="wide">
+    <div class="widget" id="pmWidget">
+      <div class="widget-title">Real data &middot; where frozen beliefs live</div>
+      <div class="btnrow" role="group" aria-label="phase map view" style="margin-bottom:1.1rem;">
+        <button class="ctl" id="pmClosed" aria-pressed="true">Closed loop</button>
+        <button class="ctl" id="pmYoked" aria-pressed="false">Exact replay</button>
+        <button class="ctl" id="pmDiff" aria-pressed="false">Where the loop matters</button>
+      </div>
+      <div class="pm-layout">
+        <div class="pm-svg-wrap">
+          <svg id="pmSvg" viewBox="0 0 620 560" style="width:620px; max-width:100%; height:auto;" role="img" aria-label="Phase map of frozen-belief rates across adversity and control"></svg>
+          <div class="pm-legend">
+            <span id="pmLegendLo">0% frozen</span>
+            <span class="ramp" id="pmRamp"></span>
+            <span id="pmLegendHi">100% frozen</span>
+          </div>
+        </div>
+        <div class="pm-cellinfo" id="pmInfo">
+          <div class="hd">hover a cell</div>
+          <div>Each cell is 20 lives at one (adversity, control) setting. The readout compares the two arms directly.</div>
+        </div>
+      </div>
+      <p class="widget-note" id="pmCaption"></p>
+    </div>
+  </div>
+
+  <h3>What the map shows</h3>
+  <p>
+    Under exact replay, freezing is a wall: once adversity is moderate or worse, nearly every
+    belief freezes, and control makes <em>no difference at all</em> — the frozen count in the
+    high-adversity band is identical at low and high control
+    (<span class="num">25</span> cells vs <span class="num">25</span> cells). It cannot be otherwise:
+    with the evidence stream fixed, control has no route by which to matter. In the closed loop
+    the picture reorganizes. Freezing concentrates where adversity is high and control is
+    <strong>partial</strong> (<span class="num">&kappa;</span> roughly <span class="num">0.2</span> to
+    <span class="num">0.6</span>), and <em>releases</em> as control rises:
+    <span class="num">22</span> majority-frozen cells in the high-adversity low-control band,
+    <span class="num">0</span> at high control. The interaction — control's effect on freezing, over
+    and above anything replay shows — is <span class="num">22</span> cells. Control can only matter
+    through the loop, and it does.
+  </p>
+
+  <div class="wide">
+    <div class="headline-stats">
+      <div class="hstat"><div class="v cold">42%</div><div class="k">of the replay agents' aversive evidence is all the closed-loop agents receive in the frozen band (70.9 vs 169.6 events)</div></div>
+      <div class="hstat"><div class="v cold">53%</div><div class="k">&mdash; yet they revise only about half as much under the safe course (0.072 vs 0.136)</div></div>
+      <div class="hstat"><div class="v warm">0.81 vs 0.70</div><div class="k">capture at probe time (closed loop vs replay): the mediator that carries the reversal</div></div>
+      <div class="hstat"><div class="v warm">22 : 0</div><div class="k">majority-frozen cells at partial vs high control in the closed loop; 25 : 25 under replay</div></div>
+    </div>
+  </div>
+
+  <h3>The capture signature</h3>
+  <p>
+    Now the decisive detail. In that same high-adversity band, the closed-loop agents receive
+    <em>less than half</em> the aversive evidence their replay twins do —
+    <span class="num">42%</span> of it, because their avoidance keeps working — and yet they revise
+    only about <em>half as much</em>. If freezing were about the sheer mass of threat evidence,
+    the ordering would have to run the other way: the replay agents' threat banks are far larger.
+    The variable that carries the reversal is capture. The replay agent keeps receiving ordinary,
+    half-watched bad days all through the long second epoch, which dilutes its early collapsed
+    writes and raises the average watching of its threat ledger. The closed-loop agent's
+    successful avoidance <em>removes exactly those later, transparent writes</em> — so the early
+    catastrophic entries, written at watching near <span class="num">0.14</span>, stay dominant, and
+    the safe course arrives at <span class="num">81%</span> capture against replay's
+    <span class="num">70%</span>. Avoidance protects the wound's original register. This is the
+    self-sealing loop of the theory, stated in count arithmetic.
+  </p>
+  <p>One matched pair, same seed, same world (<span class="num">&omega; 2.6, &kappa; 0.4</span>):</p>
+
+  <div class="wide">
+    <div class="pair">
+      <div class="pair-col">
+        <div class="tag">closed loop</div>
+        <h4>Avoidance works &mdash; the belief freezes</h4>
+        <div class="pair-rows readout">
+          <div><span>potential bad events</span><span>188</span></div>
+          <div><span>actually experienced</span><span>58</span></div>
+          <div><span>suppressed by successful action</span><span>130</span></div>
+          <div><span>capture at probe</span><span>0.81</span></div>
+          <div><span>predicted threat, before &rarr; after</span><span>0.41 &rarr; 0.38</span></div>
+          <div><span>relative revision</span><span>6.2%</span></div>
+          <div><span>verdict</span><span class="verdict frozen">frozen</span></div>
+        </div>
+      </div>
+      <div class="pair-col">
+        <div class="tag">exact replay</div>
+        <h4>Everything lands &mdash; the belief keeps updating</h4>
+        <div class="pair-rows readout">
+          <div><span>potential bad events</span><span>188</span></div>
+          <div><span>actually experienced</span><span>188</span></div>
+          <div><span>suppressed by successful action</span><span>0</span></div>
+          <div><span>capture at probe</span><span>0.56</span></div>
+          <div><span>predicted threat, before &rarr; after</span><span>0.75 &rarr; 0.60</span></div>
+          <div><span>relative revision</span><span>19.8%</span></div>
+          <div><span>verdict</span><span class="verdict between">not frozen</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p>
+    Notice what the pair does to intuition: the frozen agent suffered <em>less</em>, holds the
+    <em>lower</em> threat estimate, and possesses the <em>larger</em> total evidence bank — its world
+    was mostly quiet, thanks to its own competence at fleeing. None of that saves it. What its
+    threat ledger contains is dominated by writes made in collapse, and at test time that is the
+    only thing that matters.
+  </p>
+  <div class="aside">
+    <p>
+      Where do <em>new</em> parts fit in? Spawned explanations concentrate where the action
+      landscape is flat — in the near-helpless columns (<span class="num">&kappa; &le; 0.2</span>),
+      rising with adversity to about <span class="num">65%</span> of lives at the extreme corner. In
+      the partial-control band where freezing peaks, the frozen belief is usually the agent's
+      <em>original</em> explanation, hardened by the same loop. The mechanism does not care whether
+      the bundle was born in the storm or annexed by it.
+    </p>
+  </div>
+</section>
+
+<section class="col" id="clinical">
+  <div class="eyebrow">7 &middot; The clinical reading</div>
+  <h2>What the simulation says, said carefully</h2>
+  <p>
+    Each of these is a pattern in the data above, restated in the vocabulary it was built to
+    formalize. They are claims about the model; their clinical resonance is the reason the model
+    exists, not evidence that it is true of people.
+  </p>
+  <ul class="claims">
+    <li>
+      <strong>Uncontrollable adversity produces honest suffering, not frozen parts.</strong> At
+      <span class="num">&kappa; = 0</span> — where no avoidance loop can form — beliefs keep tracking the
+      world in both arms, and when the safe course arrives, they update. At the most extreme
+      adversity, the helpless column freezes <em>least</em> in the closed loop. The suffering is
+      real and the learning stays honest, because nothing edits the evidence.
+    </li>
+    <li>
+      <strong>Freezing requires partial control.</strong> The frozen region lives where avoidance
+      works well enough to suppress most disconfirming exposure but not well enough to end the
+      adversity: enough control to protect the wound's original register, not enough to outgrow it.
+      As control rises past that band, the same loop that froze the belief releases it.
+    </li>
+    <li>
+      <strong>Numbing tracks helplessness, not hazard severity.</strong> Attenuation is chosen
+      <span class="num">25%</span> of the time when control is absent, decays as control grows, and is
+      essentially never chosen (max <span class="num">0.05%</span>) once
+      <span class="num">&kappa; &ge; 0.5</span> — at <em>every</em> adversity level. It is a response to
+      the flat action landscape, not to how bad things are. And the agents who numb are not the
+      agents who freeze: attenuation is a distinct dissociative mode, not the freezing mechanism.
+    </li>
+    <li>
+      <strong>Competence is not immunity.</strong> About one life in five freezes at the extreme
+      adversity-and-high-control corner — the lives where a catastrophe lands <em>before</em> control
+      is learned. From then on, skillful avoidance does precisely what it does in the frozen band:
+      it keeps the early collapsed writes dominant. Control prevents chronic freezing; it cannot
+      retroactively protect the first blow.
+    </li>
+  </ul>
+</section>
+
+<section class="col" id="audit">
+  <div class="eyebrow">8 &middot; Honest confidence</div>
+  <h2>What is chosen, what emerges</h2>
+  <p>
+    These results reproduced on fresh random worlds after all rules and thresholds were frozen —
+    they are stable properties of this architecture, not one lucky run. That is also the correct
+    ceiling on their weight: the simulation demonstrates that the theory's account of freezing is
+    <em>coherent</em> — that ordinary learning, an ordinary world, and the capture assumption
+    jointly suffice to produce the clinical pattern — not that this is how people work. The one
+    genuinely psychological assumption, the tilt (evidence lands in proportion to the watching in
+    which a belief's contents were written), is imported from the theory rather than derived; the
+    simulation shows what follows from it, not that it is true. Everything is laid out for audit:
+  </p>
+  <div class="wide" style="margin-top:1.6rem;">
+    <div class="audit">
+      <div class="audit-col chosen">
+        <h4>Chosen by hand</h4>
+        <ul>
+          <li>World rates: bad-event probability <span class="num">0.08+0.31&omega;</span>; catastrophe rate and severity (<span class="num">6&times;</span>); epoch lengths <span class="num">72 / 128</span>.</li>
+          <li>Relief windows (<span class="num">1/3/2/0</span> trials) and efficacy weights per action.</li>
+          <li>Learning constants: base write <span class="num">0.16</span>, arousal gain <span class="num">60</span>, arousal scale <span class="num">5.2</span>, watching slope <span class="num">0.88</span>.</li>
+          <li>The tilt itself: slopes <span class="num">&beta;=1.0, &gamma;=1.2</span>, depth scale <span class="num">3.0</span>, precision scale <span class="num">2.0</span>.</li>
+          <li>Spawn gate: capacity <span class="num">1.0</span>, leak <span class="num">0.72</span>, threshold <span class="num">1.2</span>, flatness <span class="num">0.55</span>.</li>
+          <li>Verdict thresholds: frozen <span class="num">&le;15%</span>, revisable <span class="num">&ge;25%</span>, threat-relevance <span class="num">&ge;0.40</span>, majority rule per cell.</li>
+          <li>Policy preferences and costs (<span class="num">+1.35 / &minus;2.35</span>; attenuation's discounts).</li>
+        </ul>
+      </div>
+      <div class="audit-col emerges">
+        <h4>Emerges from the run</h4>
+        <ul>
+          <li>Which cells freeze &mdash; the region's location at high adversity &times; partial control, and its connectedness.</li>
+          <li>The release of freezing as control rises, and its complete flatness under replay.</li>
+          <li>The capture signature: less delivered evidence, less revision &mdash; the reversal of the evidence-mass prediction, mediated by capture at probe.</li>
+          <li>Where new explanations are born (flat-landscape columns), with no spawn schedule anywhere in the code.</li>
+          <li>Attenuation's confinement to helplessness, at every adversity level.</li>
+          <li>Freezing without catastrophe-era control &mdash; the one-in-five high-control lives hit before efficacy was learned.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <p style="margin-top:1.6rem;">
+    The invitation stands: every number on this page traces to a constant in the model or a cell
+    in the data. If a conclusion above survives only because of a hand-chosen value on the left,
+    that is a flaw worth finding — and this page should make it findable.
+  </p>
+</section>
+
+</main>
+
+<footer>
+  <div class="col">
+    <div class="thermo" aria-hidden="true"></div>
+    <p>
+      A companion to the theory: parts as frozen beliefs, capture as the precision tilt between a
+      belief's priors and present context, witnessing as the regime in which safe evidence finally
+      lands. The simulation is the theory's arithmetic run forward — nothing scripted, everything
+      auditable.
+    </p>
+  </div>
+</footer>
+
+<script>
+const GRID={"omegas":[0.2,0.4,0.6,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.4,2.6,2.8,3.0],"kappas":[0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.4],"closed":{"frozen":[[0.0,0.0,0.15,0.55,0.75,0.65,0.75,0.65,0.75,0.6,0.5,0.4,0.35,0.15,0.15],[0.0,0.0,0.0,0.25,0.6,0.65,0.8,0.85,0.95,0.9,0.8,0.85,0.7,0.5,0.5],[0.0,0.0,0.0,0.1,0.4,0.45,0.7,0.85,1.0,1.0,0.9,0.95,0.85,0.75,0.75],[0.0,0.0,0.0,0.1,0.15,0.2,0.35,0.55,0.8,0.9,0.85,1.0,1.0,0.95,0.9],[0.0,0.0,0.0,0.05,0.1,0.15,0.15,0.4,0.45,0.55,0.65,0.9,0.9,1.0,0.95],[0.0,0.0,0.0,0.0,0.05,0.05,0.05,0.15,0.2,0.3,0.45,0.65,0.7,0.85,0.85],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.25,0.3,0.45,0.45,0.45],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.1,0.25,0.25,0.25,0.25],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.1,0.25,0.25,0.2,0.2],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.1,0.25,0.25,0.2,0.2],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.1,0.25,0.25,0.2,0.2],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.1,0.25,0.25,0.2,0.2],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.1,0.25,0.25,0.2,0.2],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.1,0.25,0.25,0.2,0.2],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.1,0.25,0.25,0.2,0.2]],"rev":[[0.3598,0.3476,0.272,0.2681,0.2083,0.2896,0.224,0.243,0.1762,0.2451,0.3027,0.2703,0.2951,0.4283,0.4393],[0.2762,0.2884,0.2085,0.2049,0.1466,0.2236,0.1627,0.1484,0.0636,0.1143,0.172,0.1212,0.1778,0.2669,0.26],[0.236,0.2506,0.1841,0.181,0.1211,0.1375,0.1435,0.1375,0.0536,0.0568,0.1185,0.0755,0.1506,0.1889,0.1644],[0.1901,0.2083,0.1636,0.1616,0.123,0.1398,0.1216,0.1386,0.0556,0.0571,0.0947,0.0518,0.0492,0.0698,0.0838],[0.1907,0.1864,0.143,0.1409,0.1031,0.0991,0.1044,0.0988,0.057,0.0554,0.0948,0.0517,0.0511,0.0569,0.058],[0.106,0.103,0.1013,0.0998,0.1038,0.0992,0.105,0.1004,0.059,0.0572,0.0537,0.0531,0.0532,0.0509,0.051],[0.1062,0.1033,0.1018,0.1004,0.105,0.0999,0.1055,0.1009,0.0593,0.0588,0.0511,0.0534,0.0515,0.0544,0.0557],[0.1063,0.1035,0.102,0.1008,0.1053,0.1008,0.0641,0.0594,0.0595,0.0576,0.0512,0.0521,0.054,0.0557,0.0556],[0.1064,0.1037,0.1022,0.101,0.1055,0.1008,0.0642,0.0596,0.0596,0.0576,0.0512,0.0522,0.0527,0.0554,0.0545],[0.1064,0.1037,0.1022,0.101,0.1055,0.1008,0.0642,0.0596,0.0596,0.0576,0.0512,0.0522,0.0527,0.0554,0.0545],[0.1064,0.1037,0.1022,0.101,0.1055,0.1008,0.0642,0.0596,0.0596,0.0576,0.0512,0.0522,0.0527,0.0554,0.0545],[0.1064,0.1037,0.1022,0.101,0.1055,0.1008,0.0642,0.0596,0.0596,0.0576,0.0512,0.0522,0.0527,0.0554,0.0545],[0.1064,0.1037,0.1022,0.101,0.1055,0.1008,0.0642,0.0596,0.0596,0.0576,0.0512,0.0522,0.0527,0.0554,0.0545],[0.1064,0.1037,0.1022,0.101,0.1055,0.1008,0.0642,0.0596,0.0596,0.0576,0.0512,0.0522,0.0527,0.0554,0.0545],[0.1064,0.1037,0.1022,0.101,0.1055,0.1008,0.0642,0.0596,0.0596,0.0576,0.0512,0.0522,0.0527,0.0554,0.0545]],"cap":[[0.4487,0.4535,0.3908,0.3945,0.3451,0.4267,0.377,0.3331,0.3005,0.3342,0.402,0.2957,0.2956,0.4248,0.4068],[0.3573,0.382,0.3188,0.3223,0.2714,0.3521,0.2992,0.2564,0.1845,0.2314,0.2789,0.2308,0.2607,0.2628,0.2402],[0.3171,0.3425,0.289,0.2936,0.2418,0.261,0.2702,0.2573,0.1847,0.1943,0.2535,0.2078,0.2789,0.26,0.2204],[0.2748,0.3006,0.267,0.2711,0.2388,0.2584,0.2434,0.2526,0.1856,0.1892,0.2198,0.1792,0.175,0.1597,0.1988],[0.2743,0.279,0.2446,0.2488,0.2166,0.2191,0.2273,0.2158,0.186,0.1817,0.217,0.1753,0.1774,0.1668,0.1703],[0.1965,0.2013,0.2056,0.2092,0.2151,0.2176,0.225,0.2157,0.1789,0.1763,0.1675,0.1691,0.1708,0.1648,0.1652],[0.196,0.2006,0.2045,0.2077,0.2126,0.2153,0.2222,0.213,0.1764,0.1769,0.1567,0.1646,0.161,0.17,0.1739],[0.1957,0.2003,0.204,0.2068,0.2117,0.2143,0.184,0.1748,0.1756,0.1723,0.1556,0.1591,0.1658,0.1709,0.1712],[0.1954,0.2,0.2037,0.2064,0.2114,0.2141,0.1838,0.1741,0.1754,0.1719,0.1553,0.1588,0.1618,0.1697,0.1673],[0.1954,0.2,0.2037,0.2064,0.2114,0.2141,0.1838,0.1741,0.1754,0.1719,0.1553,0.1588,0.1618,0.1697,0.1673],[0.1954,0.2,0.2037,0.2064,0.2114,0.2141,0.1838,0.1741,0.1754,0.1719,0.1553,0.1588,0.1618,0.1697,0.1673],[0.1954,0.2,0.2037,0.2064,0.2114,0.2141,0.1838,0.1741,0.1754,0.1719,0.1553,0.1588,0.1618,0.1697,0.1673],[0.1954,0.2,0.2037,0.2064,0.2114,0.2141,0.1838,0.1741,0.1754,0.1719,0.1553,0.1588,0.1618,0.1697,0.1673],[0.1954,0.2,0.2037,0.2064,0.2114,0.2141,0.1838,0.1741,0.1754,0.1719,0.1553,0.1588,0.1618,0.1697,0.1673],[0.1954,0.2,0.2037,0.2064,0.2114,0.2141,0.1838,0.1741,0.1754,0.1719,0.1553,0.1588,0.1618,0.1697,0.1673]],"exp":[[29.2,40.9,49.3,62.3,75.0,86.1,95.2,108.0,116.0,128.0,135.7,142.8,153.8,162.5,170.5],[26.7,36.4,43.1,52.6,60.6,72.5,76.3,81.9,91.2,98.3,105.7,109.0,122.8,114.7,120.2],[24.6,32.4,39.3,46.9,54.9,59.4,64.4,70.9,75.2,81.5,86.1,93.8,104.7,96.6,100.5],[23.6,30.5,36.6,42.8,48.5,52.0,57.6,61.2,66.7,69.1,70.8,79.0,82.2,81.8,80.0],[22.8,29.7,34.1,40.1,45.7,48.2,51.8,56.4,61.6,64.2,65.3,71.4,75.0,74.2,74.5],[22.4,28.1,32.8,37.8,42.9,45.5,47.4,50.7,51.2,53.9,55.8,60.5,62.9,64.0,64.2],[22.0,27.4,31.2,35.5,39.0,41.8,43.4,46.2,47.0,48.7,49.8,51.8,53.9,55.3,55.8],[21.7,26.9,30.8,34.4,37.6,39.6,42.2,45.0,45.6,47.3,48.0,49.1,50.8,51.1,52.0],[21.4,26.6,30.3,33.8,37.0,39.3,41.7,44.0,45.1,46.6,47.5,48.5,50.0,50.5,50.9],[21.4,26.6,30.3,33.8,37.0,39.3,41.7,44.0,45.1,46.6,47.5,48.5,50.0,50.5,50.9],[21.4,26.6,30.3,33.8,37.0,39.3,41.7,44.0,45.1,46.6,47.5,48.5,50.0,50.5,50.9],[21.4,26.6,30.3,33.8,37.0,39.3,41.7,44.0,45.1,46.6,47.5,48.5,50.0,50.5,50.9],[21.4,26.6,30.3,33.8,37.0,39.3,41.7,44.0,45.1,46.6,47.5,48.5,50.0,50.5,50.9],[21.4,26.6,30.3,33.8,37.0,39.3,41.7,44.0,45.1,46.6,47.5,48.5,50.0,50.5,50.9],[21.4,26.6,30.3,33.8,37.0,39.3,41.7,44.0,45.1,46.6,47.5,48.5,50.0,50.5,50.9]],"att":[[0.252,0.247,0.189,0.194,0.17,0.326,0.237,0.285,0.126,0.243,0.276,0.265,0.335,0.248,0.329],[0.126,0.111,0.049,0.044,0.051,0.231,0.025,0.019,0.005,0.019,0.082,0.024,0.128,0.053,0.058],[0.0,0.0,0.0,0.003,0.047,0.048,0.011,0.011,0.0,0.003,0.011,0.006,0.046,0.009,0.013],[0.0,0.0,0.0,0.003,0.001,0.002,0.037,0.0,0.0,0.003,0.003,0.002,0.002,0.001,0.002],[0.0,0.0,0.0,0.003,0.001,0.001,0.0,0.0,0.0,0.009,0.003,0.002,0.002,0.001,0.001],[0.0,0.0,0.0,0.0,0.001,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]],"spawn":[[0.3,0.3,0.2,0.2,0.15,0.25,0.2,0.35,0.2,0.35,0.35,0.4,0.45,0.55,0.65],[0.2,0.2,0.1,0.1,0.05,0.15,0.1,0.15,0.05,0.15,0.2,0.1,0.2,0.45,0.5],[0.15,0.15,0.1,0.1,0.05,0.1,0.1,0.1,0.0,0.0,0.05,0.0,0.1,0.25,0.25],[0.15,0.15,0.1,0.1,0.05,0.1,0.1,0.1,0.0,0.0,0.05,0.0,0.0,0.1,0.05],[0.15,0.15,0.1,0.1,0.05,0.05,0.05,0.05,0.0,0.0,0.05,0.0,0.0,0.05,0.05],[0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.05,0.05,0.05,0.05,0.05,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.05,0.05,0.05,0.05,0.05,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.05,0.05,0.05,0.05,0.05,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.05,0.05,0.05,0.05,0.05,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.05,0.05,0.05,0.05,0.05,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.05,0.05,0.05,0.05,0.05,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.05,0.05,0.05,0.05,0.05,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.05,0.05,0.05,0.05,0.05,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]]},"yoked":{"frozen":[[0.0,0.0,0.4,0.65,0.7,0.65,0.75,0.7,0.75,0.6,0.45,0.3,0.15,0.05,0.0],[0.0,0.05,0.3,0.7,0.85,0.75,0.8,0.8,0.9,0.85,0.75,0.6,0.35,0.25,0.1],[0.0,0.05,0.35,0.75,0.9,0.9,0.9,0.85,1.0,1.0,0.85,0.8,0.55,0.55,0.2],[0.0,0.05,0.35,0.8,0.9,0.9,0.9,0.85,1.0,1.0,0.95,0.95,0.8,0.65,0.4],[0.0,0.05,0.35,0.85,0.95,0.95,0.95,0.95,1.0,1.0,0.95,0.95,0.85,0.75,0.45],[0.0,0.05,0.4,0.9,0.95,0.95,0.95,0.95,1.0,1.0,1.0,0.95,0.85,0.85,0.45],[0.0,0.05,0.4,0.9,0.95,0.95,0.95,0.95,1.0,1.0,1.0,0.95,0.85,0.85,0.45],[0.0,0.05,0.4,0.9,0.95,0.95,1.0,1.0,1.0,1.0,1.0,0.95,0.85,0.85,0.45],[0.0,0.05,0.4,0.9,0.95,0.95,1.0,1.0,1.0,1.0,1.0,0.95,0.85,0.85,0.45],[0.0,0.05,0.4,0.9,0.95,0.95,1.0,1.0,1.0,1.0,1.0,0.95,0.85,0.85,0.45],[0.0,0.05,0.4,0.9,0.95,0.95,1.0,1.0,1.0,1.0,1.0,0.95,0.85,0.85,0.45],[0.0,0.05,0.4,0.9,0.95,0.95,1.0,1.0,1.0,1.0,1.0,0.95,0.85,0.85,0.45],[0.0,0.05,0.4,0.9,0.95,0.95,1.0,1.0,1.0,1.0,1.0,0.95,0.85,0.85,0.45],[0.0,0.05,0.4,0.9,0.95,0.95,1.0,1.0,1.0,1.0,1.0,0.95,0.85,0.85,0.45],[0.0,0.05,0.4,0.9,0.95,0.95,1.0,1.0,1.0,1.0,1.0,0.95,0.85,0.85,0.45]],"rev":[[0.358,0.3479,0.2705,0.2679,0.2075,0.2888,0.1987,0.2175,0.1536,0.2723,0.3143,0.3104,0.3406,0.3601,0.3624],[0.2734,0.2842,0.2039,0.2006,0.1439,0.2251,0.2032,0.2016,0.1222,0.1402,0.1999,0.2339,0.2975,0.3552,0.346],[0.2312,0.2427,0.1778,0.1741,0.1186,0.1377,0.1437,0.1471,0.0668,0.0737,0.1714,0.1805,0.2389,0.2685,0.2667],[0.1875,0.2026,0.1577,0.1549,0.1186,0.1377,0.1224,0.1253,0.0668,0.0737,0.1129,0.0866,0.1393,0.2305,0.2186],[0.1875,0.1822,0.1381,0.1364,0.101,0.0985,0.1037,0.1012,0.0668,0.0737,0.1129,0.0866,0.1031,0.178,0.1842],[0.1033,0.0993,0.0973,0.0961,0.101,0.0985,0.1037,0.1013,0.0671,0.074,0.076,0.0867,0.1032,0.128,0.17],[0.1033,0.0993,0.0973,0.0961,0.101,0.0985,0.1037,0.1013,0.0671,0.074,0.076,0.0867,0.1032,0.128,0.17],[0.1033,0.0993,0.0973,0.0961,0.101,0.0985,0.0642,0.0627,0.0671,0.074,0.076,0.0867,0.1032,0.128,0.17],[0.1033,0.0993,0.0973,0.0961,0.101,0.0985,0.0642,0.0627,0.0671,0.074,0.076,0.0867,0.1032,0.128,0.17],[0.1033,0.0993,0.0973,0.0961,0.101,0.0985,0.0642,0.0627,0.0671,0.074,0.076,0.0867,0.1032,0.128,0.17],[0.1033,0.0993,0.0973,0.0961,0.101,0.0985,0.0642,0.0627,0.0671,0.074,0.076,0.0867,0.1032,0.128,0.17],[0.1033,0.0993,0.0973,0.0961,0.101,0.0985,0.0642,0.0627,0.0671,0.074,0.076,0.0867,0.1032,0.128,0.17],[0.1033,0.0993,0.0973,0.0961,0.101,0.0985,0.0642,0.0627,0.0671,0.074,0.076,0.0867,0.1032,0.128,0.17],[0.1033,0.0993,0.0973,0.0961,0.101,0.0985,0.0642,0.0627,0.0671,0.074,0.076,0.0867,0.1032,0.128,0.17],[0.1033,0.0993,0.0973,0.0961,0.101,0.0985,0.0642,0.0627,0.0671,0.074,0.076,0.0867,0.1032,0.128,0.17]],"cap":[[0.4493,0.4542,0.3918,0.3959,0.348,0.4311,0.3401,0.329,0.2734,0.396,0.3946,0.3564,0.3599,0.3487,0.326],[0.3603,0.3849,0.323,0.3276,0.2807,0.3647,0.3523,0.3488,0.2866,0.3012,0.3544,0.3478,0.3662,0.3743,0.3686],[0.322,0.3473,0.2953,0.3009,0.2548,0.28,0.2902,0.2927,0.2248,0.2395,0.3337,0.3476,0.3701,0.4009,0.3822],[0.2812,0.3078,0.2753,0.2814,0.2548,0.28,0.2684,0.2713,0.2248,0.2395,0.2754,0.2591,0.3143,0.4078,0.4023],[0.2812,0.2876,0.2556,0.2623,0.2362,0.245,0.2525,0.2478,0.2248,0.2395,0.2754,0.2591,0.2818,0.3567,0.3716],[0.205,0.2127,0.2188,0.2261,0.2362,0.245,0.2525,0.2478,0.2248,0.2395,0.2403,0.2591,0.2818,0.3085,0.356],[0.205,0.2127,0.2188,0.2261,0.2362,0.245,0.2525,0.2478,0.2248,0.2395,0.2403,0.2591,0.2818,0.3085,0.356],[0.205,0.2127,0.2188,0.2261,0.2362,0.245,0.2171,0.2135,0.2248,0.2395,0.2403,0.2591,0.2818,0.3085,0.356],[0.205,0.2127,0.2188,0.2261,0.2362,0.245,0.2171,0.2135,0.2248,0.2395,0.2403,0.2591,0.2818,0.3085,0.356],[0.205,0.2127,0.2188,0.2261,0.2362,0.245,0.2171,0.2135,0.2248,0.2395,0.2403,0.2591,0.2818,0.3085,0.356],[0.205,0.2127,0.2188,0.2261,0.2362,0.245,0.2171,0.2135,0.2248,0.2395,0.2403,0.2591,0.2818,0.3085,0.356],[0.205,0.2127,0.2188,0.2261,0.2362,0.245,0.2171,0.2135,0.2248,0.2395,0.2403,0.2591,0.2818,0.3085,0.356],[0.205,0.2127,0.2188,0.2261,0.2362,0.245,0.2171,0.2135,0.2248,0.2395,0.2403,0.2591,0.2818,0.3085,0.356],[0.205,0.2127,0.2188,0.2261,0.2362,0.245,0.2171,0.2135,0.2248,0.2395,0.2403,0.2591,0.2818,0.3085,0.356],[0.205,0.2127,0.2188,0.2261,0.2362,0.245,0.2171,0.2135,0.2248,0.2395,0.2403,0.2591,0.2818,0.3085,0.356]],"exp":[[29.9,42.2,52.7,65.9,79.8,91.2,102.7,116.7,129.3,142.0,152.2,163.2,176.4,189.1,194.6],[29.9,42.2,52.7,65.9,79.8,91.2,102.7,116.7,129.3,142.0,152.2,163.2,176.4,189.1,194.6],[29.9,42.2,52.7,65.9,79.8,91.2,102.7,116.7,129.3,142.0,152.2,163.2,176.4,189.1,194.6],[29.9,42.2,52.7,65.9,79.8,91.2,102.7,116.7,129.3,142.0,152.2,163.2,176.4,189.1,194.6],[29.9,42.2,52.7,65.9,79.8,91.2,102.7,116.7,129.3,142.0,152.2,163.2,176.4,189.1,194.6],[29.9,42.2,52.7,65.9,79.8,91.2,102.7,116.7,129.3,142.0,152.2,163.2,176.4,189.1,194.6],[29.9,42.2,52.7,65.9,79.8,91.2,102.7,116.7,129.3,142.0,152.2,163.2,176.4,189.1,194.6],[29.9,42.2,52.7,65.9,79.8,91.2,102.7,116.7,129.3,142.0,152.2,163.2,176.4,189.1,194.6],[29.9,42.2,52.7,65.9,79.8,91.2,102.7,116.7,129.3,142.0,152.2,163.2,176.4,189.1,194.6],[29.9,42.2,52.7,65.9,79.8,91.2,102.7,116.7,129.3,142.0,152.2,163.2,176.4,189.1,194.6],[29.9,42.2,52.7,65.9,79.8,91.2,102.7,116.7,129.3,142.0,152.2,163.2,176.4,189.1,194.6],[29.9,42.2,52.7,65.9,79.8,91.2,102.7,116.7,129.3,142.0,152.2,163.2,176.4,189.1,194.6],[29.9,42.2,52.7,65.9,79.8,91.2,102.7,116.7,129.3,142.0,152.2,163.2,176.4,189.1,194.6],[29.9,42.2,52.7,65.9,79.8,91.2,102.7,116.7,129.3,142.0,152.2,163.2,176.4,189.1,194.6],[29.9,42.2,52.7,65.9,79.8,91.2,102.7,116.7,129.3,142.0,152.2,163.2,176.4,189.1,194.6]],"att":[[0.251,0.25,0.195,0.174,0.171,0.334,0.206,0.261,0.167,0.29,0.305,0.408,0.468,0.39,0.507],[0.094,0.141,0.05,0.011,0.05,0.231,0.062,0.016,0.05,0.021,0.094,0.065,0.218,0.079,0.133],[0.0,0.0,0.0,0.001,0.047,0.048,0.011,0.012,0.0,0.001,0.001,0.002,0.051,0.046,0.051],[0.0,0.0,0.0,0.0,0.001,0.001,0.036,0.036,0.0,0.0,0.0,0.0,0.045,0.005,0.005],[0.0,0.0,0.0,0.0,0.001,0.001,0.0,0.0,0.0,0.0,0.0,0.0,0.001,0.001,0.001],[0.0,0.0,0.0,0.0,0.001,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]],"spawn":[[0.3,0.3,0.2,0.2,0.15,0.25,0.2,0.3,0.2,0.3,0.45,0.4,0.45,0.45,0.5],[0.2,0.2,0.1,0.1,0.05,0.15,0.15,0.15,0.05,0.1,0.15,0.25,0.35,0.45,0.45],[0.15,0.15,0.1,0.1,0.05,0.1,0.1,0.1,0.0,0.0,0.1,0.1,0.2,0.2,0.2],[0.15,0.15,0.1,0.1,0.05,0.1,0.1,0.1,0.0,0.0,0.05,0.0,0.05,0.1,0.05],[0.15,0.15,0.1,0.1,0.05,0.05,0.05,0.05,0.0,0.0,0.05,0.0,0.0,0.05,0.0],[0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.05,0.05,0.05,0.05,0.05,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.05,0.05,0.05,0.05,0.05,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.05,0.05,0.05,0.05,0.05,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.05,0.05,0.05,0.05,0.05,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.05,0.05,0.05,0.05,0.05,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.05,0.05,0.05,0.05,0.05,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.05,0.05,0.05,0.05,0.05,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.05,0.05,0.05,0.05,0.05,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]]}};
+
+/* ============ shared helpers ============ */
+const $ = (id) => document.getElementById(id);
+const fmt = (x, d=2) => Number(x).toFixed(d);
+const pct = (x, d=0) => (100*x).toFixed(d) + '%';
+const clamp = (x, lo, hi) => Math.max(lo, Math.min(hi, x));
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function lerpColor(c1, c2, t) {
+  const a = c1.match(/\w\w/g).map(h => parseInt(h, 16));
+  const b = c2.match(/\w\w/g).map(h => parseInt(h, 16));
+  return 'rgb(' + a.map((v, i) => Math.round(v + (b[i]-v)*t)).join(',') + ')';
+}
+const PAPER = 'EEF1F2', FROST = '2F5D7C', EMBER = 'B05C22';
+
+/* ============ hero mini map ============ */
+(function heroMap() {
+  const svg = $('heroMap');
+  const g = GRID.closed.frozen; // [kappa][omega]
+  const n = 15, s = 20;
+  let html = '';
+  for (let j = 0; j < n; j++) {
+    for (let i = 0; i < n; i++) {
+      const v = g[j][i];
+      html += `<rect x="${i*s+i}" y="${(n-1-j)*s+(n-1-j)}" width="${s}" height="${s}" rx="2" fill="${lerpColor(PAPER, FROST, v)}"/>`;
+    }
+  }
+  svg.innerHTML = html;
+})();
+
+/* ============ 1. tally toy ============ */
+(function tally() {
+  const start = { A: { safe: 5, threat: 7 }, B: { safe: 200, threat: 280 } };
+  let A, B;
+  function beliefs(b) { return b.threat / (b.safe + b.threat); }
+  function render() {
+    for (const [bank, sub, bar, dot, read] of [[A,'tallyAsub','tallyAbar','tallyAdot','tallyAread'],[B,'tallyBsub','tallyBbar','tallyBdot','tallyBread']]) {
+      const tot = bank.safe + bank.threat, p = beliefs(bank);
+      $(sub).textContent = `${fmt(bank.safe,0)} safe / ${fmt(bank.threat,0)} threat  (total ${fmt(tot,0)})`;
+      $(bar).innerHTML = `<div class="threat" style="width:${100*p}%"></div><div class="safe" style="width:${100*(1-p)}%"></div>`;
+      $(dot).style.left = (100*p) + '%';
+      $(read).textContent = `believes p(bad day) = ${pct(p,1)}`;
+    }
+  }
+  function add(field, k) { A[field] += k; B[field] += k; render(); }
+  function reset() { A = { ...start.A }; B = { ...start.B }; render(); }
+  $('tallySafe').addEventListener('click', () => add('safe', 1));
+  $('tallySafe10').addEventListener('click', () => add('safe', 10));
+  $('tallyThreat').addEventListener('click', () => add('threat', 1));
+  $('tallyReset').addEventListener('click', reset);
+  reset();
+})();
+
+/* ============ 2. world dial ============ */
+(function world() {
+  const policies = [
+    { name: 'approach', w: 0.10, relief: 1 },
+    { name: 'flee',     w: 1.40, relief: 3 },
+    { name: 'appease',  w: 0.90, relief: 2 },
+    { name: 'attenuate',w: 0.00, relief: 0 },
+  ];
+  const rows = $('wPolicies');
+  rows.innerHTML = policies.map((p, i) => `
+    <div class="stat-row">
+      <span class="stat-label" style="flex-basis:5.6rem;">${p.name}</span>
+      <span class="stat-bar-wrap"><span class="stat-bar warm" id="wp${i}"></span></span>
+      <span class="stat-val readout" id="wpv${i}"></span>
+      <span class="readout" style="flex:0 0 3.9rem; text-align:right; color:var(--muted);">${p.relief} quiet</span>
+    </div>`).join('');
+  function update() {
+    const om = parseFloat($('wOmega').value), ka = parseFloat($('wKappa').value);
+    $('wOmegaVal').textContent = fmt(om,1); $('wKappaVal').textContent = fmt(ka,1);
+    const pav = clamp(0.08 + 0.31*om, 0.06, 0.97);
+    const pcat = clamp(0.015*(om - 1.2), 0, 0.08);
+    const c = ka / (ka + 0.45);
+    $('wPav').textContent = pct(pav); $('wPavBar').style.width = pct(pav);
+    $('wPcat').textContent = pct(pcat,1); $('wPcatBar').style.width = pct(pcat/0.08*1 || 0);
+    $('wCtl').textContent = fmt(c,2); $('wCtlBar').style.width = pct(c/0.76);
+    policies.forEach((p, i) => {
+      const pAversive = clamp(0.90 - p.w*c, p.name==='flee'?0.02:0.03, 0.98);
+      const succ = 1 - pAversive;
+      $('wp'+i).style.width = pct(succ);
+      $('wpv'+i).textContent = pct(succ);
+    });
+  }
+  $('wOmega').addEventListener('input', update);
+  $('wKappa').addEventListener('input', update);
+  update();
+})();
+
+/* ============ 3. capture demo ============ */
+(function capture() {
+  const START = { safe: 100, threat: 260 }, TRIALS = 96, RATE = 2.0;
+  const banks = {
+    A: { slider: 'capAslider', rlab: 'capAr', derived: 'capAderived', spark: 'capAspark', read: 'capAread', verdict: 'capAverdict' },
+    B: { slider: 'capBslider', rlab: 'capBr', derived: 'capBderived', spark: 'capBspark', read: 'capBread', verdict: 'capBverdict' },
+  };
+  let state, timer = null;
+  function weight(rbar, total) {
+    const E = 3 * rbar;
+    const pi = (total / 2) * Math.exp(-1.0 * E);
+    const lam = Math.exp(1.2 * E);
+    return { C: pi / (pi + lam), w: lam / (pi + lam) };
+  }
+  function initState() {
+    state = {};
+    for (const k of ['A','B']) state[k] = { safe: START.safe, threat: START.threat, hist: [START.threat/(START.safe+START.threat)], done: 0 };
+  }
+  function verdictFor(pre, post) {
+    const rel = Math.max(pre - post, 0) / pre;
+    if (rel <= 0.15) return ['frozen', 'frozen ' + pct(rel,1) + ' drop'];
+    if (rel >= 0.25) return ['revisable', 'revisable ' + pct(rel,1) + ' drop'];
+    return ['between', 'in between ' + pct(rel,1) + ' drop'];
+  }
+  function render() {
+    for (const k of ['A','B']) {
+      const b = banks[k], s = state[k];
+      const rbar = parseFloat($(b.slider).value);
+      $(b.rlab).textContent = fmt(rbar,2);
+      const total0 = START.safe + START.threat;
+      const { C, w } = weight(rbar, total0);
+      $(b.derived).innerHTML =
+        `<div><span>capture C</span><span>${fmt(C,3)}</span></div>` +
+        `<div><span>lands per safe trial</span><span>${fmt(RATE*w,2)} / 2.0</span></div>`;
+      const p = s.threat / (s.safe + s.threat);
+      $(b.read).textContent = `p(threat) ${fmt(s.hist[0],3)} → ${fmt(p,3)}  (${s.done}/${TRIALS} trials)`;
+      // sparkline
+      const svg = $(b.spark), W = 300, H = 92, pad = 6;
+      const x = (i) => pad + (W - 2*pad) * i / TRIALS;
+      const y = (v) => pad + (H - 2*pad) * (1 - v / 0.8);
+      let path = s.hist.map((v, i) => (i ? 'L' : 'M') + fmt(x(i),1) + ' ' + fmt(y(v),1)).join(' ');
+      const thresholdY = y(s.hist[0] * 0.85), reviseY = y(s.hist[0] * 0.75);
+      svg.innerHTML =
+        `<line x1="${pad}" y1="${thresholdY}" x2="${W-pad}" y2="${thresholdY}" stroke="#2F5D7C" stroke-width="1" stroke-dasharray="3 4" opacity="0.55"/>` +
+        `<line x1="${pad}" y1="${reviseY}" x2="${W-pad}" y2="${reviseY}" stroke="#B05C22" stroke-width="1" stroke-dasharray="3 4" opacity="0.55"/>` +
+        `<text x="${W-pad}" y="${thresholdY-3}" font-size="8" fill="#2F5D7C" text-anchor="end" font-family="ui-monospace,monospace">frozen line (-15%)</text>` +
+        `<text x="${W-pad}" y="${reviseY-3}" font-size="8" fill="#B05C22" text-anchor="end" font-family="ui-monospace,monospace">revisable line (-25%)</text>` +
+        `<path d="${path}" fill="none" stroke="#1B2429" stroke-width="2"/>`;
+      // verdict
+      const v = $(b.verdict);
+      if (s.done === TRIALS) {
+        const [cls, label] = verdictFor(s.hist[0], s.hist[s.hist.length-1]);
+        v.className = 'verdict ' + cls; v.textContent = label;
+      } else {
+        v.className = 'verdict idle'; v.textContent = s.done ? 'running…' : 'not yet probed';
+      }
+    }
+  }
+  function step() {
+    let any = false;
+    for (const k of ['A','B']) {
+      const s = state[k];
+      if (s.done >= TRIALS) continue;
+      any = true;
+      const rbar = parseFloat($(banks[k].slider).value);
+      const { w } = weight(rbar, START.safe + START.threat);
+      s.safe += RATE * w;
+      s.done += 1;
+      s.hist.push(s.threat / (s.safe + s.threat));
+    }
+    render();
+    if (!any) { clearInterval(timer); timer = null; }
+  }
+  function run() {
+    if (timer) return;
+    reset(false);
+    if (reducedMotion) { for (let i = 0; i < TRIALS; i++) step(); render(); return; }
+    timer = setInterval(step, 28);
+  }
+  function reset(rerender = true) {
+    if (timer) { clearInterval(timer); timer = null; }
+    initState();
+    if (rerender) render();
+  }
+  $('capRun').addEventListener('click', run);
+  $('capReset').addEventListener('click', () => reset());
+  $('capAslider').addEventListener('input', () => reset());
+  $('capBslider').addEventListener('input', () => reset());
+  initState(); render();
+})();
+
+/* ============ 4. phase map ============ */
+(function phasemap() {
+  const svg = $('pmSvg'), info = $('pmInfo'), caption = $('pmCaption');
+  const omegas = GRID.omegas, kappas = GRID.kappas, n = 15;
+  const L = 74, T = 18, S = 34, GAP = 2;
+  let view = 'closed', hovered = null;
+  const captions = {
+    closed: 'Closed loop: each cell shows the share of 20 lives whose dominant threat belief froze. Freezing concentrates at high adversity and partial control, and releases as control rises.',
+    yoked: 'Exact replay: identical events delivered regardless of action. The frozen wall is flat in control — with the evidence stream fixed, control has no route by which to matter.',
+    diff: 'Replay-minus-closed-loop freezing. The warm region is release: lives the loop saves. Where actions can edit the evidence stream, rising control un-freezes what replay leaves frozen.'
+  };
+  function cellColor(j, i) {
+    if (view === 'closed') return lerpColor(PAPER, FROST, GRID.closed.frozen[j][i]);
+    if (view === 'yoked') return lerpColor(PAPER, FROST, GRID.yoked.frozen[j][i]);
+    const d = GRID.yoked.frozen[j][i] - GRID.closed.frozen[j][i];
+    return d >= 0 ? lerpColor(PAPER, EMBER, Math.min(d, 1)) : lerpColor(PAPER, FROST, Math.min(-d, 1));
+  }
+  function draw() {
+    let html = '';
+    for (let j = 0; j < n; j++) {
+      for (let i = 0; i < n; i++) {
+        const x = L + i * (S + GAP), y = T + (n - 1 - j) * (S + GAP);
+        const sel = hovered && hovered[0] === j && hovered[1] === i;
+        html += `<rect data-j="${j}" data-i="${i}" x="${x}" y="${y}" width="${S}" height="${S}" rx="3" fill="${cellColor(j,i)}" stroke="${sel ? '#1B2429' : 'none'}" stroke-width="2" style="cursor:crosshair"/>`;
+      }
+    }
+    // axes
+    const bottomY = T + n * (S + GAP) + 16;
+    for (let i = 0; i < n; i += 2) {
+      html += `<text x="${L + i*(S+GAP) + S/2}" y="${bottomY}" font-size="10.5" fill="#56676F" text-anchor="middle" font-family="ui-monospace,monospace">${omegas[i]}</text>`;
+    }
+    for (let j = 0; j < n; j += 2) {
+      html += `<text x="${L - 10}" y="${T + (n-1-j)*(S+GAP) + S/2 + 4}" font-size="10.5" fill="#56676F" text-anchor="end" font-family="ui-monospace,monospace">${kappas[j].toFixed(1)}</text>`;
+    }
+    html += `<text x="${L + n*(S+GAP)/2}" y="${bottomY + 22}" font-size="12" fill="#1B2429" text-anchor="middle" font-family="ui-monospace,monospace">adversity ω →</text>`;
+    html += `<text x="16" y="${T + n*(S+GAP)/2}" font-size="12" fill="#1B2429" text-anchor="middle" font-family="ui-monospace,monospace" transform="rotate(-90 16 ${T + n*(S+GAP)/2})">control κ →</text>`;
+    svg.innerHTML = html;
+  }
+  function showInfo(j, i) {
+    const om = omegas[i], ka = kappas[j];
+    const c = GRID.closed, y = GRID.yoked;
+    info.innerHTML =
+      `<div class="hd" style="text-transform:none">ω ${om} &middot; κ ${ka.toFixed(1)} &middot; 20 lives per arm</div>` +
+      `<div style="color:#2F5D7C">closed loop</div>` +
+      `<div>frozen ${pct(c.frozen[j][i])} &middot; capture ${fmt(1 - c.cap[j][i],2)}</div>` +
+      `<div>bad events felt ${fmt(c.exp[j][i],0)} &middot; revision ${fmt(c.rev[j][i],3)}</div>` +
+      `<div>new parts ${pct(c.spawn[j][i])} &middot; numbing ${pct(c.att[j][i])}</div>` +
+      `<div style="margin-top:0.5rem; color:#56676F">exact replay</div>` +
+      `<div>frozen ${pct(y.frozen[j][i])} &middot; capture ${fmt(1 - y.cap[j][i],2)}</div>` +
+      `<div>bad events felt ${fmt(y.exp[j][i],0)} &middot; revision ${fmt(y.rev[j][i],3)}</div>`;
+  }
+  svg.addEventListener('mousemove', (e) => {
+    const t = e.target;
+    if (t.tagName === 'rect' && t.dataset.j !== undefined) {
+      const j = +t.dataset.j, i = +t.dataset.i;
+      if (!hovered || hovered[0] !== j || hovered[1] !== i) { hovered = [j, i]; draw(); showInfo(j, i); }
+    }
+  });
+  svg.addEventListener('mouseleave', () => { hovered = null; draw(); });
+  function setView(v) {
+    view = v;
+    for (const [id, key] of [['pmClosed','closed'],['pmYoked','yoked'],['pmDiff','diff']]) {
+      $(id).setAttribute('aria-pressed', key === v ? 'true' : 'false');
+    }
+    const ramp = $('pmRamp');
+    if (v === 'diff') {
+      ramp.style.background = `linear-gradient(90deg, #${PAPER}, #${EMBER})`;
+      $('pmLegendLo').textContent = 'no difference'; $('pmLegendHi').textContent = 'released by the loop';
+    } else {
+      ramp.style.background = `linear-gradient(90deg, #${PAPER}, #${FROST})`;
+      $('pmLegendLo').textContent = '0% frozen'; $('pmLegendHi').textContent = '100% frozen';
+    }
+    caption.textContent = captions[v];
+    draw();
+  }
+  $('pmClosed').addEventListener('click', () => setView('closed'));
+  $('pmYoked').addEventListener('click', () => setView('yoked'));
+  $('pmDiff').addEventListener('click', () => setView('diff'));
+  setView('closed');
+})();
+</script>
