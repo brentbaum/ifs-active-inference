@@ -1,112 +1,139 @@
-# Sim 2: Hysteresis Loop and BMR Melt
+# Sim 2 T4.3 Step A: single-gate pilot
 
-This module implements T1.3 inside `EmergenceSuite.Sim2`. It is scoped to
-`src/sims/sim2/`; the package runner dispatches here only when
-`experiment: sim2` is selected.
+This is the Phase 4 de-authoring pilot for Sim 2. It may run only with label
+`pilot`, seeds 1001–1010, and output `runs/sim2/pilot/`. Confirmatory execution
+is deliberately disabled in this Step A implementation.
 
-## Model Contract
+## Preregistered primary and robustness arm
 
-- Sim 2 imports frozen bundle artifacts using schema `sim1.bundle.v2`.
-  `formation` and `revision_probe` are metadata; `cause_banks` seed ordinary
-  threat and policy sufficient statistics.
-- The root structure is a two-state relational coupling:
-  `met-in-this` vs. `alone-with-this`. The full prior encodes the frozen
-  coupling; the reduced prior is the pruned/no-coupling alternative. Threat and
-  policy banks remain separate ordinary Dirichlet banks.
-- E_t enters inference only through the D1 log-precision tilt:
-  `pi_eff = pi_part * exp(-beta * E_t)`,
-  `lambda_eff = lambda_ctx * exp(gamma * E_t)`, with `C_t` logged as the
-  normalized bundle-prior precision share.
-- The environment emits one observation content per trial. Likelihood routing,
-  not a channel switch, determines which sufficient statistics it can update:
-
-  | Observation content | Likelihood target | Root-coupling update |
-  | --- | --- | --- |
-  | `met-well` | Relational expectation: how shown material is met | Adds weighted evidence for `met-in-this`, plus the registered residual old-coupling count |
-  | `met-badly` | Relational expectation: how shown material is met | Adds weighted evidence for `alone-with-this`, plus the registered residual met count |
-  | `informational-safe` | Threat/outcome bank | Adds ordinary safe-outcome evidence only; root likelihood is flat, so root-coupling statistics receive zero |
-  | `absent` | No observation | Zero root-coupling statistics |
-
-  This is the C3 likelihood claim in code form: informational content can be
-  useful evidence about the cue's outcome while still being no evidence about
-  the root relational expectation.
-- BMR is evaluated every `bmr_interval` trials and in prompted probes. Pruning
-  is a structural event: once the reduced model wins, root-coupling structural
-  precision drops to the reduced prior while threat and policy banks are
-  retained.
-
-## Derived Melt Gate
-
-The melt gate follows D2 directly. The BMR posterior is not the externally
-available raw count table. It is the reflexively accessible posterior:
+Both coherent D2 implementations are configuration-switchable. The primary is
+**Option A (`primary_gate: write`)**:
 
 ```text
-a_E = b_F + rho(E_t) * n
-rho(E_t) = E_t / (E_t + E_0)
+w_root(E_t, content) = D1_context_share(E_t) * content_root_route
+a_BMR = b_full + n_actually_written
 ```
 
-`n` is the weighted root-coupling evidence accumulated from relational
-observation content. The module calls the suite's canonical
-`BMR.reflexive_prior_swap_delta`, which wraps the Friston-2017 prior-swap
-identity. At `E_t = 0`, the data-driven BMR term cancels exactly, so the
-comparison is uninformative except for model prior odds. There is no separate
-"block prune if E_t is low" rule.
+E_t enters the melt pathway once, through D1 evidence weighting at write time.
+BMR is the canonical prior swap over the raw counts that were actually written;
+its access weight is exactly one and contains no E_t.
 
-## Relational Accumulation Weight
-
-Relational observations write root-coupling statistics on every trial where the
-content is relational. The write weight uses the same D1 effective-precision
-balance logged elsewhere:
+**Option B (`primary_gate: access`)** is the robustness arm:
 
 ```text
-pi_eff(E_t) = pi_part * exp(-beta * E_t)
-lambda_eff(E_t) = lambda_ctx * exp(gamma * E_t)
-lambda_share(E_t) = lambda_eff(E_t) / (pi_eff(E_t) + lambda_eff(E_t))
-w_rel(E_t) = min(1, lambda_share(E_t) / lambda_share(high_E))
-w_obs(E_t) = w_rel(E_t) * attenuation_scale
+w_root(content) = content_root_route                 # no E_t
+a_BMR = b_full + rho(E_t) * n_actually_written      # sole E_t entry
 ```
 
-`attenuation_scale` is `attenuation_learning_rate` in dissociative quiet and
-`1.0` otherwise. `high_E` therefore defines one registered relational count per
-high-depth witnessed trial; low-E capture receives the discounted trickle
-implied by the same precision balance. Informational observations have
-`w_obs = 0` for root coupling because their root likelihood is flat.
+The pilot always compares Option A with Option B using both registered
+accessibility functions. Changing `primary_gate` changes which arm supplies the
+headline four-regime, prompt, real-danger, and content-swap metrics; it does not
+create a hybrid. Runtime E_t-flip probes explicitly audit the branch invariant.
 
-## Imported Bundles
+## Why Option A is primary: argument against both D2 readings
 
-`configs/sim2.yaml` uses the manifest-listed T1.2 artifacts from
-`runs/sim1/sim1-t1-2/artifacts/`:
+D2 reading (i), the architectural reading, says an agent-internal reduction
+requires an addressable representation of “this bundle as hypothesis.” We take
+the D1-weighted write as the operational location of that representation for the
+primary model: under transparency, little root-indexed evidence is registered,
+so raw-count BMR later has little represented evidence to compare. Under
+opacity, the evidence is registered and becomes a normal structural posterior.
+No second access transformation is added at reduction time.
 
-- Acute/frozen-source cohort: `bundle_seed1020_omega1p4_kappa0p0.json`,
-  `bundle_seed1001_omega1p4_kappa0p1.json`,
-  `bundle_seed1008_omega1p4_kappa0p1.json`,
-  `bundle_seed1013_omega1p4_kappa0p1.json`,
-  `bundle_seed1004_omega1p6_kappa0p0.json`.
-- Slow-accumulation cohort: `bundle_slow_seed1001_trial105.json`,
-  `bundle_slow_seed1002_trial95.json`.
+D2 reading (ii), inferential degeneration, does **not** follow from vanilla
+raw-count BMR. D2 derives it only after adding the premise
+`a_E = b_full + rho(E_t)n`. Option B takes that premise fully: its writes are
+E_t-independent, and accessibility is the only E_t gate. It is a robustness
+arm rather than the primary because the suite’s R2 constitution locates E_t in
+the D1 effective-precision balance; Option A retains that location and leaves
+canonical BMR untouched. The pilot therefore tests, rather than silently
+combines, the two readings.
 
-The run summary records the resolved bundle files, Sim 1 seeds, routes,
-families, and imported structural precision values.
+## A content swap that can fail
+
+Informational observations now have a fixed weak root likelihood. They update
+`met-in-this` at `0.20` of relational content’s root count on the same
+observation budget. This is a weakly informative routing choice, not a learned
+routing model: facts about the cue can bear weakly on “alone-with-this,” but the
+observation is not itself evidence about how disclosure was met. The magnitude
+is preregistered as a 1:5 likelihood-strength contrast before the pilot; it is
+not zero and is logged per trial and per seed.
+
+The C3 test is therefore live: relational witnessing and informational
+content-swap both reach the root for 60 trials at high E_t. C3 survives only if
+relational content melts while informational content does not. A content-swap
+melt is reported as a negative result, not rerouted away.
+
+## Formation-inherited root priors
+
+The pilot imports existing `sim1.bundle.v2` artifacts while awaiting schema v3.
+For each bundle, the v2 mapping is:
+
+```text
+p_met, p_alone = normalize(cause_banks.cue_counts.safe,
+                           cause_banks.cue_counts.threat)
+m_formation = log(1 + revision_probe.structural_precision)
+b_full = [1, 1] + m_formation * [p_met, p_alone]
+b_reduced = fill(sum(b_full) / 2, 2)
+```
+
+The unit vector is the ordinary Dirichlet base measure. The logarithm compresses
+Sim 1’s modality-specific count scale when using it as an equivalent sample
+size for the missing v2 relational modality. Both direction and concentration
+therefore vary with formation output. Reduction preserves the inherited total
+concentration while removing its directional coupling. Fixed `[2,12]` and
+`[7,7]` priors are no longer used. Schema v3 should replace this documented
+surrogate with direct relational formation fields.
+
+## Accessibility robustness
+
+Option B compares two independently motivated functions:
+
+```text
+saturating:       rho(E) = E / (E + E0)
+threshold-linear: rho(E) = clamp((E - E_threshold) /
+                                 (E_full - E_threshold), 0, 1)
+```
+
+The saturating form models graded effective sample size. The threshold-linear
+form models an addressability threshold followed by proportional access. The
+summary reports melt rate and mean melt trial for each at the primary BMR
+interval, plus their melt-trial range. Neither function is used by Option A.
+
+## Four regimes and probes
+
+All four regimes receive 60 observations:
+
+| Regime | Content | E_t | Other attenuation |
+| --- | --- | ---: | ---: |
+| informational | informational-safe | 0.05 | none |
+| contact-under-capture | met-well | 0.05 | none |
+| dissociative-quiet | met-well | 0.05 | 0.18 write scale |
+| witnessing | met-well | 0.90 | none |
+
+The pilot also runs premature/late prompted reduction, real danger, the live
+high-E_t informational content swap, an E_t-flip audit for every gate arm, a
+prior-odds sweep, and the complete gate × accessibility × interval comparison.
+
+## Interval-independent discreteness
+
+BMR intervals 3, 5, and 10 are all swept. Discreteness is no longer the
+interval divided by a hand-chosen window. At each BMR check the code measures
+the structural decrease across that check. The registered metric is:
+
+```text
+largest positive inter-check structural drop / sum of all positive inter-check drops
+```
+
+The criterion is greater than 0.50 and the witnessing melt rate must survive at
+all three intervals. Because this model’s canonical prune is a discrete model
+change, a value of one documents that property; the interval sweep tests whether
+the event occurs, not whether `5/60` happens to fit a window criterion.
 
 ## Outputs
 
-- `summary.json`: config snapshot, imported bundle inventory, D2 melt-gate
-  declaration, headline metrics, adversarial probe metrics, E_0 sweep, and
-  prior-odds sweep.
-- `per_seed_metrics.csv`: one row per seed per four-regime condition.
-- `posterior_traces.csv`: trial-level structural/effective precision traces.
-- `prompt_probe_metrics.csv`, `real_danger_metrics.csv`,
-  `content_swap_metrics.csv`, `et_flip_metrics.csv`,
-  `e0_sweep_metrics.csv`, `prior_odds_sweep_metrics.csv`: probe-specific
-  readouts.
-- `figures/hysteresis.svg`: structural root precision vs. cumulative
-  corrective evidence for the four registered regimes, with first-passage
-  markers.
-- `criteria-results.json`: labels emitted from `configs/sim2-criteria.yaml`.
-
-## E_0 Sweep
-
-`E_0` is treated as a magic number. The preregistered config runs
-`E_0 in [0.5, 1.0, 2.0]` and writes the melt rate, mean prune trial, mean root
-revision, and drop fraction for each value. The default reported trajectory uses
-`E_0 = 1.0`.
+The pilot emits the standard run contract, primary per-seed metrics and traces,
+probe CSVs, `single_gate_comparison_per_seed.csv`, the aggregated
+`single_gate_comparison_metrics.csv`, `prior_odds_sweep_metrics.csv`, and the
+primary four-regime hysteresis SVG. Constants and any post-pilot tuning history
+are recorded in `magic-numbers.md`.

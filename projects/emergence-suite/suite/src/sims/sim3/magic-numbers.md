@@ -1,38 +1,66 @@
-# Sim 3 Magic Numbers
+# Sim 3 Magic Numbers — Phase 4 Step A Pilot
 
-Every hand-set constant in `src/sims/sim3/` is listed here with its status.
+The Phase 4 pilot may tune constants, but every such choice is disclosed here.
+"Pilot candidate" means chosen before the first 1001–1010 execution; any value
+changed after observing that pilot must be relabeled "pilot-tuned" with the
+observed reason. Step B must freeze both code and criteria before fresh seeds.
 
-| Constant | Value | Status | Rationale |
-|---|---:|---|---|
-| `n_training_trials` | 20 | derivation | Carried from v10 Sim 3, enough for stable treated-cue learning while keeping matched protocols short. |
-| `n_probe_trials` | 1 | derivation | The first untreated probe is the clean discriminant before repeated probing can itself become exposure. |
-| Seeds per condition | 24 | derivation | Exceeds the T1.1 minimum of 20 seeds per condition. |
-| `high_E` | 0.85 | derivation | Carried from v10 witnessing condition; high point on the D1 log-precision tilt. |
-| `low_E` | 0.15 | derivation | Carried from v10 exposure/capture condition; matched low-depth comparator. |
-| Training parity epsilon | 0.05 nats | IOU | Strict enough to catch training-fit confounding; should be narrowed after a formal likelihood-calibration derivation. |
-| Root-sharing cue root couplings | `[1.0, 0.8, 0.6, 0.4, 0.2]` | derivation | K=5 structural continuum required by T1.1, evenly spaced coupling to the trained cue's self-state root. |
-| Root-sharing cue perceptual similarities | `[1.0, 0.35, 0.2, 0.7, 0.45]` | derivation | Hand-set decorrelated feature-overlap values so perceptual similarity and structural similarity are visibly independent. |
-| Structural-confound cue attributes | perceptual similarity `0.9`, root coupling `0.0`, root id `2` | derivation | Perceptually near the trained cue while root-distant for A3.2. |
-| Perceptual generalization channel | none | derivation | The T1.1 redesign permits no conventional feature-overlap channel; transfer is tested as root-conditioned structural transfer only. |
-| E sweep grid | 0.05:0.10:0.95 | sweep | Covers low, transition, and high depth readout with ten points and no fitted control surface in the model. |
-| `pi_part` | 3.6 | derivation | Carried from v10 Sim 3 as the structural-prior log-precision intercept. |
-| `beta_se` | 1.0 | derivation | D1 slope from depth to bundle-prior log-precision, matching v10 scale. |
-| `lambda_self` | 0.7 | derivation | Carried from v10 Sim 3 as the relational evidence log-precision intercept. |
-| `gamma_se` | 1.2 | derivation | D1 slope from depth to relational-evidence log-precision, matching v10 scale. |
-| `eta_self` | 1.0 | derivation | Carried from v10 Sim 3 shared-bank learning rate. |
-| `eta_threat` | 1.6 | derivation | Carried from v10 Sim 3 cue-local learning rate. |
-| `self_to_threat_coupling` | 1.35 | derivation | Carried from v10 Sim 3 root-to-threat within-trial influence. |
-| `h2_threat_to_self_coupling` | 1.35 | derivation | Mirrors the H1 coupling magnitude in the reversed-root architecture while reversing the conditioning direction. |
-| `outcome_precision` | 1.6 | derivation | Carried from v10 Sim 3 outcome update precision. |
-| `policy_precision` | 3.2 | derivation | Carried from v10 Sim 3 policy-selection precision. |
-| `threat_policy_weight` | 2.4 | derivation | Carried from v10 Sim 3 threat contribution to policy EFE. |
-| `contact_self_bias` | 0.08 | derivation | Carried from v10 Sim 3 small root-state contribution to contact. |
-| `avoid_bias` | 0.03 | derivation | Carried from v10 Sim 3 small root-state contribution to avoid. |
-| Outcome utilities | `[-2.4, 1.4, -0.15, 0.20]` | derivation | Carried from v10 Sim 3 contact/avoid outcome preferences. |
-| Initial `d_self` | `[18.0, 2.0]` | derivation | Carried from v10 Sim 3 helpless-biased self-state prior. |
-| Initial `d_threat(c)` | `[17.0, 3.0]` | derivation | Carried from v10 Sim 3 dangerous-biased threat prior. |
-| Relational truthfulness | 0.88 | derivation | Relational modality is always on and truthful; value carried from v10 reliability. |
-| Outcome reliabilities | `[0.96, 0.08, 0.97, 0.78]` | derivation | Carried from v10 Sim 3 safe/danger contact/avoid outcome model. |
-| First-passage threshold | 0.60 | IOU | Chosen as a modest posterior crossing above indifference; should be swept after T1.1. |
-| Policy first-passage threshold | 0.60 | IOU | Same crossing convention for contact probability. |
-| Shape readout minimum range | 0.20 | IOU | Requires visible transfer-vs-depth change before the emergent threshold shape can receive full support. |
+| Constant | Value | Status / provenance |
+|---|---:|---|
+| Pilot seeds | 1001–1010 | Protocol-fixed by T4.2 Step A. |
+| Association pre-training observations per cue | 48 | Pilot candidate; enough Bernoulli co-occurrences to separate the five world rates while retaining seed-level posterior variation. |
+| Association Dirichlet prior | `[1,1]` | Conventional symmetric Laplace prior; not tuned. |
+| Root-context world rates | `[0.95, 0.80, 0.65, 0.45, 0.25]` | Pilot candidate; experimenter manipulation replacing supplied causal coupling. These values generate contexts only. |
+| Root-poor confound world rate | `0.05` | Pilot candidate; makes A3.2's perceptually near cue genuinely root-poor without setting a zero pathway. |
+| Perceptual similarities | `[1.0, 0.35, 0.20, 0.70, 0.45]` | Carried from the prior decorrelated cue design. |
+| Root-poor confound perceptual similarity | `0.90` | Carried from the prior A3.2 near-feature confound. |
+| Perceptual generalization gain | `0.45` | Pilot candidate; moderate shared threat evidence, chosen to make conventional generalization live without assuming it dominates root-mediated transfer. |
+| Training trials | 20 | Carried from v10/v11 Sim 3. |
+| Held-out trials | 6 | Pilot candidate; gives each pilot seed multiple frozen-bank predictions without feeding held-out outcomes back into state. |
+| High / low depth | `0.85 / 0.15` | Carried from v10/v11 witnessing and exposure conditions. |
+| Training parity stop | `0.05` nats/trial | Carried strict stop condition; not relaxed for the pilot. |
+| Prior/evidence precision constants | `pi_part=3.6`, `beta_se=1.0`, `lambda_self=0.9`, `gamma_se=1.2` | `pi_part`, `beta_se`, and `gamma_se` carried from v10/v11. `lambda_self` pilot-tuned from `0.7` to `0.9` jointly with the common coupling; see log. |
+| Learning rates | `eta_self=7.0`, `eta_threat=1.6` | `eta_threat` carried from v10/v11. `eta_self` pilot-tuned from `1.0`; identical across H1/H2; see log. |
+| Cross-level coupling | `2.0` | Pilot-tuned from the carried `1.35`; common to H1 self→threat and H2 threat→self and never cue-specific; see log. |
+| Outcome precision | `1.6` | Carried from v10/v11. |
+| Policy precision / threat weight | `3.2 / 2.4` | Carried from v10/v11; policy equation identical across architectures. |
+| Self policy biases | contact `0.08`, avoid `0.03` | Carried from v10/v11 and active in both architectures. |
+| Outcome utilities | `[-2.4, 1.4, -0.15, 0.20]` | Carried contact/avoid harm/neutral utilities. |
+| Initial self counts | `[18,2]` for both roots | Carried from v10/v11; root banks initialized identically. |
+| Initial threat counts | `[17,3]` for every cue | Carried from v10/v11; cue banks initialized identically. |
+| Relational truthfulness | `0.88` | Carried from v10/v11; also generates observed relational messages. |
+| Outcome reliabilities | `[0.96,0.08,0.97,0.78]` | Carried from v10/v11. |
+| Self / threat first-passage threshold | `0.60` | Carried IOU threshold. |
+| Policy first-passage threshold | `0.60` | Carried IOU threshold. |
+| Shared micro-step clock | self `+1`, threat `+2`, policy `+3` | Protocol choice, identical for H1/H2; these are actual update steps, not architecture-label offsets. |
+| Structural A3.2 cue | `cue_3` | Predeclared from the old design because it combines low feature overlap (`0.20`) with a high root-context world rate (`0.65`). Metrics use its learned association. |
+| Criteria thresholds | see `configs/sim3-criteria.yaml` | Pilot candidates selected before the first run from effect-size and 8/10 seed-robustness conventions; changes after pilot must be recorded below. |
+
+## Pilot-tuning log
+
+- First stop-condition attempt with carried `lambda_self=0.7` and coupling
+  `1.35` stopped at an H1/H2 training-likelihood gap of `0.1163` nats/trial.
+  The parity epsilon remained fixed at `0.05`.
+- A shared-parameter grid over `lambda_self ∈ {0.25,0.4,0.55,0.7,0.9,1.1}`
+  and coupling `∈ {1.5,2.0,2.5,3.0,3.5,4.0}` selected
+  `lambda_self=0.9`, coupling `2.0`: pilot parity gap `0.0159`, held-out
+  H1−H2 log-likelihood `+0.0219` nats/trial, and strict H1 cascade rate `1.0`.
+  Selection required all three properties; no architecture-specific constant
+  was introduced.
+- The first completed pilot exposed a saturated untrained-cue policy readout:
+  H1−exposure mean contact was `7.47e-8` because the shared root bank ended at
+  `P(resourced)=0.452`. A shared `eta_self` sweep over
+  `{1,1.5,2,3,4,4.5,5,5.5,6,6.5,7,8}` selected `7.0`, the smallest tested
+  value meeting the prewritten `r≥0.70` learned-association correlation while
+  retaining the strict cascade in 9/10 seeds. At `7.0`, pilot diagnostics were:
+  parity gap `0.0069`, held-out H1−H2 `+0.0289` nats/trial, H1−exposure contact
+  `+0.431`, root-controlled association correlation `0.723`, and structural
+  cue−perceptual-confound contact `+0.457`.
+- The preliminary perceptual behavioral-gain criterion was removed after the
+  first pilot because T4.2 specifies a *threat-level, cue-bound* conventional
+  pathway. The threat-safe gain remains directly preregistered, together with
+  the harder requirement that root-associated `cue_3` exceed the perceptual
+  confound in contact. H2 self liveness was corrected from a signed resourced
+  shift to an absolute bank shift: reversed conditioning initially moves the
+  bank toward helplessness, which is evidence of an active pathway, not a dead
+  one.

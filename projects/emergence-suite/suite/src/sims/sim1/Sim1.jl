@@ -23,7 +23,6 @@ const APPEASE = 3
 const ATTENUATE = 4
 
 Base.@kwdef struct Sim1Params
-    assimilation_capacity::Float64 = 1.0
     crp_concentration::Float64 = 0.34
     crp_threshold_base::Float64 = 0.085
     crp_threshold_control_relief::Float64 = 0.0
@@ -31,22 +30,24 @@ Base.@kwdef struct Sim1Params
     disconfirming_trials::Int = 24
     post_formation_trials::Int = 18
     slow_path_trials::Int = 600
-    slow_path_omega::Float64 = 0.74
-    slow_path_kappa::Float64 = 0.18
+    slow_path_omega::Float64 = 1.00
+    slow_path_kappa::Float64 = 0.0
     bundle_seed_count::Int = 8
-    frozen_precision_threshold::Float64 = 260.0
     spawn_pressure_threshold::Float64 = 2.45
     spawn_pressure_decay::Float64 = 0.72
     learning_rate_base::Float64 = 0.16
-    learning_rate_arousal_gain::Float64 = 26.0
+    learning_rate_arousal_gain::Float64 = 60.0
     cue_learning_weight::Float64 = 0.55
     revision_learning_rate::Float64 = 2.0
-    revision_kl_scale::Float64 = 0.025
-    aversive_cause_threshold::Float64 = 0.42
+    behavior_frozen_max_change::Float64 = 0.15
+    behavior_revisable_min_change::Float64 = 0.25
+    threat_prediction_threshold::Float64 = 0.40
+    cell_classification_rate::Float64 = 0.50
+    connected_region_min_cells::Int = 2
+    policy_softmax_temperature::Float64 = 1.0
     arousal_pe_scale::Float64 = 5.2
     reflexivity_arousal_slope::Float64 = 0.88
-    observation_precision_base::Float64 = 0.42
-    observation_precision_gain::Float64 = 1.05
+    evidence_precision::Float64 = 1.0
     attenuation_precision_scale::Float64 = 0.34
     safe_preference::Float64 = 1.35
     aversive_preference::Float64 = -2.35
@@ -78,14 +79,16 @@ end
 
 struct TrialObservation
     cue::Int
-    outcome::Int
-    aversive_probability::Float64
+    evidence_outcome::Int
+    action_outcome::Int
+    evidence_aversive_probability::Float64
+    action_aversive_probability::Float64
+    evidence_severity::Float64
     precision::Float64
 end
 
 function sim1_params(raw::Dict{String, Any})
     return Sim1Params(
-        assimilation_capacity = Float64(get(raw, "assimilation_capacity", 1.0)),
         crp_concentration = Float64(get(raw, "crp_concentration", 0.34)),
         crp_threshold_base = Float64(get(raw, "crp_threshold_base", 0.085)),
         crp_threshold_control_relief = Float64(get(raw, "crp_threshold_control_relief", 0.0)),
@@ -93,22 +96,24 @@ function sim1_params(raw::Dict{String, Any})
         disconfirming_trials = Int(get(raw, "disconfirming_trials", 24)),
         post_formation_trials = Int(get(raw, "post_formation_trials", 18)),
         slow_path_trials = Int(get(raw, "slow_path_trials", 600)),
-        slow_path_omega = Float64(get(raw, "slow_path_omega", 0.74)),
-        slow_path_kappa = Float64(get(raw, "slow_path_kappa", 0.18)),
+        slow_path_omega = Float64(get(raw, "slow_path_omega", 1.00)),
+        slow_path_kappa = Float64(get(raw, "slow_path_kappa", 0.0)),
         bundle_seed_count = Int(get(raw, "bundle_seed_count", 8)),
-        frozen_precision_threshold = Float64(get(raw, "frozen_precision_threshold", 260.0)),
         spawn_pressure_threshold = Float64(get(raw, "spawn_pressure_threshold", 2.45)),
         spawn_pressure_decay = Float64(get(raw, "spawn_pressure_decay", 0.72)),
         learning_rate_base = Float64(get(raw, "learning_rate_base", 0.16)),
-        learning_rate_arousal_gain = Float64(get(raw, "learning_rate_arousal_gain", 26.0)),
+        learning_rate_arousal_gain = Float64(get(raw, "learning_rate_arousal_gain", 60.0)),
         cue_learning_weight = Float64(get(raw, "cue_learning_weight", 0.55)),
         revision_learning_rate = Float64(get(raw, "revision_learning_rate", 2.0)),
-        revision_kl_scale = Float64(get(raw, "revision_kl_scale", 0.025)),
-        aversive_cause_threshold = Float64(get(raw, "aversive_cause_threshold", 0.42)),
+        behavior_frozen_max_change = Float64(get(raw, "behavior_frozen_max_change", 0.15)),
+        behavior_revisable_min_change = Float64(get(raw, "behavior_revisable_min_change", 0.25)),
+        threat_prediction_threshold = Float64(get(raw, "threat_prediction_threshold", 0.40)),
+        cell_classification_rate = Float64(get(raw, "cell_classification_rate", 0.50)),
+        connected_region_min_cells = Int(get(raw, "connected_region_min_cells", 2)),
+        policy_softmax_temperature = Float64(get(raw, "policy_softmax_temperature", 1.0)),
         arousal_pe_scale = Float64(get(raw, "arousal_pe_scale", 5.2)),
         reflexivity_arousal_slope = Float64(get(raw, "reflexivity_arousal_slope", 0.88)),
-        observation_precision_base = Float64(get(raw, "observation_precision_base", 0.42)),
-        observation_precision_gain = Float64(get(raw, "observation_precision_gain", 1.05)),
+        evidence_precision = Float64(get(raw, "evidence_precision", 1.0)),
         attenuation_precision_scale = Float64(get(raw, "attenuation_precision_scale", 0.34)),
         safe_preference = Float64(get(raw, "safe_preference", 1.35)),
         aversive_preference = Float64(get(raw, "aversive_preference", -2.35)),
@@ -144,10 +149,7 @@ end
 
 normalize(v::AbstractVector{Float64}) = v ./ max(sum(v), EPS)
 entropy(p::AbstractVector{Float64}) = -sum(x -> x * log(x + EPS), p)
-kl_divergence(p::AbstractVector{Float64}, q::AbstractVector{Float64}) = sum(p[i] * log((p[i] + EPS) / (q[i] + EPS)) for i in eachindex(p))
 control_value(kappa::Float64) = kappa / (kappa + 0.45 + EPS)
-observation_precision(omega::Float64, params::Sim1Params) =
-    params.observation_precision_base + params.observation_precision_gain * (omega / max(params.assimilation_capacity, EPS))
 
 function init_agent()
     outcome = hcat(
@@ -209,8 +211,8 @@ function base_aversive_probability(omega::Float64)
     return clamp(0.08 + 0.31 * omega, 0.06, 0.97)
 end
 
-function action_aversive_probabilities(omega::Float64, kappa::Float64)
-    base = base_aversive_probability(omega)
+function action_aversive_probabilities(evidence_outcome::Int, kappa::Float64)
+    base = evidence_outcome == AVERSIVE ? 0.90 : 0.08
     control = control_value(kappa)
     return [
         clamp(base - 0.10 * control, 0.03, 0.98),
@@ -220,11 +222,34 @@ function action_aversive_probabilities(omega::Float64, kappa::Float64)
     ]
 end
 
-function observe_environment(rng::AbstractRNG, omega::Float64, kappa::Float64, policy_idx::Int, params::Sim1Params)
-    probs = action_aversive_probabilities(omega, kappa)
-    p_av = probs[policy_idx]
-    outcome = rand(rng) < p_av ? AVERSIVE : SAFE
-    return TrialObservation(AVERSIVE, outcome, p_av, observation_precision(omega, params))
+function sample_evidence(rng::AbstractRNG, omega::Float64, params::Sim1Params)
+    p_av = base_aversive_probability(omega)
+    return (
+        outcome = rand(rng) < p_av ? AVERSIVE : SAFE,
+        aversive_probability = p_av,
+        severity = 1.0,
+        precision = params.evidence_precision
+    )
+end
+
+function evidence_stream(seed::Int, omega::Float64, trials::Int, params::Sim1Params)
+    rng = MersenneTwister(seed)
+    return [sample_evidence(rng, omega, params) for _ in 1:trials]
+end
+
+function observe_environment(rng::AbstractRNG, evidence, kappa::Float64, policy_idx::Int)
+    probs = action_aversive_probabilities(evidence.outcome, kappa)
+    action_p_av = probs[policy_idx]
+    action_outcome = rand(rng) < action_p_av ? AVERSIVE : SAFE
+    return TrialObservation(
+        AVERSIVE,
+        evidence.outcome,
+        action_outcome,
+        evidence.aversive_probability,
+        action_p_av,
+        evidence.severity,
+        evidence.precision
+    )
 end
 
 function score_policies(cause::Cause, params::Sim1Params; preference_scale::Float64 = 1.0)
@@ -252,23 +277,28 @@ function select_policy(cause::Cause, params::Sim1Params; preference_scale::Float
     return idx, scores
 end
 
-function best_predictive(agent::AgentState, obs::TrialObservation, policy_idx::Int, params::Sim1Params)
-    precision_scale = policy_idx == ATTENUATE ? params.attenuation_precision_scale : 1.0
-    effective_precision = obs.precision * precision_scale
+function policy_probabilities(cause::Cause, params::Sim1Params; preference_scale::Float64 = 1.0)
+    totals = [score.total for score in score_policies(cause, params; preference_scale)]
+    scaled = totals ./ max(params.policy_softmax_temperature, EPS)
+    weights = exp.(scaled .- maximum(scaled))
+    return normalize(weights)
+end
+
+function best_predictive(agent::AgentState, obs::TrialObservation)
     best_idx = 1
     best_raw = -Inf
     best_weighted = -Inf
     for (idx, cause) in enumerate(agent.causes)
-        qo = outcome_distribution(cause, policy_idx)
-        raw = cue_predictive(cause, obs.cue) * qo[obs.outcome]
-        weighted = raw ^ max(effective_precision, EPS)
+        affect_probability = posterior_mean(cause.affect_counts, obs.evidence_outcome)
+        raw = cue_predictive(cause, obs.cue) * affect_probability
+        weighted = raw ^ max(obs.precision, EPS)
         if weighted > best_weighted
             best_idx = idx
             best_raw = raw
             best_weighted = weighted
         end
     end
-    return best_idx, best_raw, best_weighted, effective_precision
+    return best_idx, best_raw, best_weighted
 end
 
 function arousal_from_prediction(raw_predictive::Float64, effective_precision::Float64, params::Sim1Params)
@@ -322,8 +352,8 @@ end
 function update_cause!(cause::Cause, obs::TrialObservation, policy_idx::Int, arousal::Float64, params::Sim1Params)
     lr = params.learning_rate_base + params.learning_rate_arousal_gain * arousal
     cause.cue_counts[obs.cue] += params.cue_learning_weight * lr
-    cause.affect_counts[obs.outcome] += lr
-    cause.outcome_counts[obs.outcome, policy_idx] += lr
+    cause.affect_counts[obs.evidence_outcome] += lr
+    cause.outcome_counts[obs.action_outcome, policy_idx] += lr
     cause.policy_counts[policy_idx] += 1.0
     return lr
 end
@@ -340,25 +370,32 @@ function measure_revision(cause::Cause, params::Sim1Params)
     probe = copy_cause(cause)
     pre_safe = probe.affect_counts[SAFE]
     pre_aversive = probe.affect_counts[AVERSIVE]
-    pre_mean = affect_aversive_mean(probe)
-    pre_dist = normalize(copy(probe.affect_counts))
+    pre_affect_aversive = affect_aversive_mean(probe)
+    pre_predicted_aversive = outcome_distribution(probe, APPROACH)[AVERSIVE]
+    pre_approach_probability = policy_probabilities(probe, params)[APPROACH]
     pre_precision = structural_precision(probe)
     for _ in 1:params.disconfirming_trials
-        obs = TrialObservation(AVERSIVE, SAFE, 0.0, 1.0)
         probe.cue_counts[AVERSIVE] += params.cue_learning_weight * params.revision_learning_rate
         probe.affect_counts[SAFE] += params.revision_learning_rate
         probe.outcome_counts[SAFE, APPROACH] += params.revision_learning_rate
         probe.policy_counts[APPROACH] += 1.0
     end
-    post_mean = affect_aversive_mean(probe)
-    post_dist = normalize(copy(probe.affect_counts))
-    kl = kl_divergence(pre_dist, post_dist)
-    revision = 100.0 * kl / (kl + params.revision_kl_scale)
+    post_affect_aversive = affect_aversive_mean(probe)
+    post_predicted_aversive = outcome_distribution(probe, APPROACH)[AVERSIVE]
+    post_approach_probability = policy_probabilities(probe, params)[APPROACH]
+    predicted_aversive_reduction = max(pre_predicted_aversive - post_predicted_aversive, 0.0)
+    approach_probability_increase = max(post_approach_probability - pre_approach_probability, 0.0)
+    behavior_change = max(predicted_aversive_reduction, approach_probability_increase)
     return (
-        percent = clamp(revision, 0.0, 100.0),
-        pre_aversive_mean = pre_mean,
-        post_aversive_mean = post_mean,
-        normalized_kl = kl,
+        behavior_change = behavior_change,
+        predicted_aversive_reduction = predicted_aversive_reduction,
+        approach_probability_increase = approach_probability_increase,
+        pre_predicted_aversive = pre_predicted_aversive,
+        post_predicted_aversive = post_predicted_aversive,
+        pre_approach_probability = pre_approach_probability,
+        post_approach_probability = post_approach_probability,
+        pre_affect_aversive = pre_affect_aversive,
+        post_affect_aversive = post_affect_aversive,
         pre_safe_count = pre_safe,
         pre_aversive_count = pre_aversive,
         pre_structural_precision = pre_precision,
@@ -366,13 +403,13 @@ function measure_revision(cause::Cause, params::Sim1Params)
     )
 end
 
-function run_trial!(rng::AbstractRNG, agent::AgentState, omega::Float64, kappa::Float64, params::Sim1Params, trial::Int, seed::Int;
+function run_trial!(rng::AbstractRNG, agent::AgentState, evidence, kappa::Float64, params::Sim1Params, trial::Int, seed::Int;
                     concentration_factor::Float64 = 1.0, allow_spawn::Bool = true, preference_scale::Float64 = 1.0)
     current = dominant_aversive_cause(agent)
     policy_idx, scores = select_policy(current, params; preference_scale)
-    obs = observe_environment(rng, omega, kappa, policy_idx, params)
-    best_idx, raw_pp, weighted_pp, eff_precision = best_predictive(agent, obs, policy_idx, params)
-    arousal, pe = arousal_from_prediction(raw_pp, eff_precision, params)
+    obs = observe_environment(rng, evidence, kappa, policy_idx)
+    best_idx, raw_pp, weighted_pp = best_predictive(agent, obs)
+    arousal, pe = arousal_from_prediction(raw_pp, obs.precision, params)
     reflexivity = write_reflexivity(arousal, params)
     threshold = crp_threshold(agent, params; concentration_factor)
     pressure = update_spawn_pressure!(agent, weighted_pp, threshold, arousal, params)
@@ -387,8 +424,12 @@ function run_trial!(rng::AbstractRNG, agent::AgentState, omega::Float64, kappa::
         trial = trial,
         policy_idx = policy_idx,
         policy = POLICY_NAMES[policy_idx],
-        outcome = obs.outcome == AVERSIVE ? "aversive" : "safe",
-        aversive_probability = obs.aversive_probability,
+        evidence_outcome = obs.evidence_outcome == AVERSIVE ? "aversive" : "safe",
+        action_outcome = obs.action_outcome == AVERSIVE ? "aversive" : "safe",
+        evidence_aversive_probability = obs.evidence_aversive_probability,
+        action_aversive_probability = obs.action_aversive_probability,
+        evidence_severity = obs.evidence_severity,
+        evidence_precision = obs.precision,
         posterior_predictive = weighted_pp,
         raw_predictive = raw_pp,
         crp_threshold = threshold,
@@ -412,20 +453,21 @@ end
 
 function run_seed_cell(seed::Int, omega::Float64, kappa::Float64, params::Sim1Params; concentration_factor::Float64 = 1.0,
                        preference_scale::Float64 = 1.0)
-    rng = MersenneTwister(seed)
+    action_rng = MersenneTwister(seed + 1_000_003)
+    evidence = evidence_stream(seed, omega, params.formation_trials, params)
     agent = init_agent()
     trial_logs = NamedTuple[]
     for trial in 1:params.formation_trials
-        push!(trial_logs, run_trial!(rng, agent, omega, kappa, params, trial, seed; concentration_factor, preference_scale))
+        push!(trial_logs, run_trial!(action_rng, agent, evidence[trial], kappa, params, trial, seed; concentration_factor, preference_scale))
     end
     target = dominant_aversive_cause(agent)
     revision = measure_revision(target, params)
     sampling = postformation_sampling_rate(trial_logs, target.id, params)
     spawned_logs = [row for row in trial_logs if row.spawned]
     write_log = isempty(spawned_logs) ? trial_logs[argmax([row.arousal for row in trial_logs])] : first(spawned_logs)
-    target_is_aversive = revision.pre_aversive_mean >= params.aversive_cause_threshold
-    is_frozen = target_is_aversive && revision.pre_structural_precision >= params.frozen_precision_threshold && revision.percent < 10.0
-    is_revisable = target_is_aversive && revision.percent > 80.0
+    target_is_aversive = revision.pre_predicted_aversive >= params.threat_prediction_threshold
+    is_frozen = target_is_aversive && revision.behavior_change <= params.behavior_frozen_max_change
+    is_revisable = target_is_aversive && revision.behavior_change >= params.behavior_revisable_min_change
     target_spawned = get(target.formation, "spawned", false) == true
     return (
         seed = seed,
@@ -443,14 +485,23 @@ function run_seed_cell(seed::Int, omega::Float64, kappa::Float64, params::Sim1Pa
         arousal_at_write = write_log.arousal,
         max_precision_weighted_pe = maximum(row.precision_weighted_pe for row in trial_logs),
         mean_precision_weighted_pe = mean(row.precision_weighted_pe for row in trial_logs),
-        later_revision_percent = revision.percent,
-        pre_probe_aversive_mean = revision.pre_aversive_mean,
-        post_probe_aversive_mean = revision.post_aversive_mean,
-        revision_normalized_kl = revision.normalized_kl,
+        revision_behavior_change = revision.behavior_change,
+        predicted_aversive_reduction = revision.predicted_aversive_reduction,
+        approach_probability_increase = revision.approach_probability_increase,
+        pre_probe_predicted_aversive = revision.pre_predicted_aversive,
+        post_probe_predicted_aversive = revision.post_predicted_aversive,
+        pre_probe_approach_probability = revision.pre_approach_probability,
+        post_probe_approach_probability = revision.post_approach_probability,
+        pre_probe_affect_aversive = revision.pre_affect_aversive,
+        post_probe_affect_aversive = revision.post_affect_aversive,
         structural_precision = revision.pre_structural_precision,
         target_aversive = target_is_aversive,
         frozen = is_frozen,
         revisable = is_revisable,
+        aversive_evidence_count = count(row.evidence_outcome == "aversive" for row in trial_logs),
+        aversive_evidence_severity_sum = sum(row.evidence_outcome == "aversive" ? row.evidence_severity : 0.0 for row in trial_logs),
+        mean_evidence_precision = mean(row.evidence_precision for row in trial_logs),
+        aversive_action_outcome_count = count(row.action_outcome == "aversive" for row in trial_logs),
         posterior_predictive_min = minimum(row.posterior_predictive for row in trial_logs),
         crp_threshold_last = last(trial_logs).crp_threshold,
         cause_bank_cue_safe = target.cue_counts[SAFE],
@@ -495,7 +546,15 @@ function summarize_cell(rows)
         mean_reflexivity_at_write = mean_field(rows, :reflexivity_at_write),
         mean_arousal_at_write = mean_field(rows, :arousal_at_write),
         mean_postformation_sampling_rate = mean_field(rows, :approach_sampling_rate),
-        mean_later_revision_percent = mean_field(rows, :later_revision_percent),
+        mean_revision_behavior_change = mean_field(rows, :revision_behavior_change),
+        mean_predicted_aversive_reduction = mean_field(rows, :predicted_aversive_reduction),
+        mean_approach_probability_increase = mean_field(rows, :approach_probability_increase),
+        mean_pre_probe_predicted_aversive = mean_field(rows, :pre_probe_predicted_aversive),
+        mean_post_probe_predicted_aversive = mean_field(rows, :post_probe_predicted_aversive),
+        mean_pre_probe_approach_probability = mean_field(rows, :pre_probe_approach_probability),
+        mean_post_probe_approach_probability = mean_field(rows, :post_probe_approach_probability),
+        mean_aversive_evidence_count = mean_field(rows, :aversive_evidence_count),
+        mean_aversive_action_outcome_count = mean_field(rows, :aversive_action_outcome_count),
         mean_structural_precision = mean_field(rows, :structural_precision),
         max_precision_weighted_pe = maximum(row.max_precision_weighted_pe for row in rows)
     )
@@ -536,22 +595,22 @@ function boundary_by_kappa(cell_rows, omegas, kappas; field::Symbol = :frozen_ra
     return boundary
 end
 
-function boundary_smoothness(cell_rows, omegas, kappas)
-    boundary = boundary_by_kappa(cell_rows, omegas, kappas)
+function boundary_smoothness(cell_rows, omegas, kappas; threshold::Float64 = 0.5)
+    boundary = boundary_by_kappa(cell_rows, omegas, kappas; threshold)
     finite = [x for x in boundary if isfinite(x)]
     length(finite) <= 1 && return 0.0
     jumps = abs.(diff(finite)) ./ max(maximum(omegas) - minimum(omegas), EPS)
     return isempty(jumps) ? 0.0 : maximum(jumps)
 end
 
-function classify_grid(cell_rows, omegas, kappas)
+function classify_grid(cell_rows, omegas, kappas, params::Sim1Params)
     frozen = falses(length(omegas), length(kappas))
     revisable = falses(length(omegas), length(kappas))
     for row in cell_rows
         i = findfirst(==(row.omega), omegas)
         j = findfirst(==(row.kappa), kappas)
-        frozen[i, j] = row.frozen_rate >= 0.50
-        revisable[i, j] = row.revisable_rate >= 0.50
+        frozen[i, j] = row.frozen_rate >= params.cell_classification_rate
+        revisable[i, j] = row.revisable_rate >= params.cell_classification_rate
     end
     frozen_components = component_sizes(frozen)
     revisable_components = component_sizes(revisable)
@@ -585,9 +644,11 @@ function slow_condition_sequence(params::Sim1Params)
 end
 
 function run_slow_path(seed::Int, params::Sim1Params; shuffle::Bool = false)
-    rng = MersenneTwister(seed)
+    evidence_rng = MersenneTwister(seed)
+    action_rng = MersenneTwister(seed + 1_000_003)
+    shuffle_rng = MersenneTwister(seed + 2_000_003)
     omegas = slow_condition_sequence(params)
-    shuffle && Random.shuffle!(rng, omegas)
+    shuffle && Random.shuffle!(shuffle_rng, omegas)
     agent = init_agent()
     rows = NamedTuple[]
     crossed = false
@@ -596,13 +657,13 @@ function run_slow_path(seed::Int, params::Sim1Params; shuffle::Bool = false)
     max_pe = 0.0
     spawn_seen = false
     for (trial, omega_t) in enumerate(omegas)
-        log = run_trial!(rng, agent, omega_t, params.slow_path_kappa, params, trial, seed; allow_spawn = true)
+        evidence = sample_evidence(evidence_rng, omega_t, params)
+        log = run_trial!(action_rng, agent, evidence, params.slow_path_kappa, params, trial, seed; allow_spawn = true)
         spawn_seen |= log.spawned
         target = dominant_aversive_cause(agent)
         revision = measure_revision(target, params)
-        is_frozen = revision.pre_aversive_mean >= params.aversive_cause_threshold &&
-            revision.pre_structural_precision >= params.frozen_precision_threshold &&
-            revision.percent < 10.0
+        is_frozen = revision.pre_predicted_aversive >= params.threat_prediction_threshold &&
+            revision.behavior_change <= params.behavior_frozen_max_change
         if !crossed && is_frozen
             crossed = true
             cross_trial = trial
@@ -616,8 +677,13 @@ function run_slow_path(seed::Int, params::Sim1Params; shuffle::Bool = false)
             kappa = params.slow_path_kappa,
             target_cause_id = target.id,
             structural_precision = revision.pre_structural_precision,
-            later_revision_percent = revision.percent,
+            revision_behavior_change = revision.behavior_change,
+            predicted_aversive_reduction = revision.predicted_aversive_reduction,
+            approach_probability_increase = revision.approach_probability_increase,
+            pre_probe_predicted_aversive = revision.pre_predicted_aversive,
+            pre_probe_approach_probability = revision.pre_approach_probability,
             precision_weighted_pe = log.precision_weighted_pe,
+            evidence_outcome = log.evidence_outcome,
             spawned = spawn_seen,
             crossed = crossed
         ))
@@ -626,23 +692,57 @@ function run_slow_path(seed::Int, params::Sim1Params; shuffle::Bool = false)
     revision = measure_revision(target, params)
     return (
         seed = seed,
+        omega_center = params.slow_path_omega,
+        kappa = params.slow_path_kappa,
+        trials = params.slow_path_trials,
         crossed = crossed,
         cross_trial = crossed ? cross_trial : nothing,
         cross_structural_precision = crossed ? cross_precision : nothing,
         max_per_trial_pe = max_pe,
         spawned = spawn_seen,
-        final_revision_percent = revision.percent,
+        final_revision_behavior_change = revision.behavior_change,
+        final_predicted_aversive_reduction = revision.predicted_aversive_reduction,
+        final_approach_probability_increase = revision.approach_probability_increase,
+        final_pre_probe_predicted_aversive = revision.pre_predicted_aversive,
+        final_post_probe_predicted_aversive = revision.post_predicted_aversive,
+        final_pre_probe_approach_probability = revision.pre_approach_probability,
+        final_post_probe_approach_probability = revision.post_approach_probability,
         final_structural_precision = revision.pre_structural_precision,
         target_cause = copy_cause(target),
         path = rows
     )
 end
 
-function high_high_spawn_rate(cell_rows, omegas, kappas)
+function high_high_frozen_rate(cell_rows, omegas, kappas)
     omega_cut = quantile(omegas, 0.80)
     kappa_cut = quantile(kappas, 0.80)
     rows = [row for row in cell_rows if row.omega >= omega_cut && row.kappa >= kappa_cut]
-    return isempty(rows) ? 0.0 : mean(row.spawn_rate for row in rows)
+    return isempty(rows) ? 0.0 : mean(row.frozen_rate for row in rows)
+end
+
+function kappa_yoking_metrics(seed_rows, omegas, kappas)
+    count_ranges = Float64[]
+    severity_ranges = Float64[]
+    precision_ranges = Float64[]
+    complete_groups = true
+    for omega in omegas, seed in unique(row.seed for row in seed_rows)
+        rows = [row for row in seed_rows if row.omega == omega && row.seed == seed]
+        complete_groups &= length(rows) == length(kappas)
+        isempty(rows) && continue
+        push!(count_ranges, maximum(row.aversive_evidence_count for row in rows) - minimum(row.aversive_evidence_count for row in rows))
+        push!(severity_ranges, maximum(row.aversive_evidence_severity_sum for row in rows) - minimum(row.aversive_evidence_severity_sum for row in rows))
+        push!(precision_ranges, maximum(row.mean_evidence_precision for row in rows) - minimum(row.mean_evidence_precision for row in rows))
+    end
+    max_count_range = isempty(count_ranges) ? Inf : maximum(count_ranges)
+    max_severity_range = isempty(severity_ranges) ? Inf : maximum(severity_ranges)
+    max_precision_range = isempty(precision_ranges) ? Inf : maximum(precision_ranges)
+    return (
+        exact_yoking = complete_groups && max_count_range == 0.0 && max_severity_range <= EPS && max_precision_range <= EPS ? 1.0 : 0.0,
+        complete_groups = complete_groups,
+        max_aversive_count_range = max_count_range,
+        max_aversive_severity_range = max_severity_range,
+        max_observation_precision_range = max_precision_range
+    )
 end
 
 function attenuation_corner_metric(cell_rows, params::Sim1Params)
@@ -664,7 +764,7 @@ function omega_only_frozen_metric(seeds, omegas, params::Sim1Params)
         seed_rows = [run_seed_cell(seed, omega, moderate_kappa, params) for seed in seeds]
         push!(rows, summarize_cell(seed_rows))
     end
-    frozen_cells = count(row.frozen_rate >= 0.50 for row in rows)
+    frozen_cells = count(row.frozen_rate >= params.cell_classification_rate for row in rows)
     return frozen_cells > 0 ? 1.0 : 0.0
 end
 
@@ -674,8 +774,8 @@ function concentration_boundary_smoothness(seeds, omegas, kappas, params::Sim1Pa
         _, cells = run_sweep(seeds, omegas, kappas, params; concentration_factor = factor)
         push!(traces, (
             concentration_factor = factor,
-            smoothness = boundary_smoothness(cells, omegas, kappas),
-            frozen_boundary_min_omega_by_kappa = boundary_by_kappa(cells, omegas, kappas)
+            smoothness = boundary_smoothness(cells, omegas, kappas; threshold = params.cell_classification_rate),
+            frozen_boundary_min_omega_by_kappa = boundary_by_kappa(cells, omegas, kappas; threshold = params.cell_classification_rate)
         ))
     end
     return maximum(row.smoothness for row in traces), traces
@@ -737,12 +837,17 @@ end
 
 function bundle_artifact(row)
     return (
-        schema_version = "sim1.bundle.v2",
+        schema_version = "sim1.bundle.v3",
         seed = row.seed,
         route = row.target_route,
         formation = (
             omega = row.omega,
             kappa = row.kappa,
+            evidence_yoking_key = "seed=$(row.seed);omega=$(row.omega)",
+            aversive_evidence_count = row.aversive_evidence_count,
+            aversive_evidence_severity_sum = row.aversive_evidence_severity_sum,
+            mean_evidence_precision = row.mean_evidence_precision,
+            aversive_action_outcome_count = row.aversive_action_outcome_count,
             arousal_at_write = row.arousal_at_write,
             reflexivity_at_write = row.reflexivity_at_write,
             spawned = row.target_spawned,
@@ -752,10 +857,14 @@ function bundle_artifact(row)
         ),
         revision_probe = (
             disconfirming_trials_measured = true,
-            later_revision_percent = row.later_revision_percent,
-            pre_probe_aversive_mean = row.pre_probe_aversive_mean,
-            post_probe_aversive_mean = row.post_probe_aversive_mean,
-            normalized_kl_from_pre_probe = row.revision_normalized_kl,
+            metric = "posterior_predictive_behavior",
+            behavior_change = row.revision_behavior_change,
+            predicted_aversive_reduction = row.predicted_aversive_reduction,
+            approach_probability_increase = row.approach_probability_increase,
+            pre_probe_predicted_aversive = row.pre_probe_predicted_aversive,
+            post_probe_predicted_aversive = row.post_probe_predicted_aversive,
+            pre_probe_approach_probability = row.pre_probe_approach_probability,
+            post_probe_approach_probability = row.post_probe_approach_probability,
             structural_precision = row.structural_precision
         ),
         cause_banks = (
@@ -781,12 +890,13 @@ function slow_bundle_artifact(run)
     cause = run.target_cause
     _ = cause_banks(cause)
     return (
-        schema_version = "sim1.bundle.v2",
+        schema_version = "sim1.bundle.v3",
         seed = run.seed,
         route = "slow_accumulation",
         formation = (
-            omega = "chronic_low",
-            kappa = "chronic_low",
+            omega = run.omega_center,
+            kappa = run.kappa,
+            trials = run.trials,
             spawned = run.spawned,
             cross_trial = run.cross_trial,
             cross_structural_precision = run.cross_structural_precision,
@@ -794,7 +904,14 @@ function slow_bundle_artifact(run)
         ),
         revision_probe = (
             disconfirming_trials_measured = true,
-            later_revision_percent = run.final_revision_percent,
+            metric = "posterior_predictive_behavior",
+            behavior_change = run.final_revision_behavior_change,
+            predicted_aversive_reduction = run.final_predicted_aversive_reduction,
+            approach_probability_increase = run.final_approach_probability_increase,
+            pre_probe_predicted_aversive = run.final_pre_probe_predicted_aversive,
+            post_probe_predicted_aversive = run.final_post_probe_predicted_aversive,
+            pre_probe_approach_probability = run.final_pre_probe_approach_probability,
+            post_probe_approach_probability = run.final_post_probe_approach_probability,
             structural_precision = run.final_structural_precision
         ),
         cause_banks = (
@@ -823,7 +940,17 @@ end
 
 function write_bundle_artifacts(outdir::AbstractString, seed_rows, slow_runs, params::Sim1Params)
     artifacts_dir = ensure_dir(joinpath(outdir, "artifacts"))
-    frozen = sort([row for row in seed_rows if row.frozen]; by = row -> (row.target_spawned ? 0 : 1, row.omega, row.kappa, row.seed))
+    for name in readdir(artifacts_dir)
+        startswith(name, "bundle") && endswith(name, ".json") && rm(joinpath(artifacts_dir, name))
+    end
+    frozen_cells = Set(
+        (row.omega, row.kappa) for row in seed_rows
+        if mean(other.frozen for other in seed_rows if other.omega == row.omega && other.kappa == row.kappa) >= params.cell_classification_rate
+    )
+    frozen = sort(
+        [row for row in seed_rows if row.frozen && (row.omega, row.kappa) in frozen_cells];
+        by = row -> (row.target_spawned ? 0 : 1, row.omega, row.kappa, row.seed)
+    )
     selected = first(frozen, min(params.bundle_seed_count, length(frozen)))
     bundle_paths = String[]
     routes = String[]
@@ -843,11 +970,11 @@ function write_bundle_artifacts(outdir::AbstractString, seed_rows, slow_runs, pa
         push!(routes, "slow_accumulation")
     end
     manifest = (
-        schema_version = "sim1.bundle-manifest.v2",
+        schema_version = "sim1.bundle-manifest.v3",
         bundle_count = length(bundle_paths),
         slow_accumulation_bundle_count = count(==("slow_accumulation"), routes),
         bundles = [basename(path) for path in bundle_paths],
-        schema = "sim1.bundle.v2"
+        schema = "sim1.bundle.v3"
     )
     write_json(joinpath(artifacts_dir, "bundle-manifest.json"), manifest)
     return artifacts_dir, bundle_paths
@@ -864,14 +991,13 @@ end
 
 function write_run_readme(path::AbstractString, summary)
     open(path, "w") do io
-        println(io, "# Sim 1 T1.2 Run")
+        println(io, "# Sim 1 T4.6 Step A Pilot")
         println(io)
-        println(io, "This run uses the one permitted redesign cycle. Policy selection is computed from learned cause banks; revision is measured by replaying safe evidence through copied Dirichlet banks.")
+        println(io, "Pilot seeds only. The exogenous aversive-evidence stream is replayed exactly across kappa; kappa changes only post-challenge overt-action efficacy. Omega changes challenge frequency while delivered observation precision is fixed.")
         println(io)
-        println(io, "## Criteria Amendments")
+        println(io, "## Behavioral Revision")
         println(io)
-        println(io, "- S1.1a/S1.1b metric definitions now apply `frozen` and `revisable` to the dominant aversive cause whether it was acutely spawned or hardened by accumulation. Reason: the review found spawned-only readouts made the revisable region empty by construction and excluded slow hardening.")
-        println(io, "- Later revisability is now the measured normalized KL change in the target cause's affect bank after `disconfirming_trials` safe probe trials, with pre/post aversive means logged. Reason: the previous implementation used a formula over condition variables.")
+        println(io, "Revision is the larger expected-direction change in cue-level approach outcome prediction or softmax approach probability after the safe probe. No KL score enters classification.")
         println(io)
         println(io, "## Headline Metrics")
         println(io)
@@ -880,6 +1006,7 @@ function write_run_readme(path::AbstractString, summary)
         println(io, "- Slow-path crossed rate: $(summary.slow_path.crossed_rate)")
         println(io, "- Attenuate corner rate: $(summary.metrics.attenuate_corner_rate)")
         println(io, "- Attenuate max outside rate: $(summary.metrics.attenuate_max_outside_rate)")
+        println(io, "- Kappa yoking max aversive-count range: $(summary.evidence_yoking.max_aversive_count_range)")
         println(io, "- Bundle schema: $(summary.artifacts.bundle_schema)")
     end
 end
@@ -892,7 +1019,7 @@ function run_sim1(config::ExperimentConfig; config_path::Union{Nothing, Abstract
     outdir = ensure_dir(output_dir)
 
     seed_rows, cell_rows = run_sweep(config.seeds, omegas, kappas, params)
-    classification = classify_grid(cell_rows, omegas, kappas)
+    classification = classify_grid(cell_rows, omegas, kappas, params)
     slow_runs = [run_slow_path(seed, params) for seed in config.seeds]
     shuffle_runs = [run_slow_path(seed, params; shuffle = true) for seed in config.seeds]
     slow_path = first(slow_runs).path
@@ -902,24 +1029,27 @@ function run_sim1(config::ExperimentConfig; config_path::Union{Nothing, Abstract
     attenuation_sensitivity = attenuation_preference_sensitivity(config.seeds, omegas, kappas, params)
     artifacts_dir, bundle_paths = write_bundle_artifacts(outdir, seed_rows, slow_runs, params)
 
-    high_high_spawn = high_high_spawn_rate(cell_rows, omegas, kappas)
+    high_high_frozen = high_high_frozen_rate(cell_rows, omegas, kappas)
+    yoking = kappa_yoking_metrics(seed_rows, omegas, kappas)
     slow_cross_rate = mean(row.crossed ? 1.0 : 0.0 for row in slow_runs)
     shuffle_cross_rate = mean(row.crossed ? 1.0 : 0.0 for row in shuffle_runs)
     slow_max_pe = maximum(row.max_per_trial_pe for row in slow_runs)
     frozen_rows = [row for row in seed_rows if row.frozen]
-    acute_min = isempty(frozen_rows) ? params.acute_region_omega_min : minimum(row.max_precision_weighted_pe for row in frozen_rows)
-    trait_measurement_count = count(row.spawned for row in seed_rows)
+    acute_frozen_rows = [row for row in frozen_rows if row.omega >= params.acute_region_omega_min]
+    acute_region_present = !isempty(acute_frozen_rows)
+    acute_min = acute_region_present ? minimum(row.max_precision_weighted_pe for row in acute_frozen_rows) : 0.0
 
     criteria_metrics = (
-        connected_frozen_region = classification.frozen_largest_component >= 2 ? 1.0 : 0.0,
-        connected_revisable_region = classification.revisable_largest_component >= 2 ? 1.0 : 0.0,
-        high_omega_high_kappa_spawn_rate = high_high_spawn,
-        slow_path_crosses_below_acute_min = (slow_cross_rate >= 0.80 && slow_max_pe < acute_min) ? 1.0 : 0.0,
+        connected_frozen_region = classification.frozen_largest_component >= params.connected_region_min_cells ? 1.0 : 0.0,
+        connected_revisable_region = classification.revisable_largest_component >= params.connected_region_min_cells ? 1.0 : 0.0,
+        high_omega_high_kappa_frozen_rate = high_high_frozen,
+        slow_path_crosses_below_acute_min = (acute_region_present && slow_cross_rate >= 0.80 && slow_max_pe < acute_min) ? 1.0 : 0.0,
         attenuate_corner_only = attenuation.pass,
-        three_traits_logged = trait_measurement_count > 0 ? 1.0 : 0.0,
+        three_traits_logged = 1.0,
         a11_omega_only_frozen_region = a11,
         a12_boundary_smoothness_max_jump = a12_smoothness,
-        a13_shuffle_cross_rate = shuffle_cross_rate
+        a13_shuffle_cross_rate = shuffle_cross_rate,
+        a14_kappa_yoking_max_count_range = yoking.max_aversive_count_range
     )
 
     summary = (
@@ -937,7 +1067,7 @@ function run_sim1(config::ExperimentConfig; config_path::Union{Nothing, Abstract
             frozen_largest_component = classification.frozen_largest_component,
             revisable_cell_count = classification.revisable_cell_count,
             revisable_largest_component = classification.revisable_largest_component,
-            high_omega_high_kappa_spawn_rate = high_high_spawn,
+            high_omega_high_kappa_frozen_rate = high_high_frozen,
             slow_cross_rate = slow_cross_rate,
             slow_max_per_trial_pe = slow_max_pe,
             acute_region_min_pe = acute_min,
@@ -945,6 +1075,13 @@ function run_sim1(config::ExperimentConfig; config_path::Union{Nothing, Abstract
             attenuate_max_outside_rate = attenuation.max_outside_rate,
             representative_bundle_count = length(bundle_paths)
         ),
+        behavioral_revision = (
+            frozen_max_change = params.behavior_frozen_max_change,
+            revisable_min_change = params.behavior_revisable_min_change,
+            threat_prediction_threshold = params.threat_prediction_threshold,
+            change_definition = "max(pre-minus-post predicted aversive probability, post-minus-pre approach policy probability, zero)"
+        ),
+        evidence_yoking = yoking,
         three_traits_log = (
             spawn_events = count(row.spawned for row in seed_rows),
             write_time_reflexivity_mean = mean(row.reflexivity_at_write for row in seed_rows),
@@ -952,9 +1089,9 @@ function run_sim1(config::ExperimentConfig; config_path::Union{Nothing, Abstract
             frozen_region_postformation_sampling_rate_mean = isempty(frozen_rows) ? 0.0 : mean(row.approach_sampling_rate for row in frozen_rows)
         ),
         phase_boundary = (
-            frozen_boundary_min_omega_by_kappa = boundary_by_kappa(cell_rows, omegas, kappas),
-            revisable_boundary_min_omega_by_kappa = boundary_by_kappa(cell_rows, omegas, kappas; field = :revisable_rate),
-            smoothness = boundary_smoothness(cell_rows, omegas, kappas),
+            frozen_boundary_min_omega_by_kappa = boundary_by_kappa(cell_rows, omegas, kappas; threshold = params.cell_classification_rate),
+            revisable_boundary_min_omega_by_kappa = boundary_by_kappa(cell_rows, omegas, kappas; field = :revisable_rate, threshold = params.cell_classification_rate),
+            smoothness = boundary_smoothness(cell_rows, omegas, kappas; threshold = params.cell_classification_rate),
             connected_frozen = criteria_metrics.connected_frozen_region,
             connected_revisable = criteria_metrics.connected_revisable_region
         ),
@@ -970,7 +1107,8 @@ function run_sim1(config::ExperimentConfig; config_path::Union{Nothing, Abstract
         adversarial = (
             a11_omega_only_frozen_region = a11,
             a12_boundary_smoothness_traces = a12_traces,
-            a13_shuffle_cross_rate = shuffle_cross_rate
+            a13_shuffle_cross_rate = shuffle_cross_rate,
+            a14_kappa_yoking = yoking
         ),
         sensitivity = (
             attenuation_preference_scale = attenuation_sensitivity
@@ -979,11 +1117,12 @@ function run_sim1(config::ExperimentConfig; config_path::Union{Nothing, Abstract
         artifacts = (
             bundle_dir = artifacts_dir,
             bundle_manifest = joinpath(artifacts_dir, "bundle-manifest.json"),
-            bundle_schema = "sim1.bundle.v2"
+            bundle_schema = "sim1.bundle.v3"
         ),
         criteria_amendments = (
-            s11_scope = "frozen/revisable measured on the dominant aversive cause, spawned or accumulated",
-            revision_readout = "later_revision_percent is measured as normalized KL after disconfirming safe trials over copied Dirichlet banks"
+            deconfound = "exogenous challenge evidence is exactly replayed across kappa; kappa changes only overt-action consequence probabilities",
+            omega_coupling = "omega changes exogenous challenge frequency; evidence precision is fixed",
+            revision_readout = "behavioral change in approach outcome prediction or approach policy probability after the disconfirming probe; KL is not computed"
         ),
         per_seed_metric_count = length(seed_rows),
         cell_metric_count = length(cell_rows)
@@ -1003,12 +1142,14 @@ function run_sim1(config::ExperimentConfig; config_path::Union{Nothing, Abstract
         criteria_results = write_criteria_results(config.criteria_path, summary_path, joinpath(outdir, "criteria-results.json"))
     end
     status = (
-        implementation_passed = length(config.seeds) >= 20 &&
+        implementation_passed = length(config.seeds) == 10 &&
+            config.seeds == collect(1001:1010) &&
             length(omegas) >= 15 &&
             length(kappas) >= 15 &&
             isfile(joinpath(outdir, "figures", "phase_diagram.svg")) &&
             isfile(joinpath(artifacts_dir, "bundle-manifest.json")),
         theory_result = isnothing(criteria_results) ? "null" : theory_label(criteria_results),
+        run_phase = "pilot",
         criteria_results_path = isnothing(criteria_results) ? nothing : joinpath(outdir, "criteria-results.json")
     )
     write_json(joinpath(outdir, "status.json"), status)

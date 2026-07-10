@@ -2,6 +2,7 @@ module BMR
 
 export bmr_delta_f_pooled_evidence,
        bmr_delta_f_prior_swap,
+       accessibility_weight,
        dirichlet_log_evidence,
        logbeta,
        reflexive_prior_swap_delta,
@@ -105,9 +106,21 @@ end
 Saturating D2 toy-demo mapping from reflexivity precision to accessible
 evidence fraction. At `E <= 0`, no data-driven BMR comparison is available.
 """
+function accessibility_weight(E::Real; form::Symbol = :saturating, E0::Real = 1.0, threshold::Real = 0.2, full_access::Real = 0.8)
+    value = Float64(E)
+    if form == :saturating
+        E0 > 0 || error("E0 must be positive")
+        value <= 0 && return 0.0
+        return value / (value + Float64(E0))
+    elseif form == :threshold_linear
+        full_access > threshold || error("full_access must exceed threshold")
+        return clamp((value - Float64(threshold)) / (Float64(full_access) - Float64(threshold)), 0.0, 1.0)
+    end
+    error("Unknown accessibility form: $form")
+end
+
 function reflexivity_weight(E::Real; E0::Real = 1.0)
-    E <= 0 && return 0.0
-    return Float64(E) / (Float64(E) + Float64(E0))
+    return accessibility_weight(E; form = :saturating, E0 = E0)
 end
 
 """
@@ -116,8 +129,8 @@ end
 D2 toy-demo helper: builds `post = full_prior + rho(E) * counts` and evaluates
 the canonical prior-swap BMR.
 """
-function reflexive_prior_swap_delta(full_prior, reduced_prior, counts, E; E0 = 1.0)
-    rho = reflexivity_weight(E; E0 = E0)
+function reflexive_prior_swap_delta(full_prior, reduced_prior, counts, E; E0 = 1.0, form::Symbol = :saturating, threshold::Real = 0.2, full_access::Real = 0.8)
+    rho = accessibility_weight(E; form = form, E0 = E0, threshold = threshold, full_access = full_access)
     post = full_prior .+ rho .* counts
     return bmr_delta_f_prior_swap(post, full_prior, reduced_prior)
 end

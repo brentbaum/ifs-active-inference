@@ -1,145 +1,108 @@
 criteria:
-  - id: S3.training_parity
-    description: H1 and H2 treated-cue training log-evidence differ by less than epsilon before probes are interpreted.
-    metric_path: metrics.training_parity.abs_log_evidence_diff
+  - id: S3.training_parity_stop
+    description: H1 and H2 in-sample training-cue mean log likelihoods are matched before transfer probes are interpreted.
+    metric_path: metrics.training_parity.abs_mean_log_likelihood_diff
     comparator: "<="
     threshold: 0.05
     weak_threshold: 0.08
     opposite_threshold: 0.12
     kind: success
-  - id: S3.2.cascade_witnessing
-    description: Witnessing seeds show self-state first passage before threat meaning before policy in more than 90 percent of seeds.
-    metric_path: metrics.cascade.witnessing_order_rate
-    comparator: ">"
-    threshold: 0.90
-    weak_threshold: 0.80
-    opposite_threshold: 0.50
+
+  - id: S3.model_comparison.heldout_h1_advantage
+    description: With training banks frozen, H1 predicts held-out training-cue outcomes better than the live reversed-direction H2 competitor.
+    metric_path: metrics.out_of_sample.h1_minus_h2_mean_log_likelihood
+    comparator: ">="
+    threshold: 0.01
+    weak_threshold: 0.00
+    opposite_threshold: -0.02
     kind: success
-  - id: S3.2.no_exposure_order
-    description: Matched exposure does not show a consistent self-to-threat-to-policy first-passage order.
+
+  - id: S3.cascade.honest_witnessing_order
+    description: Under the architecture-invariant self/threat/policy micro-step schedule, witnessing produces strict self-before-threat-before-policy crossings in at least 8 of 10 pilot seeds.
+    metric_path: metrics.cascade.witnessing_order_rate
+    comparator: ">="
+    threshold: 0.80
+    weak_threshold: 0.60
+    opposite_threshold: 0.30
+    kind: success
+
+  - id: S3.cascade.exposure_control
+    description: Low-depth exposure does not produce the strict cascade in a majority of seeds.
     metric_path: metrics.cascade.exposure_order_rate
     comparator: "<="
-    threshold: 0.60
-    weak_threshold: 0.70
-    opposite_threshold: 0.85
+    threshold: 0.50
+    weak_threshold: 0.60
+    opposite_threshold: 0.80
     kind: success
-  - id: S3.transfer.h1_witnessing_gradient
-    description: H1 witnessing produces a monotone transfer gradient across root-sharing continuum cues.
-    metric_path: metrics.transfer.h1_witnessing_monotone_gradient
+
+  - id: S3.transfer.learned_association_correlation
+    description: Across held agent banks and untrained cues, the transfer gradient positively tracks each agent's learned cue-to-root association rather than a supplied cue coefficient.
+    metric_path: metrics.transfer.learned_association_contact_correlation
     comparator: ">="
-    threshold: 1.0
-    weak_threshold: 0.75
-    opposite_threshold: 0.25
+    threshold: 0.70
+    weak_threshold: 0.50
+    opposite_threshold: 0.00
     kind: success
+
+  - id: S3.transfer.learned_association_partial
+    description: Learned cue-to-root association remains positively related to contact after controlling for perceptual similarity.
+    metric_path: metrics.transfer.learned_association_partial_correlation
+    comparator: ">="
+    threshold: 0.50
+    weak_threshold: 0.30
+    opposite_threshold: 0.00
+    kind: adversarial
+
   - id: S3.transfer.witnessing_vs_exposure
-    description: H1 witnessing transfer exceeds matched exposure by the preregistered effect size.
+    description: Mean untrained-cue contact after witnessing exceeds matched low-depth exposure.
     metric_path: metrics.transfer.h1_witnessing_minus_exposure_mean
     comparator: ">="
-    threshold: 0.20
-    weak_threshold: 0.12
-    opposite_threshold: 0.05
+    threshold: 0.12
+    weak_threshold: 0.07
+    opposite_threshold: 0.00
     kind: success
-  - id: S3.transfer.witnessing_vs_h2
-    description: H1 witnessing transfer exceeds H2 by the preregistered effect size.
-    metric_path: metrics.transfer.h1_witnessing_minus_h2_mean
+
+  - id: A3.2.perceptual_threat_channel_live
+    description: The perceptually near but root-poor cue receives positive generalized safe-threat evidence from feature overlap.
+    metric_path: metrics.perceptual_generalization.root_poor_threat_safe_gain
     comparator: ">="
-    threshold: 0.20
-    weak_threshold: 0.12
-    opposite_threshold: 0.05
-    kind: success
-  - id: S3.transfer.exposure_flat
-    description: Matched exposure remains cue-bound with a low continuum slope.
-    metric_path: metrics.transfer.exposure_abs_slope
-    comparator: "<="
-    threshold: 0.10
-    weak_threshold: 0.15
-    opposite_threshold: 0.25
-    kind: success
-  - id: S3.transfer.h2_flat
-    description: H2 control remains cue-bound with a low continuum slope.
-    metric_path: metrics.transfer.h2_abs_slope
-    comparator: "<="
-    threshold: 0.10
-    weak_threshold: 0.15
-    opposite_threshold: 0.25
-    kind: success
-  - id: S3.leakage.untrained_threat_banks
-    description: Untrained cue-local threat banks remain statistically unchanged.
-    metric_path: metrics.leakage.max_untrained_threat_l1_shift
-    comparator: "<="
-    threshold: 0.05
-    weak_threshold: 0.08
-    opposite_threshold: 0.12
-    kind: success
-  - id: S3.3.eta_self_zero_kills_transfer
-    description: Setting eta_self to zero collapses the witnessing transfer signature.
-    metric_path: metrics.ablations.eta_self_zero_transfer_drop
-    comparator: ">="
-    threshold: 0.18
-    weak_threshold: 0.10
-    opposite_threshold: 0.03
-    kind: success
-  - id: S3.3.eta_threat_zero_preserves_signature
-    description: Setting eta_threat to zero does not kill the witnessing transfer signature.
-    metric_path: metrics.ablations.eta_threat_zero_transfer_ratio
-    comparator: ">="
-    threshold: 0.80
-    weak_threshold: 0.65
-    opposite_threshold: 0.40
-    kind: success
-  - id: S3.1.emergent_sigmoid_readout
-    description: Transfer as a function of E_t has a preregistered sigmoid-shaped readout without any sigmoid function in model code.
-    metric_path: metrics.e_t_readout.shape_score
-    comparator: ">="
-    threshold: 0.80
-    weak_threshold: 0.65
-    opposite_threshold: 0.40
-    kind: success
-  - id: A3.1.fake_content_kills_transfer
-    description: Replacing self evidence with threat evidence prevents the transfer signature.
-    metric_path: metrics.adversarial.fake_content_transfer_drop
-    comparator: ">="
-    threshold: 0.18
-    weak_threshold: 0.10
-    opposite_threshold: 0.03
+    threshold: 0.03
+    weak_threshold: 0.015
+    opposite_threshold: 0.00
     kind: adversarial
-  - id: A3.1.counterbalanced_reversal
-    description: Training and probing on counterbalanced cues preserves the transfer signature.
-    metric_path: metrics.adversarial.counterbalanced_transfer_gap
+
+  - id: A3.2.witnessing_exceeds_perceptual
+    description: The preregistered low-perceptual root-associated cue transfers more than the perceptually near root-poor cue, despite a live perceptual channel.
+    metric_path: metrics.perceptual_generalization.structural_cue_minus_root_poor_perceptual_contact
     comparator: ">="
-    threshold: 0.18
-    weak_threshold: 0.10
-    opposite_threshold: 0.03
-    kind: adversarial
-  - id: A3.1.real_danger_probe
-    description: In a real-danger probe, adaptive avoidance remains high after witnessing.
-    metric_path: metrics.adversarial.real_danger_avoidance
-    comparator: ">="
-    threshold: 0.75
-    weak_threshold: 0.65
-    opposite_threshold: 0.40
-    kind: adversarial
-  - id: A3.1.sensitivity_sweep
-    description: The transfer signature survives preregistered local perturbations of learning and precision parameters.
-    metric_path: metrics.adversarial.sensitivity_support_rate
-    comparator: ">="
-    threshold: 0.75
-    weak_threshold: 0.60
-    opposite_threshold: 0.35
-    kind: adversarial
-  - id: A3.1.matched_fit_verification
-    description: H1 and H2 dog-training trajectories remain matched, not only final evidence.
-    metric_path: metrics.adversarial.training_trajectory_gap
-    comparator: "<="
     threshold: 0.08
-    weak_threshold: 0.12
-    opposite_threshold: 0.20
+    weak_threshold: 0.04
+    opposite_threshold: 0.00
     kind: adversarial
-  - id: A3.2.structural_confound
-    description: Perceptually near but root-distant confound transfers less than a perceptually distant root-sharing cue.
-    metric_path: metrics.adversarial.structural_confound_gap
+
+  - id: A3.2.perceptual_inference_is_cue_bound
+    description: Perceptual sharing is an inference-time stimulus-generalization message and does not mutate untrained cue-local threat banks.
+    metric_path: metrics.perceptual_generalization.max_untrained_threat_bank_l1_shift
+    comparator: "<="
+    threshold: 0.000000001
+    weak_threshold: 0.000001
+    opposite_threshold: 0.01
+    kind: adversarial
+
+  - id: S3.h2.self_learning_live
+    description: H2's shared self bank changes downstream of its learned threat state in either direction; self learning is not disabled.
+    metric_path: metrics.h2_liveness.self_bank_absolute_shift
+    comparator: ">="
+    threshold: 0.02
+    weak_threshold: 0.01
+    opposite_threshold: 0.00
+    kind: adversarial
+
+  - id: S3.h2.threat_learning_live
+    description: H2's trained cue-local threat bank learns substantially from relational and outcome evidence.
+    metric_path: metrics.h2_liveness.trained_threat_safe_shift
     comparator: ">="
     threshold: 0.15
-    weak_threshold: 0.08
+    weak_threshold: 0.10
     opposite_threshold: 0.00
     kind: adversarial

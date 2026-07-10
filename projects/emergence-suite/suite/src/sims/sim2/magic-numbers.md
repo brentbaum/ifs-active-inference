@@ -1,38 +1,46 @@
-# Sim 2 Magic Numbers
+# Sim 2 T4.3 Magic Numbers and Pilot Provenance
 
-Every hand-set constant in `configs/sim2.yaml` is listed here with its status.
+The values below were written before the T4.3 pilot. Step B must freeze or amend
+them after audit; confirmatory seeds may not be used to tune them.
 
-| Constant | Value | Status |
+| Constant | Pilot value | Provenance / debt |
 | --- | ---: | --- |
-| `n_melt_trials` | 60 | Matched corrective-evidence budget across the four regimes; long enough for interval BMR while keeping the run cheap. |
-| `bmr_interval` | 5 | Registered fixed BMR cadence. The discreteness criterion requires the event window to be no wider than 10% of the 60-trial melt phase, so 5/60 = 0.083. |
-| `early_prompt_max_trial` | 10 | Premature-prompt probe point before the D2 accessible counts can clear the prior odds. |
-| `late_prompt_trial` | 45 | Late-prompt probe after witnessed counts have accumulated substantially beyond the BMR threshold. |
-| `high_E` | 0.90 | Held witnessing depth. Uses the same normalized E_t scale as Sim 3. |
-| `low_E` | 0.05 | Capture/low-depth condition. With D2 rho and the registered prior odds, low E_t leaves BMR below the prune threshold. |
-| `flip_trial` | 3 | A2.2 one-trial E_t perturbation away from the 5-trial BMR cadence, so only effective precision changes. |
-| `pi_part`, `beta_se` | 4.0, 1.0 | D1 log-precision tilt parameters, matching Sim 3's implementation pattern. |
-| `lambda_ctx`, `gamma_se` | 1.0, 1.2 | D1 log-precision tilt parameters, matching Sim 3's implementation pattern. |
-| `E0` | 1.0 | Magic number under D2's saturating accessibility function. Swept at 0.5, 1.0, and 2.0 in the full Sim 2 run. |
-| `prior_log_odds` | -5.0 nats | BMR model prior odds against pruning. Swept by +/- 1 nat for A2.3. |
-| `relational_count_good` | 1.0 | One self-indexed count for a full-weight high-depth relational observation. Lower-depth relational observations are weighted by the normalized `lambda_eff` share; informational observations route to threat/outcome banks and add zero root counts. |
-| `relational_count_old` | 0.08 | Small residual count for the old coupling during a full-weight `met-well` relational observation, reversed for `met-badly`; keeps the D2 comparison finite and close to the toy demo's late-count ratio. |
-| `ordinary_learning_rate` | 1.0 | One ordinary Bayesian count per corrective observation. |
-| `attenuation_learning_rate` | 0.18 | Sim 1-inspired dissociative quiet condition: ordinary and relational observation precisions are present but written at reduced precision. |
-| `policy_learning_rate` | 0.25 | Slow policy-bank learning relative to outcome/threat counts. |
-| `policy_precision` | 3.0 | Readout gain for policy probabilities from learned banks and current inferred danger. |
-| `root_avoidance_bias` | 0.48 | Frozen-root contribution to compulsive avoidance while the root coupling is present. |
-| `danger_avoidance_bias` | 0.55 | Real-danger control contribution preserving adaptive fear when the cue is truly dangerous. |
-| `competence_policy_floor` | 0.12 | Pseudocount floor so retained competence policies remain available after pruning. |
-| `full_prior_met`, `full_prior_alone` | 2.0, 12.0 | D2 toy-demo full prior: the frozen coupling favors `alone-with-this`. |
-| `reduced_prior_met`, `reduced_prior_alone` | 7.0, 7.0 | D2 toy-demo reduced prior: root coupling pruned to no strong relational preference. |
+| `n_melt_trials` | 60 | Retained matched evidence budget from T1.3 so the de-authored result is directly comparable. |
+| `primary_gate` | `write` | Theory choice: R2 locates E_t in D1 effective precision; D2 reading (i) is implemented as registration at write, with raw BMR afterward. |
+| `bmr_interval` | 5 | Retained reporting cadence only; no criterion is defined as `interval / melt length`. |
+| `bmr_intervals` | `[3,5,10]` | Ticket-mandated arithmetic robustness sweep spanning frequent, original, and sparse checks. |
+| `accessibility_functions` | saturating, threshold-linear | Two independently motivated Option B forms: graded effective sample size and addressability threshold. |
+| `early_prompt_max_trial` | 10 | Retained T1.3 early probe before substantial corrective evidence. |
+| `late_prompt_trial` | 45 | Retained T1.3 late probe after three quarters of the matched budget. |
+| `high_E`, `low_E` | 0.90, 0.05 | Retained normalized witnessing/capture anchors used elsewhere in the suite. |
+| `flip_trial` | 3 | Early single-observation perturbation. The new audit checks branch-specific one-entry invariants rather than assuming write counts must be identical in Option A. |
+| `pi_part`, `beta_se` | 4.0, 1.0 | Retained D1 bundle-prior map from T1.3/Sim 3. Hand-set map parameters; no new tuning. |
+| `lambda_ctx`, `gamma_se` | 1.0, 1.2 | Retained D1 contextual-evidence map from T1.3/Sim 3. Hand-set map parameters; no new tuning. |
+| `E0` | 1.0 | D2 toy-demo scale for the saturating robustness arm, retained without pilot tuning. |
+| `access_threshold`, `access_full` | 0.20, 0.80 | Theoretical bracketing: 0.05 capture lies below addressability; 0.90 witnessing lies above full access. This is a hand-set robustness model, not an estimated psychophysical threshold. |
+| `prior_log_odds` | -5.0 nats | Retained T1.3 prior against pruning; swept ±1 nat jointly with all BMR intervals. |
+| `relational_count_good`, `relational_count_old` | 1.0, 0.08 | Retained one-count relational observation and finite residual old-coupling evidence. The 0.08 residual remains an IOU inherited from the D2 toy geometry. |
+| `informational_root_fraction` | 0.20 | New preregistered weak routing: a fact about the cue carries one fifth the root likelihood strength of being met well. Chosen as a theory-readable 1:5 contrast before pilot; live failure is possible because 60 trials write 12 full-weight root counts in Option A high-E content-swap. |
+| v2 root-prior base | `[1,1]` | Canonical unit Dirichlet base measure, not a fitted frozen prior. |
+| v2 root-prior mass | `log1p(structural_precision)` | Monotone compression from the formation bundle’s count scale into equivalent root sample size while v2 lacks relational fields. Explicit schema-v2 bridge; schema v3 should remove it. |
+| `ordinary_learning_rate` | 1.0 | One ordinary outcome count per unattenuated observation. |
+| `attenuation_learning_rate` | 0.18 | Retained T1.3 dissociative-quiet attenuation; independent of E_t and applied in both gate arms. |
+| `policy_learning_rate` | 0.25 | Retained slow competence/policy-bank update scale. |
+| `policy_precision` | 3.0 | Retained policy readout gain. |
+| `root_avoidance_bias` | 0.48 | Retained contribution of an intact relational root to compulsive avoidance. |
+| `danger_avoidance_bias` | 0.55 | Retained true-contingency contribution in the real-danger control. |
+| `competence_policy_floor` | 0.12 | Retained pseudocount floor keeping competence policies available after root pruning. |
 
-## Sensitivity Sweeps
+## Pilot tuning log
 
-- `E0_sweep = [0.5, 1.0, 2.0]` is emitted in `summary.json` and
-  `e0_sweep_metrics.csv`.
-- `prior_odds_offsets = [-1.0, 0.0, 1.0]` is emitted in `summary.json` and
-  `prior_odds_sweep_metrics.csv`.
-
-Any future amendment to `configs/sim2-criteria.yaml` must be logged with the
-reason and made before rerunning the full preregistered suite.
+- Before first T4.3 pilot execution: no constants had been tuned against T4.3
+  outcomes. The design changes were made from the ticket, D2, and the adversarial
+  review. Any rerun-driven change must be appended here with old value, new
+  value, observed failure, and theoretical justification; silent replacement is
+  prohibited.
+- After the pilot (seeds 1001–1010): **no constants were changed and no second
+  pilot was run.** Option A's contact-under-capture and content-swap arms both
+  melted in 10/10 seeds. This kills the primary four-regime/C3 contrast at the
+  registered values. Raising the BMR penalty or lowering informational routing
+  after observing that result could manufacture the desired separation, so this
+  Step A deliberately leaves the negative result intact for orchestrator audit.

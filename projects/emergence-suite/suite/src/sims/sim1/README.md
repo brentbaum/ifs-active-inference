@@ -1,115 +1,126 @@
-# Sim 1: Freezing Phase Diagram
+# Sim 1: De-confounded Freezing Phase Diagram
 
-This module implements T1.2 inside `EmergenceSuite.Sim1`. It is scoped to
-`src/sims/sim1/`; the package runner dispatches here only when
-`experiment: sim1` is selected.
+This is T4.6 Step A. The checked-in configuration is a pilot configuration:
+seeds 1001–1010, label `pilot`, output `runs/sim1/pilot/`. No confirmatory
+seeds have been run. Step B must audit and commit this code and its frozen
+criteria before a separate process supplies fresh confirmatory seeds.
 
-## Model Contract
+## De-confounded generative design
 
-- The environment samples aversive/safe outcomes from the configured
-  `omega`/`kappa` cell. `omega` changes outcome intensity and observation
-  precision; `kappa` changes how much overt actions alter outcome
-  probabilities.
-- The agent has latent causes with per-cause Dirichlet banks for cue,
-  affective outcome, policy-specific outcome, and policy use.
-- Policies are selected by an expected-free-energy decomposition over the
-  currently dominant cause's learned banks. No policy score reads `omega` or
-  `kappa` directly.
-- A CRP growth proposal accumulates only when the posterior predictive under
-  existing causes is persistently below threshold. The spawned cause is then
-  updated by the same arousal-scaled Dirichlet write as any existing cause.
-- Arousal is computed from realized precision-weighted surprise. Tier A
-  reflexivity is an arousal-linked input and is logged at write time.
-- Later revisability is measured by copying the dominant aversive cause,
-  running `disconfirming_trials` safe-evidence updates at ordinary arousal, and
-  normalizing the KL divergence from the pre-probe affect bank. Pre/post
-  aversive posterior means are logged alongside the KL readout.
-- Region labels (`frozen`, `revisable`, `shutdown`) are post-run readouts. No
-  generative-model factor is named `exile`, `protector`, or `gate`.
+Each `(seed, omega)` generates one exogenous challenge stream and replays it
+unchanged at every kappa. The stream fixes, trial by trial:
 
-## Criteria Amendments
+- whether challenge evidence is aversive or safe;
+- aversive-event severity (1.0); and
+- delivered observation precision (1.0).
 
-- S1.1a/S1.1b now classify the dominant aversive cause whether it was spawned
-  acutely or hardened by accumulation. Reason: the previous spawned-only
-  readout made the revisable region empty by construction and excluded the
-  slow-kinetics route.
-- `later_revision_percent` now means the measured normalized KL change of the
-  target cause's affect bank after safe probe trials, with pre/post aversive
-  means logged. Reason: the previous readout was a formula over condition
-  variables.
-- Thresholds in `configs/sim1-criteria.yaml` are unchanged.
+The challenge outcome updates the cause's cue and affect banks and is the only
+input to cause assignment, precision-weighted prediction error, arousal, CRP
+pressure, and the arousal-scaled write rate. Kappa is absent from that path.
 
-## Bundle Artifact Schema
+After the challenge, the selected action produces a separate consequence.
+Kappa changes only how much overt flee, appease, and approach reduce the
+probability of an aversive action consequence. Those consequences update only
+the policy-specific outcome banks. Covert attenuation has no world-outcome
+efficacy. Thus control can change learned action forecasts and policy without
+changing which aversive challenges the agent was exposed to.
 
-Representative frozen-region causes are exported under each run's `artifacts/`
-directory. The schema was bumped because bundles now include measured revision
-probe fields, affect banks, policy-specific outcome banks, and route metadata.
+Omega has one evidence coupling: it changes exogenous challenge frequency via
+`clamp(0.08 + 0.31*omega, 0.06, 0.97)`. Observation precision is fixed, so
+omega is no longer routed through both event probability and precision.
+Overwhelm in this implementation means repeated precision-weighted prediction
+error from the omega-governed challenge stream, not an omega multiplier on
+precision.
 
-Manifest:
+A1.4 checks the de-confound directly. For every fixed seed and omega it reports
+the maximum across-kappa range of aversive counts, summed aversive severity,
+and mean delivered precision. Exact equality (range zero) is stronger than the
+registered statistical-equality requirement.
+
+## Posterior-predictive behavioral revision
+
+The safe probe runs on a copied cause for 24 trials. Before and after it, the
+module computes:
+
+- predicted aversive probability under approach from the learned
+  policy-specific outcome bank; and
+- approach probability from a softmax over the learned EFE policy scores.
+
+The revision readout is
+`max(pre_aversive - post_aversive, post_approach - pre_approach, 0)`.
+KL divergence is neither computed nor used. A target is threat-relevant when
+its pre-probe predicted aversive probability is at least 0.40. It is frozen at
+behavior change at most 0.15 and revisable at change at least 0.25. Values in
+between are deliberately unclassified. A grid cell is classified when at
+least 5/10 pilot seeds share the label; a connected region requires at least
+two orthogonally adjacent cells.
+
+All classification values, the chronic path (`omega=1.00`, `kappa=0.0`, 600
+trials), and arousal learning gain (60.0) are frozen after pilot calibration.
+Their full provenance is in `magic-numbers.md`.
+
+## Criteria battery
+
+`configs/sim1-criteria.yaml` retains S1.1a/S1.1b and S1.2–S1.4, rewrites them
+against behavioral revision under yoked evidence, retains A1.1–A1.3, and adds
+A1.4. Unsupported criteria are reported as unsupported; pilot tuning does not
+change their registered 0.80 or other success margins.
+
+## Bundle schema v3
+
+Representative causes produced by the real formation loop are exported under
+`runs/sim1/pilot/artifacts/`. The manifest is
+`sim1.bundle-manifest.v3`; each bundle is `sim1.bundle.v3`.
+
+V3 preserves the learned sufficient statistics in `cause_banks`, adds the
+evidence-yoking key and delivered/action-outcome counts to `formation`, and
+replaces the v2 KL fields with behavioral posterior-predictive fields:
 
 ```json
 {
-  "schema_version": "sim1.bundle-manifest.v2",
-  "bundle_count": 10,
-  "slow_accumulation_bundle_count": 2,
-  "bundles": ["bundle_seed1001_omega2p8_kappa0p0.json"],
-  "schema": "sim1.bundle.v2"
-}
-```
-
-Each bundle file has schema version `sim1.bundle.v2`:
-
-```json
-{
-  "schema_version": "sim1.bundle.v2",
+  "schema_version": "sim1.bundle.v3",
   "seed": 1001,
   "route": "acute_spawn",
   "formation": {
-    "omega": 2.8,
+    "omega": 1.8,
     "kappa": 0.0,
-    "arousal_at_write": 0.9,
-    "reflexivity_at_write": 0.2,
-    "spawned": true,
-    "spawn_count": 1,
-    "posterior_predictive_min": 0.001,
-    "crp_threshold_last": 0.064
+    "evidence_yoking_key": "seed=1001;omega=1.8",
+    "aversive_evidence_count": 45,
+    "aversive_evidence_severity_sum": 45.0,
+    "mean_evidence_precision": 1.0,
+    "aversive_action_outcome_count": 42
   },
   "revision_probe": {
-    "disconfirming_trials_measured": true,
-    "later_revision_percent": 4.2,
-    "pre_probe_aversive_mean": 0.91,
-    "post_probe_aversive_mean": 0.87,
-    "normalized_kl_from_pre_probe": 0.005,
-    "structural_precision": 410.0
+    "metric": "posterior_predictive_behavior",
+    "behavior_change": 0.08,
+    "predicted_aversive_reduction": 0.08,
+    "approach_probability_increase": 0.03,
+    "pre_probe_predicted_aversive": 0.62,
+    "post_probe_predicted_aversive": 0.54,
+    "pre_probe_approach_probability": 0.12,
+    "post_probe_approach_probability": 0.15
   },
   "cause_banks": {
     "cue_counts": {"safe": 1.0, "threat": 26.0},
     "affect_counts": {"safe": 3.0, "threat": 380.0},
-    "policy_counts": {
-      "approach": 1.0,
-      "flee": 4.0,
-      "appease": 1.0,
-      "attenuate": 68.0
-    },
-    "outcome_counts": {
-      "approach": {"safe": 1.0, "threat": 1.0},
-      "flee": {"safe": 1.0, "threat": 20.0},
-      "appease": {"safe": 1.0, "threat": 1.0},
-      "attenuate": {"safe": 2.0, "threat": 360.0}
-    }
+    "policy_counts": {},
+    "outcome_counts": {}
   }
 }
 ```
 
-T1.3 should treat `formation` and `revision_probe` as metadata and
-`cause_banks` as imported sufficient statistics.
+The bundle is formation output, not a hand-authored Sim 4 stack. T4.1 may
+consume the cause banks and formation provenance; it must still run its own
+neutral developmental schedule and may not infer authored taxonomy from route
+strings.
 
 ## Outputs
 
-- `summary.json`: headline metrics, criteria metrics, phase-boundary readouts,
-  three-traits measurements, slow-path result, sensitivity sweep, and bundle
-  manifest path.
-- `per_seed_metrics.csv`: one row per seed per sweep cell.
-- `cell_metrics.csv`: aggregate sweep cell metrics.
-- `posterior_traces.csv`: slow-kinetics path for the first configured seed.
-- `figures/phase_diagram.svg`: omega-kappa phase diagram with the slow path.
+- `summary.json`: headline, behavioral-boundary, yoking, sensitivity, chronic,
+  and criteria metrics.
+- `per_seed_metrics.csv`: one row per seed/cell, including both evidence and
+  action-consequence counts and all pre/post behavior values.
+- `cell_metrics.csv`: cell aggregates.
+- `posterior_traces.csv`: chronic trace for pilot seed 1001.
+- `artifacts/`: real formation bundles and v3 manifest.
+- `figures/phase_diagram.svg`: behavioral frozen/revisable phase diagram.

@@ -1,5 +1,5 @@
 experiment: sim3
-label: preregistered
+label: pilot
 output_dir: ../runs
 criteria_path: sim3-criteria.yaml
 seeds:
@@ -13,28 +13,30 @@ seeds:
   - 1008
   - 1009
   - 1010
-  - 1011
-  - 1012
-  - 1013
-  - 1014
-  - 1015
-  - 1016
-  - 1017
-  - 1018
-  - 1019
-  - 1020
-  - 1021
-  - 1022
-  - 1023
-  - 1024
 model_params:
+  n_association_pretraining_trials: 48
   n_training_trials: 20
-  n_probe_trials: 1
+  n_heldout_trials: 6
   high_E: 0.85
   low_E: 0.15
   training_parity_epsilon: 0.05
-  continuum_root_couplings: [1.0, 0.8, 0.6, 0.4, 0.2]
-  continuum_perceptual_similarities: [1.0, 0.35, 0.2, 0.7, 0.45]
-  structural_confound_perceptual_similarity: 0.9
-  structural_confound_root_coupling: 0.0
-  e_sweep: [0.05, 0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 0.95]
+  continuum_root_context_rates: [0.95, 0.80, 0.65, 0.45, 0.25]
+  continuum_perceptual_similarities: [1.0, 0.35, 0.20, 0.70, 0.45]
+  structural_confound_perceptual_similarity: 0.90
+  structural_confound_root_context_rate: 0.05
+  association_prior: 1.0
+  perceptual_generalization_gain: 0.45
+  pi_part: 3.6
+  beta_se: 1.0
+  lambda_self: 0.9
+  gamma_se: 1.2
+  eta_self: 7.0
+  eta_threat: 1.6
+  cross_level_coupling: 2.0
+  outcome_precision: 1.6
+  policy_precision: 3.2
+  threat_policy_weight: 2.4
+  contact_self_bias: 0.08
+  avoid_bias: 0.03
+  first_passage_threshold: 0.60
+  policy_threshold: 0.60

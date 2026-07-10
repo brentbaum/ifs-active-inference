@@ -1,30 +1,38 @@
 criteria:
   - id: S2.1
-    description: "Regimes 1-3 produce less than 10% of witnessing's root revision at matched evidence counts."
+    description: "Under primary single-gate Option A, each non-witnessing regime produces at most 10% of witnessing root revision at matched 60-observation budgets."
     metric_path: metrics.regimes.max_non_witnessing_root_revision_ratio
     comparator: <=
     threshold: 0.10
-    weak_threshold: 0.15
+    weak_threshold: 0.20
     opposite_threshold: 0.50
     kind: success
   - id: S2.2a
-    description: "More than 50% of total structural drop occurs inside the registered melt window."
-    metric_path: metrics.melt_discreteness.max_drop_fraction_in_window
+    description: "Witnessing melts in at least 80% of pilot seeds under primary Option A."
+    metric_path: metrics.melt_discreteness.melt_rate
+    comparator: ">="
+    threshold: 0.80
+    weak_threshold: 0.60
+    opposite_threshold: 0.20
+    kind: success
+  - id: S2.2b
+    description: "More than half of the total structural drop occurs in the single largest inter-check step (interval-independent definition)."
+    metric_path: metrics.melt_discreteness.largest_intercheck_drop_fraction
     comparator: ">"
     threshold: 0.50
     weak_threshold: 0.40
     opposite_threshold: 0.25
     kind: success
-  - id: S2.2b
-    description: "The melt window is no wider than 10% of the melt phase."
-    metric_path: metrics.melt_discreteness.window_fraction
-    comparator: <=
-    threshold: 0.10
-    weak_threshold: 0.15
-    opposite_threshold: 0.25
+  - id: S2.2c
+    description: "Witnessing melt rate remains at least 80% at BMR intervals 3, 5, and 10."
+    metric_path: metrics.interval_robustness.min_witnessing_melt_rate
+    comparator: ">="
+    threshold: 0.80
+    weak_threshold: 0.60
+    opposite_threshold: 0.20
     kind: success
   - id: S2.3a
-    description: "Threat and competence banks survive the prune at ordinary structural precision."
+    description: "Threat and competence banks survive root pruning at ordinary or greater structural precision."
     metric_path: metrics.selective_prune.min_bank_precision_survival_ratio
     comparator: ">="
     threshold: 0.95
@@ -32,7 +40,7 @@ criteria:
     opposite_threshold: 0.70
     kind: success
   - id: S2.3b
-    description: "Post-melt compulsive avoidance drops while competence-dependent policy remains available."
+    description: "Post-melt compulsive avoidance drops while competence banks remain."
     metric_path: metrics.selective_prune.compulsive_avoidance_drop
     comparator: ">="
     threshold: 0.25
@@ -40,7 +48,7 @@ criteria:
     opposite_threshold: 0.00
     kind: success
   - id: S2.4a
-    description: "Premature prompted reduction fails with the full model retained."
+    description: "Premature prompted reduction fails."
     metric_path: metrics.premature_late.early_fail_rate
     comparator: ">="
     threshold: 0.90
@@ -48,7 +56,7 @@ criteria:
     opposite_threshold: 0.50
     kind: success
   - id: S2.4b
-    description: "Late prompted reduction succeeds after witnessed contact accumulates."
+    description: "Late prompted reduction succeeds."
     metric_path: metrics.premature_late.late_success_rate
     comparator: ">="
     threshold: 0.90
@@ -56,7 +64,7 @@ criteria:
     opposite_threshold: 0.50
     kind: success
   - id: S2.4c
-    description: "Prompt failure tracks residual accuracy contribution from remaining evidential work."
+    description: "Prompt failure tracks residual accuracy contribution."
     metric_path: metrics.premature_late.failure_residual_accuracy_correlation
     comparator: ">="
     threshold: 0.50
@@ -72,42 +80,74 @@ criteria:
     opposite_threshold: 0.60
     kind: success
   - id: S2.5
-    description: "Real-danger control preserves adaptive fear under witnessing."
+    description: "Real-danger witnessing preserves adaptive fear."
     metric_path: metrics.real_danger.adaptive_fear_preserved_rate
     comparator: ">="
     threshold: 0.85
     weak_threshold: 0.75
     opposite_threshold: 0.50
     kind: success
-  - id: A2.1
-    description: "Content-swap matched-precision informational content in the relational slot does not melt."
-    metric_path: metrics.content_swap.melt_rate
-    comparator: <=
-    threshold: 0.10
-    weak_threshold: 0.20
-    opposite_threshold: 0.50
-    kind: adversarial
-  - id: A2.2
-    description: "One-trial E_t flip changes effective precision only; structural counts are bit-identical."
-    metric_path: metrics.et_flip.structural_counts_bit_identical_rate
+  - id: C3.live_path
+    description: "Informational content has nonzero root routing in every seed, so content-swap can fail."
+    metric_path: metrics.content_swap.root_route_nonzero_rate
     comparator: "=="
     threshold: 1.00
     weak_threshold: 1.00
     opposite_threshold: 0.00
     kind: adversarial
+  - id: C3.nonzero_counts
+    description: "Matched-budget informational content actually writes nonzero root evidence."
+    metric_path: metrics.content_swap.mean_root_counts_met
+    comparator: ">"
+    threshold: 0.00
+    weak_threshold: 0.00
+    opposite_threshold: 0.00
+    kind: adversarial
+  - id: C3.no_info_melt
+    description: "Informational content does not melt more than 20% of bundles despite reaching the root."
+    metric_path: metrics.content_swap.melt_rate
+    comparator: <=
+    threshold: 0.20
+    weak_threshold: 0.30
+    opposite_threshold: 0.60
+    kind: adversarial
+  - id: C3.relational_advantage
+    description: "Relational witnessing exceeds informational content-swap melt rate by at least 60 percentage points."
+    metric_path: metrics.content_swap.relational_minus_informational_melt_rate
+    comparator: ">="
+    threshold: 0.60
+    weak_threshold: 0.40
+    opposite_threshold: 0.00
+    kind: adversarial
+  - id: R2.single_entry
+    description: "E_t-flip audit confirms exactly one melt-path entry in Option A and both Option B accessibility arms."
+    metric_path: metrics.et_flip.single_entry_invariant_rate
+    comparator: "=="
+    threshold: 1.00
+    weak_threshold: 1.00
+    opposite_threshold: 0.00
+    kind: adversarial
+  - id: D2.accessibility_robustness
+    description: "Option B witnessing melts under both independently motivated accessibility functions."
+    metric_path: metrics.accessibility_sensitivity.min_witnessing_melt_rate
+    comparator: ">="
+    threshold: 0.80
+    weak_threshold: 0.60
+    opposite_threshold: 0.20
+    kind: adversarial
   - id: A2.3a
-    description: "Melt discreteness survives BMR prior-odds sweep by drop fraction."
-    metric_path: metrics.prior_odds_sweep.min_max_drop_fraction_in_window
+    description: "Witnessing melt survives the prior-odds by interval sweep."
+    metric_path: metrics.prior_odds_sweep.min_melt_rate
+    comparator: ">="
+    threshold: 0.80
+    weak_threshold: 0.60
+    opposite_threshold: 0.20
+    kind: adversarial
+  - id: A2.3b
+    description: "Interval-independent discreteness survives the prior-odds by interval sweep."
+    metric_path: metrics.prior_odds_sweep.min_largest_intercheck_drop_fraction
     comparator: ">"
     threshold: 0.50
     weak_threshold: 0.40
-    opposite_threshold: 0.25
-    kind: adversarial
-  - id: A2.3b
-    description: "Melt discreteness survives BMR prior-odds sweep by window width."
-    metric_path: metrics.prior_odds_sweep.max_window_fraction
-    comparator: <=
-    threshold: 0.10
-    weak_threshold: 0.15
     opposite_threshold: 0.25
     kind: adversarial

@@ -1,5 +1,5 @@
 experiment: sim1
-label: sim1-t1-2
+label: pilot
 output_dir: ../runs
 criteria_path: sim1-criteria.yaml
 seeds:
@@ -13,18 +13,7 @@ seeds:
   - 1008
   - 1009
   - 1010
-  - 1011
-  - 1012
-  - 1013
-  - 1014
-  - 1015
-  - 1016
-  - 1017
-  - 1018
-  - 1019
-  - 1020
 model_params:
-  assimilation_capacity: 1.0
   crp_concentration: 0.34
   crp_threshold_base: 0.085
   crp_threshold_control_relief: 0.0
@@ -35,22 +24,24 @@ model_params:
   disconfirming_trials: 24
   post_formation_trials: 18
   slow_path_trials: 600
-  slow_path_omega: 0.90
+  slow_path_omega: 1.00
   slow_path_kappa: 0.0
   bundle_seed_count: 8
-  frozen_precision_threshold: 260.0
   spawn_pressure_threshold: 2.45
   spawn_pressure_decay: 0.72
   learning_rate_base: 0.16
-  learning_rate_arousal_gain: 26.0
+  learning_rate_arousal_gain: 60.0
   cue_learning_weight: 0.55
   revision_learning_rate: 2.0
-  revision_kl_scale: 0.025
-  aversive_cause_threshold: 0.42
+  behavior_frozen_max_change: 0.15
+  behavior_revisable_min_change: 0.25
+  threat_prediction_threshold: 0.40
+  cell_classification_rate: 0.50
+  connected_region_min_cells: 2
+  policy_softmax_temperature: 1.0
   arousal_pe_scale: 5.2
   reflexivity_arousal_slope: 0.88
-  observation_precision_base: 0.42
-  observation_precision_gain: 1.05
+  evidence_precision: 1.0
   attenuation_precision_scale: 0.34
   safe_preference: 1.35
   aversive_preference: -2.35

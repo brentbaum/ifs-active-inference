@@ -1,32 +1,51 @@
-# Sim 3 Redesign Notes
+# Sim 3 Phase 4 Step A: De-authoring Pilot
 
-This module implements T1.1, Sim 3: the generalization gradient.
+This module implements T4.2 Step A. It may run only seeds 1001–1010 into
+`runs/sim3/pilot/` until the orchestrator freezes the implementation and criteria.
 
-## H2 Architecture
+## Architecture comparison
 
-H1 keeps the original root direction: relational evidence updates the shared self-state bank, and cue-local threat inference conditions on that self-state through `self_to_threat_coupling * cue.root_coupling`.
+H1 and H2 receive the same cue stream, relational observations, outcome stream,
+learning rates (including the shared pilot-tuned self rate), feature-overlap messages, policy equation, and self → threat →
+policy micro-step clock. Both self and threat banks learn. Their one substantive
+difference is conditioning direction:
 
-H2 is the reversed-root control. Threat is the root: the treated cue's threat meaning is learned from cue/outcome evidence directly, and policy reads threat meaning without reading self-state. The self-state bank still learns in H2. Relational evidence is always on and truthful, and H2 additionally updates self-state downstream from inferred threat through `h2_threat_to_self_coupling`. Because neither threat inference nor policy conditions on self-state in H2, self-state revision is inert for transfer by architecture rather than by a disabled learning flag.
+- H1: relational evidence updates self at micro-step 1; threat conditions on
+  self at micro-step 2.
+- H2: self conditions on the prior threat message at micro-step 1; the same
+  relational evidence updates threat at micro-step 2.
 
-## Cue Design
+Policy is micro-step 3 in both models and reads both inferred states. First
+passage uses these shared micro-step numbers directly. There are no architecture
+labels or offsets in the metric. Equal timestamps are ties and never satisfy the
+strict cascade test.
 
-Each cue has two independent attributes:
+Training fit is the mean online outcome log likelihood on learned training-cue
+trials. A difference above 0.05 nats/trial is a hard stop. Out-of-sample model
+comparison uses subsequent training-cue trials with all banks frozen.
 
-| cue | perceptual_similarity | root_coupling | root_id | role |
-|---|---:|---:|---:|---|
-| `cue_1` | 1.00 | 1.00 | 1 | trained cue |
-| `cue_2` | 0.35 | 0.80 | 1 | root-sharing continuum |
-| `cue_3` | 0.20 | 0.60 | 1 | structural A3.2 contrast |
-| `cue_4` | 0.70 | 0.40 | 1 | decorrelation cue |
-| `cue_5` | 0.45 | 0.20 | 1 | root-sharing continuum |
-| `structural_confound` | 0.90 | 0.00 | 2 | perceptually near, root-distant A3.2 confound |
+## Learned root association
 
-There is no separate perceptual stimulus-generalization channel in this run. Perceptual similarity is logged and used for the A3.2 design contrast, but it does not drive threat transfer. Exposure generalization is therefore expected to be cue-bound unless directly learned through the trained cue's local threat bank.
+Each cue has a world-level probability of co-occurring with root-1 versus root-2
+context during 48 pre-training observations. The agent starts with symmetric
+Dirichlet(1,1) counts and learns `P(root | cue)` from those observations. World
+rates generate data only. They never enter inference or transfer metrics.
 
-## Criteria Amendments
+The transfer figure and gradient metrics use the association measured from each
+agent's own `cue_root_banks`. Shared self evidence is read and written through
+those learned posterior weights. `probe_metrics.csv` exposes both Dirichlet
+counts, the posterior association, local/generalized threat readouts, and contact
+for every seed × condition × cue so the analysis can be independently recomputed.
 
-Thresholds in `configs/sim3-criteria.yaml` are unchanged.
+## Perceptual generalization and A3.2
 
-- `S3.transfer.h1_witnessing_gradient`: the metric still reports `metrics.transfer.h1_witnessing_monotone_gradient`, but the continuum is now sorted over `root_coupling`, not perceptual similarity. Reason: T1.1's transfer claim concerns structural similarity through the root.
-- `S3.transfer.exposure_flat` and `S3.transfer.h2_flat`: continuum slopes are now computed against `root_coupling`, not perceptual similarity. Reason: the flatness controls should test absence of structural transfer, not absence of feature-overlap effects.
-- `A3.2.structural_confound`: the contrast now compares the perceptually distant, root-sharing structural cue (`cue_3`, perceptual similarity 0.20, root coupling 0.60) against the perceptually near, root-distant confound. Reason: the previous metric used the lowest-similarity continuum endpoint and conflated perceptual and root distance.
+Cue-local threat evidence is also available to other cues at inference, weighted
+by feature overlap and the common gain 0.45. This is conventional stimulus
+generalization: it changes the target cue's generalized threat prior but does not
+write into the target threat bank.
+
+A3.2 is two-sided. The perceptually near, root-poor `structural_confound` must
+show positive threat-level generalization without a write to its local bank. Separately, the
+predeclared low-perceptual, root-associated `cue_3` must exceed that perceptual
+baseline, and contact must track learned root association after controlling for
+perceptual similarity.

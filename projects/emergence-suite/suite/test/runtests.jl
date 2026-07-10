@@ -84,6 +84,15 @@ end
     end
 end
 
+@testset "BMR accessibility alternatives" begin
+    @test accessibility_weight(0.0; form = :saturating, E0 = 1.0) == 0.0
+    @test accessibility_weight(1.0; form = :saturating, E0 = 1.0) == 0.5
+    @test accessibility_weight(0.05; form = :threshold_linear, threshold = 0.2, full_access = 0.8) == 0.0
+    @test accessibility_weight(0.5; form = :threshold_linear, threshold = 0.2, full_access = 0.8) ≈ 0.5
+    @test accessibility_weight(0.9; form = :threshold_linear, threshold = 0.2, full_access = 0.8) == 1.0
+    @test_throws ErrorException accessibility_weight(0.5; form = :unknown)
+end
+
 @testset "criteria evaluator labels" begin
     fixture_dir = joinpath(@__DIR__, "fixtures", "criteria")
     results = evaluate_criteria(joinpath(fixture_dir, "criteria.yaml"), joinpath(fixture_dir, "summary.json"))
