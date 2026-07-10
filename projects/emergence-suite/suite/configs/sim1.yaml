@@ -21,13 +21,13 @@ model_params:
   attenuation_flat_kappa: 0.16
   acute_region_omega_min: 1.18
   formation_trials: 72
-  disconfirming_trials: 24
+  disconfirming_trials: 96
   post_formation_trials: 18
   slow_path_trials: 600
   slow_path_omega: 1.00
   slow_path_kappa: 0.0
   bundle_seed_count: 8
-  spawn_pressure_threshold: 2.45
+  spawn_pressure_threshold: 1.2
   spawn_pressure_decay: 0.72
   learning_rate_base: 0.16
   learning_rate_arousal_gain: 60.0

@@ -27,13 +27,14 @@ Base.@kwdef struct Sim1Params
     crp_threshold_base::Float64 = 0.085
     crp_threshold_control_relief::Float64 = 0.0
     formation_trials::Int = 72
-    disconfirming_trials::Int = 24
+    disconfirming_trials::Int = 96
     post_formation_trials::Int = 18
     slow_path_trials::Int = 600
     slow_path_omega::Float64 = 1.00
     slow_path_kappa::Float64 = 0.0
     bundle_seed_count::Int = 8
-    spawn_pressure_threshold::Float64 = 2.45
+    spawn_pressure_threshold::Float64 = 1.2
+    efe_flatness_threshold::Float64 = 0.55
     spawn_pressure_decay::Float64 = 0.72
     learning_rate_base::Float64 = 0.16
     learning_rate_arousal_gain::Float64 = 60.0
@@ -64,6 +65,21 @@ Base.@kwdef struct Sim1Params
     attenuation_extreme_omega::Float64 = 2.65
     attenuation_flat_kappa::Float64 = 0.16
     acute_region_omega_min::Float64 = 1.18
+    # Probe-time capture (T4.6 step C): D1 tilt slopes shared with Sims 2/3/6a;
+    # the two scale constants are pilot-swept and frozen.
+    tilt_beta::Float64 = 1.0
+    tilt_gamma::Float64 = 1.2
+    probe_depth_scale::Float64 = 3.0
+    capture_precision_scale::Float64 = 2.0
+    context_precision::Float64 = 1.0
+    # Acute-overwhelm channel (severity of rare catastrophic hazards)
+    catastrophe_omega_floor::Float64 = 1.2
+    catastrophe_rate::Float64 = 0.015
+    catastrophe_max::Float64 = 0.08
+    catastrophe_severity::Float64 = 6.0
+    assimilation_capacity::Float64 = 1.0
+    severity_prior_ordinary::Float64 = 1.0
+    severity_prior_catastrophic::Float64 = 0.05
 end
 
 mutable struct Cause
@@ -73,6 +89,20 @@ mutable struct Cause
     outcome_counts::Matrix{Float64}
     policy_counts::Vector{Float64}
     formation::Dict{String, Any}
+    # Count-weighted write-reflexivity accumulators (Tier A aggregate: how much of
+    # this cause's mass was written while reflexivity was collapsed). Drives the
+    # probe-time capture weight per D1/§7; orchestrator addition, T4.6 step C.
+    reflexive_mass::Float64
+    total_mass::Float64
+    # Severity beliefs: Dirichlet counts over {ordinary, catastrophic} given aversive.
+    severity_counts::Vector{Float64}
+end
+
+is_catastrophic(obs) = obs.evidence_outcome == AVERSIVE && obs.evidence_severity > 1.5
+
+function severity_predictive(cause::Cause, obs)
+    obs.evidence_outcome == AVERSIVE || return 1.0
+    return posterior_mean(cause.severity_counts, is_catastrophic(obs) ? 2 : 1)
 end
 
 mutable struct AgentState
@@ -112,13 +142,14 @@ function sim1_params(raw::Dict{String, Any})
         crp_threshold_base = Float64(get(raw, "crp_threshold_base", 0.085)),
         crp_threshold_control_relief = Float64(get(raw, "crp_threshold_control_relief", 0.0)),
         formation_trials = Int(get(raw, "formation_trials", get(raw, "post_formation_trials", 72) * 4)),
-        disconfirming_trials = Int(get(raw, "disconfirming_trials", 24)),
+        disconfirming_trials = Int(get(raw, "disconfirming_trials", 96)),
         post_formation_trials = Int(get(raw, "post_formation_trials", 18)),
         slow_path_trials = Int(get(raw, "slow_path_trials", 600)),
         slow_path_omega = Float64(get(raw, "slow_path_omega", 1.00)),
         slow_path_kappa = Float64(get(raw, "slow_path_kappa", 0.0)),
         bundle_seed_count = Int(get(raw, "bundle_seed_count", 8)),
-        spawn_pressure_threshold = Float64(get(raw, "spawn_pressure_threshold", 2.45)),
+        spawn_pressure_threshold = Float64(get(raw, "spawn_pressure_threshold", 1.2)),
+        efe_flatness_threshold = Float64(get(raw, "efe_flatness_threshold", 0.55)),
         spawn_pressure_decay = Float64(get(raw, "spawn_pressure_decay", 0.72)),
         learning_rate_base = Float64(get(raw, "learning_rate_base", 0.16)),
         learning_rate_arousal_gain = Float64(get(raw, "learning_rate_arousal_gain", 60.0)),
@@ -148,7 +179,19 @@ function sim1_params(raw::Dict{String, Any})
         overt_action_cost = Float64(get(raw, "overt_action_cost", 0.03)),
         attenuation_extreme_omega = Float64(get(raw, "attenuation_extreme_omega", 2.65)),
         attenuation_flat_kappa = Float64(get(raw, "attenuation_flat_kappa", 0.16)),
-        acute_region_omega_min = Float64(get(raw, "acute_region_omega_min", 1.18))
+        acute_region_omega_min = Float64(get(raw, "acute_region_omega_min", 1.18)),
+        tilt_beta = Float64(get(raw, "tilt_beta", 1.0)),
+        tilt_gamma = Float64(get(raw, "tilt_gamma", 1.2)),
+        probe_depth_scale = Float64(get(raw, "probe_depth_scale", 3.0)),
+        capture_precision_scale = Float64(get(raw, "capture_precision_scale", 2.0)),
+        context_precision = Float64(get(raw, "context_precision", 1.0)),
+        catastrophe_omega_floor = Float64(get(raw, "catastrophe_omega_floor", 1.2)),
+        catastrophe_rate = Float64(get(raw, "catastrophe_rate", 0.015)),
+        catastrophe_max = Float64(get(raw, "catastrophe_max", 0.08)),
+        assimilation_capacity = Float64(get(raw, "assimilation_capacity", 1.0)),
+        catastrophe_severity = Float64(get(raw, "catastrophe_severity", 6.0)),
+        severity_prior_ordinary = Float64(get(raw, "severity_prior_ordinary", 1.0)),
+        severity_prior_catastrophic = Float64(get(raw, "severity_prior_catastrophic", 0.05))
     )
 end
 
@@ -188,7 +231,10 @@ function init_agent()
         [15.0, 7.0],
         Matrix{Float64}(outcome),
         [3.0, 5.0, 4.0, 1.0],
-        Dict{String, Any}("route" => "initial_cause", "spawned" => false)
+        Dict{String, Any}("route" => "initial_cause", "spawned" => false),
+        0.0,
+        0.0,
+        [1.0, 0.05]
     )
     return AgentState([base], 2, 0.0, 0)
 end
@@ -200,7 +246,10 @@ function copy_cause(cause::Cause)
         copy(cause.affect_counts),
         copy(cause.outcome_counts),
         copy(cause.policy_counts),
-        copy(cause.formation)
+        copy(cause.formation),
+        cause.reflexive_mass,
+        cause.total_mass,
+        copy(cause.severity_counts)
     )
 end
 
@@ -215,7 +264,17 @@ function posterior_mean(counts::AbstractVector{Float64}, idx::Int)
     return counts[idx] / max(sum(counts), EPS)
 end
 
+# T4.6 step C (orchestrator): the expected outcome of CONTACT conditions on the
+# cause's threat belief — the bundle's own structure (what-this-is predicts
+# what-happens-if-I-approach). Without this link, an avoidant agent's approach
+# column is a near-empty bank that trivially revises the moment it is finally
+# tested, making frozenness impossible by construction. Non-approach policies
+# keep their learned action-consequence banks.
 function outcome_distribution(cause::Cause, policy_idx::Int)
+    if policy_idx == APPROACH
+        mixed = vec(cause.outcome_counts[:, APPROACH]) .+ 0.5 .* cause.affect_counts
+        return normalize(mixed)
+    end
     return normalize(vec(cause.outcome_counts[:, policy_idx]))
 end
 
@@ -257,10 +316,18 @@ end
 
 function sample_evidence(rng::AbstractRNG, omega::Float64, params::Sim1Params)
     p_av = base_aversive_probability(omega)
+    outcome = rand(rng) < p_av ? AVERSIVE : SAFE
+    # Acute-overwhelm channel (T4.6 step C, orchestrator): rare catastrophic-severity
+    # hazards above an omega floor. Binary outcomes bound surprise, which killed both
+    # spawning and collapsed writes; severity restores genuinely unassimilable events
+    # (§4: "input no explanation on hand can absorb"). Stream is precomputed per
+    # (seed, omega), so the yoked arm replays severity exactly.
+    p_cata = clamp(params.catastrophe_rate * (omega - params.catastrophe_omega_floor), 0.0, params.catastrophe_max)
+    severity = (outcome == AVERSIVE && rand(rng) < p_cata) ? params.catastrophe_severity : 1.0
     return (
-        outcome = rand(rng) < p_av ? AVERSIVE : SAFE,
+        outcome = outcome,
         aversive_probability = p_av,
-        severity = 1.0,
+        severity = severity,
         precision = params.evidence_precision
     )
 end
@@ -348,7 +415,7 @@ function best_predictive(agent::AgentState, obs::TrialObservation)
     best_weighted = -Inf
     for (idx, cause) in enumerate(agent.causes)
         affect_probability = posterior_mean(cause.affect_counts, obs.evidence_outcome)
-        raw = cue_predictive(cause, obs.cue) * affect_probability
+        raw = cue_predictive(cause, obs.cue) * affect_probability * severity_predictive(cause, obs)
         weighted = raw ^ max(obs.precision, EPS)
         if weighted > best_weighted
             best_idx = idx
@@ -389,7 +456,10 @@ function spawn_cause!(agent::AgentState, arousal::Float64, reflexivity::Float64,
             "seed" => seed,
             "arousal_at_write" => arousal,
             "reflexivity_at_write" => reflexivity
-        )
+        ),
+        0.0,
+        0.0,
+        [1.0, 0.05]
     )
     push!(agent.causes, cause)
     agent.next_cause_id += 1
@@ -398,22 +468,53 @@ function spawn_cause!(agent::AgentState, arousal::Float64, reflexivity::Float64,
     return cause
 end
 
-function update_spawn_pressure!(agent::AgentState, posterior_predictive::Float64, threshold::Float64, arousal::Float64, params::Sim1Params)
-    if posterior_predictive < threshold
-        agent.spawn_pressure = params.spawn_pressure_decay * agent.spawn_pressure + arousal
+# T4.6 step C (orchestrator): spawn pressure is accumulated precision-weighted
+# surprise IN EXCESS of assimilation capacity (§4: overwhelm = error beyond what
+# existing causes can absorb). The previous form (decayed arousal, bounded at 1.0)
+# could never reach the 2.45 gate — an unreachable-criterion bug, not a result.
+function update_spawn_pressure!(agent::AgentState, posterior_predictive::Float64, threshold::Float64, pe::Float64, params::Sim1Params)
+    excess = max(0.0, pe - params.assimilation_capacity)
+    if posterior_predictive < threshold || excess > 0.0
+        agent.spawn_pressure = params.spawn_pressure_decay * agent.spawn_pressure + excess
     else
         agent.spawn_pressure *= params.spawn_pressure_decay
     end
     return agent.spawn_pressure
 end
 
-function update_cause!(cause::Cause, obs::TrialObservation, policy_idx::Int, arousal::Float64, params::Sim1Params)
+function update_cause!(cause::Cause, obs::TrialObservation, policy_idx::Int, arousal::Float64, reflexivity::Float64, params::Sim1Params)
     lr = params.learning_rate_base + params.learning_rate_arousal_gain * arousal
     cause.cue_counts[obs.cue] += params.cue_learning_weight * lr
     cause.affect_counts[obs.evidence_outcome] += lr
     cause.outcome_counts[obs.action_outcome, policy_idx] += lr
     cause.policy_counts[policy_idx] += 1.0
+    if obs.evidence_outcome == AVERSIVE
+        cause.reflexive_mass += lr * reflexivity
+        cause.total_mass += lr
+        cause.severity_counts[is_catastrophic(obs) ? 2 : 1] += lr
+    end
     return lr
+end
+
+# Count-weighted write-reflexivity of the AVERSIVE content specifically: the frozen
+# quantity is the aversive expectation, so what matters is the watching-state when
+# that content was written (safe-trial mass would otherwise dilute the aggregate).
+written_reflexivity(cause::Cause) = cause.total_mass > 0.0 ? cause.reflexive_mass / cause.total_mass : 1.0
+
+"""
+Probe-time capture weight (T4.6 step C, orchestrator). The disconfirming probe's
+evidence is weighted by the present-context share of the D1 tilt, with the depth
+coordinate set by the cause's count-weighted write-reflexivity: a cause whose mass
+was written under collapsed reflexivity is transparent at test (§3), so probe
+evidence is discounted by capture (§7). One mechanism, imported from D1/Sims 2-6a,
+not invented here. beta/gamma are the suite's tilt slopes; the two scale constants
+are swept on pilot and frozen (magic-numbers.md).
+"""
+function probe_evidence_weight(cause::Cause, params::Sim1Params)
+    E = written_reflexivity(cause) * params.probe_depth_scale
+    pi_eff = (structural_precision(cause) / params.capture_precision_scale) * exp(-params.tilt_beta * E)
+    lambda_eff = params.context_precision * exp(params.tilt_gamma * E)
+    return lambda_eff / (pi_eff + lambda_eff)
 end
 
 function dominant_aversive_cause(agent::AgentState)
@@ -432,16 +533,20 @@ function measure_revision(cause::Cause, params::Sim1Params)
     pre_predicted_aversive = outcome_distribution(probe, APPROACH)[AVERSIVE]
     pre_approach_probability = policy_probabilities(probe, params)[APPROACH]
     pre_precision = structural_precision(probe)
+    capture_weight = probe_evidence_weight(probe, params)
     for _ in 1:params.disconfirming_trials
-        probe.cue_counts[AVERSIVE] += params.cue_learning_weight * params.revision_learning_rate
-        probe.affect_counts[SAFE] += params.revision_learning_rate
-        probe.outcome_counts[SAFE, APPROACH] += params.revision_learning_rate
-        probe.policy_counts[APPROACH] += 1.0
+        w = capture_weight * params.revision_learning_rate
+        probe.cue_counts[AVERSIVE] += params.cue_learning_weight * w
+        probe.affect_counts[SAFE] += w
+        probe.outcome_counts[SAFE, APPROACH] += w
+        probe.policy_counts[APPROACH] += capture_weight
     end
     post_affect_aversive = affect_aversive_mean(probe)
     post_predicted_aversive = outcome_distribution(probe, APPROACH)[AVERSIVE]
     post_approach_probability = policy_probabilities(probe, params)[APPROACH]
-    predicted_aversive_reduction = max(pre_predicted_aversive - post_predicted_aversive, 0.0)
+    # Relative reduction (T4.6 step C): frozen means resisting a full extinction
+    # course; absolute-probability change saturates for beliefs starting near 0.4.
+    predicted_aversive_reduction = max(pre_predicted_aversive - post_predicted_aversive, 0.0) / max(pre_predicted_aversive, EPS)
     approach_probability_increase = max(post_approach_probability - pre_approach_probability, 0.0)
     behavior_change = max(predicted_aversive_reduction, approach_probability_increase)
     return (
@@ -472,14 +577,20 @@ function run_trial!(rng::AbstractRNG, agent::AgentState, world::WorldState, pote
     arousal, pe = arousal_from_prediction(raw_pp, obs.precision, params)
     reflexivity = write_reflexivity(arousal, params)
     threshold = crp_threshold(agent, params; concentration_factor)
-    pressure = update_spawn_pressure!(agent, weighted_pp, threshold, arousal, params)
+    pressure = update_spawn_pressure!(agent, weighted_pp, threshold, pe, params)
     spawned = false
     cause = agent.causes[best_idx]
-    if allow_spawn && weighted_pp < threshold && pressure >= params.spawn_pressure_threshold
+    # §4's fork, both conditions explicit: overwhelm (pressure = accumulated surprise
+    # excess) AND flat overt-policy landscape (no action is expected to help). With
+    # efficacy learned, high-kappa cells develop spread in their overt scores and do
+    # not spawn even on catastrophic surprise — S1.2 emerges from the fork itself.
+    overt_totals = [scores[i].total for i in (APPROACH, FLEE, APPEASE)]
+    overt_spread = maximum(overt_totals) - minimum(overt_totals)
+    if allow_spawn && pressure >= params.spawn_pressure_threshold && overt_spread < params.efe_flatness_threshold
         cause = spawn_cause!(agent, arousal, reflexivity, trial, seed)
         spawned = true
     end
-    lr = update_cause!(cause, obs, policy_idx, arousal, params)
+    lr = update_cause!(cause, obs, policy_idx, arousal, reflexivity, params)
     return (
         trial = trial,
         policy_idx = policy_idx,
