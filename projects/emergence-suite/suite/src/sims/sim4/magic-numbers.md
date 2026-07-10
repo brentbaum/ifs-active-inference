@@ -63,6 +63,46 @@ five candidates. At the retained `0.25` write size, rupture asymmetry was
 `4/10` with mean grown ratio `1.3380`; changing write size is therefore neither
 an ordering rescue nor authorized after this pilot.
 
+## T4.1c graded-contact identifying preregistration (frozen before pilot)
+
+This experiment changes only the therapy contact/write rule. All three arms
+reuse T4.1b's grown stacks, pair strengths, IID forecasts, EFE choice stream,
+outcome stream, retained write size, sessions, and pilot seeds.
+
+| Constant | Value | Pilot provenance |
+|---|---:|---|
+| Contact arms | `G=gate`, `W=weighted`, `P=probabilistic` | User protocol, frozen before the T4.1c pilot. |
+| Arm G contact | `access >= 1.0 - 1e-9` | Exact T4.1b rule, retained solely as the reproduction baseline. |
+| Arm W contact/write | contact always; every write scaled by continuous `access` | User protocol; no access threshold is applied in this arm. |
+| Arm P contact/write | Bernoulli(`access`); full write on contact | User protocol. |
+| Arm P contact RNG offset | `3_000_037` | Fixed before pilot; separate from development (`seed`), formation policy (`+1_000_003`), outcome (`+2_000_033`), forecast (`+4_000_009`), forecast permutation (`+8_000_021`), and history shuffle (`+9_000_031`) streams. |
+| A4c.baseline | G ordering exactly `1/10`; G zero-contact exactly `5/8` multi-cause seeds | T4.1b reproduction values supplied by protocol. |
+| S4c.unlock | W and P each contact in `>=7/10` seeds | User protocol. |
+| S4c.descent revival | either W or P complete outside-in ordering `>=8/10` | Gate-authored negative; only a fresh-seed cycle may test the revived claim. |
+| S4c.descent no-direction | both W and P ordering `<=3/10`, conditional on unlock | Confirms T4.1b's no-direction conclusion; missing concurrent activation remains a candidate, not a uniquely identified fact. |
+| A4.shuffle-history trigger | report the control for any arm with ordering `>=8/10` | The existing within-seed off-diagonal pair-strength permutation and RNG offset are unchanged. |
+
+No arm changes `access_fraction`, `score_contact`, EFE choice, relational
+forecast initialization, blocking-strength construction, or cause identity.
+Arm W's scale is the raw continuous access value; no cutoff, floor, or fitted
+transform is introduced.
+
+### T4.1c pilot observations (not confirmatory)
+
+| Criterion/readout | G gate | W weighted | P probabilistic | Frozen interpretation |
+|---|---:|---:|---:|---|
+| Seeds with >=1 contact | 5/10 | 10/10 | 10/10 | S4c.unlock supports; the exact-access deadlock disappears in both graded arms. |
+| Zero-contact multi-cause seeds | 5/8 | 0/8 | 0/8 | G exactly reproduces T4.1b. |
+| Complete outside-in ordering | 1/10 | 1/10 | 1/10 | Both graded arms are <=3/10, so the no-direction conclusion is confirmed. |
+| Total contact events | 322 | 960 | 942 | Audit only; W contacts every session by definition, while P realizes Bernoulli access. |
+| History-shuffled ordering | 0/10 | 2/10 | 2/10 | No arm reached the >=8/10 trigger. Controls were nevertheless run for all arms; shuffle did not reveal a hidden directional carrier. |
+
+Seed 1003 is the sole outside-in pass in all three unshuffled arms. Unlocking
+contact therefore does not revive descent. The gate authored the zero-contact
+deadlock, but the grown coupling still has no reliable outside-in directional
+bias. Missing concurrent activation remains a candidate mechanism; this pilot
+does not uniquely establish it.
+
 ## Preregistered pilot-only write-size sweep
 
 Candidate repair and breach write sizes are identical within each arm:

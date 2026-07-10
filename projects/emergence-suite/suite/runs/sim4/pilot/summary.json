@@ -87,6 +87,11 @@
             "therapy_sessions": 96
         },
         "sweep_grid": {
+            "contact_rule": [
+                "gate",
+                "weighted",
+                "probabilistic"
+            ]
         },
         "criteria_path": "configs/sim4-criteria.yaml"
     },
@@ -107,9 +112,13 @@
             "A4.perm",
             "A4.shuffle-history",
             "A4.grown",
-            "S4.rupture"
+            "S4.rupture",
+            "A4c.baseline",
+            "S4c.unlock",
+            "S4c.descent"
         ],
-        "original_scripted_criteria_retained_falsified": true
+        "original_scripted_criteria_retained_falsified": true,
+        "t41c_frozen_before_pilot": true
     },
     "pilot_tuning": {
         "initial_schedule_result": "one initial cause in every seed; descent structurally untestable",
@@ -164,6 +173,20 @@
         "permutation_arm": "all off-diagonal directed-pair strengths shuffled within seed",
         "permutation_rng_offset": 9000031
     },
+    "contact_rule_audit": {
+        "only_difference_between_arms": "contact occurrence and write scaling after the shared EFE-selected cause",
+        "arm_G": "contact iff access >= 1.0 - 1e-9; full writes",
+        "arm_W": "contact always; all writes scaled by continuous access; no threshold",
+        "arm_P": "contact with probability access; full writes on contact",
+        "probabilistic_contact_rng_offset": 3000037,
+        "shared_streams": [
+            "formation",
+            "grown coupling",
+            "forecast",
+            "EFE choice",
+            "outcome"
+        ]
+    },
     "efe_audit": {
         "terms": [
             "access-conditioned expected_outcome",
@@ -178,6 +201,105 @@
         "note": "Access is computed from grown directed-pair strengths and current permission only; pair identity is looked up by cause ID, never ordered by it."
     },
     "metrics": {
+        "t41c": {
+            "baseline": {
+                "reproduced": 1,
+                "expected_gate_ordering_seed_count": 1,
+                "observed_gate_ordering_seed_count": 1,
+                "expected_gate_zero_contact_multi_cause_seed_count": 5,
+                "observed_gate_zero_contact_multi_cause_seed_count": 5,
+                "expected_multi_cause_seed_count": 8,
+                "observed_multi_cause_seed_count": 8
+            },
+            "unlock": {
+                "minimum_contact_seed_rate": 1,
+                "weighted_contact_seed_rate": 1,
+                "probabilistic_contact_seed_rate": 1,
+                "both_graded_arms_unlocked": true
+            },
+            "descent": {
+                "maximum_graded_ordering_rate": 0.1,
+                "gate_ordering_rate": 0.1,
+                "weighted_ordering_rate": 0.1,
+                "probabilistic_ordering_rate": 0.1,
+                "interpretation": "no_direction_confirmed_concurrency_remains_candidate"
+            },
+            "arms": {
+                "G": {
+                    "arm": "G",
+                    "contact_rule": "gate",
+                    "seed_count": 10,
+                    "ordering_seed_count": 1,
+                    "ordering_rate": 0.1,
+                    "contact_seed_count": 5,
+                    "contact_seed_rate": 0.5,
+                    "multi_cause_seed_count": 8,
+                    "zero_contact_multi_cause_seed_count": 5,
+                    "zero_contact_multi_cause_rate": 0.625,
+                    "total_contact_count": 322,
+                    "history_shuffle_ordering_seed_count": 0,
+                    "history_shuffle_ordering_rate": 0,
+                    "history_shuffle_ordering_rate_degradation": 0.1,
+                    "history_shuffle_degraded_seeds": [
+                        1003
+                    ],
+                    "history_shuffle_improved_seeds": [
+                    ]
+                },
+                "W": {
+                    "arm": "W",
+                    "contact_rule": "weighted",
+                    "seed_count": 10,
+                    "ordering_seed_count": 1,
+                    "ordering_rate": 0.1,
+                    "contact_seed_count": 10,
+                    "contact_seed_rate": 1,
+                    "multi_cause_seed_count": 8,
+                    "zero_contact_multi_cause_seed_count": 0,
+                    "zero_contact_multi_cause_rate": 0,
+                    "total_contact_count": 960,
+                    "history_shuffle_ordering_seed_count": 2,
+                    "history_shuffle_ordering_rate": 0.2,
+                    "history_shuffle_ordering_rate_degradation": -0.1,
+                    "history_shuffle_degraded_seeds": [
+                        1003
+                    ],
+                    "history_shuffle_improved_seeds": [
+                        1005,
+                        1010
+                    ]
+                },
+                "P": {
+                    "arm": "P",
+                    "contact_rule": "probabilistic",
+                    "seed_count": 10,
+                    "ordering_seed_count": 1,
+                    "ordering_rate": 0.1,
+                    "contact_seed_count": 10,
+                    "contact_seed_rate": 1,
+                    "multi_cause_seed_count": 8,
+                    "zero_contact_multi_cause_seed_count": 0,
+                    "zero_contact_multi_cause_rate": 0,
+                    "total_contact_count": 942,
+                    "history_shuffle_ordering_seed_count": 2,
+                    "history_shuffle_ordering_rate": 0.2,
+                    "history_shuffle_ordering_rate_degradation": -0.1,
+                    "history_shuffle_degraded_seeds": [
+                        1003
+                    ],
+                    "history_shuffle_improved_seeds": [
+                        1005,
+                        1010
+                    ]
+                }
+            },
+            "history_shuffle": {
+                "reporting_trigger_rate": 0.8,
+                "triggered_arms": [
+                ],
+                "controls_run_for_all_arms": true
+            }
+        },
         "descent": {
             "ordering_rate": 0.1,
             "ordering_seed_count": 1
@@ -329,5 +451,5 @@
         }
     ],
     "per_seed_metric_count": 10,
-    "trace_row_count": 2880
+    "trace_row_count": 6720
 }

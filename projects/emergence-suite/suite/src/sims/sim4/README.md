@@ -107,7 +107,8 @@ writes, if obtained, is a measurement of the realized stream rather than a
 - `summary.json`, `status.json`, `criteria-results.json`, `metadata.json`
 - `formation_events.csv`, `developmental_history.csv`,
   `taxonomy_readouts.csv`
-- `per_seed_metrics.csv`, `posterior_traces.csv`, `write_size_sweep.csv`
+- `per_seed_metrics.csv`, `contact_arm_metrics.csv`, `posterior_traces.csv`,
+  `write_size_sweep.csv`
 - `blocking_strengths.csv`: grown and history-shuffled directed-pair strengths
 - `figures/descent.svg`
 
@@ -134,3 +135,41 @@ A third cycle, if attempted, must preregister a DISTINCT theory-motivated
 coupling (e.g. content overlap: the protector's cue banks written on contexts
 associated with the wound's activating contexts) — not a rescaled version of
 this one. Two cycles of falsification stand in the record either way.
+
+## T4.1c Step A identifying-pilot result (2026-07-10)
+
+T4.1c changed only the post-selection contact rule on the same pilot seeds and
+deterministic formation/forecast/coupling streams. Arm G retained T4.1b's
+exact-access gate. Arm W always contacted the EFE-selected cause and scaled
+every write by continuous access, with no threshold. Arm P contacted with
+probability equal to access and made a full-size write on contact; its contact
+draw used the preregistered independent `seed + 3_000_037` stream.
+
+Arm G exactly reproduced T4.1b: outside-in ordering was 1/10, and 5/8
+multi-cause seeds made zero contacts. W and P both eliminated the deadlock:
+10/10 seeds contacted in each arm, with zero zero-contact multi-cause seeds.
+But complete outside-in ordering remained 1/10 in W and 1/10 in P, with seed
+1003 the sole pass in every arm.
+
+Under the frozen interpretation rule, this confirms the T4.1b conclusion that
+the grown coupling has no reliable outside-in directional bias. The
+exact-access rule authored the deadlock but did not author the negative
+directional result. Missing concurrent activation remains the leading
+candidate among the stated explanations, not a uniquely identified diagnosis.
+No arm reached the 8/10 ordering trigger for A4.shuffle-history; the controls
+were still run for all arms and yielded G=0/10, W=2/10, and P=2/10 after
+shuffle.
+
+## T4.1c identifying experiment (orchestrator ticket, 2026-07-10): the gate caused the deadlock, NOT the negative descent
+
+Three preregistered contact rules on the same grown stacks, couplings, and
+seeds: G (T4.1b's exact-access gate), W (always-contact, access-weighted
+writes), P (contact with probability = access). G reproduced T4.1b exactly.
+W and P unlocked contact in 10/10 seeds (960/942 contacts vs G's 322) — and
+outside-in ordering stayed at exactly 1/10 in ALL THREE ARMS. Under the
+preregistered interpretation rule, the re-review's alternative explanation
+("useful coupling trapped by the gate") is eliminated: this grown coupling has
+no outside-in directional bias, gated or not. Missing concurrent activation
+remains a CANDIDATE explanation for why no directional coupling forms — not
+uniquely established. Sim 4's descent claim is closed for this model class:
+three cycles, each preregistered, converging on unearned.

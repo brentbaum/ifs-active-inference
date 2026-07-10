@@ -61,6 +61,42 @@
             "opposite_threshold": 0.3,
             "value": 0.4,
             "label": "null"
+        },
+        {
+            "id": "A4c.baseline",
+            "description": "Arm G exactly reproduces the T4.1b pilot: complete outside-in descent in 1/10 seeds and zero contacts in 5/8 multi-cause seeds.",
+            "kind": "adversarial",
+            "metric_path": "metrics.t41c.baseline.reproduced",
+            "comparator": "==",
+            "threshold": 1,
+            "weak_threshold": 1,
+            "opposite_threshold": 0,
+            "value": 1,
+            "label": "support"
+        },
+        {
+            "id": "S4c.unlock",
+            "description": "The exact-access deadlock disappears in both graded arms: Arms W and P each make at least one contact in at least 7/10 pilot seeds.",
+            "kind": "success",
+            "metric_path": "metrics.t41c.unlock.minimum_contact_seed_rate",
+            "comparator": ">=",
+            "threshold": 0.7,
+            "weak_threshold": 0.6,
+            "opposite_threshold": 0.3,
+            "value": 1,
+            "label": "support"
+        },
+        {
+            "id": "S4c.descent",
+            "description": "Report outside-in first-contact ordering in every arm. If the best of W/P is <=3/10 after contacts unlock, T4.1b's no-direction conclusion is confirmed and missing concurrency remains the candidate; if either W/P is >=8/10, the gate authored the negative and descent revives for a fresh-seed cycle.",
+            "kind": "success",
+            "metric_path": "metrics.t41c.descent.maximum_graded_ordering_rate",
+            "comparator": ">=",
+            "threshold": 0.8,
+            "weak_threshold": 0.4,
+            "opposite_threshold": 0.3,
+            "value": 0.1,
+            "label": "falsified"
         }
     ]
 }

@@ -21,6 +21,8 @@ const HOLD_ACCESS = 1
 const ALLOW_ACCESS = 2
 const RAPID_ACTION = 3
 const POLICY_NAMES = ["hold_access", "allow_access", "rapid_action"]
+const CONTACT_RULES = (:gate, :weighted, :probabilistic)
+const CONTACT_RNG_OFFSET = 3_000_037
 
 Base.@kwdef struct DevelopmentEpisode
     omega::Float64
@@ -474,12 +476,26 @@ function update_contact!(cause::LayerCause, outcome::String, params::Sim4Params,
     return before, trust(cause), weight
 end
 
-function maybe_revise_inner!(cause::LayerCause, contacted::Bool)
+function maybe_revise_inner!(cause::LayerCause, contacted::Bool; write_scale::Float64 = 1.0)
     contacted || return 0.0
     before = cause.root_revision
-    cause.root_revision = min(1.0, cause.root_revision + 0.35)
+    cause.root_revision = min(1.0, cause.root_revision + 0.35 * write_scale)
     return cause.root_revision - before
 end
+
+function contact_write_scale(contact_rule::Symbol, access::Float64, rng::AbstractRNG)
+    contact_rule in CONTACT_RULES || error("Unknown Sim 4 contact rule: $contact_rule")
+    if contact_rule == :gate
+        contacted = access >= 1.0 - 1e-9
+        return contacted, contacted ? 1.0 : 0.0
+    elseif contact_rule == :weighted
+        return true, access
+    end
+    contacted = rand(rng) < access
+    return contacted, contacted ? 1.0 : 0.0
+end
+
+arm_label(contact_rule::Symbol) = contact_rule == :gate ? "G" : contact_rule == :weighted ? "W" : "P"
 
 function permute_forecasts!(causes::Vector{LayerCause}, seed::Int)
     permutation = collect(eachindex(causes))
@@ -509,12 +525,18 @@ function complete_outside_in(first_contacts::Dict{Int, Int}, causes)
     return length(order) >= 2 && all(>(0), sessions) && all(diff(sessions) .> 0), order, sessions
 end
 
+first_contact_sequence(first_contacts::Dict{Int, Int}) =
+    join((string(id) for (id, _) in sort!(collect(first_contacts); by = last)), "-")
+
 function simulate_descent(seed::Int, params::Sim4Params, thresholds::ReadoutThresholds;
                           forecast_mode::Symbol = :baseline, history_mode::Symbol = :baseline,
+                          contact_rule::Symbol = :gate,
                           write_size::Float64 = params.contact_write_size,
                           keep_history::Bool = true)
+    contact_rule in CONTACT_RULES || error("Unknown Sim 4 contact rule: $contact_rule")
     choice_rng = MersenneTwister(seed + 41)
     outcome_rng = MersenneTwister(seed + 2_000_033)
+    contact_rng = MersenneTwister(seed + CONTACT_RNG_OFFSET)
     causes, formation_rows, history = grow_stack_with_history(seed, params, thresholds)
     forecast_permutation = forecast_mode == :permuted ? permute_forecasts!(causes, seed) : collect(eachindex(causes))
     history_permutation = history_mode == :permuted ? permute_blocking_strengths!(causes, seed) : Int[]
@@ -543,12 +565,15 @@ function simulate_descent(seed::Int, params::Sim4Params, thresholds::ReadoutThre
         outcome_draw = rand(outcome_rng)
         outcome = "blocked"
         relational_write = 0.0
+        applied_write_size = 0.0
         rupture_ratio = nothing
 
-        if access >= 1.0 - 1e-9
+        contacted, write_scale = contact_write_scale(contact_rule, access, contact_rng)
+        if contacted
             outcome = outcome_draw < params.breach_probability ? "met-badly" : "met-well"
+            applied_write_size = write_size * write_scale
             trust_before, trust_after, relational_write = update_contact!(
-                selected_cause, outcome, params, params.high_E; write_size
+                selected_cause, outcome, params, params.high_E; write_size = applied_write_size
             )
             get!(first_contacts, selected, session)
             if outcome == "met-well"
@@ -558,7 +583,8 @@ function simulate_descent(seed::Int, params::Sim4Params, thresholds::ReadoutThre
                 rupture_ratio = drop / max(last_repair_gain[selected], EPS)
                 push!(rupture_ratios, rupture_ratio)
             end
-            selected == 1 && outcome == "met-well" && maybe_revise_inner!(selected_cause, true)
+            selected == 1 && outcome == "met-well" &&
+                maybe_revise_inner!(selected_cause, true; write_scale)
         end
 
         policy_delta = sum(abs.(selected_cause.policy_counts .- pre_policy))
@@ -575,13 +601,19 @@ function simulate_descent(seed::Int, params::Sim4Params, thresholds::ReadoutThre
 
         push!(rows, (
             seed = seed,
+            arm = arm_label(contact_rule),
+            contact_rule = string(contact_rule),
             condition = condition,
             session = session,
             selected_cause_id = selected,
             selected_readout = readout_label(selected_cause),
             outcome = outcome,
             computed_access = access,
+            contact_occurred = contacted,
+            write_scale = write_scale,
+            applied_write_size = applied_write_size,
             relational_write_weight = relational_write,
+            relational_write_mass = relational_write * applied_write_size,
             trust_before = trust_before,
             trust_after = trust_after,
             rupture_ratio = rupture_ratio,
@@ -604,12 +636,15 @@ function simulate_descent(seed::Int, params::Sim4Params, thresholds::ReadoutThre
         development_history = keep_history ? history : NamedTuple[],
         traces = rows,
         choices = choices,
+        contact_rule = string(contact_rule),
+        arm = arm_label(contact_rule),
         forecast_mode = string(forecast_mode),
         forecast_permutation = forecast_permutation,
         history_mode = string(history_mode),
         history_permutation = history_permutation,
         outside_in_ids = outside_in_ids,
         first_contact_sessions = first_contact_sessions,
+        first_contact_sequence = first_contact_sequence(first_contacts),
         complete_outside_in = ordered,
         grown_rupture_ratio = grown_ratio,
         breach_with_prior_repair_count = length(rupture_ratios),
@@ -710,10 +745,46 @@ mean_bool(rows, field::Symbol) = isempty(rows) ? 0.0 : mean(getproperty(row, fie
 mean_field(rows, field::Symbol) = isempty(rows) ? 0.0 : mean(Float64(getproperty(row, field)) for row in rows)
 choice_sequence(choices) = join(string.(choices), "-")
 
+function contact_rules_from_config(config::ExperimentConfig)
+    raw = get(config.sweep_grid, "contact_rule", String.(CONTACT_RULES))
+    rules = Symbol.(String.(raw))
+    rules == collect(CONTACT_RULES) ||
+        error("T4.1c requires contact_rule arms gate, weighted, probabilistic in that order")
+    return rules
+end
+
+function contact_arm_summary(runs, shuffled_runs)
+    multi_cause = [run for run in runs if length(run.causes) >= 2]
+    ordering_count = count(run.complete_outside_in for run in runs)
+    shuffled_ordering_count = count(run.complete_outside_in for run in shuffled_runs)
+    contact_seed_count = count(run.contacted_event_count >= 1 for run in runs)
+    zero_contact_multi_count = count(run.contacted_event_count == 0 for run in multi_cause)
+    return (
+        arm = first(runs).arm,
+        contact_rule = first(runs).contact_rule,
+        seed_count = length(runs),
+        ordering_seed_count = ordering_count,
+        ordering_rate = ordering_count / length(runs),
+        contact_seed_count = contact_seed_count,
+        contact_seed_rate = contact_seed_count / length(runs),
+        multi_cause_seed_count = length(multi_cause),
+        zero_contact_multi_cause_seed_count = zero_contact_multi_count,
+        zero_contact_multi_cause_rate = isempty(multi_cause) ? 0.0 : zero_contact_multi_count / length(multi_cause),
+        total_contact_count = sum(run.contacted_event_count for run in runs),
+        history_shuffle_ordering_seed_count = shuffled_ordering_count,
+        history_shuffle_ordering_rate = shuffled_ordering_count / length(shuffled_runs),
+        history_shuffle_ordering_rate_degradation = (ordering_count - shuffled_ordering_count) / length(runs),
+        history_shuffle_degraded_seeds = [run.seed for (run, shuffled) in zip(runs, shuffled_runs)
+                                            if run.complete_outside_in && !shuffled.complete_outside_in],
+        history_shuffle_improved_seeds = [run.seed for (run, shuffled) in zip(runs, shuffled_runs)
+                                            if !run.complete_outside_in && shuffled.complete_outside_in],
+    )
+end
+
 function write_size_sweep(config::ExperimentConfig, params::Sim4Params, thresholds::ReadoutThresholds)
     rows = NamedTuple[]
     for write_size in params.contact_write_size_sweep
-        runs = [simulate_descent(seed, params, thresholds; write_size, keep_history = false) for seed in config.seeds]
+        runs = [simulate_descent(seed, params, thresholds; contact_rule = :gate, write_size, keep_history = false) for seed in config.seeds]
         push!(rows, (
             contact_write_size = write_size,
             seed_count = length(runs),
@@ -739,7 +810,7 @@ end
 
 function write_descent_svg(path::AbstractString, traces)
     ensure_dir(dirname(path))
-    rows = [row for row in traces if row.condition == "baseline" && row.seed == first(traces).seed]
+    rows = [row for row in traces if row.arm == "G" && row.condition == "baseline" && row.seed == first(traces).seed]
     width, height = 980, 420
     left, top = 70.0, 55.0
     plot_w, plot_h = 820.0, 250.0
@@ -765,11 +836,17 @@ end
 
 function write_run_readme(path::AbstractString, summary)
     open(path, "w") do io
-        println(io, "# Sim 4 grown-for-real pilot")
+        println(io, "# Sim 4 T4.1c graded-contact identifying pilot")
         println(io)
-        println(io, "Every cause in this run was returned by Sim1.init_agent/run_trial!/spawn machinery under the neutral configured schedule. Taxonomy is a frozen property readout, and initial relational forecasts are randomized independently of formation order.")
+        println(io, "Every cause in this run was returned by Sim1.init_agent/run_trial!/spawn machinery. Arms G/W/P share the grown stacks, coupling, forecasts, EFE choices, outcome stream, and seeds; only the contact/write rule differs.")
         println(io)
-        println(io, "- Baseline outside-in rate: $(summary.metrics.descent.ordering_rate)")
+        println(io, "- Arm G outside-in / contact-seed rates: $(summary.metrics.t41c.arms.G.ordering_rate) / $(summary.metrics.t41c.arms.G.contact_seed_rate)")
+        println(io, "- Arm W outside-in / contact-seed rates: $(summary.metrics.t41c.arms.W.ordering_rate) / $(summary.metrics.t41c.arms.W.contact_seed_rate)")
+        println(io, "- Arm P outside-in / contact-seed rates: $(summary.metrics.t41c.arms.P.ordering_rate) / $(summary.metrics.t41c.arms.P.contact_seed_rate)")
+        println(io, "- A4c.baseline reproduced: $(summary.metrics.t41c.baseline.reproduced)")
+        println(io, "- S4c.unlock minimum graded contact-seed rate: $(summary.metrics.t41c.unlock.minimum_contact_seed_rate)")
+        println(io, "- S4c interpretation: $(summary.metrics.t41c.descent.interpretation)")
+        println(io, "- T4.1b Arm G outside-in rate: $(summary.metrics.descent.ordering_rate)")
         println(io, "- Forecast-permutation outside-in rate: $(summary.metrics.forecast_permutation.ordering_rate)")
         println(io, "- History-shuffle outside-in rate: $(summary.metrics.history_shuffle.ordering_rate)")
         println(io, "- History-shuffle degradation: $(summary.metrics.history_shuffle.ordering_rate_degradation)")
@@ -785,21 +862,55 @@ function run_sim4_config(config::ExperimentConfig; config_path::Union{Nothing, A
     thresholds = readout_thresholds(config.criteria_path)
     config.label == "pilot" || error("T4.1 Step A permits only label=pilot")
     config.seeds == collect(1001:1010) || error("T4.1 Step A permits only pilot seeds 1001-1010")
+    contact_rules = contact_rules_from_config(config)
     outdir = output_dir === nothing ? normpath(joinpath(config.output_dir, config.experiment, "pilot")) : output_dir
     ensure_dir(outdir)
 
-    baseline_runs = [simulate_descent(seed, params, thresholds; forecast_mode = :baseline) for seed in config.seeds]
+    arm_runs = Dict(rule => [simulate_descent(seed, params, thresholds; contact_rule = rule,
+                                              forecast_mode = :baseline,
+                                              keep_history = rule == :gate)
+                              for seed in config.seeds]
+                    for rule in contact_rules)
+    arm_history_shuffle_runs = Dict(rule => [simulate_descent(seed, params, thresholds;
+                                                              contact_rule = rule,
+                                                              history_mode = :permuted,
+                                                              keep_history = false)
+                                              for seed in config.seeds]
+                                    for rule in contact_rules)
+    baseline_runs = arm_runs[:gate]
     permutation_runs = [simulate_descent(seed, params, thresholds; forecast_mode = :permuted, keep_history = false) for seed in config.seeds]
-    history_shuffle_runs = [simulate_descent(seed, params, thresholds; history_mode = :permuted, keep_history = false) for seed in config.seeds]
+    history_shuffle_runs = arm_history_shuffle_runs[:gate]
     sweep_rows = write_size_sweep(config, params, thresholds)
 
-    traces = vcat([run.traces for run in baseline_runs]..., [run.traces for run in permutation_runs]...,
-                  [run.traces for run in history_shuffle_runs]...)
+    traces = vcat([run.traces for rule in contact_rules for run in arm_runs[rule]]...,
+                  [run.traces for run in permutation_runs]...,
+                  [run.traces for rule in contact_rules for run in arm_history_shuffle_runs[rule]]...)
     formation_rows = vcat([run.formation_rows for run in baseline_runs]...)
     development_history = vcat([run.development_history for run in baseline_runs]...)
     tax_rows = vcat([taxonomy_rows(run.seed, run.causes) for run in baseline_runs]...)
     pair_rows = vcat([blocking_rows(run.seed, run.causes, history_shuffle_runs[idx].causes)
                       for (idx, run) in enumerate(baseline_runs)]...)
+    arm_per_seed = [begin
+        shuffled = arm_history_shuffle_runs[rule][idx]
+        (
+            seed = run.seed,
+            arm = run.arm,
+            contact_rule = run.contact_rule,
+            grown_cause_count = length(run.causes),
+            descent_evaluable = length(run.causes) >= 2,
+            formation_order_newest_to_oldest = join(run.outside_in_ids, "-"),
+            first_contact_sequence = run.first_contact_sequence,
+            first_contact_sessions = join(run.first_contact_sessions, "-"),
+            complete_outside_in = run.complete_outside_in,
+            contacted_event_count = run.contacted_event_count,
+            made_contact = run.contacted_event_count >= 1,
+            history_shuffled_first_contact_sequence = shuffled.first_contact_sequence,
+            history_shuffled_first_contact_sessions = join(shuffled.first_contact_sessions, "-"),
+            history_shuffle_complete_outside_in = shuffled.complete_outside_in,
+            history_shuffle_seed_degradation = (run.complete_outside_in ? 1 : 0) -
+                                                (shuffled.complete_outside_in ? 1 : 0),
+        )
+    end for rule in contact_rules for (idx, run) in enumerate(arm_runs[rule])]
     per_seed = [begin
         perm = permutation_runs[idx]
         shuffled = history_shuffle_runs[idx]
@@ -849,6 +960,23 @@ function run_sim4_config(config::ExperimentConfig; config_path::Union{Nothing, A
     policy_events = sum(row.policy_write_events for row in per_seed)
     mandate_events = sum(row.mandate_write_events for row in per_seed)
     contacted_events = sum(row.contacted_event_count for row in per_seed)
+    gate_arm = contact_arm_summary(arm_runs[:gate], arm_history_shuffle_runs[:gate])
+    weighted_arm = contact_arm_summary(arm_runs[:weighted], arm_history_shuffle_runs[:weighted])
+    probabilistic_arm = contact_arm_summary(arm_runs[:probabilistic], arm_history_shuffle_runs[:probabilistic])
+    baseline_reproduced = gate_arm.ordering_seed_count == 1 &&
+        gate_arm.multi_cause_seed_count == 8 && gate_arm.zero_contact_multi_cause_seed_count == 5
+    minimum_graded_contact_rate = min(weighted_arm.contact_seed_rate, probabilistic_arm.contact_seed_rate)
+    graded_unlocked = minimum_graded_contact_rate >= 0.70
+    maximum_graded_ordering_rate = max(weighted_arm.ordering_rate, probabilistic_arm.ordering_rate)
+    descent_interpretation = if graded_unlocked && maximum_graded_ordering_rate <= 0.30
+        "no_direction_confirmed_concurrency_remains_candidate"
+    elseif maximum_graded_ordering_rate >= 0.80
+        "gate_authored_negative_descent_revives_for_fresh_seed_cycle"
+    else
+        "inconclusive_between_gate_and_direction"
+    end
+    shuffle_triggered_arms = [arm.arm for arm in (gate_arm, weighted_arm, probabilistic_arm)
+                              if arm.ordering_rate >= 0.80]
 
     summary = (
         experiment = "sim4",
@@ -858,8 +986,10 @@ function run_sim4_config(config::ExperimentConfig; config_path::Union{Nothing, A
             thresholds_frozen_before_pilot = true,
             criteria_file = config.criteria_path,
             readout_classifier = thresholds,
-            active_criteria = ["S4.descent", "A4.perm", "A4.shuffle-history", "A4.grown", "S4.rupture"],
+            active_criteria = ["S4.descent", "A4.perm", "A4.shuffle-history", "A4.grown", "S4.rupture",
+                               "A4c.baseline", "S4c.unlock", "S4c.descent"],
             original_scripted_criteria_retained_falsified = true,
+            t41c_frozen_before_pilot = true,
         ),
         pilot_tuning = (
             initial_schedule_result = "one initial cause in every seed; descent structurally untestable",
@@ -886,6 +1016,14 @@ function run_sim4_config(config::ExperimentConfig; config_path::Union{Nothing, A
             permutation_arm = "all off-diagonal directed-pair strengths shuffled within seed",
             permutation_rng_offset = 9_000_031,
         ),
+        contact_rule_audit = (
+            only_difference_between_arms = "contact occurrence and write scaling after the shared EFE-selected cause",
+            arm_G = "contact iff access >= 1.0 - 1e-9; full writes",
+            arm_W = "contact always; all writes scaled by continuous access; no threshold",
+            arm_P = "contact with probability access; full writes on contact",
+            probabilistic_contact_rng_offset = CONTACT_RNG_OFFSET,
+            shared_streams = ["formation", "grown coupling", "forecast", "EFE choice", "outcome"],
+        ),
         efe_audit = (
             terms = ["access-conditioned expected_outcome", "accessible information_gain", "settled_forecast_cost"],
             direct_depth_or_position_term = false,
@@ -896,6 +1034,36 @@ function run_sim4_config(config::ExperimentConfig; config_path::Union{Nothing, A
             note = "Access is computed from grown directed-pair strengths and current permission only; pair identity is looked up by cause ID, never ordered by it.",
         ),
         metrics = (
+            t41c = (
+                baseline = (
+                    reproduced = baseline_reproduced ? 1.0 : 0.0,
+                    expected_gate_ordering_seed_count = 1,
+                    observed_gate_ordering_seed_count = gate_arm.ordering_seed_count,
+                    expected_gate_zero_contact_multi_cause_seed_count = 5,
+                    observed_gate_zero_contact_multi_cause_seed_count = gate_arm.zero_contact_multi_cause_seed_count,
+                    expected_multi_cause_seed_count = 8,
+                    observed_multi_cause_seed_count = gate_arm.multi_cause_seed_count,
+                ),
+                unlock = (
+                    minimum_contact_seed_rate = minimum_graded_contact_rate,
+                    weighted_contact_seed_rate = weighted_arm.contact_seed_rate,
+                    probabilistic_contact_seed_rate = probabilistic_arm.contact_seed_rate,
+                    both_graded_arms_unlocked = graded_unlocked,
+                ),
+                descent = (
+                    maximum_graded_ordering_rate = maximum_graded_ordering_rate,
+                    gate_ordering_rate = gate_arm.ordering_rate,
+                    weighted_ordering_rate = weighted_arm.ordering_rate,
+                    probabilistic_ordering_rate = probabilistic_arm.ordering_rate,
+                    interpretation = descent_interpretation,
+                ),
+                arms = (G = gate_arm, W = weighted_arm, P = probabilistic_arm),
+                history_shuffle = (
+                    reporting_trigger_rate = 0.80,
+                    triggered_arms = shuffle_triggered_arms,
+                    controls_run_for_all_arms = true,
+                ),
+            ),
             descent = (
                 ordering_rate = baseline_ordering,
                 ordering_seed_count = count(row.complete_outside_in for row in per_seed),
@@ -956,6 +1124,7 @@ function run_sim4_config(config::ExperimentConfig; config_path::Union{Nothing, A
     summary_path = joinpath(outdir, "summary.json")
     write_json(summary_path, summary)
     write_rows_csv(joinpath(outdir, "per_seed_metrics.csv"), per_seed)
+    write_rows_csv(joinpath(outdir, "contact_arm_metrics.csv"), arm_per_seed)
     write_rows_csv(joinpath(outdir, "posterior_traces.csv"), traces)
     write_rows_csv(joinpath(outdir, "formation_events.csv"), formation_rows)
     write_rows_csv(joinpath(outdir, "developmental_history.csv"), development_history)
@@ -967,8 +1136,9 @@ function run_sim4_config(config::ExperimentConfig; config_path::Union{Nothing, A
 
     criteria_results = write_criteria_results(config.criteria_path, summary_path, joinpath(outdir, "criteria-results.json"))
     implementation_passed = config.seeds == collect(1001:1010) && config.label == "pilot" &&
-        authored_count == 0 && provenance_complete &&
-        all(isfile(joinpath(outdir, name)) for name in ("summary.json", "per_seed_metrics.csv", "posterior_traces.csv", "formation_events.csv", "developmental_history.csv", "taxonomy_readouts.csv", "blocking_strengths.csv", "write_size_sweep.csv"))
+        contact_rules == collect(CONTACT_RULES) && authored_count == 0 && provenance_complete &&
+        length(arm_per_seed) == 3 * length(config.seeds) &&
+        all(isfile(joinpath(outdir, name)) for name in ("summary.json", "per_seed_metrics.csv", "contact_arm_metrics.csv", "posterior_traces.csv", "formation_events.csv", "developmental_history.csv", "taxonomy_readouts.csv", "blocking_strengths.csv", "write_size_sweep.csv"))
     status = (
         implementation_passed = implementation_passed,
         theory_result = theory_label(criteria_results),

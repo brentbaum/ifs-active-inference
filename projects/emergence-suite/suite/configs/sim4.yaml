@@ -2,6 +2,14 @@ experiment: sim4
 label: pilot
 output_dir: ../runs
 criteria_path: sim4-criteria.yaml
+sweep_grid:
+  # T4.1c identifying arms. These alter only whether/how the EFE-selected
+  # contact writes; formation, coupling, forecasts, choice, and outcomes stay
+  # on their T4.1b streams.
+  contact_rule:
+    - gate
+    - weighted
+    - probabilistic
 seeds:
   - 1001
   - 1002
