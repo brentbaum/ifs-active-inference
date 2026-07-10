@@ -1,113 +1,78 @@
+# T4.1b Step A revised preregistration, frozen before the repaired pilot seeds
+# 1001-1010 were run. The earlier T4.1 preregistration remains represented by
+# the unchanged classifier, S4.descent, A4.perm, A4.grown, and S4.rupture rules.
+# Taxonomy is a readout only. These thresholds may not be changed after the
+# classifier has seen pilot output; any future amendment must retain this block.
+readout_classifier:
+  written_reflexivity_max_exile: 0.35
+  catastrophic_belief_min_exile: 0.25
+  manager_structural_precision_min: 120.0
+  firefighter_dominant_policies:
+    - flee
+    - attenuate
+
 criteria:
-  - id: S4.1a
-    description: "EFE-selected contact order is outside-in by readout sequence before deep contact."
-    metric_path: metrics.descent.protector_first_ordering_rate
+  - id: S4.descent
+    description: "EFE contact follows complete newest-formed to oldest-formed order in at least 8/10 pilot seeds, with no ordering term in the objective."
+    metric_path: metrics.descent.ordering_rate
     comparator: ">="
-    threshold: 0.85
-    weak_threshold: 0.70
-    opposite_threshold: 0.40
+    threshold: 0.80
+    weak_threshold: 0.60
+    opposite_threshold: 0.30
     kind: success
-  - id: S4.1b
-    description: "Computed permission crosses before direct contact with the deepest cause."
-    metric_path: metrics.descent.permission_precedes_deep_contact_rate
+  - id: A4.perm
+    description: "Complete outside-in ordering survives an across-cause permutation of the randomized initial relational forecasts in at least 8/10 pilot seeds."
+    metric_path: metrics.forecast_permutation.ordering_rate
     comparator: ">="
-    threshold: 0.90
-    weak_threshold: 0.75
-    opposite_threshold: 0.50
-    kind: success
-  - id: S4.1c
-    description: "Before the outer relational bank crosses trust threshold, the selected contact is the outer cause."
-    metric_path: metrics.descent.outer_choice_before_trust_rate
+    threshold: 0.80
+    weak_threshold: 0.60
+    opposite_threshold: 0.30
+    kind: adversarial
+  - id: A4.shuffle-history
+    description: "Permuting grown blocking strengths among directed cause pairs degrades complete outside-in ordering by at least 2/10 pilot seeds; otherwise ordering is not carried by the grown formation-history coupling."
+    metric_path: metrics.history_shuffle.ordering_rate_degradation
     comparator: ">="
-    threshold: 0.85
-    weak_threshold: 0.70
-    opposite_threshold: 0.40
-    kind: success
-  - id: S4.2a
-    description: "Forced direct-access probe generates a new cause through CRP spawn conditions."
-    metric_path: metrics.thickening.forced_spawn_rate
+    threshold: 0.20
+    weak_threshold: 0.10
+    opposite_threshold: 0.00
+    kind: adversarial
+  - id: A4.grown
+    description: "Every stack element is returned by Sim1.init_agent/run_trial!/spawn machinery and has an auditable initial-or-spawn formation event; no Sim 4-authored cause exists."
+    metric_path: metrics.grown.zero_authored_complete_provenance
+    comparator: "=="
+    threshold: 1.00
+    weak_threshold: 1.00
+    opposite_threshold: 0.00
+    kind: adversarial
+  - id: S4.rupture
+    description: "With identical per-event evidence sizes for repair and breach, an observed breach outweighs the preceding same-cause repair in at least 8/10 pilot seeds; the ratio is measured from posterior changes."
+    metric_path: metrics.rupture.asymmetry_seed_rate
     comparator: ">="
-    threshold: 0.90
-    weak_threshold: 0.75
-    opposite_threshold: 0.50
+    threshold: 0.80
+    weak_threshold: 0.60
+    opposite_threshold: 0.30
     kind: success
-  - id: S4.2b
-    description: "Forced direct access thickens the stack rather than revising the deepest cause."
-    metric_path: metrics.thickening.forced_stack_thickening_rate
-    comparator: ">="
-    threshold: 0.90
-    weak_threshold: 0.75
-    opposite_threshold: 0.50
-    kind: success
-  - id: S4.2c
-    description: "Unforced descent does not add another spawned cause."
-    metric_path: metrics.thickening.unforced_spawn_rate
-    comparator: <=
-    threshold: 0.10
-    weak_threshold: 0.20
-    opposite_threshold: 0.50
-    kind: success
+
+# FALSIFIED ORIGINALS, retained verbatim in substance as historical records.
+# They are not active criteria because their mechanisms were authored by the
+# retired grow_stack implementation. Their 2026-07-10 adversarial verdict is
+# permanent; this Step A does not retroactively rescue them.
+falsified_originals:
+  - id: S4.1a-S4.1c
+    status: falsified
+    reason: "Authored three-cause routes, positions, forecasts, and counts encoded descent."
+  - id: S4.2a-S4.2c
+    status: falsified
+    reason: "Forced-access pressure and stack thickening were assigned outside Sim 1 formation."
   - id: S4.3
-    description: "One misattunement setback exceeds five times the immediately preceding attuned-contact gain."
-    metric_path: metrics.trust_asymmetry.mean_asymmetry_ratio
-    comparator: ">"
-    threshold: 5.00
-    weak_threshold: 3.50
-    opposite_threshold: 1.00
-    kind: success
-  - id: S4.4a
-    description: "Policy-only avoidance yields substantially to practiced counter-conditioning."
-    metric_path: metrics.habit_control.habit_practice_drop
-    comparator: ">="
-    threshold: 0.50
-    weak_threshold: 0.35
-    opposite_threshold: 0.10
-    kind: success
-  - id: S4.4b
-    description: "The same practice route leaves the protective cause largely unmoved."
-    metric_path: metrics.habit_control.protective_practice_drop
-    comparator: <=
-    threshold: 0.15
-    weak_threshold: 0.25
-    opposite_threshold: 0.45
-    kind: success
-  - id: S4.4c
-    description: "The protective cause changes under the relational route."
-    metric_path: metrics.habit_control.protective_relational_drop
-    comparator: ">="
-    threshold: 0.40
-    weak_threshold: 0.30
-    opposite_threshold: 0.10
-    kind: success
-  - id: S4.5a
-    description: "Protective policy banks update from world feedback while mandate/root banks do not."
-    metric_path: metrics.methods_not_mission.policy_to_mandate_update_ratio
-    comparator: ">="
-    threshold: 10.00
-    weak_threshold: 5.00
-    opposite_threshold: 1.00
-    kind: success
-  - id: S4.5b
-    description: "Mandate/root bank update rate under own operation is zero."
-    metric_path: metrics.methods_not_mission.mandate_update_rate
-    comparator: "=="
-    threshold: 0.00
-    weak_threshold: 0.00
-    opposite_threshold: 0.10
-    kind: success
-  - id: A4.1
-    description: "Removing relational storage degrades descent ordering to indifference."
-    metric_path: metrics.ablation.ordering_degrades_to_indifference
-    comparator: "=="
-    threshold: 1.00
-    weak_threshold: 1.00
-    opposite_threshold: 0.00
-    kind: adversarial
-  - id: A4.2
-    description: "EFE audit contains no depth, stack-position, or taxonomy-ordering term."
-    metric_path: metrics.audit.efe_audit_no_ordering_terms
-    comparator: "=="
-    threshold: 1.00
-    weak_threshold: 1.00
-    opposite_threshold: 0.00
-    kind: adversarial
+    status: falsified
+    reason: "The per-event breach:repair count ratio was authored as 80:8."
+  - id: S4.4a-S4.4c
+    status: falsified
+    reason: "Habit and protector paths used different hand-set decay laws."
+  - id: S4.5a-S4.5b
+    status: falsified
+    reason: "Mandate learning was fixed to zero rather than measured from bank-write pathways."
+  - id: A4.1-A4.2
+    status: falsified
+    reason: "Relational-forecast inheritance carried position into EFE despite the term-name audit."

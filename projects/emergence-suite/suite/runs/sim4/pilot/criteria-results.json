@@ -1,0 +1,66 @@
+{
+    "criteria_path": "/Users/brentbaum/dev/research/ifs-active-inference/projects/emergence-suite/suite/configs/sim4-criteria.yaml",
+    "summary_path": "/Users/brentbaum/dev/research/ifs-active-inference/projects/emergence-suite/suite/runs/sim4/pilot/summary.json",
+    "results": [
+        {
+            "id": "S4.descent",
+            "description": "EFE contact follows complete newest-formed to oldest-formed order in at least 8/10 pilot seeds, with no ordering term in the objective.",
+            "kind": "success",
+            "metric_path": "metrics.descent.ordering_rate",
+            "comparator": ">=",
+            "threshold": 0.8,
+            "weak_threshold": 0.6,
+            "opposite_threshold": 0.3,
+            "value": 0.1,
+            "label": "falsified"
+        },
+        {
+            "id": "A4.perm",
+            "description": "Complete outside-in ordering survives an across-cause permutation of the randomized initial relational forecasts in at least 8/10 pilot seeds.",
+            "kind": "adversarial",
+            "metric_path": "metrics.forecast_permutation.ordering_rate",
+            "comparator": ">=",
+            "threshold": 0.8,
+            "weak_threshold": 0.6,
+            "opposite_threshold": 0.3,
+            "value": 0.1,
+            "label": "falsified"
+        },
+        {
+            "id": "A4.shuffle-history",
+            "description": "Permuting grown blocking strengths among directed cause pairs degrades complete outside-in ordering by at least 2/10 pilot seeds; otherwise ordering is not carried by the grown formation-history coupling.",
+            "kind": "adversarial",
+            "metric_path": "metrics.history_shuffle.ordering_rate_degradation",
+            "comparator": ">=",
+            "threshold": 0.2,
+            "weak_threshold": 0.1,
+            "opposite_threshold": 0,
+            "value": 0.1,
+            "label": "weak_support"
+        },
+        {
+            "id": "A4.grown",
+            "description": "Every stack element is returned by Sim1.init_agent/run_trial!/spawn machinery and has an auditable initial-or-spawn formation event; no Sim 4-authored cause exists.",
+            "kind": "adversarial",
+            "metric_path": "metrics.grown.zero_authored_complete_provenance",
+            "comparator": "==",
+            "threshold": 1,
+            "weak_threshold": 1,
+            "opposite_threshold": 0,
+            "value": 1,
+            "label": "support"
+        },
+        {
+            "id": "S4.rupture",
+            "description": "With identical per-event evidence sizes for repair and breach, an observed breach outweighs the preceding same-cause repair in at least 8/10 pilot seeds; the ratio is measured from posterior changes.",
+            "kind": "success",
+            "metric_path": "metrics.rupture.asymmetry_seed_rate",
+            "comparator": ">=",
+            "threshold": 0.8,
+            "weak_threshold": 0.6,
+            "opposite_threshold": 0.3,
+            "value": 0.4,
+            "label": "null"
+        }
+    ]
+}

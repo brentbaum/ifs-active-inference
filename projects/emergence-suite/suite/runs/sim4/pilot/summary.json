@@ -1,0 +1,333 @@
+{
+    "experiment": "sim4",
+    "protocol": {
+        "stage": "Step A",
+        "label": "pilot",
+        "confirmatory_run": false,
+        "seeds": [
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010
+        ]
+    },
+    "config": {
+        "experiment": "sim4",
+        "seeds": [
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010
+        ],
+        "output_dir": "runs",
+        "label": "pilot",
+        "model_params": {
+            "beta_se": 1,
+            "breach_probability": 0.08,
+            "contact_write_size": 0.25,
+            "contact_write_size_sweep": [
+                0.25,
+                0.5,
+                1.0,
+                2.0,
+                4.0
+            ],
+            "developmental_schedule": [
+                {
+                    "acute_trials": 72,
+                    "consolidation_trials": 128,
+                    "kappa": 0,
+                    "omega": 3
+                },
+                {
+                    "acute_trials": 64,
+                    "consolidation_trials": 64,
+                    "kappa": 0.2,
+                    "omega": 2.6
+                },
+                {
+                    "acute_trials": 64,
+                    "consolidation_trials": 32,
+                    "kappa": 0.9,
+                    "omega": 1.4
+                },
+                {
+                    "acute_trials": 64,
+                    "consolidation_trials": 64,
+                    "kappa": 0.7,
+                    "omega": 2
+                }
+            ],
+            "efe_information_weight": 5,
+            "efe_settled_cost": 1.05,
+            "efe_utility_bad": -1.15,
+            "efe_utility_catastrophic": -4.8,
+            "efe_utility_good": 2.2,
+            "gamma_se": 1.2,
+            "high_E": 0.9,
+            "lambda_ctx": 1,
+            "low_E": 0.05,
+            "permission_trust_threshold": 0.72,
+            "pi_part": 4,
+            "policy_learning_rate": 0.45,
+            "relational_prior_count": 1,
+            "relational_prior_jitter": 0.25,
+            "therapy_sessions": 96
+        },
+        "sweep_grid": {
+        },
+        "criteria_path": "configs/sim4-criteria.yaml"
+    },
+    "preregistration": {
+        "thresholds_frozen_before_pilot": true,
+        "criteria_file": "configs/sim4-criteria.yaml",
+        "readout_classifier": {
+            "written_reflexivity_max_exile": 0.35,
+            "catastrophic_belief_min_exile": 0.25,
+            "manager_structural_precision_min": 120,
+            "firefighter_dominant_policies": [
+                "flee",
+                "attenuate"
+            ]
+        },
+        "active_criteria": [
+            "S4.descent",
+            "A4.perm",
+            "A4.shuffle-history",
+            "A4.grown",
+            "S4.rupture"
+        ],
+        "original_scripted_criteria_retained_falsified": true
+    },
+    "pilot_tuning": {
+        "initial_schedule_result": "one initial cause in every seed; descent structurally untestable",
+        "schedule_amendment": "moved the acute omega=3.0/kappa=0.0 Sim 1 formation block before assimilative episodes; no Sim 1 parameter or cause target changed",
+        "contact_write_size_selection": "selected 0.25, the smallest preregistered equal-write candidate; all five candidates produced asymmetry in 10/10 pilot seeds"
+    },
+    "formation": {
+        "machinery": "EmergenceSuite.Sim1.init_agent + run_trial! + spawn_cause! + update_cause!",
+        "neutral_schedule": [
+            {
+                "omega": 3,
+                "kappa": 0,
+                "acute_trials": 72,
+                "consolidation_trials": 128
+            },
+            {
+                "omega": 2.6,
+                "kappa": 0.2,
+                "acute_trials": 64,
+                "consolidation_trials": 64
+            },
+            {
+                "omega": 1.4,
+                "kappa": 0.9,
+                "acute_trials": 64,
+                "consolidation_trials": 32
+            },
+            {
+                "omega": 2,
+                "kappa": 0.7,
+                "acute_trials": 64,
+                "consolidation_trials": 64
+            }
+        ],
+        "total_grown_causes": 20,
+        "per_seed_min_causes": 1,
+        "per_seed_max_causes": 3,
+        "descent_evaluable_seed_count": 8,
+        "taxonomy_counts": {
+            "exile_readout": 4,
+            "manager_readout": 16
+        }
+    },
+    "forecast_control": {
+        "initialization": "iid bounded symmetric pseudo-counts independent of cause formation order",
+        "inheritance": false,
+        "permutation_arm": true
+    },
+    "history_coupling": {
+        "formula": "blocker learned (flee + appease + attenuate) policy mass * fraction of blocker cue/affect write mass accrued while target was active",
+        "zero_when_no_coupled_writes": true,
+        "permutation_arm": "all off-diagonal directed-pair strengths shuffled within seed",
+        "permutation_rng_offset": 9000031
+    },
+    "efe_audit": {
+        "terms": [
+            "access-conditioned expected_outcome",
+            "accessible information_gain",
+            "settled_forecast_cost"
+        ],
+        "direct_depth_or_position_term": false,
+        "taxonomy_term": false,
+        "structural_precision_term": false,
+        "ordering_bonus": false,
+        "formation_order_comparison": false,
+        "note": "Access is computed from grown directed-pair strengths and current permission only; pair identity is looked up by cause ID, never ordered by it."
+    },
+    "metrics": {
+        "descent": {
+            "ordering_rate": 0.1,
+            "ordering_seed_count": 1
+        },
+        "forecast_permutation": {
+            "ordering_rate": 0.1,
+            "ordering_seed_count": 1,
+            "outcome_agreement_rate": 1,
+            "forecasts_carry_ordering_when": [
+            ]
+        },
+        "history_shuffle": {
+            "ordering_rate": 0,
+            "ordering_seed_count": 0,
+            "ordering_rate_degradation": 0.1,
+            "degraded_seeds": [
+                1003
+            ],
+            "improved_seeds": [
+            ],
+            "blocking_multiset_preserved": true,
+            "ordering_carried_by_grown_coupling": false
+        },
+        "ordering_proxy_audit": {
+            "structural_precision_used_in_access_or_efe": false,
+            "per_seed_structural_precision_order_correlations": [
+                {
+                    "seed": 1001,
+                    "correlation": -1,
+                    "evaluable": true
+                },
+                {
+                    "seed": 1002,
+                    "correlation": 0,
+                    "evaluable": false
+                },
+                {
+                    "seed": 1003,
+                    "correlation": -1,
+                    "evaluable": true
+                },
+                {
+                    "seed": 1004,
+                    "correlation": -1,
+                    "evaluable": true
+                },
+                {
+                    "seed": 1005,
+                    "correlation": -0.9487754109300336,
+                    "evaluable": true
+                },
+                {
+                    "seed": 1006,
+                    "correlation": 0,
+                    "evaluable": false
+                },
+                {
+                    "seed": 1007,
+                    "correlation": -0.9999999999999999,
+                    "evaluable": true
+                },
+                {
+                    "seed": 1008,
+                    "correlation": -1,
+                    "evaluable": true
+                },
+                {
+                    "seed": 1009,
+                    "correlation": -0.8961305202338508,
+                    "evaluable": true
+                },
+                {
+                    "seed": 1010,
+                    "correlation": -1,
+                    "evaluable": true
+                }
+            ],
+            "mean_grown_blocking_later_share": 0.46513237538568564
+        },
+        "grown": {
+            "authored_cause_count": 0,
+            "provenance_complete_rate": 1,
+            "zero_authored_complete_provenance": 1
+        },
+        "rupture": {
+            "per_event_repair_write_size": 0.25,
+            "per_event_breach_write_size": 0.25,
+            "authored_80_to_8_ratio_retired": true,
+            "breach_observed_seed_rate": 0.5,
+            "asymmetry_seed_rate": 0.4,
+            "mean_grown_ratio": 1.3380301123916436,
+            "min_grown_ratio": 0
+        },
+        "bank_writes": {
+            "policy_write_events": 322,
+            "mandate_write_events": 0,
+            "policy_write_event_rate": 1,
+            "mandate_write_event_rate": 0,
+            "policy_write_mass": 36.22500000000002,
+            "mandate_write_mass": 0,
+            "measurement": "counted nonzero before/after deltas on actual update_contact! pathways"
+        }
+    },
+    "pilot_write_size_sweep": [
+        {
+            "contact_write_size": 0.25,
+            "seed_count": 10,
+            "ordering_rate": 0.1,
+            "breach_observed_rate": 0.5,
+            "asymmetry_seed_rate": 0.4,
+            "mean_grown_rupture_ratio": 1.3380301123916436,
+            "mean_breach_with_prior_repair_count": 3
+        },
+        {
+            "contact_write_size": 0.5,
+            "seed_count": 10,
+            "ordering_rate": 0.1,
+            "breach_observed_rate": 0.3,
+            "asymmetry_seed_rate": 0.3,
+            "mean_grown_rupture_ratio": 1.611431453303703,
+            "mean_breach_with_prior_repair_count": 2.8
+        },
+        {
+            "contact_write_size": 1,
+            "seed_count": 10,
+            "ordering_rate": 0.1,
+            "breach_observed_rate": 0.3,
+            "asymmetry_seed_rate": 0.3,
+            "mean_grown_rupture_ratio": 2.258687115789715,
+            "mean_breach_with_prior_repair_count": 2.8
+        },
+        {
+            "contact_write_size": 2,
+            "seed_count": 10,
+            "ordering_rate": 0.1,
+            "breach_observed_rate": 0.3,
+            "asymmetry_seed_rate": 0.3,
+            "mean_grown_rupture_ratio": 3.0458551189739715,
+            "mean_breach_with_prior_repair_count": 2.8
+        },
+        {
+            "contact_write_size": 4,
+            "seed_count": 10,
+            "ordering_rate": 0.1,
+            "breach_observed_rate": 0.3,
+            "asymmetry_seed_rate": 0.3,
+            "mean_grown_rupture_ratio": 4.021772212563144,
+            "mean_breach_with_prior_repair_count": 2.8
+        }
+    ],
+    "per_seed_metric_count": 10,
+    "trace_row_count": 2880
+}
