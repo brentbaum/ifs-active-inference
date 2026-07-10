@@ -1,0 +1,44 @@
+experiment: sim2
+label: confirmatory
+output_dir: ../runs
+criteria_path: sim2-criteria.yaml
+seeds: [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020]
+model_params:
+  bundle_dir: ../runs/sim1/sim1-t1-2/artifacts
+  bundle_files:
+    - bundle_seed1020_omega1p4_kappa0p0.json
+    - bundle_seed1001_omega1p4_kappa0p1.json
+    - bundle_seed1008_omega1p4_kappa0p1.json
+    - bundle_seed1013_omega1p4_kappa0p1.json
+    - bundle_seed1004_omega1p6_kappa0p0.json
+    - bundle_slow_seed1001_trial105.json
+    - bundle_slow_seed1002_trial95.json
+  n_melt_trials: 60
+  primary_gate: write
+  bmr_interval: 5
+  bmr_intervals: [3, 5, 10]
+  accessibility_functions: [saturating, threshold-linear]
+  early_prompt_max_trial: 10
+  late_prompt_trial: 45
+  high_E: 0.90
+  low_E: 0.05
+  flip_trial: 3
+  pi_part: 4.0
+  beta_se: 1.0
+  lambda_ctx: 1.0
+  gamma_se: 1.2
+  E0: 1.0
+  access_threshold: 0.20
+  access_full: 0.80
+  prior_log_odds: -5.0
+  prior_odds_offsets: [-1.0, 0.0, 1.0]
+  relational_count_good: 1.0
+  relational_count_old: 0.08
+  informational_root_fraction: 0.20
+  ordinary_learning_rate: 1.0
+  attenuation_learning_rate: 0.18
+  policy_learning_rate: 0.25
+  policy_precision: 3.0
+  root_avoidance_bias: 0.48
+  danger_avoidance_bias: 0.55
+  competence_policy_floor: 0.12
