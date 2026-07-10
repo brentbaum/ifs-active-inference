@@ -1,0 +1,148 @@
+{
+    "experiment": "sim7",
+    "phase": "Step A pilot",
+    "config": {
+        "experiment": "sim7",
+        "seeds": [
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010
+        ],
+        "output_dir": "runs",
+        "label": "pilot",
+        "model_params": {
+            "activation_drive": 0.86,
+            "activation_jitter": 0.04,
+            "adult_adversity_probability": 0.68,
+            "adult_capture_rate_threshold": 0.6,
+            "adult_heldout_trials": 12,
+            "adult_trials": 48,
+            "adult_trigger_every": 6,
+            "adult_write_size": 1,
+            "assimilation_capacity": 1,
+            "breach_probability": 0.08,
+            "capture_precision_scale": 2,
+            "capture_threshold": 0.3,
+            "carried_correlation_threshold": -0.25,
+            "contact_write_size": 0.25,
+            "context_precision": 1,
+            "coreg_precision": 2.35,
+            "depth_grid": [
+                0,
+                0.25,
+                0.5,
+                0.75,
+                1
+            ],
+            "disconfirming_trials": 24,
+            "efe_information_weight": 5,
+            "efe_settled_cost": 1.05,
+            "efe_utility_bad": -1.15,
+            "efe_utility_catastrophic": -4.8,
+            "efe_utility_good": 2.2,
+            "h1_loglik_advantage_threshold": 0.02,
+            "h1_win_rate_threshold": 0.7,
+            "low_baseline_prior": [
+                0.46,
+                0.28,
+                0.16,
+                0.07,
+                0.03
+            ],
+            "mapping_learning_rate": 1,
+            "mapping_prior_count": 1,
+            "mapping_settle_probability_by_signal": [
+                0.9,
+                0.6,
+                0.64,
+                0.1
+            ],
+            "melt_capture_drop_threshold": 0.08,
+            "permission_trust_threshold": 0.72,
+            "policy_learning_rate": 0.45,
+            "posttherapy_heldout_trials": 12,
+            "posttherapy_safe_probability": 0.82,
+            "probe_depth_scale": 3,
+            "regulated_channel_safe_probability": 0.9,
+            "regulated_coreg_by_depth": [
+                0.08,
+                0.16,
+                0.36,
+                0.74,
+                0.93
+            ],
+            "regulated_surface_coherent_probability": 0.92,
+            "relational_prior_count": 1,
+            "relational_prior_jitter": 0.25,
+            "revision_learning_rate": 2,
+            "therapy_melt_rate_threshold": 0.6,
+            "therapy_safe_probability": 0.92,
+            "therapy_sessions": 96,
+            "tilt_beta": 1,
+            "tilt_gamma": 1.2,
+            "transition_mix": 0.08,
+            "trigger_adversity_probability": 0.9,
+            "volatility_precision": 1.35,
+            "witnessing_write_size": 18
+        },
+        "sweep_grid": {
+        },
+        "criteria_path": "configs/sim7-criteria.yaml"
+    },
+    "preregistration": {
+        "criteria_file": "configs/sim7-criteria.yaml",
+        "readouts_frozen_before_pilot": true,
+        "adult_capture": "Focal Sim 1-grown cause: carried written reflexivity, structural precision, and severity bank under the Sim 1 probe precision standard.",
+        "therapy_melt": "Adult-to-post-therapy capture drop on the same focal bank, with fixed safe witnessing writes routed through de-authored Sim 4 access.",
+        "model_comparison": "Mean frozen out-of-sample Bernoulli log likelihood on identical adult and post-therapy held-out world segments.",
+        "melt_order": "Descriptive only; no ordering criterion is evaluated."
+    },
+    "metrics": {
+        "carried_capture": {
+            "childhood_written_reflexivity_adult_capture_correlation": -0.9901740718536177,
+            "threshold": -0.25
+        },
+        "adult_capture": {
+            "rate": 0.4,
+            "mean": 0.411786744419937,
+            "threshold": 0.3
+        },
+        "therapy_melt": {
+            "rate": 0.4,
+            "mean_capture_drop": 0.3075138232609713,
+            "mean_probe_revision_change": -0.08919240810767513,
+            "mean_witnessing_evidence_mass": 1440.818772794723
+        },
+        "h2_model_comparison": {
+            "mean_h1_minus_h2_log_likelihood": -0.08955347400601793,
+            "h1_win_rate": 0.3
+        },
+        "descriptive_melt_order": {
+            "counts": {
+                "no_melt": 6,
+                "order_2": 2,
+                "order_3": 2
+            },
+            "claim_status": "not_claimed_after_Sim4_falsification"
+        },
+        "audit": {
+            "bank_identity_rate": 1,
+            "condition_branch_count": 0,
+            "root_bank_replacement_count": 0
+        }
+    },
+    "state_audit": {
+        "formation": "Sim4.grow_stack called once per seed/model; its Sim1-grown arrays are retained by object identity.",
+        "adult": "Same cause arrays, depth posterior, and learned mapping mutated by update_life!.",
+        "therapy": "Same arrays mutated by update_life!; witnessing evidence increments the carried mandate/severity bank.",
+        "probe": "Learning disabled; reads the same arrays without replacement or manual posterior injection.",
+        "h1_h2_difference": "GraphDirection.depth_tilt_target constructor argument only."
+    }
+}

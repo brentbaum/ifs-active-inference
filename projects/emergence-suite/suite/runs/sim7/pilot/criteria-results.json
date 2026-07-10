@@ -1,0 +1,78 @@
+{
+    "criteria_path": "/Users/brentbaum/dev/research/ifs-active-inference/projects/emergence-suite/suite/configs/sim7-criteria.yaml",
+    "summary_path": "/Users/brentbaum/dev/research/ifs-active-inference/projects/emergence-suite/suite/runs/sim7/pilot/summary.json",
+    "results": [
+        {
+            "id": "S7R1.bank_identity",
+            "description": "All cause banks, the depth posterior, and the learned co-regulation mapping retain object identity across every stage in both graph models.",
+            "kind": "success",
+            "metric_path": "metrics.audit.bank_identity_rate",
+            "comparator": ">=",
+            "threshold": 1,
+            "weak_threshold": 0.95,
+            "opposite_threshold": 0.5,
+            "value": 1,
+            "label": "support"
+        },
+        {
+            "id": "S7R1.carried_capture",
+            "description": "Adult capture is negatively correlated with childhood written reflexivity of the same carried focal cause.",
+            "kind": "success",
+            "metric_path": "metrics.carried_capture.childhood_written_reflexivity_adult_capture_correlation",
+            "comparator": "<=",
+            "threshold": -0.25,
+            "weak_threshold": -0.1,
+            "opposite_threshold": 0.1,
+            "value": -0.9901740718536177,
+            "label": "support"
+        },
+        {
+            "id": "S7R1.adult_capture",
+            "description": "At least 60% of H1 pilot lives show adult capture at the frozen 0.30 threshold after ordinary adversity and triggers.",
+            "kind": "success",
+            "metric_path": "metrics.adult_capture.rate",
+            "comparator": ">=",
+            "threshold": 0.6,
+            "weak_threshold": 0.5,
+            "opposite_threshold": 0.2,
+            "value": 0.4,
+            "label": "null"
+        },
+        {
+            "id": "S7R1.therapy_melt",
+            "description": "At least 60% of H1 pilot lives reduce carried focal-cause capture by at least 0.08 after learned co-regulation plus witnessing.",
+            "kind": "success",
+            "metric_path": "metrics.therapy_melt.rate",
+            "comparator": ">=",
+            "threshold": 0.6,
+            "weak_threshold": 0.5,
+            "opposite_threshold": 0.2,
+            "value": 0.4,
+            "label": "null"
+        },
+        {
+            "id": "S7R1.h2_loglik",
+            "description": "The graph-direction prediction earns at least 0.02 nats/held-out event mean H1 advantage without condition-specific dynamics.",
+            "kind": "success",
+            "metric_path": "metrics.h2_model_comparison.mean_h1_minus_h2_log_likelihood",
+            "comparator": ">=",
+            "threshold": 0.02,
+            "weak_threshold": 0,
+            "opposite_threshold": -0.02,
+            "value": -0.08955347400601793,
+            "label": "falsified"
+        },
+        {
+            "id": "A7R1.h2_seed_robustness",
+            "description": "H1 has higher held-out life-segment likelihood than H2 in at least 7/10 paired pilot seeds.",
+            "kind": "adversarial",
+            "metric_path": "metrics.h2_model_comparison.h1_win_rate",
+            "comparator": ">=",
+            "threshold": 0.7,
+            "weak_threshold": 0.6,
+            "opposite_threshold": 0.3,
+            "value": 0.3,
+            "label": "falsified"
+        }
+    ]
+}

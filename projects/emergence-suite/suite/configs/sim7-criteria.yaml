@@ -1,79 +1,90 @@
-preregistered_taxonomy_readout_rules:
-  rule_1: "early acute cause: spawned == true; formation_duration <= 2; route contains early/acute; and position_index is the deepest node in the computed access graph."
-  rule_2: "reactive flood-spawned cause: spawned == true; formation_duration <= 2; route or source contains flood/avoidance_failure; and position_index is above the earliest acute node in the computed access graph."
-  rule_3: "slow-accumulated proactive cause: slow_accumulation == true or spawned == false with formation_duration >= slow_duration_min; and position_index is the outermost node in the computed access graph."
-  rule_scope: "The classifier receives only formation kinetics and computed access-graph position; taxonomy words are output labels only."
+preregistration:
+  phase: "T4.5 Step A pilot only"
+  seeds: [1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 1010]
+  frozen_before_pilot: true
+  readouts:
+    adult_capture: "Correlation of adult focal-cause capture with the same cause's childhood written reflexivity, plus capture prevalence. The cause bank is carried and evolved."
+    therapy_melt: "Adult-to-post-therapy capture drop on the same focal bank after learned co-regulation and access-weighted witnessing evidence."
+    h2_failure: "H1 minus H2 frozen out-of-sample log likelihood on paired held-out adult and post-therapy life segments."
+    melt_order: "Reported descriptively only. No success threshold or outside-in claim is registered."
+
+# The sol-review originals are dead. They remain here as immutable records and
+# are deliberately absent from the active `criteria` list.
+retired_falsified_originals:
+  - id: S7.1
+    status: dead_falsified
+    reason: "Taxonomy recovery read authored route/position metadata."
+  - id: S7.2
+    status: dead_falsified
+    reason: "Ordered melt inherited the now-falsified Sim 4 outside-in claim."
+  - id: S7.3a
+    status: dead_falsified
+    reason: "H2 failure was implemented by condition-specific suppression of evidence and BMR."
+  - id: S7.3b
+    status: dead_falsified
+    reason: "Resilient-world control used a separate scripted life rather than the shared state/update path."
+  - id: S7.4a
+    status: dead_falsified
+    reason: "Adult capture was computed directly from configured low_E."
+  - id: S7.4b
+    status: dead_falsified
+    reason: "Permission sequencing was part of the authored stitched biography."
+  - id: S7.4c
+    status: dead_falsified
+    reason: "Melt was condition-gated and followed by bank replacement."
+  - id: S7.4d
+    status: dead_falsified
+    reason: "Transfer replaced the root bank with [4, 34]."
+  - id: A7.1
+    status: dead_falsified
+    reason: "The complete biography aggregated the dead scripted signatures."
 
 criteria:
-  - id: S7.1
-    description: "Blind fixed taxonomy readout recovers early acute, reactive flood-spawned, and slow-accumulated proactive causes in a majority of seeds."
-    metric_path: metrics.taxonomy_recovery.majority_rate
+  - id: S7R1.bank_identity
+    description: "All cause banks, the depth posterior, and the learned co-regulation mapping retain object identity across every stage in both graph models."
+    metric_path: metrics.audit.bank_identity_rate
     comparator: ">="
-    threshold: 0.51
-    weak_threshold: 0.40
-    opposite_threshold: 0.25
-    kind: success
-  - id: S7.2
-    description: "Layer first-passage order in therapy inverts formation order: outermost slow layer, then flood layer, then earliest acute root."
-    metric_path: metrics.melt_order.inverted_rate
-    comparator: ">="
-    threshold: 0.51
-    weak_threshold: 0.40
-    opposite_threshold: 0.25
-    kind: success
-  - id: S7.3a
-    description: "H2 life fails in the predicted way: no cascade/no melt and a flat transfer probe."
-    metric_path: metrics.controls.h2_life_control_pass_rate
-    comparator: ">="
-    threshold: 0.80
-    weak_threshold: 0.65
-    opposite_threshold: 0.35
-    kind: success
-  - id: S7.3b
-    description: "Resilient-world life fails in the predicted way: no frozen stack forms and adult cue learning remains ordinary/revisable at most."
-    metric_path: metrics.controls.resilient_world_control_pass_rate
-    comparator: ">="
-    threshold: 0.80
-    weak_threshold: 0.65
-    opposite_threshold: 0.35
-    kind: success
-  - id: S7.4a
-    description: "Component signature reappears: adult baseline cue encounters are captured under low depth."
-    metric_path: metrics.composition_integrity.mean_adult_capture_index
-    comparator: ">="
-    threshold: 0.70
-    weak_threshold: 0.62
+    threshold: 1.0
+    weak_threshold: 0.95
     opposite_threshold: 0.50
     kind: success
-  - id: S7.4b
-    description: "Component signature reappears: permission precedes direct root contact in therapy."
-    metric_path: metrics.composition_integrity.permission_precedes_contact_rate
-    comparator: ">="
-    threshold: 0.51
-    weak_threshold: 0.40
-    opposite_threshold: 0.25
+  - id: S7R1.carried_capture
+    description: "Adult capture is negatively correlated with childhood written reflexivity of the same carried focal cause."
+    metric_path: metrics.carried_capture.childhood_written_reflexivity_adult_capture_correlation
+    comparator: "<="
+    threshold: -0.25
+    weak_threshold: -0.10
+    opposite_threshold: 0.10
     kind: success
-  - id: S7.4c
-    description: "Component signature reappears: structural melt is a discrete BMR event."
-    metric_path: metrics.composition_integrity.discrete_melt_rate
+  - id: S7R1.adult_capture
+    description: "At least 60% of H1 pilot lives show adult capture at the frozen 0.30 threshold after ordinary adversity and triggers."
+    metric_path: metrics.adult_capture.rate
     comparator: ">="
-    threshold: 0.51
-    weak_threshold: 0.40
-    opposite_threshold: 0.25
+    threshold: 0.60
+    weak_threshold: 0.50
+    opposite_threshold: 0.20
     kind: success
-  - id: S7.4d
-    description: "Component signature reappears: post-melt transfer follows root coupling on the Sim 3 cue continuum."
-    metric_path: metrics.composition_integrity.transfer_gradient_rate
+  - id: S7R1.therapy_melt
+    description: "At least 60% of H1 pilot lives reduce carried focal-cause capture by at least 0.08 after learned co-regulation plus witnessing."
+    metric_path: metrics.therapy_melt.rate
     comparator: ">="
-    threshold: 0.51
-    weak_threshold: 0.40
-    opposite_threshold: 0.25
+    threshold: 0.60
+    weak_threshold: 0.50
+    opposite_threshold: 0.20
     kind: success
-  - id: A7.1
-    description: "Seed robustness: complete spawn-stratify-descend-melt-transfer biography appears in a majority of at least 20 seeds."
-    metric_path: metrics.seed_robustness.biography_complete_rate
+  - id: S7R1.h2_loglik
+    description: "The graph-direction prediction earns at least 0.02 nats/held-out event mean H1 advantage without condition-specific dynamics."
+    metric_path: metrics.h2_model_comparison.mean_h1_minus_h2_log_likelihood
     comparator: ">="
-    threshold: 0.51
-    weak_threshold: 0.40
-    opposite_threshold: 0.25
+    threshold: 0.02
+    weak_threshold: 0.00
+    opposite_threshold: -0.02
+    kind: success
+  - id: A7R1.h2_seed_robustness
+    description: "H1 has higher held-out life-segment likelihood than H2 in at least 7/10 paired pilot seeds."
+    metric_path: metrics.h2_model_comparison.h1_win_rate
+    comparator: ">="
+    threshold: 0.70
+    weak_threshold: 0.60
+    opposite_threshold: 0.30
     kind: adversarial

@@ -1,17 +1,30 @@
-# Sim 7 Magic Numbers
+# Sim 7 R1 pilot constants
 
-Sim 7 is a composition run, so most constants are inherited from accepted
-component configs. Local constants are preregistered in `configs/sim7.yaml`.
+These values were frozen before the only permitted Step-A pilot (seeds
+1001–1010). They are pilot-only and carry no confirmatory standing. No constant
+was selected from Sim 7 R1 output when this table was written.
 
-| Constant | Value | Source / debt |
+| Constant | Value | Provenance / debt |
 | --- | ---: | --- |
-| `therapy_session_cap` | 96 | IOU. Chosen to exceed Sim 4's 64-session descent window and allow BMR checks every 5 sessions without changing component parameters. |
-| `adult_baseline_trials` | 8 | IOU. Logging-only count for Act II cue encounters; adult capture is read from the accepted D1 precision balance. |
-| `resilient_omega` | 1.40 | Sim 1 high-intensity control-preserved region; paired with high `kappa` as the resilient-world acute event. |
-| `resilient_kappa` | 1.00 | Sim 1 high-control setting used to test no frozen stack under preserved control. |
-| `capture_threshold` | 0.70 | Borrowed from the accepted capture range in Sims 2/5; used only for readout. |
-| `transfer_slope_threshold` | 0.08 | IOU. Minimum post-melt contact-probability slope across the Sim 3 root-coupled continuum. |
-| `flat_transfer_slope_threshold` | 0.03 | IOU. H2/resilient control flatness readout on identical transfer axes. |
-| `post_melt_original_cue_threshold` | 0.62 | Sim 3-style policy readout threshold for original-cue re-encounter after root revision. |
-| `melt_window_fraction_threshold` | 0.10 | Directly from the suite's discreteness convention: >50% structural drop within <=10% of the melt phase. |
-| `slow_duration_min` | 20 | IOU. Classifier cutoff separating slow accumulation from one-event formation. |
+| `adult_trials` | 48 | Design choice: enough chronic ordinary events to evolve the childhood bank without becoming another lifetime-scale formation epoch. |
+| `adult_heldout_trials` | 12 | Sim 3-style frozen model-comparison segment; one quarter of the learned adult segment. |
+| `therapy_sessions` | 96 | Inherited upper window from the de-authored Sim 4 pilot. |
+| `posttherapy_heldout_trials` | 12 | Paired with the adult held-out segment for equal pre/post coverage. |
+| `adult_adversity_probability` | 0.68 | Pilot-only world rate for chronic ordinary adversity. |
+| `adult_trigger_every` | 6 | Pilot-only periodic trigger cadence; it changes the world schedule only. |
+| `trigger_adversity_probability` | 0.90 | Pilot-only trigger severity contrast. |
+| `posttherapy_safe_probability` | 0.82 | Pilot-only held-out post-therapy world rate; never visible to inference. |
+| `adult_write_size` | 1.0 | Unit Dirichlet evidence event. |
+| `witnessing_write_size` | 18.0 | Pilot-only scale debt. Chosen before running to make 96 graded Sim 4-access contacts commensurate with high-precision Sim 1-grown severity banks. |
+| `therapy_safe_probability` | 0.92 | Matches the regulated therapist's coherent-channel reliability scale in Sim 5. |
+| `capture_threshold` | 0.30 | Pilot-only behavioral readout for root-share × dangerous-belief capture. |
+| `melt_capture_drop_threshold` | 0.08 | Pilot-only minimum absolute change judged substantively visible. |
+| `carried_correlation_threshold` | -0.25 | Small-to-moderate negative association required from Sim 1 written reflexivity to adult capture. |
+| `adult_capture_rate_threshold` | 0.60 | Majority-plus-one pilot prevalence. |
+| `therapy_melt_rate_threshold` | 0.60 | Majority-plus-one pilot prevalence. |
+| `h1_loglik_advantage_threshold` | 0.02 | Sim 3-scale nonzero out-of-sample advantage in nats per event. |
+| `h1_win_rate_threshold` | 0.70 | Seven of ten paired seeds. |
+
+Inherited Sim 1 probe constants, Sim 4 EFE/access constants, and Sim 5 learned
+co-regulation constants are repeated in `configs/sim7.yaml` for auditability.
+The two H models have no separate constants.
