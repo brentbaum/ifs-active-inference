@@ -152,3 +152,19 @@ preregistered at configs/sim6a-robustness-confirmatory.yaml (fresh seeds
 6001-6020, train/held-out = first/second half) with scaled criteria. The pilot's
 estimator attempt-1 (mismatched historical transition, r=0.50) is retained at
 runs/sim6a/pilot-attempt1/ as an audit record.
+
+## Step B confirmatory verdict (2026-07-10, fresh seeds 6001-6020): FALSIFIED at the preregistered standards
+
+The pilot's weak/mixed signals resolved downward, not up. Decoupled signature
+12/20 (true per-seed rate ~0.6 — the pilot's 8/10 was gate-edge luck); joint
+volume 0.062 (5/81 points at the 0.8-fraction gate) versus the 0.50 claim; the
+non-monotone null leaked 9/20 and flat leaked 5/20 — the four-part collapse
+signature is NOT specific to the theory's volatility mapping in this regime.
+What survives: reversed-mapping null clean (0/20) and held-out identifiability
+r=0.706 (fit first half, evaluate second). Honest reading: Sim 6a Stage 1's
+collapse transition was real in its original coupled-schedule setting, but the
+ROBUSTNESS of the claim dies under decoupling + joint perturbation; §9 must not
+claim it beyond the original setting. No retuning was performed on confirmatory
+data. (Post-run label fix: summary's per_grid_seed_requirement field previously
+printed a stale constant 8; the executed gate was the preregistered 0.8
+fraction, i.e. 16/20, throughout.)

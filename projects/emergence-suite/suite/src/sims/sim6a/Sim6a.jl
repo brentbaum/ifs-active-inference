@@ -1303,7 +1303,7 @@ function run_sim6a_robustness(config::ExperimentConfig, params::Sim6aParams, out
             transition_volume_fraction = mean(row.transition_survives for row in joint_rows),
             surviving_grid_points = count(row -> row.transition_survives == 1.0, joint_rows),
             total_grid_points = length(joint_rows),
-            per_grid_seed_requirement = 8,
+            per_grid_seed_requirement = ceil(Int, 0.8 * length(config.seeds)),
         ),
         heldout = (
             mean_truth_correlation = mean(row.truth_correlation for row in heldout_rows),

@@ -1,0 +1,151 @@
+{
+    "experiment": "sim6a",
+    "analysis": "T4.7 robustness pilot",
+    "config": {
+        "experiment": "sim6a",
+        "seeds": [
+            6001,
+            6002,
+            6003,
+            6004,
+            6005,
+            6006,
+            6007,
+            6008,
+            6009,
+            6010,
+            6011,
+            6012,
+            6013,
+            6014,
+            6015,
+            6016,
+            6017,
+            6018,
+            6019,
+            6020
+        ],
+        "output_dir": "projects/emergence-suite/suite/runs",
+        "label": "confirmatory",
+        "model_params": {
+            "beta": 1,
+            "depth_grid": [
+                0,
+                0.25,
+                0.5,
+                0.75,
+                1
+            ],
+            "gamma": 1.15,
+            "initial_depth_prior": [
+                0.03,
+                0.05,
+                0.1,
+                0.27,
+                0.55
+            ],
+            "lambda_ctx": 0.9,
+            "latent_initial_depth": 0.9,
+            "latent_lower_bound": 0.08,
+            "latent_process_noise": 0.012,
+            "latent_upper_bound": 0.92,
+            "latent_velocity": 0.055,
+            "likelihood_fit_smoothing": 0.5,
+            "n_trials": 72,
+            "observation_probability": 0.82,
+            "pi_part": 4,
+            "robustness_mode": true,
+            "safety_depth_prior": [
+                0.02,
+                0.04,
+                0.09,
+                0.25,
+                0.6
+            ],
+            "signature_capture_rise": 0.04,
+            "signature_depth_drop": 0.18,
+            "signature_precision_drop": 0.2,
+            "signature_recovery_fraction": 0.75,
+            "transition_mix": 0.06
+        },
+        "sweep_grid": {
+            "beta_gamma_scale": [
+                0.5,
+                1.0,
+                2.0
+            ],
+            "likelihood_matrix": [
+                "diffuse",
+                "theory",
+                "concentrated"
+            ],
+            "policy_gain_scale": [
+                0.5,
+                1.0,
+                2.0
+            ],
+            "safety_high_state_mass": [
+                0.35,
+                0.6,
+                0.8
+            ]
+        },
+        "criteria_path": "projects/emergence-suite/suite/configs/sim6a-robustness-criteria-confirmatory.yaml"
+    },
+    "model_contract": {
+        "latent_process": "autonomous reflected stochastic depth trajectory; no trial_spec or biography phase input",
+        "observation_schedule": "Bernoulli availability sampled independently of latent depth; emissions sampled from P(volatility | latent depth)",
+        "null_evaluation": "null-generated emissions evaluated by the frozen theory-mapping agent",
+        "heldout_protocol": "emission and transition matrices fitted on first five seed trajectories; forward-backward recovery evaluated on the other five",
+        "collapse_signature": "precision drop AND inferred-depth drop AND capture rise AND precision recovery"
+    },
+    "metrics": {
+        "decoupled": {
+            "signature_seed_count": 12,
+            "evaluable_seed_count": 20,
+            "seed_count": 20
+        },
+        "nulls": {
+            "flat_signature_seed_count": 5,
+            "reversed_signature_seed_count": 0,
+            "nonmonotone_signature_seed_count": 9,
+            "max_signature_seed_count": 9
+        },
+        "joint": {
+            "transition_volume_fraction": 0.06172839506172839,
+            "surviving_grid_points": 5,
+            "total_grid_points": 81,
+            "per_grid_seed_requirement": 8
+        },
+        "heldout": {
+            "mean_truth_correlation": 0.7060169128890671,
+            "min_truth_correlation": 0.4164501824230322,
+            "training_seeds": [
+                6001,
+                6002,
+                6003,
+                6004,
+                6005,
+                6006,
+                6007,
+                6008,
+                6009,
+                6010
+            ],
+            "heldout_seeds": [
+                6011,
+                6012,
+                6013,
+                6014,
+                6015,
+                6016,
+                6017,
+                6018,
+                6019,
+                6020
+            ]
+        }
+    },
+    "per_seed_metric_count": 20,
+    "trace_row_count": 1440
+}
