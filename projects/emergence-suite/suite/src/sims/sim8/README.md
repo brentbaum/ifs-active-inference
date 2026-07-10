@@ -161,3 +161,68 @@ relative to bank mass to kill the peeling artifact. Sol's one-sentence honest
 claim stands as the current register: this pilot shows a functioning
 concurrent-activation testbed whose ordering behavior is not yet separable
 from its own selection and exposure dynamics.
+
+### Iterations 8-11 plan (preregistered 2026-07-10, before any run; Occam pass)
+
+The unifying diagnosis of the sol review: every confound is an ASYMMETRIC
+weighting rule. The elegant fix is removal, not addition.
+
+- **It8 — bilinear observation**: internal write weight = observer's own
+  current-trial posterior responsibility x observed cause's entering
+  activation (x the excess term). One rule, no observer special case. The
+  newborn's birth write is now weighted by its GROWN posterior share of the
+  event it spawned to explain — earned by inference, not by append order.
+  Prediction: direction survives if the newborn genuinely absorbs its birth
+  event (its posterior share is high); dies if not — either is the result.
+- **It9 — shrinkage-to-baseline aversion, normalization removed**: aversion =
+  contrast from a bank smoothed toward the observer's own baseline at fixed
+  pseudo-count k (equal risks read ZERO contrast at any exposure — kills the
+  n/(n+k) exposure confound). Blocking uses ABSOLUTE aversion x own fear; the
+  attribution normalization layer and its 0.01 smoothing are deleted.
+- **It10 — grown protective preference**: protective_share replaced by each
+  cause's counterfactual own-policy argmax (what would I do, from my own
+  banks) — a real role readout, not global-action bookkeeping.
+- **It11 — peeling-proof therapy**: contact writes proportional to target
+  bank mass (relative, not fixed count), and the no-gate (access=1) arm runs
+  as a STANDING control inside the sim; S8.descent only counts seeds where
+  the baseline descends AND the no-gate arm does not.
+
+One run per iteration, logged honestly below, exploratory throughout.
+
+### Iterations 8-11 results (one run each, logged 2026-07-10)
+
+- **It8 (bilinear observation)**: coupling ROSE to 5/10 directional (fraction
+  0.69), descent 4/10, shuffle degradation 3 — removing sol's fatal-1
+  confound made the result stronger. The newborn's formative write survives
+  being weighted by its own grown posterior share of the event it spawned to
+  explain: direction is earned at the birth event by inference, not by
+  append order.
+- **It9 (shrinkage-to-baseline aversion; normalization + 0.01 deleted)**:
+  coupling unchanged (readout is now exposure-fair); descent fell to 3 with
+  zero shuffle degradation — the un-normalized gate (raw contrasts ~0.007-
+  0.04) was too weak to carry ordering, which reverted to bank dynamics.
+  Logged as the honest cost of deleting the laundering layer.
+- **It10 (counterfactual protective preference)**: role readout now grown
+  (softmax over each cause's own outcome banks, sharpness 4); metrics
+  unchanged pending gate magnitude.
+- **It11 (mass-relative contact writes, contact_fraction 0.05; block_gain 12
+  = ~1/(2 x observed max contrast 0.039), pilot-scale-derived; STANDING
+  no-gate control)**: descent 4/10, shuffle degradation 3, no-gate arm passes
+  3 — **gate_earned = 1/7** (seed 1001: descends with the gate, fails
+  without, shuffle destroys it). Two-cause seeds descend gate-free because
+  the catastrophe-born spawn's own aversive fraction orders selection;
+  that is initial-condition ordering, not coupling. Seed 1004's four-layer
+  order muddles at strong gating (root gated to session 17, but 2 before 3).
+
+### Honest standing after the Occam pass
+
+The architecture now satisfies every sol obligation: bilinear symmetric
+observation, exposure-fair contrast, grown roles, no normalization layer,
+mass-relative therapy, and a standing no-gate control inside the metric.
+Correspondingly the result shrank to its unconfounded core: coupling
+directional in 5/10 seeds, and exactly ONE seed whose descent is carried by
+grown coupling alone. That is the true current size of the descent result in
+this model class — smaller and real. Next candidates (preregister first):
+richer worlds (more episodes -> deeper stacks and more formative events),
+and the actor-vs-bystander discount for the reversal seeds (1009 unchanged
+through every iteration).

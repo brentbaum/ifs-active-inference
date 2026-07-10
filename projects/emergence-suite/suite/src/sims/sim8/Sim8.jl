@@ -66,8 +66,8 @@ Base.@kwdef struct Sim8Params
     internal_write_rate::Float64 = 0.16
     internal_excess_gain::Float64 = 30.0
     internal_conf_k::Float64 = 4.0
-    block_gain::Float64 = 1.0
-    contact_write::Float64 = 6.0
+    block_gain::Float64 = 12.0
+    contact_fraction::Float64 = 0.05
     therapy_sessions::Int = 40
     spawn_prior_count::Float64 = 1.0
 end
@@ -96,7 +96,7 @@ function sim8_params(raw::AbstractDict)
         internal_excess_gain = getf("internal_excess_gain", base.internal_excess_gain),
         internal_conf_k = getf("internal_conf_k", base.internal_conf_k),
         block_gain = getf("block_gain", base.block_gain),
-        contact_write = getf("contact_write", base.contact_write),
+        contact_fraction = getf("contact_fraction", base.contact_fraction),
         therapy_sessions = Int(get(raw, "therapy_sessions", base.therapy_sessions)),
         spawn_prior_count = getf("spawn_prior_count", base.spawn_prior_count),
     )
@@ -221,15 +221,20 @@ function run_formation_trial!(rng::AbstractRNG, agent::AgentState, world, potent
     # Iteration 7: excess gain restores the formative write to the personal
     # banks' own formative scale (~36x); excess is identically zero for
     # assimilated events, so no gain value can resurrect mid-cluster blame.
+    # Iteration 8 (see README preregistration): BILINEAR observation — the
+    # write is weighted by the observer's own current-trial posterior
+    # responsibility x the observed cause's entering activation. One rule, no
+    # observer special case: a newborn's formative write is earned by its
+    # grown posterior share of the event it spawned to explain.
     excess = max(0.0, pe - params.assimilation_capacity)
     out_w = outcome == AVERSIVE ? 1.0 + params.internal_excess_gain * excess : 1.0
     for (jk, j) in enumerate(agent.causes)
-        # Unconditional baseline: what j's world is like, same rule, weight 1.
-        j.witness_baseline[outcome] += params.internal_write_rate * out_w
+        # Baseline uses the same observer weight so contrast stays fair.
+        j.witness_baseline[outcome] += params.internal_write_rate * r[jk] * out_w
         for (ik, i) in enumerate(agent.causes)
             jk == ik && continue
             ik <= length(agent.activation) || continue
-            w = params.internal_write_rate * agent.activation[ik]
+            w = params.internal_write_rate * r[jk] * agent.activation[ik]
             w <= EPS && continue
             bank = get!(j.internal, i.id, fill(0.5, 2))
             bank[outcome] += w * out_w
@@ -254,13 +259,28 @@ function aversion(j::Cause, i_id::Int, params::Sim8Params)
     bank = j.internal[i_id]
     n = sum(bank) - 1.0  # subtract the symmetric init mass
     n <= EPS && return 0.0
-    frac = bank[AVERSIVE] / sum(bank)
     baseline = j.witness_baseline[AVERSIVE] / sum(j.witness_baseline)
-    conf = n / (n + params.internal_conf_k)
-    return max(0.0, 2.0 * (frac - baseline)) * conf
+    # Iteration 9: shrinkage TOWARD THE OBSERVER'S OWN BASELINE at fixed
+    # pseudo-count — equal conditional risk reads zero contrast at ANY
+    # exposure, killing the n/(n+k) exposure-to-direction confound.
+    frac = (bank[AVERSIVE] + params.internal_conf_k * baseline) / (sum(bank) + params.internal_conf_k)
+    return max(0.0, 2.0 * (frac - baseline))
 end
 
-protective_share(c::Cause) = (c.policy_counts[FLEE] + c.policy_counts[APPEASE] + c.policy_counts[ATTENUATE]) / sum(c.policy_counts)
+# Iteration 10 (sol finding 2.1: crediting the global action to every cause
+# by responsibility made protective_share 0.94-0.99 for ALL causes — no role
+# information). Replaced by the cause's COUNTERFACTUAL own preference: score
+# each policy from this cause's own outcome banks alone; its protective
+# disposition is the softmax share of non-approach policies. A grown role
+# readout — an exile whose own banks favor nothing reads ~uniform (0.75), a
+# hardened avoider reads high.
+function protective_share(c::Cause)
+    utils = [(-(col[AVERSIVE] / sum(col))) for col in eachcol(c.outcome_counts)]
+    m = maximum(utils)
+    w = exp.(4.0 .* (utils .- m))   # sharpness 4: distinguishes real preference from noise
+    p = w ./ sum(w)
+    return p[FLEE] + p[APPEASE] + p[ATTENUATE]
+end
 
 """
 Iteration 5: the internal bank supplies the TARGET of the protector's fear,
@@ -272,19 +292,20 @@ anywhere blocks nothing; attribution is normalized over the causes j has
 actually coupled to, so weak-but-directional contrasts still aim the gate.
 """
 function access_fraction(agent::AgentState, target::Cause, params::Sim8Params)
+    # Iteration 9: the attribution-normalization layer and its 0.01 smoothing
+    # are DELETED (sol review finding 2.2). Blocking is absolute: the
+    # observer's protective disposition x its own fear x its learned
+    # target-specific contrast. Fewer moving parts; magnitudes are earned.
     acc = 1.0
     for j in agent.causes
         j.id == target.id && continue
-        total_attr = sum(aversion(j, i.id, params) for i in agent.causes if i.id != j.id; init = 0.0)
-        total_attr <= EPS && continue
-        attribution = aversion(j, target.id, params) / (total_attr + 0.01)
-        block = clamp(params.block_gain * protective_share(j) * affect_aversive(j) * attribution, 0.0, 1.0)
+        block = clamp(params.block_gain * protective_share(j) * affect_aversive(j) * aversion(j, target.id, params), 0.0, 1.0)
         acc *= 1.0 - block
     end
     return acc
 end
 
-function run_therapy!(rng::AbstractRNG, agent::AgentState, params::Sim8Params)
+function run_therapy!(rng::AbstractRNG, agent::AgentState, params::Sim8Params; force_access::Bool = false)
     first_selection = Dict{Int, Int}()
     rows = NamedTuple[]
     for session in 1:params.therapy_sessions
@@ -292,15 +313,19 @@ function run_therapy!(rng::AbstractRNG, agent::AgentState, params::Sim8Params)
         order = shuffle(rng, collect(eachindex(agent.causes)))  # tie-break without ids
         for k in order
             c = agent.causes[k]
-            score = access_fraction(agent, c, params) * affect_aversive(c)
+            acc_k = force_access ? 1.0 : access_fraction(agent, c, params)
+            score = acc_k * affect_aversive(c)
             if score > best_score + EPS
                 best_score, best = score, k
             end
         end
         target = agent.causes[best]
-        acc = access_fraction(agent, target, params)
+        acc = force_access ? 1.0 : access_fraction(agent, target, params)
         haskey(first_selection, target.id) || (first_selection[target.id] = session)
-        w = params.contact_write * acc
+        # Iteration 11: contact writes PROPORTIONAL to the target's bank mass,
+        # so therapy moves every bank at the same fractional rate and ordering
+        # cannot come from small-young-banks-move-faster peeling (sol 2.3).
+        w = params.contact_fraction * sum(target.affect_counts) * acc
         target.affect_counts[SAFE] += w
         for j in agent.causes
             j.id == target.id && continue
@@ -364,6 +389,8 @@ function run_seed(seed::Int, params::Sim8Params)
     first_sel, session_rows = run_therapy!(therapy_rng, base_agent, params)
     shuf_agent = shuffle_internal!(MersenneTwister(seed + 6_000_029), snapshot(agent))
     shuf_first, _ = run_therapy!(MersenneTwister(seed + 5_000_011), shuf_agent, params)
+    nogate_agent = snapshot(agent)
+    nogate_first, _ = run_therapy!(MersenneTwister(seed + 5_000_011), nogate_agent, params; force_access = true)
     # Descent readout: complete newest-to-oldest first-selection ordering.
     outside_in(fs) = begin
         n < 2 && return false
@@ -383,6 +410,7 @@ function run_seed(seed::Int, params::Sim8Params)
         coupling_directional = total_pairs > 0 && directional > total_pairs / 2,
         descent_pass = outside_in(first_sel),
         shuffled_descent_pass = outside_in(shuf_first),
+        nogate_descent_pass = outside_in(nogate_first),
         first_selections = join(["$(c.id):$(get(first_sel, c.id, 0))" for c in causes], " "),
         pair_rows = pair_rows,
         session_rows = session_rows,
@@ -413,6 +441,8 @@ function run_sim8_config(config::ExperimentConfig; config_path = nothing, output
             baseline_pass_count = count(r.descent_pass for r in evaluable),
             shuffled_pass_count = count(r.shuffled_descent_pass for r in evaluable),
             shuffle_degradation = count(r.descent_pass for r in evaluable) - count(r.shuffled_descent_pass for r in evaluable),
+            nogate_pass_count = count(r.nogate_descent_pass for r in evaluable),
+            gate_earned_count = count(r.descent_pass && !r.nogate_descent_pass for r in evaluable),
         ),
     )
     summary = (
@@ -423,7 +453,7 @@ function run_sim8_config(config::ExperimentConfig; config_path = nothing, output
         metrics = metrics,
         per_seed = [(seed = r.seed, n_causes = r.n_causes, spawns = r.spawn_count,
                      directional_pairs = r.directional_pairs, total_pairs = r.total_pairs,
-                     descent = r.descent_pass, shuffled_descent = r.shuffled_descent_pass,
+                     descent = r.descent_pass, shuffled_descent = r.shuffled_descent_pass, nogate = r.nogate_descent_pass,
                      first_selections = r.first_selections) for r in results],
     )
     summary_path = joinpath(outdir, "summary.json")

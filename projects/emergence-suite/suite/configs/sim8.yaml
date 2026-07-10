@@ -35,7 +35,7 @@ model_params:
   internal_write_rate: 0.16
   internal_excess_gain: 30.0
   internal_conf_k: 4.0
-  block_gain: 1.0
-  contact_write: 6.0
+  block_gain: 12.0
+  contact_fraction: 0.05
   therapy_sessions: 40
   spawn_prior_count: 1.0
