@@ -11,7 +11,7 @@
             "threshold": 6,
             "weak_threshold": 4,
             "opposite_threshold": 1,
-            "value": 7,
+            "value": 8,
             "label": "support"
         },
         {
@@ -23,8 +23,8 @@
             "threshold": 8,
             "weak_threshold": 6,
             "opposite_threshold": 2,
-            "value": 5,
-            "label": "null"
+            "value": 2,
+            "label": "falsified"
         },
         {
             "id": "S8.descent",
@@ -35,8 +35,8 @@
             "threshold": 8,
             "weak_threshold": 6,
             "opposite_threshold": 2,
-            "value": 4,
-            "label": "null"
+            "value": 0,
+            "label": "falsified"
         },
         {
             "id": "A8.shuffle",
@@ -47,8 +47,8 @@
             "threshold": 3,
             "weak_threshold": 2,
             "opposite_threshold": 0,
-            "value": 3,
-            "label": "support"
+            "value": -1,
+            "label": "falsified"
         }
     ]
 }

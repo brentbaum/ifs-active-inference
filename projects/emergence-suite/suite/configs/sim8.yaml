@@ -27,15 +27,15 @@ model_params:
   aversive_preference: -2.35
   overt_action_cost: 0.03
   attenuation_cost: 0.80
-  # Formation: two crises, each acute + consolidation (Sim 1's epoch structure)
+  policy_softmax_temperature: 1.0
+  # Formation: four crises, each acute + consolidation (Sim 1's epoch structure)
   episodes:
     - [2.6, 0.2, 72, 128]
     - [2.2, 0.35, 48, 96]
-  # New Sim 8 constants (pilot provenance in sim8/magic-numbers.md)
-  internal_write_rate: 0.16
-  internal_excess_gain: 30.0
+    - [2.7, 0.15, 60, 110]
+    - [2.3, 0.3, 48, 96]
+  # Surviving Sim 8 constants (pilot provenance in sim8/magic-numbers.md)
   internal_conf_k: 4.0
-  block_gain: 12.0
   contact_fraction: 0.05
   therapy_sessions: 40
   spawn_prior_count: 1.0

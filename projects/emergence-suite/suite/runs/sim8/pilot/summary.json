@@ -16,47 +16,47 @@
             1010
         ]
     },
-    "mechanism": "parts observe parts on soft responsibility; direction, if any, grown from the two-epoch world",
+    "mechanism": "iteration 12: one conditional table (internal state as context), one arousal-scaled bilinear write rule, access as an ordinary softmax policy; no severity/excess/gain constants",
     "metrics": {
         "formation": {
-            "multi_cause_seed_count": 7,
-            "mean_cause_count": 2.3,
-            "total_spawns": 13
+            "multi_cause_seed_count": 8,
+            "mean_cause_count": 3.3,
+            "total_spawns": 23
         },
         "coupling": {
-            "directional_seed_count": 5,
-            "mean_directional_fraction": 0.6904761904761905
+            "directional_seed_count": 2,
+            "mean_directional_fraction": 0.42083333333333334
         },
         "descent": {
-            "baseline_pass_count": 4,
+            "baseline_pass_count": 0,
             "shuffled_pass_count": 1,
-            "shuffle_degradation": 3,
-            "nogate_pass_count": 3,
-            "gate_earned_count": 1
+            "shuffle_degradation": -1,
+            "nogate_pass_count": 0,
+            "gate_earned_count": 0
         }
     },
     "per_seed": [
         {
             "seed": 1001,
+            "n_causes": 5,
+            "spawns": 4,
+            "directional_pairs": 3,
+            "total_pairs": 10,
+            "descent": false,
+            "shuffled_descent": false,
+            "nogate": false,
+            "first_selections": "1:26 2:0 3:0 4:0 5:1"
+        },
+        {
+            "seed": 1002,
             "n_causes": 3,
             "spawns": 2,
             "directional_pairs": 3,
             "total_pairs": 3,
-            "descent": true,
+            "descent": false,
             "shuffled_descent": false,
             "nogate": false,
-            "first_selections": "1:8 2:4 3:1"
-        },
-        {
-            "seed": 1002,
-            "n_causes": 2,
-            "spawns": 1,
-            "directional_pairs": 1,
-            "total_pairs": 1,
-            "descent": true,
-            "shuffled_descent": false,
-            "nogate": true,
-            "first_selections": "1:8 2:1"
+            "first_selections": "1:17 2:1 3:0"
         },
         {
             "seed": 1003,
@@ -73,37 +73,15 @@
             "seed": 1004,
             "n_causes": 4,
             "spawns": 3,
-            "directional_pairs": 5,
+            "directional_pairs": 2,
             "total_pairs": 6,
             "descent": false,
             "shuffled_descent": false,
             "nogate": false,
-            "first_selections": "1:17 2:3 3:8 4:1"
+            "first_selections": "1:19 2:0 3:1 4:0"
         },
         {
             "seed": 1005,
-            "n_causes": 2,
-            "spawns": 1,
-            "directional_pairs": 1,
-            "total_pairs": 1,
-            "descent": true,
-            "shuffled_descent": true,
-            "nogate": true,
-            "first_selections": "1:4 2:1"
-        },
-        {
-            "seed": 1006,
-            "n_causes": 1,
-            "spawns": 0,
-            "directional_pairs": 0,
-            "total_pairs": 0,
-            "descent": false,
-            "shuffled_descent": false,
-            "nogate": false,
-            "first_selections": "1:1"
-        },
-        {
-            "seed": 1007,
             "n_causes": 3,
             "spawns": 2,
             "directional_pairs": 2,
@@ -111,7 +89,29 @@
             "descent": false,
             "shuffled_descent": false,
             "nogate": false,
-            "first_selections": "1:3 2:1 3:11"
+            "first_selections": "1:19 2:1 3:0"
+        },
+        {
+            "seed": 1006,
+            "n_causes": 4,
+            "spawns": 3,
+            "directional_pairs": 3,
+            "total_pairs": 6,
+            "descent": false,
+            "shuffled_descent": false,
+            "nogate": false,
+            "first_selections": "1:27 2:1 3:0 4:0"
+        },
+        {
+            "seed": 1007,
+            "n_causes": 2,
+            "spawns": 1,
+            "directional_pairs": 0,
+            "total_pairs": 1,
+            "descent": false,
+            "shuffled_descent": true,
+            "nogate": false,
+            "first_selections": "1:1 2:0"
         },
         {
             "seed": 1008,
@@ -126,25 +126,25 @@
         },
         {
             "seed": 1009,
+            "n_causes": 6,
+            "spawns": 5,
+            "directional_pairs": 1,
+            "total_pairs": 15,
+            "descent": false,
+            "shuffled_descent": false,
+            "nogate": false,
+            "first_selections": "1:22 2:0 3:0 4:0 5:0 6:1"
+        },
+        {
+            "seed": 1010,
             "n_causes": 4,
             "spawns": 3,
-            "directional_pairs": 2,
+            "directional_pairs": 3,
             "total_pairs": 6,
             "descent": false,
             "shuffled_descent": false,
             "nogate": false,
-            "first_selections": "1:3 2:6 3:4 4:1"
-        },
-        {
-            "seed": 1010,
-            "n_causes": 2,
-            "spawns": 1,
-            "directional_pairs": 0,
-            "total_pairs": 1,
-            "descent": true,
-            "shuffled_descent": false,
-            "nogate": true,
-            "first_selections": "1:5 2:1"
+            "first_selections": "1:24 2:0 3:0 4:1"
         }
     ]
 }

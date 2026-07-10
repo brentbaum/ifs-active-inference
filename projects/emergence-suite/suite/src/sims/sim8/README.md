@@ -226,3 +226,86 @@ this model class — smaller and real. Next candidates (preregister first):
 richer worlds (more episodes -> deeper stacks and more formative events),
 and the actor-vs-bystander discount for the reversal seeds (1009 unchanged
 through every iteration).
+
+### Iteration 12 — the "no new machinery" rebuild (preregistered 2026-07-10, before any run; Brent-approved)
+
+Three unifications, one deletion hypothesis, richer worlds. Nothing is added;
+special-purpose machinery is replaced by the agent's ordinary machinery.
+
+1. **Internal state is context.** The internal banks, witness_baseline, and
+   affect banks collapse into ONE conditional table per cause: outcome counts
+   conditioned on which cause was active entering the trial. The write rule is
+   the personal arousal-scaled rule, applied once (observer engagement x
+   observed activation, bilinear as in it8). The marginal of the table IS the
+   old affect bank (activations sum to 1), so fear, predictive fit, and mass
+   all read from the same structure. Deleted: internal_write_rate.
+2. **The excess gain deletes itself (hypothesis).** Conditional-vs-marginal
+   contrast should discount expected storms automatically — a marginal IS the
+   agent's expectation, and mid-cluster catastrophes raise conditional and
+   marginal together. Deleted: internal_excess_gain, severity multipliers on
+   internal writes. If reversal seed 1009 persists anyway, the hypothesis is
+   wrong and that is the finding.
+3. **Access is a policy, not a formula.** Contacting part i is an ordinary
+   action: each cause scores allow-vs-leave from its own conditional (shrunk
+   toward its marginal, conf_k unchanged) with the suite's standard
+   preferences; the mass-prior mixture aggregates; access = softmax share of
+   allow at temperature 1. Deleted: block_gain, protective_share, the
+   multiplication chain. Protective disposition now EMERGES as causes whose
+   conditional about the target is worse than their marginal voting against
+   contact. Therapy contact writes flow through the SAME conditional-table
+   write path (a session is a trial in which the target is active).
+4. **Richer worlds:** four crises (episodes at omega 2.6/2.2/2.7/2.3), since
+   two acute clusters starve the coupling regardless of mechanism.
+
+Preregistered predictions (one run, logged either way): coupling survives
+unification (>=4/10 directional) or the result was machinery-dependent;
+1009's reversal resolves if the marginal auto-discount is real; richer worlds
+give >=8/10 multi-cause seeds; gate_earned >= 2. Controls unchanged: shuffle,
+standing no-gate arm, gate_earned standard. A predictive out-of-sample
+standard (grown map vs shuffled map predicting held-out gating) is the
+planned next upgrade, not in this run.
+
+**Iteration 12 RESULT: predictions 2 and 4 falsified; 3 confirmed.** Richer
+worlds work (8/10 multi-cause, 19 spawns, one six-cause stack). Coupling
+collapsed to 1/10 and gate_earned to 0: with the excess amplification gone,
+the formative write is written at the newborn's mass-prior responsibility
+(~0.5% at its own birth) and drowns in the shrinkage prior; several causes
+were never contacted at all. The marginal-discount hypothesis is falsified AS
+A REPLACEMENT for formative amplification — unassimilable events must write
+harder, which is the paper's own capture principle and not removable.
+
+### Iteration 13 (preregistered before running): restore two SIM 1 frozen semantics that iteration 12 over-deleted
+
+(a) The spawn-trial write is assigned wholly to the newborn — Sim 1's own
+spawn_cause! semantic (in latent-cause terms, spawning IS the assignment of
+the unassimilable event to the new cause). This gives the formative write
+full weight through the ordinary arousal-scaled rule; no gain constant.
+(b) Severity beliefs (Sim 1's severity_counts, ordinary-biased prior
+[1.0, 0.05]) enter the predictive; newborns start FLAT [0.5, 0.5] because
+they are born of the event the old ordinary-world model could not claim. On
+catastrophic trials a newborn's severity-predictive beats an
+ordinary-adapted cause ~10x — grown separation, same rule for everyone.
+Predictions: coupling recovers to >=4/10 with no gain constants anywhere;
+never-contacted causes resolve (newborns get real mass at birth);
+gate_earned >= 2. If coupling stays collapsed, the unified-table design
+itself dilutes the signal and the iteration-11 architecture stands as the
+model. One run, logged either way.
+
+**Iteration 13 RESULT: coupling partially recovers (2/10, fraction 0.42;
+formation rich at 23 spawns, six-cause stacks); therapy BREAKS legibly —
+descent 0/8.** The access policy gates hard and creates a deadlock the
+multiplicative gate never had: gated parts are never contacted, so their
+gates never relax; and contacting a protector makes it MORE protective,
+because safety raises its leave-things-be utility while its conditional about
+the exile stays frozen. The unified model has re-derived, from arithmetic,
+IFS's own claim: a part system cannot open itself from inside — permission
+requires the protector's trust in something OUTSIDE the system (the
+therapist/Self relationship = Sim 5's learned co-regulation regime, §5's gate
+ontology). Per the iteration-13 preregistration fallback: the ITERATION-11
+architecture stands as the reference model; the iteration-12/13 unified
+rebuild is retained on a branch of the log as the more principled design
+awaiting its missing piece. The missing piece is now precisely specified:
+couple Sim 5's learned therapist-trust into the access policy (the protector
+scores contact-with-i under co-regulated expected outcomes, not raw ones).
+That is the next preregistration, and it is a THEORY-DERIVED requirement, not
+a patch.

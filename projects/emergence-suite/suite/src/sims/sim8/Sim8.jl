@@ -1,31 +1,31 @@
 """
 Sim 8 — concurrent part activation: parts observe parts (EXPLORATORY register).
 
-Decision record: mechanism 2 on substrate 1 (Brent, 2026-07-10; see
-projects/emergence-suite/concurrent-activation-sketch.md). Sim 1's frozen
-confirmatory record is untouched; its world functions are imported read-only
-so formation runs in the SAME two-epoch world (acute catastrophe-live, then
-same-omega consolidation).
+Iteration 12 rebuild ("no new machinery", Brent-approved; see README
+preregistration): every special-purpose structure from iterations 1-11 is
+replaced by the agent's ordinary machinery.
 
-Substrate: soft responsibility. Every cause receives writes and contributes to
-policy in proportion to its posterior responsibility — winner-take-all was the
-approximation, this is the mixture it approximated.
+- ONE conditional table per cause: outcome counts conditioned on which cause
+  was active entering the trial. Its marginal is the cause's experience bank
+  (activations sum to one), so predictive fit, fear, and mass are reads of the
+  same structure. "Parts observe parts" is ordinary contextual learning whose
+  context happens to be internal.
+- ONE write rule: the arousal-scaled personal rule, bilinear (observer's
+  current posterior responsibility x observed cause's entering activation).
+  No severity multipliers, no excess gains: conditional-vs-marginal contrast
+  is hypothesized to discount expected storms automatically, because a
+  marginal IS the agent's expectation.
+- Access is a POLICY: contacting part i is an ordinary action each cause
+  scores from its own conditional (allow vs leave-as-is) with the suite's
+  standard preferences; the mass-prior mixture aggregates; access is the
+  softmax share of allow. Protective disposition emerges as causes whose
+  conditional about the target is worse than their marginal voting no.
 
-Mechanism: a cause's observation space includes the ACTIVATION of other
-causes. Each trial, every cause j writes evidence about every other cause i
-into an internal bank, weighted by i's activation entering the trial. Nothing
-directional is coded anywhere: if the later-formed cause ends up expecting
-catastrophe when the earlier one is active, that must come from the epoch
-structure of the world (the protector's formative sample of the exile is the
-crisis; the exile's sample of the protector is the aftermath).
-
-Therapy: contact target selected by draw-toward-pain gated by GROWN access;
-blocking strength for target i = each other cause j's protective policy share
-times j's learned catastrophe expectation about i. Contacts write safe
-evidence into the target AND into every witness's internal bank about the
-target (survived contact relaxes the gate). Access-weighted writes (T4.1c Arm
-W rule) — no all-or-nothing gate anywhere. Descent, if it appears, is read
-out; it is never encoded. The claim is earnable in both directions.
+Sim 1's frozen world is imported read-only. Nothing directional is coded:
+direction, if any, must be grown from who was active entering the
+unassimilable moments. Controls: pair-shuffle of conditional contexts, and a
+standing no-gate (access=1) arm; descent only counts where the baseline
+passes AND the no-gate arm fails (gate_earned).
 """
 module Sim8
 
@@ -43,7 +43,6 @@ const APPROACH = 1
 const FLEE = 2
 const APPEASE = 3
 const ATTENUATE = 4
-const POLICY_NAMES = ["approach", "flee", "appease", "attenuate"]
 const EPS = 1e-12
 
 Base.@kwdef struct Sim8Params
@@ -51,7 +50,6 @@ Base.@kwdef struct Sim8Params
     learning_rate_base::Float64 = 0.16
     learning_rate_arousal_gain::Float64 = 60.0
     arousal_pe_scale::Float64 = 5.2
-    reflexivity_arousal_slope::Float64 = 0.88
     assimilation_capacity::Float64 = 1.0
     spawn_pressure_threshold::Float64 = 1.2
     spawn_pressure_decay::Float64 = 0.72
@@ -60,13 +58,13 @@ Base.@kwdef struct Sim8Params
     aversive_preference::Float64 = -2.35
     overt_action_cost::Float64 = 0.03
     attenuation_cost::Float64 = 0.80
+    policy_softmax_temperature::Float64 = 1.0
     # Formation schedule: episodes of (omega, kappa, acute, consolidation)
-    episodes::Vector{NTuple{4, Float64}} = [(2.6, 0.2, 72.0, 128.0), (2.2, 0.35, 48.0, 96.0)]
-    # New Sim 8 constants (pilot provenance in sim8/magic-numbers.md)
-    internal_write_rate::Float64 = 0.16
-    internal_excess_gain::Float64 = 30.0
+    episodes::Vector{NTuple{4, Float64}} = [
+        (2.6, 0.2, 72.0, 128.0), (2.2, 0.35, 48.0, 96.0),
+        (2.7, 0.15, 60.0, 110.0), (2.3, 0.3, 48.0, 96.0)]
+    # Surviving Sim 8 constants (provenance sim8/magic-numbers.md)
     internal_conf_k::Float64 = 4.0
-    block_gain::Float64 = 12.0
     contact_fraction::Float64 = 0.05
     therapy_sessions::Int = 40
     spawn_prior_count::Float64 = 1.0
@@ -75,14 +73,13 @@ end
 function sim8_params(raw::AbstractDict)
     episodes = haskey(raw, "episodes") ?
         [Tuple(Float64.(ep)) for ep in raw["episodes"]] :
-        [(2.6, 0.2, 72.0, 128.0), (2.2, 0.35, 48.0, 96.0)]
+        Sim8Params().episodes
     base = Sim8Params()
     getf(k, d) = Float64(get(raw, k, d))
     return Sim8Params(
         learning_rate_base = getf("learning_rate_base", base.learning_rate_base),
         learning_rate_arousal_gain = getf("learning_rate_arousal_gain", base.learning_rate_arousal_gain),
         arousal_pe_scale = getf("arousal_pe_scale", base.arousal_pe_scale),
-        reflexivity_arousal_slope = getf("reflexivity_arousal_slope", base.reflexivity_arousal_slope),
         assimilation_capacity = getf("assimilation_capacity", base.assimilation_capacity),
         spawn_pressure_threshold = getf("spawn_pressure_threshold", base.spawn_pressure_threshold),
         spawn_pressure_decay = getf("spawn_pressure_decay", base.spawn_pressure_decay),
@@ -91,11 +88,9 @@ function sim8_params(raw::AbstractDict)
         aversive_preference = getf("aversive_preference", base.aversive_preference),
         overt_action_cost = getf("overt_action_cost", base.overt_action_cost),
         attenuation_cost = getf("attenuation_cost", base.attenuation_cost),
+        policy_softmax_temperature = getf("policy_softmax_temperature", base.policy_softmax_temperature),
         episodes = episodes,
-        internal_write_rate = getf("internal_write_rate", base.internal_write_rate),
-        internal_excess_gain = getf("internal_excess_gain", base.internal_excess_gain),
         internal_conf_k = getf("internal_conf_k", base.internal_conf_k),
-        block_gain = getf("block_gain", base.block_gain),
         contact_fraction = getf("contact_fraction", base.contact_fraction),
         therapy_sessions = Int(get(raw, "therapy_sessions", base.therapy_sessions)),
         spawn_prior_count = getf("spawn_prior_count", base.spawn_prior_count),
@@ -104,20 +99,23 @@ end
 
 mutable struct Cause
     id::Int
-    affect_counts::Vector{Float64}          # [safe, aversive]
+    # THE table: outcome counts conditioned on which cause was active entering
+    # the trial. Everything else is a read of this structure or of the policy
+    # banks below.
+    context_counts::Dict{Int, Vector{Float64}}
     outcome_counts::Matrix{Float64}         # 2 x 4 outcome given policy
     policy_counts::Vector{Float64}
-    reflexive_mass::Float64
-    total_mass::Float64
-    internal::Dict{Int, Vector{Float64}}    # other cause id => [safe, aversive]
-    witness_baseline::Vector{Float64}       # same write rule, unconditional
+    severity_counts::Vector{Float64}        # Sim 1 semantic: [ordinary, catastrophic] given aversive
     born_trial::Int
     spawned::Bool
 end
 
+# Newborns carry a FLAT severity prior — they are born of the event the
+# ordinary-adapted world model could not claim; established causes carry
+# Sim 1's ordinary-biased prior.
 new_cause(id, born, spawned, prior) = Cause(
-    id, fill(prior, 2), fill(prior, 2, 4), fill(prior, 4), 0.0, 0.0,
-    Dict{Int, Vector{Float64}}(), fill(0.5, 2), born, spawned)
+    id, Dict{Int, Vector{Float64}}(), fill(prior, 2, 4), fill(prior, 4),
+    spawned ? [0.5, 0.5] : [1.0, 0.05], born, spawned)
 
 mutable struct AgentState
     causes::Vector{Cause}
@@ -128,19 +126,40 @@ end
 
 function init_agent(params::Sim8Params)
     root = new_cause(1, 0, false, 1.0)
-    # Modest initial world knowledge, symmetric across policies (no direction).
-    root.affect_counts .= [6.0, 4.0]
+    # Modest initial world knowledge under its own context (no direction).
+    root.context_counts[1] = [6.0, 4.0]
     return AgentState([root], [1.0], 0.0, 0)
 end
 
-affect_aversive(c::Cause) = c.affect_counts[AVERSIVE] / sum(c.affect_counts)
-predictive(c::Cause, outcome::Int) = outcome == AVERSIVE ? affect_aversive(c) : 1.0 - affect_aversive(c)
-cause_mass(c::Cause) = sum(c.affect_counts)
+"Marginal of the conditional table = the cause's experience bank."
+function marginal(c::Cause)
+    m = [0.5, 0.5]  # symmetric prior mass, as each context row carries
+    for bank in values(c.context_counts)
+        m .+= bank .- 0.5
+    end
+    return m
+end
 
-function responsibilities(agent::AgentState, outcome::Int)
+function conditional(c::Cause, i_id::Int)
+    get(c.context_counts, i_id, [0.5, 0.5])
+end
+
+affect_aversive(c::Cause) = (m = marginal(c); m[AVERSIVE] / sum(m))
+cause_mass(c::Cause) = sum(marginal(c))
+
+function predictive(c::Cause, outcome::Int, catastrophic::Bool)
+    p = outcome == AVERSIVE ? affect_aversive(c) : 1.0 - affect_aversive(c)
+    if outcome == AVERSIVE
+        p_cat = c.severity_counts[2] / sum(c.severity_counts)
+        p *= catastrophic ? p_cat : 1.0 - p_cat
+    end
+    return p
+end
+
+function responsibilities(agent::AgentState, outcome::Int, catastrophic::Bool)
     prior = [cause_mass(c) for c in agent.causes]
     prior ./= sum(prior)
-    post = [prior[k] * predictive(agent.causes[k], outcome) for k in eachindex(agent.causes)]
+    post = [prior[k] * predictive(agent.causes[k], outcome, catastrophic) for k in eachindex(agent.causes)]
     s = sum(post)
     return s > EPS ? post ./ s : prior
 end
@@ -169,12 +188,11 @@ function run_formation_trial!(rng::AbstractRNG, agent::AgentState, world, potent
     obs = Sim1.observe_environment(rng, potential, kappa, policy_idx, :closed_loop, world, s1p)
     outcome = obs.evidence_outcome == Sim1.AVERSIVE ? AVERSIVE : SAFE
     severity = obs.evidence_severity
-    # Mixture prediction error and arousal (Sim 1 formulas, mixture predictive).
+    catastrophic = outcome == AVERSIVE && severity > 1.5
     prior = [cause_mass(c) for c in agent.causes]; prior ./= sum(prior)
-    mix_pred = sum(prior[k] * predictive(agent.causes[k], outcome) for k in eachindex(agent.causes))
+    mix_pred = sum(prior[k] * predictive(agent.causes[k], outcome, catastrophic) for k in eachindex(agent.causes))
     pe = -log(max(mix_pred, EPS)) * severity
     arousal = 1.0 - exp(-pe / params.arousal_pe_scale)
-    reflexivity = max(0.0, 1.0 - params.reflexivity_arousal_slope * arousal)
     # Spawn gate: surprise excess + flat overt landscape (Sim 1's fork).
     overt = scores[1:3]
     spread = maximum(overt) - minimum(overt)
@@ -182,63 +200,39 @@ function run_formation_trial!(rng::AbstractRNG, agent::AgentState, world, potent
         max(0.0, pe - params.assimilation_capacity)
     spawned = false
     if agent.spawn_pressure >= params.spawn_pressure_threshold && spread < params.efe_flatness_threshold
-        c = new_cause(length(agent.causes) + 1, trial, true, params.spawn_prior_count)
-        push!(agent.causes, c)
+        push!(agent.causes, new_cause(length(agent.causes) + 1, trial, true, params.spawn_prior_count))
         push!(agent.activation, 0.0)
         agent.spawn_count += 1
         agent.spawn_pressure = 0.0
         spawned = true
     end
-    r = responsibilities(agent, outcome)
-    # Soft writes: every cause learns in proportion to responsibility.
-    lr = params.learning_rate_base * (1.0 + params.learning_rate_arousal_gain * arousal / params.arousal_pe_scale)
-    for (k, c) in enumerate(agent.causes)
-        w = lr * r[k]
-        c.affect_counts[outcome] += w
-        c.outcome_counts[outcome, policy_idx] += w
-        c.policy_counts[policy_idx] += r[k]
-        if outcome == AVERSIVE
-            c.reflexive_mass += reflexivity * w
-            c.total_mass += w
-        end
+    # Sim 1's spawn semantic: the triggering trial's write is assigned wholly
+    # to the newborn — spawning IS the assignment of the unassimilable event
+    # to the new cause. All later trials use the ordinary mixture.
+    r = if spawned
+        onehot = zeros(length(agent.causes)); onehot[end] = 1.0; onehot
+    else
+        responsibilities(agent, outcome, catastrophic)
     end
-    # Parts observe parts: j writes about i, weighted by i's activation ENTERING
-    # the trial and by the outcome's SEVERITY (iteration 2: what the protector
-    # learns about the exile is the catastrophe — the unassimilable input, §4 —
-    # not mere valence; both epochs share the ordinary hazard rate, so severity
-    # is the only quantity the world makes asymmetric between them). One
-    # symmetric rule; any direction must be grown by the epoch structure.
-    # Iteration 6 (see README preregistration): attribution forms from
-    # UNASSIMILABLE events only. Internal aversive mass is weighted by
-    # (1 + excess), excess = max(0, pe - assimilation_capacity) — the same
-    # quantity that gates spawning. An expected storm (mid-cluster catastrophe
-    # after beliefs adapt, pe below capacity) is assimilated and carries no
-    # attribution; that expected-storm blame is what reversed the coupling in
-    # seeds 1009/1010. Severity enters through pe, the principled route. The
-    # baseline uses the identical rule so the contrast stays apples-to-apples.
-    # Same lag rule for everyone; direction can only come from who was active
-    # ENTERING the unassimilable moments.
-    # Iteration 7: excess gain restores the formative write to the personal
-    # banks' own formative scale (~36x); excess is identically zero for
-    # assimilated events, so no gain value can resurrect mid-cluster blame.
-    # Iteration 8 (see README preregistration): BILINEAR observation — the
-    # write is weighted by the observer's own current-trial posterior
-    # responsibility x the observed cause's entering activation. One rule, no
-    # observer special case: a newborn's formative write is earned by its
-    # grown posterior share of the event it spawned to explain.
-    excess = max(0.0, pe - params.assimilation_capacity)
-    out_w = outcome == AVERSIVE ? 1.0 + params.internal_excess_gain * excess : 1.0
+    # THE single write rule: arousal-scaled, bilinear (observer's current
+    # posterior responsibility x observed cause's entering activation), into
+    # the observer's conditional table under the observed cause's context.
+    # Summing a cause's writes over contexts gives exactly its old personal
+    # write (activations sum to one) — the marginal IS the experience bank.
+    lr = params.learning_rate_base * (1.0 + params.learning_rate_arousal_gain * arousal / params.arousal_pe_scale)
     for (jk, j) in enumerate(agent.causes)
-        # Baseline uses the same observer weight so contrast stays fair.
-        j.witness_baseline[outcome] += params.internal_write_rate * r[jk] * out_w
         for (ik, i) in enumerate(agent.causes)
-            jk == ik && continue
             ik <= length(agent.activation) || continue
-            w = params.internal_write_rate * r[jk] * agent.activation[ik]
+            w = lr * r[jk] * agent.activation[ik]
             w <= EPS && continue
-            bank = get!(j.internal, i.id, fill(0.5, 2))
-            bank[outcome] += w * out_w
+            bank = get!(j.context_counts, i.id, [0.5, 0.5])
+            bank[outcome] += w
         end
+        # Policy banks unchanged (world-action learning).
+        wj = lr * r[jk]
+        j.outcome_counts[outcome, policy_idx] += wj
+        j.policy_counts[policy_idx] += r[jk]
+        outcome == AVERSIVE && (j.severity_counts[catastrophic ? 2 : 1] += lr * r[jk])
     end
     agent.activation = r
     return (trial = trial, outcome = outcome, spawned = spawned, policy = policy_idx,
@@ -246,63 +240,50 @@ function run_formation_trial!(rng::AbstractRNG, agent::AgentState, world, potent
 end
 
 """
-Learned catastrophe expectation of j about i, CONTRASTIVE (iteration 3): the
-excess of j's severity-weighted aversive fraction conditioned on i's activity
-over j's own unconditional baseline — "when i is active, things are worse than
-my normal." An absolute 0.5 baseline is wrong in a world containing avoidance
-(suppression drives everyone's delivered aversive fraction below half, reading
-all coupling as zero). Conditional-vs-marginal risk is the quantity a Dirichlet
-observer of another part should report. Symmetric rule; earnable either way.
+Learned contrast of j about i: conditional aversive fraction (shrunk toward
+j's own marginal at fixed pseudo-count, so equal risk reads zero at any
+exposure) minus the marginal. The marginal is j's expectation, so expected
+storms raise both terms together and self-discount (iteration-12 hypothesis).
 """
 function aversion(j::Cause, i_id::Int, params::Sim8Params)
-    haskey(j.internal, i_id) || return 0.0
-    bank = j.internal[i_id]
-    n = sum(bank) - 1.0  # subtract the symmetric init mass
+    haskey(j.context_counts, i_id) || return 0.0
+    bank = j.context_counts[i_id]
+    n = sum(bank) - 1.0
     n <= EPS && return 0.0
-    baseline = j.witness_baseline[AVERSIVE] / sum(j.witness_baseline)
-    # Iteration 9: shrinkage TOWARD THE OBSERVER'S OWN BASELINE at fixed
-    # pseudo-count — equal conditional risk reads zero contrast at ANY
-    # exposure, killing the n/(n+k) exposure-to-direction confound.
-    frac = (bank[AVERSIVE] + params.internal_conf_k * baseline) / (sum(bank) + params.internal_conf_k)
-    return max(0.0, 2.0 * (frac - baseline))
-end
-
-# Iteration 10 (sol finding 2.1: crediting the global action to every cause
-# by responsibility made protective_share 0.94-0.99 for ALL causes — no role
-# information). Replaced by the cause's COUNTERFACTUAL own preference: score
-# each policy from this cause's own outcome banks alone; its protective
-# disposition is the softmax share of non-approach policies. A grown role
-# readout — an exile whose own banks favor nothing reads ~uniform (0.75), a
-# hardened avoider reads high.
-function protective_share(c::Cause)
-    utils = [(-(col[AVERSIVE] / sum(col))) for col in eachcol(c.outcome_counts)]
-    m = maximum(utils)
-    w = exp.(4.0 .* (utils .- m))   # sharpness 4: distinguishes real preference from noise
-    p = w ./ sum(w)
-    return p[FLEE] + p[APPEASE] + p[ATTENUATE]
+    m = marginal(j)
+    base = m[AVERSIVE] / sum(m)
+    frac = (bank[AVERSIVE] + params.internal_conf_k * base) / (sum(bank) + params.internal_conf_k)
+    return max(0.0, 2.0 * (frac - base))
 end
 
 """
-Iteration 5: the internal bank supplies the TARGET of the protector's fear,
-not its magnitude — the magnitude is the protector's own catastrophic
-expectation (its personal banks are what the catastrophe made them). Blocking
-of i by j = j's protective policy share x j's own aversive expectation x the
-share of j's danger-attribution that points at i. A cause with no attribution
-anywhere blocks nothing; attribution is normalized over the causes j has
-actually coupled to, so weak-but-directional contrasts still aim the gate.
+Access as an ordinary policy: each cause scores allowing contact with i from
+its own conditional about i (shrunk toward its marginal) versus leaving
+things as they are (its marginal), with the suite's standard preferences; the
+mass-prior mixture aggregates; access is the softmax share of allow. No gain
+constants; protective disposition emerges as causes whose conditional about
+the target is worse than their marginal voting no.
 """
 function access_fraction(agent::AgentState, target::Cause, params::Sim8Params)
-    # Iteration 9: the attribution-normalization layer and its 0.01 smoothing
-    # are DELETED (sol review finding 2.2). Blocking is absolute: the
-    # observer's protective disposition x its own fear x its learned
-    # target-specific contrast. Fewer moving parts; magnitudes are earned.
-    acc = 1.0
-    for j in agent.causes
-        j.id == target.id && continue
-        block = clamp(params.block_gain * protective_share(j) * affect_aversive(j) * aversion(j, target.id, params), 0.0, 1.0)
-        acc *= 1.0 - block
+    prior = [cause_mass(c) for c in agent.causes]
+    prior ./= sum(prior)
+    u_allow = 0.0
+    u_leave = 0.0
+    for (k, c) in enumerate(agent.causes)
+        m = marginal(c)
+        base = m[AVERSIVE] / sum(m)
+        p_av = if c.id == target.id
+            base
+        else
+            bank = conditional(c, target.id)
+            (bank[AVERSIVE] + params.internal_conf_k * base) / (sum(bank) + params.internal_conf_k)
+        end
+        u_allow += prior[k] * (params.safe_preference * (1.0 - p_av) + params.aversive_preference * p_av)
+        u_leave += prior[k] * (params.safe_preference * (1.0 - base) + params.aversive_preference * base)
     end
-    return acc
+    t = max(params.policy_softmax_temperature, EPS)
+    ea = exp(u_allow / t)
+    return ea / (ea + exp(u_leave / t))
 end
 
 function run_therapy!(rng::AbstractRNG, agent::AgentState, params::Sim8Params; force_access::Bool = false)
@@ -310,7 +291,7 @@ function run_therapy!(rng::AbstractRNG, agent::AgentState, params::Sim8Params; f
     rows = NamedTuple[]
     for session in 1:params.therapy_sessions
         best_score, best = -Inf, 0
-        order = shuffle(rng, collect(eachindex(agent.causes)))  # tie-break without ids
+        order = shuffle(rng, collect(eachindex(agent.causes)))
         for k in order
             c = agent.causes[k]
             acc_k = force_access ? 1.0 : access_fraction(agent, c, params)
@@ -322,14 +303,12 @@ function run_therapy!(rng::AbstractRNG, agent::AgentState, params::Sim8Params; f
         target = agent.causes[best]
         acc = force_access ? 1.0 : access_fraction(agent, target, params)
         haskey(first_selection, target.id) || (first_selection[target.id] = session)
-        # Iteration 11: contact writes PROPORTIONAL to the target's bank mass,
-        # so therapy moves every bank at the same fractional rate and ordering
-        # cannot come from small-young-banks-move-faster peeling (sol 2.3).
-        w = params.contact_fraction * sum(target.affect_counts) * acc
-        target.affect_counts[SAFE] += w
+        # Contact = a trial in which the target is active and the outcome is
+        # safe; everyone writes through the SAME conditional-table path.
+        # Mass-relative so ordering cannot come from small-banks-move-faster.
+        w = params.contact_fraction * cause_mass(target) * acc
         for j in agent.causes
-            j.id == target.id && continue
-            bank = get!(j.internal, target.id, fill(0.5, 2))
+            bank = get!(j.context_counts, target.id, [0.5, 0.5])
             bank[SAFE] += w
         end
         push!(rows, (session = session, target_id = target.id, access = acc,
@@ -338,13 +317,13 @@ function run_therapy!(rng::AbstractRNG, agent::AgentState, params::Sim8Params; f
     return first_selection, rows
 end
 
-"Shuffle control: permute learned aversion banks across ordered pairs."
+"Shuffle control: permute learned conditional banks across ordered pairs."
 function shuffle_internal!(rng::AbstractRNG, agent::AgentState)
-    pairs = [(j, i_id) for j in agent.causes for i_id in keys(j.internal)]
-    banks = [copy(j.internal[i_id]) for (j, i_id) in pairs]
+    pairs = [(j, i_id) for j in agent.causes for i_id in keys(j.context_counts) if i_id != j.id]
+    banks = [copy(j.context_counts[i_id]) for (j, i_id) in pairs]
     perm = shuffle(rng, collect(eachindex(banks)))
     for (idx, (j, i_id)) in enumerate(pairs)
-        j.internal[i_id] = banks[perm[idx]]
+        j.context_counts[i_id] = banks[perm[idx]]
     end
     return agent
 end
@@ -357,7 +336,6 @@ function run_seed(seed::Int, params::Sim8Params)
     world = Sim1.WorldState(0, 0, 0, false)
     s1p = Sim1.Sim1Params()
     trial = 0
-    formation_rows = NamedTuple[]
     for (ei, ep) in enumerate(params.episodes)
         omega, kappa, acute, consolidation = ep
         rng = MersenneTwister(seed + 7919 * ei)
@@ -366,24 +344,22 @@ function run_seed(seed::Int, params::Sim8Params)
             [Sim1.sample_evidence(rng, omega, s1p; catastrophes = false) for _ in 1:Int(consolidation)])
         for potential in stream
             trial += 1
-            push!(formation_rows, run_formation_trial!(action_rng, agent, world, potential, kappa, params, trial))
+            run_formation_trial!(action_rng, agent, world, potential, kappa, params, trial)
         end
     end
     causes = agent.causes
     n = length(causes)
-    # Coupling readout: later-onto-earlier aversion vs the reverse, per pair.
     pair_rows = NamedTuple[]
     directional = 0; total_pairs = 0
     for j in causes, i in causes
         j.born_trial > i.born_trial || continue
-        a_ji = aversion(j, i.id, params)   # later about earlier
-        a_ij = aversion(i, j.id, params)   # earlier about later
+        a_ji = aversion(j, i.id, params)
+        a_ij = aversion(i, j.id, params)
         total_pairs += 1
         directional += a_ji > a_ij + EPS ? 1 : 0
         push!(pair_rows, (seed = seed, later_id = j.id, earlier_id = i.id,
                           later_about_earlier = a_ji, earlier_about_later = a_ij))
     end
-    # Therapy: baseline arm and shuffled-internal control arm on copies.
     therapy_rng = MersenneTwister(seed + 5_000_011)
     base_agent = snapshot(agent)
     first_sel, session_rows = run_therapy!(therapy_rng, base_agent, params)
@@ -391,12 +367,11 @@ function run_seed(seed::Int, params::Sim8Params)
     shuf_first, _ = run_therapy!(MersenneTwister(seed + 5_000_011), shuf_agent, params)
     nogate_agent = snapshot(agent)
     nogate_first, _ = run_therapy!(MersenneTwister(seed + 5_000_011), nogate_agent, params; force_access = true)
-    # Descent readout: complete newest-to-oldest first-selection ordering.
     outside_in(fs) = begin
         n < 2 && return false
         sels = [get(fs, c.id, typemax(Int)) for c in causes]
         births = [c.born_trial for c in causes]
-        order = sortperm(births, rev = true)  # newest first
+        order = sortperm(births, rev = true)
         sorted = sels[order]
         all(sorted[k] < sorted[k + 1] for k in 1:(n - 1)) && all(s -> s != typemax(Int), sels)
     end
@@ -449,7 +424,7 @@ function run_sim8_config(config::ExperimentConfig; config_path = nothing, output
         experiment = "sim8",
         register = "EXPLORATORY (sol re-review convention): pilot-shaped; nothing here is confirmatory evidence",
         config = (label = config.label, seeds = config.seeds),
-        mechanism = "parts observe parts on soft responsibility; direction, if any, grown from the two-epoch world",
+        mechanism = "iteration 12: one conditional table (internal state as context), one arousal-scaled bilinear write rule, access as an ordinary softmax policy; no severity/excess/gain constants",
         metrics = metrics,
         per_seed = [(seed = r.seed, n_causes = r.n_causes, spawns = r.spawn_count,
                      directional_pairs = r.directional_pairs, total_pairs = r.total_pairs,
