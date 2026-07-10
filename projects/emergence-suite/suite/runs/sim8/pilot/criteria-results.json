@@ -1,0 +1,54 @@
+{
+    "criteria_path": "/Users/brentbaum/dev/research/ifs-active-inference/projects/emergence-suite/suite/configs/sim8-criteria.yaml",
+    "summary_path": "/Users/brentbaum/dev/research/ifs-active-inference/projects/emergence-suite/suite/runs/sim8/pilot/summary.json",
+    "results": [
+        {
+            "id": "S8.stacks",
+            "description": "Formation viability: at least 6 of 10 pilot seeds grow two or more causes under the two-crisis schedule (descent is unevaluable otherwise).",
+            "kind": "success",
+            "metric_path": "metrics.formation.multi_cause_seed_count",
+            "comparator": ">=",
+            "threshold": 6,
+            "weak_threshold": 4,
+            "opposite_threshold": 1,
+            "value": 7,
+            "label": "support"
+        },
+        {
+            "id": "S8.coupling_direction",
+            "description": "The grown internal banks are directional: in at least 8 of 10 evaluable seeds, a majority of later/earlier pairs have the later cause expecting catastrophe on the earlier cause's activation more than the reverse. The write rule is symmetric; direction can only come from the world's epoch structure.",
+            "kind": "success",
+            "metric_path": "metrics.coupling.directional_seed_count",
+            "comparator": ">=",
+            "threshold": 8,
+            "weak_threshold": 6,
+            "opposite_threshold": 2,
+            "value": 4,
+            "label": "null"
+        },
+        {
+            "id": "S8.descent",
+            "description": "Outside-in therapy ordering emerges: complete newest-to-oldest first-selection in at least 8 of 10 evaluable seeds, with contact selection = draw-toward-pain gated by grown access only (access-weighted writes, no all-or-nothing gate per T4.1c).",
+            "kind": "success",
+            "metric_path": "metrics.descent.baseline_pass_count",
+            "comparator": ">=",
+            "threshold": 8,
+            "weak_threshold": 6,
+            "opposite_threshold": 2,
+            "value": 3,
+            "label": "null"
+        },
+        {
+            "id": "A8.shuffle",
+            "description": "The ordering is carried by the grown coupling: permuting internal banks across pairs degrades descent passes by at least 3 seeds.",
+            "kind": "adversarial",
+            "metric_path": "metrics.descent.shuffle_degradation",
+            "comparator": ">=",
+            "threshold": 3,
+            "weak_threshold": 2,
+            "opposite_threshold": 0,
+            "value": 1,
+            "label": "null"
+        }
+    ]
+}

@@ -1,7 +1,9 @@
 # Design sketch: concurrent part activation (the v12 architecture question)
 
-*Orchestrator note for collaboration, 2026-07-10. Status: sketch only — nothing
-here is built or preregistered. Context: Sim 4's descent claim closed as
+*Orchestrator note for collaboration, 2026-07-10. Status: DECIDED by Brent
+(2026-07-10): mechanism 2 on substrate 1 — parts observe parts, on soft
+responsibility. Built as Sim 8 (exploratory register; Sim 1's frozen record
+untouched). Original sketch below for the record. Context: Sim 4's descent claim closed as
 unearned after three preregistered cycles (see
 reviews/2026-07-10-t41c-sim4-identifying-experiment.md); the identified gap is
 that the current architecture allows only ONE active part per trial, so a

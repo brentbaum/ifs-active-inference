@@ -1,0 +1,40 @@
+experiment: sim8
+label: pilot
+output_dir: ../runs
+criteria_path: sim8-criteria.yaml
+seeds:
+  - 1001
+  - 1002
+  - 1003
+  - 1004
+  - 1005
+  - 1006
+  - 1007
+  - 1008
+  - 1009
+  - 1010
+model_params:
+  # Inherited Sim 1 constants (provenance sim1/magic-numbers.md, unchanged)
+  learning_rate_base: 0.16
+  learning_rate_arousal_gain: 60.0
+  arousal_pe_scale: 5.2
+  reflexivity_arousal_slope: 0.88
+  assimilation_capacity: 1.0
+  spawn_pressure_threshold: 1.2
+  spawn_pressure_decay: 0.72
+  efe_flatness_threshold: 0.55
+  safe_preference: 1.35
+  aversive_preference: -2.35
+  overt_action_cost: 0.03
+  attenuation_cost: 0.80
+  # Formation: two crises, each acute + consolidation (Sim 1's epoch structure)
+  episodes:
+    - [2.6, 0.2, 72, 128]
+    - [2.2, 0.35, 48, 96]
+  # New Sim 8 constants (pilot provenance in sim8/magic-numbers.md)
+  internal_write_rate: 0.16
+  internal_conf_k: 4.0
+  block_gain: 1.0
+  contact_write: 6.0
+  therapy_sessions: 40
+  spawn_prior_count: 1.0
