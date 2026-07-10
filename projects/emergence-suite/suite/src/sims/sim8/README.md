@@ -130,3 +130,34 @@ Stacks 7/10; coupling 4/10 directional (fraction 0.67); descent 4/10
 chain world -> coupling -> gate -> ordering is proven functional and
 bidirectionally honest; the single open question remains why two worlds grow
 reversed attribution, with a preregistered next mechanism.
+
+## Sol adversarial review (2026-07-10) — orchestrator verification
+
+Review at reviews/2026-07-10-gpt56sol-sim8-review.md. Verdict REJECT of the
+paper-register claim. Verified against code; findings CONFIRMED:
+(1) the newborn observes its own birth trial at full rate (observer writes are
+not weighted by the observer's own activation) while the reverse is zero —
+the formative asymmetry's STRENGTH is a design choice, not purely time's
+arrow; (2) the confidence term n/(n+4) converts exposure asymmetry
+(mass-prior keeps old causes active, so later-about-earlier banks are simply
+BIGGER) into directional strength even at equal conditional risk — a real
+confound; (3) protective_share reads 0.94-0.99 for every cause (global argmax
+policy credited to all by responsibility) — it does no role-differentiating
+work; (4) the 0.01 attribution smoothing is the same order as observed
+contrasts (independently caught by the explainer build); (5) sol's access=1
+diagnostic arm descends 3/7 vs baseline 4/7 — much of the descent readout is
+fixed-write peeling of small young banks, not the gate; only seed 1004's
+order requires the gate. CONTESTED in part: the birth-boundary asymmetry is
+partially time's arrow (a cause cannot be observed before existing, and the
+part IS the explanation of its birth event) — but the burden is now to earn
+direction with the confounds controlled, not to argue the point.
+
+Next-iteration obligations (preregister before any run): observer writes
+weighted by the observer's own current responsibility; exposure-fair aversion
+(no raw n/(n+k) asymmetry); per-cause counterfactual policy preference for
+protective_share; documented shrinkage replacing the 0.01; the access=1
+no-gate arm as a STANDING control that descent must beat; contact writes
+relative to bank mass to kill the peeling artifact. Sol's one-sentence honest
+claim stands as the current register: this pilot shows a functioning
+concurrent-activation testbed whose ordering behavior is not yet separable
+from its own selection and exposure dynamics.
