@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Self-energy and capture — a keystone toy</title>
+<style>
+  :root{
+    --paper:#f6f3ee;
+    --ink:#2b2926;
+    --muted:#8a847a;
+    --rule:#ddd6ca;
+    --part:#cf5a4e;       /* the part's reality — warm threat */
+    --part-soft:#e7a79f;
+    --ctx:#3f86b5;        /* present context — calm */
+    --ctx-soft:#a8cbe0;
+    --self:#d9a536;       /* Self / Self-energy — gold */
+    --self-soft:#f0d79a;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:Charter,"Iowan Old Style",Georgia,serif;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
+  .wrap{max-width:760px;margin:0 auto;padding:64px 24px 120px;}
+  h1{font-size:30px;font-weight:600;line-height:1.2;letter-spacing:-.01em;margin:0 0 6px;}
+  .sub{font-size:15px;color:var(--muted);margin:0 0 40px;font-style:italic;}
+  p{font-size:18px;line-height:1.62;margin:0 0 22px;}
+  .lead{font-size:20px;}
+  em{font-style:italic;}
+  .ui-font{font-family:ui-sans-serif,system-ui,-apple-system,"Helvetica Neue",sans-serif;}
+  .fig{margin:40px 0 14px;}
+  canvas{display:block;width:100%;touch-action:none;cursor:grab;}
+  canvas:active{cursor:grabbing;}
+  .caption{font-size:14px;line-height:1.55;color:var(--muted);
+    font-family:ui-sans-serif,system-ui,sans-serif;margin:0 0 8px;}
+  .caption b{color:var(--ink);font-weight:600;}
+
+  .panel{background:#fbf9f5;border:1px solid var(--rule);border-radius:12px;
+    padding:20px 22px;margin:26px 0;}
+  .ctrl{display:grid;grid-template-columns:128px 1fr 78px;align-items:center;
+    gap:14px;margin:13px 0;font-family:ui-sans-serif,system-ui,sans-serif;font-size:13px;}
+  .ctrl label{color:var(--muted);}
+  .ctrl .name{color:var(--ink);font-weight:600;}
+  .ctrl output{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink);
+    font-size:13px;font-weight:600;}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;
+    border-radius:4px;background:var(--rule);outline:none;margin:0;}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;
+    border-radius:50%;background:var(--self);border:2px solid #fff;
+    box-shadow:0 1px 4px rgba(0,0,0,.22);cursor:grab;}
+  input[type=range].plain::-webkit-slider-thumb{background:#b7afa1;}
+  input[type=range]::-moz-range-thumb{width:18px;height:18px;border:2px solid #fff;
+    border-radius:50%;background:var(--self);cursor:grab;}
+
+  .readout{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;
+    font-family:ui-sans-serif,system-ui,sans-serif;}
+  .chip{font-size:12.5px;padding:6px 11px;border-radius:999px;border:1px solid var(--rule);
+    background:#fff;color:var(--muted);font-variant-numeric:tabular-nums;}
+  .chip b{color:var(--ink);font-weight:600;}
+  .regime{font-family:ui-sans-serif,system-ui,sans-serif;font-size:15px;margin-top:18px;
+    padding:12px 16px;border-radius:9px;font-weight:600;transition:background .3s,color .3s;}
+  .eq{font-family:"Latin Modern Math",Cambria,Georgia,serif;font-size:16px;
+    background:#fbf9f5;border:1px solid var(--rule);border-radius:9px;padding:14px 18px;
+    margin:24px 0;line-height:2;text-align:center;color:#41607a;}
+  .eq .v{font-variant-numeric:tabular-nums;color:var(--ink);font-weight:600;
+    font-family:ui-sans-serif,system-ui,sans-serif;font-size:14px;}
+  .small{font-size:13px;color:var(--muted);}
+  a{color:#9a6a1f;}
+  .footnote{font-size:13.5px;color:var(--muted);line-height:1.55;border-top:1px solid var(--rule);
+    padding-top:18px;margin-top:40px;font-family:ui-sans-serif,system-ui,sans-serif;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Same activation, different relationship</h1>
+  <p class="sub">A keystone toy for the Self-energy mechanism — IFS as active inference</p>
+
+  <p class="lead">Sometimes I am afraid. Sometimes a <em>part</em> of me is afraid. The fear can be
+  identical — the same racing heart, the same urge to flee — yet everything that matters
+  therapeutically turns on which of those two sentences is true.</p>
+
+  <p>This paper's claim is that one variable governs the difference. Call it
+  <strong style="color:#b07d1a">Self-energy</strong>. It does not turn the fear off. It changes
+  how much the fear is allowed to <em>become the whole world</em> — whether an activated part
+  is something you are speaking <em>from</em>, or something you can relate <em>to</em>.</p>
+
+  <p>Everything below is live. Drag the gold knob — or drag the dot on the curve directly — and
+  watch the mechanism move.</p>
+
+  <div class="fig">
+    <canvas id="scene" width="900" height="430"></canvas>
+  </div>
+  <p class="caption"><b>The inference field.</b> The bar is the system's posterior — its working
+  model of what is real. On the left, the activated part insists: <i>helpless, in danger, flee</i>.
+  On the right, present context offers: <i>this room, this adult body, this moment is safe</i>.
+  The split between them is the <b>capture index</b>. The gold conduit is the witnessed-self-state
+  channel; it is functionally silent under capture and opens only when capture falls — and when it
+  opens, the system's self-state can migrate from <i>helpless-alone</i> toward <i>capable-present</i>.</p>
+
+  <div class="panel">
+    <div class="ctrl">
+      <label class="name" style="color:#b07d1a">Self-energy &nbsp;E<sub>t</sub></label>
+      <input id="E" type="range" min="0" max="1" step="0.001" value="0.15">
+      <output id="Eo">0.15</output>
+    </div>
+    <div class="ctrl">
+      <label>activation &nbsp;r<sub>t</sub></label>
+      <input id="r" class="plain" type="range" min="0" max="1.5" step="0.01" value="1.0">
+      <output id="ro">1.00</output>
+    </div>
+    <div class="ctrl">
+      <label>part insistence &nbsp;&pi;<sub>part</sub></label>
+      <input id="pi" class="plain" type="range" min="1" max="10" step="0.1" value="5.7">
+      <output id="pio">5.7</output>
+    </div>
+    <div class="ctrl">
+      <label>context clarity &nbsp;&lambda;<sub>ctx</sub></label>
+      <input id="lam" class="plain" type="range" min="0.2" max="4" step="0.05" value="1.0">
+      <output id="lamo">1.00</output>
+    </div>
+
+    <div id="regime" class="regime"></div>
+
+    <div class="readout">
+      <span class="chip">&pi;<sub>eff</sub> = <b id="cPi">–</b></span>
+      <span class="chip">&lambda;<sub>eff</sub> = <b id="cLam">–</b></span>
+      <span class="chip">capture C<sub>t</sub> = <b id="cC">–</b></span>
+      <span class="chip">channel open = <b id="cW">–</b></span>
+      <span class="chip">self-state = <b id="cS">–</b></span>
+    </div>
+  </div>
+
+  <p>The mechanism is a single precision balance. Self-energy enters in exactly one place — it
+  re-weights how loudly the part's priors speak versus how much present evidence is heard:</p>
+
+  <div class="eq">
+    &pi;<sub>eff</sub> = r<sub>t</sub> &middot; &pi;<sub>part</sub> &middot; e<sup>&minus;&beta;E<sub>t</sub></sup> = <span class="v" id="ePi">–</span>
+    &nbsp;&nbsp;&nbsp;
+    &lambda;<sub>eff</sub> = &lambda;<sub>ctx</sub> &middot; e<sup>+&gamma;E<sub>t</sub></sup> = <span class="v" id="eLam">–</span>
+    <br>
+    C<sub>t</sub> = &pi;<sub>eff</sub> &frasl; (&pi;<sub>eff</sub> + &lambda;<sub>eff</sub>) = <span class="v" id="eC">–</span>
+  </div>
+
+  <p>Now the payoff — and the part of the model that was <em>not</em> put in by hand. Sweep
+  Self-energy from 0 to 1 and watch where self-state revision turns on. It is not a smooth ramp.
+  It is a threshold, and it sits near <strong>E<sub>t</sub> &asymp; 0.6</strong> — an
+  <em>emergent</em> property of capture interacting with the channel, never a parameter we set.</p>
+
+  <div class="fig">
+    <canvas id="curve" width="900" height="380"></canvas>
+  </div>
+  <p class="caption"><b>Capture and revision against Self-energy.</b> The dark curve is capture
+  C<sub>t</sub>(E<sub>t</sub>); the gold curve is how far the witnessed channel opens. Below the
+  threshold the system sits in the red <b>capture</b> band — contact alone (low E<sub>t</sub>)
+  changes little, no matter how long it lasts. Above it, in the blue <b>context-held</b> band,
+  revision rises steeply. Drag the dot to set Self-energy. The labelled ticks are the paper's
+  conditions: <i>contact-only</i>, <i>baseline</i>, and <i>witnessing</i>.</p>
+
+  <p>That sharp turn-on is the whole thesis in one picture. <em>Calm without activation</em> sits
+  on the far right with nothing firing — nothing to revise. <em>Contact without Self-energy</em>
+  (raise <code>r<sub>t</sub></code>, keep E<sub>t</sub> low) sits deep in the red band — the part
+  is screaming and the channel is shut. Only the upper band — activation held in context, the part
+  live but no longer the whole world — lets the corrective signal through.</p>
+
+  <p class="footnote">This is a proof-of-concept for a longer interactive article. The dynamics are
+  the C2 precision-balance from draft&nbsp;v10 §6.1; &beta;,&nbsp;&gamma; and the channel threshold
+  are tuned so the emergent revision sigmoid lands at E<sub>t</sub>&nbsp;&asymp;&nbsp;0.6&ndash;0.65,
+  matching the paper's reported sweep. Self-state here is shown as reversible for legibility — durable
+  revision is the accumulation of this same gating over many context-held repetitions (the learning
+  story comes later in the article).</p>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  // ---- model constants (faithful to draft-v10 §6.1) ----
+  const BETA = 1.6, GAMMA = 1.6;     // Self-energy gain on part vs context precision
+  const CSTAR = 0.45, KW = 11;       // witnessed-channel opening: superlinear below threshold
+  const clamp = (x,a,b)=>Math.max(a,Math.min(b,x));
+  const lerp = (a,b,t)=>a+(b-a)*t;
+  const smooth = (e)=> e<=0?0 : e>=1?1 : e*e*(3-2*e);
+
+  function model(E, r, piPart, lam){
+    const piEff  = r * piPart * Math.exp(-BETA*E);
+    const lamEff = lam * Math.exp(GAMMA*E);
+    const C = piEff/(piEff+lamEff);
+    const W = 1/(1+Math.exp(KW*(C-CSTAR)));   // channel openness (0..1)
+    return {piEff, lamEff, C, W};
+  }
+
+  // ---- state (with eased display values for buttery transitions) ----
+  const S = {E:0.15, r:1.0, pi:5.7, lam:1.0};
+  const D = {C:0, W:0, self:0, piEff:0, lamEff:0};   // displayed/eased
+  let firstFrame = true;
+
+  const $ = id=>document.getElementById(id);
+  const E=$("E"), r=$("r"), pi=$("pi"), lam=$("lam");
+
+  function syncInputs(){
+    S.E=+E.value; S.r=+r.value; S.pi=+pi.value; S.lam=+lam.value;
+    $("Eo").textContent=S.E.toFixed(2);
+    $("ro").textContent=S.r.toFixed(2);
+    $("pio").textContent=S.pi.toFixed(1);
+    $("lamo").textContent=S.lam.toFixed(2);
+  }
+  [E,r,pi,lam].forEach(el=>el.addEventListener("input",syncInputs));
+  syncInputs();
+
+  // ---- canvas setup w/ devicePixelRatio ----
+  function setup(cv){
+    const ctx=cv.getContext("2d");
+    function resize(){
+      const cssW=cv.clientWidth, ratio=cv.height/cv.width;
+      const dpr=window.devicePixelRatio||1;
+      cv.width=Math.round(cssW*dpr); cv.height=Math.round(cssW*ratio*dpr);
+      cv._w=cssW; cv._h=cssW*ratio; cv._dpr=dpr;
+    }
+    resize(); window.addEventListener("resize",resize);
+    return ctx;
+  }
+  const sc=$("scene"), cu=$("curve");
+  const sctx=setup(sc), cctx=setup(cu);
+
+  // colors
+  const COL={paper:"#f6f3ee",ink:"#2b2926",muted:"#8a847a",rule:"#ddd6ca",
+    part:"#cf5a4e",partSoft:"#e7a79f",ctx:"#3f86b5",ctxSoft:"#a8cbe0",
+    self:"#d9a536",selfSoft:"#f0d79a"};
+
+  function roundRect(g,x,y,w,h,rad){
+    g.beginPath();
+    g.moveTo(x+rad,y);
+    g.arcTo(x+w,y,x+w,y+h,rad);
+    g.arcTo(x+w,y+h,x,y+h,rad);
+    g.arcTo(x,y+h,x,y,rad);
+    g.arcTo(x,y,x+w,y,rad);
+    g.closePath();
+  }
+
+  // =================== HERO SCENE ===================
+  let particlePhase=0;
+  function drawScene(){
+    const g=sctx, W=sc._w, H=sc._h, dpr=sc._dpr;
+    g.setTransform(dpr,0,0,dpr,0,0);
+    g.clearRect(0,0,W,H);
+    const m=Math.min(1,W/640);   // scale factor for small screens
+
+    const padX=40*1;
+    const fieldL=padX, fieldR=W-padX, fieldW=fieldR-fieldL;
+    const fieldY=H*0.50, fieldH=78*m;
+    const C=D.C, Wopen=D.W;
+
+    // --- source labels (part / present) ---
+    g.font=`600 ${13*m}px ui-sans-serif,system-ui,sans-serif`;
+    g.textBaseline="alphabetic";
+    g.fillStyle=COL.part; g.textAlign="left";
+    g.fillText("THE PART'S REALITY", fieldL, fieldY-fieldH*0.5-30*m);
+    g.fillStyle=COL.ctx; g.textAlign="right";
+    g.fillText("PRESENT CONTEXT", fieldR, fieldY-fieldH*0.5-30*m);
+
+    // --- posterior bar ---
+    const div=fieldL+fieldW*C;
+    // part side
+    let gp=g.createLinearGradient(fieldL,0,div,0);
+    gp.addColorStop(0,COL.part); gp.addColorStop(1,COL.partSoft);
+    roundRect(g,fieldL,fieldY-fieldH/2,fieldW,fieldH,14*m);
+    g.save(); g.clip();
+    g.fillStyle="#efe7da"; g.fillRect(fieldL,fieldY-fieldH/2,fieldW,fieldH);
+    g.fillStyle=gp; g.fillRect(fieldL,fieldY-fieldH/2,div-fieldL,fieldH);
+    let gc=g.createLinearGradient(div,0,fieldR,0);
+    gc.addColorStop(0,COL.ctxSoft); gc.addColorStop(1,COL.ctx);
+    g.fillStyle=gc; g.fillRect(div,fieldY-fieldH/2,fieldR-div,fieldH);
+    g.restore();
+    // divider
+    g.strokeStyle=COL.self; g.lineWidth=2.5;
+    g.beginPath(); g.moveTo(div,fieldY-fieldH/2-6*m); g.lineTo(div,fieldY+fieldH/2+6*m); g.stroke();
+    // outline
+    g.strokeStyle="rgba(0,0,0,.10)"; g.lineWidth=1;
+    roundRect(g,fieldL,fieldY-fieldH/2,fieldW,fieldH,14*m); g.stroke();
+    // inner phrases (fade by share)
+    g.font=`italic ${12.5*m}px Charter,Georgia,serif`; g.textBaseline="middle";
+    g.fillStyle=`rgba(255,255,255,${0.55+0.4*C})`; g.textAlign="left";
+    if(C>0.16) g.fillText("helpless · danger · flee", fieldL+14*m, fieldY);
+    g.fillStyle=`rgba(255,255,255,${0.55+0.4*(1-C)})`; g.textAlign="right";
+    if(C<0.84) g.fillText("this room · adult body · safe", fieldR-14*m, fieldY);
+
+    // capture % tag on divider
+    g.font=`600 ${12*m}px ui-sans-serif,system-ui,sans-serif`;
+    g.fillStyle=COL.ink; g.textAlign="center"; g.textBaseline="bottom";
+    g.fillText(Math.round(C*100)+"% captured", div, fieldY-fieldH/2-9*m);
+
+    // --- witnessed-self channel (gold conduit, top -> field divider area) ---
+    const chX=fieldL+fieldW*0.5;
+    const topY=24*m, irisY=fieldY-fieldH/2-46*m;
+    // pipe
+    g.lineCap="round";
+    g.strokeStyle=Wopen>0.04?`rgba(217,165,54,${0.30+0.55*Wopen})`:"rgba(150,142,128,.35)";
+    g.setLineDash(Wopen>0.04?[]:[4,5]);
+    g.lineWidth=3*m;
+    g.beginPath(); g.moveTo(chX,topY); g.lineTo(chX,irisY); g.stroke();
+    g.setLineDash([]);
+    // label
+    g.font=`600 ${11.5*m}px ui-sans-serif,system-ui,sans-serif`;
+    g.textAlign="left"; g.textBaseline="middle";
+    g.fillStyle=Wopen>0.5?COL.self:COL.muted;
+    g.fillText(Wopen>0.5?"witnessed self-state · open":"witnessed self-state · silent",
+               chX+12*m, topY+4*m);
+    // iris (aperture)
+    const irisR=7*m+13*m*Wopen;
+    g.beginPath(); g.arc(chX,irisY,12*m,0,Math.PI*2);
+    g.fillStyle="#efe7da"; g.fill();
+    g.strokeStyle="rgba(0,0,0,.12)"; g.lineWidth=1; g.stroke();
+    if(Wopen>0.02){
+      const gr=g.createRadialGradient(chX,irisY,0,chX,irisY,irisR);
+      gr.addColorStop(0,`rgba(231,191,90,${0.55+0.4*Wopen})`);
+      gr.addColorStop(1,"rgba(231,191,90,0)");
+      g.beginPath(); g.arc(chX,irisY,irisR,0,Math.PI*2); g.fillStyle=gr; g.fill();
+    } else {
+      g.strokeStyle=COL.muted; g.lineWidth=1.4;
+      g.beginPath(); g.moveTo(chX-4*m,irisY-4*m); g.lineTo(chX+4*m,irisY+4*m);
+      g.moveTo(chX+4*m,irisY-4*m); g.lineTo(chX-4*m,irisY+4*m); g.stroke();
+    }
+
+    // --- self-state track (below field) ---
+    const trackY=fieldY+fieldH/2+58*m, tL=fieldL+30*m, tR=fieldR-30*m;
+    g.strokeStyle=COL.rule; g.lineWidth=3;
+    g.beginPath(); g.moveTo(tL,trackY); g.lineTo(tR,trackY); g.stroke();
+    g.font=`${11.5*m}px ui-sans-serif,system-ui,sans-serif`; g.textBaseline="top";
+    g.fillStyle=COL.muted; g.textAlign="left";
+    g.fillText("helpless-alone", tL,trackY+12*m);
+    g.textAlign="right"; g.fillText("capable-present", tR,trackY+12*m);
+    // self token
+    const selfX=tL+(tR-tL)*D.self;
+    // gold flow from channel to token when open
+    if(Wopen>0.05){
+      g.strokeStyle=`rgba(217,165,54,${0.18+0.4*Wopen})`;
+      g.lineWidth=2*m; g.setLineDash([2,6]); g.lineDashOffset=-particlePhase;
+      g.beginPath(); g.moveTo(chX,irisY+irisR*0.4);
+      g.bezierCurveTo(chX,trackY-30*m, selfX,trackY-40*m, selfX,trackY-9*m);
+      g.stroke(); g.setLineDash([]);
+    }
+    g.beginPath(); g.arc(selfX,trackY,8.5*m,0,Math.PI*2);
+    g.fillStyle=COL.self; g.fill();
+    g.strokeStyle="#fff"; g.lineWidth=2.5; g.stroke();
+    g.font=`600 ${11*m}px ui-sans-serif,system-ui,sans-serif`;
+    g.fillStyle=COL.muted; g.textAlign="center"; g.textBaseline="bottom";
+    g.fillText("self-state", selfX, trackY-13*m);
+  }
+
+  // =================== CURVE PANEL ===================
+  const CONDS=[
+    {E:0.15,label:"contact-only"},
+    {E:0.40,label:"baseline"},
+    {E:0.85,label:"witnessing"},
+  ];
+  function drawCurve(){
+    const g=cctx, W=cu._w, H=cu._h, dpr=cu._dpr;
+    g.setTransform(dpr,0,0,dpr,0,0);
+    g.clearRect(0,0,W,H);
+    const m=Math.min(1,W/640);
+    const L=52*m, R=W-24*m, T=24*m, B=H-46*m;
+    const px=e=>L+(R-L)*e, py=v=>B-(B-T)*v;   // v in 0..1, 0 bottom
+
+    // bands: capture (top, C>0.5 region shaded red) vs context-held (bottom blue)
+    g.fillStyle="rgba(207,90,78,.07)"; g.fillRect(L,T,R-L,py(0.5)-T);
+    g.fillStyle="rgba(63,134,181,.07)"; g.fillRect(L,py(0.5),R-L,B-py(0.5));
+    // 0.5 line
+    g.strokeStyle="rgba(0,0,0,.12)"; g.setLineDash([3,4]); g.lineWidth=1;
+    g.beginPath(); g.moveTo(L,py(0.5)); g.lineTo(R,py(0.5)); g.stroke(); g.setLineDash([]);
+
+    // axes
+    g.strokeStyle=COL.rule; g.lineWidth=1.2;
+    g.beginPath(); g.moveTo(L,T); g.lineTo(L,B); g.lineTo(R,B); g.stroke();
+    g.font=`${11.5*m}px ui-sans-serif,system-ui,sans-serif`; g.fillStyle=COL.muted;
+    g.textAlign="center"; g.textBaseline="top";
+    g.fillText("Self-energy  Eₜ  →", (L+R)/2, B+24*m);
+    g.save(); g.translate(15*m,(T+B)/2); g.rotate(-Math.PI/2);
+    g.textBaseline="middle"; g.fillText("capture / channel", 0,0); g.restore();
+    g.textAlign="left"; g.textBaseline="bottom";
+    g.fillStyle="rgba(207,90,78,.9)"; g.fillText("capture zone", L+8*m, py(0.5)-6*m);
+    g.fillStyle="rgba(63,134,181,.9)"; g.textBaseline="top";
+    g.fillText("context-held zone", L+8*m, py(0.5)+6*m);
+
+    // capture curve C(E)
+    g.strokeStyle=COL.ink; g.lineWidth=2.4; g.beginPath();
+    for(let i=0;i<=120;i++){const e=i/120;const mm=model(e,S.r,S.pi,S.lam);
+      const X=px(e),Y=py(mm.C); i?g.lineTo(X,Y):g.moveTo(X,Y);}
+    g.stroke();
+    // channel-open / revision curve W(E)  (the emergent sigmoid)
+    g.strokeStyle=COL.self; g.lineWidth=2.4; g.setLineDash([6,4]); g.beginPath();
+    for(let i=0;i<=120;i++){const e=i/120;const mm=model(e,S.r,S.pi,S.lam);
+      const X=px(e),Y=py(mm.W); i?g.lineTo(X,Y):g.moveTo(X,Y);}
+    g.stroke(); g.setLineDash([]);
+
+    // legend (with paper backing so it reads over the curves)
+    g.font=`600 ${11*m}px ui-sans-serif,system-ui,sans-serif`;
+    const lw=174*m, lh=38*m, lx=R-lw, ly=T;
+    roundRect(g,lx,ly,lw,lh,7*m);
+    g.fillStyle="rgba(246,243,238,.9)"; g.fill();
+    g.strokeStyle=COL.rule; g.lineWidth=1; g.stroke();
+    g.textAlign="left"; g.textBaseline="middle";
+    g.fillStyle=COL.ink;
+    g.fillText("— capture  Cₜ", lx+10*m, ly+11*m);
+    g.fillStyle=COL.self; g.fillText("- - channel open / revision", lx+10*m, ly+27*m);
+
+    // condition ticks
+    CONDS.forEach(c=>{
+      g.strokeStyle="rgba(0,0,0,.18)"; g.lineWidth=1;
+      g.beginPath(); g.moveTo(px(c.E),B); g.lineTo(px(c.E),B+5*m); g.stroke();
+      g.fillStyle=COL.muted; g.font=`${10*m}px ui-sans-serif,system-ui,sans-serif`;
+      g.textAlign="center"; g.textBaseline="top";
+      g.fillText(c.label, px(c.E), B+7*m);
+    });
+
+    // current point (draggable) on capture curve
+    const cm=model(S.E,S.r,S.pi,S.lam);
+    const cx=px(S.E), cy=py(cm.C);
+    g.strokeStyle="rgba(217,165,54,.5)"; g.lineWidth=1; g.setLineDash([2,3]);
+    g.beginPath(); g.moveTo(cx,B); g.lineTo(cx,T); g.stroke(); g.setLineDash([]);
+    g.beginPath(); g.arc(cx,cy,8*m,0,Math.PI*2);
+    g.fillStyle=COL.self; g.fill(); g.strokeStyle="#fff"; g.lineWidth=2.5; g.stroke();
+    cu._dot={x:cx,y:cy,r:18*m,L,R};
+  }
+
+  // =================== readouts ===================
+  function updateReadouts(){
+    const m=model(S.E,S.r,S.pi,S.lam);
+    $("cPi").textContent=m.piEff.toFixed(2);
+    $("cLam").textContent=m.lamEff.toFixed(2);
+    $("cC").textContent=m.C.toFixed(2);
+    $("cW").textContent=Math.round(m.W*100)+"%";
+    $("cS").textContent=Math.round(D.self*100)+"%";
+    $("ePi").textContent=m.piEff.toFixed(2);
+    $("eLam").textContent=m.lamEff.toFixed(2);
+    $("eC").textContent=m.C.toFixed(2);
+    // regime banner
+    const rg=$("regime");
+    if(m.C>0.55){
+      rg.style.background="rgba(207,90,78,.12)"; rg.style.color="#9c3a30";
+      rg.textContent="Captured — transparent. The part is the world; you speak from it.";
+    } else if(m.C<0.45){
+      rg.style.background="rgba(63,134,181,.12)"; rg.style.color="#235a7e";
+      rg.textContent="Context-held — opacified. The part is an object you can relate to.";
+    } else {
+      rg.style.background="rgba(217,165,54,.14)"; rg.style.color="#8a5e10";
+      rg.textContent="At the threshold — the bundle is becoming visible as itself.";
+    }
+  }
+
+  // =================== animation loop ===================
+  function frame(){
+    const m=model(S.E,S.r,S.pi,S.lam);
+    const ease=firstFrame?1:0.18;
+    D.C   = lerp(D.C,   m.C,   ease);
+    D.W   = lerp(D.W,   m.W,   ease);
+    // self-state target: channel pulls it toward capable-present; needs the part active to register
+    const target = m.W * smooth(clamp(S.r,0,1));
+    D.self= lerp(D.self,target, firstFrame?1:0.10);
+    firstFrame=false;
+    particlePhase=(particlePhase+0.6)%1000;
+    drawScene(); drawCurve(); updateReadouts();
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  // =================== drag on curve ===================
+  function curvePos(ev){
+    const rect=cu.getBoundingClientRect();
+    const x=(ev.touches?ev.touches[0].clientX:ev.clientX)-rect.left;
+    return x;
+  }
+  let dragging=false;
+  function startDrag(ev){
+    const x=curvePos(ev), d=cu._dot;
+    if(!d) return;
+    // grab if near dot OR anywhere in plot horizontally
+    dragging=true; moveDrag(ev); ev.preventDefault();
+  }
+  function moveDrag(ev){
+    if(!dragging) return;
+    const x=curvePos(ev), d=cu._dot;
+    const e=clamp((x-d.L)/(d.R-d.L),0,1);
+    E.value=e.toFixed(3); syncInputs(); ev.preventDefault();
+  }
+  function endDrag(){dragging=false;}
+  cu.addEventListener("mousedown",startDrag);
+  window.addEventListener("mousemove",moveDrag);
+  window.addEventListener("mouseup",endDrag);
+  cu.addEventListener("touchstart",startDrag,{passive:false});
+  cu.addEventListener("touchmove",moveDrag,{passive:false});
+  cu.addEventListener("touchend",endDrag);
+})();
+</script>
+</body>
+</html>

@@ -54,3 +54,48 @@ The runner emits:
 
 The runner includes a small RxInfer convergence probe for a three-layer Gaussian `h -> z -> y` message path and records iterations, free-energy endpoints, divergence count, and any obstruction in `summary.json` and `status.json`. The basin map itself is an expected-dynamics integration of the empirical-prior precision-balance equations, because the U2 deliverable is a phase portrait rather than a full time-series inversion.
 
+## T4.8 Step A robustness pilot (2026-07-10)
+
+`scripts/run_t48.jl` is an isolated 10-seed pilot. It leaves the historical
+Stage 3 run unchanged, generates observations from an autonomous reflected
+latent-depth process, freezes the agent-side theory response for all null
+worlds, and never applies the historical phase-specific recovery assistance.
+The preregistered complete signature is Self before the first low-depth
+crossing, capture during that excursion, and capture in at least 4/5 states
+after the latent process autonomously returns to high depth.
+
+The pilot verdict is falsified/mixed. Decoupled capture is `0/10`, including
+at zero observation noise, so the theory mapping does not provide the required
+reference transition. Flat, reversed, and non-monotone mappings are also
+`0/10`; these clean counts cannot support specificity because the theory
+reference is absent. Moreover, their driven basin maps are not clean nulls:
+mean post-recovery capture fractions across the 81 initial-state cells are
+`0.757` (flat), `0.884` (reversed), and `0.607` (non-monotone), versus `0.514`
+for theory. The initial condition, rather than the autonomous latent excursion,
+determines which existing basin is occupied.
+
+The autonomous bifurcation result does survive. A single 6-neighbor-connected
+bistable component occupies `66/125 = 0.528` of the preregistered beta x gamma
+x safety-prior grid and contains the historical hysteresis-reference default
+`(1.05, 1.25, 0.60)`. It is a slab across safety masses `0.20–0.60`: each of
+those slices has `22/25` bistable beta/gamma cells, excluding the same three
+low-slope corner cells. No cell is bistable at safety mass `0.80` or `1.00`.
+At the default, the converged basin fractions are `0.963` Self and `0.037`
+capture.
+
+The noise criterion is already dead at SD `0.0`; counts over the registered
+grid `[0, 0.012, 0.035, 0.07, 0.14, 0.28]` are `[0, 0, 0, 0, 2, 4]/10` and
+never reach the `8/10` survival gate. No confirmatory seeds were run and no
+post-pilot retuning was performed.
+
+Run with:
+
+```bash
+~/.juliaup/bin/julia --project=projects/emergence-suite/continuous \
+  projects/emergence-suite/continuous/scripts/run_t48.jl
+```
+
+Pilot outputs are under
+`results/t48_continuous_robustness_pilot/`, including per-mapping SVG basin
+maps, `bifurcation_map.svg`, seed-level null/decoupling metrics, and the noise
+sweep.

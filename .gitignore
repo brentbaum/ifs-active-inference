@@ -6,3 +6,9 @@ paper_reproduction/.DS_Store
 *.m4a
 projects/ifs-paper/*.pdf
 .specstory
+
+# Local agent/runtime artifacts
+.codex-tmp/
+.herenow/
+.claude/worktrees/
+.claude/skills/avoid-ai-writing/

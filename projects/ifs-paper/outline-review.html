@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>v11 Outline — Review Galley</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f5efe3;
+  --paper-deep:#ece4d2;
+  --ink:#231d12;
+  --ink-soft:#5c5340;
+  --ink-faint:#8d8270;
+  --rule:#d8cdb6;
+  --c1:#1e5f58;   /* architecture — petrol */
+  --c2:#8e2f1c;   /* regime — madder */
+  --c3:#3f5d24;   /* content — olive */
+  --g:#a3641a;    /* gating corollary — amber */
+  --s:#6e675c;    /* scaffolding — slate */
+  --fix:#b3372a;
+  --new:#2c6b3f;
+  --import:#2c5a86;
+  --opt:#857c6b;
+  --defer:#9a917e;
+  --v10:#7a6f54;
+  --hl:#fff8e6;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Newsreader',serif;
+  font-size:17px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+/* paper grain */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:1000;opacity:.35;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+a{color:inherit}
+.mono{font-family:'IBM Plex Mono',monospace}
+
+/* ============ MASTHEAD ============ */
+header.masthead{
+  max-width:980px;margin:0 auto;padding:72px 32px 36px;
+  border-bottom:3px double var(--rule);
+  position:relative;
+}
+.kicker{
+  font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--ink-faint);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
+}
+h1.worktitle{
+  font-family:'Fraunces',serif;font-variation-settings:'opsz' 100,'SOFT' 40,'WONK' 1;
+  font-weight:560;font-size:clamp(30px,4.6vw,50px);line-height:1.08;
+  margin:26px 0 8px;letter-spacing:-.01em;
+}
+h1.worktitle .amp{color:var(--c2);font-style:italic}
+.subtitle{
+  font-family:'Fraunces',serif;font-style:italic;font-weight:400;
+  font-size:clamp(17px,2.2vw,22px);color:var(--ink-soft);margin-bottom:34px;
+}
+.thesis{
+  border-left:4px solid var(--c2);
+  padding:6px 0 6px 26px;margin:8px 0 30px;
+  font-family:'Newsreader',serif;font-style:italic;font-weight:400;
+  font-size:clamp(18px,2.4vw,23px);line-height:1.5;color:var(--ink);
+  max-width:56ch;
+}
+.thesis b{font-style:normal;font-weight:600}
+.thesis .lbl{
+  display:block;font-family:'IBM Plex Mono',monospace;font-style:normal;
+  font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--c2);margin-bottom:10px;
+}
+/* version timeline */
+.timeline{display:flex;align-items:flex-start;gap:0;margin-top:10px;flex-wrap:wrap}
+.tl{flex:1 1 140px;min-width:140px;position:relative;padding:14px 18px 4px 0}
+.tl::before{content:"";position:absolute;top:5px;left:0;right:14px;height:1px;background:var(--rule)}
+.tl::after{content:"";position:absolute;top:1px;left:0;width:9px;height:9px;border-radius:50%;background:var(--ink-faint)}
+.tl.now::after{background:var(--c2);box-shadow:0 0 0 4px rgba(142,47,28,.15)}
+.tl .v{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;letter-spacing:.08em}
+.tl.now .v{color:var(--c2)}
+.tl p{font-size:13.5px;color:var(--ink-soft);line-height:1.4;margin-top:2px}
+
+/* ============ BRIEFING ============ */
+.briefing{
+  max-width:980px;margin:42px auto 0;padding:0 32px;
+}
+.briefing-card{
+  background:var(--paper-deep);
+  border:1px solid var(--rule);
+  border-radius:3px;
+  padding:30px 34px 26px;
+  position:relative;
+  box-shadow:0 1px 0 rgba(35,29,18,.06), 0 12px 28px -18px rgba(35,29,18,.25);
+}
+.briefing-card::before{
+  content:"⌘";font-family:'Fraunces',serif;
+  position:absolute;top:-17px;left:30px;background:var(--paper-deep);
+  border:1px solid var(--rule);border-radius:50%;width:34px;height:34px;
+  display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--c2);
+}
+.briefing h2{
+  font-family:'Fraunces',serif;font-weight:600;font-size:21px;margin-bottom:4px;
+}
+.briefing .sub{font-style:italic;color:var(--ink-soft);font-size:15px;margin-bottom:18px}
+.briefing ol{list-style:none;counter-reset:b}
+.briefing ol li{
+  counter-increment:b;position:relative;padding:10px 0 10px 44px;
+  border-top:1px solid var(--rule);font-size:15.5px;line-height:1.5;
+}
+.briefing ol li::before{
+  content:counter(b,decimal-leading-zero);
+  position:absolute;left:0;top:11px;
+  font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--c2);letter-spacing:.05em;
+}
+.briefing b{font-weight:600}
+.briefing .date{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--ink-faint);letter-spacing:.06em}
+
+/* ============ CLAIM SPINE ============ */
+.spine{max-width:980px;margin:56px auto 0;padding:0 32px}
+.spine h2.sect, .outline h2.sect{
+  font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.26em;
+  text-transform:uppercase;color:var(--ink-faint);
+  display:flex;align-items:center;gap:14px;margin-bottom:22px;
+}
+h2.sect::after{content:"";flex:1;height:1px;background:var(--rule)}
+.claims{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.claim{
+  background:#faf6ec;border:1px solid var(--rule);border-radius:3px;
+  padding:22px 22px 18px;position:relative;overflow:hidden;
+  transition:transform .25s ease, box-shadow .25s ease;
+}
+.claim:hover{transform:translateY(-2px);box-shadow:0 14px 30px -18px rgba(35,29,18,.35)}
+.claim::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--cc)}
+.claim .tag{
+  font-family:'Fraunces',serif;font-weight:700;font-size:34px;color:var(--cc);
+  line-height:1;display:flex;align-items:baseline;gap:10px;margin-bottom:8px;
+}
+.claim .tag small{
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:500;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--ink-faint);
+}
+.claim p{font-size:14.5px;line-height:1.55;color:var(--ink-soft)}
+.claim p b{color:var(--ink);font-weight:600}
+.claim.g-card{grid-column:1/-1}
+.rules{
+  margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;
+}
+.rule-box{
+  border:1px dashed var(--ink-faint);border-radius:3px;padding:16px 20px;
+  font-size:14.5px;font-style:italic;color:var(--ink-soft);background:rgba(255,255,255,.25);
+}
+.rule-box b{font-style:normal;color:var(--ink);font-weight:600}
+.rule-box .mono{font-style:normal;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--c2);display:block;margin-bottom:6px}
+
+/* ============ TOOLBAR ============ */
+.toolbar{
+  position:sticky;top:0;z-index:500;
+  background:rgba(245,239,227,.92);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--rule);
+  margin-top:56px;
+}
+.toolbar-inner{
+  max-width:980px;margin:0 auto;padding:10px 32px;
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+}
+.fgroup{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.fgroup .glbl{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);margin-right:2px}
+.fbtn{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.05em;
+  padding:4px 11px;border-radius:999px;border:1px solid var(--rule);
+  background:transparent;color:var(--ink-soft);cursor:pointer;
+  transition:all .15s ease;
+}
+.fbtn:hover{border-color:var(--ink-faint)}
+.fbtn.on{background:var(--fc,var(--ink));border-color:var(--fc,var(--ink));color:#faf6ec}
+.fsep{width:1px;height:20px;background:var(--rule)}
+#search{
+  font-family:'IBM Plex Mono',monospace;font-size:12px;
+  border:1px solid var(--rule);border-radius:999px;background:rgba(255,255,255,.5);
+  padding:5px 14px;color:var(--ink);outline:none;width:150px;transition:width .2s ease;
+}
+#search:focus{width:210px;border-color:var(--ink-faint)}
+.progress{
+  margin-left:auto;display:flex;align-items:center;gap:10px;
+  font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);
+}
+.pbar{width:110px;height:5px;background:var(--rule);border-radius:99px;overflow:hidden}
+.pbar i{display:block;height:100%;width:0%;background:var(--c3);border-radius:99px;transition:width .3s ease}
+#resetReviewed{border:none;background:none;color:var(--ink-faint);cursor:pointer;font-size:10px;font-family:'IBM Plex Mono',monospace;text-decoration:underline dotted}
+
+/* ============ OUTLINE ============ */
+.outline{max-width:980px;margin:48px auto;padding:0 32px}
+.osection{margin-bottom:54px;position:relative}
+.osection > h3{
+  font-family:'Fraunces',serif;font-weight:600;font-size:25px;line-height:1.2;
+  margin-bottom:4px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
+}
+.osection > h3 .secnum{
+  font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:13px;color:var(--c2);
+  letter-spacing:.08em;
+}
+.serves{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;padding:3px 9px;border-radius:999px;
+  border:1px solid currentColor;font-weight:500;
+}
+.osnote{font-style:italic;color:var(--ink-soft);font-size:14.5px;margin:6px 0 16px;max-width:62ch}
+.nodes{list-style:none;border-top:1px solid var(--rule)}
+.node{
+  position:relative;border-bottom:1px solid var(--rule);
+  padding:13px 14px 13px 46px;cursor:default;
+  transition:opacity .25s ease, filter .25s ease, background .15s ease;
+}
+.node:hover{background:rgba(255,255,255,.45)}
+.node::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
+  background:var(--nc,transparent);opacity:.85;
+}
+.node .check{
+  position:absolute;left:16px;top:16px;width:16px;height:16px;border-radius:50%;
+  border:1.5px solid var(--ink-faint);cursor:pointer;background:transparent;
+  transition:all .15s ease;
+}
+.node .check:hover{border-color:var(--c3);transform:scale(1.15)}
+.node.reviewed .check{background:var(--c3);border-color:var(--c3)}
+.node.reviewed .check::after{
+  content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:#faf6ec;font-size:10px;font-weight:700;
+}
+.node.reviewed .ntext{opacity:.45}
+.ntext{font-size:15.5px;line-height:1.55}
+.ntext b{font-weight:600}
+.ntext em.q{font-family:'Fraunces',serif}
+.sub{list-style:none;margin-top:7px}
+.sub li{
+  position:relative;padding:3px 0 3px 22px;font-size:14.5px;color:var(--ink-soft);line-height:1.5;
+}
+.sub li::before{content:"–";position:absolute;left:6px;color:var(--ink-faint)}
+.fixnote{
+  display:block;margin-top:6px;font-size:13.5px;font-style:italic;color:var(--fix);
+  padding-left:14px;border-left:2px solid rgba(179,55,42,.3);line-height:1.45;
+}
+.fixnote.newnote{color:var(--new);border-left-color:rgba(44,107,63,.3)}
+.formula{
+  font-family:'IBM Plex Mono',monospace;font-size:12.5px;background:rgba(255,255,255,.55);
+  border:1px solid var(--rule);border-radius:3px;padding:8px 14px;margin:8px 0 2px;
+  color:var(--ink);overflow-x:auto;white-space:nowrap;
+}
+/* chips */
+.chips{display:inline-flex;gap:5px;flex-wrap:wrap;vertical-align:2px;margin-left:8px}
+.chip{
+  font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:500;letter-spacing:.1em;
+  text-transform:uppercase;padding:2px 7px;border-radius:2px;white-space:nowrap;
+}
+.chip.c1{background:rgba(30,95,88,.12);color:var(--c1)}
+.chip.c2{background:rgba(142,47,28,.12);color:var(--c2)}
+.chip.c3{background:rgba(63,93,36,.13);color:var(--c3)}
+.chip.g{background:rgba(163,100,26,.14);color:var(--g)}
+.chip.s{background:rgba(110,103,92,.13);color:var(--s)}
+.chip.fix{background:var(--fix);color:#faf6ec}
+.chip.new{background:var(--new);color:#faf6ec}
+.chip.import{background:var(--import);color:#faf6ec}
+.chip.v10{background:transparent;border:1px solid var(--rule);color:var(--v10)}
+.chip.v9{background:transparent;border:1px solid var(--import);color:var(--import)}
+.chip.opt{background:transparent;border:1px dashed var(--opt);color:var(--opt)}
+.chip.defer{background:transparent;border:1px solid var(--defer);color:var(--defer);text-decoration:line-through}
+/* filtering states */
+.node.dim{opacity:.18;filter:grayscale(.9)}
+.node.hide-search{display:none}
+/* deferred + open items */
+.endmatter{
+  background:var(--paper-deep);border:1px solid var(--rule);border-radius:3px;
+  padding:26px 30px;margin-bottom:24px;
+}
+.endmatter h3{font-family:'Fraunces',serif;font-size:20px;font-weight:600;margin-bottom:6px}
+.endmatter .sub2{font-style:italic;color:var(--ink-soft);font-size:14.5px;margin-bottom:14px}
+.endmatter ul{list-style:none}
+.endmatter ul li{padding:7px 0 7px 24px;position:relative;font-size:15px;border-top:1px solid var(--rule);color:var(--ink-soft)}
+.endmatter ul li::before{content:"→";position:absolute;left:0;color:var(--g);font-family:'IBM Plex Mono',monospace;font-size:12px;top:9px}
+.endmatter ul.openitems li::before{content:"○";color:var(--c2)}
+footer{
+  max-width:980px;margin:30px auto 70px;padding:24px 32px 0;border-top:3px double var(--rule);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
+  font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-faint);letter-spacing:.08em;
+}
+/* load animation */
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+header.masthead,.briefing{animation:rise .6s ease both}
+.briefing{animation-delay:.1s}
+@media(max-width:640px){
+  .progress{margin-left:0}
+  .node{padding-left:40px}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="kicker">
+    <span>Draft v11 · Claim-Architecture Outline</span>
+    <span>Review Galley · June 2026</span>
+  </div>
+  <h1 class="worktitle">Self-Energy, Witnessing, <span class="amp">&amp;</span> the Revision of Part Beliefs</h1>
+  <p class="subtitle">An Active Inference Account of Internal Family Systems — with Edmundo Lopez</p>
+
+  <div class="thesis">
+    <span class="lbl">Thesis · one sentence</span>
+    A part is an <b>identity-level precision bundle</b> organized around a self-state prior; <b>Self-energy</b> determines whether activation produces capture or context-held activation; and inside the context-held window, <b>relational prediction error</b> reaches the shared self-state root — which is why witnessing-type change <b>generalizes</b> while threat-level change stays local.
+  </div>
+
+  <div class="timeline">
+    <div class="tl"><span class="v">v8</span><p>the original center: bundles, Self-energy, witnessing</p></div>
+    <div class="tl"><span class="v">v9</span><p>the gating pivot — protectors as gate traversal</p></div>
+    <div class="tl"><span class="v">v10</span><p>reverted to the v8 center; transfer test added</p></div>
+    <div class="tl now"><span class="v">v11 ← you are here</span><p>claim spine C1–C3 + G; sims demoted to three contrasts</p></div>
+    <div class="tl"><span class="v">v12</span><p>the gating paper — G made formal</p></div>
+  </div>
+</header>
+
+<section class="briefing">
+  <div class="briefing-card">
+    <h2>Welcome back</h2>
+    <p class="sub">What happened while you were away — six decisions, all recorded in the outline's tags.</p>
+    <ol>
+      <li><span class="date">2026-03-30</span> — <b>PARA restructure.</b> Sim code &amp; figures moved to <span class="mono" style="font-size:12px">~/dev/personal/projects/ifs-active-inference/</span>; the <span class="mono" style="font-size:12px">figures/</span> paths in drafts are dangling until relinked.</li>
+      <li><span class="date">2026-06-10</span> — <b>Gating deferred to v12.</b> "An elaboration I got excited about." v11 keeps the v8/v10 center; gating survives only as corollary <b>G</b> — C1+C3 applied recursively to protectors. No new mechanism.</li>
+      <li><span class="date">2026-06-10</span> — <b>The claim spine replaces "Moves 1/2/3."</b> Three named claims (C1 architecture, C2 regime, C3 content), defined once in §1, referenced by name everywhere.</li>
+      <li><span class="date">2026-06-10</span> — <b>Self-energy <i>is</i> epistemic depth</b> (reflexivity precision; Laukkonen &amp; Chandaria) — a single variable, not the old V<sub>t</sub>/M<sub>t</sub> composite. Autonomic state becomes a described <i>input</i>, not a modeled component. C2 also gains the transparency→opacification framing (guarded: description, not second mechanism).</li>
+      <li><span class="date">2026-06-10</span> — <b>Seminality critique → sims kept but demoted.</b> You considered cutting them entirely. Decision: one compressed section, three contrasts only, led by an epistemology paragraph (existence proofs &amp; prediction generators, never confirmation). "Confirm" purged from the abstract; "exposure" condition renamed <b>contact-only</b> with a steelman in the Discussion; controls/sweep/probe demoted to new Appendix D.</li>
+      <li><span class="date">2026-06-10</span> — <b>Both repos in sync.</b> Work happens in <span class="mono" style="font-size:12px">research/ifs-active-inference</span>; v10, the v11 outline, and the reference papers are synced to the personal PARA repo.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="spine">
+  <h2 class="sect">The Claim Spine</h2>
+  <div class="claims">
+    <div class="claim" style="--cc:var(--c1)">
+      <div class="tag">C1 <small>Architecture</small></div>
+      <p>Parts are <b>identity-level precision bundles</b> (self-state, world-state, policy, expected outcome) in which <b>self-state is the organizing, upstream prior</b>.</p>
+    </div>
+    <div class="claim" style="--cc:var(--c2)">
+      <div class="tag">C2 <small>Regime</small></div>
+      <p><b>Self-energy = epistemic depth</b> sets the precision balance between part-bundle priors and present-context evidence. Under capture the bundle is <b>transparent</b> (perceived through); under context-held activation it is <b>opacified</b> (an object the system can relate to). Revision is possible only for an opacified prior.</p>
+    </div>
+    <div class="claim" style="--cc:var(--c3)">
+      <div class="tag">C3 <small>Content</small></div>
+      <p>Inside the context-held window the operative corrective signal is <b>relational prediction error</b> — the part registering the system's present-moment self-state — and because it revises the <b>shared</b> self-state prior, change <b>generalizes</b> beyond the treated cue.</p>
+    </div>
+    <div class="claim g-card" style="--cc:var(--g)">
+      <div class="tag">G <small>Gating corollary — not a fourth claim</small></div>
+      <p>Protectors are themselves parts (C1 recursively) and relational PE operates on their expectations too (C3 recursively) — so protection organizes into a <b>layered stack</b> and witnessing reaches the exile by <b>descending it</b>. No new mechanism, no new hidden factors. Stated as architecture, tested only indirectly; the formalization is the v12 paper.</p>
+    </div>
+  </div>
+  <div class="rules">
+    <div class="rule-box"><span class="mono">Audit rule</span>Every section node must serve C1, C2, C3, G, or be tagged [S]. Anything that serves none is spread — <b>cut it</b>.</div>
+    <div class="rule-box"><span class="mono">Structural rule</span><b>Theory structures the paper; the simulations are servants of C1–C3</b>, not a second center of gravity. Sims appear once, compressed, as existence proofs and prediction generators — never as confirmation.</div>
+  </div>
+</section>
+
+<nav class="toolbar">
+  <div class="toolbar-inner">
+    <div class="fgroup" id="claimFilters">
+      <span class="glbl">Claim</span>
+      <button class="fbtn" data-f="c1" style="--fc:var(--c1)">C1</button>
+      <button class="fbtn" data-f="c2" style="--fc:var(--c2)">C2</button>
+      <button class="fbtn" data-f="c3" style="--fc:var(--c3)">C3</button>
+      <button class="fbtn" data-f="g" style="--fc:var(--g)">G</button>
+      <button class="fbtn" data-f="s" style="--fc:var(--s)">S</button>
+    </div>
+    <div class="fsep"></div>
+    <div class="fgroup" id="statusFilters">
+      <span class="glbl">Status</span>
+      <button class="fbtn" data-f="new" style="--fc:var(--new)">new</button>
+      <button class="fbtn" data-f="fix" style="--fc:var(--fix)">fix</button>
+      <button class="fbtn" data-f="import" style="--fc:var(--import)">import</button>
+      <button class="fbtn" data-f="v10" style="--fc:var(--v10)">v10</button>
+      <button class="fbtn" data-f="opt" style="--fc:var(--opt)">opt</button>
+    </div>
+    <div class="fsep"></div>
+    <input id="search" type="text" placeholder="find…">
+    <div class="progress">
+      <span id="pcount">0/0 reviewed</span>
+      <div class="pbar"><i id="pfill"></i></div>
+      <button id="resetReviewed" title="clear review marks">reset</button>
+    </div>
+  </div>
+</nav>
+
+<main class="outline">
+  <h2 class="sect" style="margin-top:6px">The Outline — claims, not topics · click ○ to mark a node reviewed</h2>
+
+  <!-- §1 -->
+  <section class="osection">
+    <h3><span class="secnum">§1</span> Introduction <span class="serves" style="color:var(--s)">S → states C1–C3</span></h3>
+    <ul class="nodes">
+      <li class="node" data-c="s" data-st="v10" style="--nc:var(--s)"><span class="check"></span><div class="ntext">Hook: <em class="q">Sometimes I am afraid. Sometimes a part of me is afraid. Same activation, different relationship.</em><span class="chips"><span class="chip v10">v10 §1</span></span></div></li>
+      <li class="node" data-c="s" data-st="v10" style="--nc:var(--s)"><span class="check"></span><div class="ntext">The dog case: activation that feels like identity, not one belief among many; existing fear models have no account of this.<span class="chips"><span class="chip v10">v10 §1</span></span></div></li>
+      <li class="node" data-c="s" data-st="v10" style="--nc:var(--s)"><span class="check"></span><div class="ntext">IFS reading: burdened part, protectors, the capture-vs-Self question.<span class="chips"><span class="chip v10">v10 §1</span></span></div></li>
+      <li class="node" data-c="s" data-st="v10" style="--nc:var(--s)"><span class="check"></span><div class="ntext">The paper's claim: the decisive therapeutic variable is the relation of the system to activated part-content; the governing variable is Self-energy.<span class="chips"><span class="chip v10">v10 §1</span></span></div></li>
+      <li class="node" data-c="s" data-st="fix new" style="--nc:var(--s)"><span class="check"></span><div class="ntext"><b>State C1, C2, C3 explicitly</b> as the paper's three claims and the roadmap.<span class="chips"><span class="chip fix">fix</span><span class="chip new">new ~1¶</span></span><span class="fixnote">fix: replaces the v10 ¶ "two sharper predictions"; purges all later "Move 1/2/3" references by giving them names here.</span></div></li>
+      <li class="node" data-c="g" data-st="new" style="--nc:var(--g)"><span class="check"></span><div class="ntext">One-sentence trailer for G: the same architecture applies recursively to the parts that protect — yielding the layered structure IFS calls the protective system (§8) — formal treatment deferred.<span class="chips"><span class="chip g">G</span><span class="chip new">new 1 sent.</span></span></div></li>
+      <li class="node" data-c="s" data-st="v10" style="--nc:var(--s)"><span class="check"></span><div class="ntext">Non-claims: not replacing exposure/schema work; different therapies alter different inferential variables.<span class="chips"><span class="chip v10">v10 §1</span></span></div></li>
+      <li class="node" data-c="s" data-st="new" style="--nc:var(--s)"><span class="check"></span><div class="ntext"><b>Positioning:</b> joins the family of active inference treatments of self-transformative practice — meditation (Laukkonen &amp; Slagter 2021), epistemic depth (Laukkonen &amp; Chandaria 2024), emptiness (Sandved-Smith et al. 2026), depersonalisation (Deane et al. 2020). Those programs revise priors via attentional/metacognitive operations on the global self-model; this account targets intermediate, part-level identity priors via an internal <i>relationship</i> — <b>relational PE is the move the family does not have</b>.<span class="chips"><span class="chip s">S</span><span class="chip new">new ~1¶</span></span><span class="fixnote newnote">could move to early Discussion if §1 gets heavy.</span></div></li>
+      <li class="node" data-c="s" data-st="fix" style="--nc:var(--s)"><span class="check"></span><div class="ntext">Section map (one short paragraph, rebuilt last once ordering is final).<span class="chips"><span class="chip fix">fix</span></span><span class="fixnote">fix: v10's map has stale numbering.</span></div></li>
+    </ul>
+  </section>
+
+  <!-- §2 -->
+  <section class="osection">
+    <h3><span class="secnum">§2</span> IFS in Its Own Terms <span class="serves" style="color:var(--s)">S</span></h3>
+    <ul class="nodes">
+      <li class="node" data-c="s" data-st="v10" style="--nc:var(--s)"><span class="check"></span><div class="ntext">Exiles, managers, firefighters; Self as non-part; Self-energy as clinical go/no-go.<span class="chips"><span class="chip v10">v10 §2</span></span></div></li>
+      <li class="node" data-c="s" data-st="v10" style="--nc:var(--s)"><span class="check"></span><div class="ntext">Dog example in IFS terms; captured vs unblended; speaking <i>from</i> vs <i>for</i> the part.<span class="chips"><span class="chip v10">v10 §2</span></span></div></li>
+      <li class="node" data-c="s" data-st="v10" style="--nc:var(--s)"><span class="check"></span><div class="ntext"><em class="q">How do you feel toward this part?</em> measures relationship to activation, not activation.<span class="chips"><span class="chip v10">v10 §2</span></span></div></li>
+      <li class="node" data-c="s" data-st="v10 fix" style="--nc:var(--s)"><span class="check"></span><div class="ntext">Table 1: translation table.<span class="chips"><span class="chip v10">v10 §2</span><span class="chip fix">fix</span></span><span class="fixnote">fix: align "Witnessing" and "Self" rows with canonical §5–6 formulations; "Self-energy" row becomes "epistemic depth available under activation (reflexivity precision)"; "Protectors" row matches §8's framing (full parts whose policies produce the effective gate state). One source of truth.</span></div></li>
+    </ul>
+  </section>
+
+  <!-- §3 -->
+  <section class="osection">
+    <h3><span class="secnum">§3</span> Parts as Identity-Level Precision Bundles <span class="serves" style="color:var(--c1)">C1</span></h3>
+    <ul class="nodes">
+      <li class="node" data-c="c1" data-st="v10" style="--nc:var(--c1)"><span class="check"></span><div class="ntext">A part is a local control model: a bundle of priors that learned together and reactivate together.<span class="chips"><span class="chip v10">v10 §3</span></span></div></li>
+      <li class="node" data-c="c1" data-st="v10" style="--nc:var(--c1)"><span class="check"></span><div class="ntext">The four elements; <b>self-state is the organizing prior</b> — the root from which the others inherit.<span class="chips"><span class="chip v10">v10 §3</span></span></div></li>
+      <li class="node" data-c="c1" data-st="v10" style="--nc:var(--c1)"><span class="check"></span><div class="ntext">Object-relations precedent (self-image / object-image / cause / effect): same structure, different level of description.<span class="chips"><span class="chip v10">v10 §3</span></span></div></li>
+      <li class="node" data-c="c1" data-st="v10" style="--nc:var(--c1)"><span class="check"></span><div class="ntext"><b>Discriminant validity</b> vs schemas, latent contexts, trait priors; the three predictions nearby constructs don't make. <b>Load-bearing — keep verbatim.</b><span class="chips"><span class="chip v10">v10 §3</span></span></div></li>
+      <li class="node" data-c="c1 c3" data-st="v10 fix" style="--nc:var(--c1)"><span class="check"></span><div class="ntext">Because self-state is shared across situations while threat meanings are cue-bound, revision that reaches self-state should travel; this is why the transfer test exists (forward pointer to C3).<span class="chips"><span class="chip v10">v10 §3</span><span class="chip fix">fix</span></span><span class="fixnote">fix: repair pointer — transfer is §9.4; v10 pointed at "§11.3," which is wrong.</span></div></li>
+      <li class="node" data-c="c1" data-st="v10" style="--nc:var(--c1)"><span class="check"></span><div class="ntext">Dog bundle example: the four priors; why parts feel coherent; why activation feels like identity (no vantage point outside the bundle).<span class="chips"><span class="chip v10">v10 §3</span></span></div></li>
+      <li class="node" data-c="s" data-st="v10" style="--nc:var(--s)"><span class="check"></span><div class="ntext"><b>3.1 Computational setup</b><span class="chips"><span class="chip s">S</span><span class="chip v10">v10 §3.1</span></span>
+        <ul class="sub">
+          <li>Not separate agents; learned local models within one generative model.</li>
+          <li>Generative model: two hidden factors (self-state, threat meaning), three channels, cross-trial Dirichlet learning.</li>
+          <li>Precision defined for the non-technical reader.</li>
+          <li>Scope discipline: only π_part, λ_ctx, E_t vary.</li>
+        </ul>
+      </div></li>
+    </ul>
+  </section>
+
+  <!-- §4 -->
+  <section class="osection">
+    <h3><span class="secnum">§4</span> Formation and Persistence <span class="serves" style="color:var(--s)">S → supports C1</span></h3>
+    <ul class="nodes">
+      <li class="node" data-c="s c1" data-st="v10" style="--nc:var(--c1)"><span class="check"></span><div class="ntext">Formation claim: overwhelm + low control; threat alone is not enough.<span class="chips"><span class="chip v10">v10 §4</span></span></div></li>
+      <li class="node" data-c="s c1" data-st="v10" style="--nc:var(--c1)"><span class="check"></span><div class="ntext">Formation sequence (compression under overwhelm); two predictions: not all fear becomes a part; chronic neglect is part-forming.<span class="chips"><span class="chip v10">v10 §4</span></span></div></li>
+      <li class="node" data-c="s c1" data-st="v10 new" style="--nc:var(--c1)"><span class="check"></span><div class="ntext">Persistence: self-sealing loop — high prior precision, underweighted present context, avoidant sampling. <b>Convergent support from the habit literature:</b> a prior over policies gains precision simply by being used, decoupled from whether its use remains optimal (Friston et al. 2016; Proietti et al. 2025; same dynamic Sandved-Smith et al. 2026 use for the separation prior).<span class="chips"><span class="chip v10">v10 §4</span><span class="chip new">new 1 sent. + cites</span></span></div></li>
+      <li class="node" data-c="s c1" data-st="v10" style="--nc:var(--c1)"><span class="check"></span><div class="ntext">Functional isolation, not structural disconnection → admits slow change under safe contact → why exposure still learns something in the model.<span class="chips"><span class="chip v10">v10 §4</span></span></div></li>
+      <li class="node" data-c="s c1" data-st="v10" style="--nc:var(--c1)"><span class="check"></span><div class="ntext">Formation simulation summary; control gates identity-level consolidation.<span class="chips"><span class="chip v10">v10 §4 + App A</span></span></div></li>
+    </ul>
+  </section>
+
+  <!-- §5 -->
+  <section class="osection">
+    <h3><span class="secnum">§5</span> Self and Self-Energy <span class="serves" style="color:var(--c2)">C2</span></h3>
+    <ul class="nodes">
+      <li class="node" data-c="c2" data-st="v10" style="--nc:var(--c2)"><span class="check"></span><div class="ntext">Self as regime of uncaptured inference (not a homunculus).<span class="chips"><span class="chip v10">v10 §5.1</span></span></div></li>
+      <li class="node" data-c="c2" data-st="fix new" style="--nc:var(--c2)"><span class="check"></span><div class="ntext"><b>The dual-role claim, stated once and squarely.</b> Self has two formal appearances but one mechanism: (i) <b>as regime</b> — the condition in which no bundle's precision dominates; (ii) <b>as content</b> — the present-moment self-state that self-modeling yields when that regime obtains, which an activated part can register as evidence. (ii) is available exactly when (i) obtains. Self-energy governs both. <b>There is no third thing.</b><span class="chips"><span class="chip fix">fix</span><span class="chip new">new ~1¶</span></span><span class="fixnote">fix: the paper's most pressable point; currently implicit and scattered.</span></div></li>
+      <li class="node" data-c="c2" data-st="fix new" style="--nc:var(--c2)"><span class="check"></span><div class="ntext"><b>Self-energy is epistemic depth.</b><span class="chips"><span class="chip fix">fix</span><span class="chip new">new ~2¶</span></span>
+        <ul class="sub">
+          <li>E_t identified with epistemic depth: the degree to which the system's reality model is reflexively shared with itself — reflexivity precision (Laukkonen &amp; Chandaria 2024; cf. parametric depth, Sandved-Smith et al. 2021). To know <i>a part of me is afraid</i> rather than only <i>I am afraid</i> is to have the state reflexively in the model rather than operative as the model.</li>
+          <li>This grounding makes the dual-role claim orthodox: reflexivity precision <i>is</i> a precision on a recursive evidence loop — the model's own state re-entering as input. The two faces EDT already gives this construct.</li>
+          <li><b>Autonomic-social regulation is an input, not a component.</b> Ventral-vagal availability, embodied safety, co-regulation condition how much depth is available under activation. The nervous system enters the paper as prose, not as a variable.</li>
+          <li>The two old failure cases, recast: somatic calm without reflexivity = low E_t despite a quiet body; articulate parts-language while the body is in threat = <i>reported</i> depth without reflexivity precision under activation — the sharper self-like-part statement.</li>
+          <li>In the simulations E_t is a scalar of epistemic depth — no longer "a proxy for a composite."</li>
+        </ul>
+        <span class="fixnote">fix: replaces the V_t/M_t composite; single variable, grounded in published formalism. Salvage v10 §5.2 phrasing.</span>
+      </div></li>
+      <li class="node" data-c="c2" data-st="v10 import opt" style="--nc:var(--c2)"><span class="check"></span><div class="ntext">Scaffolding: Self-energy is dyadic before it is endogenous; therapist supplies co-regulation, pacing, a temporary relational bridge (Direct Access is explicitly temporary). Co-regulation = another nervous system raising available epistemic depth.<span class="chips"><span class="chip v10">v10 §5.2</span><span class="chip v9">v9 §5 import</span><span class="chip opt">opt</span></span></div></li>
+      <li class="node" data-c="c2" data-st="v10" style="--nc:var(--c2)"><span class="check"></span><div class="ntext">Self-led calm vs dissociative quiet; discriminator = whether present evidence stays online.<span class="chips"><span class="chip v10">v10 §5.3</span></span></div></li>
+      <li class="node" data-c="c2" data-st="v10" style="--nc:var(--c2)"><span class="check"></span><div class="ntext">The therapeutic zone 2×2; lower-right cell unstable by default; therapy titrates both axes.<span class="chips"><span class="chip v10">v10 §5.4</span></span></div></li>
+      <li class="node" data-c="c2" data-st="v10 new" style="--nc:var(--c2)"><span class="check"></span><div class="ntext">8 C's as phenomenological signature; the self-like part as hard case — now stateable precisely: reported depth without reflexivity precision under activation. A derivation sketch for compassion exists in adjacent literature (unbounded free energy minimisation once no boundary is privileged; Sandved-Smith et al. 2026 §6.2) — <b>cite as convergence, don't claim it</b>.<span class="chips"><span class="chip v10">v10 §5.4</span><span class="chip new">new 1–2 sent.</span></span></div></li>
+    </ul>
+  </section>
+
+  <!-- §6 -->
+  <section class="osection">
+    <h3><span class="secnum">§6</span> Capture and Context-Held Activation <span class="serves" style="color:var(--c2)">C2</span></h3>
+    <p class="osnote">Merges v10 §6 + §7 — they are one argument: the two regimes, and why only one permits change.</p>
+    <ul class="nodes">
+      <li class="node" data-c="c2" data-st="v10" style="--nc:var(--c2)"><span class="check"></span><div class="ntext">The regimes are asymmetric: capture is the failure mode, context-held activation the goal; witnessing is its clinically cultivated form.<span class="chips"><span class="chip v10">v10 §6</span></span></div></li>
+      <li class="node" data-c="c2" data-st="fix v10" style="--nc:var(--c2)"><span class="check"></span><div class="ntext"><b>Canonical Self-energy formalization</b> — E_t enters inference through <b>one mechanism</b>: the precision balance.
+        <div class="formula">π_eff_part = r_t · π_part · e^(−βE_t) &nbsp;&nbsp;·&nbsp;&nbsp; λ_eff_ctx = λ_ctx · e^(+γE_t) &nbsp;&nbsp;·&nbsp;&nbsp; C_t = π_eff / (π_eff + λ_eff)</div>
+        <ul class="sub">
+          <li><b>Two consequences, not two mechanisms:</b> informational — as C_t falls, present-context evidence regains weight; relational — the present-moment self-state is itself part of present context, so low capture is what makes it observable to the part.</li>
+          <li>The main sim's "witnessed-self-state channel opens via inverse capture" is an <i>implementation</i> of the relational consequence, not an added gate; the transfer model's always-available self-evidence is the same mechanism in a smaller model. Say this explicitly in §9.</li>
+          <li><b>Purge everywhere:</b> any wording implying Self-energy toggles a channel on/off as a separate mechanism. The sigmoid in results is emergent (keep that sentence).</li>
+        </ul>
+        <span class="chips"><span class="chip fix">fix</span><span class="chip v10">v10 §6.1</span><span class="chip new">new 2–3 sent.</span></span>
+        <span class="fixnote">fix: the single biggest repair; this wording becomes the only mechanism statement in the paper.</span>
+      </div></li>
+      <li class="node" data-c="c2" data-st="v10" style="--nc:var(--c2)"><span class="check"></span><div class="ntext">Capture: graded, not binary; the part's local world becomes the only reality model.<span class="chips"><span class="chip v10">v10 §6.1</span></span></div></li>
+      <li class="node" data-c="c2" data-st="new" style="--nc:var(--c2)"><span class="check"></span><div class="ntext"><b>Transparency and opacity as the experiential face of the regime change.</b> Under capture the bundle is phenomenally transparent — perceived <i>through</i>, functioning as architecture; under context-held activation it is opacified — an object the system can relate to (Metzinger 2003; Limanowski &amp; Friston 2018). "Speaking from vs. for the part" is this transition stated clinically. Convergence: two independent programs arrive at transparency → opacification → revision (Sandved-Smith et al. 2026; Laukkonen &amp; Chandaria 2024); this paper is the same pipeline applied to part-level identity priors under a <b>relational, not attentional, operation</b>.<span class="chips"><span class="chip c2">C2</span><span class="chip new">new ~1¶ + cites</span></span><span class="fixnote newnote">guard: opacity describes the regime; the precision balance is the mechanism. One vocabulary does the math, the other does the phenomenology.</span></div></li>
+      <li class="node" data-c="c2" data-st="v10" style="--nc:var(--c2)"><span class="check"></span><div class="ntext">Context-held activation: activation live, capture prevented; distinct from distraction, suppression, dissociation.<span class="chips"><span class="chip v10">v10 §6.2</span></span></div></li>
+      <li class="node" data-c="c2" data-st="v10 new" style="--nc:var(--c2)"><span class="check"></span><div class="ntext">The clinical probe as regime assay — and now also a transparency probe: <em class="q">"How do you feel toward this part?"</em> asks whether the bundle is opacified (an object with a felt relation) or transparent (no vantage point outside it).<span class="chips"><span class="chip v10">v10 §6.3</span><span class="chip new">new 1 sent.</span></span></div></li>
+      <li class="node" data-c="c2" data-st="v10" style="--nc:var(--c2)"><span class="check"></span><div class="ntext">Why only context-held activation permits lasting change: the three simultaneous conditions (active part, online context, no capture); why capture fails; why calm-without-activation fails.<span class="chips"><span class="chip v10">v10 §7</span></span></div></li>
+      <li class="node" data-c="c2" data-st="v10 new" style="--nc:var(--c2)"><span class="check"></span><div class="ntext">Unburdening as upstream revision; why deep change feels sudden; role transformation after unburdening. Candidate mechanism for the suddenness: <b>Bayesian model reduction</b> — once relational PE revises self-state enough, the bundle's accuracy contribution approaches zero while its complexity cost remains, and BMR prunes it as a unit ("fact-free learning"; Friston et al. 2017; Laukkonen et al. 2023). Regime change, not damping. <b>Frame as interpretation, one paragraph, not a fourth claim.</b><span class="chips"><span class="chip v10">v10 §7.1</span><span class="chip new">new + cites</span></span></div></li>
+      <li class="node" data-c="c2 c3" data-st="v10 fix" style="--nc:var(--c2)"><span class="check"></span><div class="ntext">Exposure vs context-held activation: informational PE without relational PE; transition to C3.<span class="chips"><span class="chip v10">v10 §7.2</span><span class="chip fix">fix</span></span><span class="fixnote">fix: repair stale cross-refs ("§11.3 and §12.8" → transfer, §9.4).</span></div></li>
+    </ul>
+  </section>
+
+  <!-- §7 -->
+  <section class="osection">
+    <h3><span class="secnum">§7</span> Relational Prediction Error <span class="serves" style="color:var(--c3)">C3</span></h3>
+    <ul class="nodes">
+      <li class="node" data-c="c3" data-st="v10" style="--nc:var(--c3)"><span class="check"></span><div class="ntext">Present context includes more than the room: the present-moment self-state becomes registrable by the part.<span class="chips"><span class="chip v10">v10 §8</span></span></div></li>
+      <li class="node" data-c="c3" data-st="v10" style="--nc:var(--c3)"><span class="check"></span><div class="ntext">The part's generative model includes relational expectations (<i>I am alone with this</i>), which belong to the self-state element.<span class="chips"><span class="chip v10">v10 §8</span></span></div></li>
+      <li class="node" data-c="c3" data-st="v10" style="--nc:var(--c3)"><span class="check"></span><div class="ntext"><b>The exile form:</b> expected isolation meets presence; the mismatch reaches the self-state prior directly, not threat meaning.<span class="chips"><span class="chip v10">v10 §8</span></span></div></li>
+      <li class="node" data-c="c3 g" data-st="import" style="--nc:var(--c3)"><span class="check"></span><div class="ntext"><b>The protector form</b> — the single most valuable import.
+        <ul class="sub">
+          <li>Protectors carry expectations too: contact with the exile will produce flooding, humiliation, destabilization.</li>
+          <li>Under witnessing, the protector encounters what its model did not predict: Self remains present, does not collapse, the catastrophe does not arrive. Its cost estimate updates; access relaxes.</li>
+          <li>Clinical ordering follows: protectors change <i>before</i> exiles, and are often the rate-limiting step. (The <i>structure</i> this implies — the stack — is §8.)</li>
+        </ul>
+        <span class="chips"><span class="chip c3">C3</span><span class="chip g">G</span><span class="chip v9">v9 §6 import ~2¶</span></span>
+      </div></li>
+      <li class="node" data-c="c3" data-st="v10" style="--nc:var(--c3)"><span class="check"></span><div class="ntext">Two channels inside the window, not interchangeable: relational primary, informational secondary; the shift often precedes any explicit life-updating.<span class="chips"><span class="chip v10">v10 §8</span></span></div></li>
+      <li class="node" data-c="c3" data-st="v10" style="--nc:var(--c3)"><span class="check"></span><div class="ntext">Clinical anchors: Anderson on relationship-building; <em class="q">She sees me now.</em><span class="chips"><span class="chip v10">v10 §8</span></span></div></li>
+      <li class="node" data-c="c3" data-st="v10 fix" style="--nc:var(--c3)"><span class="check"></span><div class="ntext">Reconsolidation: <b>compatible, not demonstrated</b> — the destabilizing mismatch is relational.<span class="chips"><span class="chip v10">v10 §8</span><span class="chip fix">fix</span></span><span class="fixnote">fix: adopt v9's hedged wording ("compatible with… remains an empirical question") over v10's "offers independent support".</span></div></li>
+      <li class="node" data-c="c3" data-st="v10" style="--nc:var(--c3)"><span class="check"></span><div class="ntext">Modality independence.<span class="chips"><span class="chip v10">v10 §8</span></span></div></li>
+    </ul>
+  </section>
+
+  <!-- §8 -->
+  <section class="osection">
+    <h3><span class="secnum">§8</span> Layered Protection: The Architecture Applied to Protectors <span class="serves" style="color:var(--g)">G</span></h3>
+    <p class="osnote">Upgraded from v10's "Extensions" — where the gating picture lives, framed as recursion of C1+C3, not as new machinery.</p>
+    <ul class="nodes">
+      <li class="node" data-c="g c1" data-st="import" style="--nc:var(--g)"><span class="check"></span><div class="ntext"><b>Protectors are full parts, not switches</b> — C1 applies to them. Each protector bundle carries a role/self-position (<i>"I'm the one who keeps us composed"</i>), a target-part model, policy priors (suppress, perfect, numb, charm, dissociate), and feared consequences.<span class="chips"><span class="chip g">G ← C1</span><span class="chip v9">v9 §3 import, 1¶</span></span></div></li>
+      <li class="node" data-c="g" data-st="import" style="--nc:var(--g)"><span class="check"></span><div class="ntext"><b>The gate is what protector policies produce, not what protectors are.</b> The effective gate state is the net output of currently active protector policies. This is why IFS negotiates with protectors rather than removing obstacles: <b>a gate has no beliefs to update; a part does.</b><span class="chips"><span class="chip g">G</span><span class="chip v9">v9 §3 import</span></span><span class="fixnote newnote">short, load-bearing — this sentence keeps "gating" in the paper without a gate mechanism.</span></div></li>
+      <li class="node" data-c="g" data-st="v10" style="--nc:var(--g)"><span class="check"></span><div class="ntext">Managers gate prospectively, firefighters reactively — temporal depth of the same function.<span class="chips"><span class="chip v10">v10 §9</span></span></div></li>
+      <li class="node" data-c="g c1" data-st="import" style="--nc:var(--g)"><span class="check"></span><div class="ntext"><b>Protection layers.</b> New protectors form when prior protective strategies become costly, shameful, or ineffective: need goes unmet → protest → protest punished → suppression protector → suppression suffocates → intellectualization/achievement protector → even the wish to ask becomes shameful → a further layer seals the wish itself. Each layer encodes a developmentally later self-state; the exile below stays frozen.<span class="chips"><span class="chip g">G ← C1</span><span class="chip v9">v9 §4 import, 1–2¶</span></span></div></li>
+      <li class="node" data-c="g c3" data-st="import" style="--nc:var(--g)"><span class="check"></span><div class="ntext"><b>Witnessing descends the stack</b> — C3 applies at each layer. Access to layer <i>n</i> depends on layer <i>n−1</i> updating its cost prediction via protector-form relational PE (§7). The clinical sequence — permission before contact, protectors before exiles, why the work "takes so long" — falls out of the architecture rather than being procedural convention.<span class="chips"><span class="chip g">G ← C3</span><span class="chip v9">v9 §4 import</span></span></div></li>
+      <li class="node" data-c="g" data-st="fix new" style="--nc:var(--g)"><span class="check"></span><div class="ntext"><b>Terminological guard:</b> witnessing remains a <i>state</i> (context-held activation, §6); the descent is the <i>trajectory</i> repeated witnessing traces through the stack.<span class="chips"><span class="chip fix">fix</span><span class="chip new">new 1 sent.</span></span><span class="fixnote">fix: reconciles the v9/v10 definitional conflict — so v9's "witnessing = gate traversal" doesn't silently reenter.</span></div></li>
+      <li class="node" data-c="g" data-st="new" style="--nc:var(--g)"><span class="check"></span><div class="ntext"><b>Why G is a corollary, not a fourth claim:</b> no new hidden factors, no new precision quantities — only C1 and C3 applied recursively. The sims do not test the stack; they collapse it into the part's policy priors. The stacked formalization is the next paper.<span class="chips"><span class="chip new">new 2–3 sent.</span><span class="chip defer">defer→v12</span></span><span class="fixnote newnote">the honesty marker that keeps claims tight.</span></div></li>
+      <li class="node" data-c="g" data-st="import" style="--nc:var(--g)"><span class="check"></span><div class="ntext">Realistic protectors: some operate on accurate current contingencies (unsafe partner, shaming family); the model formalizes anachronistic protection, it does not pathologize protection as such.<span class="chips"><span class="chip v9">v9 §4/§8 import</span></span><span class="fixnote newnote">could live here or in §10 — pick one place.</span></div></li>
+      <li class="node" data-c="g c1" data-st="v10 import new" style="--nc:var(--g)"><span class="check"></span><div class="ntext">Polarization: a part's world-model naturally includes other parts — mutual high-cost policies; alternation of rival local realities under low E_t; simultaneous representability under high E_t; three-regime picture with the medium exploration band. One framing sentence: <b>polarization is bistable perception at the identity level</b> — rival bundles alternate like binocular rivalry, each wholly real while it has the floor (Laukkonen &amp; Chandaria 2024; Hohwy et al. 2008).<span class="chips"><span class="chip g">G ← C1</span><span class="chip v10">v10 §9 + App A</span><span class="chip new">new 1 sent. + cites</span></span></div></li>
+    </ul>
+  </section>
+
+  <!-- §9 -->
+  <section class="osection">
+    <h3><span class="secnum">§9</span> The Formalism Running: Model and Three Contrasts <span class="serves" style="color:var(--s)">S → tests C1–C3</span></h3>
+    <p class="osnote">Merges v10 §10 + §11 into one section at roughly <b>half their combined length</b>. Three contrasts in the main text, one paragraph + one figure each; secondary results move to Appendix D. The section reads as "here is the formalism running," not "here is our evidence."</p>
+    <ul class="nodes">
+      <li class="node" data-c="s" data-st="fix new" style="--nc:var(--s)"><span class="check"></span><div class="ntext"><b>9.0 Epistemology paragraph — leads the section.</b> The simulations are <b>existence proofs and prediction generators, not confirmations</b>: they show the architecture is coherent enough to compute, that its claims have discriminating consequences (H1 vs H2 produce different orderings; witnessing vs contact-only produce different transfer), and they sharpen the empirical predictions of §10. They cannot confirm the theory — the confirmatory tests are the empirical program.
+        <ul class="sub">
+          <li><b>Purge "confirm" everywhere, including the abstract:</b> "simulations confirm the ordering" → "the predicted ordering emerges in simulation"; "transfer test confirms the generalization prediction directly" → "the transfer model demonstrates that the architecture entails the generalization gradient."</li>
+        </ul>
+        <span class="chips"><span class="chip fix">fix</span><span class="chip new">new ~1¶</span></span>
+        <span class="fixnote">fix: the paper must state what its simulations can and cannot show — defuses the circularity objection before a referee raises it.</span>
+      </div></li>
+      <li class="node" data-c="s" data-st="v10 fix" style="--nc:var(--s)"><span class="check"></span><div class="ntext"><b>9.1 Main model, compressed:</b> three hidden factors, five channels, witnessed-self-state channel precision-modulated by inverse capture (describe as implementation of §6's relational consequence); three E_t conditions; two-phase protocol.<span class="chips"><span class="chip v10">v10 §10.1</span><span class="chip fix">fix</span></span><span class="fixnote">fix: rename the low-E_t condition <b>"contact-only"</b> (was "exposure") — the sim isolates contact-without-witnessing as a component analysis, not exposure therapy as practiced. Steelman lives in §10's therapy-comparison node.</span></div></li>
+      <li class="node" data-c="c2 c3" data-st="v10 fix" style="--nc:var(--c2)"><span class="check"></span><div class="ntext"><b>9.2 Contrast 1 — the cascade under H1</b> → C2, C3: self-state first, threat second, outcome third, policy last; the informational/relational gap on self-state; one figure (the cascade diagonal).<span class="chips"><span class="chip c2">C2</span><span class="chip c3">C3</span><span class="chip v10">v10 §10.2 + §11.1–11.2, 1¶</span><span class="chip fix">fix: "Move 1" → C1/C2</span></span></div></li>
+      <li class="node" data-c="c1" data-st="v10" style="--nc:var(--c1)"><span class="check"></span><div class="ntext"><b>9.3 Contrast 2 — H2 reversal</b> → C1: reversing the causal chain eliminates the cascade; the ordering requires self-state at the root. One paragraph + figure.<span class="chips"><span class="chip c1">C1</span><span class="chip v10">v10 §10.2 + §11.3</span></span></div></li>
+      <li class="node" data-c="c3 c2" data-st="v10" style="--nc:var(--c3)"><span class="check"></span><div class="ntext"><b>9.4 Contrast 3 — transfer</b> → C3 (E_t contrast within it → C2): shared self-state prior, cue-specific threat priors; dog training → first cat probe; identity-level revision generalizes, threat-level does not; no leakage (cat threat prior unchanged). One paragraph + figure.
+        <ul class="sub">
+          <li>Methodological note stays here: within-run timing alone cannot prove content specificity; transfer is the content discriminant. <b>Surface the Test 4 failure from Appendix B in one sentence</b> — "we tried to break the cascade and succeeded; that break is why the transfer model exists" — the honesty is load-bearing.</li>
+        </ul>
+        <span class="chips"><span class="chip c3">C3</span><span class="chip c2">C2</span><span class="chip v10">v10 §10.3 + §11.8 + App B</span></span>
+      </div></li>
+      <li class="node" data-c="s" data-st="fix" style="--nc:var(--s)"><span class="check"></span><div class="ntext">One-line pointers only (results live in Appendix D): real-danger and dissociation controls (cited by §5.3), the emergent E_t sigmoid ≈ 0.60–0.65 (cited by §6; keep "emergent, not a parameter"), free-choice probe, ±20% sensitivity.<span class="chips"><span class="chip fix">fix</span></span><span class="fixnote">fix: these were main-text results §11.5–11.7 in v10; demoted.</span></div></li>
+    </ul>
+  </section>
+
+  <!-- §10 -->
+  <section class="osection">
+    <h3><span class="secnum">§10</span> Discussion</h3>
+    <ul class="nodes">
+      <li class="node" data-c="s" data-st="v10 fix" style="--nc:var(--s)"><span class="check"></span><div class="ntext">What the model explains — <b>rekey the seven points to the claim spine</b> (worlds-not-beliefs → C1; activation-alone-insufficient, calm-insufficient, dissociation-vs-Self → C2; relational PE, generalization gradient → C3; "why this is still an IFS model" → thesis).<span class="chips"><span class="chip v10">v10 §12.1</span><span class="chip fix">fix</span></span><span class="fixnote">fix: currently an unordered list of seven; grouping by claim makes the architecture audible.</span></div></li>
+      <li class="node" data-c="g" data-st="import" style="--nc:var(--g)"><span class="check"></span><div class="ntext">Add an eighth: it explains the clinical ordering — protectors before exiles, permission before contact — as <b>architectural</b> (G: each layer's cost prediction must update before descent) rather than procedural convention.<span class="chips"><span class="chip g">G</span><span class="chip v9">v9 §8 import, 2–3 sent.</span></span></div></li>
+      <li class="node" data-c="s" data-st="import new" style="--nc:var(--s)"><span class="check"></span><div class="ntext"><b>What the model does not claim</b> — reviewer armor, ~3 short ¶s.
+        <ul class="sub">
+          <li>Agnostic on parts pre-existing their burdens; formalizes how extreme roles form/persist/revise, not IFS's full ontology. Principled basis: no finite agent can evidence its own internal boundaries (Sandved-Smith et al. 2026 fn. 3; Fields &amp; Glazebrook 2023) — parts ontology is in-principle unevidenceable from inside; the bundle construct is judged on predictive utility.</li>
+          <li>The matched-contact foil is not the strongest form of AEDP / Coherence Therapy / EFT; the sim isolates one variable (corrective contact ± Self-led relational contact).</li>
+          <li>Realistic protection is not pathologized (if not placed in §8).</li>
+        </ul>
+        <span class="chips"><span class="chip v9">v9 §8 import</span><span class="chip new">new 1 sent. + cite</span></span>
+      </div></li>
+      <li class="node" data-c="s" data-st="v10" style="--nc:var(--s)"><span class="check"></span><div class="ntext">What it does not yet explain: protector negotiation/trust, self-like parts, the dyad, multi-part networks; timing-vs-content limitation of the cascade and how transfer partially addresses it.<span class="chips"><span class="chip v10">v10 §12.2</span></span></div></li>
+      <li class="node" data-c="s c3" data-st="v10 fix new" style="--nc:var(--s)"><span class="check"></span><div class="ntext"><b>Implications</b> — v10 §12.3 widened; pointers, not new claims.
+        <ul class="sub">
+          <li><b>Therapy comparison + steelman:</b> exposure learns, but learns differently; witnessing should revise a broader downstream class. <b>Steelman exposure here</b>: exposure as practiced includes therapist presence, titration, regulation — nonzero Self-energy by this paper's own definition; the contact-only condition isolates one component, it is not a verdict on exposure therapy. <i>(fix: without this, the comparator is a strawman an exposure researcher would disown.)</i></li>
+          <li>The clinical probe as a <i>measurement instrument</i>: "How do you feel toward this part?" is a regime assay with a formal correlate (C_t) — a candidate session-level process measure. <i>(new 2–3 sent.)</i></li>
+          <li>The generalization gradient as a trial-design signature: transfer to structurally similar untreated fears as the discriminating outcome variable between modalities. <i>(new 1–2 sent.)</i></li>
+          <li>Why purely informational interventions (psychoeducation, cognitive restructuring on identity-level material) underperform: they supply the secondary channel without the primary one. <i>(new 1–2 sent.)</i></li>
+          <li><i>opt:</i> any agent architecture with learned local control models admits capture/witnessing-like regimes — one sentence, no more; cut first if it smells like spread.</li>
+          <li><i>opt:</i> the continuum pointer (≤2 sentences): the separation prior of Sandved-Smith et al. 2026 as the limiting case of an identity-level prior — the deepest "part" — making unburdening and emptiness realisation the same operation at different depths; Self on a continuum toward Presence and MPE. Natural v12+ trajectory.</li>
+        </ul>
+        <span class="chips"><span class="chip v10">v10 §12.3</span><span class="chip fix">fix</span><span class="chip new">new</span><span class="chip opt">2 opt</span></span>
+      </div></li>
+      <li class="node" data-c="c1 c2 c3" data-st="v10 opt import" style="--nc:var(--c3)"><span class="check"></span><div class="ntext">Empirical predictions, keyed to claims: <b>revision order</b> (C1+C2), <b>generalization gradient</b> (C3), <b>relational channel primacy</b> (C3). <i>opt fourth, from G:</i> protector relaxation should precede exile-level identity revision under IFS-informed work; no such ordering under matched exposure — only if it doesn't crowd the three; it is the natural v12 bridge.<span class="chips"><span class="chip v10">v10 §12.4</span><span class="chip v9">v9 §8 import</span><span class="chip opt">opt</span></span></div></li>
+      <li class="node" data-c="g" data-st="v10 defer" style="--nc:var(--g)"><span class="check"></span><div class="ntext">Next steps: <b>stacked relational gating is the marquee next model — making G formal</b> (gate as inferred hidden factor, protector layers with cost models and trust variables, sequential relaxation as the test); dyadic regulation; self-like parts; empirical fitting.<span class="chips"><span class="chip v10">v10 §12.4</span><span class="chip defer">defer→v12, named</span></span></div></li>
+      <li class="node" data-c="s" data-st="v10" style="--nc:var(--s)"><span class="check"></span><div class="ntext">Closing paragraph: what was defined, what was shown, the sharpest edge. <i>(Candidate arrival: the therapist's question and the capture index are the same measurement, asked in two languages.)</i><span class="chips"><span class="chip v10">v10 §12.4</span></span></div></li>
+    </ul>
+  </section>
+
+  <!-- Appendices -->
+  <section class="osection">
+    <h3><span class="secnum">App.</span> Appendices</h3>
+    <ul class="nodes">
+      <li class="node" data-c="s" data-st="v10" style="--nc:var(--s)"><span class="check"></span><div class="ntext"><b>A. Formation and polarization simulations.</b><span class="chips"><span class="chip v10">v10 App A</span></span></div></li>
+      <li class="node" data-c="s" data-st="v10" style="--nc:var(--s)"><span class="check"></span><div class="ntext"><b>B. Adversarial testing.</b> Tests 1–3 passed; Test 4 (gated threat channel mimics cascade) motivated the transfer design.<span class="chips"><span class="chip v10">v10 App B</span></span></div></li>
+      <li class="node" data-c="s" data-st="v10 fix" style="--nc:var(--s)"><span class="check"></span><div class="ntext"><b>C. Condensed glossary.</b><span class="chips"><span class="chip v10">v10 App C</span><span class="chip fix">fix</span></span><span class="fixnote">fix: re-derive rows from final §5–7 wording after the prose pass; v10's glossary predates the canonical formulations.</span></div></li>
+      <li class="node" data-c="s" data-st="new" style="--nc:var(--s)"><span class="check"></span><div class="ntext"><b>D. Controls and robustness.</b> Receives the results demoted from v10 §11.5–11.7: real-danger control (witnessing preserves adaptive fear); dissociation control (reduced disturbance without upstream revision — the §5.3 discriminator); E_t sweep with emergent sigmoid ≈ 0.60–0.65; free-choice probe (avoid / inspect / stay); parameter sensitivity ±20%. Main text keeps one-line pointers only (§9).<span class="chips"><span class="chip new">new appendix</span></span></div></li>
+    </ul>
+  </section>
+
+  <!-- end matter -->
+  <div class="endmatter">
+    <h3>Explicitly deferred to v12 — the gating paper</h3>
+    <p class="sub2">Division of labor: v11 states G as a corollary in prose; v12 makes G formal and tests it. Listed so the machinery doesn't re-import by accident.</p>
+    <ul>
+      <li>"IFS as hierarchical relational gating" as a <i>center claim</i> (in v11 it is a corollary of C1+C3)</li>
+      <li>Gate as a true hidden factor inferred via A-matrices (v4 simulation, gate ablation)</li>
+      <li>Per-layer trust variables and protector cost models as formal quantities</li>
+      <li>Witnessing <i>redefined</i> as gate traversal (v11 keeps witnessing = the state; descent = the trajectory)</li>
+      <li>Presence as a distinct construct from Self-energy</li>
+      <li>Sequential-relaxation simulation of a multi-layer stack</li>
+    </ul>
+  </div>
+
+  <div class="endmatter">
+    <h3>Open items — logistics, not claims</h3>
+    <ul class="openitems">
+      <li>Figures &amp; simulation code are no longer in this repo (PARA restructure, c13214b). Relocate or re-link <span class="mono" style="font-size:12px">figures/</span>, <span class="mono" style="font-size:12px">figures/v2/</span>, <span class="mono" style="font-size:12px">figures/v3/</span> before assembly. (Sim code: <span class="mono" style="font-size:12px">~/dev/personal/projects/ifs-active-inference/library/</span>)</li>
+      <li>Decide final length target. v10 ≈ 9.5k words; the §6–7 merge, the discussion regrouping, and the §9 compression should land v11 <b>meaningfully under it</b> despite the three imports.</li>
+      <li>Rebuild §1's section map and all cross-references last, after ordering is frozen.</li>
+    </ul>
+  </div>
+</main>
+
+<footer>
+  <span>ifs-active-inference · draft-v11-outline.md</span>
+  <span id="nodecount"></span>
+  <span>set in Fraunces &amp; Newsreader</span>
+</footer>
+
+<script>
+(function(){
+  const nodes = Array.from(document.querySelectorAll('.node'));
+  const claimBtns = Array.from(document.querySelectorAll('#claimFilters .fbtn'));
+  const statusBtns = Array.from(document.querySelectorAll('#statusFilters .fbtn'));
+  const search = document.getElementById('search');
+  const LS_KEY = 'ifs-v11-reviewed';
+
+  // ----- review marks -----
+  nodes.forEach((n,i)=>n.dataset.id='n'+i);
+  let reviewed = new Set(JSON.parse(localStorage.getItem(LS_KEY)||'[]'));
+  function paintReviewed(){
+    nodes.forEach(n=>n.classList.toggle('reviewed',reviewed.has(n.dataset.id)));
+    const c=reviewed.size, t=nodes.length;
+    document.getElementById('pcount').textContent=c+'/'+t+' reviewed';
+    document.getElementById('pfill').style.width=(t? (100*c/t):0)+'%';
+  }
+  nodes.forEach(n=>{
+    n.querySelector('.check').addEventListener('click',e=>{
+      e.stopPropagation();
+      const id=n.dataset.id;
+      reviewed.has(id)?reviewed.delete(id):reviewed.add(id);
+      localStorage.setItem(LS_KEY,JSON.stringify([...reviewed]));
+      paintReviewed();
+    });
+  });
+  document.getElementById('resetReviewed').addEventListener('click',()=>{
+    if(!reviewed.size) return;
+    reviewed.clear(); localStorage.setItem(LS_KEY,'[]'); paintReviewed();
+  });
+  paintReviewed();
+
+  // ----- filters -----
+  const active = {claim:new Set(), status:new Set()};
+  function applyFilters(){
+    const q = search.value.trim().toLowerCase();
+    nodes.forEach(n=>{
+      const cs=(n.dataset.c||'').split(/\s+/), ss=(n.dataset.st||'').split(/\s+/);
+      const okC = !active.claim.size || cs.some(c=>active.claim.has(c));
+      const okS = !active.status.size || ss.some(s=>active.status.has(s));
+      n.classList.toggle('dim', !(okC&&okS));
+      n.classList.toggle('hide-search', q.length>1 && !n.textContent.toLowerCase().includes(q));
+    });
+  }
+  function wire(btns,set){
+    btns.forEach(b=>b.addEventListener('click',()=>{
+      const f=b.dataset.f;
+      if(set.has(f)){set.delete(f);b.classList.remove('on')}
+      else{set.add(f);b.classList.add('on')}
+      applyFilters();
+    }));
+  }
+  wire(claimBtns,active.claim); wire(statusBtns,active.status);
+  search.addEventListener('input',applyFilters);
+  document.addEventListener('keydown',e=>{
+    if(e.key==='/'&&document.activeElement!==search){e.preventDefault();search.focus()}
+    if(e.key==='Escape'){search.value='';search.blur();applyFilters()}
+  });
+
+  // ----- footer stats -----
+  const newC=nodes.filter(n=>(n.dataset.st||'').includes('new')).length;
+  const fixC=nodes.filter(n=>(n.dataset.st||'').includes('fix')).length;
+  const impC=nodes.filter(n=>(n.dataset.st||'').includes('import')).length;
+  document.getElementById('nodecount').textContent=
+    nodes.length+' nodes · '+newC+' new · '+fixC+' fix · '+impC+' import';
+})();
+</script>
+</body>
+</html>
