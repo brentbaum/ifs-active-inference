@@ -1,15 +1,25 @@
 # Simulation Specification: v11 — The Emergence Suite
 
-**Date:** 2026-07-09
-**Status:** Design document. Nothing here is built. Supersedes `simulation-v9-spec.md` (old repo) as the program of record.
-**Serves:** `draft-v11-theory.md` §9 (currently stubbed) and §10 (empirical predictions), plus the interactive explainer.
+> **Epistemic-depth correction (2026-07-13; supersedes R2 and Appendix A where
+> they conflict).** The v11 paper now uses epistemic depth in the global sense
+> of Laukkonen, Friston, and Chandaria (2025): recursive inference over a
+> channel-specific precision field $\Phi$, followed by downward rebroadcast.
+> $E_t$ may be reported as a posterior index, but it never directly lowers part
+> precision or raises context precision. The earlier Sim 6a discrete and
+> continuous models are retained as local parametric-depth precursors. The
+> replacement experiment is
+> `projects/emergence-suite/continuous/src/GlobalPrecisionField.jl`.
+
+**Date:** 2026-07-09; amended 2026-07-13
+**Status:** Historical design and results ledger, amended by the epistemic-depth correction above. The implemented global-field experiment is the current Sim 6 mechanism.
+**Serves:** `draft-v11-rewritten.md` §§6–10, plus the interactive explainer.
 **Prior art:** v10 program at `~/dev/personal/projects/ifs-active-inference/` (Julia, hand-rolled active inference); BLT hyper-model reproductions at `projects/beautiful-simulation/` (RxInfer.jl).
 
 ---
 
 ## 1. Why a new program
 
-The v10 sims were built for a different paper. v11 became a **derivation paper**: the exile/protector taxonomy, the protectors-first ordering, and the witness-before-unburdening rule are claimed to *fall out* of the architecture. A simulation in which E_t is a dial, the taxonomy is wired into the factor labels, and the A-matrices are tuned until the cascade appears does not under-serve that claim — it contradicts it. Two v10 designs additionally conflict with v11's ontology:
+The v10 sims were built for a different paper. v11 became a **derivation paper**: the exile/protector taxonomy, the protectors-first ordering, and the witness-before-unburdening rule are claimed to *fall out* of the architecture. A simulation in which a scalar depth score is a dial, the taxonomy is wired into the factor labels, and the A-matrices are tuned until the cascade appears does not under-serve that claim — it contradicts it. Two v10 designs additionally conflict with v11's ontology:
 
 - **v2's Channel 5** (witnessed self-state, precision gated by inverse capture) is the "channel opens" mechanism §7 now explicitly disavows: *"No channel opens; nothing is switched on."* The relational evidence must arrive through the same falling-gain mechanism as everything else.
 - **v9/v4's gate as hidden factor** contradicts §5: *"The gate… is not a part at all. Whether access is open, closed, or partial is simply the net output of whichever protector policies are running."* Gate-as-inferred-state is deferred to the sequel; the v11 sims must not smuggle it back in.
@@ -32,11 +42,11 @@ What survives from v10:
 
 These are hard constraints. A sim that violates one is out of the program regardless of how good its figures look.
 
-**R1 — Nothing scripted, everything grown.** Every IFS construct the paper derives must *emerge* from three ingredients: precision dynamics, structure learning (latent-cause spawn / BMR prune), and one depth variable. No factor may be named `exile`, `protector`, or `gate` in the generative model. Taxonomy, ordering, and timing are **readouts**, applied post hoc by fixed classification rules stated before the run.
+**R1 — Nothing scripted, everything grown.** Every IFS construct the paper derives must *emerge* from three ingredients: precision dynamics, structure learning (latent-cause spawn / BMR prune), and a global hyper-model over the precision field. No factor may be named `exile`, `protector`, or `gate` in the generative model. Taxonomy, ordering, and timing are **readouts**, applied post hoc by fixed classification rules stated before the run.
 
-**R2 — One mechanism.** E_t enters inference in exactly one place: the effective-precision balance (§7's π_eff / λ_eff). No sim may give depth a second entry point (a gate, a channel switch, a bonus term). Everything downstream is consequences.
+**R2 — One recursive mechanism.** The inferred field $\Phi_t$ enters lower-level inference only through channel-specific effective precisions. Errors on those precision forecasts update the global hyper-model, which rebroadcasts the revised field. Any scalar depth score is a readout of $q(\Phi_t)$ and cannot enter a gate, channel switch, effective-precision equation, or bonus term.
 
-**R3 — Structural vs. effective precision.** Effective precision (fast, reversible, E_t-modulated) and structural precision (Dirichlet concentration; the spawn/prune axis) are separate quantities in every sim, separately logged. *Witnessing ≠ melting*: E_t opens the regime; the melt is the slow structural follow-on that runs only while held. Any sim where flipping E_t instantly changes structure has a bug by definition.
+**R3 — Structural vs. effective precision.** Effective precision (fast, reversible, field-modulated) and structural precision (Dirichlet concentration; the spawn/prune axis) are separate quantities in every sim, separately logged. *Witnessing ≠ melting*: $\Phi_t$ configures the regime; the melt is the slow structural follow-on that runs only while held. Any sim where changing the field instantly changes structure has a bug by definition.
 
 **R4 — Pre-register, then attack.** Per sim, before any run: success criteria with thresholds, named adversarial tests (including at least one designed to *break* the headline claim, in the spirit of v10's fake-Channel-5 test), and the falsifiable empirical prediction the sim licenses. Outcomes labeled `support / weak_support / null / falsified` in the result bundle.
 
@@ -91,13 +101,13 @@ Framework note: Tier A sims 1–3 are discrete POMDPs with Dirichlet cross-trial
 ### Sim 2 — The hysteresis loop
 *"What froze in isolation melts in relationship." (§§7–8) — plus the melt's controls.*
 
-**Model.** One agent, one formed bundle (imported from a Sim 1 spawn, seeds shared): frozen self-state root (relational content: *alone-with-this*) with dependent threat-meaning and policy banks. Cross-trial Dirichlet learning. E_t enters per R2 only. Relational evidence is an observation modality carrying *how the shown material is met* — always available, always truthful, never gated (v3 principle); what varies is only the weight inference gives it, via C_t. Melting is **actual Bayesian model reduction**: at intervals, compare full model (bundle coupling present) against reduced model (coupling pruned, competences retained) by the analytic Friston et al. 2017 free-energy difference over the learned counts. Prune when the reduced model wins.
+**Model.** One agent, one formed bundle (imported from a Sim 1 spawn, seeds shared): frozen self-state root (relational content: *alone-with-this*) with dependent threat-meaning and policy banks. Cross-trial Dirichlet learning. The global hyper-model forecasts a channel-specific field $\Phi_t$ per R2. Relational evidence is an observation modality carrying *how the shown material is met* — always available, always truthful, never gated (v3 principle); what varies is the effective precision inferred for it within the whole field. Melting is **actual Bayesian model reduction**: at intervals, compare full model (bundle coupling present) against reduced model (coupling pruned, competences retained) by the analytic Friston et al. 2017 free-energy difference over the learned counts. Prune when the reduced model wins.
 
 **The loop.** Drive structural precision up (threat trials), then attempt to bring it down under four regimes on matched evidence budgets:
-1. **Informational**: corrective facts about the cue (*safe dogs, endlessly*), low E_t.
-2. **Contact under capture**: relational evidence present, E_t low (C_t high).
+1. **Informational under a narrow field**: corrective facts about the cue (*safe dogs, endlessly*), with low contextual/relational effective precision.
+2. **Contact under capture**: relational evidence present, with part dominance high and the global field narrow.
 3. **Dissociative quiet**: attenuation policy active — evidence itself turned down.
-4. **Witnessing**: relational evidence under held E_t (C_t low, part active).
+4. **Witnessing**: the part remains active while the global field retains contextual, interoceptive, relational, and policy precision.
 
 **Headline figure.** Structural precision vs. cumulative corrective evidence, four trajectories: three flat lines and one that steps down discontinuously — a literal hysteresis diagram (the path down is not the path up). First-passage markers at the BMR event.
 
@@ -112,7 +122,7 @@ Framework note: Tier A sims 1–3 are discrete POMDPs with Dirichlet cross-trial
 
 **Adversarial tests.**
 - A2.1 Content-swap (the v10 killer, re-armed): replace the relational modality's content with matched-precision informational content. If the melt still runs, C3 fails in the model — the mechanism would be "any evidence under depth," not relational error at the root.
-- A2.2 E_t-flip test (R3 enforcement): raise E_t for one trial and drop it. Structural precision must be unchanged; only effective precision moves. Witnessing ≠ melting.
+- A2.2 Field-flip test (R3 enforcement): change one trial's forecast $\Phi_t$ without changing learned parameters. Structural precision must be unchanged; only effective precision moves. Witnessing ≠ melting.
 - A2.3 BMR threshold sweep: the discreteness of the melt (S2.2) must survive reasonable prior-odds settings, not be an artifact of one threshold.
 
 **Licensed empirical predictions.** Deep change under witnessing is stepwise (sudden-gains literature: gains should cluster, prepared by preceding within-session process markers). Premature unburdening fails in the take-it-back pattern, and failure probability tracks unwitnessed material, not ritual quality (§10 already states this; the sim gives it a quantitative shape).
@@ -131,7 +141,7 @@ Framework note: Tier A sims 1–3 are discrete POMDPs with Dirichlet cross-trial
 
 **Headline figure.** Two transfer curves over cue similarity — one traveling, one flat — with the H2 panel showing no gradient at any depth. Identical axes across panels (Chamberlin rules).
 
-**Pre-registered criteria.** Port v3's seven criteria; add: S3.1 the E_t threshold for transfer is sigmoid and **emergent** (no sigmoid anywhere in the parameterization — per the §9 stub); S3.2 the cascade ordering is strict at high E_t and absent under matched exposure; S3.3 η_self=0 ablation kills transfer (necessity), and η_threat=0 does not (non-sufficiency of threat learning for the signature).
+**Pre-registered criteria.** Port v3's seven criteria; add: S3.1 transfer changes nonlinearly across a preregistered one-dimensional path through $\Phi_t$, with no sigmoid wired into the parameterization; S3.2 the cascade ordering is strict in the witnessing field and absent under matched exposure; S3.3 η_self=0 ablation kills transfer (necessity), and η_threat=0 does not (non-sufficiency of threat learning for the signature).
 
 **Adversarial tests.** A3.1 v3's full battery re-run. A3.2 Similarity-confound test: transfer must track *structural* similarity through the root, not raw perceptual overlap — include a perceptually similar cue with a different self-state linkage; it should transfer less than a perceptually distant cue sharing the root.
 
@@ -142,7 +152,7 @@ Framework note: Tier A sims 1–3 are discrete POMDPs with Dirichlet cross-trial
 ### Sim 4 — The trust ledger
 *Protectors-first as an optimal policy, not a rule. (§5, §8)*
 
-**Model.** A stack grown, not built: run Sim 1's formation machinery through a schedule that produces an exile plus 2–3 protector-classified causes (breakthrough-spawned and slow-accumulated — the firefighter/manager kinetics of §5, applied as post-hoc readout labels per R1). Each protector cause carries, among its banks, a **relational prior about Self** — Dirichlet counts over what contact yields (the §8 referent of *trust*). The gate is **computed, not represented**: access to the layer beneath = net output of currently-running protector policies (R1; honors §5's ontology). A Self-process (high-E_t regime) selects whom to contact by expected free energy over the stack.
+**Model.** A stack grown, not built: run Sim 1's formation machinery through a schedule that produces an exile plus 2–3 protector-classified causes (breakthrough-spawned and slow-accumulated — the firefighter/manager kinetics of §5, applied as post-hoc readout labels per R1). Each protector cause carries, among its banks, a **relational prior about Self** — Dirichlet counts over what contact yields (the §8 referent of *trust*). The gate is **computed, not represented**: access to the layer beneath = net output of currently-running protector policies (R1; honors §5's ontology). A Self-process operating under a broad, calibrated precision field selects whom to contact by expected free energy over the stack.
 
 **What must emerge (not be scripted).**
 - **The clinical ordering:** contacting the exile directly is EFE-suboptimal while protector forecasts are unrevised; the optimizer discovers outside-in descent.
@@ -163,7 +173,7 @@ Framework note: Tier A sims 1–3 are discrete POMDPs with Dirichlet cross-trial
 ### Sim 5 — The dyad
 *Borrowed depth, actually simulated. (§6, §8) — and the self-like part's first model.*
 
-**Model.** Two coupled active inference agents. **Client:** the Sim 2/3 architecture; its E_t is not free but collapses under activation (arousal-linked, as at formation). **Therapist:** a second agent whose observable behavior carries its regulation state. The coupling: among the client's observation modalities is co-regulation evidence — how the other is holding what the client's system is showing — and the client's *expected available depth* is partly inferred from it. (Formally: the client holds beliefs about its own E_t capacity; therapist-regulation observations are evidence for those beliefs. This is scaffolding in the literal sense — external evidence standing in for a hyper-prior the system cannot yet hold alone.)
+**Model.** Two coupled active inference agents. **Client:** the Sim 2/3 architecture extended with the global precision-field hyper-model. **Therapist:** a second agent whose observable behavior carries its regulation state. The coupling: among the client's observation modalities is co-regulation evidence — how the other is holding what the client's system is showing. Therapist-regulation observations inform the client's forecast for relational, interoceptive, contextual, and policy precision under activation. Repeated contact can update that context-conditioned forecast, making the scaffold partially available later without the therapist.
 
 **Conditions.** (1) Regulated therapist. (2) Dysregulated therapist (own activation leaking into the co-regulation channel). (3) **Fluent-but-threatened**: parts-language content delivered from a body in threat — the content channel says depth, the regulation channel says none. (4) No-therapist self-practice at varying baseline capacity (the owned-depth endpoint).
 
@@ -179,22 +189,22 @@ Framework note: Tier A sims 1–3 are discrete POMDPs with Dirichlet cross-trial
 
 ---
 
-### Sim 6 — E_t made honest: the reflexive hyper-model
+### Sim 6 — The global precision-field hyper-model
 *The technical contribution. (§3, §6, §7; Laukkonen, Friston & Chandaria's Φ married to the parts machinery.)*
 
-**Model.** Stop dialing E_t; **infer it**. Extend `beautiful-simulation`'s three-layer stack (hyper-state → precision-state → content) so the top layer is a hyper-model over the precision balance of the parts machinery: its state is precision-on-the-model's-own-precision — reflexivity precision as an inferred quantity, per the BLT Φ construct. Arousal enters as evidence at the middle layer (volatility), and the key dynamic must *emerge*: acute arousal collapses the top layer's posterior precision (collapsed reflexivity), so bundles written under overwhelm are written while the hyper-layer is dark — transparent encoding as a property of the run, not a stipulation. Recovery of hyper-layer precision under safety = opacification. Capture, the C_t index, and the depth threshold are all read off the one inferred variable.
+**Model.** Infer a correlated field $\Phi_t$ over part, context, interoception, relationship, and policy. The hyper-model forecasts channel log precisions, lower layers use the corresponding broadcast precisions, realized precision evidence returns a second-order error, and the posterior over $\Phi_t$ updates before the next broadcast. Part dominance $C_t$ is computed from the part/context competition. A scalar depth index may summarize posterior confidence, forecast calibration, and representational breadth, but no lower-level equation reads it. Arousal is evidence about the field, not an inverse depth assignment: an accurate urgent threat may combine high part dominance with high epistemic depth.
 
-**Why this is Tier B ambitious.** Structure learning inside a hyper-model is not off-the-shelf in RxInfer or pymdp; coupling a CRP spawn process (Sim 1) to a continuous GCV hierarchy is genuine research. Fallback staging: 6a — hyper-model over a *fixed* bundle (no spawning), demonstrating emergent collapse/recovery and the emergent sigmoid; 6b — the coupled version feeding Sim 7.
+**Implemented scope.** `GlobalPrecisionField.jl` is a post-definition construction check over a fixed bundle, not a preregistered confirmation. It tests whether dominance and global depth can dissociate and whether repeated dyadic scaffolding can teach a context-conditioned precision forecast. Coupling structure learning to the global field remains an open research problem.
 
-**Headline figure.** One variable's biography: hyper-layer precision collapsing at the formation event (the write happening in the dark), flat through years of avoidance, scaffolded upward in the dyad, held through witnessing — with capture, opacification, and the revision window all annotated on the same trace. The paper's most elegant circle — *the variable that fails at formation is the one therapy restores* — as a single time series.
+**Headline figure.** Identity-root revision across repeated contact, with the dyadic scaffold removed halfway through and the learned relational precision profile retained afterward.
 
-**Pre-registered criteria.** S6.1 The E_t↔revision threshold is sigmoid and emergent (v10 found ≈0.6 with a parameterized sigmoid; here no sigmoid may appear anywhere in the spec). S6.2 Collapse under arousal is dose-dependent and recoverable (state, not trait). S6.3 Bundles written during collapse acquire the frozen signature (Sim 1's traits) *because of* the collapse: yoked control with arousal but clamped hyper-precision must produce ordinary revisable learning — the discriminating test that overwhelm freezes *via* reflexivity collapse, not via intensity.
+**Construction criteria.** S6.1 Demonstrate all four cells of the dominance × depth table, including high-dominance/high-depth accurate danger and low-dominance/low-depth quiet narrowing. S6.2 Hold part activation during witnessing while the field remains broad and calibrated. S6.3 Show repeated scaffolding learning a relational precision profile that remains after scaffold removal. S6.4 Verify by code and intervention that the scalar depth readout is not a precision input.
 
-**Adversarial tests.** A6.1 The clamp control above is itself the adversarial test of §3's collapsed-reflexivity claim — if clamping doesn't rescue revisability, the paper's invariant is wrong in the model. A6.2 Identifiability: show hyper-layer precision is recoverable from behavior (simulated inference on simulated data), else the construct is doing no observable work.
+**Adversarial tests.** A6.1 Disable precision-profile learning: borrowed depth should not become an independently recoverable forecast. A6.2 Replace the global posterior with local, uncorrelated updates: local calibration alone must not count as global epistemic depth. A6.3 Invert the downward log-precision broadcast: a confident but miscalibrated hyper-model must score as shallow.
 
-**Licensed empirical predictions.** Meta-awareness degrades lawfully with arousal (dose-response within-subject, not a trait difference). Depth-restoration interventions transfer across content domains (the variable is content-general). Peri-traumatic loss of reflexive awareness predicts part-formation (intrusive identity-level sequelae) better than event severity.
+**Licensed empirical predictions.** Part dominance and epistemic depth can vary independently. Dyadic regulation should predict later preservation of relational, bodily, and contextual access under activation, including after the regulating partner is absent. Apparent calm produced by attenuation should dissociate from calibrated knowledge of the precision landscape.
 
-**Full design: Appendix A** (core operationalization, substrate decision, collapse mechanisms, the circularity resolution, derivational targets, staging, and the elegance upgrades).
+**Historical precursor: Appendix A.** It records the superseded scalar/reflexive-channel design and its failures; it is not the current definition of epistemic depth.
 
 ---
 
@@ -205,7 +215,7 @@ Framework note: Tier A sims 1–3 are discrete POMDPs with Dirichlet cross-trial
 
 **Controls.** The full life re-run on the H2 (threat-at-root) architecture: same world, no cascade, no descent, no transfer — §9's reversal at biographical scale. And a resilient-world control: same child, one caregiver who comes — the boundary never crossed, the stack never built.
 
-**Headline figure.** The org chart of a psyche growing from three ingredients and melting in reverse order of formation — formation events, stratification, descent, and the post-melt transfer probe on one timeline. If it works, this is the figure the paper is remembered by, and the explainer's central toy: the E_t slider flips the regime instantly; the structural melt integrates only while held.
+**Headline figure.** The org chart of a psyche growing from three ingredients and melting in reverse order of formation — formation events, stratification, descent, and the post-melt transfer probe on one timeline. If it works, this is the figure the paper is remembered by. The explainer should expose the precision field and its channel forecasts; structural melt integrates only while a revision-supporting configuration is sustained.
 
 **Pre-registered criteria.** S7.1 The classification rules recover the IFS taxonomy from the grown structure (blind labeling by a rater given only the rules and the logs). S7.2 Melt order inverts formation order (outside-in). S7.3 The two controls fail in their predicted, distinct ways.
 
@@ -299,9 +309,9 @@ Reading the matrix: the top of the list is dominated by two *pencil* items (rank
 
 ---
 
-## Appendix A — Sim 6 design: the reflexive hyper-model
+## Appendix A — Historical Sim 6 scalar/reflexive-channel design
 
-*(2026-07-09. Worked design for the suite's technical centerpiece. Everything here is subordinate to R1–R7.)*
+*(2026-07-09 design, superseded 2026-07-13. Retained to document the local parametric-depth precursor and the claims its failed tests no longer license. Nothing in this appendix overrides corrected R2 or the current Sim 6 contract.)*
 
 ### A.1 Core operationalization: reflexivity as a channel
 

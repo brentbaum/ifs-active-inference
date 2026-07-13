@@ -1,5 +1,13 @@
 # Sim 6a: Inferred Depth and Inference-Face Collapse
 
+> **Definition note (2026-07-13).** This model infers a scalar state that
+> controls two local precision mappings. It is a model of parametric depth and
+> local meta-awareness, not a literal implementation of Beautiful Loop
+> Theory's system-wide epistemic depth. The scalar results remain part of the
+> v11 audit record, including the failed robustness tests, but `E_t` is not the
+> mechanism of Self-energy. The replacement global precision-field experiment
+> is in `projects/emergence-suite/continuous/src/GlobalPrecisionField.jl`.
+
 This module implements T2.1 inside `EmergenceSuite.Sim6a`. It is scoped to
 `src/sims/sim6a/`; the package runner dispatches here only when
 `experiment: sim6a` is selected.

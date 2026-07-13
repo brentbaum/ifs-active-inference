@@ -1,6 +1,39 @@
-# Sim 6a Continuous, Stage 3
+# Continuous depth and global precision-field simulations
+
+## v11 global precision field (2026-07-13)
+
+`src/GlobalPrecisionField.jl` implements epistemic depth in the global sense
+of Laukkonen, Friston, and Chandaria (2025). It replaces the causal
+scalar-depth interpretation with a hyper-model over the channel-specific field
+
+```text
+Phi = (part, context, interoception, relational, policy).
+```
+
+Each cycle predicts the field, uses it to weight lower-level errors, receives
+error on the precision forecast, updates `q(Phi)`, and broadcasts the revised
+field. The scalar `depth_index` is computed afterward from posterior
+confidence, calibration, and representational breadth. No effective-precision
+equation reads that index.
+
+The probes test whether part dominance and depth dissociate, and whether
+identity-root revision requires activation plus an open precision field. Run:
+
+```bash
+julia --project=projects/emergence-suite/continuous \
+  projects/emergence-suite/continuous/scripts/run_global_phi.jl
+```
+
+Outputs are written to `results/global_precision_field/`.
+
+## Historical Sim 6a continuous Stage 3
 
 This standalone Julia project implements ticket T2.4: the continuous three-layer Phi bridge and U2 basin map.
+
+This earlier model is retained as an audit artifact. Its scalar `depth` state
+directly tilts bundle and evidence precision, so it instantiates local
+parametric depth rather than the stronger global definition of epistemic
+depth. Its basin and robustness results remain results about that scalar model.
 
 ## Model
 

@@ -1,0 +1,80 @@
+{
+  "regime_probe": {
+    "metrics": {
+      "low_dominance_low_depth": 1.0,
+      "high_dominance_high_depth": 1.0,
+      "blended_signature": 1.0,
+      "self_led_signature": 1.0
+    },
+    "summaries": [{
+      "scenario": "blended_capture",
+      "mean_part_dominance": 0.6016021403816307,
+      "mean_depth_index": 0.0539786435298986,
+      "mean_opacity_index": 0.24412643242920354
+    }, {
+      "scenario": "known_urgent_threat",
+      "mean_part_dominance": 0.8274678267742013,
+      "mean_depth_index": 0.8634186795925025,
+      "mean_opacity_index": 0.9764450980859006
+    }, {
+      "scenario": "quiet_narrowing",
+      "mean_part_dominance": 0.3707005279708445,
+      "mean_depth_index": 0.053703489115394486,
+      "mean_opacity_index": 0.24412643242920354
+    }, {
+      "scenario": "self_led_witnessing",
+      "mean_part_dominance": 0.40621765295201107,
+      "mean_depth_index": 0.8717805438867632,
+      "mean_opacity_index": 0.9764450980859006
+    }]
+  },
+  "witnessing_probe": {
+    "metrics": {
+      "witnessing_beats_regulation": 1.0,
+      "learned_relational_profile_gain": 1.6297408304894234,
+      "witnessing_beats_contact": 1.0,
+      "learned_unscaffolded_field": 1.0,
+      "learned_unscaffolded_depth_gain": 0.005716527304385488,
+      "local_only_unscaffolded_depth": 0.0,
+      "informational_revision_when_open": 1.0,
+      "calibrated_broadcast_required": 1.0,
+      "inverted_unscaffolded_depth": 0.050910885439335876,
+      "global_sharing_required": 1.0
+    },
+    "summaries": [{
+      "mean_unscaffolded_depth": 0.4854122389624891,
+      "mean_final_relational_profile": 1.6297408304894234,
+      "arm": "witnessing",
+      "final_root_belief_alone": 0.047468235462316315
+    }, {
+      "mean_unscaffolded_depth": 0.838309441635298,
+      "mean_final_relational_profile": 1.5360514719743024,
+      "arm": "regulation_only",
+      "final_root_belief_alone": 0.7978269219648186
+    }, {
+      "mean_unscaffolded_depth": 0.1561810459909071,
+      "mean_final_relational_profile": 0.6032950248673572,
+      "arm": "contact_only",
+      "final_root_belief_alone": 0.830254798424979
+    }, {
+      "mean_unscaffolded_depth": 0.4854183021289924,
+      "mean_final_relational_profile": 1.1372032887150407,
+      "arm": "informational_open",
+      "final_root_belief_alone": 0.056841144084061566
+    }]
+  },
+  "config": {
+    "prior_variance": 0.9,
+    "sessions": 12,
+    "seeds": [7101, 7102, 7103, 7104, 7105, 7106, 7107, 7108, 7109, 7110, 7111, 7112, 7113, 7114, 7115, 7116, 7117, 7118, 7119, 7120],
+    "global_correlation": 0.35,
+    "scaffolded_sessions": 6
+  },
+  "experiment": "v11_global_precision_field",
+  "definition": {
+    "epistemic_depth": "recursive global inference over a channel-specific precision field Phi",
+    "scalar_depth_index": "posterior readout only; absent from all effective-precision equations",
+    "channels": ["part", "context", "interoception", "relational", "policy"],
+    "hyper_loop": ["predict precision field", "weight lower-level errors", "receive error on precision forecast", "update q(Phi)", "broadcast revised Phi"]
+  }
+}

@@ -1,12 +1,19 @@
 # Simulation v11 — Implementation Plan (Phases 0–2)
 
-**Date:** 2026-07-09. Tickets for Codex. Spec of record: `simulation-v11-spec.md` (read §2 design constitution and the relevant sim section before starting any ticket; Appendix A for T2.x).
+> **Program correction (2026-07-13).** Scalar `E_t` runs remain historical
+> tests of local parametric depth. The v11 epistemic-depth mechanism is now the
+> global precision-field loop implemented in
+> `projects/emergence-suite/continuous/src/GlobalPrecisionField.jl`; its scalar
+> depth index is a readout only. Any ticket text below that says `E_t` directly
+> controls part/context precision is superseded by this correction.
+
+**Date:** 2026-07-09; amended 2026-07-13. Historical implementation ledger plus the current global-field correction. Spec of record: `simulation-v11-spec.md`.
 **Code home:** `projects/emergence-suite/` in this repo (create on T0.5). Old v10 code (read-only reference): `~/dev/personal/projects/ifs-active-inference/library/`.
 **Gates:** G0 = T0.1–T0.5 done. G1 = T1.1–T1.3 done → §9 stub writable. G2 = T2.1–T2.3 done.
 
 ## Global conventions (all tickets)
 
-- **R1–R7 of the spec are binding.** In particular: no factor named `exile/protector/gate` in any generative model (R1); E_t enters only via the effective-precision balance (R2); structural (Dirichlet counts) and effective (E_t-modulated) precision are separate, separately logged quantities (R3).
+- **R1–R7 of the spec are binding.** In particular: no factor named `exile/protector/gate` in any generative model (R1); the inferred field $\Phi_t$ enters lower-level inference only through channel-specific effective precisions, while any scalar depth index remains a readout (R2); structural (Dirichlet counts) and effective (field-modulated) precision are separate, separately logged quantities (R3).
 - **Preregistration:** each sim ticket writes `criteria.yaml` (thresholds + adversarial tests) and gets it committed **before** the first full run. Results labeled `support | weak_support | null | falsified` per criterion. Null/falsified outcomes are shipped, not tuned away.
 - **Run contract** (from T0.5): every run emits `summary.json`, `status.json`, `metadata.json` (seed, git hash, config), per-seed CSV, and figures. Every hand-set constant is listed in the sim's `magic-numbers.md` with derivation, sensitivity sweep, or explicit IOU (R6).
 - **Seeds:** ≥ 20 per condition unless stated; report mean + CI bands, never single curves.
@@ -29,7 +36,7 @@
 
 ### T0.2 — D1 derivation: the tilt equation as a mean-field message
 **Depends:** none. **Math ticket; deliverable is markdown + one notebook.**
-**Task:** In a model where a hyper-layer holds a posterior over depth (discrete depth states d with beliefs q(d), each d implying log-precisions for the bundle-prior stream and present-evidence stream), derive the effective precisions a lower level uses under mean-field VMP. Target result: π_eff = r_t·π_part·e^(−βE_t), λ_eff = λ_ctx·e^(+γE_t) with E_t an expectation under q(d) and β, γ identified as properties of the depth→log-precision mapping (its slope/spacing), **not free parameters**.
+**Historical task (superseded as the definition of epistemic depth):** In a model where a hyper-layer holds a posterior over a local parametric-depth state, derive the effective precisions a lower level uses under mean-field VMP. The resulting scalar tilt remains a valid property of that local model but is not the mechanism now assigned to global epistemic depth.
 **Success criteria:**
 - [ ] `derivations/d1-tilt-derivation.md`: assumptions stated, derivation complete **or** the precise obstruction stated (which factorization assumption fails, what the correct message is instead).
 - [ ] Numeric check: notebook comparing message-passing effective precision vs. the closed-form tilt across a grid of q(d); agreement < 1% error where the derivation claims exactness.
@@ -67,14 +74,14 @@
 
 ### T1.1 — Sim 3: generalization gradient
 **Depends:** T0.5. **Spec: §3 Sim 3.** Reference implementation: v10's `ifs_simulation_v3.jl` + `simulation-v3-spec.md` (port the design, not the code style).
-**Task:** Rebuild v3 in the suite framework. Two hidden-factor architecture: shared self-state (Dirichlet bank `d_self`) + cue-local threat banks `d_threat(c)`. **Cue continuum:** K ≥ 5 cues parameterized by feature overlap with the trained cue, plus one **structural-confound cue** (perceptually near, root-distant) for A3.2. H1 (self at root) and H2 (threat at root) variants. E_t enters per R2 only; relational modality always on, always truthful. Conditions: witnessing (high E_t), matched exposure (low E_t), E_t sweep for the sigmoid readout. Log per-element first-passage times (self-state, threat meaning, policy).
+**Task:** Rebuild v3 in the suite framework. Two hidden-factor architecture: shared self-state (Dirichlet bank `d_self`) + cue-local threat banks `d_threat(c)`. **Cue continuum:** K ≥ 5 cues parameterized by feature overlap with the trained cue, plus one **structural-confound cue** (perceptually near, root-distant) for A3.2. H1 (self at root) and H2 (threat at root) variants. The historical implementation uses scalar parametric depth; reinterpret its witnessing/exposure contrast as a path through the corrected precision field, not as a test of global epistemic depth. Relational modality remains always on and truthful. Log per-element first-passage times (self-state, threat meaning, policy).
 **Preregister in `criteria.yaml`, then run. Success criteria:**
 - [ ] **Training parity:** H1 vs. H2 log-evidence difference on treated-cue training < preregistered ε (else the transfer discriminant is confounded — stop and fix).
 - [ ] **Cascade (S3.2):** under witnessing, first-passage order self→threat→policy in > 90% of seeds; no consistent order under matched exposure.
 - [ ] **Transfer:** H1+witnessing shows a monotone transfer gradient over the continuum; exposure and H2 show flat/cue-bound profiles (preregistered effect-size thresholds).
 - [ ] **Leakage check:** untrained `d_threat(c)` banks statistically unchanged — transfer flows through `d_self` only.
 - [ ] **Ablations (S3.3):** η_self = 0 kills transfer; η_threat = 0 does not kill the signature.
-- [ ] **Emergent sigmoid (S3.1):** transfer-vs-E_t is sigmoid by preregistered fit criterion, with **no logistic/sigmoid function anywhere in model code** (assert via code review note in closing).
+- [ ] **Historical scalar threshold (S3.1):** retain the transfer-vs-local-depth result as a property of the precursor model; do not generalize it to global epistemic depth.
 - [ ] **A3.2:** structural-confound cue transfers less than a perceptually-distant root-sharing cue.
 - [ ] v3's original adversarial battery re-run and labeled.
 
@@ -94,7 +101,7 @@
 
 ### T1.3 — Sim 2: hysteresis loop and BMR melt
 **Depends:** T1.2 (bundle artifact), T0.3 (gate status). **Spec: §3 Sim 2.**
-**Task:** Import a Sim 1 frozen bundle (shared seeds). Cross-trial learning; relational modality (how shown material is met) always on/truthful; E_t per R2. Analytic BMR: at fixed intervals compare full model (coupling present) vs. reduced (coupling pruned, competence banks retained) via Friston-2017 ΔF over counts; prune when reduced wins. **If T0.3 landed:** implement the melt gate as the derived reflexivity-dependence of ΔF; **else:** impose and log as IOU. Four regimes on matched evidence budgets: informational/low-E_t; contact-under-capture; dissociative quiet (attenuation active); witnessing. Probes: premature vs. late prompted reduction; real-danger environment; E_t-flip.
+**Task:** Import a Sim 1 frozen bundle (shared seeds). Cross-trial learning; relational modality (how shown material is met) always on/truthful. The historical implementation uses a scalar parametric-depth tilt; the corrected model replaces it with field-dependent effective precision and treats informational-versus-relational contrasts as tests of access and target. Analytic BMR: at fixed intervals compare full model (coupling present) vs. reduced (coupling pruned, competence banks retained) via Friston-2017 ΔF over counts; prune when reduced wins. Probes: premature vs. late prompted reduction, real-danger environment, and a one-trial field intervention that leaves structural counts unchanged.
 **Success criteria (S2.1–S2.5 + adversarial):**
 - [ ] Regimes 1–3 produce < 10% of witnessing's root revision at matched evidence counts.
 - [ ] Melt discreteness: > 50% of total structural drop within a window ≤ 10% of melt-phase length; hysteresis figure (structural precision vs. cumulative evidence, 4 trajectories) produced.
@@ -102,18 +109,18 @@
 - [ ] Premature prompt fails (burden retained), late prompt succeeds; failure probability correlates with residual accuracy contribution, not prompt count.
 - [ ] Real-danger control: witnessing preserves adaptive fear (true-contingency avoidance intact; alone-with-this prior revised).
 - [ ] **A2.1 content-swap:** matched-precision informational content in the relational slot does **not** melt (this is the C3 test; a failure here is a headline negative result — report it).
-- [ ] **A2.2 E_t-flip:** one-trial E_t spike changes effective precision only; structural counts bit-identical.
+- [ ] **A2.2 Field intervention:** a one-trial change to forecast effective precisions leaves structural counts bit-identical.
 - [ ] **A2.3:** melt discreteness survives BMR prior-odds sweep (±1 nat).
 
 **→ Gate G1: write the §9 stub from T1.1–T1.3 results.**
 
 ---
 
-## Phase 2 — Make E_t honest ✅ RESOLVED (2026-07-09; gate G2 passed with one obstruction; §9 carries a stub for the hyper-model per author rule)
+## Phase 2 — Historical scalar-depth program ✅ RESOLVED (2026-07-09; reclassified 2026-07-13)
 
 **Outcomes:** T2.1 accepted (11 support / 1 null — emergent collapse via volatility inference, D1 validated in-model at 1.9e-16 + 15.9% broken-collinearity probe, identifiability r=0.84; D3 null with interpretation: C_t is analytically logistic in E_t, support covers only the concave side — the emergent-sigmoid claim rests on Sim 3's transfer threshold). T2.2 accepted (13/13 — collapse is EFE-selected, pragmatic term carries it while epistemic favors introspection throughout; witnessing flips to optimal after 4 co-regulated observations). T2.4 accepted (U2 supported: Self attractor 25/25 grid cells, capture basin 6/25 in the predicted corner, hysteresis as basin-hopping; dose-grading criterion falsified on saturation — floor effect). **T2.5 OBSTRUCTION:** CRP spawn never fired inside the hyper-model (existing cause assimilated acute evidence before posterior-predictive pressure crossed threshold); clamp test of §3's invariant never ran, in either direction; v12 requirement documented in src/sims/sim6b/OBSTRUCTION.md (pre-write proposal scoring against hyper-model state). Full-circle probe salvaged: post-recovery witnessed contact reached 70.6% revision. T2.3 (four-timescales figure) not run — bands 1–3 have data; awaiting author decision.
 
-### T2.1 — Sim 6a-discrete, Stage 1: inferred depth, inference-face collapse
+### T2.1 — Sim 6a-discrete, Stage 1: inferred local parametric depth
 **Depends:** T0.4 (stability envelope), T1.3 (bundle + melt machinery). **Spec: Appendix A.1–A.4, A.6 Stage 1.**
 **Task:** Extend the Sandved-Smith architecture with IFS semantics: level 1 = bundle-vs-context inference on cue trials (T1.2 bundle); level 2 = the precision balance; level 3 = discrete depth states. Reflexive modality `o_self` implemented **process-side** (generative process emits the agent's true dominant-cause configuration; agent holds an ordinary likelihood over it); E_t = inferred precision on that mapping. Collapse via the inference face only: unmodeled PE bursts raise inferred volatility → hyper-posterior widens. No mental action yet.
 **Success criteria:**

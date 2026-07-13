@@ -4,8 +4,10 @@ using Pkg
 Pkg.activate(joinpath(@__DIR__, ".."))
 include(joinpath(@__DIR__, "..", "src", "ContinuousSim6a.jl"))
 include(joinpath(@__DIR__, "..", "src", "T48Robustness.jl"))
+include(joinpath(@__DIR__, "..", "src", "GlobalPrecisionField.jl"))
 
 using .T48Robustness
+using .GlobalPrecisionField
 
 const CONFIG_PATH = joinpath(@__DIR__, "..", "configs", "t48-pilot.yaml")
 
@@ -19,6 +21,31 @@ const CONFIG_PATH = joinpath(@__DIR__, "..", "configs", "t48-pilot.yaml")
     @test mapped_depth_component(0.1, "flat") == mapped_depth_component(0.9, "flat")
     @test mapped_depth_component(0.0, "nonmonotone") == mapped_depth_component(1.0, "nonmonotone")
     @test make_params(cfg).self_support ≈ 0.20
+end
+
+@testset "global precision field keeps depth and dominance orthogonal" begin
+    result = run_regime_probe()
+    @test result.metrics.high_dominance_high_depth == 1.0
+    @test result.metrics.low_dominance_low_depth == 1.0
+    @test result.metrics.blended_signature == 1.0
+    @test result.metrics.self_led_signature == 1.0
+end
+
+@testset "epistemic depth is a readout, not a precision input" begin
+    result = infer_precision_field(zeros(length(CHANNELS)), [1.2, 0.8, 1.0, 1.1, 0.9])
+    @test length(result.broadcast_precision) == length(CHANNELS)
+    @test result.depth_index == clamp(result.posterior_confidence * result.calibration * result.breadth * result.global_integration, 0.0, 1.0)
+    @test result.part_dominance == result.broadcast_precision[1] / sum(result.broadcast_precision[1:2])
+end
+
+@testset "witnessing requires activation and an open precision field" begin
+    result = run_witnessing_probe()
+    @test result.metrics.witnessing_beats_regulation == 1.0
+    @test result.metrics.witnessing_beats_contact == 1.0
+    @test result.metrics.informational_revision_when_open == 1.0
+    @test result.metrics.learned_unscaffolded_field == 1.0
+    @test result.metrics.global_sharing_required == 1.0
+    @test result.metrics.calibrated_broadcast_required == 1.0
 end
 
 @testset "autonomous reflected pilot path" begin
