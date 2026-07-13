@@ -26,6 +26,23 @@ julia --project=projects/emergence-suite/continuous \
 
 Outputs are written to `results/global_precision_field/`.
 
+## Hierarchical fidelity tranche
+
+`src/HierarchicalEpistemicDepth.jl` moves the construction closer to Table 1
+of Beautiful Loop Theory. It adds three explicit latent levels, infers their
+states and layer precisions iteratively, derives second-order precision
+evidence from lower-level residuals, and compares a shared global hyper-node
+against matched independent local meta-inference loops.
+
+Run:
+
+```bash
+julia --project=projects/emergence-suite/continuous \
+  projects/emergence-suite/continuous/scripts/run_hierarchical_depth.jl
+```
+
+Outputs are written to `results/hierarchical_epistemic_depth/`.
+
 ## Historical Sim 6a continuous Stage 3
 
 This standalone Julia project implements ticket T2.4: the continuous three-layer Phi bridge and U2 basin map.

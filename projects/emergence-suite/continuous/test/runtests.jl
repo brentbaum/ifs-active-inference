@@ -5,9 +5,11 @@ Pkg.activate(joinpath(@__DIR__, ".."))
 include(joinpath(@__DIR__, "..", "src", "ContinuousSim6a.jl"))
 include(joinpath(@__DIR__, "..", "src", "T48Robustness.jl"))
 include(joinpath(@__DIR__, "..", "src", "GlobalPrecisionField.jl"))
+include(joinpath(@__DIR__, "..", "src", "HierarchicalEpistemicDepth.jl"))
 
 using .T48Robustness
 using .GlobalPrecisionField
+using .HierarchicalEpistemicDepth
 
 const CONFIG_PATH = joinpath(@__DIR__, "..", "configs", "t48-pilot.yaml")
 
@@ -46,6 +48,16 @@ end
     @test result.metrics.learned_unscaffolded_field == 1.0
     @test result.metrics.global_sharing_required == 1.0
     @test result.metrics.calibrated_broadcast_required == 1.0
+end
+
+@testset "hierarchical epistemic depth uses endogenous layer errors" begin
+    config = FormalConfig(seeds = [8201, 8202], samples = 60, iterations = 12)
+    episode = generate_episode(8201, [0.8, 0.8, 0.8]; config = config)
+    result = infer_episode(episode; global_model = true, config = config)
+    @test length(result.phi) == 3
+    @test length(result.trace) == config.iterations
+    @test last(result.trace).residual_1 > 0
+    @test isfinite(last(result.trace).free_energy_proxy)
 end
 
 @testset "autonomous reflected pilot path" begin

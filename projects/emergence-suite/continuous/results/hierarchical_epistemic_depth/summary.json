@@ -1,0 +1,20 @@
+{
+  "criteria": {
+    "iterative_joint_update": 1.0,
+    "global_heldout_advantage": 1.0,
+    "global_not_universally_superior": 1.0,
+    "explicit_hierarchy_runs": 1.0,
+    "endogenous_second_order_errors": 1.0
+  },
+  "protocol": "four construction experiments; not confirmatory",
+  "coordinated_heldout": {
+    "global_error": 0.2226264701490584,
+    "local_error": 1.0
+  },
+  "independent_pattern": {
+    "local_rmse": 0.16740571582826377,
+    "global_rmse": 0.3443190926539187
+  },
+  "model": "three-level linear Gaussian hierarchy with a global hyper-node over layer precisions",
+  "experiment": "hierarchical_epistemic_depth_fidelity_tranche"
+}
