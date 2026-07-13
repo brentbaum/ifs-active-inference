@@ -57,3 +57,74 @@ independent.
 **Decision:** advance the hierarchical global model, while retaining the local
 model as a standing adversarial control. Do not add further global machinery
 unless it improves a held-out prediction.
+
+## Tranche B — twenty literature-derived operators
+
+Experiments 5–24 translated twenty papers into one minimal operator each and
+ran every operator through the same seven arms, twenty seeds, and three
+strengths. The arms tested witnessing, regulation without activation, contact
+under narrowing, information through an open field, accurate danger, false
+suggestion, rupture and repair, and removal of the relational scaffold.
+
+The top single operators were:
+
+| Experiment | Operator | Source | Score | Robustness |
+|---:|---|---|---:|---:|
+| 7 | Context redescription | Chamberlin (2023) | 0.866 | 1.00 |
+| 20 | Flexible boundary | Sandved-Smith et al. (2026) | 0.842 | 1.00 |
+| 14 | Patient testing | Li et al. (2025) | 0.841 | 1.00 |
+| 8 | Spare capacity | Smith et al. (2020) | 0.835 | 1.00 |
+| 9 | Regulatory authority | Palejova (2026) | 0.830 | 1.00 |
+
+The global covariance baseline scored `0.815`. Context redescription improved
+the benchmark by adding a new state that learned that the active schema
+belonged to one context and need not govern another. It preserved the
+distinction between opening access and changing the representation itself.
+The result is therefore more interesting than a stronger learning rate, but
+it is not independent evidence for Chamberlin's theory: the operator and score
+are construction choices derived from that theory.
+
+Somatic safety and policy-likelihood interaction failed the across-strength
+robustness criterion in this implementation. This does not falsify their
+source theories. It shows that these minimal translations did not preserve
+the common benchmark's witnessing-versus-control discrimination.
+
+## Tranche C — earned recombinations
+
+Experiments 25–28 recombined the top three nonidentical operators:
+
+25. context redescription + flexible boundary;
+26. context redescription + patient testing;
+27. flexible boundary + patient testing; and
+28. all three operators.
+
+The best combination was context redescription plus patient testing at
+`0.868`, only `0.0016` above context redescription alone. The preregistered
+complexity margin was `0.020`. No combination earned retention.
+
+**Decision:** stop at twenty-eight experiments. Retain global recursive
+precision control as the access mechanism and context redescription as the
+leading candidate change mechanism. Do not add a second named force or a
+multi-operator stack. Flexible boundaries and patient-led testing remain
+useful experimental contrasts rather than components of the core theory.
+
+## What was learned
+
+The simplest surviving account has two operations, not one:
+
+1. epistemic depth keeps precision allocation recursively available across the
+   hierarchy while the part is active; and
+2. representational redescription can use that access to construct a
+   context-indexed model in which an old protective inference was coherent
+   then without being compulsory now.
+
+The formal comparison adds a scope condition: global coordination should help
+when precision changes share real structure across levels. Independent local
+changes should be handled locally. The literature tournament adds a second
+boundary: access is not itself revision. These two constraints sharpen the
+theory without multiplying its central machinery.
+
+All numerical results are in
+`projects/emergence-suite/continuous/results/literature_tournament/`. The
+tournament is hypothesis-generating and post-baseline; it did not test human
+outcomes, reproduce the cited papers, or supply clinical effect sizes.

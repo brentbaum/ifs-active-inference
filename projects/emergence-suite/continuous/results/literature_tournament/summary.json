@@ -1,0 +1,42 @@
+{
+  "best_single": {
+    "complexity": 2,
+    "rupture_root": 0.2383088704376419,
+    "mechanisms": "redescription",
+    "name": "context_redescription",
+    "information_root": 0.20319444387278862,
+    "robustness": 1.0,
+    "regulation_root": 0.8382519659880372,
+    "danger_threat": 0.8406753680016578,
+    "false_root": 0.7731437869740224,
+    "contact_root": 0.8523129717851667,
+    "experiment": 7,
+    "citation": "Chamberlin (2023)",
+    "witnessing_root": 0.06444083003614186,
+    "transfer": 0.30788767237199816,
+    "score": 0.8661831780525503,
+    "false_unrelated": 0.6092234136123075
+  },
+  "simplicity_rule": "combination must beat best single by 0.02",
+  "protocol": "adaptive construction tournament; 20 single mechanisms plus 4 earned recombinations",
+  "combination_earned": false,
+  "experiment_count": 28,
+  "best_combination": {
+    "complexity": 4,
+    "rupture_root": 0.20983096326386433,
+    "mechanisms": "redescription+patient_testing",
+    "name": "context_redescription+patient_testing",
+    "information_root": 0.203200259950812,
+    "robustness": 1.0,
+    "regulation_root": 0.8641957181938197,
+    "danger_threat": 0.8613110253463498,
+    "false_root": 0.8810095979835615,
+    "contact_root": 0.8369179148389727,
+    "experiment": 26,
+    "citation": "Chamberlin (2023); Li et al. (2025)",
+    "witnessing_root": 0.046292390891584816,
+    "transfer": 0.30788767237199816,
+    "score": 0.86774035505881,
+    "false_unrelated": 0.653181830364758
+  }
+}

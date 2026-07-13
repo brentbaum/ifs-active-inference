@@ -6,10 +6,12 @@ include(joinpath(@__DIR__, "..", "src", "ContinuousSim6a.jl"))
 include(joinpath(@__DIR__, "..", "src", "T48Robustness.jl"))
 include(joinpath(@__DIR__, "..", "src", "GlobalPrecisionField.jl"))
 include(joinpath(@__DIR__, "..", "src", "HierarchicalEpistemicDepth.jl"))
+include(joinpath(@__DIR__, "..", "src", "LiteratureTournament.jl"))
 
 using .T48Robustness
 using .GlobalPrecisionField
 using .HierarchicalEpistemicDepth
+using .LiteratureTournament
 
 const CONFIG_PATH = joinpath(@__DIR__, "..", "configs", "t48-pilot.yaml")
 
@@ -23,6 +25,26 @@ const CONFIG_PATH = joinpath(@__DIR__, "..", "configs", "t48-pilot.yaml")
     @test mapped_depth_component(0.1, "flat") == mapped_depth_component(0.9, "flat")
     @test mapped_depth_component(0.0, "nonmonotone") == mapped_depth_component(1.0, "nonmonotone")
     @test make_params(cfg).self_support ≈ 0.20
+end
+
+@testset "literature tournament defines twenty distinct mechanisms" begin
+    variants = literature_variants()
+    @test length(variants) == 20
+    @test length(unique(spec.mechanism for spec in variants)) == 20
+    @test all(spec.complexity >= 0 for spec in variants)
+end
+
+@testset "literature tournament retains the simplest earned mechanism" begin
+    mktempdir() do output_dir
+        result = run_tournament(output_dir)
+        @test length(result.rows) == 24
+        @test result.best_single.name == "context_redescription"
+        @test result.best_combination.score > result.best_single.score
+        @test result.best_combination.score < result.best_single.score + 0.02
+        @test !result.combination_earned
+        @test isfile(joinpath(output_dir, "ranked_experiments.csv"))
+        @test isfile(joinpath(output_dir, "summary.json"))
+    end
 end
 
 @testset "global precision field keeps depth and dominance orthogonal" begin
