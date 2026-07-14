@@ -1,0 +1,50 @@
+{
+  "mean_metrics": {
+    "full_after_channel_3": 1.0,
+    "blind_accuracy": 0.7125,
+    "factorized_violation_accuracy": 0.5566666666666669,
+    "blind_after_channel_3": 0.037500000000000006,
+    "random_mean_packets": 2.0,
+    "factorized_coherent_accuracy": 0.7291041106379201,
+    "full_mean_packets": 2.0,
+    "random_accuracy": 0.7041666666666666,
+    "factorized_accuracy": 0.7233333333333334,
+    "full_coherent_accuracy": 0.7935013044635564,
+    "full_before_channel_1": 1.0,
+    "line_search_invariant_rate": 1.0,
+    "full_accuracy": 0.7816666666666666,
+    "full_violation_accuracy": 0.5016666666666667
+  },
+  "protocol": "soft relational binding plus precision-guided sequential sampling",
+  "config": {
+    "relational_field": 1.5,
+    "violation_rate": 0.05,
+    "action_budget": 2,
+    "local_field": 0.1,
+    "packet_samples": 4
+  },
+  "empirical_criteria": {
+    "partially_informative_local_causes": true,
+    "relational_gain": true,
+    "active_sampling_gain": true,
+    "precision_guided_reallocation": true,
+    "matched_sample_budget": true,
+    "adversarial_scope": true
+  },
+  "experiment": 39,
+  "stage": "exploratory pilot",
+  "implementation_checks": {
+    "explicit_three_level_states": true,
+    "posterior_residual_hyper_updates": true,
+    "scalar_depth_not_used": true,
+    "factorized_replay_uses_full_actions": true
+  },
+  "local_mutual_information": 0.01331544364054988,
+  "win_rates": {
+    "active_over_random": 1.0,
+    "relational_over_factorized": 0.8
+  },
+  "optimization_checks": {
+    "line_search_invariant_holds": true
+  }
+}

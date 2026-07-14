@@ -323,3 +323,20 @@ global models. At deviation scale `2.0`, nested-global RMSE was `1.068`, versus
 ```
 
 Outputs are under `results/identifiable_globality/`.
+
+## Experiment 39: unified relational agent
+
+This exploratory construction places soft higher-order relational binding,
+the explicit three-level residual-driven precision hyper-loop, and sequential
+precision-guided sampling in one agent. Local causes remain partially
+informative, while a matched factorized replay receives the full agent's exact
+actions and observations. Matched-budget random and precision-blind policies
+separate joint binding from adaptive sampling and precision-controlled
+reallocation.
+
+```bash
+~/.juliaup/bin/julia --project=projects/emergence-suite/continuous \
+  projects/emergence-suite/continuous/scripts/run_unified_relational_pilot.jl
+```
+
+Pilot outputs are under `results/unified_relational_pilot/`.

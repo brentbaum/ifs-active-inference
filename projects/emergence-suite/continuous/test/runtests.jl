@@ -18,6 +18,7 @@ include(joinpath(@__DIR__, "..", "src", "LearnedPrecisionStructure.jl"))
 include(joinpath(@__DIR__, "..", "src", "ConfirmatoryBeautifulLoop.jl"))
 include(joinpath(@__DIR__, "..", "src", "IdentifiablePrecisionStructure.jl"))
 include(joinpath(@__DIR__, "..", "src", "IdentifiableGlobality.jl"))
+include(joinpath(@__DIR__, "..", "src", "UnifiedRelationalAgent.jl"))
 
 using .T48Robustness
 using .GlobalPrecisionField
@@ -33,6 +34,7 @@ using .LearnedPrecisionStructure
 using .ConfirmatoryBeautifulLoop
 using .IdentifiablePrecisionStructure
 using .IdentifiableGlobality
+using .UnifiedRelationalAgent
 
 const CONFIG_PATH = joinpath(@__DIR__, "..", "configs", "t48-pilot.yaml")
 
@@ -262,6 +264,19 @@ end
     @test Set(keys(snapshots)) ==
         Set(["compact_global", "nested_global", "independent_local"])
     @test all(values(IdentifiableGlobality.structural_checks(config)))
+end
+
+@testset "soft relational agent combines joint binding and action" begin
+    config = RelationalAgentConfig(seeds = [12901], episodes = 12,
+        training_episodes = 5, switch_episode = 8,
+        inference_iterations = 3, hyper_newton_steps = 2)
+    @test local_mutual_information(config) > 0
+    episode = generate_relational_episode(12901, 1; config = config)
+    @test size(episode.states) == (3, 3, config.packet_samples)
+    rows = run_relational_agent_seed(12901; config = config)
+    @test Set(row.agent for row in rows) == Set([
+        "full", "factorized_replay", "random", "precision_blind"])
+    @test all(row.sample_packets == config.action_budget for row in rows)
 end
 
 @testset "autonomous reflected pilot path" begin

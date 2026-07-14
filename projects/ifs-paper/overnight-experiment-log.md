@@ -355,3 +355,25 @@ inference earns sample efficiency when structure is shared, and the same global
 hyper-model can release tying until it matches independent learning when the
 environment warrants local structure. Preserve the direct-layer-monitoring
 fidelity cost and do not convert this into a universal global advantage.
+
+## Experiment 39 — unified relational agent pilot
+
+The first end-to-end repair used partially informative local causes plus a
+higher-order relational prior, explicit three-level Gaussian branches, a
+residual-driven global precision field, and two sequential precision-guided
+actions. A factorized control replayed the full agent's exact actions and data;
+relational random and precision-blind controls separated policy and precision.
+
+The first three-way parity version produced zero relational gain under a
+two-branch budget. Pairwise versions with two observations missed the `0.030`
+criterion, and a three-observation candidate passed five seeds but failed ten.
+With four observations per selected branch and a weaker nonzero local field,
+full pilot accuracy was `0.782`, versus `0.723` factorized replay, `0.704`
+random, and `0.713` precision-blind. Joint binding won 8/10 seeds and active
+sampling 10/10. The policy reversed its first action across the context switch
+in every held-out episode; the blind policy did not. Relation violations
+reversed the joint advantage.
+
+**Decision:** retain as the first successful exploratory conjunction. Freeze
+the complete configuration and thresholds before opening new seeds; do not add
+the result to v11 until it confirms.
