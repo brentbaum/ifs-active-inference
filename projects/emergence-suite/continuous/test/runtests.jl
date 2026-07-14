@@ -9,12 +9,14 @@ include(joinpath(@__DIR__, "..", "src", "GlobalPrecisionField.jl"))
 include(joinpath(@__DIR__, "..", "src", "HierarchicalEpistemicDepth.jl"))
 include(joinpath(@__DIR__, "..", "src", "LiteratureTournament.jl"))
 include(joinpath(@__DIR__, "..", "src", "BeautifulLoopHierarchy.jl"))
+include(joinpath(@__DIR__, "..", "src", "TemporalHyperModel.jl"))
 
 using .T48Robustness
 using .GlobalPrecisionField
 using .HierarchicalEpistemicDepth
 using .LiteratureTournament
 using .BeautifulLoopHierarchy
+using .TemporalHyperModel
 
 const CONFIG_PATH = joinpath(@__DIR__, "..", "configs", "t48-pilot.yaml")
 
@@ -101,6 +103,17 @@ end
     global_marginal = diag(global_result.map_phi * global_result.prior_covariance * global_result.map_phi')
     local_marginal = diag(local_result.map_phi * local_result.prior_covariance * local_result.map_phi')
     @test global_marginal ≈ local_marginal
+end
+
+@testset "temporal hyper-model updates coupling from endogenous evidence" begin
+    config = TemporalConfig(seeds = [8401], steps = 30, first_switch = 11,
+        second_switch = 21, evidence_samples = 12)
+    rows = run_temporal_seed(8401; config = config)
+    @test length(rows) == 30
+    @test Set(row.regime for row in rows) == Set(["coordinated_1", "independent", "coordinated_2"])
+    @test all(0 < row.global_weight < 1 for row in rows)
+    @test all(isfinite(row.adaptive_rmse) for row in rows)
+    @test any(abs(row.global_log_evidence - row.local_log_evidence) > 1.0e-6 for row in rows)
 end
 
 @testset "autonomous reflected pilot path" begin

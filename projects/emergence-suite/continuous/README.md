@@ -171,3 +171,17 @@ Run with:
 ```
 
 Outputs are under `results/beautiful_loop_hierarchy/`.
+
+## Experiment 30: temporal hyper-model
+
+This model learns a context-conditioned precision forecast online and performs
+dynamic model selection between globally coupled and independent local
+precision changes. Structure switches are not exposed to the agent; expected
+lower-level residuals supply the second-order evidence.
+
+```bash
+~/.juliaup/bin/julia --project=projects/emergence-suite/continuous \
+  projects/emergence-suite/continuous/scripts/run_temporal_hypermodel.jl
+```
+
+Outputs are under `results/temporal_hypermodel/`.

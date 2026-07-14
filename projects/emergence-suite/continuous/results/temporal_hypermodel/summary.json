@@ -1,0 +1,28 @@
+{
+  "mean_metrics": {
+    "shared_local_rmse": 0.09766551529813608,
+    "initial_global_weight": 0.7035350044908265,
+    "recovered_global_weight": 0.740084034502751,
+    "broken_forced_global_rmse": 0.5740930959374431,
+    "recovery_adaptive_rmse": 0.15880822167104292,
+    "shared_adaptive_rmse": 0.08673074317908115,
+    "broken_adaptive_rmse": 0.3186823968930204,
+    "recovery_local_rmse": 0.19031594656702946,
+    "broken_global_weight": 0.07967796001780646
+  },
+  "criteria": {
+    "broken_regime_advantage": true,
+    "coordinated_regime_competitive": true,
+    "releases_broken_coupling": true,
+    "recovers_global_coupling": true,
+    "learns_global_coupling": true
+  },
+  "protocol": "online endogenous precision forecasting with unannounced structure switches",
+  "experiment": 30,
+  "win_rates": {
+    "broken_beats_forced_global": 1.0,
+    "coupling_recovered": 1.0,
+    "global_detected": 1.0,
+    "coupling_released": 1.0
+  }
+}

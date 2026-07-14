@@ -155,3 +155,24 @@ average and improved in 17/20 seeds.
 anticipatory precision forecasting, not a large state-inference effect. The
 remaining experiment slot should test whether the global model can detect and
 recover when the assumed cross-layer context structure breaks.
+
+## Experiment 30 — endogenous temporal hyper-model
+
+Moved context-conditioned precision learning inside an online hyper-process.
+The agent compared a shared global context slope with independent layer slopes,
+using lower-level residuals as second-order evidence. The environment changed
+from coordinated to independent precision shifts and back without exposing
+the regime label.
+
+The first construction released coupling but did not confidently learn or
+recover it. A second construction retained the criteria and added a mild
+Occam prior for the four-parameter shared model over the six-parameter local
+model. The successful model's global weight moved from `0.704` to `0.080` and
+back to `0.740`. It beat forced global pooling during the broken regime
+(`0.319` versus `0.574` RMSE) and remained competitive with local loops during
+coordination (`0.087` versus `0.098`). All model-selection criteria passed in
+20/20 seeds.
+
+**Decision:** advance the temporal hyper-model to the Bayesian-binding
+experiment. Retain the explicit complexity prior in the model specification;
+do not describe the selection as emerging without inductive bias.
