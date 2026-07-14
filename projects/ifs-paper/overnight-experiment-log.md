@@ -426,10 +426,11 @@ reallocated perfectly in both worlds, and every implementation, replay, budget,
 and optimization check passed.
 
 The overall status is still failed: the residual factorized action gain was
-`0.01583`, just above the auxiliary negligible-effect cutoff of `0.015`.
+`0.01583`, just above the frozen negligible-effect cutoff of `0.015`, one of
+six equally weighted criteria.
 
 **Decision:** retain the failed cutoff. The fresh result confirms the central
-interaction but refines the theory from an all-or-none gate to strong
-amplification: relational dependence makes precision-guided sampling much more
-valuable, without making channel reliability literally irrelevant when the
-relation is absent. Stop iterating on this cutoff.
+interaction but refines the theory from an all-or-none gate to amplification:
+relational dependence makes precision-guided sampling more valuable, without
+making channel reliability literally irrelevant when the relation is absent.
+Stop iterating on this cutoff.

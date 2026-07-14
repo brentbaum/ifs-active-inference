@@ -30,6 +30,15 @@ switch (`3.8%` relational; `6.9%` factorized). Thus the policy mechanism
 continued to reallocate when the relation was absent, but its advantage over
 random sampling was much smaller.
 
+Across the twenty paired seeds, 95% Student $t$ intervals were
+`[0.071, 0.110]` for relational binding gain, `[0.064, 0.109]` for relational
+action gain, `[-0.001, 0.033]` for factorized action gain, and `[0.041, 0.100]`
+for the interaction. The raw action-gain ratio was about `5.4`; descriptively
+normalizing each gain by its random accuracy above chance reduced that contrast
+to about `1.9`. Removing relational synergy also removed total scene
+information, so the additive interaction should not be read as pure policy
+headroom.
+
 The factorized projection matched all six conditional local probabilities with
 maximum error `2.22e-16`. Both action replay and two-packet budgets were exact,
 all computed implementation checks passed, and every full-agent free-energy
@@ -49,6 +58,12 @@ advantage by `0.070`, while a small residual advantage remained without it.
 This is also the simpler mechanistic claim. Nothing in the construction implies
 that channel reliability becomes wholly irrelevant when local causes are
 factorized.
+
+The unified agent senses only the bottom of each Gaussian branch. Its policy
+uses total per-channel transition variance, which is identifiable there, but
+the nine layer-specific precision components are not separately identified.
+The precision-blind arm ablates forecast-guided action ranking; it does not
+ablate precision within perceptual inference.
 
 ## Interpretation boundary
 

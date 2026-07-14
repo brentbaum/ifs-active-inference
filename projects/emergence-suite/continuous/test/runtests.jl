@@ -307,6 +307,13 @@ end
     @test metrics.full_mean_packets == metrics.random_mean_packets
 end
 
+@testset "paired interaction intervals retain the frozen twenty-seed unit" begin
+    interval = paired_t_interval(collect(1.0:20.0))
+    @test interval.mean == 10.5
+    @test interval.lower < interval.mean < interval.upper
+    @test_throws ArgumentError paired_t_interval([1.0, 2.0])
+end
+
 @testset "autonomous reflected pilot path" begin
     cfg = load_t48_config(CONFIG_PATH)
     trace = driven_trace(first(cfg.seeds), "theory", cfg.pilot_observation_noise_sd, cfg)

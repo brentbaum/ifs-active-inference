@@ -22,6 +22,36 @@
     "relational_over_factorized": 0.0
   },
   "seeds": [16001, 16002, 16003, 16004, 16005, 16006, 16007, 16008, 16009, 16010, 16011, 16012, 16013, 16014, 16015, 16016, 16017, 16018, 16019, 16020],
+  "paired_uncertainty_95": {
+    "action_interaction": {
+      "method": "two-sided 95% Student t interval with 19 degrees of freedom",
+      "lower": 0.04108138138674634,
+      "mean": 0.07041666666666671,
+      "standard_error": 0.014015903143774662,
+      "upper": 0.09975195194658708
+    },
+    "relational_action_gain": {
+      "method": "two-sided 95% Student t interval with 19 degrees of freedom",
+      "lower": 0.06385381474797101,
+      "mean": 0.08625000000000002,
+      "standard_error": 0.010700518515064025,
+      "upper": 0.10864618525202903
+    },
+    "factorized_action_gain": {
+      "method": "two-sided 95% Student t interval with 19 degrees of freedom",
+      "lower": -0.0013260646242741654,
+      "mean": 0.01583333333333332,
+      "standard_error": 0.008198470118302669,
+      "upper": 0.03299273129094081
+    },
+    "relational_binding_gain": {
+      "method": "two-sided 95% Student t interval with 19 degrees of freedom",
+      "lower": 0.0710491403352788,
+      "mean": 0.09041666666666667,
+      "standard_error": 0.009253476508068742,
+      "upper": 0.10978419299805454
+    }
+  },
   "optimization_checks": {
     "relational_line_search": true,
     "factorized_line_search": true

@@ -314,19 +314,28 @@ with 20/20 wins. The factorized-world action gain was `0.0158`, yielding a
 preregistered relational-action interaction of `0.070`. The policy reversed
 its channel preference in both worlds, so relational dependence amplified the
 instrumental value of reallocation rather than creating the policy operation.
-The overall frozen status remains failed because `0.0158` narrowly exceeded an
-auxiliary negligible-effect cutoff of `0.015`.
+On the raw accuracy-gain scale that amplification is roughly fivefold; after
+descriptively normalizing each gain by accuracy available above chance it is
+roughly twofold, because removing synergy also removes total scene information.
+The 95% paired-seed interval for the interaction was `[0.041, 0.100]`. The
+overall frozen status remains failed because `0.0158` narrowly exceeded the
+negligible-effect cutoff of `0.015`, one of six equally weighted frozen
+criteria.
 
 The strongest defensible external-reader verdict is now **yes for a faithful
-minimal precision hyper-loop and for one authored agent in which joint binding,
-recursive precision inference, and epistemic sampling interact; no for a
-reproduction, autonomous structure discovery, or a unique architecture**. The
-conjunction is now real in the limited construction sense: removing the joint
-factor while preserving local marginals sharply attenuates the value of active
-sampling. The relational family and precision loading basis are supplied,
-free-energy descent is enforced as an optimization invariant, and the policy
-is an information-gain surrogate rather than exact expected free energy under
-the same continuous model.
+minimal precision hyper-loop under direct layer monitoring and for one authored
+agent in which joint binding, recursive precision inference, and epistemic
+sampling interact; no for a reproduction, autonomous structure discovery, or
+a unique architecture**. The conjunction is now real in the limited
+construction sense: removing the joint factor while preserving local marginals
+sharply attenuates the value of active sampling. The unified agent returns to
+bottom-only sensing, so its policy consumes identifiable total channel variance
+rather than an identified layerwise decomposition. The relational family and
+precision loading basis are supplied, free-energy descent is enforced as an
+optimization invariant, and the policy is an information-gain surrogate rather
+than exact expected free energy under the same continuous model. Within this
+agent, precision recursion is directly ablated only along the action-selection
+path, not inside perceptual inference.
 
 Most importantly, globality should not be equated with identical precision or
 one privileged node. A global hyper-model is defined by joint recursive message

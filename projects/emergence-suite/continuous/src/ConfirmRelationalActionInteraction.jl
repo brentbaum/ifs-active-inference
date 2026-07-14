@@ -5,7 +5,7 @@ using Main.GlobalPrecisionField
 using Main.UnifiedRelationalAgent
 using Main.MatchedMarginalRelationAblation
 
-export run_confirm_relational_action_interaction
+export paired_t_interval, run_confirm_relational_action_interaction
 
 function evaluate_condition(config, scene_mode, model_mode)
     metrics = NamedTuple[]
@@ -16,6 +16,17 @@ function evaluate_condition(config, scene_mode, model_mode)
     end
     result = UnifiedRelationalAgent.summarize(metrics, config)
     return metrics, result
+end
+
+function paired_t_interval(values)
+    count = length(values)
+    count == 20 || throw(ArgumentError("frozen interval expects twenty paired seeds"))
+    estimate = mean(values)
+    standard_error = std(values) / sqrt(count)
+    half_width = 2.093 * standard_error
+    return (mean = estimate, standard_error = standard_error,
+        lower = estimate - half_width, upper = estimate + half_width,
+        method = "two-sided 95% Student t interval with 19 degrees of freedom")
 end
 
 function run_confirm_relational_action_interaction(output_dir::AbstractString =
@@ -39,6 +50,14 @@ function run_confirm_relational_action_interaction(output_dir::AbstractString =
     factorized_action_gain = factorized_means.full_accuracy -
         factorized_means.random_accuracy
     interaction = relational_action_gain - factorized_action_gain
+    relational_binding_differences = [row.full_accuracy - row.factorized_accuracy
+        for row in relational_metrics]
+    relational_action_differences = [row.full_accuracy - row.random_accuracy
+        for row in relational_metrics]
+    factorized_action_differences = [row.full_accuracy - row.random_accuracy
+        for row in factorized_metrics]
+    interaction_differences = relational_action_differences .-
+        factorized_action_differences
     projection_error = MatchedMarginalRelationAblation.factorized_projection_error(config)
 
     implementation = (
@@ -81,6 +100,12 @@ function run_confirm_relational_action_interaction(output_dir::AbstractString =
             relational_action_gain = relational_action_gain,
             factorized_action_gain = factorized_action_gain,
             action_interaction = interaction,
+        ),
+        paired_uncertainty_95 = (
+            relational_binding_gain = paired_t_interval(relational_binding_differences),
+            relational_action_gain = paired_t_interval(relational_action_differences),
+            factorized_action_gain = paired_t_interval(factorized_action_differences),
+            action_interaction = paired_t_interval(interaction_differences),
         ),
         relational_mean_metrics = relational_means,
         factorized_mean_metrics = factorized_means,
