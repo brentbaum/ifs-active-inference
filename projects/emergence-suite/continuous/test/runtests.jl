@@ -19,6 +19,7 @@ include(joinpath(@__DIR__, "..", "src", "ConfirmatoryBeautifulLoop.jl"))
 include(joinpath(@__DIR__, "..", "src", "IdentifiablePrecisionStructure.jl"))
 include(joinpath(@__DIR__, "..", "src", "IdentifiableGlobality.jl"))
 include(joinpath(@__DIR__, "..", "src", "UnifiedRelationalAgent.jl"))
+include(joinpath(@__DIR__, "..", "src", "ConfirmUnifiedRelationalAgent.jl"))
 
 using .T48Robustness
 using .GlobalPrecisionField
@@ -35,6 +36,7 @@ using .ConfirmatoryBeautifulLoop
 using .IdentifiablePrecisionStructure
 using .IdentifiableGlobality
 using .UnifiedRelationalAgent
+using .ConfirmUnifiedRelationalAgent
 
 const CONFIG_PATH = joinpath(@__DIR__, "..", "configs", "t48-pilot.yaml")
 
@@ -277,6 +279,14 @@ end
     @test Set(row.agent for row in rows) == Set([
         "full", "factorized_replay", "random", "precision_blind"])
     @test all(row.sample_packets == config.action_budget for row in rows)
+    for episode in 1:config.episodes
+        full = only(filter(row -> row.episode == episode && row.agent == "full", rows))
+        replay = only(filter(row -> row.episode == episode &&
+            row.agent == "factorized_replay", rows))
+        @test (full.first_action, full.second_action) ==
+            (replay.first_action, replay.second_action)
+    end
+    @test all(values(UnifiedRelationalAgent.implementation_checks(config)))
 end
 
 @testset "autonomous reflected pilot path" begin

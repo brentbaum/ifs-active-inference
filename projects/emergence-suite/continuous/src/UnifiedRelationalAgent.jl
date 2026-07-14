@@ -389,6 +389,9 @@ function seed_metrics(rows)
     coherent(name) = filter(row -> !row.violation, heldout(name))
     violations(name) = filter(row -> row.violation, heldout(name))
     accuracy(subset) = isempty(subset) ? NaN : mean(row.correct for row in subset)
+    full_rows = sort(filter(row -> row.agent == "full", rows); by = row -> row.episode)
+    replay_rows = sort(filter(row -> row.agent == "factorized_replay", rows);
+        by = row -> row.episode)
     return (
         seed = first(rows).seed,
         full_accuracy = accuracy(heldout("full")),
@@ -404,7 +407,37 @@ function seed_metrics(rows)
         blind_after_channel_3 = mean(row.first_action == 3 for row in after("precision_blind")),
         full_mean_packets = mean(row.sample_packets for row in heldout("full")),
         random_mean_packets = mean(row.sample_packets for row in heldout("random")),
+        replay_action_match_rate = mean(full.first_action == replay.first_action &&
+            full.second_action == replay.second_action
+            for (full, replay) in zip(full_rows, replay_rows)),
         line_search_invariant_rate = mean(row.line_search_invariant for row in heldout("full")),
+    )
+end
+
+function implementation_checks(config)
+    episode = generate_relational_episode(first(config.seeds), 1; config = config)
+    unified = unified_config(config)
+    model = UnifiedBeautifulLoop.PrecisionForecaster(true, unified)
+    prior_mean, prior_covariance = UnifiedBeautifulLoop.forecast(
+        model, episode.context, unified)
+    fit = infer_relational_episode(episode.observations, [1, 2], prior_mean,
+        prior_covariance; config = config)
+    perturbed = copy(episode.observations)
+    perturbed[1, 1] += 0.50
+    perturbed_fit = infer_relational_episode(perturbed, [1, 2], prior_mean,
+        prior_covariance; config = config)
+    marginal_error = maximum(abs(
+        sum(exp(scene_log_prior(g, local_causes, :factorized, config) + log(2))
+            for local_causes in LOCAL_CONFIGURATIONS if local_causes[channel] == 1) -
+        local_positive_probability(g, channel, config))
+        for g in (-1, 1), channel in 1:3)
+    return (
+        explicit_three_level_states = size(episode.states) ==
+            (3, 3, config.packet_samples),
+        factorized_prior_matches_local_marginals = marginal_error <= 1.0e-10,
+        residual_messages_respond_to_observations =
+            norm(fit.residuals - perturbed_fit.residuals) > 1.0e-6,
+        partially_informative_local_causes = local_mutual_information(config) > 0.01,
     )
 end
 
@@ -436,12 +469,9 @@ function summarize(metrics, config)
         adversarial_scope = means.full_violation_accuracy <=
             means.factorized_violation_accuracy,
     )
-    implementation = (
-        explicit_three_level_states = true,
-        posterior_residual_hyper_updates = true,
-        factorized_replay_uses_full_actions = true,
-        scalar_depth_not_used = true,
-    )
+    implementation = merge(implementation_checks(config), (
+        factorized_replay_uses_full_actions = means.replay_action_match_rate >= 0.999,
+    ))
     optimization = (
         line_search_invariant_holds = means.line_search_invariant_rate >= 0.99,
     )

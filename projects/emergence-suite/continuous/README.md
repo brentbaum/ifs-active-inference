@@ -340,3 +340,17 @@ reallocation.
 ```
 
 Pilot outputs are under `results/unified_relational_pilot/`.
+
+## Experiment 40: frozen unified-agent confirmation
+
+This follow-up freezes Experiment 39 before opening a twenty-seed confirmation
+block. Eight independent stress cells vary the local/relational fields,
+observation packet size, and relation violations. A zero-relation negative
+control must remove joint binding while preserving precision-guided action.
+
+```bash
+~/.juliaup/bin/julia --project=projects/emergence-suite/continuous \
+  projects/emergence-suite/continuous/scripts/run_confirm_unified_relational_agent.jl
+```
+
+Outputs are under `results/confirm_unified_relational_agent/`.

@@ -2,6 +2,7 @@
   "mean_metrics": {
     "full_after_channel_3": 1.0,
     "blind_accuracy": 0.7125,
+    "replay_action_match_rate": 1.0,
     "factorized_violation_accuracy": 0.5566666666666669,
     "blind_after_channel_3": 0.037500000000000006,
     "random_mean_packets": 2.0,
@@ -35,9 +36,10 @@
   "stage": "exploratory pilot",
   "implementation_checks": {
     "explicit_three_level_states": true,
-    "posterior_residual_hyper_updates": true,
-    "scalar_depth_not_used": true,
-    "factorized_replay_uses_full_actions": true
+    "factorized_prior_matches_local_marginals": true,
+    "factorized_replay_uses_full_actions": true,
+    "partially_informative_local_causes": true,
+    "residual_messages_respond_to_observations": true
   },
   "local_mutual_information": 0.01331544364054988,
   "win_rates": {
