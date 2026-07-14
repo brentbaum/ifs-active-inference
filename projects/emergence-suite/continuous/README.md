@@ -149,3 +149,25 @@ Pilot outputs are under
 `results/t48_continuous_robustness_pilot/`, including per-mapping SVG basin
 maps, `bifurcation_map.svg`, seed-level null/decoupling metrics, and the noise
 sweep.
+
+## Higher-fidelity Beautiful Loop hierarchy
+
+The three-level Gaussian fidelity model has explicit hierarchical states and
+observations, layer-specific log precisions controlled by $\Phi$, alternating
+inference over $q(x^{(1:3)})$ and a Gaussian variational approximation to $q(\Phi)$,
+second-order errors computed from expected lower-level residuals, and local and
+joint variational-energy traces. Its independent local-loop ablation has the
+same marginal prior variance as the global hyper-model.
+
+The context-switch experiment learns precision forecasts from four training
+contexts and evaluates them at an out-of-range fifth context before every local
+loop receives new residual evidence.
+
+Run with:
+
+```bash
+~/.juliaup/bin/julia --project=projects/emergence-suite/continuous \
+  projects/emergence-suite/continuous/scripts/run_beautiful_loop_hierarchy.jl
+```
+
+Outputs are under `results/beautiful_loop_hierarchy/`.

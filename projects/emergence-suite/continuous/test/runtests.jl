@@ -1,5 +1,6 @@
 using Test
 using Pkg
+using LinearAlgebra
 
 Pkg.activate(joinpath(@__DIR__, ".."))
 include(joinpath(@__DIR__, "..", "src", "ContinuousSim6a.jl"))
@@ -7,11 +8,13 @@ include(joinpath(@__DIR__, "..", "src", "T48Robustness.jl"))
 include(joinpath(@__DIR__, "..", "src", "GlobalPrecisionField.jl"))
 include(joinpath(@__DIR__, "..", "src", "HierarchicalEpistemicDepth.jl"))
 include(joinpath(@__DIR__, "..", "src", "LiteratureTournament.jl"))
+include(joinpath(@__DIR__, "..", "src", "BeautifulLoopHierarchy.jl"))
 
 using .T48Robustness
 using .GlobalPrecisionField
 using .HierarchicalEpistemicDepth
 using .LiteratureTournament
+using .BeautifulLoopHierarchy
 
 const CONFIG_PATH = joinpath(@__DIR__, "..", "configs", "t48-pilot.yaml")
 
@@ -80,6 +83,24 @@ end
     @test length(result.trace) == config.iterations
     @test last(result.trace).residual_1 > 0
     @test isfinite(last(result.trace).free_energy_proxy)
+end
+
+@testset "Beautiful Loop hierarchy exposes local and joint variational energies" begin
+    config = LoopConfig(seeds = [8301], samples = 36, training_samples = 18,
+        iterations = 10, hyper_newton_steps = 10)
+    episode = generate_hierarchy(8301, [0.8, 0.7, 0.9]; samples = 36, config = config)
+    global_result = infer_hierarchy(episode; global_model = true, config = config)
+    local_result = infer_hierarchy(episode; global_model = false, config = config)
+    @test size(global_result.state_means) == size(episode.latent)
+    @test length(global_result.phi) == 3
+    @test all(last(global_result.trace)[Symbol("residual_$layer")] > 0 for layer in 1:3)
+    @test all(isfinite(last(global_result.trace)[field]) for field in
+        (:local_free_energy_1, :local_free_energy_2, :local_free_energy_3,
+            :hyper_free_energy, :joint_free_energy))
+    @test all(diff(getfield.(global_result.trace, :joint_free_energy)) .<= 1.0e-8)
+    global_marginal = diag(global_result.map_phi * global_result.prior_covariance * global_result.map_phi')
+    local_marginal = diag(local_result.map_phi * local_result.prior_covariance * local_result.map_phi')
+    @test global_marginal ≈ local_marginal
 end
 
 @testset "autonomous reflected pilot path" begin

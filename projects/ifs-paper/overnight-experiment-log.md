@@ -128,3 +128,30 @@ All numerical results are in
 `projects/emergence-suite/continuous/results/literature_tournament/`. The
 tournament is hypothesis-generating and post-baseline; it did not test human
 outcomes, reproduce the cited papers, or supply clinical effect sizes.
+
+## Experiment 29 — higher-fidelity Beautiful Loop hierarchy
+
+Implemented the seven-part upgrade proposed by the fidelity audit as a
+separate three-level Gaussian generative model. The model alternates exact
+state inference with Gaussian variational inference over a shared global
+precision factor and layer-specific deviations. Expected residuals provide
+the second-order errors. The run records three layer-local free energies, a
+hyper free energy, and a joint variational free energy; the joint objective
+descended monotonically in the all-layers construction check.
+
+The matched ablation replaced the global factor with three independent local
+meta-loops while preserving each layer's marginal prior variance. Four
+training contexts taught either one shared precision slope or three local
+slopes. At an out-of-range fifth context, only layer one initially received
+new residual evidence.
+
+**Result:** global forecast RMSE was `0.255` versus `0.411` for local loops
+(20/20 seed wins). Early held-out layer error was `0.205` versus `0.414`
+(15/20), and latent-state RMSE was `0.3683` versus `0.3740` (18/20). After all
+layers received evidence, local loops reduced precision error by `0.181` on
+average and improved in 17/20 seeds.
+
+**Decision:** retain as the new formal fidelity baseline. The main effect is
+anticipatory precision forecasting, not a large state-inference effect. The
+remaining experiment slot should test whether the global model can detect and
+recover when the assumed cross-layer context structure breaks.

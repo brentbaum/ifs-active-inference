@@ -1,0 +1,37 @@
+{
+  "generative_model": "three-level linear Gaussian hierarchy with Gaussian variational q(Phi)",
+  "training_contexts": [-1.0, -0.4, 0.2, 0.8],
+  "mean_results": {
+    "global_early_heldout_error": 0.20464463504834426,
+    "local_forecast_error": 0.41067877004060327,
+    "global_early_state_rmse": 0.3683312303065073,
+    "local_early_state_rmse": 0.3739660304902856,
+    "global_full_phi_error": 0.155154664111858,
+    "local_relearning_gain": 0.18139697657265524,
+    "global_forecast_error": 0.2552405410317372,
+    "local_full_phi_error": 0.19179789081506943,
+    "local_early_heldout_error": 0.4138577279972237
+  },
+  "protocol": "construction and out-of-sample context-switch test; not confirmatory",
+  "criteria": {
+    "matched_local_ablation": true,
+    "local_and_joint_free_energy": true,
+    "explicit_states_and_observations": true,
+    "local_loops_relearn": true,
+    "early_global_precision_advantage": true,
+    "early_global_state_advantage": true,
+    "endogenous_second_order_errors": true,
+    "joint_free_energy_descends": true,
+    "iterative_joint_inference": true,
+    "out_of_sample_global_forecast": true,
+    "layer_precision_field": true
+  },
+  "experiment": "beautiful_loop_three_level_fidelity",
+  "out_of_sample_context": 1.4,
+  "win_rates": {
+    "local_relearning": 0.85,
+    "early_global_state": 0.9,
+    "early_global_precision": 0.75,
+    "global_forecast": 1.0
+  }
+}
