@@ -328,3 +328,24 @@ cross-layer structure the environment supports; it is not epistemic depth.
 Epistemic depth instead belongs to the recursively closed joint hyper-model
 that can infer either shared structure or warranted local deviations and
 rebroadcast the resulting field throughout the hierarchy.
+
+## Experiment 38 — identifiable globality control
+
+An external review found that Experiment 37's compact and nested models were
+both global and that the independent control had disappeared precisely when
+layerwise precision became identifiable. A new protocol was committed before
+opening seeds `12001:12020`. It compared compact global, nested global, and
+eighteen genuinely independent local coefficients with matched marginal priors
+and identical noisy layer evidence.
+
+Under exact sharing, forecast RMSE was `0.340` compact and `0.359` nested,
+versus `0.637` independent; both global models won 20/20 seeds. At deviation
+scale `2.0`, nested global reached `1.068`, independent `1.090`, and compact
+`2.716`; nested beat compact in 20/20 while shrinkage fell from `8.32` to
+`1.88`. Accuracy remained tied and all five frozen criteria passed.
+
+**Decision:** the identifiable globality gap is closed. Joint precision
+inference earns sample efficiency when structure is shared, and the same global
+hyper-model can release tying until it matches independent learning when the
+environment warrants local structure. Preserve the direct-layer-monitoring
+fidelity cost and do not convert this into a universal global advantage.

@@ -311,6 +311,12 @@ and nested global hyper-models. A new seed block tests whether joint inference
 earns a forecast advantage in the identifiable exact-sharing regime and whether
 the nested global model can release tying under genuine local deviations.
 
+On fresh seeds, exact-sharing RMSE was `0.340` compact-global and `0.359`
+nested-global versus `0.637` independent-local, with 20/20 paired wins for both
+global models. At deviation scale `2.0`, nested-global RMSE was `1.068`, versus
+`1.090` independent and `2.716` compact, while shrinkage fell from `8.32` to
+`1.88`. All frozen criteria passed; task accuracy remained effectively tied.
+
 ```bash
 ~/.juliaup/bin/julia --project=projects/emergence-suite/continuous \
   projects/emergence-suite/continuous/scripts/run_identifiable_globality.jl

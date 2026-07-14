@@ -1,0 +1,51 @@
+{
+  "supervision": "noisy layer observations only; latent states, true precisions, and loading vectors remain scoring-only",
+  "protocol": "fresh identifiable joint precision hyper-models versus independent local meta-loops",
+  "interpretation_boundary": "direct layer monitoring identifies transition precision but is not bottom-sensed Table 1",
+  "empirical_criteria": {
+    "exact_nested_beats_independent": true,
+    "heterogeneous_nested_beats_compact": true,
+    "forecast_claim_does_not_become_task_claim": true,
+    "exact_compact_beats_independent": true,
+    "heterogeneous_nested_no_worse_than_independent": true
+  },
+  "experiment": 38,
+  "structural_checks": {
+    "fresh_seed_block": true,
+    "independent_control_has_no_shared_parameters": true,
+    "layer_monitoring_is_noisy": true,
+    "matched_marginal_prior_variance": true
+  },
+  "conditions": [{
+    "independent_forecast_error": 0.6372383953961531,
+    "nested_gain_over_compact": -0.01986675791306053,
+    "nested_accuracy": 0.78,
+    "compact_forecast_error": 0.33955883133106435,
+    "nested_gain_over_independent": 0.27781280615202825,
+    "nested_beats_independent_rate": 1.0,
+    "compact_beats_independent_rate": 1.0,
+    "nested_beats_compact_rate": 0.2,
+    "compact_accuracy": 0.78,
+    "independent_accuracy": 0.7808333333333333,
+    "nested_forecast_error": 0.3594255892441249,
+    "compact_gain_over_independent": 0.2976795640650888,
+    "local_deviation_sd": 0.0,
+    "nested_effective_shrinkage": 8.319272150656298
+  }, {
+    "independent_forecast_error": 1.0903436079624744,
+    "nested_gain_over_compact": 1.648507544670267,
+    "nested_accuracy": 0.7150000000000001,
+    "compact_forecast_error": 2.716434313836329,
+    "nested_gain_over_independent": 0.02241683879641254,
+    "nested_beats_independent_rate": 0.45,
+    "compact_beats_independent_rate": 0.0,
+    "nested_beats_compact_rate": 1.0,
+    "compact_accuracy": 0.7200000000000001,
+    "independent_accuracy": 0.7158333333333333,
+    "nested_forecast_error": 1.0679267691660619,
+    "compact_gain_over_independent": -1.6260907058738545,
+    "local_deviation_sd": 2.0,
+    "nested_effective_shrinkage": 1.8790989458117568
+  }],
+  "confirmatory_seeds": [12001, 12002, 12003, 12004, 12005, 12006, 12007, 12008, 12009, 12010, 12011, 12012, 12013, 12014, 12015, 12016, 12017, 12018, 12019, 12020]
+}
