@@ -1,0 +1,33 @@
+{
+  "supervision": "global causes, local causes, states, and true precisions are hidden from inference",
+  "mean_metrics": {
+    "full_accuracy": 0.7220833333333333,
+    "independent_accuracy": 0.5070833333333333,
+    "independent_violation_accuracy": 0.4929166666666667,
+    "independent_coherent_accuracy": 0.5059719518230474,
+    "independent_forecast_error": 0.5211905482561806,
+    "full_violation_accuracy": 0.24833333333333335,
+    "full_coherent_accuracy": 0.7470261072265336,
+    "full_forecast_error": 0.5211905482561807,
+    "joint_descent_rate": 1.0
+  },
+  "protocol": "relational scene inference versus identical independent local marginals",
+  "empirical_criteria": {
+    "coherent_relation_advantage": true,
+    "joint_structure_advantage": true,
+    "noisy_relation_scope_condition": true
+  },
+  "experiment": 34,
+  "structural_checks": {
+    "matched_local_marginals": true,
+    "zero_local_mutual_information": true,
+    "exact_joint_cause_enumeration": true,
+    "hidden_states_used_only_for_scoring": true,
+    "free_energy_descent_enforced": true,
+    "nonfactorized_scene_prior": true
+  },
+  "win_rates": {
+    "coherent": 1.0,
+    "overall": 1.0
+  }
+}

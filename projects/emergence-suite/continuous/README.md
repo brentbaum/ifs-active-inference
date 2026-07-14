@@ -237,3 +237,18 @@ forecasting and adaptive-action results.
 ```
 
 Outputs are under `results/unified_beautiful_loop/`.
+
+## Experiment 34: competitive relational binding
+
+This experiment replaces ordinary evidence pooling with a synergy benchmark.
+Three locally uninformative causes jointly encode a binary scene through their
+parity relation. The full model represents that relation; the control retains
+identical local marginals, hierarchy, precision inference, and evidence but no
+joint factor. Five percent relation violations expose the prior's failure mode.
+
+```bash
+~/.juliaup/bin/julia --project=projects/emergence-suite/continuous \
+  projects/emergence-suite/continuous/scripts/run_competitive_binding.jl
+```
+
+Outputs are under `results/competitive_binding/`.

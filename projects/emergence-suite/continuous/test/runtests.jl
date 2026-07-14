@@ -13,6 +13,7 @@ include(joinpath(@__DIR__, "..", "src", "TemporalHyperModel.jl"))
 include(joinpath(@__DIR__, "..", "src", "BayesianBinding.jl"))
 include(joinpath(@__DIR__, "..", "src", "EpistemicAgency.jl"))
 include(joinpath(@__DIR__, "..", "src", "UnifiedBeautifulLoop.jl"))
+include(joinpath(@__DIR__, "..", "src", "CompetitiveBinding.jl"))
 
 using .T48Robustness
 using .GlobalPrecisionField
@@ -23,6 +24,7 @@ using .TemporalHyperModel
 using .BayesianBinding
 using .EpistemicAgency
 using .UnifiedBeautifulLoop
+using .CompetitiveBinding
 
 const CONFIG_PATH = joinpath(@__DIR__, "..", "configs", "t48-pilot.yaml")
 
@@ -173,6 +175,26 @@ end
     policy = UnifiedBeautifulLoop.policy_posterior(bound.probability_positive,
         bound.posterior_phi, bound.posterior_covariance, [1, 2, 3], 0, config)
     @test sum(policy.probabilities) ≈ 1.0
+end
+
+@testset "competitive binding requires a joint relational factor" begin
+    config = CompetitiveConfig(seeds = [8801], episodes = 12,
+        training_episodes = 5, switch_episode = 8,
+        inference_iterations = 4, hyper_newton_steps = 3)
+    episode = generate_competitive_episode(8801, 1; config = config)
+    unified = CompetitiveBinding.unified_config(config)
+    model = UnifiedBeautifulLoop.PrecisionForecaster(true, unified)
+    prior_mean, prior_covariance = UnifiedBeautifulLoop.forecast(
+        model, episode.context, unified)
+    relational = infer_competitive_episode(episode.observations, [1, 2, 3],
+        prior_mean, prior_covariance; mode = :relational, config = config)
+    independent = infer_competitive_episode(episode.observations, [1, 2, 3],
+        prior_mean, prior_covariance; mode = :independent, config = config)
+    @test prod(episode.local_causes) ==
+        (episode.relation_violation ? -episode.global_cause : episode.global_cause)
+    @test independent.probability_positive ≈ 0.5
+    @test abs(relational.probability_positive - 0.5) > 1.0e-6
+    @test all(diff(getfield.(relational.trace, :joint_free_energy)) .<= 1.0e-8)
 end
 
 @testset "autonomous reflected pilot path" begin

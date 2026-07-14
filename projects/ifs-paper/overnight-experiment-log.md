@@ -252,3 +252,21 @@ four of eight original perturbation cells retained a fair-control advantage.
 verdict is withdrawn. Retain the precision-forecasting and adaptive-action
 results, explicitly report the near-match to local loops, and build a new
 environment with genuine local competition before claiming binding.
+
+## Experiment 34 — binding as relational synergy
+
+The first nonfactorized exclusion model failed its full pilot (`0.729` versus
+`0.724`; 10/20 wins), despite a positive two-seed screen. It was replaced with
+a parity benchmark in which the global scene is encoded only in the relation
+among three locally uniform causes. The control has identical local marginals
+and an identical precision loop but no relational factor.
+
+Overall held-out accuracy was `0.722` versus `0.507`; on relation-preserving
+scenes it was `0.747` versus `0.506`. The relational model won both contrasts
+in 20/20 exploratory seeds. On the five-percent adversarial relation violations
+the result reversed (`0.248` versus `0.493`), exposing the scope condition.
+Precision-forecast RMSE was identical (`0.521`) by construction.
+
+**Decision:** retain as the first non-vacuous binding result, but label it
+exploratory. The relation is supplied rather than learned; capacity-matched
+structure learning and fresh confirmation are required next.
