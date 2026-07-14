@@ -384,3 +384,18 @@ equaled replay exactly, but full also tied matched-budget random at `0.582`.
 Precision-guided channel reallocation remained perfect. This failed the planned
 modular action criterion and motivates a fresh test of a relational-structure
 by epistemic-action interaction.
+
+## Experiment 42: frozen relational-action interaction
+
+This paired confirmation runs the relational world and its exact
+matched-marginal factorized projection on the same untouched twenty-seed block.
+The policy must reallocate across context in both worlds, while a material
+accuracy benefit from targeted sampling must appear only in the relational
+world.
+
+```bash
+~/.juliaup/bin/julia --project=projects/emergence-suite/continuous \
+  projects/emergence-suite/continuous/scripts/run_confirm_relational_action_interaction.jl
+```
+
+Outputs are under `results/confirm_relational_action_interaction/`.

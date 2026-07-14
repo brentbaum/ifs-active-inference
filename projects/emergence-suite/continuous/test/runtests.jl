@@ -21,6 +21,7 @@ include(joinpath(@__DIR__, "..", "src", "IdentifiableGlobality.jl"))
 include(joinpath(@__DIR__, "..", "src", "UnifiedRelationalAgent.jl"))
 include(joinpath(@__DIR__, "..", "src", "ConfirmUnifiedRelationalAgent.jl"))
 include(joinpath(@__DIR__, "..", "src", "MatchedMarginalRelationAblation.jl"))
+include(joinpath(@__DIR__, "..", "src", "ConfirmRelationalActionInteraction.jl"))
 
 using .T48Robustness
 using .GlobalPrecisionField
@@ -39,6 +40,7 @@ using .IdentifiableGlobality
 using .UnifiedRelationalAgent
 using .ConfirmUnifiedRelationalAgent
 using .MatchedMarginalRelationAblation
+using .ConfirmRelationalActionInteraction
 
 const CONFIG_PATH = joinpath(@__DIR__, "..", "configs", "t48-pilot.yaml")
 
