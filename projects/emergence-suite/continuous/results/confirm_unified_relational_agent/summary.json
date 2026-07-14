@@ -1,0 +1,73 @@
+{
+  "zero_relation_control": {
+    "after_channel_3": 1.0,
+    "joint_effect_removed": true,
+    "relational_gain": 0.0,
+    "action_gain": 0.006666666666666599,
+    "relational_seed_win_rate": 0.0,
+    "seed_start": 15101,
+    "seed_end": 15105,
+    "action_seed_win_rate": 0.4,
+    "before_channel_1": 1.0,
+    "action_preserved": false
+  },
+  "protocol": "fresh confirmation and load-bearing stress of unified relational binding, precision recursion, and action",
+  "pilot_threshold_checks": {
+    "partially_informative_local_causes": true,
+    "relational_gain": true,
+    "active_sampling_gain": true,
+    "precision_guided_reallocation": true,
+    "matched_sample_budget": true,
+    "adversarial_scope": true
+  },
+  "local_mutual_information": 0.01331544364054988,
+  "mean_metrics": {
+    "full_after_channel_3": 1.0,
+    "blind_accuracy": 0.7175,
+    "replay_action_match_rate": 1.0,
+    "factorized_violation_accuracy": 0.6743181818181818,
+    "blind_after_channel_3": 0.0375,
+    "random_mean_packets": 2.0,
+    "factorized_coherent_accuracy": 0.7136899241058021,
+    "full_mean_packets": 2.0,
+    "random_accuracy": 0.7191666666666666,
+    "factorized_accuracy": 0.7120833333333334,
+    "full_coherent_accuracy": 0.8090232789802763,
+    "full_before_channel_1": 1.0,
+    "line_search_invariant_rate": 1.0,
+    "full_accuracy": 0.7983333333333335,
+    "full_violation_accuracy": 0.6294336219336218
+  },
+  "stress_tests": {
+    "cells_total": 8,
+    "cells_passed": 8
+  },
+  "optimization_checks": {
+    "line_search_invariant_holds": true
+  },
+  "experiment": 40,
+  "stage": "frozen confirmation",
+  "implementation_checks": {
+    "explicit_three_level_states": true,
+    "factorized_prior_matches_local_marginals": true,
+    "factorized_replay_uses_full_actions": true,
+    "partially_informative_local_causes": true,
+    "residual_messages_respond_to_observations": true
+  },
+  "win_rates": {
+    "active_over_random": 1.0,
+    "relational_over_factorized": 1.0
+  },
+  "empirical_criteria": {
+    "matched_budget_and_replay": true,
+    "relational_binding_confirmed": true,
+    "zero_relation_removes_only_joint_gain": false,
+    "partially_informative_local_causes": true,
+    "adversarial_relation_scope": true,
+    "epistemic_action_confirmed": true,
+    "coherent_relational_gain": true,
+    "precision_guided_reallocation": true,
+    "stress_signature": true
+  },
+  "confirmatory_seeds": [14001, 14002, 14003, 14004, 14005, 14006, 14007, 14008, 14009, 14010, 14011, 14012, 14013, 14014, 14015, 14016, 14017, 14018, 14019, 14020]
+}

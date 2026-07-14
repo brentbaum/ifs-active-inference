@@ -377,3 +377,24 @@ reversed the joint advantage.
 **Decision:** retain as the first successful exploratory conjunction. Freeze
 the complete configuration and thresholds before opening new seeds; do not add
 the result to v11 until it confirms.
+
+## Experiment 40 — frozen unified-agent confirmation
+
+The untouched twenty-seed block confirmed the main conjunction. Full accuracy
+was `0.798`, versus `0.712` for factorized replay and `0.719` for
+matched-budget random, with 20/20 paired wins against both. Relation-preserving
+accuracy improved from `0.714` to `0.809`; relation-violating scenes reversed
+the advantage (`0.629` full versus `0.674` factorized). Exact action replay,
+matched packet budgets, precision-sensitive context reallocation, and all
+computed implementation checks held. All eight stress cells passed.
+
+One frozen criterion failed. The zero-coefficient relation ablation removed
+joint gain exactly but left only a `0.007` action advantage, below `0.020`,
+despite perfect channel reallocation. The control had inadvertently changed
+the conditional local marginals as well as the joint factor.
+
+**Decision:** preserve Experiment 40 as a partial preregistered failure and a
+successful primary confirmation. Repair only the negative control by replacing
+the raw zero-coefficient world with the existing factorized distribution that
+matches the relational prior's local marginals exactly; freeze new seeds before
+testing it.

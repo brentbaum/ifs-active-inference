@@ -354,3 +354,10 @@ control must remove joint binding while preserving precision-guided action.
 ```
 
 Outputs are under `results/confirm_unified_relational_agent/`.
+
+The primary twenty-seed conjunction and all eight stress cells passed. The
+overall frozen status is nevertheless failed because the raw zero-relation
+control also weakened the local marginals: it removed joint gain but did not
+retain the required action-accuracy gain. See
+`projects/ifs-paper/experiment-40-confirm-unified-relational-agent.md` for the
+preserved failure and follow-up rationale.
