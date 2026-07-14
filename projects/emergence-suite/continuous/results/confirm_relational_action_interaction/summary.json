@@ -1,0 +1,75 @@
+{
+  "protocol": "relational structure by precision-guided epistemic action interaction at exactly matched conditional local marginals",
+  "factorized_mean_metrics": {
+    "full_after_channel_3": 1.0,
+    "blind_accuracy": 0.5774999999999999,
+    "replay_action_match_rate": 1.0,
+    "factorized_violation_accuracy": null,
+    "blind_after_channel_3": 0.06874999999999999,
+    "random_mean_packets": 2.0,
+    "factorized_coherent_accuracy": 0.5929166666666666,
+    "full_mean_packets": 2.0,
+    "random_accuracy": 0.5770833333333334,
+    "factorized_accuracy": 0.5929166666666666,
+    "full_coherent_accuracy": 0.5929166666666666,
+    "full_before_channel_1": 1.0,
+    "line_search_invariant_rate": 1.0,
+    "full_accuracy": 0.5929166666666666,
+    "full_violation_accuracy": null
+  },
+  "factorized_win_rates": {
+    "active_over_random": 0.6,
+    "relational_over_factorized": 0.0
+  },
+  "seeds": [16001, 16002, 16003, 16004, 16005, 16006, 16007, 16008, 16009, 16010, 16011, 16012, 16013, 16014, 16015, 16016, 16017, 16018, 16019, 16020],
+  "optimization_checks": {
+    "relational_line_search": true,
+    "factorized_line_search": true
+  },
+  "experiment": 42,
+  "stage": "frozen paired confirmation",
+  "implementation_checks": {
+    "factorized_checks": true,
+    "matched_packet_budgets": true,
+    "relational_checks": true,
+    "factorized_replay_exact": true,
+    "exact_conditional_local_marginals": true,
+    "relational_replay_exact": true
+  },
+  "relational_mean_metrics": {
+    "full_after_channel_3": 1.0,
+    "blind_accuracy": 0.7166666666666666,
+    "replay_action_match_rate": 1.0,
+    "factorized_violation_accuracy": null,
+    "blind_after_channel_3": 0.038125,
+    "random_mean_packets": 2.0,
+    "factorized_coherent_accuracy": 0.7233333333333334,
+    "full_mean_packets": 2.0,
+    "random_accuracy": 0.7275000000000001,
+    "factorized_accuracy": 0.7233333333333334,
+    "full_coherent_accuracy": 0.81375,
+    "full_before_channel_1": 1.0,
+    "line_search_invariant_rate": 1.0,
+    "full_accuracy": 0.81375,
+    "full_violation_accuracy": null
+  },
+  "effect_summary": {
+    "action_interaction": 0.07041666666666657,
+    "relational_action_gain": 0.08624999999999983,
+    "factorized_action_gain": 0.015833333333333255,
+    "relational_binding_gain": 0.09041666666666659
+  },
+  "projection_error": 2.220446049250313e-16,
+  "empirical_criteria": {
+    "factorized_action_negligible": false,
+    "relational_binding_present": true,
+    "relational_policy_reallocates": true,
+    "relational_action_advantage": true,
+    "factorized_policy_reallocates": true,
+    "relational_action_interaction": true
+  },
+  "relational_win_rates": {
+    "active_over_random": 1.0,
+    "relational_over_factorized": 1.0
+  }
+}

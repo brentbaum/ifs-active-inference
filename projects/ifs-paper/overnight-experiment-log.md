@@ -414,3 +414,22 @@ combinatorial evidence structure that makes targeted sampling valuable. Freeze
 a fresh paired comparison of relational and exact matched-marginal factorized
 worlds. Require the action policy to reallocate in both, but its accuracy gain
 to appear only when relational structure is present.
+
+## Experiment 42 — frozen relational-action interaction
+
+On untouched seeds `16001:16020`, relational-world accuracy was `0.814` full,
+`0.723` exact-action replay, and `0.728` matched-budget random. Both relational
+gains won 20/20 seeds. In the exact matched-marginal factorized world, full and
+replay were identical at `0.593`, while random reached `0.577`. The resulting
+action interaction was `0.070`, above the frozen `0.030` criterion. The policy
+reallocated perfectly in both worlds, and every implementation, replay, budget,
+and optimization check passed.
+
+The overall status is still failed: the residual factorized action gain was
+`0.01583`, just above the auxiliary negligible-effect cutoff of `0.015`.
+
+**Decision:** retain the failed cutoff. The fresh result confirms the central
+interaction but refines the theory from an all-or-none gate to strong
+amplification: relational dependence makes precision-guided sampling much more
+valuable, without making channel reliability literally irrelevant when the
+relation is absent. Stop iterating on this cutoff.

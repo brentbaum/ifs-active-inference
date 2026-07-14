@@ -399,3 +399,10 @@ world.
 ```
 
 Outputs are under `results/confirm_relational_action_interaction/`.
+
+On fresh seeds, relational binding gain was `0.090`, relational action gain
+`0.086`, factorized action gain `0.0158`, and the preregistered interaction
+`0.070`; both relational comparisons won 20/20 seeds. The overall status is
+nevertheless failed because the factorized gain exceeded the auxiliary `0.015`
+negligible-effect cutoff by `0.00083`. The earned result is strong relational
+amplification of epistemic action, not a literal all-or-none gate.
