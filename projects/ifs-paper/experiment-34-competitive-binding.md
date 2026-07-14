@@ -55,11 +55,12 @@ Across twenty exploratory seeds:
 | Relation-violating accuracy | 0.248 | 0.493 |
 | Precision-forecast RMSE | 0.521 | 0.521 |
 
-The relational model won overall and on relation-preserving scenes in 20/20
-seeds. The identical precision RMSE is an important negative control: the task
-effect comes from the joint scene factor, not a better precision forecast.
-Performance reversed on adversarial relation violations, as it should when a
-strong relational prior is wrong.
+Because $I(g;z_j)=0$, the factorized model is at chance by construction and the
+20/20 paired win count is not an empirical surprise. The informative outcomes
+are the relational model's absolute accuracy, its stability across later stress
+tests, and its reversal on adversarial relation violations. The identical
+precision RMSE is an important negative control: the task effect comes from the
+joint scene factor, not a better precision forecast.
 
 ## Interpretation
 
@@ -70,6 +71,8 @@ the information while leaving local sensing intact.
 
 The result is still exploratory and deliberately minimal. Parity is a clean
 synergy benchmark, not a realistic perceptual ontology, and the relational
-form is supplied rather than learned. The next experiment must ask whether a
-capacity-matched model can learn this structure and whether the effect survives
-fresh seeds and perturbed relation strength.
+form is supplied rather than learned. Sampling is fixed and there is no
+structural break, so this repair does not create one end-to-end agent containing
+joint binding, temporal precision recursion, and epistemic action. The next
+experiment must ask whether a capacity-matched model can learn this structure
+and whether the effect survives fresh seeds and perturbed relation strength.

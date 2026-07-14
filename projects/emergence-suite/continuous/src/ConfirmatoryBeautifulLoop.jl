@@ -47,7 +47,7 @@ function binding_stress_grid()
             relation_noise = specification.relation_noise,
         )
         _, result = binding_metrics(config)
-        means, wins, _, _ = result
+        means, wins, _, _, _ = result
         overall_gain = means.full_accuracy - means.independent_accuracy
         coherent_gain = means.full_coherent_accuracy - means.independent_coherent_accuracy
         push!(rows, (
@@ -131,7 +131,8 @@ function run_confirmatory_beautiful_loop(output_dir::AbstractString =
     structure_config = LearnedPrecisionStructure.StructureConfig(seeds = collect(9901:9920))
     binding_per_seed, binding_result = binding_metrics(binding_config)
     structure_per_seed, structure_result = structure_metrics(structure_config)
-    binding_means, binding_wins, binding_empirical, binding_structural = binding_result
+    binding_means, binding_wins, binding_empirical, binding_structural,
+        binding_optimization = binding_result
     structure_means, structure_wins, structure_empirical, structure_structural = structure_result
     binding_stress = binding_stress_grid()
     structure_stress = structure_stress_grid()
@@ -163,6 +164,7 @@ function run_confirmatory_beautiful_loop(output_dir::AbstractString =
             win_rates = binding_wins,
             empirical_criteria = binding_empirical,
             structural_checks = binding_structural,
+            optimization_checks = binding_optimization,
         ),
         learned_precision = (
             mean_metrics = structure_means,
@@ -189,6 +191,7 @@ function run_confirmatory_beautiful_loop(output_dir::AbstractString =
     GlobalPrecisionField.write_json(joinpath(output_dir, "summary.json"), summary)
     GlobalPrecisionField.write_json(joinpath(output_dir, "status.json"), (
         implementation_passed = all(values(binding_structural)) &&
+            all(values(binding_optimization)) &&
             all(values(structure_structural)),
         empirical_passed = all(values(empirical)),
         theory_result = all(values(empirical)) ?

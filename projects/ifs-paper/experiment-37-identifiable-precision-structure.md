@@ -12,13 +12,16 @@ identified three link precisions.
 
 ## Construction
 
-Every latent level now emits a noisy observation. The hidden states themselves
-are never supplied to inference, and true precision remains scoring-only. The
-hyper-loop therefore receives observable but noisy residual information at
-each level—the explicit implementation of Beautiful Loop Theory's assumption
-that a precision hyper-model monitors error dynamics throughout the hierarchy.
+Every latent level now emits a noisy observation with known precision. The
+hidden states themselves are never supplied to inference, and true precision
+remains scoring-only. This makes the layerwise transition residuals
+identifiable but changes the observation graph: higher levels are directly
+monitored rather than constrained only through bottom-level sensations. It is
+one possible implementation of system-wide error monitoring, not a literal
+reproduction of Beautiful Loop Theory's Table 1.
 
-The strong comparator is nested rather than parallel:
+The strong comparator is nested rather than parallel. Both alternatives are
+global hyper-models:
 
 \[
 \phi_{\ell j}(c)=\alpha_\ell+(b_j+\delta_{\ell j})c.
@@ -72,3 +75,7 @@ levels informs one joint posterior, whose whole field is returned to all
 levels. This is closer to the Beautiful Loop's functional claim while avoiding
 both unsupported shortcuts—that epistemic depth requires one anatomical node,
 or that more uniform precision is necessarily deeper.
+
+Experiment 38 adds the missing independent local loops under the same monitored
+observation graph. It is the globality test; this experiment is the internal
+global-to-local structure test.

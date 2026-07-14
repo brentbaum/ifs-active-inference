@@ -21,32 +21,32 @@
     "late_channel_3": 1.0,
     "break_channel_1": 1.0
   },
-  "criteria": {
+  "protocol": "binding-control audit with fair soft and log-odds local posterior pooling",
+  "robustness": {
+    "surviving_claims_pass_fraction": 1.0,
+    "pass_fraction": 0.5,
+    "total_cells": 8,
+    "cells_passed": 4,
+    "surviving_claims_cells_passed": 8
+  },
+  "experiment": 33,
+  "empirical_criteria": {
     "global_forecast_advantage": true,
-    "global_phi_controls_every_transition": true,
     "selective_ablation": false,
-    "expected_free_energy_policy": true,
-    "depth_is_readout_only": true,
-    "epistemic_action_advantage": true,
-    "explicit_three_level_world_model": true,
-    "unsupervised_bayesian_binding": true,
-    "endogenous_second_order_errors": true,
-    "joint_free_energy_descends": true,
-    "matched_local_meta_loop": true,
     "binding_advantage_over_fair_controls": false,
     "post_switch_recovery": true,
     "policy_reallocation": true,
-    "perturbation_robustness": false,
     "precision_forecast_reversal": true,
+    "epistemic_action_advantage": true
+  },
+  "implementation_checks": {
+    "global_phi_controls_every_transition": true,
+    "matched_local_meta_loop": true,
+    "residual_messages_respond_to_observations": true,
+    "efe_shaped_policy_score_is_normalized": true,
+    "explicit_three_level_world_model": true,
     "forecast_correct_broadcast_cycle": true
   },
-  "protocol": "binding-control audit with fair soft and log-odds local posterior pooling",
-  "robustness": {
-    "pass_fraction": 0.5,
-    "total_cells": 8,
-    "cells_passed": 4
-  },
-  "experiment": 33,
   "win_rates": {
     "reallocated": 1.0,
     "precision_reversed": 1.0,
@@ -58,5 +58,8 @@
     "beats_no_binding_logodds": 0.25,
     "global_forecast": 0.95,
     "recovered": 1.0
+  },
+  "optimization_checks": {
+    "line_search_invariant_holds": true
   }
 }

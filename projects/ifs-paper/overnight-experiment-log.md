@@ -234,10 +234,12 @@ precision, switch label, or experimental regime.
 The first implementation exposed three real failures. A single observation
 could not identify link-specific precision; a supposedly global field still
 contained independent channel slopes; and accumulated parameter certainty
-prevented structural revision. Four-draw temporal packets supplied identifiable
-residual structure, one latent field orientation created genuinely nonlocal
-sharing, and a second-order change detector released obsolete precision. A
-known training-boundary gate was removed after adversarial review.
+prevented structural revision. Four-draw temporal packets stabilized residual
+estimates but, as Experiment 37 later showed, did not identify the
+layerwise variance decomposition. One latent field orientation created
+genuinely nonlocal sharing, and a second-order change detector released
+obsolete precision. A known training-boundary gate was removed after
+adversarial review.
 
 Final forecast RMSE was `0.579` versus `0.881` for matched independent loops.
 The original cause-accuracy contrast was later found to use an unfair hard
@@ -245,8 +247,10 @@ vote. With graded local evidence retained, full accuracy was `0.954`, versus
 `0.950` for summed local log odds and `0.947` for soft pooling. The full model
 won only 5/20 and 6/20 seeds. Matched-budget random action scored `0.833`; fixed
 sampling scored `0.621`. Frozen structural-break accuracy was `0.706` and late
-accuracy was `0.968`; field and action reversal occurred in 20/20 seeds. Only
-four of eight original perturbation cells retained a fair-control advantage.
+accuracy was `0.968`; field and action reversal occurred in 20/20 seeds. The
+aggregate robustness flag passed four of eight cells only because it conjoined
+the later-falsified binding term; forecast, action, recovery, and reallocation
+gains retained their signs in all eight.
 
 **Decision:** the binding claim is falsified and the earlier external-reader
 verdict is withdrawn. Retain the precision-forecasting and adaptive-action
@@ -285,18 +289,19 @@ Both structured models recovered the hidden orientation (`r=0.981` global,
 `0.988` adaptive), and the adaptive model increased effective shrinkage from
 `7.38` to `9.72`. Scene accuracy was identical at `0.688`.
 
-**Decision:** the compact global structure earns a forecasting advantage even
-without a supplied loading basis and against a tying-capable control. Do not
-convert that result into a task-level claim. Freeze the architecture and test
-fresh seeds plus environments with increasing local deviations.
+**Decision at the time:** the compact structure appeared to earn a forecasting
+advantage without a supplied loading basis. Experiment 37 later showed that the
+scored layerwise target was not identifiable in this observation graph, while
+external review noted the adaptive model's evidence weighting was tempered.
+Retain loading recovery; treat the forecast horse race as superseded.
 
 ## Experiment 36 — frozen fresh-seed confirmation
 
-Relational binding confirmed at `0.726` versus `0.503` with 20/20 wins.
-Learned global precision confirmed at `0.673` RMSE, versus `0.835` adaptive
-local and `0.977` independent, with 17/20 wins against both. Scene accuracy was
-identical (`0.686`). All seven binding stress cells and all ordinary precision
-stress cells passed.
+Relational binding reached `0.726` versus a factorized model fixed at chance by
+construction (`0.503`). Learned loading orientation confirmed, while the
+reported precision RMSE was `0.673` global, `0.835` adaptive, and `0.977`
+independent. Scene accuracy was identical (`0.686`). All seven binding stress
+cells and all ordinary precision stress cells passed.
 
 The frozen scope crossover failed its magnitude criterion. Global remained
 better by `0.028` at deviation `2.0`; adaptive local won by only `0.023` at
@@ -304,7 +309,8 @@ deviation `3.0`, below the declared `0.050`. Effective local shrinkage fell to
 `5.71`, so the direction was right but adaptation was too conservative.
 
 **Decision:** preserve the overall failed status (9/11 precision predictions).
-The two primary confirmations remain positive. Improve the local learner, keep
+Relational robustness and loading recovery remain positive. Supersede the
+non-identifiable precision-RMSE comparison with a monitored-layer model, keep
 the crossover threshold, and use another untouched seed block.
 
 ## Experiment 37 — identifiable nested precision structure

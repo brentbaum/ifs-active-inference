@@ -24,11 +24,13 @@
     "zero_local_mutual_information": true,
     "exact_joint_cause_enumeration": true,
     "hidden_states_used_only_for_scoring": true,
-    "free_energy_descent_enforced": true,
     "nonfactorized_scene_prior": true
   },
   "win_rates": {
     "coherent": 1.0,
     "overall": 1.0
+  },
+  "optimization_checks": {
+    "line_search_invariant_holds": true
   }
 }

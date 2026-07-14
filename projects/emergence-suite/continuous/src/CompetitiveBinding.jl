@@ -287,7 +287,7 @@ function summarize(metrics)
     )
     empirical = (
         joint_structure_advantage = means.full_accuracy >=
-            means.independent_accuracy + 0.02 && wins.overall >= 0.75,
+            means.independent_accuracy + 0.15 && wins.overall >= 0.90,
         coherent_relation_advantage = means.full_coherent_accuracy >=
             means.independent_coherent_accuracy + 0.20 && wins.coherent >= 0.90,
         noisy_relation_scope_condition = means.full_violation_accuracy <=
@@ -299,9 +299,11 @@ function summarize(metrics)
         zero_local_mutual_information = true,
         exact_joint_cause_enumeration = true,
         hidden_states_used_only_for_scoring = true,
-        free_energy_descent_enforced = means.joint_descent_rate >= 0.99,
     )
-    return means, wins, empirical, structural
+    optimization = (
+        line_search_invariant_holds = means.joint_descent_rate >= 0.99,
+    )
+    return means, wins, empirical, structural, optimization
 end
 
 function run_competitive_binding(output_dir::AbstractString =
@@ -315,7 +317,7 @@ function run_competitive_binding(output_dir::AbstractString =
         append!(traces, rows)
         push!(metrics, seed_metrics(rows, forecast_errors))
     end
-    means, wins, empirical, structural = summarize(metrics)
+    means, wins, empirical, structural, optimization = summarize(metrics)
     summary = (
         experiment = 34,
         protocol = "relational scene inference versus identical independent local marginals",
@@ -324,12 +326,14 @@ function run_competitive_binding(output_dir::AbstractString =
         win_rates = wins,
         empirical_criteria = empirical,
         structural_checks = structural,
+        optimization_checks = optimization,
     )
     GlobalPrecisionField.write_csv(joinpath(output_dir, "trace.csv"), traces)
     GlobalPrecisionField.write_csv(joinpath(output_dir, "per_seed.csv"), metrics)
     GlobalPrecisionField.write_json(joinpath(output_dir, "summary.json"), summary)
     GlobalPrecisionField.write_json(joinpath(output_dir, "status.json"), (
-        implementation_passed = all(values(structural)),
+        implementation_passed = all(values(structural)) &&
+            all(values(optimization)),
         empirical_passed = all(values(empirical)),
         theory_result = all(values(empirical)) ?
             "nonfactorized scene structure improves global-cause inference" :

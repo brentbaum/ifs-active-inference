@@ -11,4 +11,8 @@ using .UnifiedBeautifulLoop
 output_dir = joinpath(project_dir, "results", "unified_beautiful_loop")
 result = run_unified_beautiful_loop(output_dir)
 println("Wrote experiment 33 to $output_dir")
-println("Passed all criteria: ", all(values(result.summary.criteria)))
+println("Implementation checks passed: ",
+    all(values(result.summary.implementation_checks)) &&
+    all(values(result.summary.optimization_checks)))
+println("Empirical criteria passed: ",
+    all(values(result.summary.empirical_criteria)))

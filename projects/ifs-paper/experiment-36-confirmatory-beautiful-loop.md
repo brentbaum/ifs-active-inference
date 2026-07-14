@@ -22,10 +22,11 @@ beat the compact global forecaster.
 | Hidden-loading correlation | 0.987 | 0.992 adaptive local | — |
 | Scene accuracy | 0.686 | 0.686 adaptive local | tied |
 
-Both primary fresh-seed confirmations passed. The binding stress signature also
-passed all seven cells spanning signal amplitude, sample count, and relation
-noise. The global precision advantage passed every non-deviation cell spanning
-regression evidence variance, forgetting, and training duration.
+Both predeclared primary criteria passed as written. The binding stress
+signature also passed all seven cells spanning signal amplitude, sample count,
+and relation noise. The loading-recovery result is confirmatory. The layerwise
+precision-RMSE comparison was later superseded by Experiment 37's
+identifiability correction and should not be read as a clean global-model win.
 
 ## Frozen failure
 
@@ -39,10 +40,10 @@ predictions passed; the overall frozen status is therefore **failed**.
 
 ## Interpretation
 
-The positive results are confirmatory: relational synergy, learned hidden
-loadings, and a compact global forecasting advantage all replicate on fresh
-seeds. The failed crossover matters. The adaptive local model can represent
-deviations but its conservative model averaging does not release tying quickly
-enough. The next experiment may improve that learner and use another untouched
-seed block, but it may not relabel this run as passed or weaken the original
-crossover threshold.
+The relational synergy signature and learned hidden loading replicate on fresh
+seeds. The factorized binding control is at chance by construction, so the
+important confirmation is the relational model's absolute accuracy,
+robustness, and adversarial reversal. The failed crossover matters, but the
+whole forecast comparison also used a non-identifiable target and conservatively
+tempered model averaging. Experiments 37 and 38 replace that comparison; they
+do not relabel this run as passed or weaken its original threshold.

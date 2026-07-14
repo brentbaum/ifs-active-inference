@@ -654,15 +654,7 @@ function summarize(metrics)
             row.break_channel_1 > 0.55 for row in metrics),
         precision_reversed = mean(row.late_phi_1 >= row.late_phi_3 + 0.15 for row in metrics),
     )
-    criteria = (
-        explicit_three_level_world_model = true,
-        global_phi_controls_every_transition = true,
-        joint_free_energy_descends = means.joint_descent_rate >= 0.99,
-        endogenous_second_order_errors = true,
-        forecast_correct_broadcast_cycle = true,
-        matched_local_meta_loop = true,
-        unsupervised_bayesian_binding = true,
-        expected_free_energy_policy = true,
+    empirical = (
         global_forecast_advantage = means.global_forecast_error < means.local_forecast_error &&
             wins.global_forecast >= 0.75,
         binding_advantage_over_fair_controls =
@@ -682,9 +674,8 @@ function summarize(metrics)
             wins.precision_reversed >= 0.80,
         selective_ablation = wins.global_forecast >= 0.75 &&
             wins.beats_no_binding_logodds >= 0.75 && wins.beats_random >= 0.75,
-        depth_is_readout_only = true,
     )
-    return means, wins, criteria
+    return means, wins, empirical
 end
 
 function run_robustness_grid(config::UnifiedConfig)
@@ -730,7 +721,14 @@ function run_robustness_grid(config::UnifiedConfig)
             action_gain = means.full_after_accuracy - means.random_after_accuracy,
             recovery_gain = means.late_after_accuracy - means.early_after_accuracy,
             reallocation_rate = wins.reallocated,
-            qualitative_pass = qualitative_pass,
+        qualitative_pass = qualitative_pass,
+            surviving_claims_pass =
+                means.global_forecast_error < means.local_forecast_error &&
+                means.full_after_accuracy >= means.random_after_accuracy + 0.03 &&
+                means.late_after_accuracy >= means.early_after_accuracy + 0.08 &&
+                means.before_channel_1 > 0.55 && means.late_channel_3 > 0.55 &&
+                means.break_channel_1 > 0.55 &&
+                means.late_phi_1 >= means.late_phi_3 + 0.15,
         ))
     end
     return rows
@@ -744,6 +742,10 @@ function structural_checks(config::UnifiedConfig)
     _, local_covariance = forecast(local_model, data.context, config)
     fit = infer_unified_episode(data.observations, [1, 2, 3],
         prior_mean, prior_covariance; binding = true, config = config)
+    perturbed_observations = copy(data.observations)
+    perturbed_observations[1, 1] += 0.50
+    perturbed_fit = infer_unified_episode(perturbed_observations, [1, 2, 3],
+        prior_mean, prior_covariance; binding = true, config = config)
     policy = policy_posterior(fit.probability_positive, fit.posterior_phi,
         fit.posterior_covariance, [1, 2, 3], 0, config)
     before_update, _ = forecast(global_model, data.context, config)
@@ -755,14 +757,14 @@ function structural_checks(config::UnifiedConfig)
             size(data.observations) == (3, config.samples_per_action),
         global_phi_controls_every_transition = length(fit.posterior_phi) == 9 &&
             rank(precision_design(data.context, true)) == 4,
-        endogenous_second_order_errors = all(fit.residuals .> 0),
+        residual_messages_respond_to_observations =
+            norm(fit.residuals - perturbed_fit.residuals) > 1.0e-6,
         forecast_correct_broadcast_cycle = norm(after_update - before_update) > 1.0e-8,
         matched_local_meta_loop = maximum(abs.(diag(prior_covariance) .-
             diag(local_covariance))) < 1.0e-10,
-        expected_free_energy_policy = abs(sum(policy.probabilities) - 1) < 1.0e-10 &&
+        efe_shaped_policy_score_is_normalized =
+            abs(sum(policy.probabilities) - 1) < 1.0e-10 &&
             policy.selected in policy.actions,
-        unsupervised_bayesian_binding = true,
-        depth_is_readout_only = true,
     )
 end
 
@@ -777,12 +779,12 @@ function run_unified_beautiful_loop(output_dir::AbstractString =
         append!(traces, rows)
         push!(metrics, seed_metrics(rows, snapshot, break_snapshot, config))
     end
-    means, wins, main_criteria = summarize(metrics)
+    means, wins, empirical = summarize(metrics)
     robustness = run_robustness_grid(config)
     robustness_fraction = mean(row.qualitative_pass for row in robustness)
-    criteria = merge(main_criteria, structural_checks(config), (
-        perturbation_robustness = robustness_fraction >= 0.75,
-    ))
+    surviving_robustness_fraction = mean(row.surviving_claims_pass for row in robustness)
+    implementation = structural_checks(config)
+    optimization = (line_search_invariant_holds = means.joint_descent_rate >= 0.99,)
     summary = (
         experiment = 33,
         protocol = "binding-control audit with fair soft and log-odds local posterior pooling",
@@ -793,16 +795,23 @@ function run_unified_beautiful_loop(output_dir::AbstractString =
             cells_passed = count(row.qualitative_pass for row in robustness),
             total_cells = length(robustness),
             pass_fraction = robustness_fraction,
+            surviving_claims_cells_passed =
+                count(row.surviving_claims_pass for row in robustness),
+            surviving_claims_pass_fraction = surviving_robustness_fraction,
         ),
-        criteria = criteria,
+        empirical_criteria = empirical,
+        implementation_checks = implementation,
+        optimization_checks = optimization,
     )
     GlobalPrecisionField.write_csv(joinpath(output_dir, "trace.csv"), traces)
     GlobalPrecisionField.write_csv(joinpath(output_dir, "per_seed.csv"), metrics)
     GlobalPrecisionField.write_csv(joinpath(output_dir, "robustness_grid.csv"), robustness)
     GlobalPrecisionField.write_json(joinpath(output_dir, "summary.json"), summary)
     GlobalPrecisionField.write_json(joinpath(output_dir, "status.json"), (
-        implementation_passed = all(values(criteria)),
-        theory_result = all(values(criteria)) ?
+        implementation_passed = all(values(implementation)) &&
+            all(values(optimization)),
+        empirical_passed = all(values(empirical)),
+        theory_result = all(values(empirical)) ?
             "one recursive precision field binds hierarchical beliefs and selects epistemic action" :
             "the original binding claim does not survive its fair-control audit",
     ))

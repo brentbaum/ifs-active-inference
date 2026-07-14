@@ -27,8 +27,10 @@ residual updates. The independent control has eighteen unconstrained local
 intercept/slope parameters. The stronger adaptive control has the same local
 parameters but averages six Gaussian priors ranging from independence to
 strong cross-component tying. Predictive evidence updates the model weights,
-so it can discover the global regularity rather than being forbidden from
-representing it.
+at a deliberately tempered learning rate of `0.04`, so it can discover the
+global regularity but commits to a shrinkage regime slowly. All models receive
+the correct linear context family; they learn its coefficients, not its
+functional form.
 
 ## Exploratory results
 
@@ -49,13 +51,16 @@ competitor rather than independent regressions under another name.
 ## Interpretation
 
 The original result was not solely manufactured by supplying the correct
-loading values. A compact global parameterization can learn an unfamiliar
-field orientation from residual evidence and generalize it out of sample more
-efficiently than both independent and tying-capable local models.
+loading values: the unfamiliar field orientation was recovered from residual
+evidence. The forecast horse race is not clean, however. Bottom-only
+observations do not identify the scored layerwise precision vector, and the
+tying-capable comparator's model evidence is tempered. Experiment 37 therefore
+supersedes the compact-versus-adaptive advantage rather than merely adding a
+scope condition.
 
 The result is specifically about forecasting. All three agents made the same
 scene decisions, so lower precision RMSE did not improve task accuracy here.
 The environment still contains exact cross-layer tying, which favors the
-compact global model. Confirmation must therefore use fresh seeds and vary the
-amount of local deviation; the adaptive model should eventually win as the
-global regularity breaks down.
+compact global model. Confirmation must therefore use an identifiable
+observation graph, fresh seeds, and a truly independent local control.
+Experiments 37 and 38 supply those tests.

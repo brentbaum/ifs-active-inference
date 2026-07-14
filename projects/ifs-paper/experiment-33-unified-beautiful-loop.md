@@ -119,8 +119,10 @@ branch three afterward, then returned to branch one after the hidden structural
 break, in 20/20 seeds. Late mean log precision was `1.540` for the newly useful
 branch and `-0.569` for the formerly useful branch. Joint variational free
 energy was non-increasing because line search enforces that implementation
-invariant. Only four of eight perturbation cells retained an advantage over
-the fair log-odds control.
+invariant. The original aggregate flag passed only four of eight perturbation
+cells because it still conjoined the falsified binding term. Precision
+forecasting, matched-budget action, recovery, and reallocation retained their
+signs in all eight cells.
 
 ## External-reader verdict
 
@@ -140,4 +142,6 @@ same continuous model. The strongest surviving result is precision forecasting
 (`0.579` versus `0.881` RMSE) and useful adaptive sampling relative to a
 matched-budget random policy. Experiments 34--37 separately repair the binding,
 structure-learning, and identifiability tests; they do not retroactively turn
-this construction into evidence for those claims.
+this construction into evidence for those claims. This twenty-seed run and its
+perturbation grid are exploratory; they were not repeated on a new frozen seed
+block.

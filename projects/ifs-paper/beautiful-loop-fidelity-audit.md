@@ -244,10 +244,12 @@ environment makes the scene cause a parity relation among three local causes.
 Every local marginal carries zero information about the scene, while the joint
 configuration identifies it. On untouched seeds, the relational model reached
 `0.726` accuracy against `0.503` for a capacity-matched factorized control and
-won 20/20 paired worlds. All seven load-bearing stress cells passed, and the
+won 20/20 paired worlds. The control is at chance by construction, so the
+informative evidence is the relational model's absolute accuracy, robustness,
+and adversarial reversal. All seven load-bearing stress cells passed, and the
 relational prior became harmful on deliberately relation-violating scenes.
 This is non-vacuous binding, but the relation itself is supplied rather than
-learned.
+learned, sampling is fixed, and no structural break occurs.
 
 The structure-learning environment samples a new hidden loading vector in each
 world. A compact six-parameter global forecaster learns it from posterior
@@ -255,30 +257,43 @@ residuals; its strong comparator has eighteen local coefficients plus
 evidence-weighted shrinkage and can discover the same tying. Fresh-seed RMSE
 was `0.673` globally, `0.835` for that adaptive comparator, and `0.977` for
 independent loops, with 17/20 paired wins against each. Scene accuracy was
-identical. The claimed result is therefore sample-efficient precision
-forecasting, not improved decisions. The declared local-deviation crossover
-failed its magnitude criterion and remains recorded as a failed confirmation.
+identical. Loading recovery is real, but the layerwise target is not identifiable
+from bottom-only observations and the adaptive model's evidence updates are
+tempered. Experiment 37 supersedes the forecast horse race. The declared
+local-deviation crossover failed and remains recorded as a failed confirmation.
 
 ## Identifiability correction and current verdict
 
 Experiment 37 corrects an error in the earlier construction. Bottom-only
 observations in an additive Gaussian hierarchy identify total transition
 variance, not its layerwise decomposition; repeated temporal draws cannot fix
-that structural ambiguity. The corrected model emits noisy observations at
-every level and compares the compact global field with a nested hyper-model
-that contains the same shared terms plus shrinkage-controlled local
-deviations. The compact model gained only `0.012` RMSE under exact sharing,
-failing the declared `0.050` criterion. At deviation scales one, two, and three,
-the nested model won 20/20 seeds and its shrinkage adapted downward.
+that structural ambiguity. This is also a constraint on Beautiful Loop
+Theory's Table 1. The corrected model emits known-noise observations at every
+level, trading bottom-sensed hierarchical fidelity for identifiability. It
+compares two global hyper-models: a compact shared field and a nested
+shared-plus-local field. The compact model gained only `0.012` RMSE under exact
+sharing, failing the declared `0.050` criterion. At deviation scales one, two,
+and three, the nested model won 20/20 seeds and released tying.
 
-The strongest defensible external-reader verdict is now **yes for a minimal
-computational construction of the three Beautiful Loop operations, no for a
-reproduction or unique architecture**. The sequence contains a hierarchical
-precision hyper-loop with endogenous residual messages, a genuinely joint
-binding problem, and epistemic sampling; the two central effects replicate on
-fresh seeds against strong controls. But binding and action remain coupled only
-in an authored toy environment, the parity relation is not learned, free-energy
-descent is partly guaranteed by line search, and the policy is a surrogate.
+Experiment 38 supplies the independent local control missing from that
+identifiable regime. On untouched seeds under exact sharing, compact and nested
+global RMSE were `0.340` and `0.359`, versus `0.637` for eighteen independent
+local loops; both won 20/20. Under strong local deviations, nested global RMSE
+was `1.068`, independent was `1.090`, and compact was `2.716`; shrinkage fell
+from `8.32` to `1.88`. All frozen criteria passed and task accuracy remained
+tied. This is the cleanest evidence for global message passing in the sequence,
+while retaining the direct-monitoring fidelity boundary.
+
+The strongest defensible external-reader verdict is now **yes for a faithful
+minimal precision hyper-loop and for separate constructions of joint binding
+and epistemic sampling; no for their conjunction, a reproduction, or a unique
+architecture**. The sequence contains a hierarchical precision hyper-loop with
+endogenous residual messages, a genuinely joint binding problem, and epistemic
+sampling. But the repaired binding model has fixed sampling and no structural
+break, while the unified action model's binding collapses to ordinary pooling.
+No single agent yet realizes all three operations non-vacuously. The parity
+relation is not learned, free-energy descent is an optimization invariant, and
+the policy is a surrogate.
 Most importantly, globality should not be equated with identical precision or
 one privileged node. A global hyper-model is defined by joint recursive message
 passing across the hierarchy and may correctly infer substantial local
