@@ -1,0 +1,36 @@
+{
+  "supervision": "true loading vectors and precisions are hidden and used only for scoring",
+  "mean_metrics": {
+    "adaptive_forecast_error": 0.8320860260068776,
+    "global_forecast_error": 0.6756038902912661,
+    "adaptive_loading_correlation": 0.9875127836926343,
+    "independent_forecast_error": 0.9580458966463015,
+    "global_loading_correlation": 0.9811917103966499,
+    "independent_accuracy": 0.6875,
+    "adaptive_effective_shrinkage": 9.721579480370632,
+    "adaptive_accuracy": 0.6875,
+    "global_accuracy": 0.6875
+  },
+  "protocol": "randomized learned field loadings versus adaptive hierarchical local loops",
+  "empirical_criteria": {
+    "capable_local_control": true,
+    "advantage_over_independent": true,
+    "task_accuracy_scope_condition": true,
+    "advantage_over_adaptive": true,
+    "randomized_loading_recovered": true
+  },
+  "experiment": 35,
+  "structural_checks": {
+    "identical_observations_and_updates": true,
+    "loading_hidden_from_agents": true,
+    "loading_randomized_by_seed": true,
+    "global_loading_inferred": true,
+    "local_model_can_learn_tying": true
+  },
+  "win_rates": {
+    "global_beats_independent": 0.95,
+    "global_loading": 1.0,
+    "global_beats_adaptive": 1.0,
+    "adaptive_loading": 1.0
+  }
+}

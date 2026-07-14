@@ -270,3 +270,22 @@ Precision-forecast RMSE was identical (`0.521`) by construction.
 **Decision:** retain as the first non-vacuous binding result, but label it
 exploratory. The relation is supplied rather than learned; capacity-matched
 structure learning and fresh confirmation are required next.
+
+## Experiment 35 — learned precision structure
+
+Replaced the supplied channel basis with a different hidden, randomized loading
+vector in every seed. The global model inferred three layer intercepts and
+three loadings. Its strong control was an eighteen-parameter local model with
+predictive model averaging over six shrinkage strengths, allowing it to learn
+the same tying rather than forbidding global regularity.
+
+Global out-of-sample forecast RMSE was `0.676`, versus `0.832` for the adaptive
+local model and `0.958` for independent loops. It won 20/20 and 19/20 seeds.
+Both structured models recovered the hidden orientation (`r=0.981` global,
+`0.988` adaptive), and the adaptive model increased effective shrinkage from
+`7.38` to `9.72`. Scene accuracy was identical at `0.688`.
+
+**Decision:** the compact global structure earns a forecasting advantage even
+without a supplied loading basis and against a tying-capable control. Do not
+convert that result into a task-level claim. Freeze the architecture and test
+fresh seeds plus environments with increasing local deviations.

@@ -252,3 +252,18 @@ joint factor. Five percent relation violations expose the prior's failure mode.
 ```
 
 Outputs are under `results/competitive_binding/`.
+
+## Experiment 35: learned precision structure
+
+This experiment randomizes the channel-loading vector in every seed and hides
+it from all agents. A compact global forecaster learns the loadings from
+posterior residual evidence. It is compared with independent local regressions
+and an evidence-weighted hierarchical local model that can learn the same
+cross-layer tying.
+
+```bash
+~/.juliaup/bin/julia --project=projects/emergence-suite/continuous \
+  projects/emergence-suite/continuous/scripts/run_learned_precision_structure.jl
+```
+
+Outputs are under `results/learned_precision_structure/`.

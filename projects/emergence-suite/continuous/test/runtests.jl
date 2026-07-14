@@ -14,6 +14,7 @@ include(joinpath(@__DIR__, "..", "src", "BayesianBinding.jl"))
 include(joinpath(@__DIR__, "..", "src", "EpistemicAgency.jl"))
 include(joinpath(@__DIR__, "..", "src", "UnifiedBeautifulLoop.jl"))
 include(joinpath(@__DIR__, "..", "src", "CompetitiveBinding.jl"))
+include(joinpath(@__DIR__, "..", "src", "LearnedPrecisionStructure.jl"))
 
 using .T48Robustness
 using .GlobalPrecisionField
@@ -25,6 +26,7 @@ using .BayesianBinding
 using .EpistemicAgency
 using .UnifiedBeautifulLoop
 using .CompetitiveBinding
+using .LearnedPrecisionStructure
 
 const CONFIG_PATH = joinpath(@__DIR__, "..", "configs", "t48-pilot.yaml")
 
@@ -195,6 +197,25 @@ end
     @test independent.probability_positive ≈ 0.5
     @test abs(relational.probability_positive - 0.5) > 1.0e-6
     @test all(diff(getfield.(relational.trace, :joint_free_energy)) .<= 1.0e-8)
+end
+
+@testset "precision structure is learned without a supplied loading basis" begin
+    config = StructureConfig(seeds = [8901], episodes = 12,
+        training_episodes = 5, switch_episode = 8,
+        inference_iterations = 3, hyper_newton_steps = 2)
+    loading = random_channel_loading(8901)
+    @test abs(sum(loading) / length(loading)) <= 1.0e-12
+    @test sqrt(sum(abs2, loading) / length(loading)) ≈ 1.30
+    global_model = LearnedGlobalForecaster(config)
+    adaptive_model = AdaptiveLocalForecaster(config)
+    global_mean, global_covariance = LearnedPrecisionStructure.forecast(
+        global_model, 1.4, config)
+    local_mean, local_covariance = LearnedPrecisionStructure.forecast(
+        adaptive_model, 1.4, config)
+    @test length(global_mean) == 9
+    @test length(local_mean) == 9
+    @test size(global_covariance) == (9, 9)
+    @test size(local_covariance) == (9, 9)
 end
 
 @testset "autonomous reflected pilot path" begin
