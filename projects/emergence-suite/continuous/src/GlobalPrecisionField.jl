@@ -513,7 +513,7 @@ function run_all(output_dir::AbstractString = joinpath(@__DIR__, "..", "results"
     write_json(joinpath(output_dir, "metadata.json"), (
         seeds = config.seeds,
         source = "projects/emergence-suite/continuous/src/GlobalPrecisionField.jl",
-        paper = "projects/ifs-paper/draft-v11-rewritten.md",
+        paper = "projects/ifs-paper/draft-v11-theory.md",
         preregistered = false,
     ))
     write_svg(joinpath(output_dir, "identity_revision.svg"), witnessing.rows, config)

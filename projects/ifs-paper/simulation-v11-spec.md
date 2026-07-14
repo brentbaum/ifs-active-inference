@@ -12,7 +12,7 @@
 
 **Date:** 2026-07-09; amended 2026-07-13
 **Status:** Historical design and results ledger, amended by the epistemic-depth correction above. The implemented global-field experiment is the current Sim 6 mechanism.
-**Serves:** `draft-v11-rewritten.md` §§6–10, plus the interactive explainer.
+**Serves:** `draft-v11-theory.md` §§6–10, plus the interactive explainer.
 **Prior art:** v10 program at `~/dev/personal/projects/ifs-active-inference/` (Julia, hand-rolled active inference); BLT hyper-model reproductions at `projects/beautiful-simulation/` (RxInfer.jl).
 
 ---
