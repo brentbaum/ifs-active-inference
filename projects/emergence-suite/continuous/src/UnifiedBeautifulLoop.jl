@@ -202,8 +202,23 @@ function logsumexp(values)
     return maximum_value + log(sum(exp(value - maximum_value) for value in values))
 end
 
+function aggregate_local_probabilities(probabilities, method::Symbol)
+    isempty(probabilities) && return 0.5
+    method == :soft_mean && return mean(probabilities)
+    if method == :log_odds
+        pooled_log_odds = sum(log(clamp(probability, 1.0e-12, 1 - 1.0e-12) /
+            (1 - clamp(probability, 1.0e-12, 1 - 1.0e-12)))
+            for probability in probabilities)
+        return inv(1 + exp(-pooled_log_odds))
+    elseif method == :hard_vote
+        votes = sum(probability >= 0.5 ? 1 : -1 for probability in probabilities)
+        return votes >= 0 ? 1.0 : 0.0
+    end
+    throw(ArgumentError("unknown local aggregation method: $method"))
+end
+
 function state_update(observations, observed_channels, mean_phi, covariance_phi,
-        config::UnifiedConfig; binding = true)
+        config::UnifiedConfig; binding = true, local_aggregation::Symbol = :log_odds)
     variance_phi = diag(covariance_phi)
     causes = (-1, 1)
     branch_results = Array{Any}(undef, 2, 3, config.samples_per_action)
@@ -260,10 +275,13 @@ function state_update(observations, observed_channels, mean_phi, covariance_phi,
             end
         end
     end
-    probability_positive = isempty(probabilities_positive) ? 0.5 : mean(probabilities_positive)
+    probability_positive = binding ?
+        (isempty(probabilities_positive) ? 0.5 : only(probabilities_positive)) :
+        aggregate_local_probabilities(probabilities_positive, local_aggregation)
     return (probability_positive = probability_positive, residuals = residuals,
         local_energy = local_energy, state_means = state_means,
-        cause_term = cause_term, expected_local = expected_local)
+        cause_term = cause_term, expected_local = expected_local,
+        local_probabilities = probabilities_positive)
 end
 
 function hyper_objective(mean_phi, covariance_phi, prior_mean, prior_covariance,
@@ -316,7 +334,8 @@ function joint_free_energy(state, mean_phi, covariance_phi, prior_mean,
 end
 
 function infer_unified_episode(observations, observed_channels, prior_mean,
-        prior_covariance; binding = true, config::UnifiedConfig = UnifiedConfig())
+        prior_covariance; binding = true, local_aggregation::Symbol = :log_odds,
+        config::UnifiedConfig = UnifiedConfig())
     mean_phi = copy(prior_mean)
     covariance_phi = copy(prior_covariance)
     active = zeros(9)
@@ -325,14 +344,15 @@ function infer_unified_episode(observations, observed_channels, prior_mean,
     end
     trace = NamedTuple[]
     state = state_update(observations, observed_channels, mean_phi, covariance_phi,
-        config; binding = binding)
+        config; binding = binding, local_aggregation = local_aggregation)
     current_free_energy = joint_free_energy(state, mean_phi, covariance_phi,
         prior_mean, prior_covariance)
     for iteration in 1:config.inference_iterations
         proposed_mean, proposed_covariance = hyper_update(prior_mean, prior_covariance,
             state.residuals, active, mean_phi, covariance_phi, config)
         proposed_state = state_update(observations, observed_channels, proposed_mean,
-            proposed_covariance, config; binding = binding)
+            proposed_covariance, config; binding = binding,
+            local_aggregation = local_aggregation)
         proposed_free_energy = joint_free_energy(proposed_state, proposed_mean,
             proposed_covariance, prior_mean, prior_covariance)
         scale = 1.0
@@ -342,7 +362,8 @@ function infer_unified_episode(observations, observed_channels, prior_mean,
             candidate_covariance = (1 - scale) .* covariance_phi .+
                 scale .* proposed_covariance
             candidate_state = state_update(observations, observed_channels,
-                candidate_mean, candidate_covariance, config; binding = binding)
+                candidate_mean, candidate_covariance, config; binding = binding,
+                local_aggregation = local_aggregation)
             candidate_free_energy = joint_free_energy(candidate_state, candidate_mean,
                 candidate_covariance, prior_mean, prior_covariance)
             proposed_mean, proposed_covariance = candidate_mean, candidate_covariance
@@ -365,7 +386,8 @@ function infer_unified_episode(observations, observed_channels, prior_mean,
     end
     return (probability_positive = state.probability_positive,
         posterior_phi = mean_phi, posterior_covariance = covariance_phi,
-        state_means = state.state_means, residuals = state.residuals, trace = trace)
+        state_means = state.state_means, residuals = state.residuals,
+        local_probabilities = state.local_probabilities, trace = trace)
 end
 
 binary_entropy(probability) = begin
@@ -428,32 +450,22 @@ function policy_posterior(probability_positive, mean_phi, covariance_phi, availa
         selected = actions[argmax(probabilities)])
 end
 
-function local_unbound_decision(observations, observed_channels, mean_phi,
-        covariance_phi, config::UnifiedConfig)
-    isempty(observed_channels) && return 1
-    probabilities = Float64[]
-    for channel in observed_channels
-        reliability = channel_reliability(mean_phi, covariance_phi, channel, config)
-        push!(probabilities, posterior_after_binary_cue(0.5, reliability,
-            mean(observations[channel, :]) >= 0 ? 1 : -1))
-    end
-    votes = [probability >= 0.5 ? 1 : -1 for probability in probabilities]
-    return sum(votes) >= 0 ? 1 : -1
-end
-
 function run_agent_episode(rng, episode_data, model, strategy, binding,
-        training, config::UnifiedConfig; sample_budget = nothing)
+        training, config::UnifiedConfig; sample_budget = nothing,
+        local_aggregation::Symbol = :log_odds)
     prior_mean, prior_covariance = forecast(model, episode_data.context, config)
     observed = Int[]
     result = infer_unified_episode(episode_data.observations, observed,
-        prior_mean, prior_covariance; binding = binding, config = config)
+        prior_mean, prior_covariance; binding = binding,
+        local_aggregation = local_aggregation, config = config)
     first_action = 0
     last_policy = (actions = Int[], scores = Float64[], probabilities = Float64[], selected = 0)
     if training
         observed = [1, 2, 3]
         first_action = 1
         result = infer_unified_episode(episode_data.observations, observed,
-            prior_mean, prior_covariance; binding = binding, config = config)
+            prior_mean, prior_covariance; binding = binding,
+            local_aggregation = local_aggregation, config = config)
     else
         while length(observed) < config.max_samples
             available = [channel for channel in 1:3 if channel ∉ observed]
@@ -475,15 +487,13 @@ function run_agent_episode(rng, episode_data, model, strategy, binding,
             isempty(observed) && (first_action = action)
             push!(observed, action)
             result = infer_unified_episode(episode_data.observations, observed,
-                prior_mean, prior_covariance; binding = binding, config = config)
+                prior_mean, prior_covariance; binding = binding,
+                local_aggregation = local_aggregation, config = config)
         end
     end
     strategy != "fixed" && update_forecaster!(model, episode_data.context,
         result.posterior_phi, observed, config)
-    bound_decision = result.probability_positive >= 0.5 ? 1 : -1
-    decision = binding ? bound_decision : local_unbound_decision(
-        episode_data.observations, observed, result.posterior_phi,
-        result.posterior_covariance, config)
+    decision = result.probability_positive >= 0.5 ? 1 : -1
     descends = all(diff(getfield.(result.trace, :joint_free_energy)) .<= 1.0e-8)
     depth_readout = clamp(1 / (1 + mean(diag(result.posterior_covariance))), 0.0, 1.0)
     policy_free_energy = isempty(last_policy.probabilities) ? 0.0 :
@@ -494,7 +504,6 @@ function run_agent_episode(rng, episode_data, model, strategy, binding,
         first_action = first_action, result = result, observed = observed,
         descends = descends, depth_readout = depth_readout,
         policy_free_energy = policy_free_energy,
-        active_inference_objective = last(result.trace).joint_free_energy + policy_free_energy,
         policy_entropy = isempty(last_policy.probabilities) ? 0.0 :
             -sum(probability * log(max(probability, 1.0e-12))
                 for probability in last_policy.probabilities))
@@ -502,11 +511,20 @@ end
 
 function make_agents(config)
     return Dict(
-        "full" => (model = PrecisionForecaster(true, config), strategy = "efe", binding = true),
-        "local" => (model = PrecisionForecaster(false, config), strategy = "efe", binding = true),
-        "random" => (model = PrecisionForecaster(true, config), strategy = "random", binding = true),
-        "fixed" => (model = PrecisionForecaster(true, config), strategy = "fixed", binding = true),
-        "no_binding" => (model = PrecisionForecaster(true, config), strategy = "efe", binding = false),
+        "full" => (model = PrecisionForecaster(true, config), strategy = "efe",
+            binding = true, local_aggregation = :log_odds),
+        "local" => (model = PrecisionForecaster(false, config), strategy = "efe",
+            binding = true, local_aggregation = :log_odds),
+        "random" => (model = PrecisionForecaster(true, config), strategy = "random",
+            binding = true, local_aggregation = :log_odds),
+        "fixed" => (model = PrecisionForecaster(true, config), strategy = "fixed",
+            binding = true, local_aggregation = :log_odds),
+        "no_binding_logodds" => (model = PrecisionForecaster(true, config), strategy = "efe",
+            binding = false, local_aggregation = :log_odds),
+        "no_binding_soft" => (model = PrecisionForecaster(true, config), strategy = "efe",
+            binding = false, local_aggregation = :soft_mean),
+        "no_binding_hard" => (model = PrecisionForecaster(true, config), strategy = "efe",
+            binding = false, local_aggregation = :hard_vote),
     )
 end
 
@@ -525,8 +543,14 @@ end
 
 function run_unified_seed(seed::Int; config::UnifiedConfig = UnifiedConfig())
     agents = make_agents(config)
-    rngs = Dict(name => MersenneTwister(seed + 1_000index)
-        for (index, name) in enumerate(sort(collect(keys(agents)))))
+    # Keep legacy controls on stable streams when audit agents are added.
+    rng_offsets = Dict(
+        "fixed" => 1, "full" => 2, "local" => 3,
+        "no_binding_hard" => 4, "random" => 5,
+        "no_binding_logodds" => 6, "no_binding_soft" => 7,
+    )
+    rngs = Dict(name => MersenneTwister(seed + 1_000rng_offsets[name])
+        for name in keys(agents))
     rows = NamedTuple[]
     forecast_snapshot = nothing
     break_snapshot = nothing
@@ -544,11 +568,13 @@ function run_unified_seed(seed::Int; config::UnifiedConfig = UnifiedConfig())
             break_snapshot = immediate_break_probe(seed, agents["full"].model, config)
         end
         full_sample_budget = nothing
-        for name in ("full", "local", "random", "fixed", "no_binding")
+        for name in ("full", "local", "random", "fixed", "no_binding_logodds",
+                "no_binding_soft", "no_binding_hard")
             agent = agents[name]
             result = run_agent_episode(rngs[name], data, agent.model, agent.strategy,
                 agent.binding, episode <= config.training_episodes, config;
-                sample_budget = name == "random" ? full_sample_budget : nothing)
+                sample_budget = name == "random" ? full_sample_budget : nothing,
+                local_aggregation = agent.local_aggregation)
             name == "full" && (full_sample_budget = result.samples)
             phi = result.result.posterior_phi
             push!(rows, (
@@ -561,7 +587,6 @@ function run_unified_seed(seed::Int; config::UnifiedConfig = UnifiedConfig())
                 joint_descends = result.descends, depth_readout = result.depth_readout,
                 policy_entropy = result.policy_entropy,
                 policy_free_energy = result.policy_free_energy,
-                active_inference_objective = result.active_inference_objective,
             ))
         end
     end
@@ -578,7 +603,8 @@ function seed_metrics(rows, forecast_snapshot, break_snapshot, config)
     full_break = agent_rows(rows, "full", "structural_break")
     late_break = last(full_break, min(30, length(full_break)))
     metric = Dict{Symbol,Float64}()
-    for name in ("full", "local", "random", "fixed", "no_binding")
+    for name in ("full", "local", "random", "fixed", "no_binding_logodds",
+            "no_binding_soft", "no_binding_hard")
         forecast_rows = agent_rows(rows, name, "heldout_forecast")
         metric[Symbol(name, "_after_accuracy")] = mean(row.correct for row in forecast_rows)
         metric[Symbol(name, "_mean_samples")] = mean(row.samples for row in forecast_rows)
@@ -589,7 +615,9 @@ function seed_metrics(rows, forecast_snapshot, break_snapshot, config)
         local_after_accuracy = metric[:local_after_accuracy],
         random_after_accuracy = metric[:random_after_accuracy],
         fixed_after_accuracy = metric[:fixed_after_accuracy],
-        no_binding_after_accuracy = metric[:no_binding_after_accuracy],
+        no_binding_logodds_after_accuracy = metric[:no_binding_logodds_after_accuracy],
+        no_binding_soft_after_accuracy = metric[:no_binding_soft_after_accuracy],
+        no_binding_hard_after_accuracy = metric[:no_binding_hard_after_accuracy],
         full_mean_samples = metric[:full_mean_samples],
         random_mean_samples = metric[:random_mean_samples],
         early_after_accuracy = break_snapshot,
@@ -615,7 +643,12 @@ function summarize(metrics)
         beats_local = mean(row.full_after_accuracy > row.local_after_accuracy for row in metrics),
         beats_random = mean(row.full_after_accuracy > row.random_after_accuracy for row in metrics),
         beats_fixed = mean(row.full_after_accuracy > row.fixed_after_accuracy for row in metrics),
-        beats_no_binding = mean(row.full_after_accuracy > row.no_binding_after_accuracy for row in metrics),
+        beats_no_binding_logodds = mean(row.full_after_accuracy >
+            row.no_binding_logodds_after_accuracy for row in metrics),
+        beats_no_binding_soft = mean(row.full_after_accuracy >
+            row.no_binding_soft_after_accuracy for row in metrics),
+        beats_no_binding_hard = mean(row.full_after_accuracy >
+            row.no_binding_hard_after_accuracy for row in metrics),
         recovered = mean(row.late_after_accuracy >= row.early_after_accuracy + 0.08 for row in metrics),
         reallocated = mean(row.before_channel_1 > 0.55 && row.late_channel_3 > 0.55 &&
             row.break_channel_1 > 0.55 for row in metrics),
@@ -632,8 +665,10 @@ function summarize(metrics)
         expected_free_energy_policy = true,
         global_forecast_advantage = means.global_forecast_error < means.local_forecast_error &&
             wins.global_forecast >= 0.75,
-        binding_advantage = means.full_after_accuracy >= means.no_binding_after_accuracy + 0.02 &&
-            wins.beats_no_binding >= 0.75,
+        binding_advantage_over_fair_controls =
+            means.full_after_accuracy >= means.no_binding_logodds_after_accuracy + 0.02 &&
+            means.full_after_accuracy >= means.no_binding_soft_after_accuracy + 0.02 &&
+            wins.beats_no_binding_logodds >= 0.75 && wins.beats_no_binding_soft >= 0.75,
         epistemic_action_advantage = means.full_after_accuracy >= means.random_after_accuracy + 0.02 &&
             means.full_after_accuracy >= means.fixed_after_accuracy + 0.05 &&
             wins.beats_random >= 0.75 && wins.beats_fixed >= 0.75,
@@ -646,7 +681,7 @@ function summarize(metrics)
         precision_forecast_reversal = means.late_phi_1 >= means.late_phi_3 + 0.15 &&
             wins.precision_reversed >= 0.80,
         selective_ablation = wins.global_forecast >= 0.75 &&
-            wins.beats_no_binding >= 0.75 && wins.beats_random >= 0.75,
+            wins.beats_no_binding_logodds >= 0.75 && wins.beats_random >= 0.75,
         depth_is_readout_only = true,
     )
     return means, wins, criteria
@@ -674,7 +709,7 @@ function run_robustness_grid(config::UnifiedConfig)
         means, wins, _ = summarize(metrics)
         qualitative_pass =
             means.global_forecast_error < means.local_forecast_error &&
-            means.full_after_accuracy > means.no_binding_after_accuracy &&
+            means.full_after_accuracy > means.no_binding_logodds_after_accuracy &&
             means.full_after_accuracy >= means.random_after_accuracy + 0.03 &&
             means.late_after_accuracy >= means.early_after_accuracy + 0.08 &&
             means.before_channel_1 > 0.55 && means.late_channel_3 > 0.55 &&
@@ -686,7 +721,12 @@ function run_robustness_grid(config::UnifiedConfig)
             action_cost = action_cost,
             hyper_innovation_variance = hyper_variance,
             global_forecast_gain = means.local_forecast_error - means.global_forecast_error,
-            binding_gain = means.full_after_accuracy - means.no_binding_after_accuracy,
+            binding_gain_logodds = means.full_after_accuracy -
+                means.no_binding_logodds_after_accuracy,
+            binding_gain_soft = means.full_after_accuracy -
+                means.no_binding_soft_after_accuracy,
+            historical_hard_vote_gain = means.full_after_accuracy -
+                means.no_binding_hard_after_accuracy,
             action_gain = means.full_after_accuracy - means.random_after_accuracy,
             recovery_gain = means.late_after_accuracy - means.early_after_accuracy,
             reallocation_rate = wins.reallocated,
@@ -745,7 +785,7 @@ function run_unified_beautiful_loop(output_dir::AbstractString =
     ))
     summary = (
         experiment = 33,
-        protocol = "one generative model for hierarchical inference, global precision, binding, and action",
+        protocol = "binding-control audit with fair soft and log-odds local posterior pooling",
         supervision = "hidden causes, latent states, and true precisions are used only for simulation and scoring",
         mean_metrics = means,
         win_rates = wins,
@@ -764,7 +804,7 @@ function run_unified_beautiful_loop(output_dir::AbstractString =
         implementation_passed = all(values(criteria)),
         theory_result = all(values(criteria)) ?
             "one recursive precision field binds hierarchical beliefs and selects epistemic action" :
-            "unified Beautiful Loop fidelity rubric not yet satisfied",
+            "the original binding claim does not survive its fair-control audit",
     ))
     return (traces = traces, metrics = metrics, summary = summary)
 end

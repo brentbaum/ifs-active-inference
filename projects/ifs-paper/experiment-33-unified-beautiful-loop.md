@@ -38,9 +38,10 @@ causes, latent states, and true precisions are never passed to an update.
 Policies minimize expected posterior entropy plus observation cost and an
 epistemic term for uncertainty about $\Phi$. The resulting
 $q(\pi)\propto\exp[-G(\pi)/T]$ determines which branch becomes observable.
-Current-state free energy and policy free energy are also recorded together as
-the active-inference objective. Epistemic depth is computed afterward from
-posterior hyper-uncertainty and never feeds inference or action.
+Current-state and policy free energy are recorded separately; their numerical
+sum is not treated as a common objective across policies. Epistemic depth is
+computed afterward from posterior hyper-uncertainty and never feeds inference
+or action.
 
 ## Discriminating tests
 
@@ -56,8 +57,8 @@ Four controls isolate the proposed operations:
 
 - eighteen independent context-sensitive precision parameters with matched
   marginal prior variance;
-- independent branch-specific cause posteriors, removing Bayesian binding from
-  inference rather than merely changing the final decision;
+- independent branch-specific cause posteriors combined by either soft
+  posterior pooling or summed log odds, both of which retain graded evidence;
 - random branch selection with the full policy's exact per-episode sample
   budget; and
 - fixed sampling of the branch preferred before the switch.
@@ -90,7 +91,10 @@ shortcut with a regime-independent evidence burn-in.
 Finally, the random control was matched for sample budget, the no-binding
 control was factorized inside inference, local and hyper free-energy traces
 were corrected, and a frozen shock probe replaced a noisy five-trial recovery
-estimate. No outcome threshold was lowered.
+estimate. A subsequent external audit found that the factorized control still
+threw away its graded posterior at the decision boundary and used a hard
+majority vote. The model was therefore rerun with soft and log-odds pooling;
+the original hard vote remains only as a labeled historical diagnostic.
 
 ## Results
 
@@ -99,7 +103,9 @@ Across twenty seeds:
 | Contrast | Unified | Control | Seed wins |
 |---|---:|---:|---:|
 | Out-of-sample precision forecast RMSE | 0.579 | 0.881 local | 19/20 |
-| Held-out cause accuracy | 0.954 | 0.927 no binding | 16/20 |
+| Held-out cause accuracy | 0.954 | 0.950 log-odds pooling | 5/20 |
+| Held-out cause accuracy | 0.954 | 0.947 soft pooling | 6/20 |
+| Historical hard-vote accuracy | 0.954 | 0.937 hard vote | 14/20 |
 | Matched-budget cause accuracy | 0.954 | 0.833 random | 20/20 |
 | Mean observation packets | 1.650 | 1.650 random | matched |
 | Held-out cause accuracy | 0.954 | 0.621 fixed | 20/20 |
@@ -109,23 +115,24 @@ The first action changed from branch one before the out-of-sample switch to
 branch three afterward, then returned to branch one after the hidden structural
 break, in 20/20 seeds. Late mean log precision was `1.540` for the newly useful
 branch and `-0.569` for the formerly useful branch. Joint variational free
-energy was non-increasing in every recorded episode. All eight perturbation
-cells spanning observation precision, action cost, and hyper-prior variance
-preserved the full qualitative signature.
+energy was non-increasing because line search enforces that implementation
+invariant. Only four of eight perturbation cells retained an advantage over
+the fair log-odds control.
 
 ## External-reader verdict
 
-At the level of computational construction: **yes, this is it**. The model now
-contains the paper's multilayer world model, global precision hyper-model,
-ascending second-order errors, descending precision broadcast, Bayesian
-binding, temporal recursion, and epistemic policy selection in one loop. Each
-operation disappears or weakens under its relevant matched ablation.
+**The original binding claim is falsified.** Once independent local posteriors
+are combined without discarding their magnitude, the apparent binding
+advantage falls from 2.8 points to 0.4--0.8 points and loses its seed-wise
+criterion. In this environment the branches are conditionally independent
+given the global cause, so a bound posterior is ordinary Bayesian pooling, not
+a nontrivial inferential competition. The construction therefore demonstrates
+a precision hyper-loop and adaptive epistemic sampling, but not binding.
 
-That verdict has a strict boundary. The construction is a faithful minimal
-*realization*, not a unique derivation of Beautiful Loop Theory. Its low-rank
-field orientation, Gaussian branches, action set, change detector, and
-four-draw observation packets are authored inductive biases. The results show
-what computational work global recursive precision can perform under those
-assumptions. They do not show that such a field emerges in arbitrary agents,
-that it is necessary or sufficient for phenomenal consciousness, or that the
-IFS clinical mapping is true.
+The remaining positive results also retain strict boundaries. The global field
+receives the correct low-rank loading basis, its task accuracy nearly matches
+the independent local meta-loops (`0.954` versus `0.937`), and its policy uses
+an information-gain surrogate. The strongest surviving result is precision
+forecasting (`0.579` versus `0.881` RMSE) and useful adaptive sampling relative
+to a matched-budget random policy. A new construction with competing local
+causes and a genuine coherence prior is required before binding can be claimed.

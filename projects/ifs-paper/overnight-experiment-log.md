@@ -240,13 +240,15 @@ sharing, and a second-order change detector released obsolete precision. A
 known training-boundary gate was removed after adversarial review.
 
 Final forecast RMSE was `0.579` versus `0.881` for matched independent loops.
-Cause accuracy was `0.954`, versus `0.927` without binding, `0.833` under
-matched-budget random action, and `0.621` under fixed sampling. Frozen
-structural-break accuracy was `0.706` and late accuracy was `0.968`; field and
-action reversal occurred in 20/20 seeds. All eight perturbation cells passed.
+The original cause-accuracy contrast was later found to use an unfair hard
+vote. With graded local evidence retained, full accuracy was `0.954`, versus
+`0.950` for summed local log odds and `0.947` for soft pooling. The full model
+won only 5/20 and 6/20 seeds. Matched-budget random action scored `0.833`; fixed
+sampling scored `0.621`. Frozen structural-break accuracy was `0.706` and late
+accuracy was `0.968`; field and action reversal occurred in 20/20 seeds. Only
+four of eight original perturbation cells retained a fair-control advantage.
 
-**Decision:** this clears the external-reader threshold for a faithful minimal
-computational realization of the Beautiful Loop architecture. Retain the
-strict boundary: it demonstrates the consequences of an authored global-field
-inductive bias, not the emergence of that architecture, phenomenal
-consciousness, or a clinical effect.
+**Decision:** the binding claim is falsified and the earlier external-reader
+verdict is withdrawn. Retain the precision-forecasting and adaptive-action
+results, explicitly report the near-match to local loops, and build a new
+environment with genuine local competition before claiming binding.

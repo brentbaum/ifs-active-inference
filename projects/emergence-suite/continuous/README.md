@@ -224,10 +224,12 @@ free energy supplies the policy factor. The inferred precision field is learned
 without cause or reliability labels, broadcast to every transition, and used
 to decide which branch is observed next.
 
-The experiment includes matched independent meta-loops, genuinely factorized
-no-binding inference, matched-budget random action, fixed sampling, a held-out
-context forecast, an unannounced structural break, and an eight-cell parameter
-perturbation grid.
+The experiment includes matched independent meta-loops, factorized local cause
+posteriors pooled by soft probability or summed log odds, matched-budget random
+action, fixed sampling, a held-out context forecast, an unannounced structural
+break, and an eight-cell parameter perturbation grid. The corrected fair
+controls falsify the original binding advantage while preserving the precision
+forecasting and adaptive-action results.
 
 ```bash
 ~/.juliaup/bin/julia --project=projects/emergence-suite/continuous \

@@ -207,9 +207,9 @@ episode. The defensible claim is therefore that each proposed operation is
 computationally sufficient under a minimal model—not that their conjunction,
 consciousness, or the clinical IFS mechanism has been derived.
 
-## Unified construction
+## Unified construction and fair-control audit
 
-Experiment 33 removes the principal objection above. One conditionally
+Experiment 33 places the separate operations into one conditionally
 Gaussian generative model now contains three explicit levels on three branches,
 one global cause, one nine-component precision field, and one posterior over
 epistemic policies. Alternating inference over states, the global cause, and
@@ -219,19 +219,20 @@ broadcast into every transition and into the next action; the next packet of
 posterior residual moments then corrects that field. No hidden state or
 reliability label is used for learning.
 
-The matched controls are now internal rather than comparisons across separate
+The matched controls are internal rather than comparisons across separate
 experiments. Independent local precision regressions have the same marginal
-prior variance. The no-binding agent factorizes its cause posterior by branch.
-The random policy receives the exact sample budget chosen by the full policy.
-The full model beats each on the operation that the ablation removes, and the
-complete signature survives all eight cells of the perturbation grid.
+prior variance. The no-binding agent factorizes its cause posterior by branch,
+then combines the graded local evidence by summed log odds or soft posterior
+pooling. The random policy receives the exact sample budget chosen by the full
+policy.
 
-An external computational reader can reasonably say that this is a faithful
-minimal realization of Table 1 plus the paper's binding and active-inference
-claims. The remaining objection moves from implementation fidelity to theory
-identification. The environment shares the same low-rank global field family
-assumed by the agent; the simulation therefore tests the consequences and
-utility of that architecture under a favorable but explicit scope condition.
-It does not establish that global recursive precision is the only architecture
-with these effects, that it emerges without the relevant inductive bias, or
-that satisfying the computational conditions entails phenomenal awareness.
+That fair-control audit falsifies the unified model's binding claim. Full cause
+accuracy was `0.954`, compared with `0.950` under log-odds pooling and `0.947`
+under soft pooling; seed-wise wins were only 5/20 and 6/20. Because the branches
+are conditionally independent under one binary cause, the full posterior is
+ordinary Bayesian evidence pooling rather than nontrivial competition. The
+precision forecast (`0.579` versus `0.881` RMSE) and matched-budget action
+advantage remain, but global and local task accuracy are close (`0.954` versus
+`0.937`). The next fidelity model must add competing local causes and an
+explicit coherence or exclusion relation, and must learn rather than receive
+the correct field-loading basis.

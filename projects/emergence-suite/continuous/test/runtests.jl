@@ -157,11 +157,19 @@ end
         prior_mean, prior_covariance; binding = true, config = config)
     unbound = infer_unified_episode(episode.observations, [1, 2, 3],
         prior_mean, prior_covariance; binding = false, config = config)
+    unbound_soft = infer_unified_episode(episode.observations, [1, 2, 3],
+        prior_mean, prior_covariance; binding = false, local_aggregation = :soft_mean,
+        config = config)
     @test length(bound.posterior_phi) == 9
     @test all(bound.residuals .> 0)
     @test all(diff(getfield.(bound.trace, :joint_free_energy)) .<= 1.0e-8)
     @test all(isfinite(row.hyper_free_energy) for row in bound.trace)
     @test abs(bound.probability_positive - unbound.probability_positive) > 1.0e-8
+    @test unbound.probability_positive ≈
+        UnifiedBeautifulLoop.aggregate_local_probabilities(
+            unbound.local_probabilities, :log_odds)
+    @test unbound_soft.probability_positive ≈
+        sum(unbound_soft.local_probabilities) / length(unbound_soft.local_probabilities)
     policy = UnifiedBeautifulLoop.policy_posterior(bound.probability_positive,
         bound.posterior_phi, bound.posterior_covariance, [1, 2, 3], 0, config)
     @test sum(policy.probabilities) ≈ 1.0

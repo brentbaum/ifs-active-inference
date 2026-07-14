@@ -89,8 +89,8 @@ threshold after the first run.
   states per branch, and one nine-component precision field.
 - Use exact enumeration for the global cause and analytic Gaussian updates for
   states; use a Gaussian variational/Laplace update for `Phi`.
-- Distinguish current-state variational free energy from policy expected free
-  energy while recording their sum as the active-inference objective.
+- Record current-state variational free energy and policy expected free energy
+  separately; do not imply that their sum is comparable across control agents.
 - Treat failure as informative. If the unified model cannot beat a relevant
   matched ablation without supervision or fragile parameters, report that the
   current formal commitments are insufficient.
@@ -106,3 +106,14 @@ Loop model.
 
 Implement experiment 33 and iterate its inference mechanics—not its frozen
 rubric—until the model either passes or exposes a principled insufficiency.
+
+## Post-audit correction
+
+External review identified that the no-binding ablation discarded its graded
+local posteriors at the final decision. The corrected design uses summed local
+log odds and the mean local posterior as fair controls; the old hard vote is
+retained only to identify the artifact. The binding claim survives only if the
+full posterior beats both graded controls. It did not: the corrected run scored
+`0.954` for the full model, `0.950` for log-odds pooling, and `0.947` for soft
+pooling. The next construction must introduce competing local causes and a
+coherence or exclusion prior. Ordinary likelihood pooling is not binding.
