@@ -30,7 +30,8 @@ amplification rather than an all-or-none gate.
 
 ## Corrections made after review
 
-The manuscript and audit now:
+Across the manuscript, audit, experiment record, and raw summary, the committed
+record now:
 
 - call the `0.015` miss one of six equally weighted frozen criteria rather than
   labeling it auxiliary after the fact;
@@ -55,3 +56,15 @@ free energy under one continuous model, line-search-enforced descent, and a
 linear-Gaussian hierarchy. Layer-specific precision is identifiable only in
 the separate directly monitored construction. These are limitations of the
 claim, not unresolved contradictions in its current wording.
+
+## Post-correction recheck
+
+Fable re-read the corrected code, raw summary, v11 section, audit, and
+Experiment 42 record. It independently recomputed the headroom normalization
+and all four paired intervals, verified every cited result, and confirmed the
+freeze commit preceded the result commit. It found no fatal or claim-blocking
+issue and returned:
+
+- **Minimal precision hyper-loop: yes**
+- **Three-operation conjunction: yes**
+- **v11 claim ready: yes**
