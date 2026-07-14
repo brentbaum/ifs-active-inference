@@ -267,3 +267,18 @@ cross-layer tying.
 ```
 
 Outputs are under `results/learned_precision_structure/`.
+
+## Experiment 36: frozen confirmation
+
+Fresh seed blocks confirm relational binding and learned global precision,
+then stress their load-bearing assumptions. The binding signature survives all
+seven cells. The precision comparison passes nine of eleven predictions but
+fails the preregistered magnitude of the global-to-local crossover, so the
+overall experiment is recorded as failed.
+
+```bash
+~/.juliaup/bin/julia --project=projects/emergence-suite/continuous \
+  projects/emergence-suite/continuous/scripts/run_confirmatory_beautiful_loop.jl
+```
+
+Outputs are under `results/confirmatory_beautiful_loop/`.

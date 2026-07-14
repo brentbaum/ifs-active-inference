@@ -15,6 +15,7 @@ include(joinpath(@__DIR__, "..", "src", "EpistemicAgency.jl"))
 include(joinpath(@__DIR__, "..", "src", "UnifiedBeautifulLoop.jl"))
 include(joinpath(@__DIR__, "..", "src", "CompetitiveBinding.jl"))
 include(joinpath(@__DIR__, "..", "src", "LearnedPrecisionStructure.jl"))
+include(joinpath(@__DIR__, "..", "src", "ConfirmatoryBeautifulLoop.jl"))
 
 using .T48Robustness
 using .GlobalPrecisionField
@@ -27,6 +28,7 @@ using .EpistemicAgency
 using .UnifiedBeautifulLoop
 using .CompetitiveBinding
 using .LearnedPrecisionStructure
+using .ConfirmatoryBeautifulLoop
 
 const CONFIG_PATH = joinpath(@__DIR__, "..", "configs", "t48-pilot.yaml")
 
@@ -206,6 +208,12 @@ end
     loading = random_channel_loading(8901)
     @test abs(sum(loading) / length(loading)) <= 1.0e-12
     @test sqrt(sum(abs2, loading) / length(loading)) ≈ 1.30
+    deviations = LearnedPrecisionStructure.random_local_deviations(8901, 0.5)
+    @test length(deviations) == 9
+    for channel in 1:3
+        rows = [UnifiedBeautifulLoop.component_index(layer, channel) for layer in 1:3]
+        @test abs(sum(deviations[rows])) <= 1.0e-12
+    end
     global_model = LearnedGlobalForecaster(config)
     adaptive_model = AdaptiveLocalForecaster(config)
     global_mean, global_covariance = LearnedPrecisionStructure.forecast(

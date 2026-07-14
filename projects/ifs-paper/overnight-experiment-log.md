@@ -289,3 +289,20 @@ Both structured models recovered the hidden orientation (`r=0.981` global,
 without a supplied loading basis and against a tying-capable control. Do not
 convert that result into a task-level claim. Freeze the architecture and test
 fresh seeds plus environments with increasing local deviations.
+
+## Experiment 36 — frozen fresh-seed confirmation
+
+Relational binding confirmed at `0.726` versus `0.503` with 20/20 wins.
+Learned global precision confirmed at `0.673` RMSE, versus `0.835` adaptive
+local and `0.977` independent, with 17/20 wins against both. Scene accuracy was
+identical (`0.686`). All seven binding stress cells and all ordinary precision
+stress cells passed.
+
+The frozen scope crossover failed its magnitude criterion. Global remained
+better by `0.028` at deviation `2.0`; adaptive local won by only `0.023` at
+deviation `3.0`, below the declared `0.050`. Effective local shrinkage fell to
+`5.71`, so the direction was right but adaptation was too conservative.
+
+**Decision:** preserve the overall failed status (9/11 precision predictions).
+The two primary confirmations remain positive. Improve the local learner, keep
+the crossover threshold, and use another untouched seed block.

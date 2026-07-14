@@ -25,6 +25,7 @@ Base.@kwdef struct StructureConfig
     samples_per_action::Int = 4
     cause_amplitude::Float64 = 1.05
     relation_noise::Float64 = 0.05
+    local_deviation_sd::Float64 = 0.0
     shrinkage_grid::Vector{Float64} = [0.0, 0.3, 1.0, 3.0, 10.0, 30.0]
     model_weight_learning_rate::Float64 = 0.04
 end
@@ -64,17 +65,29 @@ function context_at(episode, config::StructureConfig)
     return 1.4
 end
 
-function true_precision_field(context, loading)
+function random_local_deviations(seed::Int, scale::Float64)
+    scale == 0 && return zeros(9)
+    rng = MersenneTwister(seed + 654_321)
+    deviations = scale .* randn(rng, 9)
+    for channel in 1:3
+        rows = [UnifiedBeautifulLoop.component_index(layer, channel) for layer in 1:3]
+        deviations[rows] .-= mean(deviations[rows])
+    end
+    return deviations
+end
+
+function true_precision_field(context, loading, deviations = zeros(9))
     layer_intercepts = [1.20, 0.80, 0.50]
-    return [layer_intercepts[layer] + loading[channel] * context
+    return [layer_intercepts[layer] +
+        (loading[channel] + deviations[UnifiedBeautifulLoop.component_index(layer, channel)]) * context
         for layer in 1:3 for channel in 1:3]
 end
 
-function generate_structure_episode(seed::Int, episode::Int, loading;
+function generate_structure_episode(seed::Int, episode::Int, loading, deviations;
         config::StructureConfig = StructureConfig())
     rng = MersenneTwister(seed + 10_000episode)
     context = context_at(episode, config)
-    phi = true_precision_field(context, loading)
+    phi = true_precision_field(context, loading, deviations)
     global_cause = rand(rng, Bool) ? 1 : -1
     local_causes = [rand(rng, Bool) ? 1 : -1 for _ in 1:2]
     push!(local_causes, global_cause * local_causes[1] * local_causes[2])
@@ -239,6 +252,7 @@ end
 function run_structure_seed(seed::Int; config::StructureConfig = StructureConfig())
     competitive = competitive_config(config)
     loading = random_channel_loading(seed)
+    deviations = random_local_deviations(seed, config.local_deviation_sd)
     models = Dict{String,Any}(
         "learned_global" => LearnedGlobalForecaster(config),
         "adaptive_local" => AdaptiveLocalForecaster(config),
@@ -248,7 +262,7 @@ function run_structure_seed(seed::Int; config::StructureConfig = StructureConfig
     forecast_snapshot = Dict{String,Float64}()
     loading_snapshot = Dict{String,Vector{Float64}}()
     for episode in 1:config.episodes
-        data = generate_structure_episode(seed, episode, loading; config = config)
+        data = generate_structure_episode(seed, episode, loading, deviations; config = config)
         for name in ("learned_global", "adaptive_local", "independent_local")
             model = models[name]
             prior_mean, prior_covariance = forecast(model, data.context, config)

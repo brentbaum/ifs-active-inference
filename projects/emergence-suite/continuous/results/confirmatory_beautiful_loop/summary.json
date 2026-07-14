@@ -1,0 +1,84 @@
+{
+  "protocol": "frozen fresh-seed confirmation and load-bearing stress tests",
+  "confirmatory_seed_blocks": {
+    "learned_precision": [9901, 9902, 9903, 9904, 9905, 9906, 9907, 9908, 9909, 9910, 9911, 9912, 9913, 9914, 9915, 9916, 9917, 9918, 9919, 9920],
+    "binding": [9801, 9802, 9803, 9804, 9805, 9806, 9807, 9808, 9809, 9810, 9811, 9812, 9813, 9814, 9815, 9816, 9817, 9818, 9819, 9820]
+  },
+  "experiment": 36,
+  "learned_precision": {
+    "mean_metrics": {
+      "adaptive_forecast_error": 0.8351494488489184,
+      "global_forecast_error": 0.6733701860546949,
+      "adaptive_loading_correlation": 0.9915369832328341,
+      "independent_forecast_error": 0.977115859830967,
+      "global_loading_correlation": 0.9866781979143358,
+      "independent_accuracy": 0.6858333333333333,
+      "adaptive_effective_shrinkage": 9.717195335970255,
+      "adaptive_accuracy": 0.6858333333333333,
+      "global_accuracy": 0.6858333333333333
+    },
+    "empirical_criteria": {
+      "capable_local_control": true,
+      "advantage_over_independent": true,
+      "task_accuracy_scope_condition": true,
+      "advantage_over_adaptive": true,
+      "randomized_loading_recovered": true
+    },
+    "structural_checks": {
+      "identical_observations_and_updates": true,
+      "loading_hidden_from_agents": true,
+      "loading_randomized_by_seed": true,
+      "global_loading_inferred": true,
+      "local_model_can_learn_tying": true
+    },
+    "win_rates": {
+      "global_beats_independent": 0.85,
+      "global_loading": 1.0,
+      "global_beats_adaptive": 0.85,
+      "adaptive_loading": 1.0
+    }
+  },
+  "stress_tests": {
+    "binding_cells_total": 7,
+    "binding_cells_passed": 7,
+    "structure_predictions_passed": 9,
+    "structure_cells_total": 11
+  },
+  "empirical_criteria": {
+    "relational_binding_confirmed": true,
+    "precision_scope_crossover": false,
+    "learned_precision_structure_confirmed": true,
+    "binding_stress_signature": true
+  },
+  "binding": {
+    "mean_metrics": {
+      "joint_descent_rate": 1.0,
+      "full_accuracy": 0.72625,
+      "independent_accuracy": 0.5025000000000001,
+      "independent_violation_accuracy": 0.4574007936507936,
+      "independent_coherent_accuracy": 0.5038978566127458,
+      "independent_forecast_error": 0.5138588108360631,
+      "full_violation_accuracy": 0.20638888888888887,
+      "violation_trials": 5.35,
+      "full_coherent_accuracy": 0.7495708857373116,
+      "full_forecast_error": 0.513858810836063
+    },
+    "empirical_criteria": {
+      "coherent_relation_advantage": true,
+      "joint_structure_advantage": true,
+      "noisy_relation_scope_condition": true
+    },
+    "structural_checks": {
+      "matched_local_marginals": true,
+      "zero_local_mutual_information": true,
+      "exact_joint_cause_enumeration": true,
+      "hidden_states_used_only_for_scoring": true,
+      "free_energy_descent_enforced": true,
+      "nonfactorized_scene_prior": true
+    },
+    "win_rates": {
+      "coherent": 1.0,
+      "overall": 1.0
+    }
+  }
+}

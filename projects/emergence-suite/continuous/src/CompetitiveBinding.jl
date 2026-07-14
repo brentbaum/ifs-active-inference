@@ -256,12 +256,14 @@ function seed_metrics(rows, forecast_errors)
     independent_violation = filter(row -> row.relation_violation, independent)
     full_coherent = filter(row -> !row.relation_violation, full)
     independent_coherent = filter(row -> !row.relation_violation, independent)
+    accuracy_or_nan(subset) = isempty(subset) ? NaN : mean(row.correct for row in subset)
     return (
         seed = first(rows).seed,
         full_accuracy = mean(row.correct for row in full),
         independent_accuracy = mean(row.correct for row in independent),
-        full_violation_accuracy = mean(row.correct for row in full_violation),
-        independent_violation_accuracy = mean(row.correct for row in independent_violation),
+        full_violation_accuracy = accuracy_or_nan(full_violation),
+        independent_violation_accuracy = accuracy_or_nan(independent_violation),
+        violation_trials = length(full_violation),
         full_coherent_accuracy = mean(row.correct for row in full_coherent),
         independent_coherent_accuracy = mean(row.correct for row in independent_coherent),
         full_forecast_error = forecast_errors[:relational],
@@ -272,8 +274,12 @@ end
 
 function summarize(metrics)
     metric_keys = Tuple(filter(!=(:seed), keys(first(metrics))))
-    means = NamedTuple{metric_keys}(Tuple(mean(getfield(row, key) for row in metrics)
-        for key in metric_keys))
+    function finite_mean(key)
+        values = [Float64(getfield(row, key)) for row in metrics
+            if isfinite(Float64(getfield(row, key)))]
+        return isempty(values) ? NaN : mean(values)
+    end
+    means = NamedTuple{metric_keys}(Tuple(finite_mean(key) for key in metric_keys))
     wins = (
         overall = mean(row.full_accuracy > row.independent_accuracy for row in metrics),
         coherent = mean(row.full_coherent_accuracy >
