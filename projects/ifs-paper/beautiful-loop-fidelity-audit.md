@@ -210,11 +210,13 @@ consciousness, or the clinical IFS mechanism has been derived.
 ## Unified construction and fair-control audit
 
 Experiment 33 places the separate operations into one conditionally
-Gaussian generative model now contains three explicit levels on three branches,
+Gaussian generative model that contains three explicit levels on three branches,
 one global cause, one nine-component precision field, and one posterior over
 epistemic policies. Alternating inference over states, the global cause, and
 the precision field minimizes the recorded current-state variational free
-energy. Expected free energy supplies the policy factor. The revised field is
+energy. A score combining expected information gain and sampling cost supplies
+the policy factor; it is expected-free-energy-shaped, not exact expected free
+energy under the same continuous generative model. The revised field is
 broadcast into every transition and into the next action; the next packet of
 posterior residual moments then corrects that field. No hidden state or
 reliability label is used for learning.
@@ -233,6 +235,52 @@ are conditionally independent under one binary cause, the full posterior is
 ordinary Bayesian evidence pooling rather than nontrivial competition. The
 precision forecast (`0.579` versus `0.881` RMSE) and matched-budget action
 advantage remain, but global and local task accuracy are close (`0.954` versus
-`0.937`). The next fidelity model must add competing local causes and an
-explicit coherence or exclusion relation, and must learn rather than receive
-the correct field-loading basis.
+`0.937`).
+
+## Relational binding and learned structure
+
+Experiments 34--36 implement and confirm the two required repairs. The binding
+environment makes the scene cause a parity relation among three local causes.
+Every local marginal carries zero information about the scene, while the joint
+configuration identifies it. On untouched seeds, the relational model reached
+`0.726` accuracy against `0.503` for a capacity-matched factorized control and
+won 20/20 paired worlds. All seven load-bearing stress cells passed, and the
+relational prior became harmful on deliberately relation-violating scenes.
+This is non-vacuous binding, but the relation itself is supplied rather than
+learned.
+
+The structure-learning environment samples a new hidden loading vector in each
+world. A compact six-parameter global forecaster learns it from posterior
+residuals; its strong comparator has eighteen local coefficients plus
+evidence-weighted shrinkage and can discover the same tying. Fresh-seed RMSE
+was `0.673` globally, `0.835` for that adaptive comparator, and `0.977` for
+independent loops, with 17/20 paired wins against each. Scene accuracy was
+identical. The claimed result is therefore sample-efficient precision
+forecasting, not improved decisions. The declared local-deviation crossover
+failed its magnitude criterion and remains recorded as a failed confirmation.
+
+## Identifiability correction and current verdict
+
+Experiment 37 corrects an error in the earlier construction. Bottom-only
+observations in an additive Gaussian hierarchy identify total transition
+variance, not its layerwise decomposition; repeated temporal draws cannot fix
+that structural ambiguity. The corrected model emits noisy observations at
+every level and compares the compact global field with a nested hyper-model
+that contains the same shared terms plus shrinkage-controlled local
+deviations. The compact model gained only `0.012` RMSE under exact sharing,
+failing the declared `0.050` criterion. At deviation scales one, two, and three,
+the nested model won 20/20 seeds and its shrinkage adapted downward.
+
+The strongest defensible external-reader verdict is now **yes for a minimal
+computational construction of the three Beautiful Loop operations, no for a
+reproduction or unique architecture**. The sequence contains a hierarchical
+precision hyper-loop with endogenous residual messages, a genuinely joint
+binding problem, and epistemic sampling; the two central effects replicate on
+fresh seeds against strong controls. But binding and action remain coupled only
+in an authored toy environment, the parity relation is not learned, free-energy
+descent is partly guaranteed by line search, and the policy is a surrogate.
+Most importantly, globality should not be equated with identical precision or
+one privileged node. A global hyper-model is defined by joint recursive message
+passing across the hierarchy and may correctly infer substantial local
+structure. Its shrinkage estimates environmental coupling; it does not measure
+epistemic depth.

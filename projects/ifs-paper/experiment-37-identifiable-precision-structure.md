@@ -55,15 +55,20 @@ criteria passed by wide margins.
 
 That failure is theoretically useful. A capable hierarchical model should
 approximate its nested global limit when the world is globally tied. The data
-do not identify one unique architectural node; they identify an effective
-degree of global coupling. The more defensible definition is therefore:
+identify an effective degree of cross-layer coupling, not one unique
+architectural node. The more defensible operational statement is therefore:
 
-> Epistemic depth is the inferred extent to which precision structure is
-> shared across the hierarchy and recursively made available to constrain
-> lower-level inference and action.
+> Epistemic depth is the recursively closed, system-wide inference by which a
+> precision field—including both shared structure and warranted local
+> deviations—is monitored and rebroadcast to constrain lower-level inference
+> and action.
 
-On this definition, the shrinkage hyperbelief is itself a minimal depth
-variable. It rises when error dynamics support one shared field and falls when
-local residual structure makes global broadcast maladaptive. This is closer to
-the Beautiful Loop's functional claim while avoiding an unsupported assertion
-that a single global node is uniquely necessary.
+The shrinkage hyperbelief is **not** itself a depth variable. It estimates a
+property of the current environment: how similarly precision changes across
+layers. A deep, well-calibrated system should infer low shrinkage when the
+layers genuinely differ. What distinguishes the nested hyper-model from
+independent local loops is instead its message-passing graph: evidence from all
+levels informs one joint posterior, whose whole field is returned to all
+levels. This is closer to the Beautiful Loop's functional claim while avoiding
+both unsupported shortcuts—that epistemic depth requires one anatomical node,
+or that more uniform precision is necessarily deeper.

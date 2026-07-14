@@ -1,15 +1,16 @@
 {
   "supervision": "global causes, local causes, states, and true precisions are hidden from inference",
   "mean_metrics": {
+    "joint_descent_rate": 1.0,
     "full_accuracy": 0.7220833333333333,
     "independent_accuracy": 0.5070833333333333,
-    "independent_violation_accuracy": 0.4929166666666667,
+    "independent_violation_accuracy": 0.4929166666666666,
     "independent_coherent_accuracy": 0.5059719518230474,
     "independent_forecast_error": 0.5211905482561806,
-    "full_violation_accuracy": 0.24833333333333335,
+    "full_violation_accuracy": 0.24833333333333338,
+    "violation_trials": 5.8,
     "full_coherent_accuracy": 0.7470261072265336,
-    "full_forecast_error": 0.5211905482561807,
-    "joint_descent_rate": 1.0
+    "full_forecast_error": 0.5211905482561808
   },
   "protocol": "relational scene inference versus identical independent local marginals",
   "empirical_criteria": {

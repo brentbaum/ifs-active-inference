@@ -323,6 +323,8 @@ in every nonzero condition. Effective shrinkage fell from `8.31` to `0.90`.
 
 The frozen overall status remains failed because the exact-sharing global
 advantage was only `0.012`, below `0.050`. The better theoretical conclusion is
-not architectural uniqueness. Epistemic depth is an inferred degree of global
-precision coupling: high when one field explains residual dynamics, lower when
-local structure earns release from global broadcast.
+not architectural uniqueness. The shrinkage estimate describes how much
+cross-layer structure the environment supports; it is not epistemic depth.
+Epistemic depth instead belongs to the recursively closed joint hyper-model
+that can infer either shared structure or warranted local deviations and
+rebroadcast the resulting field throughout the hierarchy.

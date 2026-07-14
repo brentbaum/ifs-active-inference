@@ -71,8 +71,11 @@ seed. These probes score the immediate shock but cannot train the agent.
 The first unified run failed. One observation per action could identify total
 branch variance but not three link-specific precisions, leaving the hyper-loop
 without enough endogenous evidence. Actions were changed to acquire four-draw
-temporal packets under one stable cause. This resolved the identifiability
-failure without supplying labels.
+temporal packets under one stable cause. This stabilized the inferred residual
+moments without supplying labels, but it did **not** resolve structural
+identifiability. Experiment 37 later showed that bottom-only observations in an
+additive Gaussian chain identify only the sum of link variances; the apparent
+layerwise solution here inherits the model's constrained field basis.
 
 The next benchmark incorrectly asked a correct context forecast to show slow
 relearning. The evaluation was split into a predicted out-of-sample context
@@ -132,7 +135,9 @@ a precision hyper-loop and adaptive epistemic sampling, but not binding.
 The remaining positive results also retain strict boundaries. The global field
 receives the correct low-rank loading basis, its task accuracy nearly matches
 the independent local meta-loops (`0.954` versus `0.937`), and its policy uses
-an information-gain surrogate. The strongest surviving result is precision
-forecasting (`0.579` versus `0.881` RMSE) and useful adaptive sampling relative
-to a matched-budget random policy. A new construction with competing local
-causes and a genuine coherence prior is required before binding can be claimed.
+an information-gain surrogate rather than exact expected free energy under the
+same continuous model. The strongest surviving result is precision forecasting
+(`0.579` versus `0.881` RMSE) and useful adaptive sampling relative to a
+matched-budget random policy. Experiments 34--37 separately repair the binding,
+structure-learning, and identifiability tests; they do not retroactively turn
+this construction into evidence for those claims.

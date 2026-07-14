@@ -289,7 +289,11 @@ This construction adds noisy observations at every hierarchical level, making
 link-specific residual statistics identifiable without revealing latent states
 or true precision. A nested random-effects hypermodel contains the compact
 global model as its high-shrinkage limit and releases local deviations when
-layer-specific evidence demands them.
+layer-specific evidence demands them. The exact-sharing margin failed its
+frozen threshold, while the nested model won every seed once deviations were
+present. Its shrinkage is interpreted as inferred environmental coupling, not
+as epistemic depth; depth belongs to the joint residual-update-and-broadcast
+loop that can represent either shared or local structure.
 
 ```bash
 ~/.juliaup/bin/julia --project=projects/emergence-suite/continuous \
