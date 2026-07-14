@@ -176,3 +176,25 @@ coordination (`0.087` versus `0.098`). All model-selection criteria passed in
 **Decision:** advance the temporal hyper-model to the Bayesian-binding
 experiment. Retain the explicit complexity prior in the model specification;
 do not describe the selection as emerging without inductive bias.
+
+## Experiment 31 — precision-weighted Bayesian binding
+
+Enumerated one global cause and three locally competing causes under an exact
+discrete posterior. The initial fixed-coherence construction increased
+confidence but did not reliably beat local majority decisions or reject a
+salient distractor. Raising coherence did not fix correctness. A repaired
+benchmark distributed correct evidence across individually ambiguous channels,
+revealing that the remaining failure came from forcing unreliable channels to
+bind as strongly as reliable ones.
+
+The successful construction made the local-to-global coherence prior depend on
+the precision field. Overall cause accuracy was `0.888` versus `0.822` for
+local decisions; ambiguous coherent accuracy was `0.863` versus `0.830`, and
+confidence was `0.631` versus `0.472`. The model rejected the salient
+distractor in `0.814` of trials; inverting the precision field reduced this to
+`0.288`. Overall binding and calibrated-precision advantages held in 20/20
+seeds; ambiguous accuracy won in 19/20.
+
+**Decision:** advance precision-weighted binding to the policy experiment.
+Treat the result as evidence that global coherence must be precision-sensitive,
+not as evidence that stronger coherence alone creates better binding.

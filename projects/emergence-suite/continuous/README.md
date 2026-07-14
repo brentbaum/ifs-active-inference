@@ -185,3 +185,17 @@ lower-level residuals supply the second-order evidence.
 ```
 
 Outputs are under `results/temporal_hypermodel/`.
+
+## Experiment 31: Bayesian binding
+
+This exact discrete model lets three channel-level causes compete to support
+one global cause. Precision controls sensory evidence and each channel's
+participation in the coherence prior. Controls use local majority decisions
+and an inverted precision field.
+
+```bash
+~/.juliaup/bin/julia --project=projects/emergence-suite/continuous \
+  projects/emergence-suite/continuous/scripts/run_bayesian_binding.jl
+```
+
+Outputs are under `results/bayesian_binding/`.

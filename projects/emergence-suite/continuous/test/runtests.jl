@@ -10,6 +10,7 @@ include(joinpath(@__DIR__, "..", "src", "HierarchicalEpistemicDepth.jl"))
 include(joinpath(@__DIR__, "..", "src", "LiteratureTournament.jl"))
 include(joinpath(@__DIR__, "..", "src", "BeautifulLoopHierarchy.jl"))
 include(joinpath(@__DIR__, "..", "src", "TemporalHyperModel.jl"))
+include(joinpath(@__DIR__, "..", "src", "BayesianBinding.jl"))
 
 using .T48Robustness
 using .GlobalPrecisionField
@@ -17,6 +18,7 @@ using .HierarchicalEpistemicDepth
 using .LiteratureTournament
 using .BeautifulLoopHierarchy
 using .TemporalHyperModel
+using .BayesianBinding
 
 const CONFIG_PATH = joinpath(@__DIR__, "..", "configs", "t48-pilot.yaml")
 
@@ -114,6 +116,14 @@ end
     @test all(0 < row.global_weight < 1 for row in rows)
     @test all(isfinite(row.adaptive_rmse) for row in rows)
     @test any(abs(row.global_log_evidence - row.local_log_evidence) > 1.0e-6 for row in rows)
+end
+
+@testset "Bayesian binding infers a global cause from local competitors" begin
+    result = infer_bound_cause([0.4, 0.5, 0.3], fill(0.45, 3), fill(0.1, 3))
+    @test 0 <= result.probability_positive <= 1
+    @test result.decision == 1
+    @test length(result.local_probabilities) == 3
+    @test all(0 <= probability <= 1 for probability in result.local_probabilities)
 end
 
 @testset "autonomous reflected pilot path" begin

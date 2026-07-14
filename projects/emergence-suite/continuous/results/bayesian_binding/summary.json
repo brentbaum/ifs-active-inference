@@ -1,0 +1,26 @@
+{
+  "mean_metrics": {
+    "ambiguous_local_confidence": 0.4715194118745254,
+    "overall_bound_accuracy": 0.8877083333333333,
+    "overall_local_accuracy": 0.8222916666666666,
+    "ambiguous_bound_confidence": 0.6309902931043452,
+    "distractor_bound_accuracy": 0.8137500000000003,
+    "distractor_inverted_accuracy": 0.288125,
+    "ambiguous_local_accuracy": 0.8302083333333334,
+    "ambiguous_bound_accuracy": 0.8633333333333333
+  },
+  "criteria": {
+    "global_binding_advantage": true,
+    "salient_distractor_rejected": true,
+    "jointly_coherent_ignition": true,
+    "ambiguous_coherence_advantage": true,
+    "calibrated_precision_required": true
+  },
+  "protocol": "exact inference over one global cause and three locally competing causes",
+  "experiment": 31,
+  "win_rates": {
+    "overall_binding": 1.0,
+    "ambiguous_binding": 0.95,
+    "precision_calibration": 1.0
+  }
+}
