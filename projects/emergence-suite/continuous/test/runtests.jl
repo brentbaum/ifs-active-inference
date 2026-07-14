@@ -17,6 +17,7 @@ include(joinpath(@__DIR__, "..", "src", "CompetitiveBinding.jl"))
 include(joinpath(@__DIR__, "..", "src", "LearnedPrecisionStructure.jl"))
 include(joinpath(@__DIR__, "..", "src", "ConfirmatoryBeautifulLoop.jl"))
 include(joinpath(@__DIR__, "..", "src", "IdentifiablePrecisionStructure.jl"))
+include(joinpath(@__DIR__, "..", "src", "IdentifiableGlobality.jl"))
 
 using .T48Robustness
 using .GlobalPrecisionField
@@ -31,6 +32,7 @@ using .CompetitiveBinding
 using .LearnedPrecisionStructure
 using .ConfirmatoryBeautifulLoop
 using .IdentifiablePrecisionStructure
+using .IdentifiableGlobality
 
 const CONFIG_PATH = joinpath(@__DIR__, "..", "configs", "t48-pilot.yaml")
 
@@ -247,6 +249,19 @@ end
     @test length(fit.posterior_phi) == 9
     @test all(fit.residuals .> 0)
     @test all(diff(getfield.(fit.trace, :joint_free_energy)) .<= 1.0e-8)
+end
+
+@testset "identifiable globality includes a truly independent control" begin
+    config = IdentifiableConfig(seeds = [11901], episodes = 12,
+        training_episodes = 5, switch_episode = 8,
+        inference_iterations = 3, hyper_newton_steps = 2)
+    rows, snapshots = run_globality_seed(11901; config = config)
+    @test Set(row.agent for row in rows) ==
+        Set(["compact_global", "nested_global", "independent_local"])
+    @test length(rows) == 3config.episodes
+    @test Set(keys(snapshots)) ==
+        Set(["compact_global", "nested_global", "independent_local"])
+    @test all(values(IdentifiableGlobality.structural_checks(config)))
 end
 
 @testset "autonomous reflected pilot path" begin

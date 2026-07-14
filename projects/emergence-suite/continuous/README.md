@@ -301,3 +301,19 @@ loop that can represent either shared or local structure.
 ```
 
 Outputs are under `results/identifiable_precision_structure/`.
+
+## Experiment 38: identifiable globality control
+
+This frozen follow-up adds the control missing from Experiment 37: eighteen
+independent local meta-loop coefficients, with no parameter sharing, receive
+the same noisy layer observations and posterior residual updates as the compact
+and nested global hyper-models. A new seed block tests whether joint inference
+earns a forecast advantage in the identifiable exact-sharing regime and whether
+the nested global model can release tying under genuine local deviations.
+
+```bash
+~/.juliaup/bin/julia --project=projects/emergence-suite/continuous \
+  projects/emergence-suite/continuous/scripts/run_identifiable_globality.jl
+```
+
+Outputs are under `results/identifiable_globality/`.
