@@ -1,18 +1,22 @@
 # Beautiful Loop fidelity audit of the v11 global precision-field simulation
 
-**Date:** 2026-07-13
+**Date:** 2026-07-14
 
-**Code audited:** `projects/emergence-suite/continuous/src/GlobalPrecisionField.jl`
+**Code audited:** the precision-field, hierarchical, identifiable-globality,
+and unified-relational implementations under
+`projects/emergence-suite/continuous/src/`
 
 **Reference:** Laukkonen, Friston, and Chandaria (2025), especially Table 1 and
 the five-step hyper-loop in §6.1.
 
 ## Bottom line
 
-The current simulation is strongly in the *spirit* of the Beautiful Loop
-account and materially closer than the retired scalar-depth models. It is not
-yet an implementation of the paper's formal model. The accurate label is
-**minimal precision-field analogue** or **construction check**.
+The original five-channel simulation is strongly in the *spirit* of the
+Beautiful Loop account and materially closer than the retired scalar-depth
+models. The later sequence now contains a higher-fidelity minimal precision
+hyper-loop and one unified relational agent. None is a reproduction of the
+paper's full formal model. The accurate labels are **minimal implementation of
+the precision hyper-loop** and **construction test of the broader operations**.
 
 It captures the proposed direction of causation:
 
@@ -197,10 +201,11 @@ global cause; precision controlled both sensory gain and participation in the
 coherence prior. Finally, an expected-free-energy policy redirected sampling
 after an unannounced channel-reliability switch.
 
-The results make the construction closer in three specific senses: precision
-is forecast and corrected across time; a global posterior is selected through
+The results made the construction closer in three specific senses: precision
+was forecast and corrected across time; a global posterior was selected through
 precision-weighted inferential competition; and learned precision beliefs
-guide epistemic action. They do not form one end-to-end model. The temporal,
+guided epistemic action. At that stage they did not form one end-to-end model.
+The temporal,
 binding, and policy experiments remain separate constructions with authored
 state spaces, and the policy experiment receives outcome feedback after each
 episode. The defensible claim is therefore that each proposed operation is
@@ -262,7 +267,7 @@ from bottom-only observations and the adaptive model's evidence updates are
 tempered. Experiment 37 supersedes the forecast horse race. The declared
 local-deviation crossover failed and remains recorded as a failed confirmation.
 
-## Identifiability correction and current verdict
+## Identifiability correction
 
 Experiment 37 corrects an error in the earlier construction. Bottom-only
 observations in an additive Gaussian hierarchy identify total transition
@@ -284,16 +289,45 @@ from `8.32` to `1.88`. All frozen criteria passed and task accuracy remained
 tied. This is the cleanest evidence for global message passing in the sequence,
 while retaining the direct-monitoring fidelity boundary.
 
+## Unified relational construction and interaction
+
+Experiments 39--42 close the earlier conjunction gap. The final agent contains
+three explicit Gaussian levels on each of three branches, a global
+nine-component precision field updated from posterior residual moments, a soft
+relational scene prior with informative local marginals, and sequential
+precision-guided sampling. Its factorized replay preserves the relational
+prior's exact conditional local marginals and copies both full-agent actions;
+random receives the same two-packet budget; precision-blind retains the entropy
+policy without channel-specific reliability.
+
+On Experiment 40's untouched seeds, full accuracy was `0.798`, versus `0.712`
+factorized replay and `0.719` random, with 20/20 paired wins against both. All
+eight stress cells passed, and relation violations reversed the binding
+advantage. The frozen run did not pass in full: its raw zero-coefficient
+negative control also weakened the local marginals and failed to preserve an
+action-accuracy gain.
+
+The exact matched-marginal projection repaired that confound and exposed an
+interaction rather than modular independence. On Experiment 42's new seeds,
+the relational-world binding and action gains were `0.090` and `0.086`, both
+with 20/20 wins. The factorized-world action gain was `0.0158`, yielding a
+preregistered relational-action interaction of `0.070`. The policy reversed
+its channel preference in both worlds, so relational dependence amplified the
+instrumental value of reallocation rather than creating the policy operation.
+The overall frozen status remains failed because `0.0158` narrowly exceeded an
+auxiliary negligible-effect cutoff of `0.015`.
+
 The strongest defensible external-reader verdict is now **yes for a faithful
-minimal precision hyper-loop and for separate constructions of joint binding
-and epistemic sampling; no for their conjunction, a reproduction, or a unique
-architecture**. The sequence contains a hierarchical precision hyper-loop with
-endogenous residual messages, a genuinely joint binding problem, and epistemic
-sampling. But the repaired binding model has fixed sampling and no structural
-break, while the unified action model's binding collapses to ordinary pooling.
-No single agent yet realizes all three operations non-vacuously. The parity
-relation is not learned, free-energy descent is an optimization invariant, and
-the policy is a surrogate.
+minimal precision hyper-loop and for one authored agent in which joint binding,
+recursive precision inference, and epistemic sampling interact; no for a
+reproduction, autonomous structure discovery, or a unique architecture**. The
+conjunction is now real in the limited construction sense: removing the joint
+factor while preserving local marginals sharply attenuates the value of active
+sampling. The relational family and precision loading basis are supplied,
+free-energy descent is enforced as an optimization invariant, and the policy
+is an information-gain surrogate rather than exact expected free energy under
+the same continuous model.
+
 Most importantly, globality should not be equated with identical precision or
 one privileged node. A global hyper-model is defined by joint recursive message
 passing across the hierarchy and may correctly infer substantial local
