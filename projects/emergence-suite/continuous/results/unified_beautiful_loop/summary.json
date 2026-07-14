@@ -1,0 +1,58 @@
+{
+  "supervision": "hidden causes, latent states, and true precisions are used only for simulation and scoring",
+  "mean_metrics": {
+    "break_channel_1": 1.0,
+    "local_forecast_error": 0.880941100859016,
+    "late_phi_3": -0.5693443735035492,
+    "late_after_accuracy": 0.9683333333333334,
+    "global_forecast_error": 0.5787564497006242,
+    "random_after_accuracy": 0.8325000000000001,
+    "fixed_after_accuracy": 0.6208333333333333,
+    "before_channel_1": 1.0,
+    "local_after_accuracy": 0.9374999999999998,
+    "full_after_accuracy": 0.9541666666666664,
+    "early_after_accuracy": 0.70625,
+    "full_mean_samples": 1.6500000000000004,
+    "random_mean_samples": 1.6500000000000004,
+    "late_phi_1": 1.5401821269451863,
+    "joint_descent_rate": 1.0,
+    "late_channel_3": 1.0,
+    "no_binding_after_accuracy": 0.9266666666666667
+  },
+  "criteria": {
+    "global_forecast_advantage": true,
+    "global_phi_controls_every_transition": true,
+    "binding_advantage": true,
+    "selective_ablation": true,
+    "expected_free_energy_policy": true,
+    "depth_is_readout_only": true,
+    "epistemic_action_advantage": true,
+    "explicit_three_level_world_model": true,
+    "unsupervised_bayesian_binding": true,
+    "endogenous_second_order_errors": true,
+    "joint_free_energy_descends": true,
+    "matched_local_meta_loop": true,
+    "post_switch_recovery": true,
+    "policy_reallocation": true,
+    "perturbation_robustness": true,
+    "precision_forecast_reversal": true,
+    "forecast_correct_broadcast_cycle": true
+  },
+  "protocol": "one generative model for hierarchical inference, global precision, binding, and action",
+  "robustness": {
+    "pass_fraction": 1.0,
+    "total_cells": 8,
+    "cells_passed": 8
+  },
+  "experiment": 33,
+  "win_rates": {
+    "reallocated": 1.0,
+    "precision_reversed": 1.0,
+    "beats_fixed": 1.0,
+    "beats_random": 1.0,
+    "beats_no_binding": 0.8,
+    "beats_local": 0.7,
+    "global_forecast": 0.95,
+    "recovered": 1.0
+  }
+}

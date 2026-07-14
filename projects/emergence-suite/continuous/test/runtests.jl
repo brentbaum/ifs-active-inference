@@ -12,6 +12,7 @@ include(joinpath(@__DIR__, "..", "src", "BeautifulLoopHierarchy.jl"))
 include(joinpath(@__DIR__, "..", "src", "TemporalHyperModel.jl"))
 include(joinpath(@__DIR__, "..", "src", "BayesianBinding.jl"))
 include(joinpath(@__DIR__, "..", "src", "EpistemicAgency.jl"))
+include(joinpath(@__DIR__, "..", "src", "UnifiedBeautifulLoop.jl"))
 
 using .T48Robustness
 using .GlobalPrecisionField
@@ -21,6 +22,7 @@ using .BeautifulLoopHierarchy
 using .TemporalHyperModel
 using .BayesianBinding
 using .EpistemicAgency
+using .UnifiedBeautifulLoop
 
 const CONFIG_PATH = joinpath(@__DIR__, "..", "configs", "t48-pilot.yaml")
 
@@ -136,6 +138,33 @@ end
     @test length(rows) == 60
     @test Set(row.strategy for row in rows) == Set(["efe", "random", "fixed"])
     @test all(0 <= row.samples <= 3 for row in rows)
+end
+
+@testset "unified Beautiful Loop couples hierarchy, precision, binding, and policy" begin
+    config = UnifiedConfig(seeds = [8701], episodes = 12, training_episodes = 5,
+        switch_episode = 8, structural_break_episode = 10,
+        inference_iterations = 6, hyper_newton_steps = 5)
+    episode = generate_unified_episode(8701, 1; config = config)
+    global_model = UnifiedBeautifulLoop.PrecisionForecaster(true, config)
+    local_model = UnifiedBeautifulLoop.PrecisionForecaster(false, config)
+    prior_mean, prior_covariance = UnifiedBeautifulLoop.forecast(
+        global_model, episode.context, config)
+    _, local_covariance = UnifiedBeautifulLoop.forecast(
+        local_model, episode.context, config)
+    @test size(episode.states) == (3, 3, config.samples_per_action)
+    @test diag(prior_covariance) ≈ diag(local_covariance)
+    bound = infer_unified_episode(episode.observations, [1, 2, 3],
+        prior_mean, prior_covariance; binding = true, config = config)
+    unbound = infer_unified_episode(episode.observations, [1, 2, 3],
+        prior_mean, prior_covariance; binding = false, config = config)
+    @test length(bound.posterior_phi) == 9
+    @test all(bound.residuals .> 0)
+    @test all(diff(getfield.(bound.trace, :joint_free_energy)) .<= 1.0e-8)
+    @test all(isfinite(row.hyper_free_energy) for row in bound.trace)
+    @test abs(bound.probability_positive - unbound.probability_positive) > 1.0e-8
+    policy = UnifiedBeautifulLoop.policy_posterior(bound.probability_positive,
+        bound.posterior_phi, bound.posterior_covariance, [1, 2, 3], 0, config)
+    @test sum(policy.probabilities) ≈ 1.0
 end
 
 @testset "autonomous reflected pilot path" begin

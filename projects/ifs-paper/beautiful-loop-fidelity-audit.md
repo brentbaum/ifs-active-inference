@@ -206,3 +206,32 @@ state spaces, and the policy experiment receives outcome feedback after each
 episode. The defensible claim is therefore that each proposed operation is
 computationally sufficient under a minimal model—not that their conjunction,
 consciousness, or the clinical IFS mechanism has been derived.
+
+## Unified construction
+
+Experiment 33 removes the principal objection above. One conditionally
+Gaussian generative model now contains three explicit levels on three branches,
+one global cause, one nine-component precision field, and one posterior over
+epistemic policies. Alternating inference over states, the global cause, and
+the precision field minimizes the recorded current-state variational free
+energy. Expected free energy supplies the policy factor. The revised field is
+broadcast into every transition and into the next action; the next packet of
+posterior residual moments then corrects that field. No hidden state or
+reliability label is used for learning.
+
+The matched controls are now internal rather than comparisons across separate
+experiments. Independent local precision regressions have the same marginal
+prior variance. The no-binding agent factorizes its cause posterior by branch.
+The random policy receives the exact sample budget chosen by the full policy.
+The full model beats each on the operation that the ablation removes, and the
+complete signature survives all eight cells of the perturbation grid.
+
+An external computational reader can reasonably say that this is a faithful
+minimal realization of Table 1 plus the paper's binding and active-inference
+claims. The remaining objection moves from implementation fidelity to theory
+identification. The environment shares the same low-rank global field family
+assumed by the agent; the simulation therefore tests the consequences and
+utility of that architecture under a favorable but explicit scope condition.
+It does not establish that global recursive precision is the only architecture
+with these effects, that it emerges without the relevant inductive bias, or
+that satisfying the computational conditions entails phenomenal awareness.

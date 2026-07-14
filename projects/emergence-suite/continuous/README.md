@@ -213,3 +213,25 @@ policy change.
 ```
 
 Outputs are under `results/epistemic_agency/`.
+
+## Experiment 33: one unified Beautiful Loop agent
+
+This construction places three explicit Gaussian levels, a discrete global
+cause, the complete precision field `Phi`, and a posterior over epistemic
+policies inside one active-inference loop. State and precision posteriors are
+updated alternately under one current-state variational objective; expected
+free energy supplies the policy factor. The inferred precision field is learned
+without cause or reliability labels, broadcast to every transition, and used
+to decide which branch is observed next.
+
+The experiment includes matched independent meta-loops, genuinely factorized
+no-binding inference, matched-budget random action, fixed sampling, a held-out
+context forecast, an unannounced structural break, and an eight-cell parameter
+perturbation grid.
+
+```bash
+~/.juliaup/bin/julia --project=projects/emergence-suite/continuous \
+  projects/emergence-suite/continuous/scripts/run_unified_beautiful_loop.jl
+```
+
+Outputs are under `results/unified_beautiful_loop/`.

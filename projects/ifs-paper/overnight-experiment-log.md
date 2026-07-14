@@ -222,3 +222,31 @@ channel three (`0.937` late). All frozen criteria passed.
 sampling. Keep the stronger binding claim in experiment 31: experiment 32
 usually selects one channel and therefore does not independently demonstrate
 multi-channel binding.
+
+## Experiment 33 — unified Beautiful Loop agent
+
+Combined the explicit three-level Gaussian hierarchy, global cause binding,
+temporal precision forecasting, second-order hyper-updates, and expected-free-
+energy action in one model. The agent learns only from its observations and
+posterior residual moments. It is never given the cause, latent states, true
+precision, switch label, or experimental regime.
+
+The first implementation exposed three real failures. A single observation
+could not identify link-specific precision; a supposedly global field still
+contained independent channel slopes; and accumulated parameter certainty
+prevented structural revision. Four-draw temporal packets supplied identifiable
+residual structure, one latent field orientation created genuinely nonlocal
+sharing, and a second-order change detector released obsolete precision. A
+known training-boundary gate was removed after adversarial review.
+
+Final forecast RMSE was `0.579` versus `0.881` for matched independent loops.
+Cause accuracy was `0.954`, versus `0.927` without binding, `0.833` under
+matched-budget random action, and `0.621` under fixed sampling. Frozen
+structural-break accuracy was `0.706` and late accuracy was `0.968`; field and
+action reversal occurred in 20/20 seeds. All eight perturbation cells passed.
+
+**Decision:** this clears the external-reader threshold for a faithful minimal
+computational realization of the Beautiful Loop architecture. Retain the
+strict boundary: it demonstrates the consequences of an authored global-field
+inductive bias, not the emergence of that architecture, phenomenal
+consciousness, or a clinical effect.
