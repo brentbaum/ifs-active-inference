@@ -1,0 +1,60 @@
+{
+  "supervision": "all layer observations are noisy; latent states and true precisions remain hidden",
+  "protocol": "layer-monitored precision inference with nested global-to-local random effects",
+  "empirical_criteria": {
+    "nested_advantage_at_three": true,
+    "global_advantage_when_exact": false,
+    "evidence_releases_tying": true,
+    "nested_no_worse_at_two": true
+  },
+  "experiment": 37,
+  "structural_checks": {
+    "global_model_nested_in_local": true,
+    "residual_updates_only": true,
+    "noisy_observations_at_all_levels": true,
+    "latent_states_hidden": true,
+    "paired_fresh_seed_block": true
+  },
+  "conditions": [{
+    "nested_effective_shrinkage": 8.314165898136206,
+    "global_seed_win_rate": 0.65,
+    "nested_seed_win_rate": 0.35,
+    "nested_minus_global": 0.012050837467482312,
+    "global_forecast_error": 0.3453780398028436,
+    "nested_forecast_error": 0.3574288772703259,
+    "nested_accuracy": 0.7616666666666666,
+    "local_deviation_sd": 0.0,
+    "global_accuracy": 0.7625
+  }, {
+    "nested_effective_shrinkage": 5.262428570602442,
+    "global_seed_win_rate": 0.0,
+    "nested_seed_win_rate": 1.0,
+    "nested_minus_global": -0.6844115415699414,
+    "global_forecast_error": 1.354738466498541,
+    "nested_forecast_error": 0.6703269249285995,
+    "nested_accuracy": 0.7708333333333333,
+    "local_deviation_sd": 1.0,
+    "global_accuracy": 0.7725000000000001
+  }, {
+    "nested_effective_shrinkage": 1.9288035008172166,
+    "global_seed_win_rate": 0.0,
+    "nested_seed_win_rate": 1.0,
+    "nested_minus_global": -1.6322811980235525,
+    "global_forecast_error": 2.664622528309526,
+    "nested_forecast_error": 1.0323413302859734,
+    "nested_accuracy": 0.7558333333333332,
+    "local_deviation_sd": 2.0,
+    "global_accuracy": 0.7566666666666666
+  }, {
+    "nested_effective_shrinkage": 0.9005132358818498,
+    "global_seed_win_rate": 0.0,
+    "nested_seed_win_rate": 1.0,
+    "nested_minus_global": -2.6565102697563363,
+    "global_forecast_error": 3.9967780926340075,
+    "nested_forecast_error": 1.3402678228776712,
+    "nested_accuracy": 0.7325,
+    "local_deviation_sd": 3.0,
+    "global_accuracy": 0.7275
+  }],
+  "confirmatory_seeds": [11001, 11002, 11003, 11004, 11005, 11006, 11007, 11008, 11009, 11010, 11011, 11012, 11013, 11014, 11015, 11016, 11017, 11018, 11019, 11020]
+}

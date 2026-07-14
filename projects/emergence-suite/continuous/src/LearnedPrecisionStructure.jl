@@ -137,10 +137,15 @@ function local_tying_laplacian()
 end
 
 function LinearFieldForecaster(mode::Symbol, config::StructureConfig; shrinkage = 0.0)
-    dimensions = mode == :global ? 6 : 18
+    dimensions = mode == :global ? 6 : (mode == :hierarchical ? 15 : 18)
     prior = Matrix{Float64}(I, dimensions, dimensions) /
         config.parameter_prior_variance
     mode == :local && (prior .+= shrinkage .* local_tying_laplacian())
+    if mode == :hierarchical
+        for index in 7:15
+            prior[index, index] += shrinkage
+        end
+    end
     return LinearFieldForecaster(mode, copy(prior), zeros(dimensions), prior)
 end
 
@@ -151,6 +156,16 @@ function precision_design(context, mode::Symbol)
             row = UnifiedBeautifulLoop.component_index(layer, channel)
             design[row, layer] = 1
             design[row, 3 + channel] = context
+        end
+        return design
+    end
+    if mode == :hierarchical
+        design = zeros(9, 15)
+        for layer in 1:3, channel in 1:3
+            row = UnifiedBeautifulLoop.component_index(layer, channel)
+            design[row, layer] = 1
+            design[row, 3 + channel] = context
+            design[row, 6 + row] = context
         end
         return design
     end
@@ -203,8 +218,8 @@ mutable struct AdaptiveLocalForecaster
     log_weights::Vector{Float64}
 end
 
-function AdaptiveLocalForecaster(config::StructureConfig)
-    candidates = [LinearFieldForecaster(:local, config; shrinkage = shrinkage)
+function AdaptiveLocalForecaster(config::StructureConfig; mode::Symbol = :local)
+    candidates = [LinearFieldForecaster(mode, config; shrinkage = shrinkage)
         for shrinkage in config.shrinkage_grid]
     return AdaptiveLocalForecaster(candidates, copy(config.shrinkage_grid),
         fill(-log(length(candidates)), length(candidates)))

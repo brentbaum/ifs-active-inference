@@ -16,6 +16,7 @@ include(joinpath(@__DIR__, "..", "src", "UnifiedBeautifulLoop.jl"))
 include(joinpath(@__DIR__, "..", "src", "CompetitiveBinding.jl"))
 include(joinpath(@__DIR__, "..", "src", "LearnedPrecisionStructure.jl"))
 include(joinpath(@__DIR__, "..", "src", "ConfirmatoryBeautifulLoop.jl"))
+include(joinpath(@__DIR__, "..", "src", "IdentifiablePrecisionStructure.jl"))
 
 using .T48Robustness
 using .GlobalPrecisionField
@@ -29,6 +30,7 @@ using .UnifiedBeautifulLoop
 using .CompetitiveBinding
 using .LearnedPrecisionStructure
 using .ConfirmatoryBeautifulLoop
+using .IdentifiablePrecisionStructure
 
 const CONFIG_PATH = joinpath(@__DIR__, "..", "configs", "t48-pilot.yaml")
 
@@ -224,6 +226,27 @@ end
     @test length(local_mean) == 9
     @test size(global_covariance) == (9, 9)
     @test size(local_covariance) == (9, 9)
+end
+
+@testset "layer monitoring identifies local precision structure" begin
+    config = IdentifiableConfig(seeds = [11001], episodes = 12,
+        training_episodes = 5, switch_episode = 8,
+        inference_iterations = 3, hyper_newton_steps = 2,
+        local_deviation_sd = 1.0)
+    structure = IdentifiablePrecisionStructure.structure_config(config)
+    loading = random_channel_loading(11001)
+    deviations = LearnedPrecisionStructure.random_local_deviations(11001, 1.0)
+    episode = generate_monitored_episode(11001, 1, loading, deviations;
+        config = config)
+    @test size(episode.monitored_observations) == size(episode.states)
+    model = LearnedGlobalForecaster(structure)
+    prior_mean, prior_covariance = LearnedPrecisionStructure.forecast(
+        model, episode.context, structure)
+    fit = infer_monitored_episode(episode.monitored_observations, [1, 2, 3],
+        prior_mean, prior_covariance; config = config)
+    @test length(fit.posterior_phi) == 9
+    @test all(fit.residuals .> 0)
+    @test all(diff(getfield.(fit.trace, :joint_free_energy)) .<= 1.0e-8)
 end
 
 @testset "autonomous reflected pilot path" begin

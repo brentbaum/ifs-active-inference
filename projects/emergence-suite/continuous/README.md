@@ -282,3 +282,18 @@ overall experiment is recorded as failed.
 ```
 
 Outputs are under `results/confirmatory_beautiful_loop/`.
+
+## Experiment 37: identifiable global-to-local precision
+
+This construction adds noisy observations at every hierarchical level, making
+link-specific residual statistics identifiable without revealing latent states
+or true precision. A nested random-effects hypermodel contains the compact
+global model as its high-shrinkage limit and releases local deviations when
+layer-specific evidence demands them.
+
+```bash
+~/.juliaup/bin/julia --project=projects/emergence-suite/continuous \
+  projects/emergence-suite/continuous/scripts/run_identifiable_precision_structure.jl
+```
+
+Outputs are under `results/identifiable_precision_structure/`.

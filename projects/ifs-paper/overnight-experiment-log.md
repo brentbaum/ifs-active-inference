@@ -306,3 +306,23 @@ deviation `3.0`, below the declared `0.050`. Effective local shrinkage fell to
 **Decision:** preserve the overall failed status (9/11 precision predictions).
 The two primary confirmations remain positive. Improve the local learner, keep
 the crossover threshold, and use another untouched seed block.
+
+## Experiment 37 — identifiable nested precision structure
+
+The attempted random-effects rebuild exposed that bottom-only observations
+cannot identify three additive link variances. The final construction added
+noisy observations at every level while keeping latent states and true
+precisions hidden. It compared the compact global field with a nested model
+containing the same six shared coefficients plus nine shrinkage-controlled
+local deviations.
+
+On paired fresh seeds, RMSE was `0.345` global versus `0.357` nested under exact
+sharing. At deviation scales `1`, `2`, and `3`, nested RMSE was `0.670`, `1.032`,
+and `1.340`, versus global `1.355`, `2.665`, and `3.997`; nested won 20/20 seeds
+in every nonzero condition. Effective shrinkage fell from `8.31` to `0.90`.
+
+The frozen overall status remains failed because the exact-sharing global
+advantage was only `0.012`, below `0.050`. The better theoretical conclusion is
+not architectural uniqueness. Epistemic depth is an inferred degree of global
+precision coupling: high when one field explains residual dynamics, lower when
+local structure earns release from global broadcast.

@@ -1,0 +1,69 @@
+# Experiment 37 — identifiable global-to-local precision structure
+
+**Date:** 2026-07-14
+
+## Problem exposed by Experiment 36
+
+Observing only the bottom of an additive three-level Gaussian chain identifies
+the sum of its transition variances, not their layer-specific decomposition.
+More temporal samples estimate that sum more accurately but do not solve the
+structural ambiguity. This weakens Experiment 33's claim that four draws alone
+identified three link precisions.
+
+## Construction
+
+Every latent level now emits a noisy observation. The hidden states themselves
+are never supplied to inference, and true precision remains scoring-only. The
+hyper-loop therefore receives observable but noisy residual information at
+each level—the explicit implementation of Beautiful Loop Theory's assumption
+that a precision hyper-model monitors error dynamics throughout the hierarchy.
+
+The strong comparator is nested rather than parallel:
+
+\[
+\phi_{\ell j}(c)=\alpha_\ell+(b_j+\delta_{\ell j})c.
+\]
+
+The six shared terms are the compact global model. Nine local deviations are
+added under an evidence-weighted shrinkage hyperprior. Infinite shrinkage gives
+the global model exactly; decreasing shrinkage releases component-specific
+structure. Thus the comparator can share globally or become local as evidence
+requires.
+
+## Paired fresh-seed results
+
+The frozen paired block `11001:11020` reused the same hidden loading vectors and
+episode noise across four deviation levels:
+
+| Local deviation | Compact global RMSE | Nested RMSE | Nested shrinkage |
+|---:|---:|---:|---:|
+| 0.0 | 0.345 | 0.357 | 8.31 |
+| 1.0 | 1.355 | 0.670 | 5.26 |
+| 2.0 | 2.665 | 1.032 | 1.93 |
+| 3.0 | 3.997 | 1.340 | 0.90 |
+
+The nested model won 20/20 seeds at every nonzero deviation. Scene accuracy
+remained nearly identical throughout; the largest difference was half a
+percentage point.
+
+## Frozen result and theory update
+
+The experiment's overall frozen status is **failed** because the compact global
+model's exact-sharing advantage was only `0.012`, below the preregistered
+`0.050`, and appeared in 13/20 rather than 15/20 seeds. The remaining three
+criteria passed by wide margins.
+
+That failure is theoretically useful. A capable hierarchical model should
+approximate its nested global limit when the world is globally tied. The data
+do not identify one unique architectural node; they identify an effective
+degree of global coupling. The more defensible definition is therefore:
+
+> Epistemic depth is the inferred extent to which precision structure is
+> shared across the hierarchy and recursively made available to constrain
+> lower-level inference and action.
+
+On this definition, the shrinkage hyperbelief is itself a minimal depth
+variable. It rises when error dynamics support one shared field and falls when
+local residual structure makes global broadcast maladaptive. This is closer to
+the Beautiful Loop's functional claim while avoiding an unsupported assertion
+that a single global node is uniquely necessary.
