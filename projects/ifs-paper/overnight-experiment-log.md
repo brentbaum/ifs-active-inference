@@ -398,3 +398,19 @@ successful primary confirmation. Repair only the negative control by replacing
 the raw zero-coefficient world with the existing factorized distribution that
 matches the relational prior's local marginals exactly; freeze new seeds before
 testing it.
+
+## Experiment 41 — matched-marginal relation ablation diagnostic
+
+The repaired control matched every conditional local marginal to numerical
+precision (`2.22e-16`) and removed only higher-order dependence. On the recycled
+failed-control seeds, full and replay were exactly equal at `0.582`, as required,
+but matched-budget random was also `0.582`; the planned `0.020` action gain again
+failed. The full policy nevertheless reversed channels perfectly across the
+context switch while the blind policy did not.
+
+**Decision:** do not force modular preservation of an accuracy effect. The
+diagnostic implies a simpler interaction: relational dependence creates the
+combinatorial evidence structure that makes targeted sampling valuable. Freeze
+a fresh paired comparison of relational and exact matched-marginal factorized
+worlds. Require the action policy to reallocate in both, but its accuracy gain
+to appear only when relational structure is present.

@@ -20,6 +20,7 @@ include(joinpath(@__DIR__, "..", "src", "IdentifiablePrecisionStructure.jl"))
 include(joinpath(@__DIR__, "..", "src", "IdentifiableGlobality.jl"))
 include(joinpath(@__DIR__, "..", "src", "UnifiedRelationalAgent.jl"))
 include(joinpath(@__DIR__, "..", "src", "ConfirmUnifiedRelationalAgent.jl"))
+include(joinpath(@__DIR__, "..", "src", "MatchedMarginalRelationAblation.jl"))
 
 using .T48Robustness
 using .GlobalPrecisionField
@@ -37,6 +38,7 @@ using .IdentifiablePrecisionStructure
 using .IdentifiableGlobality
 using .UnifiedRelationalAgent
 using .ConfirmUnifiedRelationalAgent
+using .MatchedMarginalRelationAblation
 
 const CONFIG_PATH = joinpath(@__DIR__, "..", "configs", "t48-pilot.yaml")
 
@@ -287,6 +289,20 @@ end
             (replay.first_action, replay.second_action)
     end
     @test all(values(UnifiedRelationalAgent.implementation_checks(config)))
+end
+
+@testset "factorized projection removes only joint scene structure" begin
+    config = RelationalAgentConfig(seeds = [12902], episodes = 12,
+        training_episodes = 5, switch_episode = 8,
+        inference_iterations = 3, hyper_newton_steps = 2,
+        violation_rate = 0.0)
+    @test factorized_projection_error(config) <= 1.0e-12
+    rows = run_relational_agent_seed(12902; config = config,
+        scene_mode = :factorized, model_mode = :factorized)
+    metrics = UnifiedRelationalAgent.seed_metrics(rows)
+    @test metrics.full_accuracy == metrics.factorized_accuracy
+    @test metrics.replay_action_match_rate == 1.0
+    @test metrics.full_mean_packets == metrics.random_mean_packets
 end
 
 @testset "autonomous reflected pilot path" begin

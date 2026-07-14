@@ -1,0 +1,49 @@
+{
+  "protocol": "exact factorized projection preserves conditional local marginals while removing relational synergy",
+  "mean_metrics": {
+    "full_after_channel_3": 1.0,
+    "blind_accuracy": 0.5583333333333333,
+    "replay_action_match_rate": 1.0,
+    "factorized_violation_accuracy": null,
+    "blind_after_channel_3": 0.05500000000000001,
+    "random_mean_packets": 2.0,
+    "factorized_coherent_accuracy": 0.5816666666666667,
+    "full_mean_packets": 2.0,
+    "random_accuracy": 0.5816666666666667,
+    "factorized_accuracy": 0.5816666666666667,
+    "full_coherent_accuracy": 0.5816666666666667,
+    "full_before_channel_1": 1.0,
+    "line_search_invariant_rate": 1.0,
+    "full_accuracy": 0.5816666666666667,
+    "full_violation_accuracy": null
+  },
+  "seeds": [15101, 15102, 15103, 15104, 15105],
+  "optimization_checks": {
+    "line_search_invariant_holds": true
+  },
+  "experiment": 41,
+  "stage": "recycled-seed diagnostic",
+  "implementation_checks": {
+    "explicit_three_level_states": true,
+    "factorized_prior_matches_local_marginals": true,
+    "factorized_replay_uses_full_actions": true,
+    "partially_informative_local_causes": true,
+    "residual_messages_respond_to_observations": true
+  },
+  "win_rates": {
+    "active_over_random": 0.4,
+    "relational_over_factorized": 0.0
+  },
+  "projection_error": 2.220446049250313e-16,
+  "empirical_criteria": {
+    "matched_budget_and_replay": true,
+    "joint_effect_removed": true,
+    "epistemic_action_retained": false,
+    "exact_conditional_local_marginals": true,
+    "precision_guided_reallocation": true
+  },
+  "thresholds": {
+    "minimum_action_gain": 0.02,
+    "minimum_win_rate": 0.6
+  }
+}

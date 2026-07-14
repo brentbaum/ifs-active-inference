@@ -361,3 +361,26 @@ control also weakened the local marginals: it removed joint gain but did not
 retain the required action-accuracy gain. See
 `projects/ifs-paper/experiment-40-confirm-unified-relational-agent.md` for the
 preserved failure and follow-up rationale.
+
+## Experiment 41: matched-marginal relation ablation diagnostic
+
+This repair samples from the exact factorized projection of Experiment 39's
+relational prior. It therefore preserves every conditional local marginal
+while removing higher-order dependence. All agent arms use that factorized
+scene model; full versus replay must collapse, while full versus random tests
+whether precision-guided action remains useful. The first run deliberately
+reuses Experiment 40's already-opened failed-control seeds and is diagnostic,
+not confirmatory.
+
+```bash
+~/.juliaup/bin/julia --project=projects/emergence-suite/continuous \
+  projects/emergence-suite/continuous/scripts/run_matched_marginal_relation_ablation.jl
+```
+
+Outputs are under `results/matched_marginal_relation_ablation/`.
+
+On the recycled diagnostic seeds, the projection error was `2.22e-16` and full
+equaled replay exactly, but full also tied matched-budget random at `0.582`.
+Precision-guided channel reallocation remained perfect. This failed the planned
+modular action criterion and motivates a fresh test of a relational-structure
+by epistemic-action interaction.

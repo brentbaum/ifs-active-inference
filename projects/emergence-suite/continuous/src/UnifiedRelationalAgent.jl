@@ -136,14 +136,22 @@ function sample_local_causes(rng, global_cause, mode, config)
 end
 
 function generate_relational_episode(seed::Int, episode::Int;
-        config::RelationalAgentConfig = RelationalAgentConfig())
+        config::RelationalAgentConfig = RelationalAgentConfig(),
+        scene_mode::Symbol = :mixed)
     rng = MersenneTwister(seed + 10_000episode)
     context = context_at(episode, config)
     true_phi = true_precision_field(context)
     global_cause = rand(rng, Bool) ? 1 : -1
-    violation = rand(rng) < config.violation_rate
-    local_causes = sample_local_causes(rng, global_cause,
-        violation ? :factorized : :relational, config)
+    violation_draw = rand(rng)
+    violation = scene_mode == :mixed && violation_draw < config.violation_rate
+    sampling_mode = if scene_mode == :mixed
+        violation ? :factorized : :relational
+    elseif scene_mode in (:relational, :factorized)
+        scene_mode
+    else
+        throw(ArgumentError("unknown scene mode: $scene_mode"))
+    end
+    local_causes = sample_local_causes(rng, global_cause, sampling_mode, config)
     states = zeros(3, 3, config.packet_samples)
     observations = zeros(3, config.packet_samples)
     for sample in 1:config.packet_samples, channel in 1:3
@@ -335,7 +343,10 @@ function run_agent_episode(model, data, strategy::Symbol, mode::Symbol,
 end
 
 function run_relational_agent_seed(seed::Int;
-        config::RelationalAgentConfig = RelationalAgentConfig())
+        config::RelationalAgentConfig = RelationalAgentConfig(),
+        scene_mode::Symbol = :mixed, model_mode::Symbol = :relational)
+    model_mode in (:relational, :factorized) ||
+        throw(ArgumentError("unknown model mode: $model_mode"))
     unified = unified_config(config)
     models = Dict(
         "full" => UnifiedBeautifulLoop.PrecisionForecaster(true, unified),
@@ -345,8 +356,9 @@ function run_relational_agent_seed(seed::Int;
     )
     rows = NamedTuple[]
     for episode in 1:config.episodes
-        data = generate_relational_episode(seed, episode; config = config)
-        full = run_agent_episode(models["full"], data, :active, :relational,
+        data = generate_relational_episode(seed, episode; config = config,
+            scene_mode = scene_mode)
+        full = run_agent_episode(models["full"], data, :active, model_mode,
             seed, episode, config)
         results = Dict(
             "full" => full,
@@ -354,9 +366,9 @@ function run_relational_agent_seed(seed::Int;
                 data, :replay, :factorized, seed, episode, config;
                 replay_actions = full.selected),
             "random" => run_agent_episode(models["random"], data, :random,
-                :relational, seed, episode, config),
+                model_mode, seed, episode, config),
             "precision_blind" => run_agent_episode(models["precision_blind"],
-                data, :precision_blind, :relational, seed, episode, config),
+                data, :precision_blind, model_mode, seed, episode, config),
         )
         for name in ("full", "factorized_replay", "random", "precision_blind")
             result = results[name]
