@@ -185,3 +185,24 @@ revision, or representational redescription. An external critic can therefore
 accept continuity with the formal precision loop while still rejecting any
 claim that the full Beautiful Loop theory or the IFS application has been
 derived.
+
+## Follow-up: temporal recursion, binding, and action
+
+Experiments 30–32 separately added the three missing operations emphasized in
+the broader theory. An online hyper-model learned when context-conditioned
+precision changes were globally coupled, released that coupling when the
+structure broke, and recovered it when coordination returned. An exact
+discrete binding model then let three local causes compete to support one
+global cause; precision controlled both sensory gain and participation in the
+coherence prior. Finally, an expected-free-energy policy redirected sampling
+after an unannounced channel-reliability switch.
+
+The results make the construction closer in three specific senses: precision
+is forecast and corrected across time; a global posterior is selected through
+precision-weighted inferential competition; and learned precision beliefs
+guide epistemic action. They do not form one end-to-end model. The temporal,
+binding, and policy experiments remain separate constructions with authored
+state spaces, and the policy experiment receives outcome feedback after each
+episode. The defensible claim is therefore that each proposed operation is
+computationally sufficient under a minimal model—not that their conjunction,
+consciousness, or the clinical IFS mechanism has been derived.

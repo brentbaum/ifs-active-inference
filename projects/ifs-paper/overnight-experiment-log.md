@@ -198,3 +198,27 @@ seeds; ambiguous accuracy won in 19/20.
 **Decision:** advance precision-weighted binding to the policy experiment.
 Treat the result as evidence that global coherence must be precision-sensitive,
 not as evidence that stronger coherence alone creates better binding.
+
+## Experiment 32 — epistemic agency
+
+Added expected-free-energy selection among three evidence channels. Policies
+minimized expected posterior entropy plus sampling cost and a small parameter-
+learning bonus. The unannounced switch made channel one unreliable and channel
+three reliable. Second-order surprise relaxed the learned precision profile so
+the agent could explore again.
+
+The first run was invalid because random and fixed controls stopped without
+sampling while the epistemic bonus made the EFE agent sample nearly everything.
+The successful revision required one initial observation for all strategies
+and reduced the parameter bonus. A final review corrected below-chance
+reliability handling and extended each hidden regime to 100 episodes to remove
+seed-sensitive short-window effects. Post-switch accuracy was `0.822` for EFE,
+`0.749` for random, and `0.558` for fixed sampling. EFE used `1.000` sample per
+episode versus `1.128` for random. Late accuracy recovered from `0.692` to
+`0.887`, while first actions shifted from channel one (`0.750` before) to
+channel three (`0.937` late). All frozen criteria passed.
+
+**Decision:** retain this as evidence for adaptive precision-guided epistemic
+sampling. Keep the stronger binding claim in experiment 31: experiment 32
+usually selects one channel and therefore does not independently demonstrate
+multi-channel binding.

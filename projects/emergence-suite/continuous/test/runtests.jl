@@ -11,6 +11,7 @@ include(joinpath(@__DIR__, "..", "src", "LiteratureTournament.jl"))
 include(joinpath(@__DIR__, "..", "src", "BeautifulLoopHierarchy.jl"))
 include(joinpath(@__DIR__, "..", "src", "TemporalHyperModel.jl"))
 include(joinpath(@__DIR__, "..", "src", "BayesianBinding.jl"))
+include(joinpath(@__DIR__, "..", "src", "EpistemicAgency.jl"))
 
 using .T48Robustness
 using .GlobalPrecisionField
@@ -19,6 +20,7 @@ using .LiteratureTournament
 using .BeautifulLoopHierarchy
 using .TemporalHyperModel
 using .BayesianBinding
+using .EpistemicAgency
 
 const CONFIG_PATH = joinpath(@__DIR__, "..", "configs", "t48-pilot.yaml")
 
@@ -124,6 +126,16 @@ end
     @test result.decision == 1
     @test length(result.local_probabilities) == 3
     @test all(0 <= probability <= 1 for probability in result.local_probabilities)
+end
+
+@testset "epistemic agency values informative samples" begin
+    @test expected_information_gain(0.5, 0.90) > expected_information_gain(0.5, 0.60)
+    @test expected_information_gain(0.9, 0.90) < expected_information_gain(0.5, 0.90)
+    config = AgencyConfig(seeds = [8601], episodes = 20, switch_episode = 11)
+    rows = run_agency_seed(8601; config = config)
+    @test length(rows) == 60
+    @test Set(row.strategy for row in rows) == Set(["efe", "random", "fixed"])
+    @test all(0 <= row.samples <= 3 for row in rows)
 end
 
 @testset "autonomous reflected pilot path" begin

@@ -199,3 +199,17 @@ and an inverted precision field.
 ```
 
 Outputs are under `results/bayesian_binding/`.
+
+## Experiment 32: epistemic agency
+
+This experiment uses expected posterior entropy, sampling cost, and uncertainty
+about channel reliability to select evidence. An unannounced reliability switch
+tests whether second-order surprise redirects sampling without a scripted
+policy change.
+
+```bash
+~/.juliaup/bin/julia --project=projects/emergence-suite/continuous \
+  projects/emergence-suite/continuous/scripts/run_epistemic_agency.jl
+```
+
+Outputs are under `results/epistemic_agency/`.
