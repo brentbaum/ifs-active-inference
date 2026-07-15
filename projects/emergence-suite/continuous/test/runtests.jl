@@ -378,7 +378,8 @@ end
 @testset "IFS inquiry arms separate questions, conclusions, replay, and contact" begin
     config = IFSBundleConfig(seeds = [16903], episodes = 10,
         training_episodes = 4, switch_episode = 8, packet_samples = 2,
-        inference_iterations = 3, hyper_newton_steps = 2)
+        bundle_training_scenes = 24, inference_iterations = 3,
+        hyper_newton_steps = 2)
     learner, training = fit_joint_learner(16903; config = config)
     learned_joint = learned_conditional_table(learner)
     learned_factorized = factorized_projection(learned_joint)
@@ -424,9 +425,10 @@ end
 end
 
 @testset "IFS evaluator preserves one auditable row schema" begin
-    config = IFSBundleConfig(seeds = [16904], episodes = 6,
+    config = IFSBundleConfig(seeds = [16904], episodes = 8,
         training_episodes = 4, switch_episode = 6, packet_samples = 1,
-        inference_iterations = 2, hyper_newton_steps = 1)
+        bundle_training_scenes = 24, inference_iterations = 2,
+        hyper_newton_steps = 1)
     result = run_ifs_bundle_seed(16904; config = config)
     metrics = ConfirmIFSBundleInquiry.seed_metrics(result.episode_rows)
     audit = implementation_audit([result], config)
@@ -439,6 +441,27 @@ end
     @test audit.replay_action_and_observation_match
     @test audit.contact_streams_byte_identical
     @test audit.conclusion_never_receives_inquiry_packet
+end
+
+@testset "IFS policy learning is explicit and survives scaffold removal" begin
+    learner = ActionPolicyLearner()
+    for _ in 1:6
+        update_policy!(learner, 1.2, 4)
+    end
+    update_policy!(learner, 1.2, 2)
+    @test policy_action(learner, 1.2) == 4
+    @test policy_action(learner, -1.2) == 1
+
+    config = IFSBundleConfig(seeds = [16905], episodes = 8,
+        training_episodes = 4, bundle_training_scenes = 24,
+        switch_episode = 6, packet_samples = 1,
+        inference_iterations = 2, hyper_newton_steps = 1)
+    result = run_ifs_bundle_seed(16905; config = config)
+    removed = filter(row -> row.stage == "43C" &&
+        startswith(row.arm, "internalized"), result.budget_rows)
+    @test !isempty(removed)
+    @test all(row.interventions == 0 for row in removed)
+    @test all(row.packets == config.action_budget for row in removed)
 end
 
 @testset "paired interaction intervals retain the frozen twenty-seed unit" begin

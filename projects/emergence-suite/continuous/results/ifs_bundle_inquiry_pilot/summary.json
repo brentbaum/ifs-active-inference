@@ -1,0 +1,339 @@
+{
+  "frozen_seed_ranges": {
+    "pilot": "16901:16910",
+    "confirmation": "17001:17020",
+    "stress": "17101:17120"
+  },
+  "mean_metrics": {
+    "wrong_suggestion_cost": 0.65,
+    "contact_only_accuracy": 0.615625,
+    "noisy_information_matched_gain": 0.16656956503365944,
+    "wrong_guidance_log_loss_gain": 1.0148335198751168,
+    "stale_information_matched_gain": 0.6456103836384959,
+    "wrong_information_matched_gain": 0.6130409650904382,
+    "joint_guidance_interaction": -0.012688886406758882,
+    "action_interaction": 0.1046875,
+    "transfer_gain": 0.0703125,
+    "contact_misattuned_scaffold_accuracy": 0.796875,
+    "post_scaffold_accuracy_gain": 0.0375,
+    "noisy_transfer_gain": 0.05390625,
+    "post_scaffold_new_channel_rate": 0.9,
+    "noisy_guidance_log_loss_gain": 0.09481286641986131,
+    "adaptive_release_gain": 0.23214396576925855,
+    "stale_guidance_log_loss_gain": 1.048862577126538,
+    "adversarial_advantage": -0.05625,
+    "wrong_transfer_gain": 0.139453125,
+    "capacity_log_score_gain": 0.6121139847806079,
+    "coordinated_global_gain": 0.2617450183437505,
+    "accurate_conclusion_accuracy_advantage": 0.1859375,
+    "stale_transfer_gain": 0.05859375,
+    "bundle_gain": 0.071875,
+    "post_scaffold_transfer_gain": 0.028125,
+    "factorized_action_gain": 0.0203125,
+    "contact_absent_scaffold_accuracy": 0.79375,
+    "joint_action_gain": 0.125
+  },
+  "seeds": [16901, 16902, 16903, 16904, 16905, 16906, 16907, 16908, 16909, 16910],
+  "paired_uncertainty_95": {
+    "wrong_suggestion_cost": {
+      "method": "two-sided 95% Student t interval with 9 degrees of freedom",
+      "lower": 0.5996842687373025,
+      "mean": 0.65,
+      "standard_error": 0.02224391302506523,
+      "upper": 0.7003157312626975
+    },
+    "contact_only_accuracy": {
+      "method": "two-sided 95% Student t interval with 9 degrees of freedom",
+      "lower": 0.5717962164710791,
+      "mean": 0.615625,
+      "standard_error": 0.0193761200393107,
+      "upper": 0.6594537835289208
+    },
+    "noisy_information_matched_gain": {
+      "method": "two-sided 95% Student t interval with 9 degrees of freedom",
+      "lower": 0.11884444675807943,
+      "mean": 0.16656956503365944,
+      "standard_error": 0.02109863761077808,
+      "upper": 0.21429468330923945
+    },
+    "wrong_guidance_log_loss_gain": {
+      "method": "two-sided 95% Student t interval with 9 degrees of freedom",
+      "lower": 0.9950099799279376,
+      "mean": 1.0148335198751168,
+      "standard_error": 0.008763722346233063,
+      "upper": 1.034657059822296
+    },
+    "stale_information_matched_gain": {
+      "method": "two-sided 95% Student t interval with 9 degrees of freedom",
+      "lower": 0.5970966274966323,
+      "mean": 0.6456103836384959,
+      "standard_error": 0.02144728388234467,
+      "upper": 0.6941241397803595
+    },
+    "wrong_information_matched_gain": {
+      "method": "two-sided 95% Student t interval with 9 degrees of freedom",
+      "lower": 0.5953282966362524,
+      "mean": 0.6130409650904382,
+      "standard_error": 0.007830534241461407,
+      "upper": 0.6307536335446239
+    },
+    "joint_guidance_interaction": {
+      "method": "two-sided 95% Student t interval with 9 degrees of freedom",
+      "lower": -0.030537694851094595,
+      "mean": -0.012688886406758882,
+      "standard_error": 0.00789071991349943,
+      "upper": 0.00515992203757683
+    },
+    "action_interaction": {
+      "method": "two-sided 95% Student t interval with 9 degrees of freedom",
+      "lower": 0.053051207254338796,
+      "mean": 0.1046875,
+      "standard_error": 0.02282771562584492,
+      "upper": 0.15632379274566122
+    },
+    "transfer_gain": {
+      "method": "two-sided 95% Student t interval with 9 degrees of freedom",
+      "lower": 0.031595361716353576,
+      "mean": 0.0703125,
+      "standard_error": 0.01711632992203644,
+      "upper": 0.10902963828364642
+    },
+    "contact_misattuned_scaffold_accuracy": {
+      "method": "two-sided 95% Student t interval with 9 degrees of freedom",
+      "lower": 0.7666084207365202,
+      "mean": 0.796875,
+      "standard_error": 0.013380450602776175,
+      "upper": 0.8271415792634798
+    },
+    "post_scaffold_accuracy_gain": {
+      "method": "two-sided 95% Student t interval with 9 degrees of freedom",
+      "lower": -0.04466524508574169,
+      "mean": 0.0375,
+      "standard_error": 0.03632415786283894,
+      "upper": 0.1196652450857417
+    },
+    "noisy_transfer_gain": {
+      "method": "two-sided 95% Student t interval with 9 degrees of freedom",
+      "lower": 0.02416588502103528,
+      "mean": 0.05390625,
+      "standard_error": 0.013147818293087853,
+      "upper": 0.08364661497896472
+    },
+    "post_scaffold_new_channel_rate": {
+      "method": "two-sided 95% Student t interval with 9 degrees of freedom",
+      "lower": 0.6738000000000001,
+      "mean": 0.9,
+      "standard_error": 0.09999999999999999,
+      "upper": 1.1262
+    },
+    "noisy_guidance_log_loss_gain": {
+      "method": "two-sided 95% Student t interval with 9 degrees of freedom",
+      "lower": 0.0297538586405557,
+      "mean": 0.09481286641986131,
+      "standard_error": 0.028761718735325202,
+      "upper": 0.15987187419916693
+    },
+    "adaptive_release_gain": {
+      "method": "two-sided 95% Student t interval with 9 degrees of freedom",
+      "lower": 0.1275556501766319,
+      "mean": 0.23214396576925855,
+      "standard_error": 0.046237097963141766,
+      "upper": 0.3367322813618852
+    },
+    "stale_guidance_log_loss_gain": {
+      "method": "two-sided 95% Student t interval with 9 degrees of freedom",
+      "lower": 0.9984979835517894,
+      "mean": 1.048862577126538,
+      "standard_error": 0.02226551440086149,
+      "upper": 1.0992271707012868
+    },
+    "adversarial_advantage": {
+      "method": "two-sided 95% Student t interval with 9 degrees of freedom",
+      "lower": -0.11401417879241857,
+      "mean": -0.05625,
+      "standard_error": 0.025536772233606793,
+      "upper": 0.0015141787924185662
+    },
+    "wrong_transfer_gain": {
+      "method": "two-sided 95% Student t interval with 9 degrees of freedom",
+      "lower": 0.1054083190936051,
+      "mean": 0.139453125,
+      "standard_error": 0.015050754158441603,
+      "upper": 0.17349793090639493
+    },
+    "capacity_log_score_gain": {
+      "method": "two-sided 95% Student t interval with 9 degrees of freedom",
+      "lower": 0.5452757523821752,
+      "mean": 0.6121139847806079,
+      "standard_error": 0.02954829018498347,
+      "upper": 0.6789522171790405
+    },
+    "coordinated_global_gain": {
+      "method": "two-sided 95% Student t interval with 9 degrees of freedom",
+      "lower": 0.1897285376847489,
+      "mean": 0.2617450183437505,
+      "standard_error": 0.03183752460610152,
+      "upper": 0.33376149900275215
+    },
+    "accurate_conclusion_accuracy_advantage": {
+      "method": "two-sided 95% Student t interval with 9 degrees of freedom",
+      "lower": 0.154128125,
+      "mean": 0.1859375,
+      "standard_error": 0.0140625,
+      "upper": 0.217746875
+    },
+    "stale_transfer_gain": {
+      "method": "two-sided 95% Student t interval with 9 degrees of freedom",
+      "lower": 0.014729354218396488,
+      "mean": 0.05859375,
+      "standard_error": 0.01939186374076194,
+      "upper": 0.1024581457816035
+    },
+    "bundle_gain": {
+      "method": "two-sided 95% Student t interval with 9 degrees of freedom",
+      "lower": 0.02073840328651603,
+      "mean": 0.071875,
+      "standard_error": 0.02260680668146948,
+      "upper": 0.12301159671348397
+    },
+    "post_scaffold_transfer_gain": {
+      "method": "two-sided 95% Student t interval with 9 degrees of freedom",
+      "lower": -0.011931249999999994,
+      "mean": 0.028125,
+      "standard_error": 0.01770833333333333,
+      "upper": 0.06818125
+    },
+    "factorized_action_gain": {
+      "method": "two-sided 95% Student t interval with 9 degrees of freedom",
+      "lower": -0.01877924267928106,
+      "mean": 0.0203125,
+      "standard_error": 0.017281937523996933,
+      "upper": 0.05940424267928106
+    },
+    "contact_absent_scaffold_accuracy": {
+      "method": "two-sided 95% Student t interval with 9 degrees of freedom",
+      "lower": 0.7596860889053751,
+      "mean": 0.79375,
+      "standard_error": 0.015059200307084334,
+      "upper": 0.8278139110946248
+    },
+    "joint_action_gain": {
+      "method": "two-sided 95% Student t interval with 9 degrees of freedom",
+      "lower": 0.08155289674500728,
+      "mean": 0.125,
+      "standard_error": 0.019207384286026846,
+      "upper": 0.16844710325499274
+    }
+  },
+  "frozen_criteria": {
+    "stage_43B": {
+      "information_budget_sensitivity_intervals_exclude_zero": true,
+      "noisy_wrong_stale_log_loss_intervals_exclude_zero": true,
+      "wrong_suggestion_cost_interval_excludes_zero": true
+    },
+    "implementation": {
+      "exact_budget_matching": true,
+      "maximum_conditional_local_marginal_mismatch": 1.0e-10,
+      "replay_action_and_observation_match_rate": 1.0,
+      "joint_free_energy_tolerance": 1.0e-8,
+      "byte_identical_contact_streams": true
+    },
+    "stage_43A": {
+      "adversarial_positive_advantage_upper_bound": 0.03,
+      "transfer_paired_wins": "15/20",
+      "bundle_paired_wins": "15/20",
+      "transfer_gain": 0.03,
+      "action_interaction": 0.03,
+      "bundle_gain": 0.03
+    },
+    "stress": {
+      "adaptive_over_independent_coordinated_interval_excludes_zero": true,
+      "adaptive_over_rigid_interval_excludes_zero": true
+    },
+    "stage_43C": {
+      "post_scaffold_accuracy_gain": 0.03,
+      "newly_informative_first_channel_rate": 0.75
+    }
+  },
+  "result_commit": "pending",
+  "config": {
+    "observation_precision": 9.0,
+    "scaffold_removal_episode": 80,
+    "hyper_newton_steps": 3,
+    "switch_episode": 65,
+    "local_fields": [0.15, 0.25, 0.06, 0.25],
+    "information_matched_conclusion_reliability": 0.62,
+    "coupling_self_world": 0.8,
+    "episodes": 96,
+    "dirichlet_alpha": 0.75,
+    "action_budget": 2,
+    "bundle_training_scenes": 256,
+    "coupling_world_outcome": 1.5,
+    "cause_amplitude": 0.9,
+    "contact_precision": 5.0,
+    "contact_amplitude": 0.85,
+    "inference_iterations": 4,
+    "coupling_policy_outcome": 0.0,
+    "training_episodes": 32,
+    "conclusion_reliability": 0.68,
+    "packet_samples": 2
+  },
+  "experiment": 43,
+  "stage": "pilot",
+  "implementation_checks": {
+    "inquiry_never_sets_observation_values": true,
+    "contact_budget_exact": true,
+    "matched_intervention_budgets": true,
+    "depth_readout_has_no_downstream_consumer": true,
+    "contact_only_does_not_saturate": true,
+    "learned_initialization_independent": true,
+    "monotone_joint_free_energy": true,
+    "maximum_conditional_local_marginal_mismatch": 2.220446049250313e-16,
+    "matched_packet_budgets": true,
+    "finite_local_hyper_joint_energies": true,
+    "exact_conditional_local_marginals": true,
+    "conclusion_never_receives_inquiry_packet": true,
+    "shuffled_local_marginals_match": true,
+    "contact_streams_byte_identical": true,
+    "scaffold_removed_has_no_interventions": true,
+    "replay_action_and_observation_match": true
+  },
+  "generator_coefficients_are_not_in_learner": true,
+  "statuses": {
+    "stage_43B": "support",
+    "stage_43A": "support",
+    "stress": "support",
+    "stage_43C": "support"
+  },
+  "freeze_commit": "not_frozen",
+  "conditional_contact_mutual_information_nats": 0.035686363946218706,
+  "paired_win_rates": {
+    "wrong_suggestion_cost": 1.0,
+    "contact_only_accuracy": 1.0,
+    "noisy_information_matched_gain": 1.0,
+    "wrong_guidance_log_loss_gain": 1.0,
+    "stale_information_matched_gain": 1.0,
+    "wrong_information_matched_gain": 1.0,
+    "joint_guidance_interaction": 0.2,
+    "action_interaction": 0.9,
+    "transfer_gain": 0.8,
+    "contact_misattuned_scaffold_accuracy": 1.0,
+    "post_scaffold_accuracy_gain": 0.2,
+    "noisy_transfer_gain": 0.9,
+    "post_scaffold_new_channel_rate": 0.9,
+    "noisy_guidance_log_loss_gain": 0.8,
+    "adaptive_release_gain": 0.9,
+    "stale_guidance_log_loss_gain": 1.0,
+    "adversarial_advantage": 0.3,
+    "wrong_transfer_gain": 1.0,
+    "capacity_log_score_gain": 1.0,
+    "coordinated_global_gain": 1.0,
+    "accurate_conclusion_accuracy_advantage": 1.0,
+    "stale_transfer_gain": 0.7,
+    "bundle_gain": 0.9,
+    "post_scaffold_transfer_gain": 0.5,
+    "factorized_action_gain": 0.8,
+    "contact_absent_scaffold_accuracy": 1.0,
+    "joint_action_gain": 1.0
+  }
+}

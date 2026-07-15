@@ -82,15 +82,29 @@ function seed_metrics(rows)
     shuffled_log_score = arm_mean(rows, :joint_bundle_log_score; stage = "43A",
         world = "joint", model = "shuffled_replay", arm = "replay")
     rigid_deviation = arm_mean(rows, :forecast_error; stage = "stress",
-        world = "local_deviation", model = "rigid_global", arm = "autonomous")
+        world = "local_deviation", model = "rigid_global", arm = "autonomous",
+        phase = "heldout_after")
     adaptive_deviation = arm_mean(rows, :forecast_error; stage = "stress",
-        world = "local_deviation", model = "adaptive_global", arm = "autonomous")
+        world = "local_deviation", model = "adaptive_global", arm = "autonomous",
+        phase = "heldout_after")
     independent_coordinated = arm_mean(rows, :forecast_error; stage = "stress",
         world = "coordinated_precision", model = "independent_local",
         arm = "autonomous")
     adaptive_coordinated = arm_mean(rows, :forecast_error; stage = "stress",
         world = "coordinated_precision", model = "adaptive_global",
         arm = "autonomous")
+    internalized_guided_accuracy = arm_mean(rows, :root_correct; stage = "43C",
+        world = "joint", arm = "internalized_guided")
+    internalized_random_accuracy = arm_mean(rows, :root_correct; stage = "43C",
+        world = "joint", arm = "internalized_random")
+    internalized_guided_transfer = arm_mean(rows, :transfer_accuracy;
+        stage = "43C", world = "joint", arm = "internalized_guided")
+    internalized_random_transfer = arm_mean(rows, :transfer_accuracy;
+        stage = "43C", world = "joint", arm = "internalized_random")
+    internalized_guided_rows = select_rows(rows; stage = "43C",
+        world = "joint", arm = "internalized_guided")
+    new_channel_rate = isempty(internalized_guided_rows) ? NaN :
+        mean(row.first_action == 4 for row in internalized_guided_rows)
     return (
         seed = seed,
         bundle_gain = joint_accuracy - replay_accuracy,
@@ -129,6 +143,11 @@ function seed_metrics(rows)
                 world = "factorized"),
         adaptive_release_gain = rigid_deviation - adaptive_deviation,
         coordinated_global_gain = independent_coordinated - adaptive_coordinated,
+        post_scaffold_accuracy_gain = internalized_guided_accuracy -
+            internalized_random_accuracy,
+        post_scaffold_transfer_gain = internalized_guided_transfer -
+            internalized_random_transfer,
+        post_scaffold_new_channel_rate = new_channel_rate,
         contact_absent_scaffold_accuracy = arm_mean(rows, :root_correct;
             stage = "stress", world = "joint", arm = "scaffolded",
             contact_mode = "absent"),
@@ -171,6 +190,8 @@ function implementation_audit(all_results, config)
         ("autonomous", "random", "precision_blind", "replay",
             "scaffolded", "random_guidance"), budget_rows)
     conclusion_rows = filter(row -> startswith(row.arm, "conclusion"), budget_rows)
+    internalized_rows = filter(row -> startswith(row.arm, "internalized"),
+        budget_rows)
     matched_intervention_rows = filter(row -> row.stage == "43B" &&
         (row.arm in ("scaffolded", "random_guidance") ||
             startswith(row.arm, "conclusion")), budget_rows)
@@ -193,6 +214,8 @@ function implementation_audit(all_results, config)
             for row in inquiry_rows),
         conclusion_never_receives_inquiry_packet = all(row.packets == 0
             for row in conclusion_rows),
+        scaffold_removed_has_no_interventions = all(row.interventions == 0 &&
+            row.packets == config.action_budget for row in internalized_rows),
         contact_streams_byte_identical = contact_streams_identical(budget_rows),
         learned_initialization_independent = !hasproperty(
             IFSBundleInquiry.JointBundleLearner(config), :couplings),
@@ -218,7 +241,7 @@ function frozen_statuses(means, intervals, wins, implementation)
         pairs(implementation) if key != :maximum_conditional_local_marginal_mismatch)
     if !implementation_valid
         return (stage_43A = "invalid", stage_43B = "invalid",
-            stage_43C = "not_run", stress = "invalid")
+            stage_43C = "invalid", stress = "invalid")
     end
     bundle = means.bundle_gain >= 0.03 && wins.bundle_gain >= 0.75
     transfer = means.transfer_gain >= 0.03 && wins.transfer_gain >= 0.75
@@ -244,17 +267,57 @@ function frozen_statuses(means, intervals, wins, implementation)
         intervals.stale_information_matched_gain.lower > 0
     stage_b = guidance_primary && suggestion && information_sensitivity ?
         "support" : guidance_primary ? "mixed" : "null"
+    policy_primary = means.post_scaffold_accuracy_gain >= 0.03
+    policy_channel = means.post_scaffold_new_channel_rate >= 0.75
+    stage_c = policy_primary && policy_channel ? "support" :
+        policy_primary ? "mixed" : "null"
     stress = intervals.adaptive_release_gain.lower > 0 &&
         intervals.coordinated_global_gain.lower > 0 ? "support" : "null"
     return (stage_43A = stage_a, stage_43B = stage_b,
-        stage_43C = "not_run", stress = stress)
+        stage_43C = stage_c, stress = stress)
+end
+
+function frozen_criteria_record()
+    return (
+        implementation = (
+            maximum_conditional_local_marginal_mismatch = 1.0e-10,
+            replay_action_and_observation_match_rate = 1.0,
+            joint_free_energy_tolerance = 1.0e-8,
+            exact_budget_matching = true,
+            byte_identical_contact_streams = true,
+        ),
+        stage_43A = (
+            bundle_gain = 0.03,
+            bundle_paired_wins = "15/20",
+            transfer_gain = 0.03,
+            transfer_paired_wins = "15/20",
+            action_interaction = 0.03,
+            adversarial_positive_advantage_upper_bound = 0.03,
+        ),
+        stage_43B = (
+            noisy_wrong_stale_log_loss_intervals_exclude_zero = true,
+            wrong_suggestion_cost_interval_excludes_zero = true,
+            information_budget_sensitivity_intervals_exclude_zero = true,
+        ),
+        stage_43C = (
+            post_scaffold_accuracy_gain = 0.03,
+            newly_informative_first_channel_rate = 0.75,
+        ),
+        stress = (
+            adaptive_over_rigid_interval_excludes_zero = true,
+            adaptive_over_independent_coordinated_interval_excludes_zero = true,
+        ),
+    )
 end
 
 function config_record(config)
     return (
         episodes = config.episodes,
         training_episodes = config.training_episodes,
+        bundle_training_scenes = config.bundle_training_scenes,
         switch_episode = config.switch_episode,
+        scaffold_removal_episode = config.switch_episode +
+            max(1, div(config.episodes - config.switch_episode + 1, 2)) - 1,
         packet_samples = config.packet_samples,
         action_budget = config.action_budget,
         inference_iterations = config.inference_iterations,
@@ -269,7 +332,7 @@ function config_record(config)
         coupling_world_outcome = config.coupling_world_outcome,
         coupling_policy_outcome = config.coupling_policy_outcome,
         conclusion_reliability = config.conclusion_reliability,
-        information_matched_conclusion_reliability = 0.68,
+        information_matched_conclusion_reliability = 0.62,
     )
 end
 
@@ -279,12 +342,13 @@ function write_magic_numbers(output_dir, config, stage)
         println(io)
         println(io, "- Stage: `$stage`")
         println(io, "- Training episodes: `$(config.training_episodes)`")
+        println(io, "- Complete bundle-table training scenes: `$(config.bundle_training_scenes)`")
         println(io, "- Held-out episodes per seed: `$(config.episodes - config.training_episodes)`")
         println(io, "- Bundle packet budget: `$(config.action_budget)`")
         println(io, "- Samples per packet: `$(config.packet_samples)`")
         println(io, "- Dirichlet alpha per root/configuration cell: `$(config.dirichlet_alpha)`")
         println(io, "- Conclusion reliability: `$(config.conclusion_reliability)`")
-        println(io, "- Information-budget sensitivity reliability: `0.68`")
+        println(io, "- Information-budget sensitivity reliability: `0.62`")
         println(io, "- Marginal matching tolerance: `1e-10`")
         println(io, "- Joint free-energy tolerance: `1e-8`")
         println(io, "- Empirical gain threshold: `0.03`")
@@ -295,7 +359,7 @@ end
 function evaluate_ifs_bundle(output_dir::AbstractString;
         config::IFSBundleInquiry.IFSBundleConfig,
         stage::String = "pilot", freeze_commit::String = "not_frozen",
-        result_commit::String = "pending")
+        result_commit::String = "pending", write_full_traces::Bool = true)
     mkpath(output_dir)
     all_results = [IFSBundleInquiry.run_ifs_bundle_seed(seed; config = config)
         for seed in config.seeds]
@@ -311,6 +375,9 @@ function evaluate_ifs_bundle(output_dir::AbstractString;
         stage = stage,
         seeds = config.seeds,
         config = config_record(config),
+        frozen_seed_ranges = (pilot = "16901:16910",
+            confirmation = "17001:17020", stress = "17101:17120"),
+        frozen_criteria = frozen_criteria_record(),
         generator_coefficients_are_not_in_learner = true,
         conditional_contact_mutual_information_nats =
             IFSBundleInquiry.contact_mutual_information(config),
@@ -323,12 +390,17 @@ function evaluate_ifs_bundle(output_dir::AbstractString;
         result_commit = result_commit,
     )
     GlobalPrecisionField.write_csv(joinpath(output_dir, "per_seed.csv"), metrics)
-    GlobalPrecisionField.write_csv(joinpath(output_dir, "episode_trace.csv"),
-        episode_rows)
-    GlobalPrecisionField.write_csv(joinpath(output_dir, "free_energy_trace.csv"),
-        trace_rows)
-    GlobalPrecisionField.write_csv(joinpath(output_dir, "budget_audit.csv"),
-        budget_rows)
+    trace_paths = [joinpath(output_dir, filename) for filename in
+        ("episode_trace.csv", "free_energy_trace.csv", "budget_audit.csv")]
+    if write_full_traces
+        GlobalPrecisionField.write_csv(trace_paths[1], episode_rows)
+        GlobalPrecisionField.write_csv(trace_paths[2], trace_rows)
+        GlobalPrecisionField.write_csv(trace_paths[3], budget_rows)
+    else
+        for path in trace_paths
+            isfile(path) && rm(path)
+        end
+    end
     GlobalPrecisionField.write_json(joinpath(output_dir, "summary.json"), summary)
     GlobalPrecisionField.write_json(joinpath(output_dir, "status.json"), (
         experiment = 43, stage = stage, statuses = statuses,

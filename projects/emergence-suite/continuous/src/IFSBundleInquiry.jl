@@ -12,7 +12,8 @@ export IFSBundleConfig, JointBundleLearner, BUNDLE_CHANNELS,
     BundlePrecisionForecaster, forecast, update_forecaster!,
     infer_bundle_episode, depth_readout, run_guidance_arm, fit_joint_learner,
     fit_shuffled_learner, pretrain_forecaster, contact_mutual_information,
-    run_ifs_bundle_seed, release_weight
+    run_ifs_bundle_seed, release_weight, ActionPolicyLearner,
+    update_policy!, policy_action
 
 const BUNDLE_CHANNELS = (:self, :world, :policy, :outcome)
 const BUNDLE_CONFIGURATIONS = vec(NTuple{4, Int}[
@@ -23,9 +24,10 @@ const BUNDLE_CONFIGURATIONS = vec(NTuple{4, Int}[
 
 Base.@kwdef struct IFSBundleConfig
     seeds::Vector{Int} = collect(16901:16910)
-    episodes::Int = 48
+    episodes::Int = 96
     training_episodes::Int = 32
-    switch_episode::Int = 41
+    bundle_training_scenes::Int = 256
+    switch_episode::Int = 65
     packet_samples::Int = 2
     action_budget::Int = 2
     inference_iterations::Int = 4
@@ -38,13 +40,13 @@ Base.@kwdef struct IFSBundleConfig
     regression_forgetting::Float64 = 0.995
     cause_amplitude::Float64 = 0.90
     contact_amplitude::Float64 = 0.85
-    conclusion_reliability::Float64 = 0.84
-    guide_noise_sd::Float64 = 0.90
+    conclusion_reliability::Float64 = 0.68
+    guide_noise_sd::Float64 = 0.45
     dirichlet_alpha::Float64 = 0.75
-    local_fields::NTuple{4, Float64} = (0.42, 0.36, 0.22, 0.48)
-    coupling_self_world::Float64 = 0.70
-    coupling_world_outcome::Float64 = 1.00
-    coupling_policy_outcome::Float64 = 0.55
+    local_fields::NTuple{4, Float64} = (0.15, 0.25, 0.06, 0.25)
+    coupling_self_world::Float64 = 0.80
+    coupling_world_outcome::Float64 = 1.50
+    coupling_policy_outcome::Float64 = 0.0
 end
 
 mutable struct BundlePrecisionForecaster
@@ -53,6 +55,23 @@ mutable struct BundlePrecisionForecaster
     information::Vector{Float64}
     prior_precision::Matrix{Float64}
     updates::Int
+end
+
+mutable struct ActionPolicyLearner
+    counts::Matrix{Float64}
+end
+
+ActionPolicyLearner() = ActionPolicyLearner(ones(2, length(BUNDLE_CHANNELS)))
+
+policy_context(context) = context < 0 ? 1 : 2
+
+function update_policy!(learner::ActionPolicyLearner, context, channel)
+    learner.counts[policy_context(context), channel] += 1
+    return learner
+end
+
+function policy_action(learner::ActionPolicyLearner, context)
+    return argmax(view(learner.counts, policy_context(context), :))
 end
 
 function forecaster_dimensions(mode::Symbol)
@@ -69,7 +88,7 @@ function BundlePrecisionForecaster(mode::Symbol,
         config.parameter_prior_variance
     if mode == :adaptive_global
         for column in 5:8
-            prior_precision[column, column] = 6.0
+            prior_precision[column, column] = 1.0
         end
     end
     return BundlePrecisionForecaster(mode, copy(prior_precision),
@@ -235,7 +254,7 @@ function true_precision_field(context, episode, config::IFSBundleConfig;
         for layer in 1:3 for channel in eachindex(BUNDLE_CHANNELS)]
     if local_deviation && episode >= config.switch_episode
         for layer in 1:3
-            bundle_phi[phi_index(layer, 4)] -= 2.0channel_slopes[4] * context
+            bundle_phi[phi_index(layer, 4)] -= 3.0channel_slopes[4] * context
         end
     end
     return vcat(bundle_phi, log(config.contact_precision))
@@ -532,10 +551,10 @@ function guide_precision_forecast(episode, regime::Symbol, rng,
 end
 
 function guide_conclusion(root, regime::Symbol, rng, episode_index,
-        config::IFSBundleConfig)
+        reliability, config::IFSBundleConfig)
     regime == :accurate_stable && return root
     regime == :systematically_wrong && return -root
-    regime == :noisy && return rand(rng) < config.conclusion_reliability ? root : -root
+    regime == :noisy && return rand(rng) < reliability ? root : -root
     regime == :context_switch && return episode_index < config.switch_episode ? root : -root
     throw(ArgumentError("unknown guide regime: $regime"))
 end
@@ -546,9 +565,11 @@ function run_guidance_arm(model::BundlePrecisionForecaster, episode,
         guide_regime::Symbol = :accurate_stable,
         replay_actions::Vector{Int} = Int[],
         precision_blind::Bool = false,
+        policy_first_action::Int = 0,
         conclusion_reliability::Float64 = config.conclusion_reliability)
     arm in (:autonomous, :scaffolded, :random_guidance, :replay,
-        :conclusion, :no_guidance) || throw(ArgumentError("unknown arm: $arm"))
+        :conclusion, :no_guidance, :internalized) ||
+        throw(ArgumentError("unknown arm: $arm"))
     prior_mean, prior_covariance = forecast(model, episode.context, config)
     selected = Int[]
     predicted_gains = Float64[]
@@ -559,13 +580,13 @@ function run_guidance_arm(model::BundlePrecisionForecaster, episode,
     intervention_count = 0
     rng = MersenneTwister(seed + 30_000episode_index +
         137findfirst(==(arm), (:autonomous, :scaffolded, :random_guidance,
-            :replay, :conclusion, :no_guidance)))
+            :replay, :conclusion, :no_guidance, :internalized)))
     result = infer_bundle_episode(episode.observations, episode.contact, selected,
         prior_mean, prior_covariance, conditional_table; config = config)
     push!(root_probability_path, result.probability_positive)
     push!(bundle_probability_path, copy(result.bundle_probability_positive))
     initial_entropy = binary_entropy(result.probability_positive)
-    if arm in (:autonomous, :scaffolded, :random_guidance, :replay)
+    if arm in (:autonomous, :scaffolded, :random_guidance, :replay, :internalized)
         for action_index in 1:config.action_budget
             action_phi = result.posterior_phi
             guide_phi = arm == :scaffolded ?
@@ -581,8 +602,14 @@ function run_guidance_arm(model::BundlePrecisionForecaster, episode,
             elseif arm == :random_guidance
                 intervention_count += 1
                 rand(rng, setdiff(collect(eachindex(BUNDLE_CHANNELS)), selected))
-            else
+            elseif arm == :replay
                 replay_actions[action_index]
+            elseif action_index == 1
+                policy_first_action in eachindex(BUNDLE_CHANNELS) ||
+                    throw(ArgumentError("internalized arm requires a valid first action"))
+                policy_first_action
+            else
+                choose_channel(result, action_phi, selected, config)
             end
             gain = expected_information_gain(result,
                 guide_phi, channel, config; precision_blind = precision_blind)
@@ -601,7 +628,7 @@ function run_guidance_arm(model::BundlePrecisionForecaster, episode,
         for _ in 1:config.action_budget
             intervention_count += 1
             push!(pseudo_signals, guide_conclusion(episode.root, guide_regime,
-                rng, episode_index, config))
+                rng, episode_index, conclusion_reliability, config))
             before_entropy = binary_entropy(result.probability_positive)
             result = infer_bundle_episode(episode.observations, episode.contact,
                 selected, prior_mean, prior_covariance, conditional_table;
@@ -641,12 +668,21 @@ function training_episodes(seed::Int, scene_mode::Symbol, contact_mode::Symbol,
         for episode in 1:config.training_episodes]
 end
 
+function bundle_training_episodes(seed::Int, scene_mode::Symbol,
+        contact_mode::Symbol, config::IFSBundleConfig)
+    return [generate_ifs_bundle_episode(seed + 400_000, episode;
+        config = config, scene_mode = scene_mode, contact_mode = contact_mode)
+        for episode in 1:config.bundle_training_scenes]
+end
+
 function fit_joint_learner(seed::Int;
         config::IFSBundleConfig = IFSBundleConfig(),
         scene_mode::Symbol = :joint, contact_mode::Symbol = :present)
     learner = JointBundleLearner(config)
     episodes = training_episodes(seed, scene_mode, contact_mode, config)
-    for episode in episodes
+    table_training = bundle_training_episodes(seed, scene_mode,
+        contact_mode, config)
+    for episode in table_training
         update!(learner, episode.root, episode.bundle)
     end
     return learner, episodes
@@ -654,7 +690,7 @@ end
 
 function fit_shuffled_learner(seed::Int;
         config::IFSBundleConfig = IFSBundleConfig())
-    _, episodes = fit_joint_learner(seed; config = config)
+    episodes = bundle_training_episodes(seed, :joint, :present, config)
     learner = JointBundleLearner(config)
     rng = MersenneTwister(seed + 771_901)
     for root in (-1, 1)
@@ -866,6 +902,17 @@ function run_ifs_bundle_seed(seed::Int;
     stage_models = make_stage_models(base_joint, base_factorized,
         base_rigid, base_independent)
     guidance_models = make_guidance_models(base_joint, base_factorized)
+    policy_models = Dict(
+        "guided" => deepcopy(base_joint),
+        "random" => deepcopy(base_joint),
+        "precision_only" => deepcopy(base_joint),
+    )
+    policy_learners = Dict(
+        "guided" => ActionPolicyLearner(),
+        "random" => ActionPolicyLearner(),
+    )
+    removal_episode = config.switch_episode +
+        max(1, div(config.episodes - config.switch_episode + 1, 2)) - 1
     episode_rows = NamedTuple[]
     trace_rows = NamedTuple[]
     budget_rows = NamedTuple[]
@@ -1008,7 +1055,7 @@ function run_ifs_bundle_seed(seed::Int;
                 matched = run_guidance_arm(guidance_models[matched_key],
                     data, table, :conclusion, seed, episode_index;
                     config = config, guide_regime = regime,
-                    conclusion_reliability = 0.68)
+                    conclusion_reliability = 0.62)
                 record_arm!(episode_rows, trace_rows, budget_rows, matched,
                     data, guidance_models[matched_key], table, seed,
                     episode_index; stage = "43B", world = world_name,
@@ -1032,6 +1079,56 @@ function run_ifs_bundle_seed(seed::Int;
                     guide_regime = "accurate_stable",
                     contact_mode = String(contact_mode))
             end
+        end
+
+        if episode_index <= removal_episode
+            guided = run_guidance_arm(policy_models["guided"], joint_data,
+                joint_table, :scaffolded, seed, episode_index; config = config,
+                guide_regime = :accurate_stable)
+            update_policy!(policy_learners["guided"], joint_data.context,
+                first(guided.selected))
+            record_arm!(episode_rows, trace_rows, budget_rows, guided,
+                joint_data, policy_models["guided"], joint_table, seed,
+                episode_index; stage = "43C", world = "joint",
+                model_name = "guided_policy_learner", arm = "guided_training",
+                guide_regime = "accurate_stable")
+            random = run_guidance_arm(policy_models["random"], joint_data,
+                joint_table, :random_guidance, seed, episode_index;
+                config = config)
+            update_policy!(policy_learners["random"], joint_data.context,
+                first(random.selected))
+            record_arm!(episode_rows, trace_rows, budget_rows, random,
+                joint_data, policy_models["random"], joint_table, seed,
+                episode_index; stage = "43C", world = "joint",
+                model_name = "random_policy_learner", arm = "random_training")
+        else
+            guided_action = policy_action(policy_learners["guided"],
+                joint_data.context)
+            guided = run_guidance_arm(policy_models["guided"], joint_data,
+                joint_table, :internalized, seed, episode_index; config = config,
+                policy_first_action = guided_action)
+            record_arm!(episode_rows, trace_rows, budget_rows, guided,
+                joint_data, policy_models["guided"], joint_table, seed,
+                episode_index; stage = "43C", world = "joint",
+                model_name = "guided_policy_learner",
+                arm = "internalized_guided")
+            random_action = policy_action(policy_learners["random"],
+                joint_data.context)
+            random = run_guidance_arm(policy_models["random"], joint_data,
+                joint_table, :internalized, seed, episode_index; config = config,
+                policy_first_action = random_action)
+            record_arm!(episode_rows, trace_rows, budget_rows, random,
+                joint_data, policy_models["random"], joint_table, seed,
+                episode_index; stage = "43C", world = "joint",
+                model_name = "random_policy_learner",
+                arm = "internalized_random")
+            precision_only = run_guidance_arm(policy_models["precision_only"],
+                joint_data, joint_table, :autonomous, seed, episode_index;
+                config = config)
+            record_arm!(episode_rows, trace_rows, budget_rows, precision_only,
+                joint_data, policy_models["precision_only"], joint_table,
+                seed, episode_index; stage = "43C", world = "joint",
+                model_name = "precision_only", arm = "autonomous")
         end
     end
     return (episode_rows = episode_rows, trace_rows = trace_rows,

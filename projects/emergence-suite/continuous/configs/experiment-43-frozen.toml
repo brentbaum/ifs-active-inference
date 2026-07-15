@@ -1,0 +1,48 @@
+# Frozen after pilot seeds 16901:16910 and before opening confirmation seeds.
+
+[seed_ranges]
+pilot = "16901:16910"
+confirmation = "17001:17020"
+stress = "17101:17120"
+
+[schedule]
+episodes = 96
+precision_training_episodes = 32
+bundle_table_training_scenes = 256
+context_switch_episode = 65
+scaffold_removal_episode = 80
+packet_samples = 2
+action_budget = 2
+
+[generator]
+local_fields = [0.15, 0.25, 0.06, 0.25]
+coupling_self_world = 0.80
+coupling_world_outcome = 1.50
+coupling_policy_outcome = 0.0
+cause_amplitude = 0.90
+
+[contact]
+contact_amplitude = 0.85
+contact_precision = 5.0
+
+[guidance]
+conclusion_reliability = 0.68
+information_matched_conclusion_reliability = 0.62
+guide_noise_sd = 0.45
+
+[inference]
+observation_precision = 9.0
+dirichlet_alpha = 0.75
+inference_iterations = 4
+hyper_newton_steps = 3
+hyper_innovation_variance = 0.30
+
+[criteria]
+maximum_conditional_marginal_mismatch = 1.0e-10
+joint_free_energy_tolerance = 1.0e-8
+bundle_gain = 0.03
+transfer_gain = 0.03
+action_interaction = 0.03
+paired_wins = "15/20"
+post_scaffold_accuracy_gain = 0.03
+newly_informative_first_channel_rate = 0.75

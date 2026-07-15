@@ -17,7 +17,8 @@ config = IFSBundleConfig(seeds = collect(16901:16910))
 @assert isempty(intersect(config.seeds, collect(17001:17020)))
 
 output_dir = joinpath(project_dir, "results", "ifs_bundle_inquiry_pilot")
-summary = evaluate_ifs_bundle(output_dir; config = config, stage = "pilot")
+summary = evaluate_ifs_bundle(output_dir; config = config, stage = "pilot",
+    write_full_traces = false)
 
 open(joinpath(output_dir, "attempt-ledger.md"), "a") do io
     println(io, "## $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))")
@@ -26,6 +27,7 @@ open(joinpath(output_dir, "attempt-ledger.md"), "a") do io
     println(io, "- Configuration: repository defaults in `IFSBundleConfig`")
     println(io, "- Stage 43A pilot status: `$(summary.statuses.stage_43A)`")
     println(io, "- Stage 43B pilot status: `$(summary.statuses.stage_43B)`")
+    println(io, "- Stage 43C pilot status: `$(summary.statuses.stage_43C)`")
     println(io, "- Stress pilot status: `$(summary.statuses.stress)`")
     println(io, "- No confirmation seeds opened.")
     println(io)
