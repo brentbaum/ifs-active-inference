@@ -373,6 +373,54 @@ end
     @test 0.01 < contact_only.probability_positive < 0.99
 end
 
+@testset "IFS inquiry arms separate questions, conclusions, replay, and contact" begin
+    config = IFSBundleConfig(seeds = [16903], episodes = 10,
+        training_episodes = 4, switch_episode = 8, packet_samples = 2,
+        inference_iterations = 3, hyper_newton_steps = 2)
+    learner, training = fit_joint_learner(16903; config = config)
+    learned_joint = learned_conditional_table(learner)
+    learned_factorized = factorized_projection(learned_joint)
+    shuffled = learned_conditional_table(fit_shuffled_learner(16903;
+        config = config))
+    @test maximum_conditional_marginal_error(learned_joint, shuffled) < 1.0e-12
+
+    pretrained = pretrain_forecaster(:adaptive_global, training, learned_joint;
+        config = config)
+    episode = generate_ifs_bundle_episode(16903, 8; config = config)
+    autonomous = run_guidance_arm(deepcopy(pretrained), episode, learned_joint,
+        :autonomous, 16903, 8; config = config)
+    replay = run_guidance_arm(deepcopy(pretrained), episode, learned_factorized,
+        :replay, 16903, 8; config = config,
+        replay_actions = autonomous.selected)
+    scaffolded = run_guidance_arm(deepcopy(pretrained), episode, learned_joint,
+        :scaffolded, 16903, 8; config = config)
+    random_guidance = run_guidance_arm(deepcopy(pretrained), episode,
+        learned_joint, :random_guidance, 16903, 8; config = config)
+    conclusion = run_guidance_arm(deepcopy(pretrained), episode, learned_joint,
+        :conclusion, 16903, 8; config = config)
+    no_guidance = run_guidance_arm(deepcopy(pretrained), episode, learned_joint,
+        :no_guidance, 16903, 8; config = config)
+
+    @test autonomous.selected == replay.selected
+    @test autonomous.packet_values == replay.packet_values
+    @test autonomous.budget.packets == replay.budget.packets ==
+        config.action_budget
+    @test scaffolded.budget.interventions ==
+        random_guidance.budget.interventions ==
+        conclusion.budget.interventions == config.action_budget
+    @test isempty(scaffolded.pseudo_signals)
+    @test isempty(conclusion.selected)
+    @test isempty(conclusion.packet_values)
+    @test conclusion.budget.pseudo_observations == config.action_budget
+    @test no_guidance.budget.packets == 0
+    @test no_guidance.budget.interventions == 0
+    @test all(result.budget.contact == 1 for result in
+        (autonomous, replay, scaffolded, random_guidance, conclusion, no_guidance))
+    @test all(result.contact_bytes == autonomous.contact_bytes for result in
+        (replay, scaffolded, random_guidance, conclusion, no_guidance))
+    @test 0.0 < contact_mutual_information(config; draws = 1_000) < log(2)
+end
+
 @testset "paired interaction intervals retain the frozen twenty-seed unit" begin
     interval = paired_t_interval(collect(1.0:20.0))
     @test interval.mean == 10.5

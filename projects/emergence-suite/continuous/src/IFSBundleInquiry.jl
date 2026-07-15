@@ -10,7 +10,8 @@ export IFSBundleConfig, JointBundleLearner, BUNDLE_CHANNELS,
     maximum_conditional_marginal_error, update!, learned_conditional_table,
     configuration_score, violate_configuration, generate_ifs_bundle_episode,
     BundlePrecisionForecaster, forecast, update_forecaster!,
-    infer_bundle_episode, depth_readout
+    infer_bundle_episode, depth_readout, run_guidance_arm, fit_joint_learner,
+    fit_shuffled_learner, pretrain_forecaster, contact_mutual_information
 
 const BUNDLE_CHANNELS = (:self, :world, :policy, :outcome)
 const BUNDLE_CONFIGURATIONS = vec(NTuple{4, Int}[
@@ -36,6 +37,8 @@ Base.@kwdef struct IFSBundleConfig
     regression_forgetting::Float64 = 0.995
     cause_amplitude::Float64 = 0.90
     contact_amplitude::Float64 = 0.85
+    conclusion_reliability::Float64 = 0.84
+    guide_noise_sd::Float64 = 0.90
     dirichlet_alpha::Float64 = 0.75
     local_fields::NTuple{4, Float64} = (0.42, 0.36, 0.22, 0.48)
     coupling_self_world::Float64 = 0.70
@@ -372,7 +375,9 @@ function bundle_state_update(observations, contact, selected_channels,
             0.0
         else
             reliability = clamp(pseudo_reliability, 1.0e-6, 1 - 1.0e-6)
-            -log(root == pseudo_root ? reliability : 1 - reliability)
+            signals = pseudo_root isa AbstractVector ? pseudo_root : [pseudo_root]
+            sum(-log(root == signal ? reliability : 1 - reliability)
+                for signal in signals)
         end
         total_cost = sensory_cost + contact_cost + conclusion_cost
         push!(hypotheses, (root = root, bundle = bundle,
@@ -466,6 +471,237 @@ function infer_bundle_episode(observations, contact, selected_channels,
     end
     return merge(state, (posterior_phi = mean_phi,
         posterior_covariance = covariance_phi, trace = trace))
+end
+
+binary_entropy(probability) = probability <= 1.0e-12 || probability >= 1 - 1.0e-12 ?
+    0.0 : -probability * log(probability) - (1 - probability) * log(1 - probability)
+
+function sensor_reliability(mean_phi, channel, config::IFSBundleConfig;
+        precision_blind::Bool = false)
+    transition_variance = if precision_blind
+        3exp(-mean(mean_phi[1:12]))
+    else
+        sum(exp(-mean_phi[phi_index(layer, channel)]) for layer in 1:3)
+    end
+    signal_to_noise = config.cause_amplitude /
+        sqrt(transition_variance + inv(config.observation_precision))
+    return 1 / (1 + exp(-1.702signal_to_noise))
+end
+
+function expected_information_gain(state, mean_phi, channel,
+        config::IFSBundleConfig; precision_blind::Bool = false)
+    current_entropy = binary_entropy(state.probability_positive)
+    reliability = sensor_reliability(mean_phi, channel, config;
+        precision_blind = precision_blind)
+    expected_entropy = 0.0
+    for outcome in (-1, 1)
+        likelihoods = [outcome == hypothesis.bundle[channel] ?
+            reliability : 1 - reliability for hypothesis in state.hypotheses]
+        outcome_probability = dot(state.weights, likelihoods)
+        positive_mass = sum(weight * likelihood for
+            (hypothesis, weight, likelihood) in
+                zip(state.hypotheses, state.weights, likelihoods)
+            if hypothesis.root == 1)
+        posterior_positive = positive_mass / max(outcome_probability, 1.0e-12)
+        expected_entropy += outcome_probability * binary_entropy(posterior_positive)
+    end
+    return current_entropy - expected_entropy
+end
+
+function choose_channel(state, mean_phi, selected, config::IFSBundleConfig;
+        precision_blind::Bool = false, least_informative::Bool = false)
+    available = setdiff(collect(eachindex(BUNDLE_CHANNELS)), selected)
+    isempty(available) && throw(ArgumentError("all bundle channels are sampled"))
+    gains = [expected_information_gain(state, mean_phi, channel, config;
+        precision_blind = precision_blind) for channel in available]
+    return available[least_informative ? argmin(gains) : argmax(gains)]
+end
+
+function guide_precision_forecast(episode, regime::Symbol, rng,
+        config::IFSBundleConfig)
+    regime == :accurate_stable && return episode.true_phi
+    regime == :noisy && return episode.true_phi .+
+        config.guide_noise_sd .* randn(rng, length(episode.true_phi))
+    regime == :systematically_wrong && return .-episode.true_phi
+    if regime == :context_switch
+        stale_context = episode.context >= 0 ? -abs(episode.context) : episode.context
+        return true_precision_field(stale_context, 1, config)
+    end
+    throw(ArgumentError("unknown guide regime: $regime"))
+end
+
+function guide_conclusion(root, regime::Symbol, rng, episode_index,
+        config::IFSBundleConfig)
+    regime == :accurate_stable && return root
+    regime == :systematically_wrong && return -root
+    regime == :noisy && return rand(rng) < config.conclusion_reliability ? root : -root
+    regime == :context_switch && return episode_index < config.switch_episode ? root : -root
+    throw(ArgumentError("unknown guide regime: $regime"))
+end
+
+function run_guidance_arm(model::BundlePrecisionForecaster, episode,
+        conditional_table, arm::Symbol, seed::Int, episode_index::Int;
+        config::IFSBundleConfig = IFSBundleConfig(),
+        guide_regime::Symbol = :accurate_stable,
+        replay_actions::Vector{Int} = Int[],
+        precision_blind::Bool = false,
+        conclusion_reliability::Float64 = config.conclusion_reliability)
+    arm in (:autonomous, :scaffolded, :random_guidance, :replay,
+        :conclusion, :no_guidance) || throw(ArgumentError("unknown arm: $arm"))
+    prior_mean, prior_covariance = forecast(model, episode.context, config)
+    selected = Int[]
+    predicted_gains = Float64[]
+    realized_gains = Float64[]
+    pseudo_signals = Int[]
+    intervention_count = 0
+    rng = MersenneTwister(seed + 30_000episode_index +
+        137findfirst(==(arm), (:autonomous, :scaffolded, :random_guidance,
+            :replay, :conclusion, :no_guidance)))
+    result = infer_bundle_episode(episode.observations, episode.contact, selected,
+        prior_mean, prior_covariance, conditional_table; config = config)
+    initial_entropy = binary_entropy(result.probability_positive)
+    if arm in (:autonomous, :scaffolded, :random_guidance, :replay)
+        for action_index in 1:config.action_budget
+            action_phi = result.posterior_phi
+            channel = if arm == :autonomous
+                choose_channel(result, action_phi, selected, config;
+                    precision_blind = precision_blind)
+            elseif arm == :scaffolded
+                intervention_count += 1
+                guide_phi = guide_precision_forecast(episode, guide_regime, rng, config)
+                choose_channel(result, guide_phi, selected, config;
+                    least_informative = guide_regime == :systematically_wrong)
+            elseif arm == :random_guidance
+                intervention_count += 1
+                rand(rng, setdiff(collect(eachindex(BUNDLE_CHANNELS)), selected))
+            else
+                replay_actions[action_index]
+            end
+            gain = expected_information_gain(result,
+                arm == :scaffolded ?
+                    guide_precision_forecast(episode, guide_regime, rng, config) :
+                    action_phi, channel, config; precision_blind = precision_blind)
+            before_entropy = binary_entropy(result.probability_positive)
+            push!(selected, channel)
+            result = infer_bundle_episode(episode.observations, episode.contact,
+                selected, prior_mean, prior_covariance, conditional_table;
+                config = config)
+            push!(predicted_gains, gain)
+            push!(realized_gains,
+                before_entropy - binary_entropy(result.probability_positive))
+        end
+    elseif arm == :conclusion
+        for _ in 1:config.action_budget
+            intervention_count += 1
+            push!(pseudo_signals, guide_conclusion(episode.root, guide_regime,
+                rng, episode_index, config))
+            before_entropy = binary_entropy(result.probability_positive)
+            result = infer_bundle_episode(episode.observations, episode.contact,
+                selected, prior_mean, prior_covariance, conditional_table;
+                config = config, pseudo_root = pseudo_signals,
+                pseudo_reliability = conclusion_reliability)
+            push!(predicted_gains, before_entropy -
+                binary_entropy(result.probability_positive))
+            push!(realized_gains, before_entropy -
+                binary_entropy(result.probability_positive))
+        end
+    end
+    update_forecaster!(model, episode.context, result.posterior_phi, selected, config)
+    packet_values = isempty(selected) ? Float64[] :
+        vec(copy(episode.observations[selected, :]))
+    return (probability_positive = result.probability_positive,
+        bundle_probability_positive = result.bundle_probability_positive,
+        selected = selected, packet_values = packet_values,
+        pseudo_signals = pseudo_signals, predicted_gains = predicted_gains,
+        realized_gains = realized_gains, posterior_phi = result.posterior_phi,
+        prior_phi = prior_mean, trace = result.trace,
+        budget = (packets = length(selected),
+            interventions = intervention_count, contact = 1,
+            pseudo_observations = length(pseudo_signals)),
+        contact_bytes = reinterpret(UInt8, [episode.contact]),
+        initial_entropy = initial_entropy,
+        final_entropy = binary_entropy(result.probability_positive))
+end
+
+function training_episodes(seed::Int, scene_mode::Symbol, contact_mode::Symbol,
+        config::IFSBundleConfig)
+    return [generate_ifs_bundle_episode(seed, episode; config = config,
+        scene_mode = scene_mode, contact_mode = contact_mode)
+        for episode in 1:config.training_episodes]
+end
+
+function fit_joint_learner(seed::Int;
+        config::IFSBundleConfig = IFSBundleConfig(),
+        scene_mode::Symbol = :joint, contact_mode::Symbol = :present)
+    learner = JointBundleLearner(config)
+    episodes = training_episodes(seed, scene_mode, contact_mode, config)
+    for episode in episodes
+        update!(learner, episode.root, episode.bundle)
+    end
+    return learner, episodes
+end
+
+function fit_shuffled_learner(seed::Int;
+        config::IFSBundleConfig = IFSBundleConfig())
+    _, episodes = fit_joint_learner(seed; config = config)
+    learner = JointBundleLearner(config)
+    rng = MersenneTwister(seed + 771_901)
+    for root in (-1, 1)
+        subset = filter(episode -> episode.root == root, episodes)
+        isempty(subset) && continue
+        columns = [[episode.bundle[channel] for episode in subset]
+            for channel in eachindex(BUNDLE_CHANNELS)]
+        for column in columns
+            shuffle!(rng, column)
+        end
+        for index in eachindex(subset)
+            bundle = ntuple(channel -> columns[channel][index], 4)
+            update!(learner, root, bundle)
+        end
+    end
+    return learner
+end
+
+function pretrain_forecaster(mode::Symbol, episodes, conditional_table;
+        config::IFSBundleConfig = IFSBundleConfig())
+    model = BundlePrecisionForecaster(mode, config)
+    for episode in episodes
+        prior_mean, prior_covariance = forecast(model, episode.context, config)
+        fit = infer_bundle_episode(episode.observations, episode.contact,
+            collect(eachindex(BUNDLE_CHANNELS)), prior_mean, prior_covariance,
+            conditional_table; config = config)
+        update_forecaster!(model, episode.context, fit.posterior_phi,
+            collect(eachindex(BUNDLE_CHANNELS)), config)
+    end
+    return model
+end
+
+normal_density(value, mean_value, precision) = sqrt(precision / (2pi)) *
+    exp(-0.5precision * (value - mean_value)^2)
+
+function contact_mutual_information(config::IFSBundleConfig = IFSBundleConfig();
+        draws::Int = 4_000, seed::Int = 43)
+    rng = MersenneTwister(seed)
+    table = target_conditional_table(config)
+    information = 0.0
+    for _ in 1:draws
+        root = rand(rng, Bool) ? 1 : -1
+        bundle = sample_configuration(rng, view(table, root_index(root), :))
+        contact = expected_contact_mean(bundle, root, config) +
+            randn(rng) / sqrt(config.contact_precision)
+        likelihoods = zeros(2)
+        for candidate_root in (-1, 1)
+            row = root_index(candidate_root)
+            likelihoods[row] = sum(table[row, index] *
+                normal_density(contact,
+                    expected_contact_mean(candidate_bundle, candidate_root, config),
+                    config.contact_precision)
+                for (index, candidate_bundle) in enumerate(BUNDLE_CONFIGURATIONS))
+        end
+        posterior = likelihoods[root_index(root)] / sum(likelihoods)
+        information += log(max(posterior, 1.0e-300) / 0.5)
+    end
+    return information / draws
 end
 
 function depth_readout(result)
