@@ -22,6 +22,7 @@ include(joinpath(@__DIR__, "..", "src", "UnifiedRelationalAgent.jl"))
 include(joinpath(@__DIR__, "..", "src", "ConfirmUnifiedRelationalAgent.jl"))
 include(joinpath(@__DIR__, "..", "src", "MatchedMarginalRelationAblation.jl"))
 include(joinpath(@__DIR__, "..", "src", "ConfirmRelationalActionInteraction.jl"))
+include(joinpath(@__DIR__, "..", "src", "IFSBundleInquiry.jl"))
 
 using .T48Robustness
 using .GlobalPrecisionField
@@ -41,6 +42,7 @@ using .UnifiedRelationalAgent
 using .ConfirmUnifiedRelationalAgent
 using .MatchedMarginalRelationAblation
 using .ConfirmRelationalActionInteraction
+using .IFSBundleInquiry
 
 const CONFIG_PATH = joinpath(@__DIR__, "..", "configs", "t48-pilot.yaml")
 
@@ -305,6 +307,38 @@ end
     @test metrics.full_accuracy == metrics.factorized_accuracy
     @test metrics.replay_action_match_rate == 1.0
     @test metrics.full_mean_packets == metrics.random_mean_packets
+end
+
+@testset "IFS bundle target is learned joint structure, not authored inference" begin
+    config = IFSBundleConfig(seeds = [16901], episodes = 12,
+        training_episodes = 6, packet_samples = 3,
+        inference_iterations = 3, hyper_newton_steps = 2)
+    joint = target_conditional_table(config)
+    factorized = factorized_projection(joint)
+
+    @test size(joint) == (2, 16)
+    @test size(factorized) == size(joint)
+    @test maximum_conditional_marginal_error(joint, factorized) < 1.0e-10
+    @test maximum(abs.(joint .- factorized)) > 1.0e-4
+
+    learner = JointBundleLearner(config)
+    @test learner.counts == fill(config.dirichlet_alpha, 2, 16)
+    @test !hasproperty(learner, :couplings)
+    @test !hasproperty(learner, :local_fields)
+
+    episode = generate_ifs_bundle_episode(16901, 1; config = config,
+        scene_mode = :joint, contact_mode = :present)
+    @test length(episode.bundle) == 4
+    @test size(episode.states) == (3, 4, config.packet_samples)
+    @test size(episode.observations) == (4, config.packet_samples)
+    @test length(episode.true_phi) == 13
+    @test isfinite(episode.contact)
+
+    violated = violate_configuration(episode.bundle)
+    @test violated[1:3] == episode.bundle[1:3]
+    @test violated[4] == -episode.bundle[4]
+    @test configuration_score(violated, episode.root, config) !=
+        configuration_score(episode.bundle, episode.root, config)
 end
 
 @testset "paired interaction intervals retain the frozen twenty-seed unit" begin
