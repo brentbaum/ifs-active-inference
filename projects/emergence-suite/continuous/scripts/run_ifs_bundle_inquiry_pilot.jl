@@ -20,7 +20,7 @@ output_dir = joinpath(project_dir, "results", "ifs_bundle_inquiry_pilot")
 summary = evaluate_ifs_bundle(output_dir; config = config, stage = "pilot")
 
 open(joinpath(output_dir, "attempt-ledger.md"), "a") do io
-    println(io, "## $(Dates.format(now(), dateformat\"yyyy-mm-dd HH:MM:SS\"))")
+    println(io, "## $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))")
     println(io)
     println(io, "- Seeds: `16901:16910`")
     println(io, "- Configuration: repository defaults in `IFSBundleConfig`")
