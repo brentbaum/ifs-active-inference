@@ -1,5 +1,5 @@
 ---
-status: ready
+status: complete
 priority: p1
 issue_id: "001"
 tags: [julia, simulation, ifs-paper, experiment-43]
@@ -86,9 +86,9 @@ stage-specific outcomes without editing the manuscript.
 - [x] All five guidance arms use one action/budget interface with exact replay.
 - [x] Contact is observational, paired identically, and stress-tested.
 - [x] Pilot uses only seeds 16901–16910 and freezes config and criteria.
-- [ ] Confirmation uses untouched seeds 17001–17020 exactly once and writes every required artifact.
-- [ ] Stage 43A/43B/43C statuses and bounded interpretation are documented without manuscript edits.
-- [ ] Full Julia test suite passes.
+- [x] Confirmation uses untouched seeds 17001–17020 exactly once and writes every required artifact.
+- [x] Stage 43A/43B/43C statuses and bounded interpretation are documented without manuscript edits.
+- [x] Full Julia test suite passes.
 
 ## Work Log
 
@@ -137,3 +137,25 @@ stage-specific outcomes without editing the manuscript.
   edges are the minimum retained structure.
 - Stage 43C is a separate policy-learning result: it required an explicit
   action table and could not be inferred from the learned precision field.
+
+### 2026-07-15 - Frozen confirmation and handoff completed
+
+**By:** Codex
+
+**Actions:**
+
+- Created freeze commit `84c702a2bd7b83def669c999141674b9fcdccda7`
+  before opening confirmation seeds.
+- Ran `17001:17020` once through the guarded confirmation runner and committed
+  the immutable raw result bundle as
+  `a2fceafbc36602eb9644af496d0e1b7b71283539`.
+- Recorded `support` for 43A, 43B, 43C, and the stress cell while preserving
+  negative and bounded results in the experiment note.
+- Reran the complete Julia suite after documentation; every test passed.
+
+**Learnings:**
+
+- The frozen result supports the configural bundle and guide-error calibration
+  claims, but the inquiry advantage did not grow in the joint world.
+- Post-scaffold root accuracy and first-action retention passed, while the
+  narrower unsampled-component transfer estimate remained small.

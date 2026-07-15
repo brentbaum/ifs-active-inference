@@ -407,3 +407,36 @@ nevertheless failed because the factorized gain exceeded the `0.015`
 negligible-effect cutoff by `0.00083`; this was one of six equally weighted
 frozen criteria. The earned result is relational amplification of epistemic
 action, not a literal all-or-none gate.
+
+## Experiment 43: learned IFS bundle and guided inquiry
+
+This frozen construction gives one identity root four explicit bundle
+components (`self`, `world`, `policy`, and `outcome`), learns their conditional
+joint table from complete scenes, and compares it with the exact
+conditional-marginal factorized projection. Four three-level Gaussian branches
+and a scalar observational contact likelihood share a 13-component precision
+field. Autonomous inquiry, therapist-scaffolded inquiry, matched random
+guidance, conclusion injection, no guidance, exact replay, shuffled
+configurations, contact stress cells, and adaptive/rigid/local precision
+controls use one explicit budget ledger.
+
+The single frozen confirmation on seeds `17001:17020` supports all three
+stages and the precision stress cell. Joint-over-factorized replay root gain was
+`0.0813`, untreated-component transfer gain `0.0496`, and the action interaction
+`0.0977`. Inquiry improved log loss under noisy, systematically wrong, and stale
+guidance, while accurate stable conclusions retained a `0.2133` immediate
+accuracy advantage. After scaffold removal, the explicit learned action table
+improved root accuracy by `0.0625` and chose the newly informative channel first
+in every removal episode.
+
+The confirmation has already been opened once. The runner refuses to overwrite
+its result directory:
+
+```bash
+~/.juliaup/bin/julia --project=projects/emergence-suite/continuous \
+  projects/emergence-suite/continuous/scripts/run_confirm_ifs_bundle_inquiry.jl
+```
+
+Outputs are under `results/confirm_ifs_bundle_inquiry/`. The bounded result and
+interpretation are recorded in
+`projects/ifs-paper/experiment-43-ifs-bundle-guided-inquiry.md`.
