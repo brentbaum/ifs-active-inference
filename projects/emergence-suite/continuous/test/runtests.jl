@@ -341,6 +341,38 @@ end
         configuration_score(episode.bundle, episode.root, config)
 end
 
+@testset "IFS bundle hierarchy rebroadcasts endogenous precision evidence" begin
+    config = IFSBundleConfig(seeds = [16902], episodes = 12,
+        training_episodes = 6, packet_samples = 3,
+        inference_iterations = 4, hyper_newton_steps = 3)
+    episode = generate_ifs_bundle_episode(16902, 2; config = config)
+    model = BundlePrecisionForecaster(:adaptive_global, config)
+    prior_mean, prior_covariance = IFSBundleInquiry.forecast(
+        model, episode.context, config)
+    table = target_conditional_table(config)
+    fit = infer_bundle_episode(episode.observations, episode.contact, [1, 3],
+        prior_mean, prior_covariance, table; config = config)
+    perturbed_observations = copy(episode.observations)
+    perturbed_observations[1, 1] += 0.75
+    perturbed = infer_bundle_episode(perturbed_observations, episode.contact,
+        [1, 3], prior_mean, prior_covariance, table; config = config)
+
+    @test length(fit.posterior_phi) == 13
+    @test size(fit.posterior_covariance) == (13, 13)
+    @test length(fit.bundle_probability_positive) == 4
+    @test norm(fit.residuals - perturbed.residuals) > 1.0e-6
+    @test norm(fit.posterior_phi - perturbed.posterior_phi) > 1.0e-8
+    @test all(isfinite(row.local_free_energy) &&
+        isfinite(row.hyper_free_energy) && isfinite(row.joint_free_energy)
+        for row in fit.trace)
+    @test all(diff(getfield.(fit.trace, :joint_free_energy)) .<= 1.0e-8)
+    @test 0.0 <= depth_readout(fit) <= 1.0
+
+    contact_only = infer_bundle_episode(episode.observations, episode.contact,
+        Int[], prior_mean, prior_covariance, table; config = config)
+    @test 0.01 < contact_only.probability_positive < 0.99
+end
+
 @testset "paired interaction intervals retain the frozen twenty-seed unit" begin
     interval = paired_t_interval(collect(1.0:20.0))
     @test interval.mean == 10.5
