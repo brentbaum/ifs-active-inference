@@ -23,6 +23,7 @@ include(joinpath(@__DIR__, "..", "src", "ConfirmUnifiedRelationalAgent.jl"))
 include(joinpath(@__DIR__, "..", "src", "MatchedMarginalRelationAblation.jl"))
 include(joinpath(@__DIR__, "..", "src", "ConfirmRelationalActionInteraction.jl"))
 include(joinpath(@__DIR__, "..", "src", "IFSBundleInquiry.jl"))
+include(joinpath(@__DIR__, "..", "src", "ConfirmIFSBundleInquiry.jl"))
 
 using .T48Robustness
 using .GlobalPrecisionField
@@ -43,6 +44,7 @@ using .ConfirmUnifiedRelationalAgent
 using .MatchedMarginalRelationAblation
 using .ConfirmRelationalActionInteraction
 using .IFSBundleInquiry
+using .ConfirmIFSBundleInquiry
 
 const CONFIG_PATH = joinpath(@__DIR__, "..", "configs", "t48-pilot.yaml")
 
@@ -419,6 +421,24 @@ end
     @test all(result.contact_bytes == autonomous.contact_bytes for result in
         (replay, scaffolded, random_guidance, conclusion, no_guidance))
     @test 0.0 < contact_mutual_information(config; draws = 1_000) < log(2)
+end
+
+@testset "IFS evaluator preserves one auditable row schema" begin
+    config = IFSBundleConfig(seeds = [16904], episodes = 6,
+        training_episodes = 4, switch_episode = 6, packet_samples = 1,
+        inference_iterations = 2, hyper_newton_steps = 1)
+    result = run_ifs_bundle_seed(16904; config = config)
+    metrics = ConfirmIFSBundleInquiry.seed_metrics(result.episode_rows)
+    audit = implementation_audit([result], config)
+
+    @test length(result.episode_rows) == length(result.budget_rows)
+    @test !isempty(result.trace_rows)
+    @test isfinite(metrics.bundle_gain)
+    @test isfinite(metrics.wrong_guidance_log_loss_gain)
+    @test audit.exact_conditional_local_marginals
+    @test audit.replay_action_and_observation_match
+    @test audit.contact_streams_byte_identical
+    @test audit.conclusion_never_receives_inquiry_packet
 end
 
 @testset "paired interaction intervals retain the frozen twenty-seed unit" begin

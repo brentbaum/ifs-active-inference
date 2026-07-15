@@ -11,7 +11,8 @@ export IFSBundleConfig, JointBundleLearner, BUNDLE_CHANNELS,
     configuration_score, violate_configuration, generate_ifs_bundle_episode,
     BundlePrecisionForecaster, forecast, update_forecaster!,
     infer_bundle_episode, depth_readout, run_guidance_arm, fit_joint_learner,
-    fit_shuffled_learner, pretrain_forecaster, contact_mutual_information
+    fit_shuffled_learner, pretrain_forecaster, contact_mutual_information,
+    run_ifs_bundle_seed, release_weight
 
 const BUNDLE_CHANNELS = (:self, :world, :policy, :outcome)
 const BUNDLE_CONFIGURATIONS = vec(NTuple{4, Int}[
@@ -22,13 +23,13 @@ const BUNDLE_CONFIGURATIONS = vec(NTuple{4, Int}[
 
 Base.@kwdef struct IFSBundleConfig
     seeds::Vector{Int} = collect(16901:16910)
-    episodes::Int = 120
-    training_episodes::Int = 48
-    switch_episode::Int = 85
-    packet_samples::Int = 3
+    episodes::Int = 48
+    training_episodes::Int = 32
+    switch_episode::Int = 41
+    packet_samples::Int = 2
     action_budget::Int = 2
-    inference_iterations::Int = 6
-    hyper_newton_steps::Int = 5
+    inference_iterations::Int = 4
+    hyper_newton_steps::Int = 3
     observation_precision::Float64 = 9.0
     contact_precision::Float64 = 5.0
     hyper_innovation_variance::Float64 = 0.30
@@ -553,22 +554,28 @@ function run_guidance_arm(model::BundlePrecisionForecaster, episode,
     predicted_gains = Float64[]
     realized_gains = Float64[]
     pseudo_signals = Int[]
+    root_probability_path = Float64[]
+    bundle_probability_path = Vector{Float64}[]
     intervention_count = 0
     rng = MersenneTwister(seed + 30_000episode_index +
         137findfirst(==(arm), (:autonomous, :scaffolded, :random_guidance,
             :replay, :conclusion, :no_guidance)))
     result = infer_bundle_episode(episode.observations, episode.contact, selected,
         prior_mean, prior_covariance, conditional_table; config = config)
+    push!(root_probability_path, result.probability_positive)
+    push!(bundle_probability_path, copy(result.bundle_probability_positive))
     initial_entropy = binary_entropy(result.probability_positive)
     if arm in (:autonomous, :scaffolded, :random_guidance, :replay)
         for action_index in 1:config.action_budget
             action_phi = result.posterior_phi
+            guide_phi = arm == :scaffolded ?
+                guide_precision_forecast(episode, guide_regime, rng, config) :
+                action_phi
             channel = if arm == :autonomous
                 choose_channel(result, action_phi, selected, config;
                     precision_blind = precision_blind)
             elseif arm == :scaffolded
                 intervention_count += 1
-                guide_phi = guide_precision_forecast(episode, guide_regime, rng, config)
                 choose_channel(result, guide_phi, selected, config;
                     least_informative = guide_regime == :systematically_wrong)
             elseif arm == :random_guidance
@@ -578,9 +585,7 @@ function run_guidance_arm(model::BundlePrecisionForecaster, episode,
                 replay_actions[action_index]
             end
             gain = expected_information_gain(result,
-                arm == :scaffolded ?
-                    guide_precision_forecast(episode, guide_regime, rng, config) :
-                    action_phi, channel, config; precision_blind = precision_blind)
+                guide_phi, channel, config; precision_blind = precision_blind)
             before_entropy = binary_entropy(result.probability_positive)
             push!(selected, channel)
             result = infer_bundle_episode(episode.observations, episode.contact,
@@ -589,6 +594,8 @@ function run_guidance_arm(model::BundlePrecisionForecaster, episode,
             push!(predicted_gains, gain)
             push!(realized_gains,
                 before_entropy - binary_entropy(result.probability_positive))
+            push!(root_probability_path, result.probability_positive)
+            push!(bundle_probability_path, copy(result.bundle_probability_positive))
         end
     elseif arm == :conclusion
         for _ in 1:config.action_budget
@@ -604,6 +611,8 @@ function run_guidance_arm(model::BundlePrecisionForecaster, episode,
                 binary_entropy(result.probability_positive))
             push!(realized_gains, before_entropy -
                 binary_entropy(result.probability_positive))
+            push!(root_probability_path, result.probability_positive)
+            push!(bundle_probability_path, copy(result.bundle_probability_positive))
         end
     end
     update_forecaster!(model, episode.context, result.posterior_phi, selected, config)
@@ -614,11 +623,13 @@ function run_guidance_arm(model::BundlePrecisionForecaster, episode,
         selected = selected, packet_values = packet_values,
         pseudo_signals = pseudo_signals, predicted_gains = predicted_gains,
         realized_gains = realized_gains, posterior_phi = result.posterior_phi,
+        root_probability_path = root_probability_path,
+        bundle_probability_path = bundle_probability_path,
         prior_phi = prior_mean, trace = result.trace,
         budget = (packets = length(selected),
             interventions = intervention_count, contact = 1,
             pseudo_observations = length(pseudo_signals)),
-        contact_bytes = reinterpret(UInt8, [episode.contact]),
+        contact_bytes = collect(reinterpret(UInt8, [episode.contact])),
         initial_entropy = initial_entropy,
         final_entropy = binary_entropy(result.probability_positive))
 end
@@ -702,6 +713,331 @@ function contact_mutual_information(config::IFSBundleConfig = IFSBundleConfig();
         information += log(max(posterior, 1.0e-300) / 0.5)
     end
     return information / draws
+end
+
+function release_weight(model::BundlePrecisionForecaster)
+    model.mode == :rigid_global && return 0.0
+    model.mode == :independent_local && return 1.0
+    parameter_mean = inv(Symmetric(model.precision)) * model.information
+    shared = abs(parameter_mean[4])
+    deviations = mean(abs.(parameter_mean[5:8]))
+    return deviations / (shared + deviations + 1.0e-12)
+end
+
+phase_at(episode, config::IFSBundleConfig) = episode < config.switch_episode ?
+    "heldout_before" : "heldout_after"
+
+root_decision(probability) = probability >= 0.5 ? 1 : -1
+
+function packet_signature(values)
+    return join((repr(value) for value in values), ";")
+end
+
+function record_arm!(episode_rows, trace_rows, budget_rows, result, data,
+        model, conditional_table, seed, episode_index;
+        stage::String, world::String, model_name::String, arm::String,
+        guide_regime::String = "none", contact_mode::String = "present",
+        replay_source = nothing)
+    probability = result.probability_positive
+    true_probability = data.root == 1 ? probability : 1 - probability
+    bundle_correct = [root_decision(result.bundle_probability_positive[channel]) ==
+        data.bundle[channel] for channel in eachindex(BUNDLE_CHANNELS)]
+    unsampled = setdiff(collect(eachindex(BUNDLE_CHANNELS)), result.selected)
+    transfer_accuracy = isempty(unsampled) ? NaN : mean(bundle_correct[unsampled])
+    first_correct = findfirst(value -> root_decision(value) == data.root,
+        result.root_probability_path)
+    time_to_correct = isnothing(first_correct) ? -1 : first_correct - 1
+    table_probability = conditional_table[root_index(data.root),
+        configuration_index(data.bundle)]
+    replay_match = isnothing(replay_source) ? true :
+        result.selected == replay_source.selected &&
+        result.packet_values == replay_source.packet_values
+    forecast_error = sqrt(mean((result.prior_phi .- data.true_phi).^2))
+    push!(episode_rows, (
+        seed = seed, stage = stage, episode = episode_index,
+        phase = data.context < 0 ? "heldout_before" : "heldout_after",
+        world = world, model = model_name, arm = arm,
+        guide_regime = guide_regime, contact_mode = contact_mode,
+        precision_mode = String(model.mode), root = data.root,
+        bundle_self = data.bundle[1], bundle_world = data.bundle[2],
+        bundle_policy = data.bundle[3], bundle_outcome = data.bundle[4],
+        probability_positive = probability,
+        root_correct = root_decision(probability) == data.root,
+        root_log_loss = -log(max(true_probability, 1.0e-300)),
+        root_brier = (probability - (data.root == 1 ? 1.0 : 0.0))^2,
+        bundle_accuracy = mean(bundle_correct),
+        transfer_accuracy = transfer_accuracy,
+        false_root_revision = root_decision(probability) != data.root,
+        false_component_revision = 1 - mean(bundle_correct),
+        time_to_correct = time_to_correct,
+        first_action = isempty(result.selected) ? 0 : first(result.selected),
+        second_action = length(result.selected) < 2 ? 0 : result.selected[2],
+        expected_information_gain = isempty(result.predicted_gains) ? 0.0 :
+            sum(result.predicted_gains),
+        realized_information_gain = isempty(result.realized_gains) ? 0.0 :
+            sum(result.realized_gains),
+        joint_bundle_log_score = log(max(table_probability, 1.0e-300)),
+        forecast_error = forecast_error,
+        release_weight = release_weight(model), replay_exact = replay_match,
+        contact_value = data.contact,
+    ))
+    for trace in result.trace
+        push!(trace_rows, (seed = seed, stage = stage, episode = episode_index,
+            world = world, model = model_name, arm = arm,
+            guide_regime = guide_regime, contact_mode = contact_mode,
+            iteration = trace.iteration,
+            local_free_energy = trace.local_free_energy,
+            hyper_free_energy = trace.hyper_free_energy,
+            joint_free_energy = trace.joint_free_energy))
+    end
+    push!(budget_rows, (seed = seed, stage = stage, episode = episode_index,
+        world = world, model = model_name, arm = arm,
+        guide_regime = guide_regime, contact_mode = contact_mode,
+        packets = result.budget.packets,
+        interventions = result.budget.interventions,
+        contact = result.budget.contact,
+        pseudo_observations = result.budget.pseudo_observations,
+        selected_channels = join(result.selected, ";"),
+        packet_signature = packet_signature(result.packet_values),
+        contact_signature = join(string.(result.contact_bytes), ";"),
+        replay_exact = replay_match))
+    return result
+end
+
+function make_stage_models(base_joint, base_factorized, base_rigid,
+        base_independent)
+    return Dict{String, BundlePrecisionForecaster}(
+        "joint_autonomous" => deepcopy(base_joint),
+        "joint_random" => deepcopy(base_joint),
+        "joint_replay" => deepcopy(base_joint),
+        "joint_shuffled_replay" => deepcopy(base_joint),
+        "joint_blind" => deepcopy(base_joint),
+        "factorized_autonomous" => deepcopy(base_factorized),
+        "factorized_random" => deepcopy(base_factorized),
+        "violation_joint" => deepcopy(base_joint),
+        "violation_replay" => deepcopy(base_joint),
+        "coordinated_adaptive" => deepcopy(base_joint),
+        "coordinated_rigid" => deepcopy(base_rigid),
+        "coordinated_independent" => deepcopy(base_independent),
+        "deviation_adaptive" => deepcopy(base_joint),
+        "deviation_rigid" => deepcopy(base_rigid),
+        "deviation_independent" => deepcopy(base_independent),
+    )
+end
+
+function make_guidance_models(base_joint, base_factorized)
+    models = Dict{String, BundlePrecisionForecaster}()
+    for (world, base) in (("joint", base_joint), ("factorized", base_factorized))
+        models["$world:no_guidance"] = deepcopy(base)
+        models["$world:random_guidance"] = deepcopy(base)
+        for regime in (:accurate_stable, :noisy, :systematically_wrong, :context_switch)
+            for arm in (:scaffolded, :conclusion, :conclusion_info_matched)
+                models["$world:$regime:$arm"] = deepcopy(base)
+            end
+        end
+    end
+    for contact_mode in (:absent, :misattuned)
+        models["contact:$contact_mode:scaffolded"] = deepcopy(base_joint)
+        models["contact:$contact_mode:no_guidance"] = deepcopy(base_joint)
+    end
+    return models
+end
+
+function run_ifs_bundle_seed(seed::Int;
+        config::IFSBundleConfig = IFSBundleConfig())
+    joint_learner, joint_training = fit_joint_learner(seed; config = config,
+        scene_mode = :joint)
+    factorized_learner, factorized_training = fit_joint_learner(seed;
+        config = config, scene_mode = :factorized)
+    joint_table = learned_conditional_table(joint_learner)
+    factorized_replay_table = factorized_projection(joint_table)
+    factorized_world_table = factorized_projection(
+        learned_conditional_table(factorized_learner))
+    shuffled_table = learned_conditional_table(fit_shuffled_learner(seed;
+        config = config))
+    base_joint = pretrain_forecaster(:adaptive_global, joint_training,
+        joint_table; config = config)
+    base_factorized = pretrain_forecaster(:adaptive_global,
+        factorized_training, factorized_world_table; config = config)
+    base_rigid = pretrain_forecaster(:rigid_global, joint_training,
+        joint_table; config = config)
+    base_independent = pretrain_forecaster(:independent_local, joint_training,
+        joint_table; config = config)
+    stage_models = make_stage_models(base_joint, base_factorized,
+        base_rigid, base_independent)
+    guidance_models = make_guidance_models(base_joint, base_factorized)
+    episode_rows = NamedTuple[]
+    trace_rows = NamedTuple[]
+    budget_rows = NamedTuple[]
+    for episode_index in (config.training_episodes + 1):config.episodes
+        joint_data = generate_ifs_bundle_episode(seed, episode_index;
+            config = config, scene_mode = :joint)
+        factorized_data = generate_ifs_bundle_episode(seed, episode_index;
+            config = config, scene_mode = :factorized)
+        violation_data = generate_ifs_bundle_episode(seed, episode_index;
+            config = config, scene_mode = :configuration_violating)
+
+        joint_autonomous = run_guidance_arm(stage_models["joint_autonomous"],
+            joint_data, joint_table, :autonomous, seed, episode_index;
+            config = config)
+        record_arm!(episode_rows, trace_rows, budget_rows, joint_autonomous,
+            joint_data, stage_models["joint_autonomous"], joint_table,
+            seed, episode_index; stage = "43A", world = "joint",
+            model_name = "learned_joint", arm = "autonomous")
+        joint_random = run_guidance_arm(stage_models["joint_random"], joint_data,
+            joint_table, :random_guidance, seed, episode_index; config = config)
+        record_arm!(episode_rows, trace_rows, budget_rows, joint_random,
+            joint_data, stage_models["joint_random"], joint_table,
+            seed, episode_index; stage = "43A", world = "joint",
+            model_name = "learned_joint", arm = "random")
+        replay = run_guidance_arm(stage_models["joint_replay"], joint_data,
+            factorized_replay_table, :replay, seed, episode_index;
+            config = config, replay_actions = joint_autonomous.selected)
+        record_arm!(episode_rows, trace_rows, budget_rows, replay, joint_data,
+            stage_models["joint_replay"], factorized_replay_table,
+            seed, episode_index; stage = "43A", world = "joint",
+            model_name = "factorized_replay", arm = "replay",
+            replay_source = joint_autonomous)
+        shuffled_replay = run_guidance_arm(
+            stage_models["joint_shuffled_replay"], joint_data,
+            shuffled_table, :replay, seed, episode_index; config = config,
+            replay_actions = joint_autonomous.selected)
+        record_arm!(episode_rows, trace_rows, budget_rows, shuffled_replay,
+            joint_data, stage_models["joint_shuffled_replay"], shuffled_table,
+            seed, episode_index; stage = "43A", world = "joint",
+            model_name = "shuffled_replay", arm = "replay",
+            replay_source = joint_autonomous)
+        blind = run_guidance_arm(stage_models["joint_blind"], joint_data,
+            joint_table, :autonomous, seed, episode_index; config = config,
+            precision_blind = true)
+        record_arm!(episode_rows, trace_rows, budget_rows, blind, joint_data,
+            stage_models["joint_blind"], joint_table, seed, episode_index;
+            stage = "43A", world = "joint", model_name = "learned_joint",
+            arm = "precision_blind")
+
+        factorized_autonomous = run_guidance_arm(
+            stage_models["factorized_autonomous"], factorized_data,
+            factorized_world_table, :autonomous, seed, episode_index;
+            config = config)
+        record_arm!(episode_rows, trace_rows, budget_rows, factorized_autonomous,
+            factorized_data, stage_models["factorized_autonomous"],
+            factorized_world_table, seed, episode_index; stage = "43A",
+            world = "factorized", model_name = "factorized",
+            arm = "autonomous")
+        factorized_random = run_guidance_arm(stage_models["factorized_random"],
+            factorized_data, factorized_world_table, :random_guidance,
+            seed, episode_index; config = config)
+        record_arm!(episode_rows, trace_rows, budget_rows, factorized_random,
+            factorized_data, stage_models["factorized_random"],
+            factorized_world_table, seed, episode_index; stage = "43A",
+            world = "factorized", model_name = "factorized", arm = "random")
+
+        violation_joint = run_guidance_arm(stage_models["violation_joint"],
+            violation_data, joint_table, :autonomous, seed, episode_index;
+            config = config)
+        record_arm!(episode_rows, trace_rows, budget_rows, violation_joint,
+            violation_data, stage_models["violation_joint"], joint_table,
+            seed, episode_index; stage = "43A", world = "configuration_violating",
+            model_name = "learned_joint", arm = "autonomous")
+        violation_replay = run_guidance_arm(stage_models["violation_replay"],
+            violation_data, factorized_replay_table, :replay, seed,
+            episode_index; config = config,
+            replay_actions = violation_joint.selected)
+        record_arm!(episode_rows, trace_rows, budget_rows, violation_replay,
+            violation_data, stage_models["violation_replay"],
+            factorized_replay_table, seed, episode_index; stage = "43A",
+            world = "configuration_violating", model_name = "factorized_replay",
+            arm = "replay", replay_source = violation_joint)
+
+        deviation_data = generate_ifs_bundle_episode(seed, episode_index;
+            config = config, scene_mode = :joint, local_deviation = true)
+        for (world_name, data, prefix) in (
+                ("coordinated_precision", joint_data, "coordinated"),
+                ("local_deviation", deviation_data, "deviation"))
+            for (mode_name, suffix) in (("adaptive_global", "adaptive"),
+                    ("rigid_global", "rigid"),
+                    ("independent_local", "independent"))
+                key = string(prefix, "_", suffix)
+                result = run_guidance_arm(stage_models[key], data, joint_table,
+                    :autonomous, seed, episode_index; config = config)
+                record_arm!(episode_rows, trace_rows, budget_rows, result, data,
+                    stage_models[key], joint_table, seed, episode_index;
+                    stage = "stress", world = world_name,
+                    model_name = mode_name, arm = "autonomous")
+            end
+        end
+
+        for (world_name, data, table, base_key) in (
+                ("joint", joint_data, joint_table, "joint"),
+                ("factorized", factorized_data, factorized_world_table, "factorized"))
+            no_key = "$base_key:no_guidance"
+            no_result = run_guidance_arm(guidance_models[no_key], data, table,
+                :no_guidance, seed, episode_index; config = config)
+            record_arm!(episode_rows, trace_rows, budget_rows, no_result, data,
+                guidance_models[no_key], table, seed, episode_index;
+                stage = "43B", world = world_name,
+                model_name = base_key, arm = "no_guidance")
+            random_key = "$base_key:random_guidance"
+            random_result = run_guidance_arm(guidance_models[random_key], data,
+                table, :random_guidance, seed, episode_index; config = config)
+            record_arm!(episode_rows, trace_rows, budget_rows, random_result,
+                data, guidance_models[random_key], table, seed, episode_index;
+                stage = "43B", world = world_name,
+                model_name = base_key, arm = "random_guidance")
+            for regime in (:accurate_stable, :noisy,
+                    :systematically_wrong, :context_switch)
+                scaffold_key = "$base_key:$regime:scaffolded"
+                scaffolded = run_guidance_arm(guidance_models[scaffold_key],
+                    data, table, :scaffolded, seed, episode_index;
+                    config = config, guide_regime = regime)
+                record_arm!(episode_rows, trace_rows, budget_rows, scaffolded,
+                    data, guidance_models[scaffold_key], table, seed,
+                    episode_index; stage = "43B", world = world_name,
+                    model_name = base_key, arm = "scaffolded",
+                    guide_regime = String(regime))
+                conclusion_key = "$base_key:$regime:conclusion"
+                conclusion = run_guidance_arm(guidance_models[conclusion_key],
+                    data, table, :conclusion, seed, episode_index;
+                    config = config, guide_regime = regime)
+                record_arm!(episode_rows, trace_rows, budget_rows, conclusion,
+                    data, guidance_models[conclusion_key], table, seed,
+                    episode_index; stage = "43B", world = world_name,
+                    model_name = base_key, arm = "conclusion",
+                    guide_regime = String(regime))
+                matched_key = "$base_key:$regime:conclusion_info_matched"
+                matched = run_guidance_arm(guidance_models[matched_key],
+                    data, table, :conclusion, seed, episode_index;
+                    config = config, guide_regime = regime,
+                    conclusion_reliability = 0.68)
+                record_arm!(episode_rows, trace_rows, budget_rows, matched,
+                    data, guidance_models[matched_key], table, seed,
+                    episode_index; stage = "43B", world = world_name,
+                    model_name = base_key, arm = "conclusion_info_matched",
+                    guide_regime = String(regime))
+            end
+        end
+
+        for contact_mode in (:absent, :misattuned)
+            contact_data = generate_ifs_bundle_episode(seed, episode_index;
+                config = config, scene_mode = :joint, contact_mode = contact_mode)
+            for arm in (:scaffolded, :no_guidance)
+                key = "contact:$contact_mode:$arm"
+                result = run_guidance_arm(guidance_models[key], contact_data,
+                    joint_table, arm, seed, episode_index; config = config,
+                    guide_regime = :accurate_stable)
+                record_arm!(episode_rows, trace_rows, budget_rows, result,
+                    contact_data, guidance_models[key], joint_table, seed,
+                    episode_index; stage = "stress", world = "joint",
+                    model_name = "learned_joint", arm = String(arm),
+                    guide_regime = "accurate_stable",
+                    contact_mode = String(contact_mode))
+            end
+        end
+    end
+    return (episode_rows = episode_rows, trace_rows = trace_rows,
+        budget_rows = budget_rows, joint_table = joint_table,
+        factorized_table = factorized_replay_table,
+        shuffled_table = shuffled_table)
 end
 
 function depth_readout(result)
