@@ -1,6 +1,6 @@
 # Candidate nodes: parts as the solid phase of identity-level inference
 
-Status: INSERTED into draft-v11-outline.md (2026-07-06) as outline nodes; this file holds the
+Status: INSERTED into draft-v11-outline-editorial.md (2026-07-06) as outline nodes; this file holds the
 full staged prose. Split four ways: §3 (what a part is), §4 (how it freezes), §7 (how it
 melts — decoupling, not deletion), §10 (the named departure from Schwartz). Convergence
 cites: Aletheia (March); Sandved-Smith et al. 2026; latent-cause: Gershman/Niv;

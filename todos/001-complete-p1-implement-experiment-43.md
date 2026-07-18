@@ -111,7 +111,7 @@ stage-specific outcomes without editing the manuscript.
 
 ## Notes
 
-- Never stage or edit `draft-v11-theory.md`, `draft-v11-outline.md`, or other
+- Never stage or edit `draft-v11-theory.md`, `draft-v11-outline-editorial.md`, or other
   manuscript files during this work.
 - Do not use confirmation seeds before the freeze commit exists.
 

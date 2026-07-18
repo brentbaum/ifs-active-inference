@@ -32,7 +32,7 @@
 **Success criteria:**
 - [ ] `decisions/framework-memo.md` with benchmark table on all 5 axes, a decision, and the runner-up's disqualifier.
 - [ ] Spike code for ≥ 2 candidates runs and learns (posterior entropy on true A-matrix decreases over trials).
-- [ ] Decision logged in `draft-v11-outline.md` decision log.
+- [ ] Decision logged in `draft-v11-outline-editorial.md` decision log.
 
 ### T0.2 — D1 derivation: the tilt equation as a mean-field message
 **Depends:** none. **Math ticket; deliverable is markdown + one notebook.**
