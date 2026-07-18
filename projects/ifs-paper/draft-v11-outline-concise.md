@@ -58,7 +58,8 @@ A part is a frozen identity model that becomes revisable in Self-led relationshi
 - Use the dog encounter to establish the explanandum: learned patterns can temporarily determine identity, not merely predict danger.
 - State C1–C3 plainly and distinguish activation, access, and revision.
 - Preview the protective-system corollary, scope the therapeutic comparison to ingredients rather than schools, and frame simulations as construction tests rather than clinical evidence.
-- Position the paper as applying Beautiful Loop Theory's global epistemic-depth construct to local identity models, with relationship as the additional clinical move.
+- ~~Position the paper as applying Beautiful Loop Theory's global epistemic-depth construct to local identity models, with relationship as the additional clinical move.~~
+- **Position the paper as applying Beautiful Loop Theory's global epistemic-depth construct to local identity models, with relationship and guided attention as complementary clinical moves. State the central clinical consequence: transformative evidence must be both trusted and found. Loving contact from the client's Self is a major form of such evidence—parts are seen, loved, and valued exactly as they are—while therapist-guided inquiry helps the system find identity-relevant evidence without dictating what it must discover.**
 
 ### §2. IFS in Its Own Terms
 
