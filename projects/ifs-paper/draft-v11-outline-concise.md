@@ -6,14 +6,15 @@ Working title: **Self-Energy, Witnessing, and the Revision of Part Beliefs: An A
 
 ## Thesis
 
-A part is a frozen identity model that becomes revisable in Self-led relationship because global epistemic depth keeps the activated bundle, present self, body, context, and relationship recursively available together, allowing corrective evidence to reach the identity at the model's root.
+~~A part is a frozen identity model that becomes revisable in Self-led relationship because global epistemic depth keeps the activated bundle, present self, body, context, and relationship recursively available together, allowing corrective evidence to reach the identity at the model's root.~~ **A burdened part is organized by a frozen identity model that becomes revisable in Self-led relationship because global epistemic depth keeps the activated bundle, present self, body, context, and relationship recursively available together, allowing corrective evidence to reach the identity at the model's root.**
 
 ## Claim spine
 
 ### C1 — Frozen Identity
 
 - ~~A part is an identity-level precision bundle: a self-state, world-state, policy, and expected outcome learned together and reactivated together.~~
-- **A part is an identity-level precision bundle: an organized pattern in which a self-state, world-state, policy, and expected outcome constrain and reactivate one another.**
+- ~~**A part is an identity-level precision bundle: an organized pattern in which a self-state, world-state, policy, and expected outcome constrain and reactivate one another.**~~
+- **A burdened part is organized by an identity-level precision bundle: an organized pattern in which a self-state, world-state, policy, and expected outcome constrain and reactivate one another. The verb is deliberate: "organized by" stays neutral among the assembly, recruitment, and hybrid formation models of §10, where "is" would assert the identity the formalism leaves open.**
 - The self-state—*what kind of agent is here?*—organizes the bundle. Because the bundle contains a *who*, activation can supply both the world being perceived and the person perceiving it.
 - A burdened part is a frozen phase of inference, not a separate kind of mental object. Its precision has risen until the bundle functions as architecture rather than as one revisable hypothesis among others.
 - Freezing becomes likely under overwhelm plus low control. Extreme error favors a new latent cause; collapsed reflexivity installs it transparently; low control prevents the active testing that could bound or revise it.
