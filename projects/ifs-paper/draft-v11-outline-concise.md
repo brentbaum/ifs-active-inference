@@ -1,6 +1,6 @@
 # Draft v11 — Current Claim Architecture
 
-> **Status (2026-07-15):** `draft-v11-theory.md` is the canonical manuscript. Sections 1–10 are drafted, including the current simulation record in §9. This outline records the argument as it now stands; resolved drafting notes and superseded simulation plans remain available in Git history rather than inline here.
+> **Status (2026-07-23):** `draft-v11-theory.md` is the canonical manuscript. Sections 1–10 and Appendix A (claims audit) are drafted, including the current simulation record in §9. This outline records the argument as it now stands; resolved drafting notes and superseded simulation plans remain available in Git history rather than inline here.
 
 Working title: **Self-Energy, Witnessing, and the Revision of Part Beliefs: An Active Inference Account of Internal Family Systems**
 
@@ -46,8 +46,11 @@ A part is a frozen identity model that becomes revisable in Self-led relationshi
 
 - A protector is a complete identity bundle organized around preventing exile activation or its expected consequences. A habit specifies what to do; a protector also carries a *who*, a mandate, and a feared outcome.
 - The gate is not another entity. It is the current result of protector policies.
-- Protective layers form when one strategy fails under renewed overwhelm and low control, producing a stack of historically ordered solutions.
-- C3 applies to protectors as well as exiles: safe contact can revise catastrophe forecasts and relax the policies producing the gate.
+- ~~Protective layers form when one strategy fails under renewed overwhelm and low control, producing a stack of historically ordered solutions.~~
+- **Protective layers can form when one strategy fails under renewed overwhelm and low control, producing a historically ordered stack. The stack represents one tractable protector–exile pathway, not the general topology of an internal system. Other systems may contain several protectors converging on one vulnerable part, one protector serving several vulnerable parts, coalitions or polarizations, reciprocal cycles in which parts guard against one another, or context-dependent configurations with no stable outside-in ordering. Protectors may also preserve a relationship or the stability of the wider system rather than restrict access to a single exile.**
+- ~~C3 applies to protectors as well as exiles: safe contact can revise catastrophe forecasts and relax the policies producing the gate.~~
+- **C3 applies to protectors as complete bundles, not only to their cost forecasts. Trust is evidence reaching each element: safe contact updates the expected outcome; present-day information, arriving through inquiry into what the protector actually fears, updates the stale world-state; appreciation of service supplies relational evidence at the protector's own self-state, which carries its own aloneness. The fourth object of learning is the relationship itself: refusal is an epistemic action—the only experiment that discriminates relationship from maneuver—so a protector can be fully visible and unblended yet remain unwilling, and permission is conditional, partial, and revocable because it is a continuously updated posterior.**
+- **Protector work is witnessing at another layer, therapeutic in itself whether or not exile contact follows. Outcome-only trust is tactic-level learning and should stay contact-specific; trust that revises the protector's self-state should transfer across the contexts and gates it guards.**
 - Protectors-first clinical ordering remains a theoretical corollary, not a completed simulation result. The current models show that descent deadlocks if contact is prevented absolutely; dyadic precision scaffolding must be coupled to the gate before sequential access can be claimed as derived.
 
 ## Section structure
@@ -64,6 +67,7 @@ A part is a frozen identity model that becomes revisable in Self-led relationshi
 ### §2. IFS in Its Own Terms
 
 - Introduce multiplicity, blending/unblending, Self, Self-energy, exiles, protectors, burdens, trust, witnessing, and unburdening in the order they appear clinically.
+- **State the organizing commitment—there are no bad parts (Schwartz, 2021)—as IFS's stance toward even the most costly behavior, and keep the refrain that trust is the medium of the therapy.**
 - Preserve the question *How do you feel toward this part?* as a probe of relationship to activation rather than activation intensity.
 - End with the translation table, now aligned with the global precision-field account.
 
@@ -86,9 +90,12 @@ A part is a frozen identity model that becomes revisable in Self-led relationshi
 ### §5. The Protective System
 
 - Derive exiles and protectors from the expected cost of reactivation.
+- **Give computational content to *no bad parts*: every part is a near-optimal solution under the model, evidence, and constraints of its formation; cost reflects the staleness the freeze enforces, not malice or malfunction.**
+- **Derive exiling itself from the cost of reactivation: protector policies are selected to keep the exile inactive, so exclusion from awareness and relationship is the expected output of protection rather than an added assumption—and continually confirms the exile's expectation of aloneness.**
 - Distinguish flexible habits from identity-bearing protective mandates.
 - Explain managers, firefighters, effective gating, layered protection, and contemporary tactics serving an old identity.
-- End with the stack of frozen solutions and the need for a regime from which each model can be seen rather than seen through.
+- ~~End with the stack of frozen solutions and the need for a regime from which each model can be seen rather than seen through.~~
+- **Present the stack of frozen solutions as one tractable protector–exile pathway rather than the general topology of an internal system; name convergent, divergent, coalitional, polarized, reciprocal, and context-dependent configurations. End with the need for a regime from which each active model can be seen rather than seen through.**
 
 ### §6. Self and Self-Energy
 
@@ -117,7 +124,8 @@ A part is a frozen identity model that becomes revisable in Self-led relationshi
 - **Separate evidence from search: relationship helps make transformative evidence admissible, while therapist-guided attention helps make relevant evidence findable. The therapist directs the procedure of inquiry, not the conclusion the client must reach.**
 - **Distinguish questions from interpretations mechanically. Inquiry selects where evidence will be sampled while leaving its value open; interpretation supplies the value itself. This creates a testable tradeoff between the immediate speed of accurate conclusions and the calibration and suggestion-resistance of inquiry under uncertainty or context change.**
 - State the corrected claim: relational evidence has privileged access and direct relevance, not unique revising power.
-- Apply the same mechanism to protector trust, across local forecasts and the global precision profile.
+- ~~Apply the same mechanism to protector trust, across local forecasts and the global precision profile.~~
+- **Give trust the weight IFS gives it: most therapy hours are spent with protectors, and the exposure reading—catastrophe fails to occur—updates only one node of the protector's model. Develop the four evidence routes (outcome, world-state, self-state, relationship policy), refusal as epistemic action, the visible-yet-unwilling case, and the tactics/mandate asymmetry recovered from §5, keeping the two-level local/hyper trust structure.**
 - Separate fast regime change from slower structural revision.
 - Develop selective model reduction, role transformation, melting, unburdening, and the generalization gradient.
 
@@ -145,10 +153,16 @@ Organize the simulation record by what survived, what failed, and what remains o
 - Preserve the asymmetry: the account is revisionary about burdened parts and reconstructive about Self.
 - Present four primary predictions: revision order, generalization gradient, relational access, and dominance–depth dissociation.
 - ~~Keep the secondary predictions about protector permission, premature unburdening, and habits versus protectors.~~
-- **Keep the secondary predictions about protector permission, premature unburdening, and habits versus protectors. Add a guided-inquiry prediction: questions that direct attention while leaving the answer open should improve calibration and reduce suggestion when the guide is uncertain or the context has changed, whereas accurate supplied conclusions may produce faster immediate change. Configural target structure should govern the value of targeted sampling, not by itself determine the inquiry–conclusion tradeoff.**
+- **Keep the secondary predictions about protector permission, premature unburdening, and habits versus protectors. Add a trust-route dissociation: trust earned through outcome evidence alone should remain specific to the tested contact, whereas trust that revises the protector's own self-state should transfer across the situations and gates that protector guards. Add a guided-inquiry prediction: questions that direct attention while leaving the answer open should improve calibration and reduce suggestion when the guide is uncertain or the context has changed, whereas accurate supplied conclusions may produce faster immediate change. Configural target structure should govern the value of targeted sampling, not by itself determine the inquiry–conclusion tradeoff.**
 - ~~Name the live limits: biological implementation, direct implementation of the Beautiful Loop generative process, derivation of redescription, evidence arriving “at a part,” stacked protection, polarization, self-like parts, accurate protectors, policy authority, and reconsolidation.~~
 - **Name the live limits: biological implementation, direct implementation of the Beautiful Loop generative process, derivation of redescription, evidence arriving “at a part,” stacked protection, polarization, self-like parts, accurate protectors, policy authority, reconsolidation, computational identification of loving contact, coupled therapist–client inference, autonomous acquisition and generalization of inquiry policies, and component-level transfer after guidance is removed.**
 - End on the opening distinction: the distance between *I am afraid* and *a part of me is afraid* is not detachment or less fear, but a beautiful loop held open in relationship.
+
+### Appendix A. Claims and Simulation Support
+
+- **Audit every load-bearing claim from C1–C3 and G against the §9 record, sorted into supported, partially supported, and untested or failed.**
+- **For each claim that is untested, partial, or failed, name the bounded simulation extension that would test it.**
+- **Keep §9's register: existence proofs, scope conditions, and construction checks—never clinical evidence.**
 
 ## Settled boundaries
 
@@ -173,6 +187,8 @@ Organize the simulation record by what survived, what failed, and what remains o
 - Test context-indexed redescription against global down-weighting and cue-by-cue relearning.
 - Couple dyadic precision scaffolding to protector policies and test whether outside-in descent emerges.
 - **Develop a coupled therapist–client model that tests whether loving contact changes what evidence becomes usable, how inquiry policies are acquired and generalized, and whether learning transfers across untreated bundle components after guidance is removed.**
+- **Simulate richer protector trust: model the protector as a full bundle with the four evidence routes, test the outcome-only versus root-revising transfer dissociation, and test refusal as an epistemic action that discriminates a circumventing contact policy from a relational one.**
+- **Simulate the exiling derivation: show that exclusion from awareness and contact emerges from protector policy selection under reactivation cost, and that the excluded part's relational prior starves of disconfirming evidence as a side effect.**
 
 ## Style guardrails
 
