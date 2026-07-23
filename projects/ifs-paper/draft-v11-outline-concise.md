@@ -1,20 +1,20 @@
 # Draft v11 — Current Claim Architecture
 
-> **Status (2026-07-23):** `draft-v11-theory.md` is the canonical manuscript. Sections 1–10 and Appendix A (claims audit) are drafted, including the current simulation record in §9. This outline records the argument as it now stands; resolved drafting notes and superseded simulation plans remain available in Git history rather than inline here.
+> **Status (2026-07-23):** `draft-v11-theory.md` is the canonical manuscript. Sections 1–10, Appendix A (claims audit), and Appendix B (full simulation record) are drafted. §9 is now a ~1,300-word claim-organized summary with a system paragraph and Figure 1; the experiment-level record lives in Appendix B. The Sol/IFS-consultant review cycle of 2026-07-23 is fully incorporated. This outline records the argument as it now stands; resolved drafting notes and superseded simulation plans remain available in Git history rather than inline here.
 
 Working title: **Self-Energy, Witnessing, and the Revision of Part Beliefs: An Active Inference Account of Internal Family Systems**
 
 ## Thesis
 
-~~A part is a frozen identity model that becomes revisable in Self-led relationship because global epistemic depth keeps the activated bundle, present self, body, context, and relationship recursively available together, allowing corrective evidence to reach the identity at the model's root.~~ **A burdened part is organized by a frozen identity model that becomes revisable in Self-led relationship because global epistemic depth keeps the activated bundle, present self, body, context, and relationship recursively available together, allowing corrective evidence to reach the identity at the model's root.**
+A part is not a kind of psychological object but a phase of one. A burdened part is frozen identity—a self, a world, a policy, and an ending, coupled and trusted so completely that they function as the architecture of the moment—and the freeze is temporal as well as structural: the inference written under overwhelm never closed. It becomes revisable in Self-led relationship, where the unfinished moment meets the present, because global epistemic depth keeps the activated bundle, present self, body, context, and relationship recursively available together, allowing corrective evidence to reach the identity at the model's root.
 
 ## Claim spine
 
 ### C1 — Frozen Identity
 
 - ~~A part is an identity-level precision bundle: a self-state, world-state, policy, and expected outcome learned together and reactivated together.~~
-- ~~**A part is an identity-level precision bundle: an organized pattern in which a self-state, world-state, policy, and expected outcome constrain and reactivate one another.**~~
-- **A burdened part is organized by an identity-level precision bundle: an organized pattern in which a self-state, world-state, policy, and expected outcome constrain and reactivate one another. The verb is deliberate: "organized by" stays neutral among the assembly, recruitment, and hybrid formation models of §10, where "is" would assert the identity the formalism leaves open.**
+- **A burdened part is a form of frozen identity: an identity-level precision bundle—self-state, world-state, policy, and expected outcome—that constrain and reactivate one another. The *is* is the *is* of phase, not substance (ice is water frozen): the claim says what a burdened part is while frozen, and leaves the substrate—assembly, recruitment, hybrid—open in §10.**
+- **The freeze is temporal as well as structural: the inference never closed. The frozen-in-time refrain recurs in §4 ("the inference never closes"), §8 (retrieval; the unfinished moment meets the present), and the ending ("the moment that could not end, ends").**
 - The self-state—*what kind of agent is here?*—organizes the bundle. Because the bundle contains a *who*, activation can supply both the world being perceived and the person perceiving it.
 - A burdened part is a frozen phase of inference, not a separate kind of mental object. Its precision has risen until the bundle functions as architecture rather than as one revisable hypothesis among others.
 - Freezing becomes likely under overwhelm plus low control. Extreme error favors a new latent cause; collapsed reflexivity installs it transparently; low control prevents the active testing that could bound or revise it.
@@ -50,8 +50,10 @@ Working title: **Self-Energy, Witnessing, and the Revision of Part Beliefs: An A
 - ~~Protective layers form when one strategy fails under renewed overwhelm and low control, producing a stack of historically ordered solutions.~~
 - **Protective layers can form when one strategy fails under renewed overwhelm and low control, producing a historically ordered stack. The stack represents one tractable protector–exile pathway, not the general topology of an internal system. Other systems may contain several protectors converging on one vulnerable part, one protector serving several vulnerable parts, coalitions or polarizations, reciprocal cycles in which parts guard against one another, or context-dependent configurations with no stable outside-in ordering. Protectors may also preserve a relationship or the stability of the wider system rather than restrict access to a single exile.**
 - ~~C3 applies to protectors as well as exiles: safe contact can revise catastrophe forecasts and relax the policies producing the gate.~~
-- **C3 applies to protectors as complete bundles, not only to their cost forecasts. Trust is evidence reaching each element: safe contact updates the expected outcome; present-day information, arriving through inquiry into what the protector actually fears, updates the stale world-state; appreciation of service supplies relational evidence at the protector's own self-state, which carries its own aloneness. The fourth object of learning is the relationship itself: refusal is an epistemic action—the only experiment that discriminates relationship from maneuver—so a protector can be fully visible and unblended yet remain unwilling, and permission is conditional, partial, and revocable because it is a continuously updated posterior.**
-- **Protector work is witnessing at another layer, therapeutic in itself whether or not exile contact follows. Outcome-only trust is tactic-level learning and should stay contact-specific; trust that revises the protector's self-state should transfer across the contexts and gates it guards.**
+- ~~**C3 applies to protectors as complete bundles, not only to their cost forecasts. Trust is evidence reaching each element: safe contact updates the expected outcome; present-day information, arriving through inquiry into what the protector actually fears, updates the stale world-state; appreciation of service supplies relational evidence at the protector's own self-state, which carries its own aloneness. The fourth object of learning is the relationship itself: refusal is an epistemic action—the only experiment that discriminates relationship from maneuver—so a protector can be fully visible and unblended yet remain unwilling, and permission is conditional, partial, and revocable because it is a continuously updated posterior.**~~
+- ~~**Protector work is witnessing at another layer, therapeutic in itself whether or not exile contact follows. Outcome-only trust is tactic-level learning and should stay contact-specific; trust that revises the protector's self-state should transfer across the contexts and gates it guards.**~~
+- **C3 applies to protectors through three linked questions—what will happen if I permit this (outcome, plus present-day information addressed to the actual fear); who will carry responsibility if I relax (appreciation revises being unseen; sole responsibility needs demonstrated co-protection); what policy is generating the request (a partner model; refusal is an informative, not decisive, epistemic action). Hope enters separately: the hope-merchant counterfactual changes the policy comparison by making a job-finished future representable, and reassures only if that future has room for the protector.**
+- **Trust (a learned forecast about contact and the partner) stays distinct from permission (a policy decision under that forecast: partial, conditional, revocable; opposable by a polarized other). Protector work is relational revision at its own layer—befriending—therapeutic in itself. Trust generalizes by inferred structure: contact-local updates stay local; updates to shared variables change willingness across the situations they organize. Rupture asymmetry is conditional on failures being read as diagnostic; repair the old model cannot explain away is itself a route to trust.**
 - Protectors-first clinical ordering remains a theoretical corollary, not a completed simulation result. The current models show that descent deadlocks if contact is prevented absolutely; dyadic precision scaffolding must be coupled to the gate before sequential access can be claimed as derived.
 
 ## Section structure
@@ -61,6 +63,7 @@ Working title: **Self-Energy, Witnessing, and the Revision of Part Beliefs: An A
 - Open with *Sometimes I am afraid. Sometimes a part of me is afraid.*
 - Use the dog encounter to establish the explanandum: learned patterns can temporarily determine identity, not merely predict danger.
 - State C1–C3 plainly and distinguish activation, access, and revision.
+- **Open the claim with the phase declaration ("a part is not a kind of psychological object but a phase of one") and the temporal freeze: the inference written under overwhelm never closed, so IFS's frozen-in-time doctrine and retrieval read as mechanism, not metaphor.**
 - Preview the protective-system corollary, scope the therapeutic comparison to ingredients rather than schools, and frame simulations as construction tests rather than clinical evidence.
 - ~~Position the paper as applying Beautiful Loop Theory's global epistemic-depth construct to local identity models, with relationship as the additional clinical move.~~
 - **Position the paper as applying Beautiful Loop Theory's global epistemic-depth construct to local identity models, with relationship and guided attention as complementary clinical moves. State the central clinical consequence: transformative evidence must be both trusted and found. Loving contact from the client's Self is a major form of such evidence—parts are seen, loved, and valued exactly as they are—while therapist-guided inquiry helps the system find identity-relevant evidence without dictating what it must discover.**
@@ -70,7 +73,8 @@ Working title: **Self-Energy, Witnessing, and the Revision of Part Beliefs: An A
 - Introduce multiplicity, blending/unblending, Self, Self-energy, exiles, protectors, burdens, trust, witnessing, and unburdening in the order they appear clinically.
 - **State the organizing commitment—there are no bad parts (Schwartz, 2021)—as IFS's stance toward even the most costly behavior, and keep the refrain that trust is the medium of the therapy.**
 - Preserve the question *How do you feel toward this part?* as a probe of relationship to activation rather than activation intensity.
-- End with the translation table, now aligned with the global precision-field account.
+- ~~End with the translation table, now aligned with the global precision-field account.~~
+- **End with the translation table, each entry giving the IFS meaning first and the formal representation second, plus the signpost that the table is a functional reconstruction, not an ontology; §10 holds the departures and the agnosticism.**
 
 ### §3. Parts as Frozen Identity
 
@@ -91,8 +95,10 @@ Working title: **Self-Energy, Witnessing, and the Revision of Part Beliefs: An A
 ### §5. The Protective System
 
 - Derive exiles and protectors from the expected cost of reactivation.
-- **Give computational content to *no bad parts*: every part is a near-optimal solution under the model, evidence, and constraints of its formation; cost reflects the staleness the freeze enforces, not malice or malfunction.**
-- **Derive exiling itself from the cost of reactivation: protector policies are selected to keep the exile inactive, so exclusion from awareness and relationship is the expected output of protection rather than an added assumption—and continually confirms the exile's expectation of aloneness.**
+- ~~**Give computational content to *no bad parts*: every part is a near-optimal solution under the model, evidence, and constraints of its formation; cost reflects the staleness the freeze enforces, not malice or malfunction.**~~
+- **Give computational content to *no bad parts* through local intelligibility: costly parts' policies were adaptations to the model, options, and constraints of formation. The formalism does not derive the ethic; it supplies what the ethic presupposes—nothing about a part's cost requires a bad part to explain it.**
+- ~~**Derive exiling itself from the cost of reactivation: protector policies are selected to keep the exile inactive, so exclusion from awareness and relationship is the expected output of protection rather than an added assumption—and continually confirms the exile's expectation of aloneness.**~~
+- **Derive exiling conditionally: exclusion emerges when attentional and relational protection is the cheapest reliable option; other systems may monitor hypervigilantly, attack internally, or oscillate. Exclusion starves the exile's aloneness prior of counterevidence, and becomes active confirmation where the exclusion itself is registered.**
 - Distinguish flexible habits from identity-bearing protective mandates.
 - Explain managers, firefighters, effective gating, layered protection, and contemporary tactics serving an old identity.
 - ~~End with the stack of frozen solutions and the need for a regime from which each model can be seen rather than seen through.~~
@@ -126,13 +132,18 @@ Working title: **Self-Energy, Witnessing, and the Revision of Part Beliefs: An A
 - **Distinguish questions from interpretations mechanically. Inquiry selects where evidence will be sampled while leaving its value open; interpretation supplies the value itself. This creates a testable tradeoff between the immediate speed of accurate conclusions and the calibration and suggestion-resistance of inquiry under uncertainty or context change.**
 - State the corrected claim: relational evidence has privileged access and direct relevance, not unique revising power.
 - ~~Apply the same mechanism to protector trust, across local forecasts and the global precision profile.~~
-- **Give trust the weight IFS gives it: most therapy hours are spent with protectors, and the exposure reading—catastrophe fails to occur—updates only one node of the protector's model. Develop the four evidence routes (outcome, world-state, self-state, relationship policy), refusal as epistemic action, the visible-yet-unwilling case, and the tactics/mandate asymmetry recovered from §5, keeping the two-level local/hyper trust structure.**
+- ~~**Give trust the weight IFS gives it: most therapy hours are spent with protectors, and the exposure reading—catastrophe fails to occur—updates only one node of the protector's model. Develop the four evidence routes (outcome, world-state, self-state, relationship policy), refusal as epistemic action, the visible-yet-unwilling case, and the tactics/mandate asymmetry recovered from §5, keeping the two-level local/hyper trust structure.**~~
+- **Give trust the weight IFS gives it (most therapy hours; trust as the medium, echoing §2), then develop protector trust per the G-corollary bullets: three linked questions, hope entering as policy comparison, trust/permission distinction, visible-yet-unwilling, generalization by inferred structure, conditional rupture asymmetry. Exile reciprocal restraint is scoped to Limits.**
 - Separate fast regime change from slower structural revision.
 - Develop selective model reduction, role transformation, melting, unburdening, and the generalization gradient.
+- **Read the fuller unburdening sequence through the account: retrieval as context-indexed redescription enacted (the unfinished moment meets the present); the do-over as the completion the moment was denied; invitation of new qualities as what selective reduction predicts; protector check-in as the hope-merchant counterfactual become a verifiable observation.**
 
 ### §9. The Formalism Running
 
-Organize the simulation record by what survived, what failed, and what remains only a construction check:
+- **§9 is now a ~1,300-word claim-organized summary: methods discipline; a system paragraph plus Figure 1 (an explicit synoptic map, not a common implementation — melt marked proposed-not-implemented, supplied vs. endogenous forecast errors distinguished, therapy arms as input regimes); one paragraph each for C1 formation, C3 revision/transfer, C2 depth/field, the binding failure and repair, Experiment 43, and the consistency checks plus protection deadlock; then the floor and negatives paragraphs. Failures stay beside replacements in the body.**
+- **The full experiment-level record moved verbatim to Appendix B (Simulation Record). The inventory below describes that record:**
+
+~~Organize the simulation record by what survived, what failed, and what remains only a construction check:~~
 
 - **Formation and persistence:** active avoidance preserves the frozen write in a closed action–evidence loop; the developmental route received weaker support.
 - **Revision and transfer:** the shared-root architecture produced identity-before-threat revision and transfer. The proposed unique advantage of relational content was falsified. Learned co-regulation changed access without itself revising the root.
@@ -150,7 +161,8 @@ Organize the simulation record by what survived, what failed, and what remains o
 
 ### §10. Discussion
 
-- State the ontological departure from IFS: the burdened identity configuration is created by freezing, while innate dispositional seeds remain compatible with the machinery.
+- ~~State the ontological departure from IFS: the burdened identity configuration is created by freezing, while innate dispositional seeds remain compatible with the machinery.~~
+- **Open the orthodoxy subsection with the functional-reconstruction framing (departures named: formation, parts as control models, Self as regime, unburdening as reduction), then the part/organization distinction, neighboring traditions (object relations, schema therapy, structural dissociation), and three formation models—assembly (implemented), recruitment, hybrid—left uncommitted but distinguishable, with the Appendix A extension and the hybrid's conditional biographical-vs-affective continuity prediction. Follow with the phenomenology dissociation (nested submind vs. imaginal interface vs. freeze–melt), the legacy-burdens scope note, and the closing that leaves origin and individuation open: phenomenology, persistence, and introspection each fail to decide it.**
 - Preserve the asymmetry: the account is revisionary about burdened parts and reconstructive about Self.
 - Present four primary predictions: revision order, generalization gradient, relational access, and dominance–depth dissociation.
 - ~~Keep the secondary predictions about protector permission, premature unburdening, and habits versus protectors.~~
@@ -164,6 +176,10 @@ Organize the simulation record by what survived, what failed, and what remains o
 - **Audit every load-bearing claim from C1–C3 and G against the §9 record, sorted into supported, partially supported, and untested or failed.**
 - **For each claim that is untested, partial, or failed, name the bounded simulation extension that would test it.**
 - **Keep §9's register: existence proofs, scope conditions, and construction checks—never clinical evidence.**
+
+### Appendix B. Simulation Record
+
+- **The full experiment-level record, moved verbatim from the old §9: designs, matched controls, frozen criteria, quantitative results, and failures, in program order. Appendix A indexes the same material by claim; §9 summarizes it by claim spine.**
 
 ## Settled boundaries
 
@@ -183,7 +199,8 @@ Organize the simulation record by what survived, what failed, and what remains o
 
 - Add an abstract.
 - Complete and verify the reference list, especially source years, titles, and the precise claims attributed to Gendlin, March, Beautiful Loop Theory, object relations, latent-cause learning, Bayesian model reduction, autonomic accounts, and recent preprints.
-- Decide how much quantitative detail from §9 belongs in the body versus appendices; preserve every material failure and scope condition wherever it lands.
+- ~~Decide how much quantitative detail from §9 belongs in the body versus appendices; preserve every material failure and scope condition wherever it lands.~~ **Resolved 2026-07-23: §9 compressed by claim; full record in Appendix B; failures preserved in both.**
+- **Redraw Figure 1 as a vector figure for submission; the mermaid block is a draft-stage placeholder.**
 - Derive rather than stipulate identity revision in a unified generative model.
 - Test context-indexed redescription against global down-weighting and cue-by-cue relearning.
 - Couple dyadic precision scaffolding to protector policies and test whether outside-in descent emerges.
