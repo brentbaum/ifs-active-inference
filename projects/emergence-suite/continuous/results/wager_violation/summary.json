@@ -1,0 +1,251 @@
+{
+  "pilot": {
+    "criteria": {
+      "organization_matching_verified": true,
+      "criterion_1_inert_invariance": true,
+      "criterion_2_active_divergence": true
+    },
+    "world_count": 10,
+    "carrier_active": {
+      "minimum_divergence": 0.0958930336911981,
+      "required": 0.1,
+      "sd_divergence": 0.08769593449644338,
+      "mean_divergence": 0.24952543840920738,
+      "maximum_divergence": 0.40375424991344244
+    },
+    "carrier_inert": {
+      "mean_divergence": 0.0,
+      "maximum_divergence": 0.0,
+      "tolerance": 0.02
+    },
+    "organization_matching": {
+      "all_within_tolerance": true,
+      "maximum_abs_difference": 0.0,
+      "all_bitwise_equal": true
+    }
+  },
+  "register": {
+    "organization": "bundle + couplings + precisions + field profile",
+    "coupling_plasticity_classification": "carrier",
+    "carrier": "independently parameterized substrate",
+    "coupling_plasticity_in_organization_measure": false
+  },
+  "seeds": {
+    "pilot": [18401, 18402, 18403, 18404, 18405, 18406, 18407, 18408, 18409, 18410],
+    "confirmation": [18501, 18502, 18503, 18504, 18505, 18506, 18507, 18508, 18509, 18510, 18511, 18512, 18513, 18514, 18515, 18516, 18517, 18518, 18519, 18520],
+    "disjoint": true
+  },
+  "machinery_ablation": {
+    "formation_triad": {
+      "maximum_estimate_difference": 0.0,
+      "exact_invariance": true,
+      "plasticity_values": {
+        "extreme": [-10.0, 3.0, 50.0, 1000.0],
+        "zero": [0.0, 0.0, 0.0, 0.0]
+      }
+    },
+    "ifs_bundle_inquiry": {
+      "carrier_input_port_exists": false,
+      "exact_invariance": true,
+      "maximum_update_difference": 0.0,
+      "external_carrier_plasticities": [0.0, 1000.0]
+    },
+    "wager_transition": {
+      "ablation_restores_inert": true,
+      "inert_divergence": 0.0,
+      "ablated_divergence": 0.0,
+      "active_divergence": 0.30897053042238654
+    }
+  },
+  "power_curve": [{
+    "alpha_two_sided": 0.05,
+    "confirmation_pairs": 20,
+    "target_power": 0.8,
+    "minimum_detectable_carrier_effect": 0.0549374250349377,
+    "pilot_between_world_effect_sd": 0.08769593449644338,
+    "organization_measurement_noise_sd": 0.0
+  }, {
+    "alpha_two_sided": 0.05,
+    "confirmation_pairs": 20,
+    "target_power": 0.8,
+    "minimum_detectable_carrier_effect": 0.055647187411520534,
+    "pilot_between_world_effect_sd": 0.08769593449644338,
+    "organization_measurement_noise_sd": 0.01
+  }, {
+    "alpha_two_sided": 0.05,
+    "confirmation_pairs": 20,
+    "target_power": 0.8,
+    "minimum_detectable_carrier_effect": 0.05772413584319268,
+    "pilot_between_world_effect_sd": 0.08769593449644338,
+    "organization_measurement_noise_sd": 0.02
+  }, {
+    "alpha_two_sided": 0.05,
+    "confirmation_pairs": 20,
+    "target_power": 0.8,
+    "minimum_detectable_carrier_effect": 0.07057152827491177,
+    "pilot_between_world_effect_sd": 0.08769593449644338,
+    "organization_measurement_noise_sd": 0.05
+  }, {
+    "alpha_two_sided": 0.05,
+    "confirmation_pairs": 20,
+    "target_power": 0.8,
+    "minimum_detectable_carrier_effect": 0.10424490588905766,
+    "pilot_between_world_effect_sd": 0.08769593449644338,
+    "organization_measurement_noise_sd": 0.1
+  }, {
+    "alpha_two_sided": 0.05,
+    "confirmation_pairs": 20,
+    "target_power": 0.8,
+    "minimum_detectable_carrier_effect": 0.14379881804714129,
+    "pilot_between_world_effect_sd": 0.08769593449644338,
+    "organization_measurement_noise_sd": 0.15
+  }, {
+    "alpha_two_sided": 0.05,
+    "confirmation_pairs": 20,
+    "target_power": 0.8,
+    "minimum_detectable_carrier_effect": 0.18550913618166023,
+    "pilot_between_world_effect_sd": 0.08769593449644338,
+    "organization_measurement_noise_sd": 0.2
+  }, {
+    "alpha_two_sided": 0.05,
+    "confirmation_pairs": 20,
+    "target_power": 0.8,
+    "minimum_detectable_carrier_effect": 0.2714001442125836,
+    "pilot_between_world_effect_sd": 0.08769593449644338,
+    "organization_measurement_noise_sd": 0.3
+  }],
+  "config": {
+    "pilot_seeds": [18401, 18402, 18403, 18404, 18405, 18406, 18407, 18408, 18409, 18410],
+    "high_coupling_plasticity": 0.3,
+    "confirmation_seeds": [18501, 18502, 18503, 18504, 18505, 18506, 18507, 18508, 18509, 18510, 18511, 18512, 18513, 18514, 18515, 18516, 18517, 18518, 18519, 18520],
+    "maximum_learning_rate": 0.85,
+    "measurement_noise_levels": [0.0, 0.01, 0.02, 0.05, 0.1, 0.15, 0.2, 0.3],
+    "sessions": 12,
+    "corrective_target_scale": -0.35,
+    "low_coupling_plasticity": 0.0,
+    "target_power": 0.8,
+    "inert_divergence_tolerance": 0.02,
+    "match_tolerance": 1.0e-12,
+    "active_divergence_required": 0.1,
+    "alpha_two_sided": 0.05,
+    "corrective_evidence_sd": 0.06,
+    "base_coupling_learning_rate": 0.08
+  },
+  "experiment": 46,
+  "stage": "confirmation",
+  "machinery_audit": [{
+    "classification": "organization + neither",
+    "transition_scope": "policy learning",
+    "carrier_read": false,
+    "equation": "update_policy!",
+    "lines": "68-70",
+    "file": "src/IFSBundleInquiry.jl",
+    "inputs": "policy-count state; context; selected channel"
+  }, {
+    "classification": "organization + neither",
+    "transition_scope": "bundle learning",
+    "carrier_read": false,
+    "equation": "update!(JointBundleLearner)",
+    "lines": "168-170",
+    "file": "src/IFSBundleInquiry.jl",
+    "inputs": "bundle-count state; identity root; four-element bundle"
+  }, {
+    "classification": "organization + neither",
+    "transition_scope": "precision-field learning",
+    "carrier_read": false,
+    "equation": "update_forecaster!",
+    "lines": "232-246",
+    "file": "src/IFSBundleInquiry.jl",
+    "inputs": "precision state; context; posterior field; observed channels; fixed config"
+  }, {
+    "classification": "organization + neither",
+    "transition_scope": "state inference",
+    "carrier_read": false,
+    "equation": "bundle_branch_posterior",
+    "lines": "332-363",
+    "file": "src/IFSBundleInquiry.jl",
+    "inputs": "observation; candidate cause; field mean/variance; channel; fixed config"
+  }, {
+    "classification": "organization + neither",
+    "transition_scope": "state inference",
+    "carrier_read": false,
+    "equation": "bundle_state_update",
+    "lines": "369-435",
+    "file": "src/IFSBundleInquiry.jl",
+    "inputs": "observations; contact; channels; field; bundle table; optional conclusion; fixed config"
+  }, {
+    "classification": "organization + neither",
+    "transition_scope": "revision/inference loop",
+    "carrier_read": false,
+    "equation": "infer_bundle_episode",
+    "lines": "438-493",
+    "file": "src/IFSBundleInquiry.jl",
+    "inputs": "observations; contact; channels; field prior; bundle table; fixed config"
+  }, {
+    "classification": "organization + neither (prior may be carrier-authored upstream)",
+    "transition_scope": "formation, not intervention response",
+    "carrier_read": false,
+    "equation": "posterior_mean",
+    "lines": "212-217",
+    "file": "src/FormationSubstrateTriad.jl",
+    "inputs": "formation observations; prior mean; sample count; fixed config"
+  }, {
+    "classification": "carrier + neither",
+    "transition_scope": "formation, not intervention response",
+    "carrier_read": true,
+    "equation": "prior_for_model",
+    "lines": "220-225",
+    "file": "src/FormationSubstrateTriad.jl",
+    "inputs": "model label; selected carrier id; carrier affect/policy priors"
+  }, {
+    "classification": "organization + neither",
+    "transition_scope": "interference transition",
+    "carrier_read": false,
+    "equation": "shared_carrier_shift",
+    "lines": "366-372",
+    "file": "src/FormationSubstrateTriad.jl",
+    "inputs": "model label; two organization targets; fixed model-level update rate"
+  }, {
+    "classification": "organization + carrier identity + neither",
+    "transition_scope": "interference gate; no carrier parameter read",
+    "carrier_read": true,
+    "equation": "interference_measure",
+    "lines": "375-389",
+    "file": "src/FormationSubstrateTriad.jl",
+    "inputs": "formation estimates; selected-carrier equality; organization targets; fixed config"
+  }, {
+    "classification": "organization + carrier + neither",
+    "transition_scope": "post-formation residue, not corrective revision",
+    "carrier_read": true,
+    "equation": "selective_reduction",
+    "lines": "392-425",
+    "file": "src/FormationSubstrateTriad.jl",
+    "inputs": "model label; formation fit; carrier affect/policy priors; fixed retention rates"
+  }],
+  "confirmation": {
+    "criteria": {
+      "organization_matching_verified": true,
+      "criterion_1_inert_invariance": true,
+      "criterion_2_active_divergence": true
+    },
+    "world_count": 20,
+    "carrier_active": {
+      "minimum_divergence": 0.018130822779510065,
+      "required": 0.1,
+      "sd_divergence": 0.12981304449093897,
+      "mean_divergence": 0.1985414869948103,
+      "maximum_divergence": 0.5949028355837821
+    },
+    "carrier_inert": {
+      "mean_divergence": 0.0,
+      "maximum_divergence": 0.0,
+      "tolerance": 0.02
+    },
+    "organization_matching": {
+      "all_within_tolerance": true,
+      "maximum_abs_difference": 0.0,
+      "all_bitwise_equal": true
+    }
+  },
+  "title": "wager-violation construction"
+}
