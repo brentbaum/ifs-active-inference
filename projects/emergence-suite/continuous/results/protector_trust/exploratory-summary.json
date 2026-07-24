@@ -1,0 +1,37 @@
+{
+  "frozen_summary_sha256": "4e9e0f923d4bc411e38a845d1b83519bad9bf07b665ae4b4cb13baf41685c7c2",
+  "risk_model": {
+    "worlds": 40,
+    "minimum_competence_with_positive_shift": 0.35999999999999993,
+    "competence_evidence_episodes": 4,
+    "zero_obsolete_shift_worlds": 0,
+    "risk_equation": "r_obsolete = c * r_role + (1 - c) * 1",
+    "negative_obsolete_shift_worlds": 14,
+    "all_sign_predictions_match": true,
+    "competence_posterior_maximum": 0.9976653319463642,
+    "obsolescence_penalty_parameter": null,
+    "seeds_disjoint_from_opened_blocks": true,
+    "maximum_competence_with_negative_shift": 0.02000000000000001,
+    "seeds": [14801, 14802, 14803, 14804, 14805, 14806, 14807, 14808, 14809, 14810, 14811, 14812, 14813, 14814, 14815, 14816, 14817, 14818, 14819, 14820, 14821, 14822, 14823, 14824, 14825, 14826, 14827, 14828, 14829, 14830, 14831, 14832, 14833, 14834, 14835, 14836, 14837, 14838, 14839, 14840],
+    "all_policy_evaluations_posterior_flat": true,
+    "mean_role_shift": 0.7637114602330091,
+    "competence_crossover_estimate": 0.26177623374783143,
+    "crossover_present": true,
+    "any_obsolescence_penalty_read": false,
+    "positive_obsolete_shift_worlds": 26,
+    "mean_obsolete_shift": 0.30305314828725277,
+    "competence_posterior_minimum": 0.0007398843930635846
+  },
+  "status": "post_freeze_non_confirmatory",
+  "frozen_verdict_unchanged": "4/5; criterion (d) failed",
+  "reconstruction_rule": "remove the final top-level exploratory member and its leading comma",
+  "analytic_policy_addition": {
+    "authored_constants_controlling_ratio": ["obsolescence_penalty", "protector_role_value", "decision_temperature"],
+    "finite_temperature_lower_bound": 0.0,
+    "minimum_obsolete_shift": 0.11239000154623147,
+    "formula": "delta = w*B / ((A+B)*(A+B+w))",
+    "maximum_absolute_error": 1.942890293094024e-16,
+    "strictly_positive_worlds": 20,
+    "added_weight_ratio": 0.036883167401240015
+  }
+}

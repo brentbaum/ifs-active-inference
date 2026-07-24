@@ -1,0 +1,167 @@
+{
+  "contract": "experiments-44-49-sufficiency-round-spec.md §6",
+  "name": "protector_trust",
+  "pilot": {
+    "transfer": {
+      "worlds_tracking_inferred_variable": 10,
+      "evidence_label_incremental_variance": 0.0,
+      "mean_local_transfer": 0.0,
+      "mean_shared_transfer": 0.03603404324969939
+    },
+    "criteria": {
+      "hope_merchant": false,
+      "transfer_by_inferred_variable": true,
+      "permission_not_trust": true,
+      "refusal_discrimination": true,
+      "conditional_rupture": true
+    },
+    "all_criteria_pass": false,
+    "rupture": {
+      "repair_exceeds_k_worlds": 10,
+      "k": 3,
+      "high_diagnosticity_asymmetry_worlds": 10,
+      "low_diagnosticity_asymmetry_worlds": 0
+    },
+    "permission_stakes": {
+      "posterior_only_residual_variance_explained_by_stakes": 0.9749060695258706,
+      "mean_permission_gap": 0.15982724030306206,
+      "matched_posterior_worlds": 10
+    },
+    "refusal": {
+      "pre_refusal_equivalence_worlds": 10,
+      "mean_remaining_trust_growth": 0.4878048780487806,
+      "no_refusal_accuracy": 0.5,
+      "mean_pressuring_trust_growth": -0.4878048780487806,
+      "after_two_refusals_accuracy": 0.9878048780487807
+    },
+    "hope": {
+      "maximum_posterior_change": 0.0,
+      "mean_role_shift": 0.19397494042666322,
+      "mean_obsolescence_shift": 0.1508082377338169
+    },
+    "worlds": 10
+  },
+  "config": {
+    "competence_success_likelihood": 0.84,
+    "world_jitter_sd": 0.025,
+    "prior_competence": 0.36,
+    "outcome_risk_weight": 0.5,
+    "protector_role_value": 0.2,
+    "transfer_epsilon": 1.0e-8,
+    "hope_flat_tolerance": 1.0e-12,
+    "chance_tolerance": 0.05,
+    "pilot_seeds": [14701, 14702, 14703, 14704, 14705, 14706, 14707, 14708, 14709, 14710],
+    "repair_smooth_successes_k": 3,
+    "responsibility_risk_weight": 0.3,
+    "prior_relational": 0.5,
+    "stakes_variance_threshold": 0.15,
+    "refusal_response_reliability": 0.9,
+    "low_stakes": 0.55,
+    "confirmation_seeds": [14751, 14752, 14753, 14754, 14755, 14756, 14757, 14758, 14759, 14760, 14761, 14762, 14763, 14764, 14765, 14766, 14767, 14768, 14769, 14770],
+    "outcome_evidence_episodes": 3,
+    "smooth_success_log_bayes": 0.34,
+    "prior_tolerated": 0.38,
+    "repair_log_bayes": 1.18,
+    "refusal_accuracy_threshold": 0.8,
+    "high_diagnosticity": 1.2,
+    "decision_temperature": 0.2,
+    "obsolescence_penalty": 0.46,
+    "situation_count": 3,
+    "high_stakes": 2.2,
+    "hope_shift_margin": 0.1,
+    "hope_value": 0.42,
+    "refusal_episodes": 2,
+    "low_diagnosticity": 0.2,
+    "refusal_cost": 0.78,
+    "transfer_world_threshold": 16,
+    "outcome_success_likelihood": 0.82,
+    "partner_risk_weight": 0.2,
+    "future_stakes_multiplier": 0.35
+  },
+  "experiment": 47,
+  "confirmation": {
+    "transfer": {
+      "worlds_tracking_inferred_variable": 20,
+      "evidence_label_incremental_variance": 0.0,
+      "mean_local_transfer": 0.0,
+      "mean_shared_transfer": 0.036915040401921104
+    },
+    "criteria": {
+      "hope_merchant": false,
+      "transfer_by_inferred_variable": true,
+      "permission_not_trust": true,
+      "refusal_discrimination": true,
+      "conditional_rupture": true
+    },
+    "all_criteria_pass": false,
+    "rupture": {
+      "repair_exceeds_k_worlds": 20,
+      "k": 3,
+      "high_diagnosticity_asymmetry_worlds": 20,
+      "low_diagnosticity_asymmetry_worlds": 0
+    },
+    "permission_stakes": {
+      "posterior_only_residual_variance_explained_by_stakes": 0.9672875064579552,
+      "mean_permission_gap": 0.16927412895385113,
+      "matched_posterior_worlds": 20
+    },
+    "refusal": {
+      "pre_refusal_equivalence_worlds": 20,
+      "mean_remaining_trust_growth": 0.48780487804878075,
+      "no_refusal_accuracy": 0.5,
+      "mean_pressuring_trust_growth": -0.48780487804878075,
+      "after_two_refusals_accuracy": 0.9878048780487807
+    },
+    "hope": {
+      "maximum_posterior_change": 0.0,
+      "mean_role_shift": 0.20390259747635367,
+      "mean_obsolescence_shift": 0.15952726901942085
+    },
+    "worlds": 20
+  },
+  "structural_audit": {
+    "permission_does_not_update": true,
+    "seed_blocks_disjoint": true,
+    "stakes_absent_from_evidence": true,
+    "base_bundle_normalized": true,
+    "channels_match_experiment_43": true
+  }
+,
+  "exploratory": {
+    "frozen_summary_sha256": "4e9e0f923d4bc411e38a845d1b83519bad9bf07b665ae4b4cb13baf41685c7c2",
+    "risk_model": {
+      "worlds": 40,
+      "minimum_competence_with_positive_shift": 0.35999999999999993,
+      "competence_evidence_episodes": 4,
+      "zero_obsolete_shift_worlds": 0,
+      "risk_equation": "r_obsolete = c * r_role + (1 - c) * 1",
+      "negative_obsolete_shift_worlds": 14,
+      "all_sign_predictions_match": true,
+      "competence_posterior_maximum": 0.9976653319463642,
+      "obsolescence_penalty_parameter": null,
+      "seeds_disjoint_from_opened_blocks": true,
+      "maximum_competence_with_negative_shift": 0.02000000000000001,
+      "seeds": [14801, 14802, 14803, 14804, 14805, 14806, 14807, 14808, 14809, 14810, 14811, 14812, 14813, 14814, 14815, 14816, 14817, 14818, 14819, 14820, 14821, 14822, 14823, 14824, 14825, 14826, 14827, 14828, 14829, 14830, 14831, 14832, 14833, 14834, 14835, 14836, 14837, 14838, 14839, 14840],
+      "all_policy_evaluations_posterior_flat": true,
+      "mean_role_shift": 0.7637114602330091,
+      "competence_crossover_estimate": 0.26177623374783143,
+      "crossover_present": true,
+      "any_obsolescence_penalty_read": false,
+      "positive_obsolete_shift_worlds": 26,
+      "mean_obsolete_shift": 0.30305314828725277,
+      "competence_posterior_minimum": 0.0007398843930635846
+    },
+    "status": "post_freeze_non_confirmatory",
+    "frozen_verdict_unchanged": "4/5; criterion (d) failed",
+    "reconstruction_rule": "remove the final top-level exploratory member and its leading comma",
+    "analytic_policy_addition": {
+      "authored_constants_controlling_ratio": ["obsolescence_penalty", "protector_role_value", "decision_temperature"],
+      "finite_temperature_lower_bound": 0.0,
+      "minimum_obsolete_shift": 0.11239000154623147,
+      "formula": "delta = w*B / ((A+B)*(A+B+w))",
+      "maximum_absolute_error": 1.942890293094024e-16,
+      "strictly_positive_worlds": 20,
+      "added_weight_ratio": 0.036883167401240015
+    }
+  }
+}
