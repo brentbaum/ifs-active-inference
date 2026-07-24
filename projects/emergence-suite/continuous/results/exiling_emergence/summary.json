@@ -1,0 +1,95 @@
+{
+  "contract": "experiments-44-49-sufficiency-round-spec.md §7",
+  "name": "exiling_emergence",
+  "pilot": {
+    "criteria": {
+      "starvation": true,
+      "policy_selection": true,
+      "toggle_separation": true,
+      "confirmation": true
+    },
+    "selection": {
+      "exclusion_favorable_wins": 10,
+      "exclusion_in_competitor_favorable_worlds": 0,
+      "favorable_policy_wins": {
+        "exclusion": 10,
+        "hypervigilance": 10,
+        "internal_attack": 10,
+        "oscillation": 10
+      }
+    },
+    "all_criteria_pass": true,
+    "consequences": {
+      "toggle_only_matched_worlds": 10,
+      "maximum_ablation_episode_delta": 0.0,
+      "confirmation_strengthening_worlds": 10,
+      "mean_contact_attempts": 16.7,
+      "ablation_static_worlds": 10,
+      "starvation_static_worlds": 10,
+      "maximum_off_episode_delta": 0.0,
+      "minimum_on_delta": 0.37999998764095266
+    },
+    "worlds": 10
+  },
+  "config": {
+    "pilot_seeds": [14801, 14802, 14803, 14804, 14805, 14806, 14807, 14808, 14809, 14810],
+    "competitor_exclusion_ceiling": 4,
+    "probability_ceiling": 0.98,
+    "unfavorable_reliability": 0.68,
+    "rejection_evidence_reliability": 0.78,
+    "confirmation_seeds": [14851, 14852, 14853, 14854, 14855, 14856, 14857, 14858, 14859, 14860, 14861, 14862, 14863, 14864, 14865, 14866, 14867, 14868, 14869, 14870],
+    "favorable_direct_cost": 0.18,
+    "episodes": 64,
+    "cost_jitter_sd": 0.025,
+    "static_epsilon": 1.0e-12,
+    "favorable_reliability": 0.91,
+    "probability_floor": 0.02,
+    "unfavorable_direct_cost": 0.64,
+    "reliability_jitter_sd": 0.02,
+    "contact_attempt_rate": 0.28,
+    "exclusion_favorable_threshold": 16,
+    "prior_aloneness_beta": 1.9,
+    "prior_aloneness_alpha": 3.1,
+    "failure_cost": 1.0
+  },
+  "experiment": 48,
+  "confirmation": {
+    "criteria": {
+      "starvation": true,
+      "policy_selection": true,
+      "toggle_separation": true,
+      "confirmation": true
+    },
+    "selection": {
+      "exclusion_favorable_wins": 20,
+      "exclusion_in_competitor_favorable_worlds": 0,
+      "favorable_policy_wins": {
+        "exclusion": 20,
+        "hypervigilance": 20,
+        "internal_attack": 20,
+        "oscillation": 20
+      }
+    },
+    "all_criteria_pass": true,
+    "consequences": {
+      "toggle_only_matched_worlds": 20,
+      "maximum_ablation_episode_delta": 0.0,
+      "confirmation_strengthening_worlds": 20,
+      "mean_contact_attempts": 17.75,
+      "ablation_static_worlds": 20,
+      "starvation_static_worlds": 20,
+      "maximum_off_episode_delta": 0.0,
+      "minimum_on_delta": 0.3799980471367158
+    },
+    "worlds": 20
+  },
+  "structural_audit": {
+    "selector_returns_cheapest": true,
+    "registration_absent_from_policy": true,
+    "seed_blocks_disjoint": true,
+    "policy_selector_has_no_regime_argument": true,
+    "base_bundle_normalized": true,
+    "closed_registration_is_no_update": true,
+    "channels_match_experiment_43": true
+  }
+}
