@@ -1,0 +1,358 @@
+{
+  "capacity_audit": {
+    "prior_entropies_equal": true,
+    "evidence_budgets_equal": true,
+    "per_model": {
+      "assembly": {
+        "uniform_index_prior_entropy_nats": 1.3862943611198906,
+        "labeled_joint_prior_entropy_nats": 1.5168710494590187,
+        "discrete_latent_categories": 4,
+        "continuous_parameter_count": 4,
+        "parameter_prior_sd": 0.25,
+        "conditional_gaussian_prior_entropy_nats": 0.13057668833912822,
+        "observation_sd": 0.55,
+        "maximum_evidence_samples": 72
+      },
+      "recruitment": {
+        "uniform_index_prior_entropy_nats": 1.3862943611198906,
+        "labeled_joint_prior_entropy_nats": 1.5168710494590187,
+        "discrete_latent_categories": 4,
+        "continuous_parameter_count": 4,
+        "parameter_prior_sd": 0.25,
+        "conditional_gaussian_prior_entropy_nats": 0.13057668833912822,
+        "observation_sd": 0.55,
+        "maximum_evidence_samples": 72
+      },
+      "hybrid": {
+        "uniform_index_prior_entropy_nats": 1.3862943611198906,
+        "labeled_joint_prior_entropy_nats": 1.5168710494590187,
+        "discrete_latent_categories": 4,
+        "continuous_parameter_count": 4,
+        "parameter_prior_sd": 0.25,
+        "conditional_gaussian_prior_entropy_nats": 0.13057668833912822,
+        "observation_sd": 0.55,
+        "maximum_evidence_samples": 72
+      }
+    },
+    "parameter_counts_equal": true,
+    "audit_valid": true
+  },
+  "pilot": {
+    "interference": {
+      "mean_degradation": {
+        "assembly": 0.0,
+        "recruitment": 0.07336318824114121,
+        "hybrid": 0.07336318824114121
+      },
+      "worlds_at_or_above_margin": {
+        "assembly": 0,
+        "recruitment": 9,
+        "hybrid": 9
+      }
+    },
+    "residue": {
+      "assembly": {
+        "carrier_only": 0,
+        "neither": 1,
+        "coupling_only": 9,
+        "both": 0
+      },
+      "recruitment": {
+        "carrier_only": 10,
+        "neither": 0,
+        "coupling_only": 0,
+        "both": 0
+      },
+      "hybrid": {
+        "carrier_only": 2,
+        "neither": 0,
+        "coupling_only": 0,
+        "both": 8
+      }
+    },
+    "criteria": {
+      "criterion_2_interference": false,
+      "criterion_3_residue_dissociation": false,
+      "criterion_1_efficiency_and_shuffle": true,
+      "all": false
+    },
+    "world_count": 10,
+    "cluster_structure": {
+      "assembly": {
+        "arbitrary": {
+          "centers": [[-0.2808869645532476, 0.366636148589327], [-0.13262184175460276, -0.5881840842424165], [-0.00033633378824606447, 0.19344075675003192], [0.6366370275705922, -0.752810721553479]],
+          "cluster_sizes": [1, 2, 6, 1],
+          "silhouette": 0.35618413284023626
+        },
+        "shuffled": {
+          "centers": [[-1.0434487487960438, -0.5360859446185279], [-0.2795924150098075, 0.4023872491194272], [0.21664092448132188, -0.3173887221145842], [0.7928794131418806, 0.8310714488258406]],
+          "cluster_sizes": [3, 3, 2, 2],
+          "silhouette": 0.7599917886627525
+        },
+        "prepared": {
+          "centers": [[-0.8064170477975163, -0.6466818303541232], [-0.18060656973805855, 0.5669924697243628], [0.3678134937544614, -0.23210975327566685], [0.8160015425107754, 0.9281886158386112]],
+          "cluster_sizes": [3, 3, 2, 2],
+          "silhouette": 0.7665164257728728
+        }
+      },
+      "recruitment": {
+        "arbitrary": {
+          "centers": [[-0.22963709595134138, 0.6224175635945755], [-0.00885219371258181, -0.32796221020704674], [-0.003985213848892143, 0.3671057320498226], [0.36310780525886044, -1.056982186885863]],
+          "cluster_sizes": [4, 1, 3, 2],
+          "silhouette": 0.42983884308387477
+        },
+        "shuffled": {
+          "centers": [[-0.6964807711734599, -0.8100274142910109], [-0.7322158584107664, 0.8673706143361609], [0.33359417952397763, 0.35322904121300863], [0.8788830210775784, 1.1156609696629225]],
+          "cluster_sizes": [4, 2, 2, 2],
+          "silhouette": 0.5459074063611686
+        },
+        "prepared": {
+          "centers": [[-1.1537441479213772, -0.9370165542239182], [-0.40238760935110435, 0.8536639700945038], [0.7028852731173049, -0.523949727704303], [1.094788541210101, 1.3196002778402494]],
+          "cluster_sizes": [3, 3, 2, 2],
+          "silhouette": 0.8436345686149844
+        }
+      },
+      "hybrid": {
+        "arbitrary": {
+          "centers": [[-0.22963709595134138, 0.6224175635945755], [-0.00885219371258181, -0.32796221020704674], [-0.003985213848892143, 0.3671057320498226], [0.36310780525886044, -1.056982186885863]],
+          "cluster_sizes": [4, 1, 3, 2],
+          "silhouette": 0.42983884308387477
+        },
+        "shuffled": {
+          "centers": [[-0.6964807711734599, -0.8100274142910109], [-0.7322158584107664, 0.8673706143361609], [0.33359417952397763, 0.35322904121300863], [0.8788830210775784, 1.1156609696629225]],
+          "cluster_sizes": [4, 2, 2, 2],
+          "silhouette": 0.5459074063611686
+        },
+        "prepared": {
+          "centers": [[-1.1537441479213772, -0.9370165542239182], [-0.40238760935110435, 0.8536639700945038], [0.7028852731173049, -0.523949727704303], [1.094788541210101, 1.3196002778402494]],
+          "cluster_sizes": [3, 3, 2, 2],
+          "silhouette": 0.8436345686149844
+        }
+      }
+    },
+    "formation_efficiency": {
+      "arbitrary_recruitment_advantage": -0.4716981132075472,
+      "shuffled_recruitment_advantage": 0.043956043956043994,
+      "mean_samples": {
+        "assembly": {
+          "arbitrary": 5.3,
+          "shuffled": 9.1,
+          "prepared": 8.6
+        },
+        "recruitment": {
+          "arbitrary": 7.8,
+          "shuffled": 8.7,
+          "prepared": 4.3
+        },
+        "hybrid": {
+          "arbitrary": 7.8,
+          "shuffled": 8.7,
+          "prepared": 4.3
+        }
+      },
+      "prepared_recruitment_advantage": 0.5
+    }
+  },
+  "config": {
+    "pilot_seeds": [18101, 18102, 18103, 18104, 18105, 18106, 18107, 18108, 18109, 18110],
+    "recruitment_carrier_update": 0.52,
+    "observation_sd": 0.55,
+    "maximum_samples": 72,
+    "carrier_count": 4,
+    "confirmation_seeds": [18201, 18202, 18203, 18204, 18205, 18206, 18207, 18208, 18209, 18210, 18211, 18212, 18213, 18214, 18215, 18216, 18217, 18218, 18219, 18220],
+    "coupling_scale": 0.38,
+    "second_formation_offset": 0.48,
+    "prior_sd": 0.25,
+    "selection_samples": 3,
+    "hybrid_carrier_update": 0.52,
+    "parameter_count": 4,
+    "formation_rmse_threshold": 0.28,
+    "hybrid_coupling_retention": 0.62,
+    "arbitrary_scale": 0.65,
+    "prepared_jitter_sd": 0.1,
+    "stable_samples": 2,
+    "assembly_coupling_retention": 0.68
+  },
+  "seeds": {
+    "pilot": [18101, 18102, 18103, 18104, 18105, 18106, 18107, 18108, 18109, 18110],
+    "confirmation": [18201, 18202, 18203, 18204, 18205, 18206, 18207, 18208, 18209, 18210, 18211, 18212, 18213, 18214, 18215, 18216, 18217, 18218, 18219, 18220],
+    "disjoint": true
+  },
+  "experiment": 45,
+  "stage": "confirmation",
+  "title": "formation-substrate triad",
+  "confirmation": {
+    "interference": {
+      "mean_degradation": {
+        "assembly": 0.0,
+        "recruitment": 0.052583883664934175,
+        "hybrid": 0.052583883664934175
+      },
+      "worlds_at_or_above_margin": {
+        "assembly": 0,
+        "recruitment": 13,
+        "hybrid": 13
+      }
+    },
+    "residue": {
+      "assembly": {
+        "carrier_only": 0,
+        "neither": 3,
+        "coupling_only": 17,
+        "both": 0
+      },
+      "recruitment": {
+        "carrier_only": 20,
+        "neither": 0,
+        "coupling_only": 0,
+        "both": 0
+      },
+      "hybrid": {
+        "carrier_only": 4,
+        "neither": 0,
+        "coupling_only": 0,
+        "both": 16
+      }
+    },
+    "criteria": {
+      "criterion_2_interference": false,
+      "criterion_3_residue_dissociation": true,
+      "criterion_1_efficiency_and_shuffle": false,
+      "all": false
+    },
+    "world_count": 20,
+    "cluster_structure": {
+      "assembly": {
+        "arbitrary": {
+          "centers": [[0.1258011186676674, -0.6312600153469193], [-0.10595675401712364, -0.06535455101522872], [0.09271477968269241, 0.1641059716591118], [0.8496783905218163, 0.8309368360285249]],
+          "cluster_sizes": [5, 6, 8, 1],
+          "silhouette": 0.3229643268677068
+        },
+        "shuffled": {
+          "centers": [[-0.8989335228664601, -0.7128157543284265], [-0.14689018069983692, 0.618250258364928], [0.20936689566212227, -0.2225264833932355], [0.8837332625050657, 0.8996401519746335]],
+          "cluster_sizes": [5, 5, 5, 5],
+          "silhouette": 0.7646832334457566
+        },
+        "prepared": {
+          "centers": [[-0.8766896393472929, -0.667697672665533], [-0.15296946818358262, 0.5008463879691304], [0.41051054650239366, -0.25209886819787075], [0.7885122511274851, 0.8965830296566061]],
+          "cluster_sizes": [5, 5, 5, 5],
+          "silhouette": 0.7349442434966544
+        }
+      },
+      "recruitment": {
+        "arbitrary": {
+          "centers": [[-0.9720642337884312, -0.6744146141364965], [-0.23308038457885819, 0.47096679112320416], [0.37570146049880393, -0.6069334839564069], [0.8360184157336796, 0.7474790342574008]],
+          "cluster_sizes": [1, 7, 9, 3],
+          "silhouette": 0.5796491820915678
+        },
+        "shuffled": {
+          "centers": [[-0.8766860739279417, -0.9148552662399965], [-0.11300674047272366, 0.9700933691609979], [0.9171949644481948, 1.0454922923709202], [0.622289298628856, -0.6093777726695172]],
+          "cluster_sizes": [5, 5, 5, 5],
+          "silhouette": 0.7071865853441031
+        },
+        "prepared": {
+          "centers": [[-1.16487931004538, -0.7922764727035532], [-0.30724500802116644, 0.8332842458634738], [0.6182893444776653, -0.47103140126927806], [1.1209597424538025, 1.1669272816127543]],
+          "cluster_sizes": [5, 5, 5, 5],
+          "silhouette": 0.8366849054752669
+        }
+      },
+      "hybrid": {
+        "arbitrary": {
+          "centers": [[-0.9720642337884312, -0.6744146141364965], [-0.23308038457885819, 0.47096679112320416], [0.37570146049880393, -0.6069334839564069], [0.8360184157336796, 0.7474790342574008]],
+          "cluster_sizes": [1, 7, 9, 3],
+          "silhouette": 0.5796491820915678
+        },
+        "shuffled": {
+          "centers": [[-0.8766860739279417, -0.9148552662399965], [-0.11300674047272366, 0.9700933691609979], [0.9171949644481948, 1.0454922923709202], [0.622289298628856, -0.6093777726695172]],
+          "cluster_sizes": [5, 5, 5, 5],
+          "silhouette": 0.7071865853441031
+        },
+        "prepared": {
+          "centers": [[-1.16487931004538, -0.7922764727035532], [-0.30724500802116644, 0.8332842458634738], [0.6182893444776653, -0.47103140126927806], [1.1209597424538025, 1.1669272816127543]],
+          "cluster_sizes": [5, 5, 5, 5],
+          "silhouette": 0.8366849054752669
+        }
+      }
+    },
+    "formation_efficiency": {
+      "arbitrary_recruitment_advantage": -0.5757575757575757,
+      "shuffled_recruitment_advantage": 0.21463414634146336,
+      "mean_samples": {
+        "assembly": {
+          "arbitrary": 4.95,
+          "shuffled": 10.25,
+          "prepared": 10.05
+        },
+        "recruitment": {
+          "arbitrary": 7.8,
+          "shuffled": 8.05,
+          "prepared": 5.4
+        },
+        "hybrid": {
+          "arbitrary": 7.8,
+          "shuffled": 8.05,
+          "prepared": 5.4
+        }
+      },
+      "prepared_recruitment_advantage": 0.4626865671641791
+    }
+  },
+  "register": {
+    "organization": "four-element bundle, couplings, precisions, and field profile",
+    "carrier": "independently parameterized substrate"
+  },
+  "exploratory": {
+    "label": "post-freeze non-confirmatory",
+    "seed_blocks_disjoint": true,
+    "shuffled_preparation_diagnosis": {
+      "recruitment_advantage_vs_assembly": {
+        "shuffled_best_fitting": 0.2213114754098361,
+        "shuffled_fixed_random": -0.35245901639344257,
+        "degraded_marginals_best_fitting": -0.5928961748633879
+      },
+      "all_formed": {
+        "shuffled_best_fitting": true,
+        "shuffled_fixed_random": true,
+        "degraded_marginals_best_fitting": true
+      },
+      "world_count": 40,
+      "carrier_target_distance": {
+        "shuffled_best_fitting": 0.8188599657695358,
+        "shuffled_fixed_random": 1.5748193742072396,
+        "degraded_marginals_best_fitting": 1.8412764706403668
+      },
+      "mean_samples": {
+        "shuffled_best_fitting": 7.125,
+        "assembly": 9.15,
+        "shuffled_fixed_random": 12.375,
+        "degraded_marginals_best_fitting": 14.575
+      },
+      "attribution": {
+      "selection_share_of_observed_savings": 2.592592592592592,
+      "observed_best_fit_samples_saved": 2.0250000000000004,
+      "selection_removal_reverses_advantage": true,
+      "selection_and_coverage_explain_control_failure": true,
+        "samples_attributable_to_selection_vs_fixed_random": 5.25,
+        "samples_attributable_to_marginal_coverage_vs_degraded": 7.449999999999999
+      }
+    },
+    "confirmatory_interference_distribution": {
+      "miss_values": [-0.0853755045038009, -0.013788114966000214, -0.009142609873656365, 0.012080368487386639, 0.019650655009022577, 0.019739017391866398, 0.02873535965213951],
+      "miss_distance_below_margin": [0.1153755045038009, 0.04378811496600021, 0.039142609873656364, 0.01791963151261336, 0.010349344990977422, 0.0102609826081336, 0.0012646403478604878],
+      "world_count": 20,
+      "miss_count": 7,
+      "misses_within_0_01": 1,
+      "min": -0.0853755045038009,
+      "worlds_at_or_above_margin": 13,
+      "negative_degradation_misses": 3,
+    "characterization": "a broad, heterogeneous distribution, not a simple threshold near-miss or a clean bimodal split; the largest gap isolates one negative outlier",
+      "max": 0.14672729560774805,
+      "frozen_margin": 0.03,
+      "largest_gap_bounds": [-0.0853755045038009, -0.013788114966000214],
+      "median": 0.052081908221234055,
+      "largest_adjacent_gap": 0.07158738953780068
+    },
+    "frozen_results_unchanged": true,
+    "diagnostic_seeds": [18301, 18302, 18303, 18304, 18305, 18306, 18307, 18308, 18309, 18310, 18311, 18312, 18313, 18314, 18315, 18316, 18317, 18318, 18319, 18320, 18321, 18322, 18323, 18324, 18325, 18326, 18327, 18328, 18329, 18330, 18331, 18332, 18333, 18334, 18335, 18336, 18337, 18338, 18339, 18340]
+  }
+}
