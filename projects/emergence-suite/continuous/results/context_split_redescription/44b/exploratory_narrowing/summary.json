@@ -1,0 +1,66 @@
+{
+  "label": "Exploratory addendum (post-freeze; non-confirmatory)",
+  "seeds": [174901, 174902, 174903, 174904, 174905, 174906, 174907, 174908, 174909, 174910],
+  "strengths": [0.0, 0.25, 0.5, 0.75, 1.0],
+  "aggregate": [{
+    "narrowing_strength": 0.0,
+    "worlds": 10,
+    "part_precision": 0.7199999999999999,
+    "off_channel_precision": 0.039999999999999994,
+    "field_breadth": 0.0823906857562847,
+    "mean_final_root": 0.44184594906022207,
+    "sd_final_root": 0.273837103521923,
+    "mean_regulation_floor": 0.18244479396088595,
+    "mean_above_regulation": 0.25940115509933603
+  }, {
+    "narrowing_strength": 0.25,
+    "worlds": 10,
+    "part_precision": 0.7199999999999999,
+    "off_channel_precision": 0.030000000000000006,
+    "field_breadth": 0.06640091518201928,
+    "mean_final_root": 0.43065346187623793,
+    "sd_final_root": 0.27236915336539264,
+    "mean_regulation_floor": 0.18244479396088595,
+    "mean_above_regulation": 0.24820866791535198
+  }, {
+    "narrowing_strength": 0.5,
+    "worlds": 10,
+    "part_precision": 0.7199999999999999,
+    "off_channel_precision": 0.019999999999999997,
+    "field_breadth": 0.048989794855663564,
+    "mean_final_root": 0.41944007230888164,
+    "sd_final_root": 0.27072164106040536,
+    "mean_regulation_floor": 0.18244479396088595,
+    "mean_above_regulation": 0.23699527834799566
+  }, {
+    "narrowing_strength": 0.75,
+    "worlds": 10,
+    "part_precision": 0.7199999999999999,
+    "off_channel_precision": 0.009999999999999998,
+    "field_breadth": 0.029129506302439427,
+    "mean_final_root": 0.4081754205087972,
+    "sd_final_root": 0.2688990993491303,
+    "mean_regulation_floor": 0.18244479396088595,
+    "mean_above_regulation": 0.22573062654791118
+  }, {
+    "narrowing_strength": 1.0,
+    "worlds": 10,
+    "part_precision": 0.7199999999999999,
+    "off_channel_precision": 0.0,
+    "field_breadth": 9.211558703193802e-10,
+    "mean_final_root": 0.3965928853046613,
+    "sd_final_root": 0.2668983933130641,
+    "mean_regulation_floor": 0.18244479396088595,
+    "mean_above_regulation": 0.21414809134377535
+  }],
+  "finding": {
+    "monotone_nonincreasing": true,
+    "maximal_narrowing_mean": 0.3965928853046613,
+    "regulation_floor_mean": 0.18244479396088595,
+    "maximal_narrowing_above_regulation": 0.21414809134377535,
+    "floor_tolerance_reference": 0.12,
+    "reaches_regulation_floor": false,
+    "reading": "b_persistent_part_channel_leakage",
+    "confirmatory": false
+  }
+}

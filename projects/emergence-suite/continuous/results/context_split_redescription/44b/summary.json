@@ -1,0 +1,82 @@
+{
+  "stage": "confirmation",
+  "pilot": {
+    "worlds": 10,
+    "structured_split_selected": 10,
+    "null_split_selected": 0,
+    "mean_structured_split_margin": 0.9249058003747269,
+    "mean_null_split_margin": -2.457419367066561,
+    "mean_witnessing_final_root": 0.81175870963867,
+    "mean_open_final_root": 0.7766826671396087,
+    "mean_regulation_final_root": 0.15266575126629495,
+    "mean_narrowed_final_root": 0.3886663090625081,
+    "mean_fixed_context_final_root": 0.2695619110098339,
+    "mean_reversed_final_root": 0.06000000000000001,
+    "mean_doover_shortening": 0.478030303030303,
+    "baseline_reachable": 10,
+    "premature_failures": 10,
+    "premature_reversals": 10
+  },
+  "confirmation": {
+    "worlds": 20,
+    "structured_split_selected": 19,
+    "null_split_selected": 0,
+    "mean_structured_split_margin": 0.928911392828096,
+    "mean_null_split_margin": -2.636156583477815,
+    "mean_witnessing_final_root": 0.9969579952462434,
+    "mean_open_final_root": 0.9602408496066237,
+    "mean_regulation_final_root": 0.22292744810126308,
+    "mean_narrowed_final_root": 0.5638465560829002,
+    "mean_fixed_context_final_root": 0.4273473788471834,
+    "mean_reversed_final_root": 0.06000000000000003,
+    "mean_doover_shortening": 0.6613636363636366,
+    "baseline_reachable": 20,
+    "premature_failures": 20,
+    "premature_reversals": 16
+  },
+  "confirmation_manipulation_check": {
+    "regulation_informative": true,
+    "fixed_context_not_saturated": true,
+    "reversed_not_saturated": true,
+    "witnessing_informative": false,
+    "dynamic_range": true,
+    "baseline_reduction_askable": true,
+    "passed": false
+  },
+  "confirmation_verdicts": {
+    "criterion_1_selectivity": true,
+    "criterion_2_heldout_margin": true,
+    "criterion_3_derived_ordering": false,
+    "criterion_4_doover_timing": true,
+    "overall": false,
+    "ordering_high_minus_low": 0.5852124203343521,
+    "witnessing_open_mean_difference": 0.03671714563961967,
+    "regulation_narrowed_mean_difference": 0.3510583265455764
+  },
+  "selected_calibration": {
+    "id": "44b-cal-02",
+    "root_sessions": 14,
+    "root_amplitude": 0.35,
+    "root_observation_sd": 1.0,
+    "contact_amplitude": 0.3,
+    "contact_sd": 1.0,
+    "evidence_scale": 1.0,
+    "safe_prior_mass": 8.0,
+    "full_prior_mass": 1.0,
+    "reduced_model_log_prior_penalty": 1.2
+  },
+  "exploratory_addendum": {
+    "label": "Exploratory addendum (post-freeze; non-confirmatory)",
+    "seeds": "174901:174910",
+    "matched_worlds_per_dose": 10,
+    "narrowing_strengths": [0.0, 0.25, 0.5, 0.75, 1.0],
+    "mean_final_root": [0.44184594906022207, 0.43065346187623793, 0.41944007230888164, 0.4081754205087972, 0.3965928853046613],
+    "regulation_floor_mean": 0.18244479396088595,
+    "maximal_narrowing_above_regulation": 0.21414809134377535,
+    "monotone_nonincreasing": true,
+    "reaches_regulation_floor_within_0_12": false,
+    "reading": "b_persistent_part_channel_leakage",
+    "confirmatory": false,
+    "detail": "exploratory_narrowing/summary.json"
+  }
+}

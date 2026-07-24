@@ -1,0 +1,65 @@
+{
+  "stage": "confirmation",
+  "pilot": {
+    "worlds": 10,
+    "structured_split_selected": 10,
+    "null_split_selected": 0,
+    "mean_structured_split_margin": 0.946396684122367,
+    "mean_null_split_margin": -2.6509969755482006,
+    "mean_witnessing_final_root": 1.0,
+    "mean_open_final_root": 1.0,
+    "mean_regulation_final_root": 1.0,
+    "mean_narrowed_final_root": 1.0,
+    "mean_doover_shortening": 0.0,
+    "premature_failures": 10,
+    "premature_reversals": 0
+  },
+  "confirmation": {
+    "worlds": 20,
+    "structured_split_selected": 20,
+    "null_split_selected": 0,
+    "mean_structured_split_margin": 0.9701603850732583,
+    "mean_null_split_margin": -2.136000490693509,
+    "mean_witnessing_final_root": 1.0,
+    "mean_open_final_root": 1.0,
+    "mean_regulation_final_root": 0.999999999999992,
+    "mean_narrowed_final_root": 1.0,
+    "mean_doover_shortening": 0.0,
+    "premature_failures": 20,
+    "premature_reversals": 0
+  },
+  "confirmation_verdicts": {
+    "criterion_1_selectivity": true,
+    "criterion_2_heldout_margin": true,
+    "criterion_3_derived_ordering": false,
+    "criterion_4_doover_timing": false,
+    "overall": false,
+    "ordering_high_minus_low": 3.885780586188048e-15,
+    "witnessing_open_mean_difference": 0.0,
+    "regulation_narrowed_mean_difference": 7.982503547054876e-15
+  },
+  "complexity": {
+    "global_downweight": {
+      "active_parameters": 10,
+      "regression_parameters": 9,
+      "transition_parameters": 0,
+      "precision_parameters": 1,
+      "prior_entropy": 16.216710872587548
+    },
+    "cue_local": {
+      "active_parameters": 10,
+      "regression_parameters": 10,
+      "transition_parameters": 0,
+      "precision_parameters": 0,
+      "prior_entropy": 16.216710872587548
+    },
+    "context_split": {
+      "active_parameters": 10,
+      "regression_parameters": 9,
+      "transition_parameters": 1,
+      "precision_parameters": 0,
+      "prior_entropy": 16.216710872587548
+    },
+    "matched": true
+  }
+}

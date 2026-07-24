@@ -1,0 +1,27 @@
+{
+  "frozen_at": "2026-07-24T20:17:14.998",
+  "pilot_seeds": [174701, 174702, 174703, 174704, 174705, 174706, 174707, 174708, 174709, 174710],
+  "confirmation_seeds": [174801, 174802, 174803, 174804, 174805, 174806, 174807, 174808, 174809, 174810, 174811, 174812, 174813, 174814, 174815, 174816, 174817, 174818, 174819, 174820],
+  "selected_calibration": {
+    "id": "44b-cal-02",
+    "root_sessions": 14,
+    "root_amplitude": 0.35,
+    "root_observation_sd": 1.0,
+    "contact_amplitude": 0.3,
+    "contact_sd": 1.0,
+    "evidence_scale": 1.0,
+    "safe_prior_mass": 8.0,
+    "full_prior_mass": 1.0,
+    "reduced_model_log_prior_penalty": 1.2
+  },
+  "saturation_guard": {
+    "regulation_informative": true,
+    "fixed_context_not_saturated": true,
+    "reversed_not_saturated": true,
+    "witnessing_informative": true,
+    "dynamic_range": true,
+    "baseline_reduction_askable": true,
+    "passed": true
+  },
+  "criterion_thresholds_changed": false
+}

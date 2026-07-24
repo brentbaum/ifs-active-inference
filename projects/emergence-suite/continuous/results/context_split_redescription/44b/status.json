@@ -1,0 +1,21 @@
+{
+  "stage": "confirmation_complete",
+  "pilot_complete": true,
+  "confirmation_complete": true,
+  "valid": true,
+  "pilot_saturation_guard_passed": true,
+  "weak_and_negative_controls_informative": true,
+  "confirmation_witnessing_upper_band_passed": false,
+  "saturation_guard_passed_in_confirmation": false,
+  "overall": "failed_or_mixed",
+  "criteria": {
+    "criterion_1_selectivity": true,
+    "criterion_2_heldout_margin": true,
+    "criterion_3_derived_ordering": false,
+    "criterion_4_doover_timing": true,
+    "overall": false,
+    "ordering_high_minus_low": 0.5852124203343521,
+    "witnessing_open_mean_difference": 0.03671714563961967,
+    "regulation_narrowed_mean_difference": 0.3510583265455764
+  }
+}

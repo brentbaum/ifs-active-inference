@@ -1,0 +1,17 @@
+{
+  "stage": "confirmation_complete",
+  "pilot_complete": true,
+  "confirmation_complete": true,
+  "valid": true,
+  "overall": "failed_or_mixed",
+  "criteria": {
+    "criterion_1_selectivity": true,
+    "criterion_2_heldout_margin": true,
+    "criterion_3_derived_ordering": false,
+    "criterion_4_doover_timing": false,
+    "overall": false,
+    "ordering_high_minus_low": 3.885780586188048e-15,
+    "witnessing_open_mean_difference": 0.0,
+    "regulation_narrowed_mean_difference": 7.982503547054876e-15
+  }
+}
