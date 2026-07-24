@@ -197,6 +197,8 @@ A part is not a kind of psychological object but a phase of one. A burdened part
 
 ## Remaining manuscript work
 
+- **Simulation round specced: Experiments 44–49 (`experiments-44-49-sufficiency-round-spec.md`) — context-split redescription with derived revision + do-over (44), formation-substrate triad (45), wager-violation construction (46), protector trust (47), exiling emergence (48), dyad-gate descent (49). Each targets a named Appendix A entry; results flip entries and revise the named manuscript sites, nothing else.**
+
 - Add an abstract; it must carry the sufficiency bet.
 - Complete and verify the reference list, especially source years, titles, and the precise claims attributed to Gendlin, March, Beautiful Loop Theory, object relations, latent-cause learning, Bayesian model reduction, autonomic accounts, and recent preprints.
 - ~~Decide how much quantitative detail from §9 belongs in the body versus appendices; preserve every material failure and scope condition wherever it lands.~~ **Resolved 2026-07-23: §9 compressed by claim; full record in Appendix B; failures preserved in both.**
