@@ -1,0 +1,44 @@
+{
+  "analysis_plan_sha256": "2ec43c3b128537ae94662afc800a53a8d7ade50126c8c04666567937b034c9aa",
+  "assay": 4,
+  "canonical_source_sha256": "b5813d625a338d7231af9b7ad45bba316ca893e5699576ea16b294ec125dde41",
+  "criteria": [{
+    "decision_rule": "conditional mean ≥ 0.1 and rate ≥ 0.80",
+    "details": {
+      "conditional_worlds": 33,
+      "success_rate": 0.8181818181818182,
+      "success_rate_interval": [0.656114329507048, 0.9138934877430174]
+    },
+    "estimate": 0.3446362897905546,
+    "evidentiary_class": "model discrimination",
+    "hypothesis_provenance": "Original prediction; 50 prospective primary operationalization",
+    "interval_95": [0.2814713981546165, 0.4078011814264927],
+    "label": "conditional untreated-cue transfer",
+    "passed": true,
+    "source": "Experiment 44b generalization gradient"
+  }, {
+    "decision_rule": "reversed mean transfer < witnessing mean transfer",
+    "details": {},
+    "estimate": 0.2896221724720344,
+    "evidentiary_class": "model discrimination",
+    "hypothesis_provenance": "50 prospective",
+    "interval_95": [0.2389008929992398, 0.34034345194482907],
+    "label": "reversed-graph control",
+    "passed": true,
+    "source": "assay 4 analysis plan"
+  }],
+  "descriptive": {
+    "identity_before_threat_rate": 0.3375,
+    "ordering_provenance": "Pilot-amended",
+    "witnessing_root_revision_rate": 0.4125,
+    "worlds": 80
+  },
+  "freeze_commit": "274f8888f71ac590d7c15d6f9f59777ea919e182",
+  "genome_sha256": "efd5d83d4053858ddb07e5229ae2eb8e27bdd10d026115b37485bbc71f56074a",
+  "missing_or_numerical_failures": 0,
+  "overall_verdict": true,
+  "row_count": 240,
+  "seeds": [703086, 703087, 703088, 703089, 703090, 703091, 703092, 703093, 703094, 703095, 703096, 703097, 703098, 703099, 703100, 703101, 703102, 703103, 703104, 703105, 703106, 703107, 703108, 703109, 703110, 703111, 703112, 703113, 703114, 703115, 703116, 703117, 703118, 703119, 703120, 703121, 703122, 703123, 703124, 703125, 703126, 703127, 703128, 703129, 703130, 703131, 703132, 703133, 703134, 703135, 703136, 703137, 703138, 703139, 703140, 703141, 703142, 703143, 703144, 703145, 703146, 703147, 703148, 703149, 703150, 703151, 703152, 703153, 703154, 703155, 703156, 703157, 703158, 703159, 703160, 703161, 703162, 703163, 703164, 703165],
+  "stage": "50-H confirmatory",
+  "world_count": 80
+}

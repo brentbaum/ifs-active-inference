@@ -1,0 +1,56 @@
+{
+  "analysis_plan_sha256": "ba2a60265143f5e38f9af94aac425e1d7770207d09ee8fc54d8be847383d5bd8",
+  "assay": 8,
+  "canonical_source_sha256": "b5813d625a338d7231af9b7ad45bba316ca893e5699576ea16b294ec125dde41",
+  "confirmatory_status": "complete_after_authorized_software_repair",
+  "criteria": [{
+    "decision_rule": "tracking rate ≥ 0.8",
+    "details": {},
+    "estimate": 0.825,
+    "evidentiary_class": "conformance",
+    "hypothesis_provenance": "Original prediction; 50 prospective learned-history test",
+    "interval_95": [0.7274225612441251, 0.8927946101839012],
+    "label": "selection tracks learned expected cost",
+    "passed": true,
+    "source": "assay 8 analysis plan"
+  }, {
+    "decision_rule": "mean paired change ≥ 0.1",
+    "details": {},
+    "estimate": 0.3344035881095154,
+    "evidentiary_class": "causal contrast",
+    "hypothesis_provenance": "Original prediction",
+    "interval_95": [0.33440358810951537, 0.3344035881095155],
+    "label": "registration on-minus-off contrast",
+    "passed": true,
+    "source": "results/exiling_emergence/report.md"
+  }, {
+    "decision_rule": "off and distinct ablation within static tolerance",
+    "details": {
+      "ablation_static_rate": 1.0,
+      "off_static_rate": 1.0
+    },
+    "estimate": 1.0,
+    "evidentiary_class": "causal contrast",
+    "hypothesis_provenance": "Original prediction",
+    "interval_95": [0.954180263735425, 1.0],
+    "label": "registration off and ablation static",
+    "passed": true,
+    "source": "results/exiling_emergence/report.md"
+  }],
+  "descriptive": {
+    "arms_per_world": 3,
+    "maximum_absolute_on_off_deviation": 0.0,
+    "on_off_bit_for_bit_reproduction": true,
+    "pre_repair_sha256": "61953fe9c3cf987145da016a5a8f90ba8f6c93121f05abc54b07026b471c4690",
+    "regenerated_on_off_sha256": "61953fe9c3cf987145da016a5a8f90ba8f6c93121f05abc54b07026b471c4690",
+    "worlds": 80
+  },
+  "freeze_commit": "274f8888f71ac590d7c15d6f9f59777ea919e182",
+  "genome_sha256": "efd5d83d4053858ddb07e5229ae2eb8e27bdd10d026115b37485bbc71f56074a",
+  "missing_or_numerical_failures": 0,
+  "overall_verdict": true,
+  "row_count": 240,
+  "seeds": [707287, 707288, 707289, 707290, 707291, 707292, 707293, 707294, 707295, 707296, 707297, 707298, 707299, 707300, 707301, 707302, 707303, 707304, 707305, 707306, 707307, 707308, 707309, 707310, 707311, 707312, 707313, 707314, 707315, 707316, 707317, 707318, 707319, 707320, 707321, 707322, 707323, 707324, 707325, 707326, 707327, 707328, 707329, 707330, 707331, 707332, 707333, 707334, 707335, 707336, 707337, 707338, 707339, 707340, 707341, 707342, 707343, 707344, 707345, 707346, 707347, 707348, 707349, 707350, 707351, 707352, 707353, 707354, 707355, 707356, 707357, 707358, 707359, 707360, 707361, 707362, 707363, 707364, 707365, 707366],
+  "stage": "50-H confirmatory",
+  "world_count": 80
+}

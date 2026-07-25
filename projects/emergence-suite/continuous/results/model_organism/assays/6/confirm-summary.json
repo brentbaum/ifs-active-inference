@@ -1,0 +1,71 @@
+{
+  "analysis_plan_sha256": "13ed9c7d23a730162cb996876800aa109f05e6deefaaeb2c62826df36862e549",
+  "assay": 6,
+  "canonical_source_sha256": "b5813d625a338d7231af9b7ad45bba316ca893e5699576ea16b294ec125dde41",
+  "criteria": [{
+    "decision_rule": "macro diagonal ≥ 0.7",
+    "details": {
+      "family_rates": {
+        "change_point": {
+          "interval_95": [0.954180263735425, 1.0],
+          "rate": 1.0
+        },
+        "context_split": {
+          "interval_95": [0.954180263735425, 1.0],
+          "rate": 1.0
+        },
+        "continuous_drift": {
+          "interval_95": [0.8302301722291654, 0.95696854535256],
+          "rate": 0.9125
+        },
+        "cue_local": {
+          "interval_95": [0.954180263735425, 1.0],
+          "rate": 1.0
+        },
+        "global_downweight": {
+          "interval_95": [0.954180263735425, 1.0],
+          "rate": 1.0
+        }
+      }
+    },
+    "estimate": 0.9824999999999999,
+    "evidentiary_class": "model discrimination",
+    "hypothesis_provenance": "Original prediction (split family); 50 prospective drift/change-point recovery",
+    "interval_95": [0.9643224844820973, 0.9914978173392109],
+    "label": "five-family diagonal recovery",
+    "passed": true,
+    "source": "assay 6 analysis plan"
+  }, {
+    "decision_rule": "false split rate ≤ 0.1",
+    "details": {},
+    "estimate": 0.0,
+    "evidentiary_class": "model discrimination",
+    "hypothesis_provenance": "50 prospective",
+    "interval_95": [0.0, 0.011862589611711404],
+    "label": "context-split misspecification guard",
+    "passed": true,
+    "source": "assay 6 analysis plan"
+  }, {
+    "decision_rule": "mean margin ≥ 0.05",
+    "details": {},
+    "estimate": 1.7498231860458777,
+    "evidentiary_class": "model discrimination",
+    "hypothesis_provenance": "Original prediction",
+    "interval_95": [1.6684642849622242, 1.8311820871295312],
+    "label": "context-split held-out margin",
+    "passed": true,
+    "source": "results/context_split_redescription/44b/summary.json"
+  }],
+  "descriptive": {
+    "complexity_audit_all": true,
+    "datasets": 400
+  },
+  "freeze_commit": "274f8888f71ac590d7c15d6f9f59777ea919e182",
+  "genome_sha256": "efd5d83d4053858ddb07e5229ae2eb8e27bdd10d026115b37485bbc71f56074a",
+  "missing_or_numerical_failures": 0,
+  "overall_verdict": true,
+  "row_count": 400,
+  "seeds": [705013, 705014, 705015, 705016, 705017, 705018, 705019, 705020, 705021, 705022, 705023, 705024, 705025, 705026, 705027, 705028, 705029, 705030, 705031, 705032, 705033, 705034, 705035, 705036, 705037, 705038, 705039, 705040, 705041, 705042, 705043, 705044, 705045, 705046, 705047, 705048, 705049, 705050, 705051, 705052, 705053, 705054, 705055, 705056, 705057, 705058, 705059, 705060, 705061, 705062, 705063, 705064, 705065, 705066, 705067, 705068, 705069, 705070, 705071, 705072, 705073, 705074, 705075, 705076, 705077, 705078, 705079, 705080, 705081, 705082, 705083, 705084, 705085, 705086, 705087, 705088, 705089, 705090, 705091, 705092],
+  "stage": "50-H confirmatory",
+  "world_count": 80
+}

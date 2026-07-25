@@ -1,0 +1,43 @@
+{
+  "analysis_plan_sha256": "6d5131ad9f15077e08cff8ba74e9edbb0cfc854fe61cf9b7340b477788a76b21",
+  "assay": 1,
+  "canonical_source_sha256": "b5813d625a338d7231af9b7ad45bba316ca893e5699576ea16b294ec125dde41",
+  "criteria": [{
+    "decision_rule": "exact agreement = 1.0",
+    "details": {
+      "domain_points": 25
+    },
+    "estimate": 1.0,
+    "evidentiary_class": "conformance",
+    "hypothesis_provenance": "Original prediction",
+    "interval_95": [0.8668035060468213, 1.0],
+    "label": "joint-boundary predicate agreement",
+    "passed": true,
+    "source": "formation construction and assay 1 plan"
+  }, {
+    "decision_rule": "edge precision < positive-low-control precision",
+    "details": {
+      "edge_mean": 4.4,
+      "positive_low_control_mean": 8.0
+    },
+    "estimate": -3.5999999999999996,
+    "evidentiary_class": "conformance",
+    "hypothesis_provenance": "50 prospective",
+    "interval_95": [-3.5999999999999996, -3.5999999999999996],
+    "label": "no-control edge attenuation",
+    "passed": true,
+    "source": "assay 1 analysis plan"
+  }],
+  "descriptive": {
+    "property_domain_points": 25,
+    "working_avoidance_available_rate": 1.0
+  },
+  "freeze_commit": "274f8888f71ac590d7c15d6f9f59777ea919e182",
+  "genome_sha256": "efd5d83d4053858ddb07e5229ae2eb8e27bdd10d026115b37485bbc71f56074a",
+  "missing_or_numerical_failures": 0,
+  "overall_verdict": true,
+  "row_count": 25,
+  "seeds": [700093],
+  "stage": "50-H confirmatory",
+  "world_count": 1
+}

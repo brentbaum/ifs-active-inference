@@ -1,0 +1,37 @@
+{
+  "analysis_plan_sha256": "63562f6c2baf80c13504138b3a0617c35bb8ffd2abe6d16c3462dbd365d20055",
+  "assay": 5,
+  "canonical_source_sha256": "b5813d625a338d7231af9b7ad45bba316ca893e5699576ea16b294ec125dde41",
+  "criteria": [{
+    "decision_rule": "difference-in-differences ≥ 0.1",
+    "details": {},
+    "estimate": 0.5512997094446079,
+    "evidentiary_class": "conformance",
+    "hypothesis_provenance": "Original prediction; 50 prospective interaction",
+    "interval_95": [0.48219383054183634, 0.6204055883473795],
+    "label": "regulation × evidence interaction",
+    "passed": true,
+    "source": "assay 5 analysis plan"
+  }, {
+    "decision_rule": "|mean root change| ≤ 0.05",
+    "details": {},
+    "estimate": 0.0,
+    "evidentiary_class": "conformance",
+    "hypothesis_provenance": "Original prediction; 50 prospective margin",
+    "interval_95": [0.0, 0.0],
+    "label": "regulation-only equivalence",
+    "passed": true,
+    "source": "assay 5 analysis plan"
+  }],
+  "descriptive": {
+    "worlds": 80
+  },
+  "freeze_commit": "274f8888f71ac590d7c15d6f9f59777ea919e182",
+  "genome_sha256": "efd5d83d4053858ddb07e5229ae2eb8e27bdd10d026115b37485bbc71f56074a",
+  "missing_or_numerical_failures": 0,
+  "overall_verdict": true,
+  "row_count": 320,
+  "seeds": [704172, 704173, 704174, 704175, 704176, 704177, 704178, 704179, 704180, 704181, 704182, 704183, 704184, 704185, 704186, 704187, 704188, 704189, 704190, 704191, 704192, 704193, 704194, 704195, 704196, 704197, 704198, 704199, 704200, 704201, 704202, 704203, 704204, 704205, 704206, 704207, 704208, 704209, 704210, 704211, 704212, 704213, 704214, 704215, 704216, 704217, 704218, 704219, 704220, 704221, 704222, 704223, 704224, 704225, 704226, 704227, 704228, 704229, 704230, 704231, 704232, 704233, 704234, 704235, 704236, 704237, 704238, 704239, 704240, 704241, 704242, 704243, 704244, 704245, 704246, 704247, 704248, 704249, 704250, 704251],
+  "stage": "50-H confirmatory",
+  "world_count": 80
+}

@@ -1,0 +1,48 @@
+{
+  "analysis_plan_sha256": "7144a162bc0d60d90e30c697d9771dfa3d486bbf2cd60aa24229672bea0dda66",
+  "assay": 7,
+  "canonical_source_sha256": "b5813d625a338d7231af9b7ad45bba316ca893e5699576ea16b294ec125dde41",
+  "criteria": [{
+    "decision_rule": "exact property agreement = 1.0",
+    "details": {},
+    "estimate": 1.0,
+    "evidentiary_class": "conformance",
+    "hypothesis_provenance": "50 prospective",
+    "interval_95": [0.9633580563440465, 0.9999999999999998],
+    "label": "imaginal-evidence analytic crossover",
+    "passed": true,
+    "source": "assay 7 analysis plan"
+  }, {
+    "decision_rule": "paired advantage ≥ 0.1",
+    "details": {},
+    "estimate": 0.14583333333333331,
+    "evidentiary_class": "conformance",
+    "hypothesis_provenance": "Original prediction; 50 prospective suggestion-only comparator",
+    "interval_95": [0.11717993818640787, 0.17448672848025876],
+    "label": "post-revision do-over advantage",
+    "passed": true,
+    "source": "results/context_split_redescription/44b/summary.json"
+  }, {
+    "decision_rule": "reversal rate ≥ 0.50",
+    "details": {},
+    "estimate": 0.9375,
+    "evidentiary_class": "conformance",
+    "hypothesis_provenance": "Original prediction",
+    "interval_95": [0.8618967084664824, 0.9730110223020145],
+    "label": "premature reversal rate",
+    "passed": true,
+    "source": "results/context_split_redescription/44b/summary.json"
+  }],
+  "descriptive": {
+    "analytic_domain_points": 101,
+    "stochastic_worlds": 80
+  },
+  "freeze_commit": "274f8888f71ac590d7c15d6f9f59777ea919e182",
+  "genome_sha256": "efd5d83d4053858ddb07e5229ae2eb8e27bdd10d026115b37485bbc71f56074a",
+  "missing_or_numerical_failures": 0,
+  "overall_verdict": true,
+  "row_count": 261,
+  "seeds": [706005, 706006, 706007, 706008, 706009, 706010, 706011, 706012, 706013, 706014, 706015, 706016, 706017, 706018, 706019, 706020, 706021, 706022, 706023, 706024, 706025, 706026, 706027, 706028, 706029, 706030, 706031, 706032, 706033, 706034, 706035, 706036, 706037, 706038, 706039, 706040, 706041, 706042, 706043, 706044, 706045, 706046, 706047, 706048, 706049, 706050, 706051, 706052, 706053, 706054, 706055, 706056, 706057, 706058, 706059, 706060, 706061, 706062, 706063, 706064, 706065, 706066, 706067, 706068, 706069, 706070, 706071, 706072, 706073, 706074, 706075, 706076, 706077, 706078, 706079, 706080, 706081, 706082, 706083, 706084],
+  "stage": "50-H confirmatory",
+  "world_count": 80
+}

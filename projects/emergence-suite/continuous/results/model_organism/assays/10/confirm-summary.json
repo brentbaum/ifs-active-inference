@@ -1,0 +1,86 @@
+{
+  "analysis_plan_sha256": "8f0284ca99c77851dc6725ff61884e041b89977a52bd83d502546493856eb0a0",
+  "assay": 10,
+  "canonical_source_sha256": "b5813d625a338d7231af9b7ad45bba316ca893e5699576ea16b294ec125dde41",
+  "criteria": [{
+    "decision_rule": "mean interaction ≥ 0.25",
+    "details": {
+      "cell_rates": {
+        "adverse_coupled": {
+          "interval_95": [0.0, 0.0458197362645751],
+          "rate": 0.0
+        },
+        "adverse_decoupled": {
+          "interval_95": [0.0, 0.0458197362645751],
+          "rate": 0.0
+        },
+        "neutral_coupled": {
+          "interval_95": [0.3457751037437976, 0.5588068698826599],
+          "rate": 0.45
+        },
+        "neutral_decoupled": {
+          "interval_95": [0.0, 0.0458197362645751],
+          "rate": 0.0
+        },
+        "trustworthy_coupled": {
+          "interval_95": [0.954180263735425, 1.0],
+          "rate": 1.0
+        },
+        "trustworthy_decoupled": {
+          "interval_95": [0.0, 0.0458197362645751],
+          "rate": 0.0
+        }
+      }
+    },
+    "estimate": 1.0,
+    "evidentiary_class": "causal contrast",
+    "hypothesis_provenance": "50 prospective",
+    "interval_95": [1.0, 1.0],
+    "label": "disposition × scaffold interaction",
+    "passed": true,
+    "source": "assay 10 analysis plan"
+  }, {
+    "decision_rule": "rate ≥ 0.8",
+    "details": {},
+    "estimate": 1.0,
+    "evidentiary_class": "causal contrast",
+    "hypothesis_provenance": "50 prospective",
+    "interval_95": [0.954180263735425, 1.0],
+    "label": "trustworthy-coupled descent",
+    "passed": true,
+    "source": "assay 10 analysis plan"
+  }, {
+    "decision_rule": "trustworthy-decoupled and adverse-coupled ≤ 0.2",
+    "details": {
+      "adverse_coupled": {
+        "interval_95": [0.0, 0.0458197362645751],
+        "rate": 0.0
+      },
+      "trustworthy_decoupled": {
+        "interval_95": [0.0, 0.0458197362645751],
+        "rate": 0.0
+      }
+    },
+    "estimate": 0.0,
+    "evidentiary_class": "causal contrast",
+    "hypothesis_provenance": "50 prospective",
+      "interval_95": [0.0, 0.0458197362645751],
+    "label": "decoupled/adverse safeguards",
+    "passed": true,
+    "source": "assay 10 analysis plan"
+  }],
+  "descriptive": {
+    "neutral_no_scaffold_anchor_rate": 0.0,
+    "permission_before_root_audit_rate": 1.0,
+    "positive_evidence_without_scaffold_descent_rate": 0.0,
+    "worlds": 80
+  },
+  "freeze_commit": "274f8888f71ac590d7c15d6f9f59777ea919e182",
+  "genome_sha256": "efd5d83d4053858ddb07e5229ae2eb8e27bdd10d026115b37485bbc71f56074a",
+  "missing_or_numerical_failures": 0,
+  "overall_verdict": true,
+  "row_count": 560,
+  "seeds": [709439, 709440, 709441, 709442, 709443, 709444, 709445, 709446, 709447, 709448, 709449, 709450, 709451, 709452, 709453, 709454, 709455, 709456, 709457, 709458, 709459, 709460, 709461, 709462, 709463, 709464, 709465, 709466, 709467, 709468, 709469, 709470, 709471, 709472, 709473, 709474, 709475, 709476, 709477, 709478, 709479, 709480, 709481, 709482, 709483, 709484, 709485, 709486, 709487, 709488, 709489, 709490, 709491, 709492, 709493, 709494, 709495, 709496, 709497, 709498, 709499, 709500, 709501, 709502, 709503, 709504, 709505, 709506, 709507, 709508, 709509, 709510, 709511, 709512, 709513, 709514, 709515, 709516, 709517, 709518],
+  "stage": "50-H confirmatory",
+  "world_count": 80
+}

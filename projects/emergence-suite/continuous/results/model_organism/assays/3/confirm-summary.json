@@ -1,0 +1,38 @@
+{
+  "analysis_plan_sha256": "8d2b6fa1395f306362a191e254aaa6699d9fad3241ff0614e9deb6c68acb9dd0",
+  "assay": 3,
+  "canonical_source_sha256": "b5813d625a338d7231af9b7ad45bba316ca893e5699576ea16b294ec125dde41",
+  "criteria": [{
+    "decision_rule": "balanced accuracy ≥ 0.9",
+    "details": {},
+    "estimate": 1.0,
+    "evidentiary_class": "conformance",
+    "hypothesis_provenance": "Original prediction",
+    "interval_95": [0.9881374103882884, 0.9999999999999999],
+    "label": "four-regime realization",
+    "passed": true,
+    "source": "results/global_precision_field/summary.json"
+  }, {
+    "decision_rule": "loss_1d - loss_2d ≥ 0.02",
+    "details": {},
+    "estimate": 0.24979609567639435,
+    "evidentiary_class": "model discrimination",
+    "hypothesis_provenance": "50 prospective",
+    "interval_95": [0.24976944274578539, 0.24982274860700332],
+    "label": "two-dimensional held-out advantage",
+    "passed": true,
+    "source": "assay 3 analysis plan"
+  }],
+  "descriptive": {
+    "regime_instances": 320,
+    "world_blocks": 80
+  },
+  "freeze_commit": "274f8888f71ac590d7c15d6f9f59777ea919e182",
+  "genome_sha256": "efd5d83d4053858ddb07e5229ae2eb8e27bdd10d026115b37485bbc71f56074a",
+  "missing_or_numerical_failures": 0,
+  "overall_verdict": true,
+  "row_count": 320,
+  "seeds": [702412, 702413, 702414, 702415, 702416, 702417, 702418, 702419, 702420, 702421, 702422, 702423, 702424, 702425, 702426, 702427, 702428, 702429, 702430, 702431, 702432, 702433, 702434, 702435, 702436, 702437, 702438, 702439, 702440, 702441, 702442, 702443, 702444, 702445, 702446, 702447, 702448, 702449, 702450, 702451, 702452, 702453, 702454, 702455, 702456, 702457, 702458, 702459, 702460, 702461, 702462, 702463, 702464, 702465, 702466, 702467, 702468, 702469, 702470, 702471, 702472, 702473, 702474, 702475, 702476, 702477, 702478, 702479, 702480, 702481, 702482, 702483, 702484, 702485, 702486, 702487, 702488, 702489, 702490, 702491],
+  "stage": "50-H confirmatory",
+  "world_count": 80
+}

@@ -1,0 +1,75 @@
+{
+  "analysis_plan_sha256": "131ebb9e4842953008e11a04c77f134dc446707e7fa6cea3adad7b4299c8d0d2",
+  "assay": 9,
+  "canonical_source_sha256": "b5813d625a338d7231af9b7ad45bba316ca893e5699576ea16b294ec125dde41",
+  "confirmatory_status": "complete_after_authorized_software_repair",
+  "criteria": [{
+    "decision_rule": "exact property agreement = 1.0",
+    "details": {
+      "domain_points": 101
+    },
+    "estimate": 1.0,
+    "evidentiary_class": "conformance",
+    "hypothesis_provenance": "Original prediction",
+    "interval_95": [0.9633580563440465, 0.9999999999999998],
+    "label": "stakes-permission and transfer invariants",
+    "passed": true,
+    "source": "results/protector_trust/report.md"
+  }, {
+    "decision_rule": "macro learned-history recovery ≥ 0.7",
+    "details": {
+      "partner_strata": {
+        "adverse": {
+          "interval_95": [0.9325356757603457, 0.9977900813816939],
+          "rate": 0.9875,
+          "successes": 79,
+          "total": 80
+        },
+        "neutral": {
+          "interval_95": [0.06032618694827016, 0.20018410865677552],
+          "rate": 0.1125,
+          "successes": 9,
+          "total": 80
+        },
+        "trustworthy": {
+          "interval_95": [0.954180263735425, 1.0],
+          "rate": 1.0,
+          "successes": 80,
+          "total": 80
+        }
+      }
+    },
+    "estimate": 0.7,
+    "evidentiary_class": "conformance",
+    "hypothesis_provenance": "50 prospective",
+    "interval_95": [0.6392437983263725, 0.7544544057536532],
+    "label": "joint partner-type and competence recovery",
+    "passed": true,
+    "source": "assay 9 analysis plan"
+  }, {
+    "decision_rule": "sign-match rate ≥ 0.8",
+    "details": {},
+    "estimate": 0.5166666666666667,
+    "evidentiary_class": "conformance",
+    "hypothesis_provenance": "Exploratory finding; first prospective test in 50-H",
+    "interval_95": [0.45367997248566677, 0.5791282111876689],
+    "label": "risk-model obsolescence crossover",
+    "passed": false,
+    "source": "results/protector_trust/exploratory-summary.json"
+  }],
+  "descriptive": {
+    "learned_histories": 240,
+    "property_domain_points": 101,
+    "world_block_rerun": false,
+    "world_block_sha256": "d7f478ac45f33c90fbb178fc5adf74db12af66a778732e1011cf34c9f6d336c7"
+  },
+  "freeze_commit": "274f8888f71ac590d7c15d6f9f59777ea919e182",
+  "genome_sha256": "efd5d83d4053858ddb07e5229ae2eb8e27bdd10d026115b37485bbc71f56074a",
+  "missing_or_numerical_failures": 0,
+  "overall_verdict": false,
+  "property_row_count": 101,
+  "row_count": 320,
+  "seeds": [708300, 708301, 708302, 708303, 708304, 708305, 708306, 708307, 708308, 708309, 708310, 708311, 708312, 708313, 708314, 708315, 708316, 708317, 708318, 708319, 708320, 708321, 708322, 708323, 708324, 708325, 708326, 708327, 708328, 708329, 708330, 708331, 708332, 708333, 708334, 708335, 708336, 708337, 708338, 708339, 708340, 708341, 708342, 708343, 708344, 708345, 708346, 708347, 708348, 708349, 708350, 708351, 708352, 708353, 708354, 708355, 708356, 708357, 708358, 708359, 708360, 708361, 708362, 708363, 708364, 708365, 708366, 708367, 708368, 708369, 708370, 708371, 708372, 708373, 708374, 708375, 708376, 708377, 708378, 708379],
+  "stage": "50-H confirmatory",
+  "world_count": 80
+}
