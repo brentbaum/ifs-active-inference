@@ -1,0 +1,11 @@
+{
+  "classification": "central",
+  "draws": 80,
+  "joint_rule": "at least 8 of 10 signatures",
+  "joint_survival_interval_95": [0.954180263735425, 1.0],
+  "joint_survival_successes": 80,
+  "joint_survival_volume": 1.0,
+  "reference_classification_rule": "at least 8 signature volumes ≥ 0.60 and joint volume ≥ 0.50",
+  "robust_signatures_at_0_60": 10,
+  "worlds_per_draw": 20
+}

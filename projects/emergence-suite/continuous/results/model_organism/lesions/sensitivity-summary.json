@@ -1,0 +1,12 @@
+{
+  "classification": "block-diagonal",
+  "cross_cluster_constants": 4,
+  "material_threshold": 0.1,
+  "multi_signature_constants": 4,
+  "multi_signature_fraction": 0.0975609756097561,
+  "paired_noncausal_constants": ["rng_history_offset"],
+  "perturbation_factors": [0.95, 1.05],
+  "resolvable_constants": 41,
+  "shared_constants": 42,
+  "worlds": 30
+}

@@ -87,3 +87,21 @@ Prospective failures retained:
 - E4 — prospection failure; scientific criteria not evaluated.
 
 - E5 — prospection failure; scientific criteria not evaluated.
+
+## Final battery-wide profile after 50-L
+
+The four evidentiary classes remain separated from the 50-L causal-localization adjunct:
+
+| Evidentiary class | Final status |
+|---|---|
+| Architecture/conformance | 11 of 12 frozen criteria passed; assay-9 obsolescence crossover failed. |
+| Causal or mechanism contrast | 8 of 8 frozen criteria passed. |
+| Model discrimination and transfer | 6 of 6 frozen criteria passed. |
+| Prospective compositional challenge | E3 failed scientifically; E4 and E5 were prospection failures and were not scientifically evaluated. |
+
+50-L adjunct:
+
+- Sensitivity architecture: **block-diagonal**.
+- Joint genome neighborhood: **central**.
+- Lesion prediction misses retained: `8` across `7` preregistered lesion clusters.
+- Ordering deviation: 50-L was preregistered only after 50-P inspection; lesion predictions were restricted to the known 50-H signatures.
