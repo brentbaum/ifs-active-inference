@@ -1,0 +1,60 @@
+{
+  "canonical_source_sha256": "b5813d625a338d7231af9b7ad45bba316ca893e5699576ea16b294ec125dde41",
+  "challenge": "E3",
+  "challenge_verdict": "FAIL",
+  "configuration_sha256": "1cefbff50857d810b1e613bff202819367d9415e0448ff3b0d02138dc7cc4456",
+  "criteria": [{
+    "decision_rule": "both ≥ 0.70; one ≤ 0.10; none ≤ 0.05",
+    "details": {
+      "befriend_both_interval_95": [0.009189126490150246, 0.11363987528925378],
+      "befriend_both_rate": 0.03333333333333333,
+      "befriend_none_interval_95": [0.0, 0.06017393047793289],
+      "befriend_none_rate": 0.0,
+      "befriend_one_interval_95": [0.0, 0.06017393047793289],
+      "befriend_one_rate": 0.0
+    },
+    "estimate": 0.03333333333333333,
+    "evidentiary_class": "prospective challenge",
+    "hypothesis_provenance": "50-prospective sealed",
+    "interval_95": [0.009189126490150246, 0.11363987528925378],
+    "label": "compositional descent",
+    "passed": false
+  }, {
+    "decision_rule": "opposed-direction rate ≥ 0.70 and mean effect 95% interval above zero",
+    "details": {
+      "mean_effect_interval_95": [0.0, 0.0],
+      "mean_opposed_direction_effect": 0.0
+    },
+    "estimate": 0.0,
+    "evidentiary_class": "prospective challenge",
+    "hypothesis_provenance": "50-prospective sealed",
+    "interval_95": [0.0, 0.06017393047793289],
+    "label": "escalation coupling",
+    "passed": false
+  }],
+  "descriptive": {
+    "audit_denominator": 2,
+    "mean_p1_probe_strengthening": 0.17998880980210027,
+    "mean_p2_probe_strengthening": 0.10137502770829807,
+    "p1_probe_strengthening_interval_95": [0.10911840358245971, 0.2508592160217408],
+    "p2_probe_strengthening_interval_95": [0.0519714321995617, 0.15077862321703445],
+    "paired_worlds": 60,
+    "permissions_before_root_audit_interval_95": [0.0, 0.6576280471103807],
+    "permissions_before_root_audit_rate": 0.0
+  },
+  "freeze_commit": "274f8888f71ac590d7c15d6f9f59777ea919e182",
+  "genome_sha256": "efd5d83d4053858ddb07e5229ae2eb8e27bdd10d026115b37485bbc71f56074a",
+  "interpretation_lock_sha256": "ca1d3e815f556312a9942cf8f1c5f087c41d380e8e2f60198e4d2428990cf4a6",
+  "l_neighborhood_opened": false,
+  "maximum_seed_used": 710166,
+  "overall_verdict": false,
+  "per_seed_sha256": "a551fb954103fcaed4440016c59529a4df17cf64cf9e6d3c5d71e09485fc081e",
+  "prospection_failure": false,
+  "protocol_sha256": "9e406af9b0720476ba0508783d65916062815bee5e555378f50200a606037932",
+  "reveal_commit": "6419191",
+  "scientific_criteria_evaluated": true,
+  "seeds": [710107, 710108, 710109, 710110, 710111, 710112, 710113, 710114, 710115, 710116, 710117, 710118, 710119, 710120, 710121, 710122, 710123, 710124, 710125, 710126, 710127, 710128, 710129, 710130, 710131, 710132, 710133, 710134, 710135, 710136, 710137, 710138, 710139, 710140, 710141, 710142, 710143, 710144, 710145, 710146, 710147, 710148, 710149, 710150, 710151, 710152, 710153, 710154, 710155, 710156, 710157, 710158, 710159, 710160, 710161, 710162, 710163, 710164, 710165, 710166],
+  "stage": "50-P prospective",
+  "stage_b_commit": "1dcd051",
+  "world_count": 60
+}

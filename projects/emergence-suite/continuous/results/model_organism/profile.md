@@ -59,4 +59,31 @@ The evaluator-authorized assay 8 rerun reproduced the original on/off CSV byte-f
 
 ## Scope
 
-These results show which historical signatures survived one frozen, jointly calibrated strain on fresh escrowed worlds. The assay 9 risk-model obsolescence crossover is the sole failed frozen criterion: its `0.5167` sign-match rate did not meet `0.80` in its first prospective test. That behavior did not survive the shared parameterization; it does not show that a psychological or clinical claim is false. No 50-P or 50-L seed or protocol was opened.
+These results show which historical signatures survived one frozen, jointly calibrated strain on fresh escrowed worlds. The assay 9 risk-model obsolescence crossover is the sole failed frozen criterion: its `0.5167` sign-match rate did not meet `0.80` in its first prospective test. That behavior did not survive the shared parameterization; it does not show that a psychological or clinical claim is false. At the close of Stage B, no 50-P or 50-L seed or protocol had been opened; Stage C results are reported separately below.
+
+## Prospective challenge battery (50-P)
+
+These results are from evaluator-sealed, out-of-sample protocols revealed only after the organism and 50-H results were committed. They are reported separately from historical conformance, causal-contrast, and model-discrimination evidence.
+
+| Challenge | Challenge-level verdict |
+|---|---|
+| E3 | **FAIL** |
+| E4 | **PROSPECTION FAILURE — not scientifically evaluated** |
+| E5 | **PROSPECTION FAILURE — not scientifically evaluated** |
+
+| Challenge | Criterion | Estimate | 95% interval | Verdict |
+|---|---|---:|---|---|
+| E3 | compositional descent | 0.033333 | [0.009189, 0.113640] | **FAIL** |
+| E3 | escalation coupling | 0.000000 | [0.000000, 0.060174] | **FAIL** |
+
+E4 and E5 are absent from the criterion table because the frozen organism could not execute their required measurements without new semantics. Their invalid apparatus traces are retained but unscored.
+
+Prospective failures retained:
+
+- E3 — compositional descent.
+
+- E3 — escalation coupling.
+
+- E4 — prospection failure; scientific criteria not evaluated.
+
+- E5 — prospection failure; scientific criteria not evaluated.
