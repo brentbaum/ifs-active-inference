@@ -1,0 +1,16 @@
+assay = 5
+id = "coregulation-access-2x2"
+nodes = ["vulnerable_bundle", "precision_field", "latent_partner"]
+edges = ["bundle_coupling", "partner_to_regulation", "ordinary_evidence", "field_broadcast"]
+initializers = ["neutral_prior", "developmental_replay"]
+interventions = ["regulation_on", "regulation_off", "root_evidence_on", "root_evidence_off"]
+observations = ["partner_regulation", "root_evidence", "field_forecast_error"]
+[slots]
+vulnerable_bundles = 1
+protectors = 0
+protective_repertoires = 0
+precision_fields = 1
+latent_partners = 1
+episodic_memories = 0
+part_slots = 0
+cue_meanings = 0

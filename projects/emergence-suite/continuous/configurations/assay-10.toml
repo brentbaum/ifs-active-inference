@@ -1,0 +1,16 @@
+assay = 10
+id = "dyad-gate-factorial"
+nodes = ["vulnerable_bundle", "protector", "protective_repertoire", "precision_field", "latent_partner"]
+edges = ["bundle_coupling", "protector_guards_bundle", "repertoire_to_permission", "partner_to_regulation", "partner_to_trust_outcome", "field_to_protector", "field_broadcast", "registration_write", "ordinary_evidence"]
+initializers = ["neutral_prior", "partner_history_replay", "policy_history_replay"]
+interventions = ["scaffold_coupled", "scaffold_decoupled", "positive_evidence_without_scaffold", "registration_on", "recursive_broadcast_on"]
+observations = ["partner_regulation", "partner_outcome", "settling", "field_forecast_error", "permission", "root_evidence", "registration"]
+[slots]
+vulnerable_bundles = 1
+protectors = 1
+protective_repertoires = 1
+precision_fields = 1
+latent_partners = 1
+episodic_memories = 0
+part_slots = 0
+cue_meanings = 0

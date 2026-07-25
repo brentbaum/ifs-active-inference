@@ -1,0 +1,16 @@
+assay = 9
+id = "protector-trust-battery"
+nodes = ["vulnerable_bundle", "protector", "protective_repertoire", "latent_partner"]
+edges = ["bundle_coupling", "protector_guards_bundle", "repertoire_to_permission", "partner_to_trust_outcome"]
+initializers = ["neutral_prior", "partner_history_replay", "policy_history_replay"]
+interventions = ["stakes_low", "stakes_high", "risk_model_obsolete_future"]
+observations = ["partner_outcome", "policy_success", "permission"]
+[slots]
+vulnerable_bundles = 1
+protectors = 1
+protective_repertoires = 1
+precision_fields = 0
+latent_partners = 1
+episodic_memories = 0
+part_slots = 0
+cue_meanings = 0

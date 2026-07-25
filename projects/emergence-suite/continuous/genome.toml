@@ -1,0 +1,445 @@
+genome_id = "50-H-stage-a-v1"
+schema_version = 1
+
+[constants.neutral_probability]
+value = 0.5
+rationale = "All psychologically meaningful posterior coordinates start from an uninformative Bernoulli prior."
+
+[constants.probability_guard]
+value = 1.0e-9
+rationale = "Keeps log odds finite without changing scientific decisions."
+
+[constants.bayes_reliability]
+value = 0.82
+rationale = "Provides informative but fallible developmental and experimental observations."
+
+[constants.history_learning_rate]
+value = 0.72
+rationale = "Prevents a single developmental event from fixing a mature posterior."
+
+[constants.history_favorable_cost]
+value = 0.20
+rationale = "Defines the low developmental direct-cost population for the history-favored policy."
+
+[constants.history_unfavorable_cost]
+value = 0.65
+rationale = "Defines the comparison developmental direct-cost population."
+
+[constants.history_cost_sd]
+value = 0.10
+rationale = "Adds overlap to learned policy costs so selection is not assigned by a label."
+
+[constants.history_favorable_success]
+value = 0.82
+rationale = "Makes the history-favored policy reliable but fallible."
+
+[constants.history_unfavorable_success]
+value = 0.48
+rationale = "Keeps alternative-policy reliability histories ambiguous."
+
+[constants.history_root_positive_rate]
+value = 0.28
+rationale = "Generates a mature negative-root history without directly assigning its posterior."
+
+[constants.root_prior_probability]
+value = 0.06
+rationale = "Inherited from Experiment 44b's frozen negative-root prior."
+
+[constants.root_revision_begin]
+value = 0.62
+rationale = "Inherited from Experiment 44b's frozen revision-begun crossing."
+
+[constants.root_revision_complete]
+value = 0.80
+rationale = "Inherited from Experiment 44b's frozen completed-revision crossing."
+
+[constants.root_evidence_weight]
+value = 0.38
+rationale = "Inherited from Experiment 49's likelihood-weighted witnessing adapter."
+
+[constants.context_transition_mix]
+value = 0.08
+rationale = "Allows a learnable then-to-now transition without erasing temporal persistence."
+
+[constants.context_complexity_penalty]
+value = 1.20
+rationale = "Inherited from Experiment 44b's frozen reduced-model penalty."
+
+[constants.context_heldout_margin]
+value = 0.05
+rationale = "Inherited from Experiment 44b's frozen held-out model-selection margin."
+
+[constants.field_part_precision]
+value = 4.0
+rationale = "Inherited from Experiment 49's Sim-5-form part precision."
+
+[constants.field_context_precision]
+value = 0.90
+rationale = "Inherited from Experiment 49's Sim-5-form context precision."
+
+[constants.field_relational_precision]
+value = 2.35
+rationale = "Inherited from Experiment 49's Sim-5-form co-regulation precision."
+
+[constants.field_learning_rate]
+value = 0.24
+rationale = "Keeps the five-channel field responsive across a finite evidence budget."
+
+[constants.field_broadcast_mix]
+value = 0.35
+rationale = "Inherited from the global-precision-field construction's shared correlation."
+
+[constants.field_narrowing_strength]
+value = 0.65
+rationale = "Creates a non-saturated intervention on channel breadth for prospective field-narrowing tests."
+
+[constants.regime_observation_sd]
+value = 0.06
+rationale = "Supplies nonzero held-out variation around the four field regimes."
+
+[constants.regime_observations]
+value = 16
+rationale = "Balances the two-dimensional and scalar comparators at the same evidence budget."
+
+[constants.freeze_overwhelm_boundary]
+value = 0.70
+rationale = "Defines the authored high-overwhelm side of the one-step freeze write."
+
+[constants.freeze_low_control_boundary]
+value = 0.30
+rationale = "Defines the authored low-control side of the one-step freeze write."
+
+[constants.freeze_write_precision]
+value = 8.0
+rationale = "Makes the stipulated episodic write high precision while remaining numerically finite."
+
+[constants.freeze_no_control_attenuation]
+value = 0.55
+rationale = "Implements the specified attenuation at the no-control edge."
+
+[constants.avoidance_cost]
+value = 0.20
+rationale = "Allows working avoidance to compete in the ordinary expected-cost policy layer."
+
+[constants.contact_attempt_rate]
+value = 0.28
+rationale = "Inherited approximately from Experiment 48's observed contact-attempt frequency."
+
+[constants.registration_increment]
+value = 0.045
+rationale = "Makes each registered suppression informative without assigning the endpoint."
+
+[constants.policy_failure_cost]
+value = 1.0
+rationale = "Normalizes learned policy reliability into the same expected-cost scale as direct cost."
+
+[constants.permission_temperature]
+value = 0.20
+rationale = "Inherited from Experiment 47's frozen soft expected-cost decision."
+
+[constants.permission_threshold]
+value = 0.50
+rationale = "Inherited from Experiment 49's gate-equals-permission crossing."
+
+[constants.outcome_risk_weight]
+value = 0.34
+rationale = "Retains the outcome-forecast route in protector risk."
+
+[constants.competence_risk_weight]
+value = 0.46
+rationale = "Retains co-protection as the principal obsolescence-sensitive risk route."
+
+[constants.partner_risk_weight]
+value = 0.20
+rationale = "Retains the inferred partner-model route in protector risk."
+
+[constants.hope_value]
+value = 0.34
+rationale = "Balances learned risk against refusal without adding an obsolescence bonus."
+
+[constants.refusal_cost]
+value = 0.18
+rationale = "Makes refusal a costly protective policy rather than a completion rule."
+
+[constants.low_stakes]
+value = 0.45
+rationale = "Provides the low member of the analytic stakes-permission property domain."
+
+[constants.high_stakes]
+value = 1.35
+rationale = "Provides the high member of the analytic stakes-permission property domain."
+
+[constants.dyad_depth_states]
+value = 5
+rationale = "Preserves the five-state Sim-5-form categorical depth posterior."
+
+[constants.dyad_mapping_prior_count]
+value = 1.0
+rationale = "Uses a symmetric neutral count prior for learned signal-to-settling mappings."
+
+[constants.dyad_learning_rate]
+value = 1.0
+rationale = "Inherited from Experiment 49's canonicalized Sim-5 mapping update."
+
+[constants.dyad_packet_mass]
+value = 1.0
+rationale = "Converts accumulated relational field weight into discrete evidence packets."
+
+[constants.dyad_regulated_floor]
+value = 0.08
+rationale = "Inherited from Experiment 49's low-depth regulated likelihood."
+
+[constants.dyad_regulated_span]
+value = 0.84
+rationale = "Spans Experiment 49's low-to-high regulated likelihood across depth."
+
+[constants.partner_trustworthy_probability]
+value = 0.84
+rationale = "Generates informative but noisy outcomes for trustworthy latent partners."
+
+[constants.partner_neutral_probability]
+value = 0.50
+rationale = "Defines the uninformative latent partner disposition."
+
+[constants.partner_adverse_probability]
+value = 0.16
+rationale = "Mirrors trustworthy evidence for the adverse latent partner."
+
+[constants.episodes]
+value = 24
+rationale = "Provides a shared finite developmental and experimental horizon."
+
+[constants.rng_substream_stride]
+value = 100
+rationale = "Separates named generator families and partner dispositions within a component stream."
+
+[constants.training_events]
+value = 18
+rationale = "Provides enough developmental observations to learn mature beliefs without authored posterior state."
+
+[constants.pilot_seed_base]
+value = 50000
+rationale = "Places all descriptive pilot blocks well below the evaluator-reserved range."
+
+[constants.pilot_seed_assay_stride]
+value = 1000
+rationale = "Keeps assay pilot blocks disjoint."
+
+[constants.reserved_seed_floor]
+value = 700000
+rationale = "Implements the evaluator's confirmatory seed reservation boundary."
+
+[constants.pilot_worlds]
+value = 12
+rationale = "Keeps Phase-0 and descriptive pilot blocks small while exposing saturation and variance."
+
+[constants.rate_worlds]
+value = 80
+rationale = "Falls within the specification's 60–100 confirmatory-world range for stochastic rates."
+
+[constants.property_grid_points]
+value = 101
+rationale = "Provides a broad frozen domain for analytic property checks."
+
+[constants.assay2_effect_margin]
+value = 0.15
+rationale = "Requires a material paired exposure and revision contrast."
+
+[constants.property_grid_delta]
+value = 0.05
+rationale = "Places property points immediately below authored decision boundaries."
+
+[constants.property_grid_high_offset]
+value = 0.15
+rationale = "Places a clearly suprathreshold property point without changing the boundary."
+
+[constants.controllability_mid_dose]
+value = 0.50
+rationale = "Provides the midpoint for the frozen three-level dose response."
+
+[constants.open_loop_evidence_breadth]
+value = 0.35
+rationale = "Makes ordinary replay informative without matching closed-loop control."
+
+[constants.assay3_accuracy_threshold]
+value = 0.90
+rationale = "Requires the two-axis field to realize nearly all frozen regime cases."
+
+[constants.assay3_comparator_margin]
+value = 0.02
+rationale = "Requires held-out loss improvement over the capacity-matched one-dimensional comparator."
+
+[constants.assay4_transfer_margin]
+value = 0.10
+rationale = "Requires untreated-cue transfer beyond numerical root movement."
+
+[constants.cue_initial_belief]
+value = 0.20
+rationale = "Provides a shared neutral-low starting meaning for treated and untreated cues."
+
+[constants.cue_positive_step]
+value = 0.025
+rationale = "Defines ordinary treated-cue uptake per positive observation."
+
+[constants.cue_negative_step]
+value = 0.012
+rationale = "Defines ordinary treated-cue retreat per negative observation."
+
+[constants.cue_transfer_weight]
+value = 0.72
+rationale = "Maps shared-root movement to untreated cue meanings without endpoint assignment."
+
+[constants.regulation_uptake_bonus]
+value = 0.55
+rationale = "Lets regulation alter matched-evidence uptake through the field."
+
+[constants.unregulated_uptake]
+value = 0.45
+rationale = "Keeps root-relevant evidence usable without regulation."
+
+[constants.assay5_interaction_margin]
+value = 0.10
+rationale = "Requires regulation to materially increase uptake of matched root-relevant evidence."
+
+[constants.assay5_equivalence_margin]
+value = 0.05
+rationale = "Defines practical equivalence for the regulation-only root shift."
+
+[constants.assay6_recovery_rate]
+value = 0.70
+rationale = "Requires useful diagonal model recovery across five generator families."
+
+[constants.assay6_false_split_rate]
+value = 0.10
+rationale = "Caps context-split selection under misspecified non-split families."
+
+[constants.generator_noise_sd]
+value = 0.10
+rationale = "Adds matched observation noise to structured generator families."
+
+[constants.generator_global_sd]
+value = 0.05
+rationale = "Defines the low-amplitude global down-weight generator."
+
+[constants.generator_cue_amplitude]
+value = 0.55
+rationale = "Defines alternating cue-local structure."
+
+[constants.generator_context_amplitude]
+value = 0.70
+rationale = "Defines symmetric then/now and drift endpoints."
+
+[constants.generator_change_before]
+value = -0.15
+rationale = "Defines the pre-change mean for the change-point family."
+
+[constants.generator_change_after]
+value = 0.85
+rationale = "Defines the post-change mean for the change-point family."
+
+[constants.classifier_global_sd]
+value = 0.18
+rationale = "Separates globally down-weighted sequences by observed scale."
+
+[constants.classifier_alternating_gap]
+value = 0.75
+rationale = "Requires strong alternating evidence for cue-local recovery."
+
+[constants.classifier_drift_correlation]
+value = 0.92
+rationale = "Requires near-monotone temporal structure for drift recovery."
+
+[constants.classifier_drift_jump_ceiling]
+value = 0.45
+rationale = "Prevents abrupt change points from being labeled continuous drift."
+
+[constants.classifier_split_jump]
+value = 0.65
+rationale = "Requires a material midpoint jump for context-split recovery."
+
+[constants.assay7_timing_margin]
+value = 0.10
+rationale = "Requires post-revision do-over benefit beyond the suggestion-only comparator."
+
+[constants.imaginal_floor]
+value = 0.15
+rationale = "Inherited from Experiment 44b's reduced-model imaginal outcome equation."
+
+[constants.imaginal_span]
+value = 0.70
+rationale = "Inherited from Experiment 44b's root-dependent imaginal outcome equation."
+
+[constants.premature_root_probability]
+value = 0.30
+rationale = "Places premature do-over below the analytic crossover."
+
+[constants.postrevision_root_probability]
+value = 0.82
+rationale = "Places post-revision do-over above the completed-revision crossing."
+
+[constants.suggestion_success_probability]
+value = 0.58
+rationale = "Makes suggestion-only packets moderately useful regardless of readiness."
+
+[constants.partner_classification_margin]
+value = 0.15
+rationale = "Defines trustworthy/adverse recovery away from the neutral posterior."
+
+[constants.partner_neutral_band]
+value = 0.25
+rationale = "Defines an intentionally broad neutral recovery interval under noisy history."
+[constants.assay8_selection_rate]
+value = 0.80
+rationale = "Carries forward the historical 16/20 policy-selection rate as a proportion."
+
+[constants.assay8_registration_margin]
+value = 0.10
+rationale = "Requires registered suppression to move the relational prior materially."
+
+[constants.static_tolerance]
+value = 1.0e-12
+rationale = "Inherited from Experiment 48's frozen bit-level static-prior tolerance."
+
+[constants.assay9_recovery_rate]
+value = 0.70
+rationale = "Requires latent partner and competence recovery under noisy learned histories."
+
+[constants.assay9_crossover_rate]
+value = 0.80
+rationale = "Prospectively requires the risk-model obsolescence sign prediction in most worlds."
+
+[constants.assay10_interaction_margin]
+value = 0.25
+rationale = "Requires a material disposition-by-scaffold descent interaction."
+
+[constants.assay10_success_rate]
+value = 0.80
+rationale = "Requires descent in most trustworthy-coupled worlds."
+
+[constants.assay10_control_rate]
+value = 0.20
+rationale = "Caps descent in decoupled and adverse-partner controls."
+
+[constants.rng_world_offset]
+value = 11000
+rationale = "Separates world generation from other component streams."
+
+[constants.rng_history_offset]
+value = 22000
+rationale = "Separates developmental-history generation from worlds."
+
+[constants.rng_partner_offset]
+value = 33000
+rationale = "Separates latent partner generation from all agent updates."
+
+[constants.rng_field_offset]
+value = 44000
+rationale = "Separates field observations while preserving pairing across arms."
+
+[constants.rng_policy_offset]
+value = 55000
+rationale = "Separates policy-learning histories from experimental outcomes."
+
+[constants.rng_analysis_offset]
+value = 66000
+rationale = "Reserves a distinct stream for descriptive resampling and intervals."

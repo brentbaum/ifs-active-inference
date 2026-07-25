@@ -1,0 +1,46 @@
+{
+  "assay": 5,
+  "canonical_source_sha256": "b5813d625a338d7231af9b7ad45bba316ca893e5699576ea16b294ec125dde41",
+  "criterion_statistics_consulted": false,
+  "genome_sha256": "efd5d83d4053858ddb07e5229ae2eb8e27bdd10d026115b37485bbc71f56074a",
+  "numeric_descriptives": {
+    "evidence_present": {
+      "maximum": 1.0,
+      "mean": 0.5,
+      "minimum": 0.0,
+      "n": 48,
+      "sd": 0.5052911526399113
+    },
+    "regulation": {
+      "maximum": 1.0,
+      "mean": 0.5,
+      "minimum": 0.0,
+      "n": 48,
+      "sd": 0.5052911526399113
+    },
+    "root_change": {
+      "maximum": 0.9908478998494958,
+      "mean": 0.19719300809925658,
+      "minimum": 0.0,
+      "n": 48,
+      "sd": 0.3257233622950944
+    },
+    "seed": {
+      "maximum": 55011.0,
+      "mean": 55005.5,
+      "minimum": 55000.0,
+      "n": 48,
+      "sd": 3.488583203244183
+    },
+    "uptake": {
+      "maximum": 1.50407350094237,
+      "mean": 0.9363297998712515,
+      "minimum": 0.45,
+      "n": 48,
+      "sd": 0.49229597946004167
+    }
+  },
+  "rows": 48,
+  "seeds": [55000, 55001, 55002, 55003, 55004, 55005, 55006, 55007, 55008, 55009, 55010, 55011],
+  "stage": "pilot_descriptive"
+}

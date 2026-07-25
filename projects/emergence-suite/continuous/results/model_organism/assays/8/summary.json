@@ -1,0 +1,53 @@
+{
+  "assay": 8,
+  "canonical_source_sha256": "b5813d625a338d7231af9b7ad45bba316ca893e5699576ea16b294ec125dde41",
+  "criterion_statistics_consulted": false,
+  "genome_sha256": "efd5d83d4053858ddb07e5229ae2eb8e27bdd10d026115b37485bbc71f56074a",
+  "numeric_descriptives": {
+    "learned_cost": {
+      "maximum": 0.6542764073440878,
+      "mean": 0.29347299918258846,
+      "minimum": 0.0505442156838158,
+      "n": 24,
+      "sd": 0.192585909068077
+    },
+    "learned_reliability": {
+      "maximum": 0.9991394816,
+      "mean": 0.9258140672,
+      "minimum": 0.7252860416,
+      "n": 24,
+      "sd": 0.09807079747657664
+    },
+    "registration": {
+      "maximum": 1.0,
+      "mean": 0.5,
+      "minimum": 0.0,
+      "n": 24,
+      "sd": 0.5107539184552492
+    },
+    "relational_change": {
+      "maximum": 0.3344035881095152,
+      "mean": 0.16720179405475763,
+      "minimum": 0.0,
+      "n": 24,
+      "sd": 0.17079794297243003
+    },
+    "seed": {
+      "maximum": 58011.0,
+      "mean": 58005.5,
+      "minimum": 58000.0,
+      "n": 24,
+      "sd": 3.526298712346368
+    },
+    "selection_tracks": {
+      "maximum": 1.0,
+      "mean": 0.75,
+      "minimum": 0.0,
+      "n": 24,
+      "sd": 0.4423258684646914
+    }
+  },
+  "rows": 24,
+  "seeds": [58000, 58001, 58002, 58003, 58004, 58005, 58006, 58007, 58008, 58009, 58010, 58011],
+  "stage": "pilot_descriptive"
+}

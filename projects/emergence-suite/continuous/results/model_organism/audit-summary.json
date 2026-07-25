@@ -1,0 +1,43 @@
+{
+  "all_gates_passed": true,
+  "compression": {
+    "canonical_authored_constants": 111,
+    "canonical_load_bearing_constants": 61,
+    "compression_ratio": 0.42657342657342656,
+    "proportion_read_by_at_least_two_assay_families": 0.6885245901639344,
+    "summed_source_magic_number_rows": 143
+  },
+  "duplicate_equations": {
+    "duplicate_long_bodies": {},
+    "duplicate_names": {},
+    "equation_count": 79,
+    "forbidden_legacy_includes": [],
+    "legacy_experiment_sources_modified": false,
+    "passed": true,
+    "reachable_source_files": ["src/ModelOrganism.jl", "src/model_organism/Types.jl", "src/model_organism/Equations.jl", "src/model_organism/Assays.jl", "src/model_organism/Audits.jl", "src/model_organism/RecordIO.jl"]
+  },
+  "grammar": {
+    "assay_ids": ["freeze-formation", "frozen-persistence", "dominance-depth-dissociation", "identity-first-transfer", "coregulation-access-2x2", "redescription-model-recovery", "doover-timing", "derived-exiling-registration", "protector-trust-battery", "dyad-gate-factorial"],
+    "configuration_count": 10,
+    "passed": true
+  },
+  "identity": {
+    "canonical_source_sha256": "b5813d625a338d7231af9b7ad45bba316ca893e5699576ea16b294ec125dde41",
+    "genome_sha256": "efd5d83d4053858ddb07e5229ae2eb8e27bdd10d026115b37485bbc71f56074a",
+    "passed": true
+  },
+  "idleness": {
+    "baseline_sha256": "584fdc0ac3cbab1e6cedf1b1cdcbca9d7a124618c857167d39b1e8f1854735dd",
+    "bit_for_bit": true,
+    "idle_slot_sha256": "584fdc0ac3cbab1e6cedf1b1cdcbca9d7a124618c857167d39b1e8f1854735dd",
+    "passed": true
+  },
+  "state_provenance": {
+    "direct_posterior_configuration_files": [],
+    "growth_log_events": 141,
+    "learned_policy_provenance": true,
+    "neutral_prior_provenance": true,
+    "passed": true,
+    "replayed_posterior_provenance": true
+  }
+}

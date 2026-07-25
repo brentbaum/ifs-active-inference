@@ -1,0 +1,16 @@
+assay = 1
+id = "freeze-formation"
+nodes = ["vulnerable_bundle", "episodic_memory", "protective_repertoire"]
+edges = ["bundle_coupling", "freeze_write", "repertoire_to_permission"]
+initializers = ["neutral_prior"]
+interventions = ["overwhelm_control_grid"]
+observations = ["overwhelm", "control", "policy"]
+[slots]
+vulnerable_bundles = 1
+protectors = 0
+protective_repertoires = 1
+precision_fields = 0
+latent_partners = 0
+episodic_memories = 1
+part_slots = 0
+cue_meanings = 0

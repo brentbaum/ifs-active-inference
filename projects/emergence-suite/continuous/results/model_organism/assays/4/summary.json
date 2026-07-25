@@ -1,0 +1,60 @@
+{
+  "assay": 4,
+  "canonical_source_sha256": "b5813d625a338d7231af9b7ad45bba316ca893e5699576ea16b294ec125dde41",
+  "criterion_statistics_consulted": false,
+  "genome_sha256": "efd5d83d4053858ddb07e5229ae2eb8e27bdd10d026115b37485bbc71f56074a",
+  "numeric_descriptives": {
+    "identity_before_threat": {
+      "maximum": 1.0,
+      "mean": 0.08333333333333333,
+      "minimum": 0.0,
+      "n": 36,
+      "sd": 0.280305955290694
+    },
+    "identity_cross": {
+      "maximum": 23.0,
+      "mean": 1.1944444444444444,
+      "minimum": 0.0,
+      "n": 36,
+      "sd": 4.458183130536119
+    },
+    "root_revised": {
+      "maximum": 1.0,
+      "mean": 0.05555555555555555,
+      "minimum": 0.0,
+      "n": 36,
+      "sd": 0.2323106841457232
+    },
+    "root_revision": {
+      "maximum": 0.9077085674346329,
+      "mean": 0.108538148465987,
+      "minimum": 0.0,
+      "n": 36,
+      "sd": 0.22442097810626999
+    },
+    "seed": {
+      "maximum": 54011.0,
+      "mean": 54005.5,
+      "minimum": 54000.0,
+      "n": 36,
+      "sd": 3.5010202594590707
+    },
+    "threat_cross": {
+      "maximum": 23.0,
+      "mean": 12.833333333333334,
+      "minimum": 0.0,
+      "n": 36,
+      "sd": 11.046654309272624
+    },
+    "untreated_transfer": {
+      "maximum": 0.6535501685529357,
+      "mean": 0.07814746689551065,
+      "minimum": 0.0,
+      "n": 36,
+      "sd": 0.1615831042365144
+    }
+  },
+  "rows": 36,
+  "seeds": [54000, 54001, 54002, 54003, 54004, 54005, 54006, 54007, 54008, 54009, 54010, 54011],
+  "stage": "pilot_descriptive"
+}

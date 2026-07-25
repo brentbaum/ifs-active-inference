@@ -1,0 +1,16 @@
+assay = 7
+id = "doover-timing"
+nodes = ["vulnerable_bundle", "episodic_memory"]
+edges = ["bundle_coupling", "ordinary_evidence", "freeze_write"]
+initializers = ["neutral_prior", "freeze_history_replay"]
+interventions = ["limited_evidence_budget", "premature_doover", "postrevision_doover", "suggestion_only"]
+observations = ["root_evidence", "imaginal_outcome", "outcome"]
+[slots]
+vulnerable_bundles = 1
+protectors = 0
+protective_repertoires = 0
+precision_fields = 0
+latent_partners = 0
+episodic_memories = 1
+part_slots = 0
+cue_meanings = 0

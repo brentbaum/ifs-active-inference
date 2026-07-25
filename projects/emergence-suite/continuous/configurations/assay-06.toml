@@ -1,0 +1,16 @@
+assay = 6
+id = "redescription-model-recovery"
+nodes = ["vulnerable_bundle", "cue_meaning", "precision_field"]
+edges = ["bundle_coupling", "shared_root_parent", "ordinary_evidence", "field_broadcast"]
+initializers = ["neutral_prior"]
+interventions = ["context_family_global", "context_family_cue_local", "context_family_split", "context_family_drift", "context_family_change_point"]
+observations = ["context_then_now", "cue_evidence", "root_evidence"]
+[slots]
+vulnerable_bundles = 1
+protectors = 0
+protective_repertoires = 0
+precision_fields = 1
+latent_partners = 0
+episodic_memories = 0
+part_slots = 0
+cue_meanings = 4

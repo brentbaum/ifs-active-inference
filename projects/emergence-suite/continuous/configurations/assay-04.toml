@@ -1,0 +1,16 @@
+assay = 4
+id = "identity-first-transfer"
+nodes = ["vulnerable_bundle", "cue_meaning", "precision_field"]
+edges = ["bundle_coupling", "shared_root_parent", "reversed_root_child", "ordinary_evidence", "field_broadcast"]
+initializers = ["neutral_prior", "developmental_replay"]
+interventions = ["witnessing", "matched_exposure", "reversed_graph"]
+observations = ["root_evidence", "cue_evidence", "field_forecast_error"]
+[slots]
+vulnerable_bundles = 1
+protectors = 0
+protective_repertoires = 0
+precision_fields = 1
+latent_partners = 0
+episodic_memories = 0
+part_slots = 0
+cue_meanings = 4

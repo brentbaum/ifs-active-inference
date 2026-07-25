@@ -1,0 +1,16 @@
+assay = 8
+id = "derived-exiling-registration"
+nodes = ["vulnerable_bundle", "protective_repertoire"]
+edges = ["bundle_coupling", "repertoire_to_permission", "registration_write"]
+initializers = ["neutral_prior", "policy_history_replay"]
+interventions = ["registration_on", "registration_off", "registration_ablation"]
+observations = ["policy_cost", "policy_success", "contact_attempt", "suppression", "registration"]
+[slots]
+vulnerable_bundles = 1
+protectors = 0
+protective_repertoires = 1
+precision_fields = 0
+latent_partners = 0
+episodic_memories = 0
+part_slots = 0
+cue_meanings = 0

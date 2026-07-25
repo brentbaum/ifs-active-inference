@@ -1,0 +1,46 @@
+{
+  "assay": 6,
+  "canonical_source_sha256": "b5813d625a338d7231af9b7ad45bba316ca893e5699576ea16b294ec125dde41",
+  "criterion_statistics_consulted": false,
+  "genome_sha256": "efd5d83d4053858ddb07e5229ae2eb8e27bdd10d026115b37485bbc71f56074a",
+  "numeric_descriptives": {
+    "complexity_audit": {
+      "maximum": 1.0,
+      "mean": 1.0,
+      "minimum": 1.0,
+      "n": 60,
+      "sd": 0.0
+    },
+    "context_split_selected": {
+      "maximum": 1.0,
+      "mean": 0.2,
+      "minimum": 0.0,
+      "n": 60,
+      "sd": 0.4033755872716886
+    },
+    "diagonal": {
+      "maximum": 1.0,
+      "mean": 1.0,
+      "minimum": 1.0,
+      "n": 60,
+      "sd": 0.0
+    },
+    "heldout_margin": {
+      "maximum": 2.555802906302841,
+      "mean": 1.2059402411357802,
+      "minimum": 6.721904556722391e-6,
+      "n": 60,
+      "sd": 0.8430116742459937
+    },
+    "seed": {
+      "maximum": 56011.0,
+      "mean": 56005.5,
+      "minimum": 56000.0,
+      "n": 60,
+      "sd": 3.4811842909844075
+    }
+  },
+  "rows": 60,
+  "seeds": [56000, 56001, 56002, 56003, 56004, 56005, 56006, 56007, 56008, 56009, 56010, 56011],
+  "stage": "pilot_descriptive"
+}

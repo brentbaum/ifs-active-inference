@@ -1,0 +1,74 @@
+{
+  "assay": 1,
+  "canonical_source_sha256": "b5813d625a338d7231af9b7ad45bba316ca893e5699576ea16b294ec125dde41",
+  "criterion_statistics_consulted": false,
+  "genome_sha256": "efd5d83d4053858ddb07e5229ae2eb8e27bdd10d026115b37485bbc71f56074a",
+  "numeric_descriptives": {
+    "attenuation_edge": {
+      "maximum": 1.0,
+      "mean": 0.2,
+      "minimum": 0.0,
+      "n": 300,
+      "sd": 0.4006683379765067
+    },
+    "avoidance_available": {
+      "maximum": 1.0,
+      "mean": 1.0,
+      "minimum": 1.0,
+      "n": 300,
+      "sd": 0.0
+    },
+    "control": {
+      "maximum": 1.0,
+      "mean": 0.4,
+      "minimum": 0.0,
+      "n": 300,
+      "sd": 0.3337232947490989
+    },
+    "expected": {
+      "maximum": 1.0,
+      "mean": 0.36,
+      "minimum": 0.0,
+      "n": 300,
+      "sd": 0.4808020055718079
+    },
+    "overwhelm": {
+      "maximum": 1.0,
+      "mean": 0.6399999999999998,
+      "minimum": 0.0,
+      "n": 300,
+      "sd": 0.3432093270009838
+    },
+    "precision": {
+      "maximum": 8.0,
+      "mean": 2.4480000000000004,
+      "minimum": 0.0,
+      "n": 300,
+      "sd": 3.4248495804676486
+    },
+    "property_holds": {
+      "maximum": 1.0,
+      "mean": 1.0,
+      "minimum": 1.0,
+      "n": 300,
+      "sd": 0.0
+    },
+    "seed": {
+      "maximum": 51011.0,
+      "mean": 51005.5,
+      "minimum": 51000.0,
+      "n": 300,
+      "sd": 3.4578203740406233
+    },
+    "written": {
+      "maximum": 1.0,
+      "mean": 0.36,
+      "minimum": 0.0,
+      "n": 300,
+      "sd": 0.4808020055718079
+    }
+  },
+  "rows": 300,
+  "seeds": [51000, 51001, 51002, 51003, 51004, 51005, 51006, 51007, 51008, 51009, 51010, 51011],
+  "stage": "pilot_descriptive"
+}

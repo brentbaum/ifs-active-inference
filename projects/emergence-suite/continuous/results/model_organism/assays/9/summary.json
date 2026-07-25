@@ -1,0 +1,67 @@
+{
+  "assay": 9,
+  "canonical_source_sha256": "b5813d625a338d7231af9b7ad45bba316ca893e5699576ea16b294ec125dde41",
+  "criterion_statistics_consulted": false,
+  "genome_sha256": "efd5d83d4053858ddb07e5229ae2eb8e27bdd10d026115b37485bbc71f56074a",
+  "numeric_descriptives": {
+    "competence": {
+      "maximum": 0.999999744700033,
+      "mean": 0.4818856255072548,
+      "minimum": 1.9739043808669413e-6,
+      "n": 48,
+      "sd": 0.44473145058033253
+    },
+    "obsolete_shift": {
+      "maximum": -1.1100078611825381e-7,
+      "mean": -0.04998359787464413,
+      "minimum": -0.27766843388092355,
+      "n": 48,
+      "sd": 0.07813323761225216
+    },
+    "posterior_unchanged": {
+      "maximum": 1.0,
+      "mean": 1.0,
+      "minimum": 1.0,
+      "n": 48,
+      "sd": 0.0
+    },
+    "recovered": {
+      "maximum": 1.0,
+      "mean": 0.8541666666666666,
+      "minimum": 0.0,
+      "n": 48,
+      "sd": 0.3566739576374165
+    },
+    "seed": {
+      "maximum": 59011.0,
+      "mean": 59005.5,
+      "minimum": 59000.0,
+      "n": 48,
+      "sd": 3.488583203244183
+    },
+    "sign_prediction_match": {
+      "maximum": 1.0,
+      "mean": 0.6458333333333334,
+      "minimum": 0.0,
+      "n": 48,
+      "sd": 0.48332110525006244
+    },
+    "stakes_separated": {
+      "maximum": 1.0,
+      "mean": 1.0,
+      "minimum": 1.0,
+      "n": 48,
+      "sd": 0.0
+    },
+    "transfer_local": {
+      "maximum": 1.0,
+      "mean": 1.0,
+      "minimum": 1.0,
+      "n": 48,
+      "sd": 0.0
+    }
+  },
+  "rows": 48,
+  "seeds": [59000, 59001, 59002, 59003, 59004, 59005, 59006, 59007, 59008, 59009, 59010, 59011],
+  "stage": "pilot_descriptive"
+}

@@ -1,0 +1,74 @@
+{
+  "assay": 2,
+  "canonical_source_sha256": "b5813d625a338d7231af9b7ad45bba316ca893e5699576ea16b294ec125dde41",
+  "criterion_statistics_consulted": false,
+  "genome_sha256": "efd5d83d4053858ddb07e5229ae2eb8e27bdd10d026115b37485bbc71f56074a",
+  "numeric_descriptives": {
+    "avoidance_mediator": {
+      "maximum": 1.0,
+      "mean": 0.5,
+      "minimum": 0.0,
+      "n": 36,
+      "sd": 0.4140393356054125
+    },
+    "closed_exposure": {
+      "maximum": 22.0,
+      "mean": 9.5,
+      "minimum": 0.0,
+      "n": 36,
+      "sd": 8.019618801058172
+    },
+    "closed_revision": {
+      "maximum": 0.9641002533497899,
+      "mean": 0.31792080820593455,
+      "minimum": 0.0,
+      "n": 36,
+      "sd": 0.3640265634894362
+    },
+    "dose": {
+      "maximum": 1.0,
+      "mean": 0.5,
+      "minimum": 0.0,
+      "n": 36,
+      "sd": 0.4140393356054125
+    },
+    "exposure_effect": {
+      "maximum": -2.0,
+      "mean": -14.5,
+      "minimum": -24.0,
+      "n": 36,
+      "sd": 8.019618801058172
+    },
+    "open_exposure": {
+      "maximum": 24.0,
+      "mean": 24.0,
+      "minimum": 24.0,
+      "n": 36,
+      "sd": 0.0
+    },
+    "open_revision": {
+      "maximum": 0.5734848760530382,
+      "mean": 0.18494448116256068,
+      "minimum": 3.9059579083803404e-5,
+      "n": 36,
+      "sd": 0.19751541353433796
+    },
+    "revision_effect": {
+      "maximum": 0.8086140457752924,
+      "mean": 0.1329763270433738,
+      "minimum": -0.5734848760530382,
+      "n": 36,
+      "sd": 0.3305424579827498
+    },
+    "seed": {
+      "maximum": 52011.0,
+      "mean": 52005.5,
+      "minimum": 52000.0,
+      "n": 36,
+      "sd": 3.5010202594590707
+    }
+  },
+  "rows": 36,
+  "seeds": [52000, 52001, 52002, 52003, 52004, 52005, 52006, 52007, 52008, 52009, 52010, 52011],
+  "stage": "pilot_descriptive"
+}

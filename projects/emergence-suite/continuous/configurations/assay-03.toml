@@ -1,0 +1,16 @@
+assay = 3
+id = "dominance-depth-dissociation"
+nodes = ["vulnerable_bundle", "precision_field"]
+edges = ["bundle_coupling", "field_broadcast"]
+initializers = ["neutral_prior", "developmental_replay"]
+interventions = ["four_field_regimes", "one_dimensional_comparator", "recursive_broadcast_on"]
+observations = ["field_forecast_error", "self", "world", "policy", "outcome"]
+[slots]
+vulnerable_bundles = 1
+protectors = 0
+protective_repertoires = 0
+precision_fields = 1
+latent_partners = 0
+episodic_memories = 0
+part_slots = 0
+cue_meanings = 0

@@ -1,0 +1,60 @@
+{
+  "assay": 7,
+  "canonical_source_sha256": "b5813d625a338d7231af9b7ad45bba316ca893e5699576ea16b294ec125dde41",
+  "criterion_statistics_consulted": false,
+  "genome_sha256": "efd5d83d4053858ddb07e5229ae2eb8e27bdd10d026115b37485bbc71f56074a",
+  "numeric_descriptives": {
+    "doover_success": {
+      "maximum": 0.8333333333333334,
+      "mean": 0.515625,
+      "minimum": 0.20833333333333334,
+      "n": 24,
+      "sd": 0.19536155784858023
+    },
+    "imaginal_probability": {
+      "maximum": 0.85,
+      "mean": 0.5008155339805824,
+      "minimum": 0.15,
+      "n": 1236,
+      "sd": 0.20384222274762998
+    },
+    "reversal": {
+      "maximum": 1.0,
+      "mean": 0.5,
+      "minimum": 0.0,
+      "n": 24,
+      "sd": 0.5107539184552492
+    },
+    "root_probability": {
+      "maximum": 1.0,
+      "mean": 0.5011650485436894,
+      "minimum": 0.0,
+      "n": 1236,
+      "sd": 0.2912031753537571
+    },
+    "seed": {
+      "maximum": 57011.0,
+      "mean": 57005.5,
+      "minimum": 57000.0,
+      "n": 1236,
+      "sd": 3.4534498388529813
+    },
+    "sign_matches": {
+      "maximum": 1.0,
+      "mean": 1.0,
+      "minimum": 1.0,
+      "n": 1236,
+      "sd": 0.0
+    },
+    "suggestion_success": {
+      "maximum": 0.75,
+      "mean": 0.6093750000000001,
+      "minimum": 0.5,
+      "n": 24,
+      "sd": 0.06362217221300645
+    }
+  },
+  "rows": 1236,
+  "seeds": [57000, 57001, 57002, 57003, 57004, 57005, 57006, 57007, 57008, 57009, 57010, 57011],
+  "stage": "pilot_descriptive"
+}

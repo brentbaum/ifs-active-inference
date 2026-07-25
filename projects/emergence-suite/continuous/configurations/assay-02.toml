@@ -1,0 +1,16 @@
+assay = 2
+id = "frozen-persistence"
+nodes = ["vulnerable_bundle", "episodic_memory", "protective_repertoire"]
+edges = ["bundle_coupling", "ordinary_evidence", "repertoire_to_permission"]
+initializers = ["neutral_prior", "freeze_history_replay", "policy_history_replay"]
+interventions = ["closed_action_evidence_loop", "open_loop_replay", "corrective_evidence", "controllability_dose"]
+observations = ["outcome", "policy", "root_evidence"]
+[slots]
+vulnerable_bundles = 1
+protectors = 0
+protective_repertoires = 1
+precision_fields = 0
+latent_partners = 0
+episodic_memories = 1
+part_slots = 0
+cue_meanings = 0

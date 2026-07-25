@@ -1,0 +1,60 @@
+{
+  "assay": 3,
+  "canonical_source_sha256": "b5813d625a338d7231af9b7ad45bba316ca893e5699576ea16b294ec125dde41",
+  "criterion_statistics_consulted": false,
+  "genome_sha256": "efd5d83d4053858ddb07e5229ae2eb8e27bdd10d026115b37485bbc71f56074a",
+  "numeric_descriptives": {
+    "correct_2d": {
+      "maximum": 1.0,
+      "mean": 1.0,
+      "minimum": 1.0,
+      "n": 48,
+      "sd": 0.0
+    },
+    "depth": {
+      "maximum": 1.0,
+      "mean": 0.5,
+      "minimum": 0.0,
+      "n": 48,
+      "sd": 0.5052911526399113
+    },
+    "dominance": {
+      "maximum": 1.0,
+      "mean": 0.5,
+      "minimum": 0.0,
+      "n": 48,
+      "sd": 0.5052911526399113
+    },
+    "loss_1d": {
+      "maximum": 0.5014293098994291,
+      "mean": 0.25027055728831804,
+      "minimum": 2.780995297053242e-6,
+      "n": 48,
+      "sd": 0.25265273817617184
+    },
+    "loss_2d": {
+      "maximum": 0.002247913676298639,
+      "mean": 0.0004824738048349532,
+      "minimum": 4.103196265260106e-6,
+      "n": 48,
+      "sd": 0.0005300861416942276
+    },
+    "scalar_truth": {
+      "maximum": 1.0,
+      "mean": 0.5,
+      "minimum": 0.0,
+      "n": 48,
+      "sd": 0.3572948005052482
+    },
+    "seed": {
+      "maximum": 53011.0,
+      "mean": 53005.5,
+      "minimum": 53000.0,
+      "n": 48,
+      "sd": 3.488583203244183
+    }
+  },
+  "rows": 48,
+  "seeds": [53000, 53001, 53002, 53003, 53004, 53005, 53006, 53007, 53008, 53009, 53010, 53011],
+  "stage": "pilot_descriptive"
+}
