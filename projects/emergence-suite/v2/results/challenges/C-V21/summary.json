@@ -1,0 +1,110 @@
+{
+  "challenge": "C-V21",
+  "configuration": {
+    "channel_A_reliability": [
+      0.9,
+      0.5
+    ],
+    "channel_B_reliability": [
+      0.5,
+      0.9
+    ],
+    "channel_C_reliability": 0.1,
+    "regime_labels_given_to_inference": false,
+    "replicates_per_channel_time": 9,
+    "time_points": 12
+  },
+  "failure_interpretation": "No preregistered dissociation failure was triggered.",
+  "failures": [],
+  "frozen_identity": {
+    "commit": "60ba6e0",
+    "manifest_file_count": 29,
+    "mismatches": []
+  },
+  "paired_streams": true,
+  "passed": true,
+  "runner_execution_failures_retained_verbatim": [
+    "Attempt 1:\nTraceback (most recent call last):\n  File \"/Users/brentbaum/dev/research/ifs-active-inference/projects/emergence-suite/v2/challenges/run_c_v21.py\", line 446, in <module>\n    result = main()\n  File \"/Users/brentbaum/dev/research/ifs-active-inference/projects/emergence-suite/v2/challenges/run_c_v21.py\", line 440, in main\n    write_json(result_dir / \"summary.json\", summary)\n    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/brentbaum/dev/research/ifs-active-inference/projects/emergence-suite/v2/challenges/common.py\", line 110, in write_json\n    json.dumps(value, indent=2, sort_keys=True) + \"\\n\", encoding=\"utf-8\"\n    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nTypeError: Object of type bool is not JSON serializable\nwhen serializing dict item 'passed'\nwhen serializing dict item 'broadcast_dissociation'\nwhen serializing dict item 'tests'",
+    "Attempt 2:\nTraceback (most recent call last):\n  File \"/Users/brentbaum/dev/research/ifs-active-inference/projects/emergence-suite/v2/challenges/run_c_v21.py\", line 464, in <module>\n    result = main()\n  File \"/Users/brentbaum/dev/research/ifs-active-inference/projects/emergence-suite/v2/challenges/run_c_v21.py\", line 458, in main\n    write_json(result_dir / \"summary.json\", summary)\n    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/brentbaum/dev/research/ifs-active-inference/projects/emergence-suite/v2/challenges/common.py\", line 110, in write_json\n    json.dumps(value, indent=2, sort_keys=True) + \"\\n\", encoding=\"utf-8\"\n    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nTypeError: Object of type bool is not JSON serializable\nwhen serializing dict item 'passed'\nwhen serializing dict item 'broadcast_dissociation'\nwhen serializing dict item 'tests'"
+  ],
+  "seed_block_used": [
+    801392,
+    801451
+  ],
+  "stage": "V2.1",
+  "tests": {
+    "broadcast_dissociation": {
+      "accuracy_effect_95_interval": [
+        0.46944444444444444,
+        0.41482035288266583,
+        0.524068536006223
+      ],
+      "local_calibration_95_intervals": {
+        "off": {
+          "A": [
+            0.01785819444444444,
+            0.00850619945470207,
+            0.02721018943418681
+          ],
+          "B": [
+            0.019191944444444446,
+            0.010430162407956339,
+            0.027953726480932552
+          ],
+          "C": [
+            0.018089027777777773,
+            0.009506577771843439,
+            0.026671477783712108
+          ]
+        },
+        "on": {
+          "A": [
+            0.01785819444444444,
+            0.00850619945470207,
+            0.02721018943418681
+          ],
+          "B": [
+            0.019191944444444446,
+            0.010430162407956339,
+            0.027953726480932552
+          ],
+          "C": [
+            0.018089027777777773,
+            0.009506577771843439,
+            0.026671477783712108
+          ]
+        }
+      },
+      "local_interval_overlap": true,
+      "passed": true
+    },
+    "miscalibration_containment": {
+      "integrated_95_interval": [
+        0.0,
+        -6.938893903907228e-18,
+        0.06017393047793289
+      ],
+      "integrated_worlds": 0,
+      "passed": true
+    },
+    "no_label_audit": {
+      "inference_payload_fields": [
+        "counts",
+        "local_monitor_observations",
+        "broadcast"
+      ],
+      "midpoint_or_regime_passed": false,
+      "passed": true
+    },
+    "tracking": {
+      "crossing_95_interval": [
+        1.0,
+        0.9398260695220669,
+        0.9999999999999999
+      ],
+      "crossing_worlds": 60,
+      "passed": true
+    }
+  },
+  "world_count_per_arm": 60
+}

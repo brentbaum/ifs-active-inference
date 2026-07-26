@@ -1,0 +1,150 @@
+{
+  "challenge": "C-V22",
+  "configuration": {
+    "associated_cues_one_indexed": [
+      1,
+      3,
+      4
+    ],
+    "corrective_reliability": 0.78,
+    "cue_count": 6,
+    "floor_band": 0.02,
+    "history_length": 180,
+    "local_equivalence_band": 0.03,
+    "near_twin_pair_one_indexed": [
+      1,
+      2
+    ],
+    "precision_state_sequence": [
+      2,
+      0,
+      2
+    ],
+    "root_null_band": 0.01,
+    "segment_boundaries_given_to_inference": false,
+    "transfer_null_band": 0.01
+  },
+  "failure_interpretation": "Retained localization: transfer did not follow learned root structure.",
+  "failure_localization": {
+    "absolute_association_deviation_from_half_mean_failed": 0.04856433888691953,
+    "absolute_association_deviation_from_half_mean_passed": 0.016104585070102314,
+    "absolute_association_deviation_transfer_correlation": 0.9699676276863979,
+    "absolute_root_revision_transfer_correlation": 0.9983555540942556,
+    "cue5_learned_association_mean": 0.5011904761904762,
+    "cue5_learned_association_range": [
+      0.3901098901098901,
+      0.6043956043956044
+    ],
+    "cue5_max_transfer_range": [
+      0.0,
+      0.07719247043650956
+    ],
+    "cue5_root_revision_range": [
+      -0.09492587580705902,
+      0.0902662683363713
+    ],
+    "failed_floor_seeds": [
+      802051,
+      802052,
+      802054,
+      802056,
+      802057,
+      802059,
+      802061,
+      802064,
+      802066,
+      802068,
+      802070,
+      802072,
+      802073,
+      802078,
+      802079,
+      802080,
+      802081,
+      802082,
+      802084,
+      802087,
+      802091,
+      802094,
+      802096,
+      802099,
+      802102,
+      802103,
+      802104,
+      802106,
+      802107,
+      802109,
+      802110
+    ],
+    "failed_floor_worlds": 31,
+    "interpretation": "The failure localizes to absolute calibration of the learned non-association for cue 5: finite developmental histories left posterior associations far enough from 0.5 that repeated correction revised G. Transfer remained mediated by G (mediation passed), so the finding is not a root-free transfer route."
+  },
+  "failures": [
+    "transfer_structure"
+  ],
+  "frozen_identity": {
+    "commit": "60ba6e0",
+    "manifest_file_count": 31,
+    "mismatches": []
+  },
+  "matched_predictive_log_likelihood": {
+    "absolute_arm_difference": 0.0,
+    "cue1": -0.6931471805599453,
+    "cue5": -0.6931471805599453
+  },
+  "paired_segment_monitor_mismatches": 0,
+  "paired_streams": true,
+  "passed": false,
+  "seed_block_used": [
+    802051,
+    802110
+  ],
+  "stage": "V2.2",
+  "tests": {
+    "mediation": {
+      "maximum_null_world_transfer": 0.00821667604580495,
+      "null_root_worlds": 11,
+      "passed": true,
+      "root_null_band": 0.01,
+      "transfer_null_band": 0.01
+    },
+    "segment_gated_uptake": {
+      "attribution_effect_95_interval": [
+        0.2358886345363065,
+        0.22730008930681447,
+        0.24447717976579855
+      ],
+      "equivalence_band": 0.03,
+      "local_broad_uptake": 0.28000000000000014,
+      "local_narrowed_uptake": 0.2800000000000001,
+      "local_uptake_difference": 5.551115123125783e-17,
+      "passed": true
+    },
+    "structure_recovery": {
+      "mean_auc_95_interval": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "passed": true,
+      "threshold": 0.85
+    },
+    "transfer_structure": {
+      "cue1_structural_win_95_interval": [
+        1.0,
+        0.9398260695220669,
+        0.9999999999999999
+      ],
+      "cue1_structural_win_worlds": 60,
+      "cue1_transfer_contrast_95_interval": [
+        0.21669613608655572,
+        0.2093366251983219,
+        0.22405564697478952
+      ],
+      "cue5_floor_clean_worlds": 29,
+      "floor_band": 0.02,
+      "passed": false
+    }
+  },
+  "world_count_per_arm": 60
+}

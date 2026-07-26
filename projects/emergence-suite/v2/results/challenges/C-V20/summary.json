@@ -1,0 +1,81 @@
+{
+  "challenge": "C-V20",
+  "configuration": {
+    "actions": 2,
+    "collider_outcomes": 4,
+    "perturbations": [
+      0.2,
+      0.5,
+      0.8
+    ],
+    "time_slices": 5,
+    "x_cardinality": 3,
+    "y_cardinality": 2
+  },
+  "failure_interpretation": "No preregistered failure interpretation was triggered.",
+  "failures": [],
+  "frozen_identity": {
+    "commit": "60ba6e0",
+    "manifest_file_count": 25,
+    "mismatches": []
+  },
+  "passed": true,
+  "seed_block_used": [
+    800347,
+    800396
+  ],
+  "stage": "V2.0",
+  "tests": {
+    "comparison": {
+      "h1_episode_effect_95_interval": [
+        0.5061987322826424,
+        0.21772560608445257,
+        0.7946718584808323
+      ],
+      "h1_win_95_interval": [
+        0.94,
+        0.8378265662912299,
+        0.9793854036353695
+      ],
+      "h1_wins_at_least_1_nat": 47,
+      "h2_episode_effect_95_interval": [
+        0.7121495698900675,
+        0.32531555884366387,
+        1.0989835809364712
+      ],
+      "h2_win_95_interval": [
+        1.0,
+        0.9286499658256813,
+        1.0
+      ],
+      "h2_wins_at_least_1_nat": 50,
+      "passed": true
+    },
+    "exactness": {
+      "checks": 200,
+      "episodes_per_policy": 10,
+      "maximum_absolute_error": 2.631228568361621e-14,
+      "passed": true
+    },
+    "learning": {
+      "absolute_error": 0.028871654455442153,
+      "block_truth": 0.8423637179475056,
+      "passed": true,
+      "posterior_mean": 0.8134920634920635
+    },
+    "mutation": {
+      "cumulative_margins": [
+        24.615484825430876,
+        17.50940528883928,
+        7.3423821274853704
+      ],
+      "passed": true,
+      "perturbations": [
+        0.2,
+        0.5,
+        0.8
+      ]
+    }
+  },
+  "world_count": 50
+}

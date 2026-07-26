@@ -1,0 +1,24 @@
+{
+  "base_freeze_commit": "60ba6e0",
+  "base_freeze_manifest": "results/V2.2/freeze-manifest.json",
+  "base_freeze_manifest_sha256": "405d39375aac4f28ab7036e0efec1b190b08ce49360fe5f4a35a981f7a1a8232",
+  "base_manifest_sealed_gate_6_run": false,
+  "challenge": "C-V22",
+  "challenge_spec_sha256": "0e998bfe9971d230bb5b133ae8999676c5389389c8cf55f2ca4ed6cec6c16c5a",
+  "frozen_identity": {
+    "commit": "60ba6e0",
+    "manifest_file_count": 31,
+    "mismatches": []
+  },
+  "frozen_manifest_modified": false,
+  "overlay": {
+    "sealed_gate_6_run": true
+  },
+  "result_files": {
+    "results/challenges/C-V22/per_seed.csv": "14b0bf9e6a7e79f1f3b158bc4df9dc57528044a51476a9e45110164db836e0e7",
+    "results/challenges/C-V22/report.md": "d4741cce48b15e2c13664efde9605d8c27da6b11c6b93fa06503b11d6d6e0f95",
+    "results/challenges/C-V22/summary.json": "7cd942551bcae8a2e049169bf3c1ec4eff9cbbd174ebfd4127ccaff7ecc0ea30"
+  },
+  "stage": "V2.2",
+  "verdict": "FAIL"
+}
