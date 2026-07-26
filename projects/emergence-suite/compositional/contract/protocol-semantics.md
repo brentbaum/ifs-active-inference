@@ -1,6 +1,6 @@
 # Protocol execution semantics
 
-Contract version `1.0.0` compiles every arm into a deterministic event schedule.
+Contract version `1.0.1` compiles every arm into a deterministic event schedule.
 The executable protocol domain is the half-open interval
 `0 <= time < world.horizon`; every declared and expanded occurrence must lie in
 that domain.

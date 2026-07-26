@@ -1,6 +1,6 @@
 # Reference and identifier rules
 
-These rules are normative for contract version `1.0.0`.
+These rules are normative for contract version `1.0.1`.
 
 ## Identifiers
 

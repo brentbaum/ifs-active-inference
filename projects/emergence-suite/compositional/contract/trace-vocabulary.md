@@ -1,6 +1,6 @@
 # Canonical trace vocabulary
 
-Contract version `1.0.0` uses typed dot paths. `<node>`, `<factor>`,
+Contract version `1.0.1` uses typed dot paths. `<node>`, `<factor>`,
 `<candidate>`, `<action>`, and `<channel>` are resolved IDs, not wildcards in a
 stored trace. Analysis plans may use `*` in one placeholder position when an
 aggregation consumes all matching scalar fields.

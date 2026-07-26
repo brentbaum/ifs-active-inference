@@ -8,7 +8,7 @@ Read the complete Experiment 51 specification. Act as evaluator and challenge cu
 
 Before any organism code is written:
 
-1. Commit and Fable-review public declarative contract `1.0.0`, including the
+1. Commit and Fable-review public declarative contract `1.0.1`, including the
    four formal schemas, trace vocabulary, analysis grammar, world/RNG semantics,
    aggregate bounds, seed-escrow convention, valid/invalid fixtures, and the
    deterministic archive convention. Bind all private material to that exact

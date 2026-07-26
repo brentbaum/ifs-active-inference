@@ -3,7 +3,7 @@
 using TOML
 
 const CONTRACT_ID = "ifs-ai-experiment-51-contract"
-const CONTRACT_VERSION = "1.0.0"
+const CONTRACT_VERSION = "1.0.1"
 const ID_PATTERN = r"^[a-z][a-z0-9]*(?:[-_][a-z0-9]+)*$"
 const EDGE_SIGNATURES = Dict(
     "bundle_context" => (Set(["ContextNode"]), Set(["BundleNode"])),

@@ -1,7 +1,7 @@
 # Public contract conformance matrix
 
 `scripts/contract/test_schema_variants.py` materializes one accepted and one
-rejected fixture for every discriminated contract `1.0.0` JSON-Schema branch:
+rejected fixture for every discriminated contract `1.0.1` JSON-Schema branch:
 
 - discrete and bounded-Gaussian configuration channels;
 - six distribution families;
@@ -64,6 +64,8 @@ cumulative, upper, and rounding-fallback boundaries.
 
 `scripts/contract/test_seed_escrow.jl` freezes seed-range, exact public-contract
 commit/content-manifest binding, parsing, and purpose-suppression rules.
+It also requires the validator to retain and commit the exact input byte vector,
+preventing a parsed escrow from hashing an emptied or normalized buffer.
 
 All suites plus the public dummy's authoritative validation and independent
 archive verification must pass before private challenge authoring.

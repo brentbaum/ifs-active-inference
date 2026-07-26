@@ -1,6 +1,6 @@
 # Initialization and developmental replay
 
-Contract version `1.0.0` has one initializer and one history generator.
+Contract version `1.0.1` has one initializer and one history generator.
 
 `initializer_id = "neutral-replay-v1"` initializes every active categorical
 state uniformly, every active Bernoulli state at `0.5`, every policy at equal

@@ -5,7 +5,7 @@ The private escrow is one canonical UTF-8/LF/final-newline TOML file with:
 ```toml
 experiment_id = "experiment-51"
 contract_id = "ifs-ai-experiment-51-contract"
-contract_version = "1.0.0"
+contract_version = "1.0.1"
 contract_commit = "<40 lowercase hex>"
 rng_convention = "rng-51-v1"
 generation = "os-csprng-256"

@@ -31,11 +31,11 @@ function main()
 
     digest = bytes2hex(AnalysisMath.bootstrap_digest(
         "analysis-one", "estimand-one", 0, 0))
-    digest == "1db8158381d470639e0ba8fe91e2d655377c199a497cd277206b5661fa1f4fdd" ||
+    digest == "5e9812f2897168fdceb9411f3c8e83af23f59e6c4380f85e2691f741913812af" ||
         error("bootstrap digest vector failed: $digest")
     index = AnalysisMath.bootstrap_index(
         17, "analysis-one", "estimand-one", 0, 0)
-    index == 1 ||
+    index == 6 ||
         error("bootstrap index vector failed: $index")
     paired_keys = [
         AnalysisMath.unit_key("seed"; seed = 2, paired = true),

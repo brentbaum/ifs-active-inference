@@ -20,7 +20,7 @@ experiment must then preserve its seal, freeze, reveal, and no-repair boundaries
 
 - The specification and kickoff were moved from `~/Downloads` to
   `projects/ifs-paper/`, then amended only to bind private authoring to public
-  contract `1.0.0`, its exact commit, and its content manifest.
+  contract `1.0.1`, its exact commit, and its content manifest.
 - Fable identified a blocking schema underdetermination: §6 lacks field names,
   enums, reference rules, trace vocabulary, and an analysis expression grammar.
 - The original worktree contains unrelated user changes. Experiment 51 work is
@@ -163,9 +163,10 @@ and continuing through Experiment 51, with Fable review.
   rejected schema pairs, 40 semantic rejection fixtures, seed-escrow tests,
   analysis-math tests, RNG-transform vectors, the public manifest, canonical
   USTAR reconstruction, and independent archive verification.
-- Sealed public dummy `51-P-00` at SHA-256
+- Sealed the superseded `1.0.0` public dummy `51-P-00` at SHA-256
   `5c6fd361536c44b5e30b56404f7ca49ed2fd7682569aabf505429472dcb72d3f`
-  and 24,064 bytes.
+  and 24,064 bytes; the later correction log records why this version was
+  withdrawn before private sealing.
 - Received Fable's exact-contract verdict: `APPROVED`.
 - Reverified the Experiment 50 tracked-tree digest as
   `64444faf9b2c8ab5e8a2e5ea9cf8e2177b9953a49de318a1852a7bbca3646679`
@@ -176,3 +177,30 @@ and continuing through Experiment 51, with Fable review.
   sealed analysis plans can be interpreted fairly.
 - A single authoritative validator must invoke every suite named by the
   contract.
+
+### 2026-07-26 - Pre-seal escrow correction
+
+**By:** Codex (Sol role)
+
+**Actions:**
+- Detected on first real escrow generation that Julia's `String(raw_bytes)`
+  ownership transfer emptied the byte vector later supplied to the public
+  commitment formatter.
+- Withheld the erroneous empty-file commitment; no private seal or encrypted
+  custody object was created.
+- Moved all affected unsealed private drafts to macOS Trash and revoked the
+  earlier Fable approval.
+- Bumped the public contract to `1.0.1`, preserved the exact byte vector with
+  `String(copy(raw_bytes))`, and added byte-for-byte SHA-256 and length
+  regression assertions.
+- Regenerated the `1.0.1` public dummy vector at SHA-256
+  `7f1d40d9200430b68ab6138cba260bb1d4bbf76b8836de1f7a7ee7363ff70b2a`
+  and 24,064 bytes.
+- Restored all accidentally touched transitive `package-lock.json` metadata so
+  only the two root-package version fields changed, then passed a clean
+  `npm ci` and the full authoritative suite.
+- Received Fable's replacement exact-contract verdict: `APPROVED`.
+
+**Learnings:**
+- Parser correctness does not establish custody correctness; exact committed
+  bytes need an independent regression assertion.

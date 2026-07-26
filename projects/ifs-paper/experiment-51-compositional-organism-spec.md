@@ -6,7 +6,7 @@
 **Implementation home:** `projects/emergence-suite/compositional/`  
 **Paper home:** `projects/ifs-paper/`  
 **Specification home:** `projects/ifs-paper/experiment-51-compositional-organism-spec.md`  
-**Public declarative contract:** version `1.0.0` at
+**Public declarative contract:** version `1.0.1` at
 `projects/emergence-suite/compositional/CONTRACT.md`; its exact pre-challenge
 commit and content manifest are part of the Stage 0 seal.  
 **Starting record:** Experiment 50 is retained as the shared-core integration attempt: historically robust, sensitivity-block-diagonal, non-compositional, with prospective polarization failure and no executable evidence-format or self-like-part semantics.
@@ -267,7 +267,7 @@ The local-fluency and global-depth measurements must read actual canonical state
 
 The schemas are public before challenge sealing. Sol's sealed files must use them exactly.
 For Experiment 51, “the schemas in this document” means §6's content rules
-together with public contract `1.0.0`, its four JSON Schemas, trace vocabulary,
+together with public contract `1.0.1`, its four JSON Schemas, trace vocabulary,
 analysis grammar, world/RNG semantics, and validator. The contract must be
 committed and Fable-reviewed before private challenge authoring. Every bundle
 and seed escrow is bound to that exact commit. Any contract change after private

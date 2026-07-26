@@ -1,7 +1,7 @@
 # Experiment 51 public declarative contract
 
 **Contract ID:** `ifs-ai-experiment-51-contract`
-**Contract version:** `1.0.0`
+**Contract version:** `1.0.1`
 **Status:** public pre-implementation apparatus
 
 This contract resolves the machine-readable details intentionally left implicit
@@ -9,6 +9,15 @@ by §6 of the Experiment 51 specification. It is locked before any private 51-P
 challenge or seed escrow is authored. It defines syntax and reference semantics;
 it does not define organism equations, posterior values, challenge outcomes, or
 private thresholds.
+
+## Version correction
+
+Version `1.0.0` was withdrawn before any private seal was committed. Its escrow
+parser converted the exact byte vector to a `String` without copying; Julia
+transferred ownership and emptied the vector later passed to the public
+commitment formatter. Version `1.0.1` preserves a copy, regression-tests the
+exact byte vector, SHA-256, and byte count, and invalidates all pre-correction
+draft private material.
 
 ## Normative files
 
@@ -52,7 +61,7 @@ Every TOML file begins with:
 
 ```toml
 contract_id = "ifs-ai-experiment-51-contract"
-contract_version = "1.0.0"
+contract_version = "1.0.1"
 ```
 
 The version is exact. Implementations must reject an unknown version rather than

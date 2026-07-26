@@ -189,7 +189,7 @@ Unknown or extra keys are errors. `E` means a nested expression.
 | `budget_relative_error` | `evidence_budget_rule_id` | unit series |
 | `survival_fraction` | `arg=E`, `comparator`, `threshold` | scalar |
 
-`arm` and `paired_slope` are not contract `1.0.0` operators. All temporal
+`arm` and `paired_slope` are not contract `1.0.1` operators. All temporal
 operators group by `(seed, arm)` plus a node placeholder when present. An
 explicit wildcard is valid only when the direct parent is an aggregation or
 `argmax_match`.

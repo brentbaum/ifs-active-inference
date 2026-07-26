@@ -1,6 +1,6 @@
 # Typed world and emission semantics
 
-Contract version `1.0.0` uses closed, dimension-checked world objects.
+Contract version `1.0.1` uses closed, dimension-checked world objects.
 
 ## Latent factors
 

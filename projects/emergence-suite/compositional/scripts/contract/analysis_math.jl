@@ -3,7 +3,7 @@
 using SHA
 
 const ANALYSIS_CONTRACT_ID = "ifs-ai-experiment-51-contract"
-const ANALYSIS_CONTRACT_VERSION = "1.0.0"
+const ANALYSIS_CONTRACT_VERSION = "1.0.1"
 
 function arithmetic_mean(values)
     isempty(values) && error("analysis math: mean of empty series")

@@ -1,6 +1,6 @@
 # Public contract test vector
 
-Contract: `ifs-ai-experiment-51-contract@1.0.0`
+Contract: `ifs-ai-experiment-51-contract@1.0.1`
 Challenge: `51-P-00`
 Decision rules: `budget-valid`, `ordering-observed`
 

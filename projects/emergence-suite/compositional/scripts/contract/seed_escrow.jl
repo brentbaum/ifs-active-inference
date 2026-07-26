@@ -4,7 +4,7 @@ using SHA
 using TOML
 
 const CONTRACT_ID = "ifs-ai-experiment-51-contract"
-const CONTRACT_VERSION = "1.0.0"
+const CONTRACT_VERSION = "1.0.1"
 const EXPERIMENT_ID = "experiment-51"
 const ID_PATTERN = r"^[a-z][a-z0-9]*(?:[-_][a-z0-9]+)*$"
 
@@ -66,7 +66,7 @@ end
 function validate_escrow(path; expected_contract_commit = nothing)
     raw_bytes = read(path)
     isvalid(String, raw_bytes) || fail("escrow is not UTF-8")
-    text = String(raw_bytes)
+    text = String(copy(raw_bytes))
     occursin('\r', text) && fail("escrow contains CR")
     endswith(text, "\n") || fail("escrow lacks final newline")
     escrow = TOML.parse(text)
