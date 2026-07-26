@@ -1,0 +1,62 @@
+{
+  "failures": [],
+  "gate": 3,
+  "name": "gate_3_composition",
+  "passed": true,
+  "rerun_stage": "V2.1",
+  "results": {
+    "broadcast": {
+      "depth_effect": 0.39666666666666667,
+      "depth_off": 0.3333333333333333,
+      "depth_on": 0.73,
+      "engine_oracle_error": 2.7755575615628914e-17,
+      "local_max_difference": 0.0,
+      "local_off": [
+        0.04999999999999999,
+        0.04999999999999999,
+        0.9
+      ],
+      "local_on": [
+        0.04999999999999999,
+        0.04999999999999999,
+        0.9
+      ],
+      "off_monitor_depth_effect": 0.0
+    },
+    "composition": {
+      "delivered_log_odds_effect": 0.9020320974870424,
+      "posterior_y_broad": 0.8438218608948914,
+      "posterior_y_narrow": 0.6867378034432879
+    },
+    "open_assays": {
+      "conflict_confident_miscalibrated_target": 0.15617813910510864,
+      "conflict_less_confident_calibrated_target": 0.7498053987462923,
+      "four_unlabeled_regimes": {
+        "r0": {
+          "depth": 0.73,
+          "dominance": 0.08370017320006753,
+          "target_posterior": 0.8438218608948914
+        },
+        "r1": {
+          "depth": 0.73,
+          "dominance": 0.08370017320006753,
+          "target_posterior": 0.15617813910510864
+        },
+        "r2": {
+          "depth": 0.09249999999999999,
+          "dominance": 0.07338388425153591,
+          "target_posterior": 0.6867378034432879
+        },
+        "r3": {
+          "depth": 0.09249999999999999,
+          "dominance": 0.07338388425153591,
+          "target_posterior": 0.31326219655671206
+        }
+      },
+      "independent_local_comparator_target": 0.7601216876948239,
+      "reliable_local_high_probability": 0.9,
+      "unreliable_local_low_probability": 0.9000000000000001
+    }
+  },
+  "strain": "V2.3"
+}

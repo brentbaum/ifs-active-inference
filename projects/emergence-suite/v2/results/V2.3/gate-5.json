@@ -1,0 +1,501 @@
+{
+  "failures": [],
+  "gate": 5,
+  "name": "gate_5_cumulative_regression",
+  "passed": true,
+  "results": {
+    "cumulative_regressions": {
+      "V2.0": {
+        "gate_1_semantic": true,
+        "gate_2_recovery": true,
+        "gate_3_comparison": true,
+        "gate_4_batch_mutation": true,
+        "gate_5_one_posterior": true
+      },
+      "V2.1": {
+        "gate_1_semantic": true,
+        "gate_2_recovery": true,
+        "gate_3_composition": true,
+        "gate_4_selective_lesion": true,
+        "gate_5_cumulative_regression": true
+      },
+      "V2.2.1": {
+        "gate_1_structure_semantics": true,
+        "gate_2_recovery": true,
+        "gate_3_precision_root_transfer": true,
+        "gate_4_selective_lesions": true,
+        "gate_5_cumulative_regression": true
+      }
+    },
+    "determinism": {
+      "full_seed_block_checked_twice": true,
+      "scientific_summaries_identical": true
+    },
+    "sensitivity": {
+      "full_profile": [
+        {
+          "adaptive_persistence": 0.9560446812491941,
+          "index": 0,
+          "mediator_effect": 0.25,
+          "observation_effect": 0.5,
+          "persistent_prior": 0.1793363377725878,
+          "policy_effect": 0.875,
+          "reliability_scale": 1.0517311667666371,
+          "root_effect": 0.9806512935280457,
+          "seed": 62300,
+          "structure_effect": 0.2838531299056912,
+          "transition_effect": 0.5
+        },
+        {
+          "adaptive_persistence": 0.999748907503751,
+          "index": 1,
+          "mediator_effect": 0.41964285714285715,
+          "observation_effect": 0.375,
+          "persistent_prior": 0.291085595147085,
+          "policy_effect": 0.5625,
+          "reliability_scale": 0.9811007865851706,
+          "root_effect": 0.6632349913897151,
+          "seed": 62301,
+          "structure_effect": -0.10852692397627833,
+          "transition_effect": 0.5
+        },
+        {
+          "adaptive_persistence": 0.9999932816249321,
+          "index": 2,
+          "mediator_effect": 0.875,
+          "observation_effect": 0.75,
+          "persistent_prior": 0.2381951670477664,
+          "policy_effect": 1.0,
+          "reliability_scale": 1.058036933526914,
+          "root_effect": 0.9952941491075175,
+          "seed": 62302,
+          "structure_effect": 0.30953342007127316,
+          "transition_effect": 0.875
+        },
+        {
+          "adaptive_persistence": 0.9999471777743463,
+          "index": 3,
+          "mediator_effect": 0.375,
+          "observation_effect": 0.3125,
+          "persistent_prior": 0.3442100078108315,
+          "policy_effect": 0.375,
+          "reliability_scale": 1.0844868751078607,
+          "root_effect": 0.14065640824304,
+          "seed": 62303,
+          "structure_effect": -0.15234724206516237,
+          "transition_effect": 0.3125
+        },
+        {
+          "adaptive_persistence": 0.9997474771206426,
+          "index": 4,
+          "mediator_effect": 0.1875,
+          "observation_effect": 0.0625,
+          "persistent_prior": 0.14310725576490707,
+          "policy_effect": 0.3125,
+          "reliability_scale": 1.0344793718471028,
+          "root_effect": -0.06886007423708523,
+          "seed": 62304,
+          "structure_effect": 0.020848898290510454,
+          "transition_effect": 0.0625
+        },
+        {
+          "adaptive_persistence": 0.9999653788897852,
+          "index": 5,
+          "mediator_effect": 0.2291666666666667,
+          "observation_effect": 0.5625,
+          "persistent_prior": 0.16471381987793288,
+          "policy_effect": 0.8125,
+          "reliability_scale": 1.0883491193185735,
+          "root_effect": 0.9977903139305344,
+          "seed": 62305,
+          "structure_effect": 0.12884468992607456,
+          "transition_effect": 0.5625
+        },
+        {
+          "adaptive_persistence": 0.9959105786419621,
+          "index": 6,
+          "mediator_effect": 0.14583333333333334,
+          "observation_effect": 0.125,
+          "persistent_prior": 0.1098094810683109,
+          "policy_effect": 0.25,
+          "reliability_scale": 0.9898836166962818,
+          "root_effect": -0.03758799236037877,
+          "seed": 62306,
+          "structure_effect": -0.10177181321279043,
+          "transition_effect": 0.125
+        },
+        {
+          "adaptive_persistence": 0.9961855686330467,
+          "index": 7,
+          "mediator_effect": 0.5625,
+          "observation_effect": 0.375,
+          "persistent_prior": 0.11549437308472993,
+          "policy_effect": 0.75,
+          "reliability_scale": 0.9018191317106614,
+          "root_effect": 0.8056283701277591,
+          "seed": 62307,
+          "structure_effect": 0.620617274737099,
+          "transition_effect": 0.5
+        },
+        {
+          "adaptive_persistence": 0.9997068771993577,
+          "index": 8,
+          "mediator_effect": 0.6875,
+          "observation_effect": 0.5625,
+          "persistent_prior": 0.1664096413893778,
+          "policy_effect": 0.875,
+          "reliability_scale": 0.9133367467552287,
+          "root_effect": 0.91601773685875,
+          "seed": 62308,
+          "structure_effect": 0.6738354300861491,
+          "transition_effect": 0.6875
+        },
+        {
+          "adaptive_persistence": 0.9996446390827444,
+          "index": 9,
+          "mediator_effect": 0.47916666666666674,
+          "observation_effect": 0.6875,
+          "persistent_prior": 0.21546346648923007,
+          "policy_effect": 0.8125,
+          "reliability_scale": 0.9899181301222486,
+          "root_effect": 0.9843392244318007,
+          "seed": 62309,
+          "structure_effect": 0.518961763944037,
+          "transition_effect": 0.6875
+        },
+        {
+          "adaptive_persistence": 0.998868859090742,
+          "index": 10,
+          "mediator_effect": 0.0625,
+          "observation_effect": 0.0,
+          "persistent_prior": 0.16361195022203112,
+          "policy_effect": 0.125,
+          "reliability_scale": 0.9820515204900858,
+          "root_effect": -0.010188540878737481,
+          "seed": 62310,
+          "structure_effect": -0.15377488099984649,
+          "transition_effect": 0.0
+        },
+        {
+          "adaptive_persistence": 0.9997795787994194,
+          "index": 11,
+          "mediator_effect": 0.0,
+          "observation_effect": 0.0,
+          "persistent_prior": 0.27858292419672775,
+          "policy_effect": 0.25,
+          "reliability_scale": 0.9707696290445373,
+          "root_effect": -0.019990510813189276,
+          "seed": 62311,
+          "structure_effect": -0.00805117025034141,
+          "transition_effect": 0.0
+        },
+        {
+          "adaptive_persistence": 0.9999882295539504,
+          "index": 12,
+          "mediator_effect": 0.26249999999999996,
+          "observation_effect": 0.3125,
+          "persistent_prior": 0.28084976695786473,
+          "policy_effect": 0.375,
+          "reliability_scale": 0.9824492388710855,
+          "root_effect": 0.29202900818533617,
+          "seed": 62312,
+          "structure_effect": 0.03558725203759294,
+          "transition_effect": 0.3125
+        },
+        {
+          "adaptive_persistence": 0.9998868793819836,
+          "index": 13,
+          "mediator_effect": 0.375,
+          "observation_effect": 0.125,
+          "persistent_prior": 0.23458777911922105,
+          "policy_effect": 0.5625,
+          "reliability_scale": 0.9075028733878698,
+          "root_effect": 0.10952896291143452,
+          "seed": 62313,
+          "structure_effect": 0.07596577831966764,
+          "transition_effect": 0.25
+        },
+        {
+          "adaptive_persistence": 0.9966499879684467,
+          "index": 14,
+          "mediator_effect": 0.03749999999999998,
+          "observation_effect": 0.125,
+          "persistent_prior": 0.3440632500467331,
+          "policy_effect": 0.6875,
+          "reliability_scale": 1.0003807117439745,
+          "root_effect": 0.7555558236427562,
+          "seed": 62314,
+          "structure_effect": 0.44624415161089204,
+          "transition_effect": 0.25
+        },
+        {
+          "adaptive_persistence": 0.9997398017483495,
+          "index": 15,
+          "mediator_effect": 0.1388888888888889,
+          "observation_effect": 0.1875,
+          "persistent_prior": 0.2558120306097145,
+          "policy_effect": 0.4375,
+          "reliability_scale": 1.0261034839039371,
+          "root_effect": 0.024633512555808895,
+          "seed": 62315,
+          "structure_effect": -0.025897012762104432,
+          "transition_effect": 0.1875
+        },
+        {
+          "adaptive_persistence": 0.9946179231740637,
+          "index": 16,
+          "mediator_effect": 0.625,
+          "observation_effect": 0.4375,
+          "persistent_prior": 0.16847897653867905,
+          "policy_effect": 0.8125,
+          "reliability_scale": 1.0379361008613197,
+          "root_effect": 0.7922924710636186,
+          "seed": 62316,
+          "structure_effect": 0.6731977924313528,
+          "transition_effect": 0.4375
+        },
+        {
+          "adaptive_persistence": 0.829594141178372,
+          "index": 17,
+          "mediator_effect": 0.45833333333333337,
+          "observation_effect": 0.125,
+          "persistent_prior": 0.13951403520926176,
+          "policy_effect": 0.625,
+          "reliability_scale": 1.0099730374527045,
+          "root_effect": -0.027819861014864,
+          "seed": 62317,
+          "structure_effect": -0.1268512523974583,
+          "transition_effect": 0.375
+        },
+        {
+          "adaptive_persistence": 0.9372786095645188,
+          "index": 18,
+          "mediator_effect": 0.4375,
+          "observation_effect": 0.25,
+          "persistent_prior": 0.2211415707766438,
+          "policy_effect": 0.5625,
+          "reliability_scale": 0.9788682741441703,
+          "root_effect": 0.6158953521450623,
+          "seed": 62318,
+          "structure_effect": 0.41703964446521635,
+          "transition_effect": 0.25
+        },
+        {
+          "adaptive_persistence": 0.9956341421775186,
+          "index": 19,
+          "mediator_effect": 0.17307692307692307,
+          "observation_effect": 0.0,
+          "persistent_prior": 0.210288538514263,
+          "policy_effect": 0.1875,
+          "reliability_scale": 1.0585056059641873,
+          "root_effect": -0.017450640390677535,
+          "seed": 62319,
+          "structure_effect": -0.09170335956962919,
+          "transition_effect": 0.0
+        },
+        {
+          "adaptive_persistence": 0.9994518603670813,
+          "index": 20,
+          "mediator_effect": -0.008928571428571428,
+          "observation_effect": 0.0,
+          "persistent_prior": 0.3290787514068582,
+          "policy_effect": 0.125,
+          "reliability_scale": 1.0344135595214154,
+          "root_effect": -0.0077631447963995934,
+          "seed": 62320,
+          "structure_effect": -0.25834714788378066,
+          "transition_effect": 0.0
+        },
+        {
+          "adaptive_persistence": 0.9993795447297649,
+          "index": 21,
+          "mediator_effect": 0.3125,
+          "observation_effect": 0.0625,
+          "persistent_prior": 0.2842906624830786,
+          "policy_effect": 0.625,
+          "reliability_scale": 0.968293004264715,
+          "root_effect": 0.2005926125892497,
+          "seed": 62321,
+          "structure_effect": 0.007525169846422597,
+          "transition_effect": 0.1875
+        },
+        {
+          "adaptive_persistence": 0.9998228722983776,
+          "index": 22,
+          "mediator_effect": 0.15865384615384615,
+          "observation_effect": 0.1875,
+          "persistent_prior": 0.20695921256817848,
+          "policy_effect": 0.1875,
+          "reliability_scale": 0.9464940317012187,
+          "root_effect": 0.03720338040998315,
+          "seed": 62322,
+          "structure_effect": -0.2554966513256508,
+          "transition_effect": 0.1875
+        },
+        {
+          "adaptive_persistence": 0.9978155261419951,
+          "index": 23,
+          "mediator_effect": -0.008928571428571428,
+          "observation_effect": 0.0,
+          "persistent_prior": 0.14056569120110662,
+          "policy_effect": 0.125,
+          "reliability_scale": 0.9342316535719317,
+          "root_effect": -0.03629963600451162,
+          "seed": 62323,
+          "structure_effect": -0.24377577303872416,
+          "transition_effect": 0.0
+        },
+        {
+          "adaptive_persistence": 0.9999650774190599,
+          "index": 24,
+          "mediator_effect": 0.1875,
+          "observation_effect": 0.3125,
+          "persistent_prior": 0.19154527589338316,
+          "policy_effect": 0.25,
+          "reliability_scale": 1.0956286805505042,
+          "root_effect": 0.0575392005258864,
+          "seed": 62324,
+          "structure_effect": -0.09596477075527576,
+          "transition_effect": 0.3125
+        },
+        {
+          "adaptive_persistence": 0.9996670727274126,
+          "index": 25,
+          "mediator_effect": 0.04166666666666667,
+          "observation_effect": 0.0625,
+          "persistent_prior": 0.2542258566072267,
+          "policy_effect": 0.25,
+          "reliability_scale": 0.9953957446193058,
+          "root_effect": -0.0529095740775363,
+          "seed": 62325,
+          "structure_effect": -0.03146788253295135,
+          "transition_effect": 0.0625
+        },
+        {
+          "adaptive_persistence": 0.9912484579957241,
+          "index": 26,
+          "mediator_effect": 0.14583333333333334,
+          "observation_effect": 0.1875,
+          "persistent_prior": 0.18817324568411828,
+          "policy_effect": 0.25,
+          "reliability_scale": 1.0282043553423117,
+          "root_effect": -0.027110638801885724,
+          "seed": 62326,
+          "structure_effect": 0.08468416449077104,
+          "transition_effect": 0.1875
+        },
+        {
+          "adaptive_persistence": 0.9986324705615591,
+          "index": 27,
+          "mediator_effect": 0.0625,
+          "observation_effect": 0.0625,
+          "persistent_prior": 0.2838443943000749,
+          "policy_effect": 0.375,
+          "reliability_scale": 0.9993941046065664,
+          "root_effect": -0.05367474694496323,
+          "seed": 62327,
+          "structure_effect": 0.13119001967454502,
+          "transition_effect": 0.0625
+        },
+        {
+          "adaptive_persistence": 0.9999075015891817,
+          "index": 28,
+          "mediator_effect": 0.125,
+          "observation_effect": 0.125,
+          "persistent_prior": 0.29457916716937455,
+          "policy_effect": 0.375,
+          "reliability_scale": 1.030320348867408,
+          "root_effect": 0.006941218547547324,
+          "seed": 62328,
+          "structure_effect": 0.09591299756572025,
+          "transition_effect": 0.125
+        },
+        {
+          "adaptive_persistence": 0.999993013229645,
+          "index": 29,
+          "mediator_effect": 0.125,
+          "observation_effect": 0.125,
+          "persistent_prior": 0.24882832108834851,
+          "policy_effect": 0.25,
+          "reliability_scale": 1.0406673285684078,
+          "root_effect": 0.03803083080605629,
+          "seed": 62329,
+          "structure_effect": -0.04845058072754871,
+          "transition_effect": 0.25
+        },
+        {
+          "adaptive_persistence": 0.9996218991465631,
+          "index": 30,
+          "mediator_effect": 0.375,
+          "observation_effect": 0.25,
+          "persistent_prior": 0.12975645495226135,
+          "policy_effect": 0.75,
+          "reliability_scale": 1.0764327923256296,
+          "root_effect": 0.23994307543830848,
+          "seed": 62330,
+          "structure_effect": -0.06973724229385092,
+          "transition_effect": 0.375
+        },
+        {
+          "adaptive_persistence": 0.795586561246638,
+          "index": 31,
+          "mediator_effect": 0.875,
+          "observation_effect": 0.8125,
+          "persistent_prior": 0.29777555448558846,
+          "policy_effect": 0.9375,
+          "reliability_scale": 1.055993778086692,
+          "root_effect": 0.983010603096508,
+          "seed": 62331,
+          "structure_effect": 0.5389216095512082,
+          "transition_effect": 0.8125
+        }
+      ],
+      "joint_reliability_perturbations": {
+        "minus_10_percent": {
+          "adaptive_persistence": 0.9974907361282044,
+          "chain_effects": {
+            "observed_evidence": 0.1953125,
+            "persistent_model": 0.0929650416291072,
+            "policy_avoidance": 0.4296875,
+            "realized_mediator": 0.20298182720057723,
+            "root_persistence": 0.1995742588775427,
+            "world_transition": 0.25
+          }
+        },
+        "plus_10_percent": {
+          "adaptive_persistence": 0.9966257780049594,
+          "chain_effects": {
+            "observed_evidence": 0.1953125,
+            "persistent_model": 0.12613941263425812,
+            "policy_avoidance": 0.4296875,
+            "realized_mediator": 0.20298182720057723,
+            "root_persistence": 0.20502045739410235,
+            "world_transition": 0.25
+          }
+        }
+      },
+      "neighborhood_count": 32,
+      "neighborhood_signs_survive": true,
+      "structure_prior_sensitivity": {
+        "0.1": {
+          "adaptive_persistence": 0.9885897101215657,
+          "closed_loop_structure_effect": 0.04605425229961997
+        },
+        "0.22": {
+          "adaptive_persistence": 0.9973127215837914,
+          "closed_loop_structure_effect": 0.10980798194206927
+        },
+        "0.35": {
+          "adaptive_persistence": 0.9987996774323107,
+          "closed_loop_structure_effect": 0.06433929521224488
+        }
+      }
+    },
+    "step_injection": {
+      "count": 10944,
+      "maximum": 0.5757279701367578,
+      "percentile_99": 0.29452938694825587
+    }
+  },
+  "stage": "V2.3"
+}

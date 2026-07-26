@@ -1,0 +1,122 @@
+{
+  "failures": [],
+  "gate": 3,
+  "name": "gate_3_precision_root_transfer",
+  "passed": true,
+  "rerun_stage": "V2.2.1",
+  "results": {
+    "repair_floor_assay": {
+      "associated_component_probability_mean": 1.0,
+      "associated_transfer_95_interval": [
+        0.3231539499447657,
+        0.325589278525334
+      ],
+      "associated_transfer_mean": 0.32436985956747283,
+      "world_count": 256,
+      "zero_component_probability_mean": 0.9886979532177553,
+      "zero_floor_clean_rate": 0.98828125,
+      "zero_transfer_95_interval": [
+        0.0005789746280913005,
+        0.0014635274501528424
+      ],
+      "zero_transfer_mean": 0.0009750480194186137
+    },
+    "seam": {
+      "broad": {
+        "base_phi": [
+          0.09249999999999999,
+          0.17749999999999996,
+          0.73
+        ],
+        "base_root": [
+          0.72,
+          0.28
+        ],
+        "cue_uptake": 0.498052095323516,
+        "depth": 0.6826107714562187,
+        "local_fluency": 0.873743295323516,
+        "root_uptake": 0.24188782722129798,
+        "transfer": 0.19351026177703834
+      },
+      "broadcast_off": {
+        "base_phi": [
+          0.3333333333333333,
+          0.3333333333333333,
+          0.3333333333333333
+        ],
+        "base_root": [
+          0.72,
+          0.28
+        ],
+        "cue_uptake": 0.46834820459726534,
+        "depth": 0.2809348129353379,
+        "local_fluency": 0.8956015379305987,
+        "root_uptake": 0.12758563366726455,
+        "transfer": 0.1020685069338117
+      },
+      "mediation": {
+        "broad_indirect_effect": 0.19351026177703834,
+        "transfer_with_g_fixed_and_cue_root_cut": 0.0
+      },
+      "narrowed": {
+        "base_phi": [
+          0.73,
+          0.1775,
+          0.09249999999999999
+        ],
+        "base_root": [
+          0.72,
+          0.28
+        ],
+        "cue_uptake": 0.4377062004381788,
+        "depth": 0.07150360773250045,
+        "local_fluency": 0.9121334004381788,
+        "root_uptake": 0.04113640798533397,
+        "transfer": 0.03290912638826715
+      }
+    },
+    "transfer_2x2": {
+      "association_main_effect": 0.1331418761838451,
+      "cells": {
+        "high_similarity__high_association": {
+          "association_existence_posterior": [
+            1.9354234338691765e-12,
+            0.9999999999980647
+          ],
+          "cue_recognition_probability": 0.94,
+          "learned_association": 0.8384615384608834,
+          "transfer": 0.13314187788284187
+        },
+        "high_similarity__low_association": {
+          "association_existence_posterior": [
+            0.997261073631803,
+            0.0027389263681969764
+          ],
+          "cue_recognition_probability": 0.94,
+          "learned_association": 0.5000421373287415,
+          "transfer": 1.6989967766001257e-09
+        },
+        "low_similarity__high_association": {
+          "association_existence_posterior": [
+            1.9354234338691765e-12,
+            0.9999999999980647
+          ],
+          "cue_recognition_probability": 0.62,
+          "learned_association": 0.8384615384608834,
+          "transfer": 0.13314187788284187
+        },
+        "low_similarity__low_association": {
+          "association_existence_posterior": [
+            0.997261073631803,
+            0.0027389263681969764
+          ],
+          "cue_recognition_probability": 0.62,
+          "learned_association": 0.5000421373287415,
+          "transfer": 1.6989967766001257e-09
+        }
+      },
+      "similarity_main_effect": 0.0
+    }
+  },
+  "strain": "V2.3"
+}

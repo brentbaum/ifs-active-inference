@@ -1,0 +1,35 @@
+{
+  "failures": [],
+  "gate": 1,
+  "name": "gate_1_semantic",
+  "passed": true,
+  "rerun_stage": "V2.1",
+  "results": {
+    "semantic_proof": {
+      "analytic_high_correct": 0.9444534412955465,
+      "analytic_low_correct": 0.615911621788925,
+      "analytic_numeric_max_error": 0.0,
+      "bounded_gaussian_factor_shape": [
+        2,
+        3,
+        9
+      ],
+      "bounded_gaussian_rows_normalized": true,
+      "gaussian_log_likelihoods_at_point": [
+        -0.7019129586186752,
+        -0.47330416977385364,
+        0.1793507283315739
+      ],
+      "gaussian_variance_monotone": true,
+      "gaussian_variances": [
+        0.6065306597126334,
+        0.36787944117144233,
+        0.049787068367863944
+      ],
+      "numeric_high_correct": 0.9444534412955465,
+      "numeric_low_correct": 0.615911621788925,
+      "sharpening_effect": 0.32854181950662154
+    }
+  },
+  "strain": "V2.3"
+}

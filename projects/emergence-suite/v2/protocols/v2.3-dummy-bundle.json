@@ -1,0 +1,73 @@
+{
+  "contract": "V2.3-freeze-candidate-1",
+  "protocols": [
+    {
+      "name": "dummy-closed-loop",
+      "seed_block": [70000, 70001],
+      "world_count": 2,
+      "action_mode": "closed_loop",
+      "schedule": [
+        {
+          "event": 0,
+          "overwhelm": 0,
+          "controllability": 1,
+          "broadcast": 1,
+          "real_danger": false
+        },
+        {
+          "event": 1,
+          "overwhelm": 1,
+          "controllability": 0,
+          "broadcast": 0,
+          "real_danger": false
+        }
+      ],
+      "lesions": [],
+      "requested": {
+        "posteriors": ["H_formation", "G", "S", "C", "R", "E", "A", "W", "Y"],
+        "parameter_posteriors": [
+          "theta_consequence_engage",
+          "theta_consequence_avoid"
+        ],
+        "evidence": ["total", "transient_joint", "persistent_joint"],
+        "readouts": [
+          "persistent_probability",
+          "formation_increment",
+          "step_injection",
+          "avoidance_rate",
+          "adverse_transition_rate",
+          "realized_avoidance_mediator",
+          "chain_effects"
+        ]
+      }
+    },
+    {
+      "name": "dummy-replay-and-lesions",
+      "seed_block": [70002, 70002],
+      "world_count": 1,
+      "action_mode": "engage_replay",
+      "schedule": [
+        {
+          "event": 1,
+          "overwhelm": 0,
+          "controllability": 1,
+          "broadcast": 1,
+          "real_danger": true,
+          "action": 0
+        }
+      ],
+      "lesions": [
+        "controllability_inference",
+        "formation_coupling",
+        "reflexive_broadcast_context"
+      ],
+      "requested": {
+        "posteriors": ["H_formation", "G", "C", "R"],
+        "parameter_posteriors": ["theta_consequence_engage"],
+        "evidence": ["total"],
+        "readouts": ["persistent_probability"]
+      }
+    }
+  ]
+}
+

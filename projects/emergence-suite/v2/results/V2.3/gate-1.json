@@ -1,0 +1,40 @@
+{
+  "failures": [],
+  "gate": 1,
+  "name": "gate_1_semantic_routes",
+  "passed": true,
+  "results": {
+    "semantic_proofs": {
+      "action_transition": {
+        "avoid_minus_engage_threat_probability": 0.7
+      },
+      "controllability": {
+        "high_control_action_log_evidence_difference": 1.5581446180465492,
+        "low_control_action_log_evidence_difference": 0.0
+      },
+      "event_precision": {
+        "analytic_factor_error": 0.0,
+        "high_matching_odds": 9.595703125,
+        "log_odds_increase": 1.733675145465674,
+        "low_matching_odds": 1.6949279993379092
+      },
+      "finite_comparison": {
+        "engine_posterior": [
+          0.5402295963137276,
+          0.45977040368627237
+        ],
+        "manual_posterior": [
+          0.5402295963137277,
+          0.4597704036862724
+        ],
+        "maximum_error": 1.1102230246251565e-16
+      },
+      "reflexive_broadcast": {
+        "collapsed_persistent_probability": 0.32879965363480557,
+        "integrated_persistent_probability": 0.20187884948491025,
+        "persistent_probability_effect": 0.12692080414989532
+      }
+    }
+  },
+  "stage": "V2.3"
+}

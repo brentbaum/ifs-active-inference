@@ -1,0 +1,101 @@
+{
+  "failures": [],
+  "gate": 3,
+  "name": "gate_3_direct_composition",
+  "passed": true,
+  "results": {
+    "open_assays": {
+      "acute_formation": {
+        "final_persistent_95_interval": [
+          0.7928463283162492,
+          0.7192009901803761,
+          0.865539989592077
+        ],
+        "maximum_step_95_interval": [
+          0.2927275072184586,
+          0.26715888119228404,
+          0.31994437309739915
+        ]
+      },
+      "adaptive_persistent_threat": {
+        "final_persistent_95_interval": [
+          0.9979085930105257,
+          0.9966970130487545,
+          0.9988818718167568
+        ],
+        "interpretation": "correct persistence under real danger"
+      },
+      "closed_loop_vs_exact_replay": {
+        "observed_evidence": [
+          0.2216796875,
+          0.1835693359375,
+          0.26171875
+        ],
+        "persistent_model": [
+          0.10789918300770984,
+          0.032978381335068925,
+          0.18079330239607388
+        ],
+        "policy_avoidance": [
+          0.44140625,
+          0.3808349609375,
+          0.5029541015624999
+        ],
+        "realized_mediator": [
+          0.2537077939421689,
+          0.20272686894268924,
+          0.3089920940604534
+        ],
+        "root_persistence": [
+          0.2817986394805148,
+          0.19197024877773233,
+          0.3723608622829412
+        ],
+        "world_transition": [
+          0.2900390625,
+          0.23828125,
+          0.3427734375
+        ]
+      },
+      "gradual_accumulation": {
+        "acute_minus_gradual_maximum_step": 0.07144571357249102,
+        "final_persistent_95_interval": [
+          0.8901924753555863,
+          0.8491306797686159,
+          0.9266820015436952
+        ],
+        "formation_change_95_interval": [
+          0.6701924753555863,
+          0.6296482845258006,
+          0.7091607487569104
+        ],
+        "maximum_step_95_interval": [
+          0.22128179364596756,
+          0.20589055518809377,
+          0.23582643023519476
+        ]
+      },
+      "low_control_without_overwhelm": {
+        "low_minus_high_control_95_interval": [
+          0.19593522160982374,
+          0.12576176697080993,
+          0.27132646195605414
+        ]
+      },
+      "overwhelm_with_control": {
+        "acute_minus_controlled_95_interval": [
+          0.36824168332805707,
+          0.2518902764629037,
+          0.4818851250222174
+        ]
+      },
+      "step_injection": {
+        "count": 10944,
+        "maximum": 0.5757279701367578,
+        "percentile_99": 0.29452938694825587
+      },
+      "world_count": 64
+    }
+  },
+  "stage": "V2.3"
+}
