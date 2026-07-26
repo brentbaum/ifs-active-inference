@@ -14,3 +14,10 @@ Added after C-V22 FAIL, before V2.2.1 development (2026-07-27):
 ```
 90fb712dfcba82c9e0456de3f40c5d27bc6504da5dcd8226537b63d596c0e88e  C-V22b-seam-challenge.md
 ```
+
+Added before V2.3 development (2026-07-27):
+
+```
+c8413557dc628fabd1487cc12a1e829a31a09d5b034cb36e394b0570a4f69e89  C-V23-formation-challenge.md
+```
+Escrow: C-V23 seeds 807203:807502; V23-regression 808110:808409.
