@@ -1,0 +1,15 @@
+{
+  "stage": "V2.2.1",
+  "assay": "dummy-zero-association-comparison",
+  "seed": 45,
+  "history": {"matches": 55, "mismatches": 45},
+  "existence_candidates": [
+    {"state": 0, "reliability": 0.5, "learnable": false},
+    {"state": 1, "slab_prior_mismatch_match": [1.0, 9.0], "learnable": true}
+  ],
+  "existence_prior": [0.6, 0.4],
+  "query": ["Z[cue]", "theta[cue]|Z[cue]=1"],
+  "readout": "posterior-model-averaged association CPT",
+  "thresholds": {"zero_floor_band": 0.02}
+}
+

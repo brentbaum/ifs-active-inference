@@ -1,0 +1,32 @@
+{
+  "version": "V2.2.1-1",
+  "seed_block": [3600, 3663],
+  "repair_seed_block": [51000, 51255],
+  "root_prior": [0.72, 0.28],
+  "meaning_likelihood_reliability": 0.92,
+  "association_low": 0.52,
+  "association_high": 0.9,
+  "history_length": 120,
+  "repair_history_length": 180,
+  "association_existence_prior": [0.6, 0.4],
+  "association_slab_prior": [1.0, 9.0],
+  "zero_association_reliability": 0.5,
+  "phi_admission": [0.5, 0.68, 0.94],
+  "floor_band": 0.02,
+  "rationales": {
+    "seed_block": "A new contiguous 64-world block reruns V2.2 recovery without reusing earlier development draws.",
+    "repair_seed_block": "A disjoint 256-world block estimates the repaired zero-association floor profile.",
+    "root_prior": "Inherited unchanged from V2.2 so the strain change is confined to association structure.",
+    "meaning_likelihood_reliability": "Inherited unchanged from V2.2 to preserve local corrective uptake.",
+    "association_low": "Inherited unchanged for the original 2x2 regression.",
+    "association_high": "Inherited unchanged and equals the slab prior-predictive center.",
+    "history_length": "Inherited unchanged for original V2.2 recovery regressions.",
+    "repair_history_length": "Matches the localized finite-history regime used to diagnose the soft-zero leak.",
+    "association_existence_prior": "A modest 0.6 sparsity prior makes exact absence available without overwhelming finite evidence for a real association.",
+    "association_slab_prior": "Beta(match=9,mismatch=1) places associated mass near .9 and makes the slab honest about representing an association rather than duplicating the null.",
+    "zero_association_reliability": "Theta=.5 is exact binary factorization and therefore the structural spike.",
+    "phi_admission": "Inherited unchanged so precision gating and mediation are not repaired indirectly.",
+    "floor_band": "Retains the sealed challenge's localized untreated-transfer floor for the open repair assay."
+  }
+}
+

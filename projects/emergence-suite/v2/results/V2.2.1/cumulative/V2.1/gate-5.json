@@ -1,0 +1,17 @@
+{
+  "failures": [],
+  "gate": 5,
+  "name": "gate_5_cumulative_regression",
+  "passed": true,
+  "rerun_stage": "V2.1",
+  "results": {
+    "v2.0_regression": {
+      "gate_1_semantic": true,
+      "gate_2_recovery": true,
+      "gate_3_comparison": true,
+      "gate_4_batch_mutation": true,
+      "gate_5_one_posterior": true
+    }
+  },
+  "strain": "V2.2.1"
+}

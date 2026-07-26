@@ -1,0 +1,31 @@
+{
+  "failures": [],
+  "gate": 4,
+  "name": "gate_4_selective_lesions",
+  "passed": true,
+  "rerun_stage": "V2.2",
+  "results": {
+    "lesions": {
+      "cut_transfer": 0.0,
+      "cut_treated_cue_uptake": 0.41999999999999993,
+      "full_transfer": 0.19351026177703834
+    },
+    "repair_floor_assay": {
+      "associated_component_probability_mean": 1.0,
+      "associated_transfer_95_interval": [
+        0.3231539499447657,
+        0.325589278525334
+      ],
+      "associated_transfer_mean": 0.32436985956747283,
+      "world_count": 256,
+      "zero_component_probability_mean": 0.9886979532177553,
+      "zero_floor_clean_rate": 0.98828125,
+      "zero_transfer_95_interval": [
+        0.0005789746280913005,
+        0.0014635274501528424
+      ],
+      "zero_transfer_mean": 0.0009750480194186137
+    }
+  },
+  "strain": "V2.2.1"
+}

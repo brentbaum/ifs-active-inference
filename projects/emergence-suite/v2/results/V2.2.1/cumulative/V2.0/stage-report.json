@@ -1,0 +1,44 @@
+{
+  "factor_sensitivity": {
+    "deletion_tv": 0.18673469387755104,
+    "mutation_tv": 0.15939794611826802
+  },
+  "gates": {
+    "gate_1_semantic": true,
+    "gate_2_recovery": true,
+    "gate_3_comparison": true,
+    "gate_4_batch_mutation": true,
+    "gate_5_one_posterior": true
+  },
+  "model_comparison": {
+    "absolute_error": 0.0,
+    "analytic_log_bayes_factor": 0.7269140430307628,
+    "complexity_penalty_log": 1.2005335271868125,
+    "engine_log_bayes_factor": 0.7269140430307628,
+    "flexible_integrated_evidence": 0.00202020202020202,
+    "flexible_maximum_likelihood": 0.006710886400000005,
+    "total_mixture_evidence": 0.06742720170454546
+  },
+  "passed": true,
+  "recovery": {
+    "audit_failures": [],
+    "paired_draw_mismatches": 0,
+    "parameter_95_interval_coverage": 1.0,
+    "parameter_error_95_interval": [
+      0.017785493827160513,
+      0.02465277777777778
+    ],
+    "parameter_mean_absolute_error": 0.02118055555555556,
+    "seed_count": 64,
+    "state_accuracy": 0.84765625,
+    "state_brier": 0.12914062499999995,
+    "state_ece": 0.005087890624999977
+  },
+  "semantic_errors": {
+    "chain": 0.0,
+    "collider": 0.0,
+    "fork": 0.0,
+    "temporal": 0.0
+  },
+  "stage": "V2.0"
+}

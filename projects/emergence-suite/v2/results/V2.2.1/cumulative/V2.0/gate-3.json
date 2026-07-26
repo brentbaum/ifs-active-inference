@@ -1,0 +1,19 @@
+{
+  "failures": [],
+  "gate": 3,
+  "name": "gate_3_comparison",
+  "passed": true,
+  "rerun_stage": "V2.0",
+  "results": {
+    "model_comparison": {
+      "absolute_error": 0.0,
+      "analytic_log_bayes_factor": 0.7269140430307628,
+      "complexity_penalty_log": 1.2005335271868125,
+      "engine_log_bayes_factor": 0.7269140430307628,
+      "flexible_integrated_evidence": 0.00202020202020202,
+      "flexible_maximum_likelihood": 0.006710886400000005,
+      "total_mixture_evidence": 0.06742720170454546
+    }
+  },
+  "strain": "V2.2.1"
+}

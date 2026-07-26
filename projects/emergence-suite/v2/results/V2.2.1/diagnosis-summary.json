@@ -1,0 +1,143 @@
+{
+  "calibration": [
+    {
+      "credible_interval_95_coverage": 0.97265625,
+      "exact_zero_posterior_mass": 0.0,
+      "floor_violation_rate": 0.83984375,
+      "history_length": 20,
+      "maximum_transfer_mean_95_interval": [
+        0.05582537919079396,
+        0.05069039273350696,
+        0.06096036564808096
+      ],
+      "mean_absolute_deviation": 0.08132102272727271,
+      "posterior_mean": 0.5010653409090908,
+      "rmse": 0.10235161099233989,
+      "signed_bias": 0.0010653409090909042
+    },
+    {
+      "credible_interval_95_coverage": 0.94921875,
+      "exact_zero_posterior_mass": 0.0,
+      "floor_violation_rate": 0.64453125,
+      "history_length": 50,
+      "maximum_transfer_mean_95_interval": [
+        0.034666609872474316,
+        0.03130337606457968,
+        0.03802984368036895
+      ],
+      "mean_absolute_deviation": 0.05003004807692307,
+      "posterior_mean": 0.5042067307692308,
+      "rmse": 0.0640524643965107,
+      "signed_bias": 0.0042067307692307725
+    },
+    {
+      "credible_interval_95_coverage": 0.96875,
+      "exact_zero_posterior_mass": 0.0,
+      "floor_violation_rate": 0.62890625,
+      "history_length": 100,
+      "maximum_transfer_mean_95_interval": [
+        0.026553850547053247,
+        0.02415501181529762,
+        0.028952689278808872
+      ],
+      "mean_absolute_deviation": 0.03818167892156864,
+      "posterior_mean": 0.5014935661764706,
+      "rmse": 0.04748280334818474,
+      "signed_bias": 0.001493566176470587
+    },
+    {
+      "credible_interval_95_coverage": 0.96875,
+      "exact_zero_posterior_mass": 0.0,
+      "floor_violation_rate": 0.375,
+      "history_length": 180,
+      "maximum_transfer_mean_95_interval": [
+        0.018825110897972185,
+        0.017118440735852544,
+        0.020531781060091826
+      ],
+      "mean_absolute_deviation": 0.02702180631868132,
+      "posterior_mean": 0.4982185782967033,
+      "rmse": 0.03362404769571963,
+      "signed_bias": -0.001781421703296699
+    },
+    {
+      "credible_interval_95_coverage": 0.96875,
+      "exact_zero_posterior_mass": 0.0,
+      "floor_violation_rate": 0.23828125,
+      "history_length": 400,
+      "maximum_transfer_mean_95_interval": [
+        0.013470549997134705,
+        0.012276136227868363,
+        0.014664963766401046
+      ],
+      "mean_absolute_deviation": 0.019317475124378106,
+      "posterior_mean": 0.49990282960199006,
+      "rmse": 0.02383958828617257,
+      "signed_bias": -9.717039800995067e-05
+    },
+    {
+      "credible_interval_95_coverage": 0.95703125,
+      "exact_zero_posterior_mass": 0.0,
+      "floor_violation_rate": 0.09765625,
+      "history_length": 800,
+      "maximum_transfer_mean_95_interval": [
+        0.009836696717224001,
+        0.008961359091844317,
+        0.010712034342603685
+      ],
+      "mean_absolute_deviation": 0.01410049096009975,
+      "posterior_mean": 0.5004821929551122,
+      "rmse": 0.01741961671368878,
+      "signed_bias": 0.00048219295511221956
+    },
+    {
+      "credible_interval_95_coverage": 0.9453125,
+      "exact_zero_posterior_mass": 0.0,
+      "floor_violation_rate": 0.01953125,
+      "history_length": 1600,
+      "maximum_transfer_mean_95_interval": [
+        0.007555905270168307,
+        0.006924906384827879,
+        0.008186904155508734
+      ],
+      "mean_absolute_deviation": 0.010828749219725355,
+      "posterior_mean": 0.49975372581148564,
+      "rmse": 0.01309879906826587,
+      "signed_bias": -0.00024627418851434876
+    }
+  ],
+  "diagnostic_checks": {
+    "family_assigns_exact_zero_mass": false,
+    "n1600_floor_violation_rate": 0.01953125,
+    "n180_95_interval_coverage_in_0.90_to_0.99": true,
+    "n180_floor_violation_rate": 0.375,
+    "n180_signed_bias_below_0.01": true
+  },
+  "existing_prior": {
+    "alpha_mismatch_match": [
+      1.0,
+      1.0
+    ],
+    "continuous": true,
+    "family": "Beta",
+    "posterior_mass_at_exact_zero_association": 0.0
+  },
+  "history_lengths": [
+    20,
+    50,
+    100,
+    180,
+    400,
+    800,
+    1600
+  ],
+  "interpretation": "(b) The conjugate update is calibrated for its continuous reliability parameter, but the diffuse family represents factorization only as the measure-zero point theta=0.5. Finite evidence therefore produces correct soft deviations that the current structure prior incorrectly routes through G.",
+  "seed_block": [
+    50000,
+    50255
+  ],
+  "strain_diagnosed": "V2.2",
+  "true_zero_reliability": 0.5,
+  "verdict": "b",
+  "world_count": 256
+}
