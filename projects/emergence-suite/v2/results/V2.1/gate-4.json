@@ -1,0 +1,19 @@
+{
+  "failures": [],
+  "gate": 4,
+  "name": "gate_4_selective_lesion",
+  "passed": true,
+  "results": {
+    "batch": {
+      "depth_effect_95_interval": [
+        0.2824479166666667,
+        0.37674479166666663
+      ],
+      "maximum_oracle_error": 2.220446049250313e-16,
+      "mean_depth_effect": 0.3309244791666666,
+      "paired_draw_mismatches": 0,
+      "seed_count": 64
+    }
+  },
+  "stage": "V2.1"
+}

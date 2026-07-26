@@ -1,0 +1,17 @@
+{
+  "version": "V2.1-1",
+  "seed_block": [2200, 2263],
+  "precision_support": [0.5, 1.0, 3.0],
+  "base_likelihood": [[0.72, 0.28], [0.28, 0.72]],
+  "monitor_reliability": 0.9,
+  "phi_prior": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333],
+  "broadcast_cpt": [[0.8, 0.15, 0.05], [0.15, 0.7, 0.15], [0.05, 0.15, 0.8]],
+  "rationales": {
+    "seed_block": "A distinct contiguous 64-world block prevents reuse of V2.0 draws and stays below escrow.",
+    "precision_support": "Spans flattened, baseline, and visibly sharpened likelihoods without numerical extremes.",
+    "base_likelihood": "Leaves room for precision to change evidence weight in either direction.",
+    "monitor_reliability": "Makes local state recoverable but not observed directly.",
+    "phi_prior": "A uniform hyper-prior lets the doubly stochastic broadcast CPT preserve local marginal inference.",
+    "broadcast_cpt": "Doubly stochastic rows preserve the local marginal under a uniform Phi prior."
+  }
+}

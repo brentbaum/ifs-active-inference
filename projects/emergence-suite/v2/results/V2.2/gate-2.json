@@ -1,0 +1,17 @@
+{
+  "failures": [],
+  "gate": 2,
+  "name": "gate_2_parameter_recovery",
+  "passed": true,
+  "results": {
+    "association_recovery": {
+      "coverage_95": 0.953125,
+      "error_95_interval": [
+        0.019440317622950842,
+        0.026742443647541008
+      ],
+      "mean_absolute_error": 0.02295081967213117
+    }
+  },
+  "stage": "V2.2"
+}

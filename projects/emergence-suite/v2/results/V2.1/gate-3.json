@@ -1,0 +1,32 @@
+{
+  "failures": [],
+  "gate": 3,
+  "name": "gate_3_composition",
+  "passed": true,
+  "results": {
+    "broadcast": {
+      "depth_effect": 0.39666666666666667,
+      "depth_off": 0.3333333333333333,
+      "depth_on": 0.73,
+      "engine_oracle_error": 2.7755575615628914e-17,
+      "local_max_difference": 0.0,
+      "local_off": [
+        0.04999999999999999,
+        0.04999999999999999,
+        0.9
+      ],
+      "local_on": [
+        0.04999999999999999,
+        0.04999999999999999,
+        0.9
+      ],
+      "off_monitor_depth_effect": 0.0
+    },
+    "composition": {
+      "delivered_log_odds_effect": 0.9020320974870424,
+      "posterior_y_broad": 0.8438218608948914,
+      "posterior_y_narrow": 0.6867378034432879
+    }
+  },
+  "stage": "V2.1"
+}

@@ -1,0 +1,89 @@
+{
+  "failures": [],
+  "gate": 3,
+  "name": "gate_3_precision_root_transfer",
+  "passed": true,
+  "results": {
+    "seam": {
+      "broad": {
+        "base_phi": [
+          0.09249999999999999,
+          0.17749999999999996,
+          0.73
+        ],
+        "base_root": [
+          0.72,
+          0.28
+        ],
+        "cue_uptake": 0.498052095323516,
+        "depth": 0.6826107714562187,
+        "local_fluency": 0.873743295323516,
+        "root_uptake": 0.24188782722129798,
+        "transfer": 0.19351026177703834
+      },
+      "broadcast_off": {
+        "base_phi": [
+          0.3333333333333333,
+          0.3333333333333333,
+          0.3333333333333333
+        ],
+        "base_root": [
+          0.72,
+          0.28
+        ],
+        "cue_uptake": 0.46834820459726534,
+        "depth": 0.2809348129353379,
+        "local_fluency": 0.8956015379305987,
+        "root_uptake": 0.12758563366726455,
+        "transfer": 0.1020685069338117
+      },
+      "mediation": {
+        "broad_indirect_effect": 0.19351026177703834,
+        "transfer_with_g_fixed_and_cue_root_cut": 0.0
+      },
+      "narrowed": {
+        "base_phi": [
+          0.73,
+          0.1775,
+          0.09249999999999999
+        ],
+        "base_root": [
+          0.72,
+          0.28
+        ],
+        "cue_uptake": 0.4377062004381788,
+        "depth": 0.07150360773250045,
+        "local_fluency": 0.9121334004381788,
+        "root_uptake": 0.04113640798533397,
+        "transfer": 0.03290912638826715
+      }
+    },
+    "transfer_2x2": {
+      "association_main_effect": 0.1931023463233673,
+      "cells": {
+        "high_similarity__high_association": {
+          "learned_cue_recognition": 0.9180327868852459,
+          "learned_root_association": 0.9016393442622951,
+          "transfer": 0.19531095371544105
+        },
+        "high_similarity__low_association": {
+          "learned_cue_recognition": 0.8852459016393442,
+          "learned_root_association": 0.45901639344262296,
+          "transfer": 0.002208607392073736
+        },
+        "low_similarity__high_association": {
+          "learned_cue_recognition": 0.7295081967213115,
+          "learned_root_association": 0.9016393442622951,
+          "transfer": 0.19531095371544105
+        },
+        "low_similarity__low_association": {
+          "learned_cue_recognition": 0.5983606557377049,
+          "learned_root_association": 0.45901639344262296,
+          "transfer": 0.002208607392073736
+        }
+      },
+      "similarity_main_effect": 0.0
+    }
+  },
+  "stage": "V2.2"
+}

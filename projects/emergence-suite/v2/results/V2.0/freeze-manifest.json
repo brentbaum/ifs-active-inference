@@ -1,0 +1,33 @@
+{
+  "all_gates_1_to_5_passed": true,
+  "files": {
+    "README.md": "b20a9a24a7d554bf06160477b2c03b082daa58451919ad115e3179653ecda9ad",
+    "contracts/v2.0-kernel-contract.md": "5e9ffc47be9258599ca6530ab3836f665aeada0a891e1e2b253f48577cd17b75",
+    "protocols/v2.0-analysis-plan.md": "10ca0c8bd4fbd7d031ecb70dbe1a083ba0fe8282f11ff1d101d70a5a8f8713eb",
+    "protocols/v2.0-dummy-bundle.json": "d2f4850a42fc30f23367fe1e0346a7d979543038ab4192a5ba634fde836a7d13",
+    "protocols/v2.0-parameters.json": "7b5d2dc824f11031bacf046aa106f5bce4de721d1c1a22f848cb631eb63b3408",
+    "ref/__init__.py": "51a060d5515a4bf35204eafa21962e192066379f82eab73c32e83624d06a9b36",
+    "ref/audit.py": "a5903215d2bd1d54e05d9dc63fab56f231e234d8803da1a38e5336d9281ba36d",
+    "ref/config.py": "aef1b16452a438f9c3a239049b4c31325af3e93de521b5ff33cdbb1f2dd1b56f",
+    "ref/factor.py": "d8f86c1feba481925bebbc630f7b72d22432094187226c0e0ff09453a37e231f",
+    "ref/inference.py": "4da0023af7194d755e24c44e0612b16046ce63d7832449a7267d2dc2755b272a",
+    "ref/model.py": "db70ba277fd16f38c5ab32e908a0081b1a78f32e369692e8adb211deb69adc77",
+    "ref/oracle.py": "887a1296b6d802fbeaacf38d7b8cc99542976947b14b332533df01753d46411c",
+    "ref/rng.py": "aa0636b39fa044dd4af41ac6fa4e56d9fbf83cfddbd1a3ac0edade854d6928a1",
+    "ref/statistics.py": "34fed7266cd2a68f15d57cc285fc5e63b7365a309800a381f98443dc46a60e7c",
+    "ref/templates.py": "c7150c6e3a93818189ae10a0356100e5b1cfbfd314b5d9d939c5cdec44b85f5c",
+    "ref/v20.py": "34685f2518045ceefc05bcf4e91a36c14838dea2918876382f025840050f0e1a",
+    "results/V2.0/decisions.md": "90c24a4a7393b48f3e203827371b24fe6358a643c50d95c695ff0dd4786476b5",
+    "results/V2.0/gate-1.json": "253d5311fd6796635626ce3179216bd603815aee26ace41daf32e70992fa08b4",
+    "results/V2.0/gate-2.json": "87e7ff16e811ea48fb8b4e792249cc3a209d745be0805d2156c8046064f04743",
+    "results/V2.0/gate-3.json": "ba68c315b08ccfbdfea4453b4a1c747185d9a340a8bf72101fb6c83cf93a7098",
+    "results/V2.0/gate-4.json": "fc8208a12d72e78fe2000d1de6c573d8ecb343b5fe0a152945d5e8a2c33bbd19",
+    "results/V2.0/gate-5.json": "bd52badc06a4c85b6103bc05c9393e9ab9bd4ecf9c5f9bc278cc5e0f37ebcbe0",
+    "results/V2.0/stage-report.json": "872d51a39272d3c4ee72e978f35900bb4e24a192545be40871c13464fcdc716e",
+    "run_milestone.py": "839737069f1344f713b2ba6c882d64e3f81d5cb77679544e6b2a14a4658ba64e",
+    "tests/test_v20_kernel.py": "fae4c4ed4432e85be0351dcc363cf41d06f65cbe9cf6b141871aeeea0003e162"
+  },
+  "sealed_gate_6_run": false,
+  "stage": "V2.0",
+  "status": "freeze-candidate"
+}

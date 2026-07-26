@@ -1,0 +1,14 @@
+{
+  "stage": "V2.2",
+  "assay": "dummy-all-fields",
+  "seed": 44,
+  "root": {"name": "G", "cardinality": 2},
+  "meanings": ["M0", "M1"],
+  "developmental_history": [{"G": 0, "M0": 0, "M1": 0, "similarity": 1}],
+  "candidate_structures": ["shared", "factorized", "reversed"],
+  "precision_regime": "broad",
+  "corrective_observation": {"cue": 0, "value": 1},
+  "probes": [1],
+  "thresholds": {"mediated_transfer": 0.08}
+}
+

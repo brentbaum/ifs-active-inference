@@ -1,0 +1,13 @@
+{
+  "stage": "V2.0",
+  "assay": "dummy-all-fields",
+  "seed": 42,
+  "model": {
+    "variables": [{"name": "x", "cardinality": 2, "kind": "latent", "time": 0}],
+    "factors": [{"variables": ["x"], "values": [0.5, 0.5], "template": "categorical_prior"}]
+  },
+  "observations": {},
+  "query": ["x"],
+  "thresholds": {"normalization_tolerance": 1e-10}
+}
+

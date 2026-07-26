@@ -1,0 +1,21 @@
+{
+  "version": "V2.2-1",
+  "seed_block": [3200, 3263],
+  "root_prior": [0.72, 0.28],
+  "meaning_likelihood_reliability": 0.92,
+  "association_low": 0.52,
+  "association_high": 0.9,
+  "history_length": 120,
+  "association_prior": [1.0, 1.0],
+  "phi_admission": [0.5, 0.68, 0.94],
+  "rationales": {
+    "seed_block": "A distinct contiguous 64-history block supports paired recovery and stays below escrow.",
+    "root_prior": "An asymmetric exogenous root prior makes causal direction identifiable in finite comparison.",
+    "meaning_likelihood_reliability": "Corrective cue information remains locally usable in every regime.",
+    "association_low": "Represents near-factorization without introducing exact zero effects.",
+    "association_high": "Produces structural but non-deterministic transfer.",
+    "history_length": "Supports structure and association recovery with finite uncertainty.",
+    "association_prior": "Unit pseudocounts weakly regularize learned binary cue-root reliability.",
+    "phi_admission": "Maps inferred precision regimes to ordinary conditional association strength."
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "version": "V2.0-1",
+  "seed_block": [1200, 1263],
+  "state_prior": [0.5, 0.5],
+  "observation_reliability": 0.85,
+  "dirichlet_prior": [1.0, 1.0],
+  "recovery_trials": 160,
+  "rationales": {
+    "seed_block": "A contiguous 64-world development block supports batch summaries and stays below escrow.",
+    "state_prior": "A symmetric apparatus prior makes state recovery depend on the likelihood.",
+    "observation_reliability": "Prior-predictively separates states without making recovery deterministic.",
+    "dirichlet_prior": "Unit pseudocounts are weak and symmetric on a binary CPT row.",
+    "recovery_trials": "Keeps conjugate intervals informative while retaining visible sampling variation."
+  }
+}

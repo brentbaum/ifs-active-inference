@@ -1,0 +1,13 @@
+{
+  "stage": "V2.1",
+  "assay": "dummy-all-fields",
+  "seed": 43,
+  "channels": ["environmental", "bodily", "relational", "imaginal"],
+  "precision_support": [0.5, 1.0, 3.0],
+  "broadcast": true,
+  "return_route": true,
+  "observations": {"monitor": 2},
+  "query": ["Phi", "lambda[channel,1]"],
+  "thresholds": {"depth_effect": 0.2}
+}
+

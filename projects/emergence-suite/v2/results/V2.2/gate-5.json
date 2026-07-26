@@ -1,0 +1,23 @@
+{
+  "failures": [],
+  "gate": 5,
+  "name": "gate_5_cumulative_regression",
+  "passed": true,
+  "results": {
+    "v2.0_regression": {
+      "gate_1_semantic": true,
+      "gate_2_recovery": true,
+      "gate_3_comparison": true,
+      "gate_4_batch_mutation": true,
+      "gate_5_one_posterior": true
+    },
+    "v2.1_regression": {
+      "gate_1_semantic": true,
+      "gate_2_recovery": true,
+      "gate_3_composition": true,
+      "gate_4_selective_lesion": true,
+      "gate_5_cumulative_regression": true
+    }
+  },
+  "stage": "V2.2"
+}

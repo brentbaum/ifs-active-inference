@@ -1,0 +1,30 @@
+{
+  "failures": [],
+  "gate": 1,
+  "name": "gate_1_structure_recovery",
+  "passed": true,
+  "results": {
+    "structure_recovery": {
+      "accuracy": 0.96875,
+      "confusion_matrix": [
+        [
+          22,
+          0,
+          0
+        ],
+        [
+          2,
+          19,
+          0
+        ],
+        [
+          0,
+          0,
+          21
+        ]
+      ],
+      "mean_true_structure_probability": 0.9320320501646391
+    }
+  },
+  "stage": "V2.2"
+}
