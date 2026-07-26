@@ -1,0 +1,49 @@
+contract_id = "ifs-ai-experiment-51-contract"
+contract_version = "1.0.1"
+analysis_id = "development-evidence-format"
+unit_of_analysis = "seed"
+tie_handling = "pass"
+non_crossing = "horizon_plus_one"
+missing_cells = "fail"
+non_finite = "fail"
+
+[[estimands]]
+id = "budget-error"
+status = "audit"
+hypothesis_provenance = "development"
+expression = { op = "max", arg = { op = "budget_relative_error", evidence_budget_rule_id = "format-budget" } }
+aggregation = "identity"
+interval = { method = "none" }
+control_ids = ["format-budget-control"]
+
+[[estimands]]
+id = "root-format-contrast"
+status = "primary"
+hypothesis_provenance = "development"
+expression = { op = "arm_difference", value = { op = "terminal", arg = { op = "field", path = "state.bundle.bundle-main.root_probability" } }, treatment = "episodic-format", control = "cue-format" }
+aggregation = "mean"
+interval = { method = "percentile_bootstrap", level = 0.95, resamples = 1000 }
+control_ids = ["format-capacity-control", "format-budget-control"]
+
+[[estimands]]
+id = "cue-format-contrast"
+status = "secondary"
+hypothesis_provenance = "development"
+expression = { op = "negate", arg = { op = "arm_difference", value = { op = "terminal", arg = { op = "field", path = "state.cue.cue-main.meaning_probability" } }, treatment = "episodic-format", control = "cue-format" } }
+aggregation = "mean"
+interval = { method = "percentile_bootstrap", level = 0.95, resamples = 1000 }
+control_ids = ["format-capacity-control", "format-budget-control"]
+
+[[decision_rules]]
+id = "budget-valid"
+estimand_id = "budget-error"
+comparator = "le"
+threshold = 0.01
+interval_requirement = "none"
+
+[[decision_rules]]
+id = "root-format-separates"
+estimand_id = "root-format-contrast"
+comparator = "ge"
+threshold = 0.10
+interval_requirement = "none"

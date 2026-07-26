@@ -1,0 +1,42 @@
+contract_id = "ifs-ai-experiment-51-contract"
+contract_version = "1.0.1"
+analysis_id = "development-action-persistence"
+unit_of_analysis = "seed"
+tie_handling = "pass"
+non_crossing = "horizon_plus_one"
+missing_cells = "fail"
+non_finite = "fail"
+
+[[estimands]]
+id = "delivered-exposure-contrast"
+status = "descriptive"
+hypothesis_provenance = "development"
+expression = { op = "arm_difference", value = { op = "terminal", arg = { op = "field", path = "action.delivered_exposure" } }, treatment = "closed-loop", control = "exact-replay" }
+aggregation = "mean"
+interval = { method = "percentile_bootstrap", level = 0.95, resamples = 1000 }
+control_ids = ["exact-replay-control", "closed-replay-budget-control"]
+
+[[estimands]]
+id = "root-contrast"
+status = "descriptive"
+hypothesis_provenance = "development"
+expression = { op = "arm_difference", value = { op = "terminal", arg = { op = "field", path = "state.bundle.bundle-main.root_probability" } }, treatment = "closed-loop", control = "exact-replay" }
+aggregation = "mean"
+interval = { method = "percentile_bootstrap", level = 0.95, resamples = 1000 }
+control_ids = ["exact-replay-control", "closed-replay-budget-control"]
+
+[[estimands]]
+id = "realized-success"
+status = "audit"
+hypothesis_provenance = "development"
+expression = { op = "rate", arg = { op = "where", source = { op = "field", path = "action.success" }, predicates = [{ field = "run.arm", comparator = "eq", value = "closed-loop" }] } }
+aggregation = "identity"
+interval = { method = "none" }
+control_ids = []
+
+[[decision_rules]]
+id = "success-realized"
+estimand_id = "realized-success"
+comparator = "gt"
+threshold = 0.0
+interval_requirement = "none"

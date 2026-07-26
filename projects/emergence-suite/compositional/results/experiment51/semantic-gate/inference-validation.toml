@@ -1,0 +1,20 @@
+edge_count = 15
+maximum_exact_parity_error = 3.3306690738754696e-16
+maximum_reverse_target_delta = 0.0
+maximum_unrelated_mutation_delta = 0.0
+minimum_edge_mutation_delta = 0.07999999999999996
+minimum_implementation_mutant_delta = 0.07999999999999996
+minimum_named_trace_delta = 0.07999999999999996
+model_families = ["full_bundle", "reduced_bundle", "context_global", "context_cue_local", "context_split", "factorized_root", "shared_root"]
+model_recovery_accuracy = 0.7976190476190477
+parameter_recovery_accuracy = 1.0
+sbc_chi_square = 15.3
+sbc_rank_counts = [18, 24, 26, 19, 18, 19, 21, 27, 11, 16, 21, 24, 19, 24, 17, 23, 14, 18, 22, 20, 19]
+
+[parameter_recovery]
+access_recovery_delta = 0.19926254660397724
+coprotection_edge_forecast_delta = 0.04166209243605179
+cue_root_aligned_strength = 0.5124074757341867
+cue_root_reversed_strength = 0.5082387172465529
+policy_outcome_recovery_delta = 0.19926254660397724
+precision_forecast_delta = 0.06011768975189602

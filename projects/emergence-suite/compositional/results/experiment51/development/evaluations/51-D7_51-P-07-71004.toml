@@ -1,0 +1,24 @@
+[decisions]
+budget-valid = false
+root-format-separates = false
+
+[estimands.budget-error]
+expression = "CompositionalOrganism.AggregateExpr(:max, CompositionalOrganism.BudgetErrorExpr(\"format-budget\"), nothing)"
+lower = "missing"
+source_hashes = ["8d0f8387a79d9d7b1bc8619e759b2663fbf2715aa1e56c5cfbc699d0f562ce9c"]
+upper = "missing"
+value = 0.5036886714797273
+
+[estimands.cue-format-contrast]
+expression = "CompositionalOrganism.UnaryExpr(:negate, CompositionalOrganism.ArmDifferenceExpr(CompositionalOrganism.TemporalExpr(:terminal, CompositionalOrganism.FieldExpr(\"state.cue.cue-main.meaning_probability\"), 0, nothing, nothing, 1, nothing), \"episodic-format\", \"cue-format\"))"
+lower = -0.009823585067441076
+source_hashes = ["901e0e75fc4b2a7194449ffdf2474ddafac3d5025b49e5d3d0e329fc6031f48b", "f3499dad166483fa0ea1c8381ad1cf0938e7fe36aac41244d20cf9ee30577c1c"]
+upper = -0.009823585067441076
+value = -0.009823585067441076
+
+[estimands.root-format-contrast]
+expression = "CompositionalOrganism.ArmDifferenceExpr(CompositionalOrganism.TemporalExpr(:terminal, CompositionalOrganism.FieldExpr(\"state.bundle.bundle-main.root_probability\"), 0, nothing, nothing, 1, nothing), \"episodic-format\", \"cue-format\")"
+lower = 0.08622532307953024
+source_hashes = ["901e0e75fc4b2a7194449ffdf2474ddafac3d5025b49e5d3d0e329fc6031f48b", "f3499dad166483fa0ea1c8381ad1cf0938e7fe36aac41244d20cf9ee30577c1c"]
+upper = 0.08622532307953024
+value = 0.08622532307953024

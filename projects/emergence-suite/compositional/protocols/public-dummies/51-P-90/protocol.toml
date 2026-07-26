@@ -1,0 +1,187 @@
+contract_id = "ifs-ai-experiment-51-contract"
+contract_version = "1.0.1"
+protocol_id = "public-contract-dummy-ring-break"
+requested_trace_fields = [
+  "run.seed",
+  "run.arm",
+  "run.time",
+  "action.success",
+  "action.delivered_exposure",
+  "observation.delivered_log_likelihood",
+  "state.local_precision.local-one.mean",
+  "state.global_precision.global-main.depth",
+  "state.protector.protector-one.permission_probability",
+  "state.protector.protector-two.permission_probability",
+  "state.protector.protector-three.permission_probability",
+  "state.access.access-main.probability",
+  "state.bundle.bundle-main.root_probability",
+  "state.structure.structure-main.log_evidence.*",
+  "world.truth.partner-state",
+  "world.truth.exposure-state",
+  "provenance.edge_id"
+]
+
+[[interventions]]
+id = "sever-broadcast"
+target_kind = "edge"
+target_id = "local-broadcast"
+operation = "sever"
+
+[[interventions]]
+id = "enable-success-transition"
+target_kind = "world_contingency"
+target_id = "success-enables-approach-transition"
+operation = "enable"
+
+[[arms]]
+id = "broadcast-on"
+world_id = "public-dummy-world-ring-break"
+
+[[arms.events]]
+id = "success-transition-on"
+time = 1
+kind = "intervene"
+source = "intervention"
+intervention_id = "enable-success-transition"
+trigger = { kind = "external_proxy", predicate = { field = "action.success", comparator = "eq", value = true } }
+
+[[arms.events]]
+id = "partner-stream-on"
+time = 1
+kind = "observe"
+source = "partner"
+channel_id = "partner-signal"
+emission_id = "partner-emission"
+repeat = 20
+interval = 1
+
+[[arms.events]]
+id = "episode-stream-on"
+time = 1
+kind = "observe"
+source = "world"
+channel_id = "episode-signal"
+emission_id = "episode-emission"
+repeat = 20
+interval = 1
+
+[[arms.events]]
+id = "cue-probe-on"
+time = 22
+kind = "probe"
+source = "world"
+channel_id = "cue-signal"
+emission_id = "cue-emission"
+repeat = 1
+interval = 1
+
+[[arms.events]]
+id = "stop-check-on"
+time = 23
+kind = "stop_check"
+source = "intervention"
+stopping_rule_id = "dummy-horizon"
+
+[[arms]]
+id = "broadcast-off"
+world_id = "public-dummy-world-ring-break"
+
+[[arms.events]]
+id = "sever-at-start"
+time = 0
+kind = "intervene"
+source = "intervention"
+intervention_id = "sever-broadcast"
+
+[[arms.events]]
+id = "success-transition-off"
+time = 1
+kind = "intervene"
+source = "intervention"
+intervention_id = "enable-success-transition"
+trigger = { kind = "external_proxy", predicate = { field = "action.success", comparator = "eq", value = true } }
+
+[[arms.events]]
+id = "partner-stream-off"
+time = 1
+kind = "observe"
+source = "partner"
+channel_id = "partner-signal"
+emission_id = "partner-emission"
+repeat = 20
+interval = 1
+
+[[arms.events]]
+id = "episode-stream-off"
+time = 1
+kind = "observe"
+source = "world"
+channel_id = "episode-signal"
+emission_id = "episode-emission"
+repeat = 20
+interval = 1
+
+[[arms.events]]
+id = "cue-probe-off"
+time = 22
+kind = "probe"
+source = "world"
+channel_id = "cue-signal"
+emission_id = "cue-emission"
+repeat = 1
+interval = 1
+
+[[arms.events]]
+id = "stop-check-off"
+time = 23
+kind = "stop_check"
+source = "intervention"
+stopping_rule_id = "dummy-horizon"
+
+[[paired_streams]]
+id = "dummy-pair"
+arms = ["broadcast-on", "broadcast-off"]
+components = [
+  { kind = "process", id = "partner-process" },
+  { kind = "process", id = "episode-process" },
+  { kind = "latent_factor", id = "exposure-state" },
+  { kind = "process", id = "exposure-process" },
+  { kind = "emission", id = "partner-emission" },
+  { kind = "emission", id = "episode-emission" },
+  { kind = "outcome", id = "approach-outcome" },
+  { kind = "outcome", id = "withdraw-outcome" },
+  { kind = "outcome", id = "permit-outcome" },
+  { kind = "outcome", id = "suppress-outcome" },
+  { kind = "outcome", id = "wait-outcome" },
+  { kind = "outcome", id = "observe-outcome" },
+  { kind = "world_contingency", id = "success-enables-approach-transition" }
+]
+
+[[stopping_rules]]
+id = "dummy-horizon"
+kind = "fixed_horizon"
+max_time = 23
+
+[[evidence_budget_rules]]
+id = "dummy-budget"
+arms = ["broadcast-on", "broadcast-off"]
+arm_pairs = [{ left = "broadcast-on", right = "broadcast-off" }]
+metric = "delivered_log_likelihood_abs"
+scope = ["bundle-main", "partner-main"]
+tolerance_fraction = 0.01
+
+[[controls]]
+id = "broadcast-capacity-control"
+kind = "matched_capacity"
+treatment_arms = ["broadcast-on"]
+control_arms = ["broadcast-off"]
+intervention_ids = ["sever-broadcast"]
+budget_rule_ids = []
+
+[[controls]]
+id = "broadcast-budget-control"
+kind = "matched_budget"
+treatment_arms = ["broadcast-on"]
+control_arms = ["broadcast-off"]
+intervention_ids = []
+budget_rule_ids = ["dummy-budget"]

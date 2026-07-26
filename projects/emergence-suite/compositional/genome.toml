@@ -1,0 +1,22 @@
+genome_id = "reference-strain-51a"
+contract_id = "ifs-ai-experiment-51-contract"
+contract_version = "1.0.1"
+learning_rate = 0.18
+message_gain = 0.20
+policy_temperature = 0.50
+structure_complexity_penalty = 0.02
+precision_floor = 0.05
+dirichlet_concentration = 1.0
+approximation_iterations = 32
+approximation_tolerance = 1.0e-10
+
+[action_costs]
+approach = 0.20
+withdraw = 0.35
+inspect = 0.12
+request_support = 0.18
+offer_support = 0.16
+suppress = 0.45
+permit = 0.10
+wait = 0.08
+observe = 0.06

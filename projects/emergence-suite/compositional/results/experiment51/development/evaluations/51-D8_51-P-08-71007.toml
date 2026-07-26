@@ -1,0 +1,41 @@
+[decisions]
+budget-valid = true
+depth-separates = false
+local-calibration-preserved = true
+ordering-observed = true
+root-revision-selective = false
+
+[estimands.access-before-root]
+expression = "CompositionalOrganism.EventPrecedesExpr(CompositionalOrganism.TemporalExpr(:first_crossing, CompositionalOrganism.FieldExpr(\"state.access.access-main.probability\"), 0, :ge, 0.7, 2, nothing), CompositionalOrganism.TemporalExpr(:first_crossing, CompositionalOrganism.FieldExpr(\"state.bundle.bundle-main.root_probability\"), 0, :ge, 0.7, 2, nothing))"
+lower = 0.15811388300841894
+source_hashes = ["34a5da5287ed88b2f24d921bebfbde0264b18147c193fda2f70fbd76dff5cdb8", "517a02b9f53973b9dcedf620365eaf2a12da9bb3a740ad5aea80287f1a3e13c6"]
+upper = 1.0
+value = 1.0
+
+[estimands.budget-match]
+expression = "CompositionalOrganism.AggregateExpr(:max, CompositionalOrganism.BudgetErrorExpr(\"dummy-budget\"), nothing)"
+lower = "missing"
+source_hashes = ["b6d0f809fa2dbba817ce2efb7d75dd0aa4eccd8f19221a3b5639965e9ee8f012"]
+upper = "missing"
+value = 0.006660159660391375
+
+[estimands.depth-difference]
+expression = "CompositionalOrganism.ArmDifferenceExpr(CompositionalOrganism.TemporalExpr(:terminal, CompositionalOrganism.FieldExpr(\"state.global_precision.global-main.depth\"), 0, nothing, nothing, 1, nothing), \"broadcast-on\", \"broadcast-off\")"
+lower = 0.0074258828975495295
+source_hashes = ["34a5da5287ed88b2f24d921bebfbde0264b18147c193fda2f70fbd76dff5cdb8", "517a02b9f53973b9dcedf620365eaf2a12da9bb3a740ad5aea80287f1a3e13c6"]
+upper = 0.0074258828975495295
+value = 0.0074258828975495295
+
+[estimands.local-monitor-difference]
+expression = "CompositionalOrganism.UnaryExpr(:abs, CompositionalOrganism.ArmDifferenceExpr(CompositionalOrganism.TemporalExpr(:terminal, CompositionalOrganism.FieldExpr(\"state.local_precision.local-one.mean\"), 0, nothing, nothing, 1, nothing), \"broadcast-on\", \"broadcast-off\"))"
+lower = 0.0067021004252103555
+source_hashes = ["34a5da5287ed88b2f24d921bebfbde0264b18147c193fda2f70fbd76dff5cdb8", "517a02b9f53973b9dcedf620365eaf2a12da9bb3a740ad5aea80287f1a3e13c6"]
+upper = 0.0067021004252103555
+value = 0.0067021004252103555
+
+[estimands.root-revision-difference]
+expression = "CompositionalOrganism.ArmDifferenceExpr(CompositionalOrganism.TemporalExpr(:terminal, CompositionalOrganism.FieldExpr(\"state.bundle.bundle-main.root_probability\"), 0, nothing, nothing, 1, nothing), \"broadcast-on\", \"broadcast-off\")"
+lower = 0.015660352298497826
+source_hashes = ["34a5da5287ed88b2f24d921bebfbde0264b18147c193fda2f70fbd76dff5cdb8", "517a02b9f53973b9dcedf620365eaf2a12da9bb3a740ad5aea80287f1a3e13c6"]
+upper = 0.015660352298497826
+value = 0.015660352298497826

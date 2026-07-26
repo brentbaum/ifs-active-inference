@@ -1,0 +1,131 @@
+contract_id = "ifs-ai-experiment-51-contract"
+contract_version = "1.0.1"
+protocol_id = "development-evidence-format"
+requested_trace_fields = [
+  "run.seed",
+  "run.arm",
+  "run.time",
+  "observation.delivered_log_likelihood",
+  "observation.marginal_equivalence_error",
+  "state.bundle.bundle-main.root_probability",
+  "state.cue.cue-main.meaning_probability",
+  "learning.edge.cue-root.strength",
+  "provenance.edge_id"
+]
+[[interventions]]
+id = "declare-episodic-capacity"
+target_kind = "observation_channel"
+target_id = "episode-signal"
+operation = "enable"
+
+[[arms]]
+id = "episodic-format"
+world_id = "public-dummy-world"
+
+[[arms.events]]
+id = "episodic-capacity"
+time = 0
+kind = "intervene"
+source = "intervention"
+intervention_id = "declare-episodic-capacity"
+
+[[arms.events]]
+id = "episodic-correction"
+time = 1
+kind = "observe"
+source = "world"
+channel_id = "episode-signal"
+emission_id = "episode-emission"
+repeat = 20
+interval = 1
+
+[[arms.events]]
+id = "episodic-probe"
+time = 22
+kind = "probe"
+source = "world"
+channel_id = "cue-signal"
+emission_id = "cue-emission"
+repeat = 1
+interval = 1
+
+[[arms.events]]
+id = "episodic-stop"
+time = 23
+kind = "stop_check"
+source = "intervention"
+stopping_rule_id = "development-horizon"
+
+[[arms]]
+id = "cue-format"
+world_id = "public-dummy-world"
+
+[[arms.events]]
+id = "cue-correction"
+time = 1
+kind = "observe"
+source = "world"
+channel_id = "cue-signal"
+emission_id = "cue-emission"
+repeat = 20
+interval = 1
+
+[[arms.events]]
+id = "cue-probe"
+time = 22
+kind = "probe"
+source = "world"
+channel_id = "cue-signal"
+emission_id = "cue-emission"
+repeat = 1
+interval = 1
+
+[[arms.events]]
+id = "cue-stop"
+time = 23
+kind = "stop_check"
+source = "intervention"
+stopping_rule_id = "development-horizon"
+
+[[paired_streams]]
+id = "format-pair"
+arms = ["episodic-format", "cue-format"]
+components = [
+  { kind = "latent_factor", id = "partner-state" },
+  { kind = "latent_factor", id = "episode-state" },
+  { kind = "latent_factor", id = "exposure-state" },
+  { kind = "process", id = "partner-process" },
+  { kind = "process", id = "episode-process" },
+  { kind = "process", id = "exposure-process" },
+  { kind = "distribution", id = "reliable-signal" },
+  { kind = "outcome", id = "observe-outcome" }
+]
+
+[[stopping_rules]]
+id = "development-horizon"
+kind = "fixed_horizon"
+max_time = 23
+
+[[evidence_budget_rules]]
+id = "format-budget"
+arms = ["episodic-format", "cue-format"]
+arm_pairs = [{ left = "episodic-format", right = "cue-format" }]
+metric = "delivered_log_likelihood_abs"
+scope = ["bundle-main", "cue-main"]
+tolerance_fraction = 0.01
+
+[[controls]]
+id = "format-capacity-control"
+kind = "matched_capacity"
+treatment_arms = ["episodic-format"]
+control_arms = ["cue-format"]
+intervention_ids = ["declare-episodic-capacity"]
+budget_rule_ids = []
+
+[[controls]]
+id = "format-budget-control"
+kind = "matched_budget"
+treatment_arms = ["episodic-format"]
+control_arms = ["cue-format"]
+intervention_ids = []
+budget_rule_ids = ["format-budget"]

@@ -1,0 +1,22 @@
+revision,date,scope,change,reason,status
+A0,2026-07-26,public-contract,Implemented typed schema/compiler/kernel/trace/evaluator boundary,Establish one generic execution path,accepted
+A1,2026-07-26,rng,Inherited event-scoped scalar draws from paired emission consumers,Preserve paired likelihood budgets across arm divergence,accepted
+A2,2026-07-26,evidence,Changed delivered likelihood to agent-predictive marginal evidence,Remove evaluator-truth leakage from inference and structural scoring,accepted
+A3,2026-07-26,structure,Scored declared candidate graphs through common likelihood plus active-edge coherence and explicit complexity,Replace label-based structure selection with score argmax,accepted
+A4,2026-07-26,protocol,Counted skipped emission occurrences and corrected previous-action phase use,Conform to counter RNG and canonical phase semantics,accepted
+A5,2026-07-26,inference,Implemented sum-product inference with an independently enumerated exact oracle for every typed edge micrograph,Replace identity-only edge tests with numerical parity and deletion mutants,accepted
+A6,2026-07-26,structure,Normalized each candidate graph over the declared observation support and accumulated predictive log evidence with one initialization complexity charge,Remove scalar pseudo-BMR and make graph patterns recoverable through one generative interface,accepted
+A7,2026-07-26,learning,Added symmetric Dirichlet tables and generic likelihood transition edge policy and access updates,Ensure learnable parameters begin neutral and change only on observe events,accepted
+A8,2026-07-26,policy,Compiled protector choices into one joint support with learned forecasts access and cross-protector messages,Replace independent permission gates with joint generative policy inference,accepted
+A9,2026-07-26,precision,Made local precision a directed posterior-confidence forecast consumed by optional broadcast,Prevent an outgoing broadcast lesion from changing the local estimate it transmits,accepted
+A10,2026-07-26,evaluator,Implemented declared unit alignment tie noncrossing missing nonfinite and strata policies with AST and source-row hashes,Make the closed analysis grammar executable and auditable,accepted
+A11,2026-07-26,validation,Added SBC structural recovery and partner cue-root co-protection policy access and precision parameter recovery outputs,Establish open-development recoverability before freeze,accepted
+A12,2026-07-26,inference,Replaced the iterative self-comparison with a separate Cartesian exact oracle and declared-emission recovery generator,Remove circular parity and model-recovery evidence,accepted
+A13,2026-07-26,world,Required realized prior success for action-contingent transitions,Implement D1 mediation through world state rather than dose assignment,accepted
+A14,2026-07-26,learning,Moved partner trust updates from global action outcome to partner observations and selected change-point tables by phase,Make learned quantities depend on their declared generative evidence,accepted
+A15,2026-07-26,policy,Conditioned generated success on the selected joint action vector through generic coordination,Give joint protector inference a consumed world consequence,accepted
+A16,2026-07-26,structure,Allowed imaginal events to accumulate candidate evidence,Permit internally generated do-overs to affect BMR without a reduce command,accepted
+A17,2026-07-26,precision,Activated context interoception and policy channels and isolated named-field weights by contributing edge,Complete global field paths and remove cross-field strength contamination,accepted
+A18,2026-07-26,development,Added one generic discovery runner and executed D1 D7 and D8 on eight public pilot seeds,Run declared analyses after raw-trace sealing without D-specific callbacks,accepted
+A19,2026-07-26,development,Recorded D2 through D6 as named public-contract architecture walls,Prevent apparatus conformance from being renamed scientific target completion,blocked
+A20,2026-07-26,review,Rejected A17 contract compliance A19 D3/D6 wall classifications the 0.65 recovery threshold and per-seed target claims,Fable final Stage A review found unresolved source protocol and claim-discipline blockers,blocked

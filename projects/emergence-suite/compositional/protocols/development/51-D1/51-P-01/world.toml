@@ -1,0 +1,314 @@
+contract_id = "ifs-ai-experiment-51-contract"
+contract_version = "1.0.1"
+world_id = "public-dummy-world"
+family = "developmental_composition"
+horizon = 24
+episode_length = 8
+development_horizon = 8
+history_generator_id = "world-replay-v1"
+seed_namespace = "public-dummy-world"
+development_emission_ids = ["partner-emission", "episode-emission", "cue-emission"]
+
+[[latent_factors]]
+id = "partner-state"
+cardinality = 3
+values = ["helpful", "ambiguous", "adverse"]
+initial_distribution_id = "partner-prior"
+evaluator_only = true
+
+[[latent_factors]]
+id = "episode-state"
+cardinality = 4
+values = ["safe", "mixed", "threat", "repair"]
+initial_distribution_id = "episode-prior"
+evaluator_only = true
+
+[[latent_factors]]
+id = "exposure-state"
+cardinality = 2
+values = ["low", "high"]
+initial_distribution_id = "exposure-prior"
+evaluator_only = true
+
+[[distributions]]
+id = "partner-prior"
+family = "categorical"
+values = ["helpful", "ambiguous", "adverse"]
+probabilities = [0.34, 0.33, 0.33]
+
+[[distributions]]
+id = "episode-prior"
+family = "categorical"
+values = ["safe", "mixed", "threat", "repair"]
+probabilities = [0.25, 0.25, 0.25, 0.25]
+
+[[distributions]]
+id = "exposure-prior"
+family = "categorical"
+values = ["low", "high"]
+probabilities = [0.5, 0.5]
+
+[[distributions]]
+id = "partner-transition"
+family = "transition_matrix"
+values = ["helpful", "ambiguous", "adverse"]
+matrix = [
+  [0.80, 0.10, 0.10],
+  [0.10, 0.80, 0.10],
+  [0.10, 0.10, 0.80]
+]
+
+[[distributions]]
+id = "episode-helpful-transition"
+family = "transition_matrix"
+values = ["safe", "mixed", "threat", "repair"]
+matrix = [
+  [0.75, 0.10, 0.05, 0.10],
+  [0.30, 0.45, 0.10, 0.15],
+  [0.15, 0.20, 0.35, 0.30],
+  [0.35, 0.15, 0.05, 0.45]
+]
+
+[[distributions]]
+id = "episode-ambiguous-transition"
+family = "transition_matrix"
+values = ["safe", "mixed", "threat", "repair"]
+matrix = [
+  [0.55, 0.20, 0.15, 0.10],
+  [0.20, 0.45, 0.20, 0.15],
+  [0.10, 0.20, 0.55, 0.15],
+  [0.20, 0.20, 0.15, 0.45]
+]
+
+[[distributions]]
+id = "episode-adverse-transition"
+family = "transition_matrix"
+values = ["safe", "mixed", "threat", "repair"]
+matrix = [
+  [0.35, 0.20, 0.35, 0.10],
+  [0.10, 0.35, 0.45, 0.10],
+  [0.05, 0.10, 0.80, 0.05],
+  [0.10, 0.20, 0.45, 0.25]
+]
+
+[[distributions]]
+id = "exposure-baseline-transition"
+family = "transition_matrix"
+values = ["low", "high"]
+matrix = [
+  [0.85, 0.15],
+  [0.20, 0.80]
+]
+
+[[distributions]]
+id = "exposure-approach-transition"
+family = "transition_matrix"
+values = ["low", "high"]
+matrix = [
+  [0.10, 0.90],
+  [0.05, 0.95]
+]
+
+[[distributions]]
+id = "reliable-signal"
+family = "beta"
+sampling_scope = "event"
+alpha = 8.0
+beta = 2.0
+
+[[distributions]]
+id = "partner-helpful-emission"
+family = "categorical"
+values = ["helpful", "ambiguous", "adverse"]
+probabilities = [0.80, 0.15, 0.05]
+
+[[distributions]]
+id = "partner-ambiguous-emission"
+family = "categorical"
+values = ["helpful", "ambiguous", "adverse"]
+probabilities = [0.20, 0.60, 0.20]
+
+[[distributions]]
+id = "partner-adverse-emission"
+family = "categorical"
+values = ["helpful", "ambiguous", "adverse"]
+probabilities = [0.05, 0.15, 0.80]
+
+[[distributions]]
+id = "episode-safe-emission"
+family = "categorical"
+values = ["safe", "mixed", "threat", "repair"]
+probabilities = [0.80, 0.10, 0.05, 0.05]
+
+[[distributions]]
+id = "episode-mixed-emission"
+family = "categorical"
+values = ["safe", "mixed", "threat", "repair"]
+probabilities = [0.15, 0.60, 0.15, 0.10]
+
+[[distributions]]
+id = "episode-threat-emission"
+family = "categorical"
+values = ["safe", "mixed", "threat", "repair"]
+probabilities = [0.05, 0.10, 0.80, 0.05]
+
+[[distributions]]
+id = "episode-repair-emission"
+family = "categorical"
+values = ["safe", "mixed", "threat", "repair"]
+probabilities = [0.10, 0.10, 0.10, 0.70]
+
+[[distributions]]
+id = "cue-safe-emission"
+family = "categorical"
+values = ["negative", "positive"]
+probabilities = [0.20, 0.80]
+
+[[distributions]]
+id = "cue-mixed-emission"
+family = "categorical"
+values = ["negative", "positive"]
+probabilities = [0.50, 0.50]
+
+[[distributions]]
+id = "cue-threat-emission"
+family = "categorical"
+values = ["negative", "positive"]
+probabilities = [0.85, 0.15]
+
+[[distributions]]
+id = "cue-repair-emission"
+family = "categorical"
+values = ["negative", "positive"]
+probabilities = [0.15, 0.85]
+
+[[processes]]
+id = "partner-process"
+type = "markov"
+target_factor = "partner-state"
+transition_distribution_id = "partner-transition"
+update_interval = 4
+
+[[processes]]
+id = "episode-process"
+type = "coupled_latent"
+target_factor = "episode-state"
+source_factors = ["partner-state"]
+conditional_transition_ids = [
+  "episode-helpful-transition",
+  "episode-ambiguous-transition",
+  "episode-adverse-transition"
+]
+update_interval = 1
+
+[[processes]]
+id = "exposure-process"
+type = "action_contingent"
+target_factor = "exposure-state"
+action = "approach"
+baseline_transition_id = "exposure-baseline-transition"
+action_transition_id = "exposure-approach-transition"
+update_interval = 1
+
+[[emissions]]
+id = "partner-emission"
+source_factors = ["partner-state"]
+channel_id = "partner-signal"
+likelihood_family = "categorical"
+conditional_distribution_ids = [
+  "partner-helpful-emission",
+  "partner-ambiguous-emission",
+  "partner-adverse-emission"
+]
+reliability_distribution_id = "reliable-signal"
+masked_scope = []
+
+[[outcomes]]
+id = "approach-outcome"
+type = "action_outcome"
+action = "approach"
+source_factors = ["exposure-state"]
+success_probabilities = [0.25, 0.25]
+exposure_values = [0.25, 1.00]
+
+[[outcomes]]
+id = "potential-hazard"
+type = "hazard_outcome"
+source_factors = ["exposure-state"]
+potential_probabilities = [0.20, 0.80]
+mitigating_actions = ["approach"]
+
+[[outcomes]]
+id = "withdraw-outcome"
+type = "action_outcome"
+action = "withdraw"
+source_factors = ["exposure-state"]
+success_probabilities = [0.90, 0.95]
+exposure_values = [0.05, 0.10]
+
+[[outcomes]]
+id = "permit-outcome"
+type = "action_outcome"
+action = "permit"
+source_factors = ["exposure-state"]
+success_probabilities = [0.80, 0.90]
+exposure_values = [0.15, 0.40]
+
+[[outcomes]]
+id = "suppress-outcome"
+type = "action_outcome"
+action = "suppress"
+source_factors = ["exposure-state"]
+success_probabilities = [0.85, 0.90]
+exposure_values = [0.02, 0.05]
+
+[[outcomes]]
+id = "wait-outcome"
+type = "action_outcome"
+action = "wait"
+source_factors = ["exposure-state"]
+success_probabilities = [0.95, 0.95]
+exposure_values = [0.00, 0.00]
+
+[[outcomes]]
+id = "observe-outcome"
+type = "action_outcome"
+action = "observe"
+source_factors = ["exposure-state"]
+success_probabilities = [0.95, 0.95]
+exposure_values = [0.00, 0.00]
+
+[[contingencies]]
+id = "success-enables-approach-transition"
+action = "approach"
+target_process = "exposure-process"
+effect = "activate_action_transition"
+enabled = false
+
+[[emissions]]
+id = "episode-emission"
+source_factors = ["episode-state"]
+channel_id = "episode-signal"
+likelihood_family = "categorical"
+conditional_distribution_ids = [
+  "episode-safe-emission",
+  "episode-mixed-emission",
+  "episode-threat-emission",
+  "episode-repair-emission"
+]
+reliability_distribution_id = "reliable-signal"
+masked_scope = []
+
+[[emissions]]
+id = "cue-emission"
+source_factors = ["episode-state"]
+channel_id = "cue-signal"
+likelihood_family = "categorical"
+conditional_distribution_ids = [
+  "cue-safe-emission",
+  "cue-mixed-emission",
+  "cue-threat-emission",
+  "cue-repair-emission"
+]
+reliability_distribution_id = "reliable-signal"
+masked_scope = []

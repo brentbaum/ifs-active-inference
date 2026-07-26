@@ -1,0 +1,235 @@
+contract_id = "ifs-ai-experiment-51-contract"
+contract_version = "1.0.1"
+protocol_id = "development-action-persistence"
+requested_trace_fields = [
+  "run.seed",
+  "run.arm",
+  "run.time",
+  "action.selected",
+  "action.success",
+  "action.delivered_exposure",
+  "world.potential_hazard",
+  "world.realized_hazard",
+  "state.bundle.bundle-main.root_probability",
+  "world.truth.exposure-state",
+  "provenance.edge_id"
+]
+[[interventions]]
+id = "enable-success-transition"
+target_kind = "world_contingency"
+target_id = "success-enables-approach-transition"
+operation = "enable"
+
+[[interventions]]
+id = "disable-withdraw"
+target_kind = "policy_action"
+target_id = "withdraw"
+operation = "disable"
+
+[[interventions]]
+id = "disable-permit"
+target_kind = "policy_action"
+target_id = "permit"
+operation = "disable"
+
+[[interventions]]
+id = "disable-suppress"
+target_kind = "policy_action"
+target_id = "suppress"
+operation = "disable"
+
+[[interventions]]
+id = "disable-wait"
+target_kind = "policy_action"
+target_id = "wait"
+operation = "disable"
+
+[[interventions]]
+id = "disable-observe"
+target_kind = "policy_action"
+target_id = "observe"
+operation = "disable"
+
+[[arms]]
+id = "closed-loop"
+world_id = "public-dummy-world"
+
+[[arms.events]]
+id = "enable-contingency"
+time = 0
+kind = "intervene"
+source = "intervention"
+intervention_id = "enable-success-transition"
+
+[[arms.events]]
+id = "closed-disable-withdraw"
+time = 0
+kind = "intervene"
+source = "intervention"
+intervention_id = "disable-withdraw"
+
+[[arms.events]]
+id = "closed-disable-permit"
+time = 0
+kind = "intervene"
+source = "intervention"
+intervention_id = "disable-permit"
+
+[[arms.events]]
+id = "closed-disable-suppress"
+time = 0
+kind = "intervene"
+source = "intervention"
+intervention_id = "disable-suppress"
+
+[[arms.events]]
+id = "closed-disable-wait"
+time = 0
+kind = "intervene"
+source = "intervention"
+intervention_id = "disable-wait"
+
+[[arms.events]]
+id = "closed-disable-observe"
+time = 0
+kind = "intervene"
+source = "intervention"
+intervention_id = "disable-observe"
+
+[[arms.events]]
+id = "closed-episode-stream"
+time = 1
+kind = "observe"
+source = "world"
+channel_id = "episode-signal"
+emission_id = "episode-emission"
+repeat = 20
+interval = 1
+
+[[arms.events]]
+id = "closed-corrective-probe"
+time = 22
+kind = "probe"
+source = "world"
+channel_id = "cue-signal"
+emission_id = "cue-emission"
+repeat = 1
+interval = 1
+
+[[arms.events]]
+id = "closed-stop"
+time = 23
+kind = "stop_check"
+source = "intervention"
+stopping_rule_id = "development-horizon"
+
+[[arms]]
+id = "exact-replay"
+world_id = "public-dummy-world"
+
+[[arms.events]]
+id = "replay-disable-withdraw"
+time = 0
+kind = "intervene"
+source = "intervention"
+intervention_id = "disable-withdraw"
+
+[[arms.events]]
+id = "replay-disable-permit"
+time = 0
+kind = "intervene"
+source = "intervention"
+intervention_id = "disable-permit"
+
+[[arms.events]]
+id = "replay-disable-suppress"
+time = 0
+kind = "intervene"
+source = "intervention"
+intervention_id = "disable-suppress"
+
+[[arms.events]]
+id = "replay-disable-wait"
+time = 0
+kind = "intervene"
+source = "intervention"
+intervention_id = "disable-wait"
+
+[[arms.events]]
+id = "replay-disable-observe"
+time = 0
+kind = "intervene"
+source = "intervention"
+intervention_id = "disable-observe"
+
+[[arms.events]]
+id = "replay-episode-stream"
+time = 1
+kind = "observe"
+source = "world"
+channel_id = "episode-signal"
+emission_id = "episode-emission"
+repeat = 20
+interval = 1
+
+[[arms.events]]
+id = "replay-corrective-probe"
+time = 22
+kind = "probe"
+source = "world"
+channel_id = "cue-signal"
+emission_id = "cue-emission"
+repeat = 1
+interval = 1
+
+[[arms.events]]
+id = "replay-stop"
+time = 23
+kind = "stop_check"
+source = "intervention"
+stopping_rule_id = "development-horizon"
+
+[[paired_streams]]
+id = "closed-replay-pair"
+arms = ["closed-loop", "exact-replay"]
+components = [
+  { kind = "latent_factor", id = "partner-state" },
+  { kind = "latent_factor", id = "episode-state" },
+  { kind = "latent_factor", id = "exposure-state" },
+  { kind = "process", id = "partner-process" },
+  { kind = "process", id = "episode-process" },
+  { kind = "process", id = "exposure-process" },
+  { kind = "emission", id = "episode-emission" },
+  { kind = "emission", id = "cue-emission" },
+  { kind = "outcome", id = "approach-outcome" },
+  { kind = "outcome", id = "potential-hazard" }
+]
+
+[[stopping_rules]]
+id = "development-horizon"
+kind = "fixed_horizon"
+max_time = 23
+
+[[evidence_budget_rules]]
+id = "closed-replay-budget"
+arms = ["closed-loop", "exact-replay"]
+arm_pairs = [{ left = "closed-loop", right = "exact-replay" }]
+metric = "delivered_log_likelihood_abs"
+scope = ["bundle-main"]
+tolerance_fraction = 0.01
+
+[[controls]]
+id = "exact-replay-control"
+kind = "matched_capacity"
+treatment_arms = ["closed-loop"]
+control_arms = ["exact-replay"]
+intervention_ids = ["enable-success-transition"]
+budget_rule_ids = []
+
+[[controls]]
+id = "closed-replay-budget-control"
+kind = "matched_budget"
+treatment_arms = ["closed-loop"]
+control_arms = ["exact-replay"]
+intervention_ids = []
+budget_rule_ids = ["closed-replay-budget"]

@@ -1,0 +1,23 @@
+[decisions]
+success-realized = true
+
+[estimands.delivered-exposure-contrast]
+expression = "CompositionalOrganism.ArmDifferenceExpr(CompositionalOrganism.TemporalExpr(:terminal, CompositionalOrganism.FieldExpr(\"action.delivered_exposure\"), 0, nothing, nothing, 1, nothing), \"closed-loop\", \"exact-replay\")"
+lower = 0.0
+source_hashes = ["0c5bce3357b0742dbe1b9808227eb20bf339b855cb2fae7d334c7699b0e1d759", "fab2741c13f74640af2e6f2a67602bee462e25c835ad1133db86e7c765b8e845"]
+upper = 0.0
+value = 0.0
+
+[estimands.realized-success]
+expression = "CompositionalOrganism.AggregateExpr(:rate, CompositionalOrganism.WhereExpr(CompositionalOrganism.FieldExpr(\"action.success\"), CompositionalOrganism.PredicateIR[CompositionalOrganism.PredicateIR(\"run.arm\", :eq, \"closed-loop\")]), nothing)"
+lower = "missing"
+source_hashes = ["0c5bce3357b0742dbe1b9808227eb20bf339b855cb2fae7d334c7699b0e1d759", "11a9c0dbb414936c6e8e9a088b6bd43249177e39df758cb61a7c88ce35b6ea24", "24c3c506197b28f2e2e7b2553d94f46fc666117ef9f93d3f6b634e3bed5b31fd", "2850cf47743f886c6b0e285ea0f7f0f7e0633a5f9afb598defaa180a32616f19", "2bc1706a076d14ccb5fd25d5c15fe5a9955d13848da99c5862197158ae132156", "3410bbd3daabe6c1efbf831099bf113c8b6a706c44ad625f62fe7768f432c3f9", "3a9b5f1125cad629d09d173f041d4ff0fa5261d66be6b328c249c936f974a9e4", "3b9b89b16992773cb0e7b9c2e268326b08a15b1d30fa1c4c83c053b399e6eb75", "4e92e98e2a5e8dfe6397ad87fad9bf4acba6f367baa0e6e846a513e8f82bb5cc", "51c7ee7ab59ffa4163378134b21cfdc19f00c6062091449727e7c43a492ad51f", "5ae76a32ca4af81822f9d0edaa7e27d188bf6d2462c576ffd3cb439abdc978b0", "5b2d9bb46a5a9751d63545a1564092777d3072b1fe2f3bc9630924740c6869e3", "5f183edc0e8e405a52ac7e2901603c71795dc2278e0da28dcb4a60b3863765ce", "5fccc4f1165cfb0ae202ed9ec02db12778a25106957293188751bb3b7bc2cbed", "6388b180fb8c5170b36a44cf83f0a600d775d9653d09d8b67a66956c54af1a93", "6cc7f53b1284243e7c5eb74c1e6721d27065a9766cf3f6a7483bb2a415c8b61d", "7eba8f7421dcae34e6eb41c69d5bdcd685bcd3e37b16ab3f9bfdc251bf68eb0b", "7fe2e09b8d58c41eb7e934a1e6196c1f24764781349995edf36ae8957fd2d639", "809c4c265ea0f0b1f0cfef598ca476eda63234278f90813697da288241f13bbb", "b449549266806e69085cb32ac88b3d988af1b0fc4750688a5347490c9df4c932", "da8714b3daceccd5b3ec681e5424cf4dd581ad25be23d0a0050f0887775a92af", "e78fdab6a778fb084b68fc3a6a6d4794d4c3d1bb593f1a77ea21f315c2fb8f0a", "ec449004ade6ba773b5eb3e658f7ec3ee64742304ae932a008cf75c6f2fd5fe6", "fa2463fdd99c0aa457085e417ad73e5bacb77d9fe24a152796fe569375547a53"]
+upper = "missing"
+value = 0.2916666666666667
+
+[estimands.root-contrast]
+expression = "CompositionalOrganism.ArmDifferenceExpr(CompositionalOrganism.TemporalExpr(:terminal, CompositionalOrganism.FieldExpr(\"state.bundle.bundle-main.root_probability\"), 0, nothing, nothing, 1, nothing), \"closed-loop\", \"exact-replay\")"
+lower = 0.012641453580323203
+source_hashes = ["0c5bce3357b0742dbe1b9808227eb20bf339b855cb2fae7d334c7699b0e1d759", "fab2741c13f74640af2e6f2a67602bee462e25c835ad1133db86e7c765b8e845"]
+upper = 0.012641453580323203
+value = 0.012641453580323203

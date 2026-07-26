@@ -87,10 +87,10 @@ and continuing through Experiment 51, with Fable review.
 - [x] At least three private 51-P bundles meet every §12 requirement.
 - [x] H/C/P/L seeds are disjoint and release-block commitments are sealed.
 - [x] Seal commit contains no private challenge or seed plaintext.
-- [ ] Generic compiler, engine, runner, evaluator, and provenance trace exist.
-- [ ] Semantic edge/mutation, inference, evidence-accounting, composition, and
+- [x] Generic compiler, engine, runner, evaluator, and provenance trace exist.
+- [x] Semantic edge/mutation, inference, evidence-accounting, composition, and
       generic-runner gates pass or produce an explicit architecture failure.
-- [ ] Fable reviews Stage A and blocking findings are resolved or retained.
+- [x] Fable reviews Stage A and blocking findings are resolved or retained.
 - [ ] Freeze package and 51-L preregistration predate challenge reveal.
 - [ ] 51-H and 51-C run once on escrowed blocks.
 - [ ] Revealed 51-P archives hash-match, validate without source changes, and
@@ -98,8 +98,8 @@ and continuing through Experiment 51, with Fable review.
 - [ ] 51-L lesions and robustness run from the preregistered package.
 - [ ] Results synthesis states failures and implementation walls at the affected
       claims without exceeding the specification's licensed language.
-- [ ] Experiment 50 tracked files are unchanged.
-- [ ] Full test suite and record-integrity checks pass.
+- [x] Experiment 50 tracked files are unchanged.
+- [x] Full test suite and record-integrity checks pass.
 - [ ] Final Fable review has no unresolved blocking process or claim-discipline
       findings.
 
@@ -231,3 +231,35 @@ and continuing through Experiment 51, with Fable review.
   plaintext is retired.
 - The public release record can prove staged seed identity without exposing
   block purposes or seed material.
+
+### 2026-07-26 - Stage A negative architecture record
+
+**By:** Codex, reviewed by Fable
+
+**Actions:**
+- Implemented the generic compiler, inference/learning/policy kernel, protocol
+  runner, closed evaluator, provenance trace, exact oracle, and public
+  validation apparatus without opening any private bundle or escrowed seed.
+- Passed the full public test suite, including 231 fast assertions, 29 public
+  dry-run assertions, and the 5-check static boundary.
+- Executed 40 public-pilot development runs for the partial D1, D7, and D8
+  assays and retained every raw trace, evaluation, and content hash.
+- Received Fable's final Stage-A ruling: blocked as an architecture failure.
+  D2, D4, and D5 are genuine contract walls; D3 is unfinished and D6's wall is
+  not demonstrated.
+- Restored the unadjudicated recovery gate from `0.65` to `0.80`. The
+  independently generated edge-subset recovery result is `0.797619`, so the
+  regenerated semantic summary correctly reports failure.
+- Recorded the direct global-precision writes, undeclared joint-coordination
+  equation, per-seed evaluator limitation, incomplete D1/D7/D8 assays, and
+  development namespace pollution as unresolved blockers.
+- Stopped before Stage B. No reference strain was frozen and no historical,
+  composition, prospective, or lesion escrow was opened.
+
+**Learnings:**
+- Broad semantic test coverage does not establish contract compliance when
+  scientific state can bypass configured graph edges.
+- A publishable architecture wall must be demonstrated by the sealed grammar;
+  unfinished protocol work cannot be relabeled as inexpressibility.
+- Run-level Boolean decisions cannot substitute for locked cross-seed
+  estimands and intervals.
