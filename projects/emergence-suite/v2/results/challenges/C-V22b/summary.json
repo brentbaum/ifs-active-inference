@@ -1,0 +1,166 @@
+{
+  "challenge": "C-V22b",
+  "configuration": {
+    "cue_count": 8,
+    "history_tiers": {
+      "long": 480,
+      "medium": 120,
+      "short": 30
+    },
+    "near_twin_pair_one_indexed": [
+      1,
+      5
+    ],
+    "precision_states": [
+      2,
+      0
+    ],
+    "primary_tier": "medium",
+    "segment_boundary_given_to_inference": false,
+    "segment_identity_given_to_inference": false,
+    "strong_cues_one_indexed": [
+      1,
+      2
+    ],
+    "strong_treatment_cue_one_indexed": 1,
+    "tier_design": "nested prefixes within each of 60 paired base worlds",
+    "true_associations": [
+      0.9,
+      0.9,
+      0.7,
+      0.7,
+      0.5,
+      0.5,
+      0.5,
+      0.5
+    ],
+    "true_similarities": [
+      1.0,
+      0.24,
+      0.2,
+      0.18,
+      0.95,
+      0.16,
+      0.14,
+      0.12
+    ],
+    "weak_cues_one_indexed": [
+      3,
+      4
+    ],
+    "zero_cues_one_indexed": [
+      5,
+      6,
+      7,
+      8
+    ],
+    "zero_treatment_cue_one_indexed": 5
+  },
+  "failure_localization": [],
+  "frozen_identity": {
+    "commit": "347482f",
+    "manifest": "projects/emergence-suite/v2/results/V2.2.1/freeze-manifest.json",
+    "manifest_file_count": 50,
+    "manifest_sha256": "7c32072f1108ded6f150036d260b1f88b5e12a7f99dcc7fd526cbb1c4486b990",
+    "mismatches": []
+  },
+  "paired_stream_mismatches": 0,
+  "paired_streams": true,
+  "passed": true,
+  "seed_block_released": [
+    806117,
+    806416
+  ],
+  "seed_block_used": [
+    806117,
+    806176
+  ],
+  "stage": "V2.2.1",
+  "tests": {
+    "floor_dose_response": {
+      "floor_band": 0.02,
+      "long_floor_95_interval": [
+        1.0,
+        0.9398260695220669,
+        0.9999999999999999
+      ],
+      "long_floor_threshold": 48,
+      "long_floor_worlds": 60,
+      "mean_root_revision_by_tier": {
+        "long": [
+          4.3977608441804944e-05,
+          2.0742157562854717e-05,
+          6.721305932075517e-05
+        ],
+        "medium": [
+          0.0004194276045690513,
+          5.3318380343905466e-05,
+          0.0007855368287941971
+        ],
+        "short": [
+          0.005149610726493707,
+          0.00021974378097762252,
+          0.010079477672009791
+        ]
+      },
+      "monotone_means": true,
+      "paired_differences": {
+        "medium_minus_long": [
+          0.00037544999612724637,
+          9.252447968324557e-06,
+          0.0007416475442861682
+        ],
+        "short_minus_medium": [
+          0.004730183121924655,
+          -0.00016350746843249529,
+          0.009623873712281805
+        ]
+      },
+      "passed": true
+    },
+    "graded_transfer": {
+      "ordered_worlds": 60,
+      "ordered_worlds_95_interval": [
+        1.0,
+        0.9398260695220669,
+        0.9999999999999999
+      ],
+      "ordering_threshold": 45,
+      "passed": true,
+      "spearman_95_interval": [
+        0.9992552820541806,
+        0.998057216159099,
+        1.000453347949262
+      ],
+      "spearman_threshold": 0.6
+    },
+    "mediation": {
+      "maximum_null_world_transfer": 0.006936605478622515,
+      "maximum_root_cut_transfer": 0.0,
+      "null_root_worlds": 173,
+      "passed": true,
+      "root_null_band": 0.01,
+      "transfer_null_band": 0.01
+    },
+    "segment_gating": {
+      "attribution_effect_95_interval": [
+        0.17232712998148983,
+        0.158839996291277,
+        0.18581426367170265
+      ],
+      "broad_cue_revision_95_interval": [
+        0.42000000000000004,
+        0.42000000000000004,
+        0.42000000000000004
+      ],
+      "local_uptake_minimum": 0.2,
+      "narrowed_cue_revision_95_interval": [
+        0.42944162802068375,
+        0.4277040311117895,
+        0.431179224929578
+      ],
+      "passed": true
+    }
+  },
+  "world_count_per_arm": 60
+}
