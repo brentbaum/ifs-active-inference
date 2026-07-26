@@ -1,0 +1,515 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ifs-active-inference.local/experiment51/protocol.schema.json",
+  "title": "Experiment 51 protocol",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_id",
+    "contract_version",
+    "protocol_id",
+    "requested_trace_fields",
+    "interventions",
+    "stopping_rules",
+    "arms",
+    "paired_streams",
+    "evidence_budget_rules",
+    "controls"
+  ],
+  "properties": {
+    "contract_id": { "const": "ifs-ai-experiment-51-contract" },
+    "contract_version": { "const": "1.0.0" },
+    "protocol_id": { "$ref": "#/$defs/id" },
+    "requested_trace_fields": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 128,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/trace_path" }
+    },
+    "interventions": {
+      "type": "array",
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/intervention" }
+    },
+    "stopping_rules": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 16,
+      "items": { "$ref": "#/$defs/stopping_rule" }
+    },
+    "arms": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 16,
+      "items": { "$ref": "#/$defs/arm" }
+    },
+    "paired_streams": {
+      "type": "array",
+      "maxItems": 32,
+      "items": { "$ref": "#/$defs/paired_stream" }
+    },
+    "evidence_budget_rules": {
+      "type": "array",
+      "maxItems": 16,
+      "items": { "$ref": "#/$defs/evidence_budget_rule" }
+    },
+    "controls": {
+      "type": "array",
+      "maxItems": 32,
+      "items": { "$ref": "#/$defs/control" }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:[-_][a-z0-9]+)*$",
+      "maxLength": 64
+    },
+    "trace_path": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*(?:\\.[a-z0-9_*;=-]+)+$",
+      "maxLength": 256
+    },
+    "scalar": {
+      "oneOf": [
+        { "type": "number", "minimum": -1000000, "maximum": 1000000 },
+        { "type": "boolean" },
+        { "type": "string", "maxLength": 256 }
+      ]
+    },
+    "predicate": {
+      "oneOf": [
+        { "$ref": "#/$defs/equality_predicate" },
+        { "$ref": "#/$defs/numeric_predicate" },
+        { "$ref": "#/$defs/membership_predicate" },
+        { "$ref": "#/$defs/finite_predicate" }
+      ]
+    },
+    "equality_predicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field", "comparator", "value"],
+      "properties": {
+        "field": { "$ref": "#/$defs/trace_path" },
+        "comparator": { "enum": ["eq", "ne"] },
+        "value": { "$ref": "#/$defs/scalar" }
+      }
+    },
+    "numeric_predicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field", "comparator", "value"],
+      "properties": {
+        "field": { "$ref": "#/$defs/trace_path" },
+        "comparator": { "enum": ["lt", "le", "gt", "ge"] },
+        "value": {
+          "type": "number",
+          "minimum": -1000000,
+          "maximum": 1000000
+        }
+      }
+    },
+    "membership_predicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field", "comparator", "value"],
+      "properties": {
+        "field": { "$ref": "#/$defs/trace_path" },
+        "comparator": { "const": "in" },
+        "value": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "items": { "$ref": "#/$defs/scalar" }
+        }
+      }
+    },
+    "finite_predicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field", "comparator"],
+      "properties": {
+        "field": { "$ref": "#/$defs/trace_path" },
+        "comparator": { "const": "finite" }
+      }
+    },
+    "trigger": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "predicate"],
+          "properties": {
+            "kind": { "const": "external_proxy" },
+            "predicate": { "$ref": "#/$defs/predicate" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "predicate"],
+          "properties": {
+            "kind": { "const": "latent_intervention" },
+            "predicate": { "$ref": "#/$defs/predicate" }
+          }
+        }
+      ]
+    },
+    "observation_event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "time",
+        "kind",
+        "source",
+        "channel_id",
+        "emission_id",
+        "repeat",
+        "interval"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "time": { "type": "integer", "minimum": 0, "maximum": 4096 },
+        "kind": { "enum": ["observe", "probe"] },
+        "source": { "enum": ["world", "body", "partner"] },
+        "channel_id": { "$ref": "#/$defs/id" },
+        "emission_id": { "$ref": "#/$defs/id" },
+        "repeat": { "type": "integer", "minimum": 1, "maximum": 4096 },
+        "interval": { "type": "integer", "minimum": 1, "maximum": 4096 },
+        "trigger": { "$ref": "#/$defs/trigger" }
+      }
+    },
+    "imaginal_event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "time",
+        "kind",
+        "source",
+        "channel_id",
+        "generator_id",
+        "repeat",
+        "interval"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "time": { "type": "integer", "minimum": 0, "maximum": 4096 },
+        "kind": { "const": "imaginal" },
+        "source": { "const": "imaginal" },
+        "channel_id": { "$ref": "#/$defs/id" },
+        "generator_id": { "const": "posterior-predictive-mode-v1" },
+        "repeat": { "type": "integer", "minimum": 1, "maximum": 4096 },
+        "interval": { "type": "integer", "minimum": 1, "maximum": 4096 },
+        "trigger": { "$ref": "#/$defs/trigger" }
+      }
+    },
+    "intervention_event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "time", "kind", "source", "intervention_id"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "time": { "type": "integer", "minimum": 0, "maximum": 4096 },
+        "kind": { "const": "intervene" },
+        "source": { "const": "intervention" },
+        "intervention_id": { "$ref": "#/$defs/id" },
+        "trigger": { "$ref": "#/$defs/trigger" }
+      }
+    },
+    "stop_event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "time", "kind", "source", "stopping_rule_id"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "time": { "type": "integer", "minimum": 0, "maximum": 4096 },
+        "kind": { "const": "stop_check" },
+        "source": { "const": "intervention" },
+        "stopping_rule_id": { "$ref": "#/$defs/id" }
+      }
+    },
+    "event": {
+      "oneOf": [
+        { "$ref": "#/$defs/observation_event" },
+        { "$ref": "#/$defs/imaginal_event" },
+        { "$ref": "#/$defs/intervention_event" },
+        { "$ref": "#/$defs/stop_event" }
+      ]
+    },
+    "arm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "world_id", "events"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "world_id": { "$ref": "#/$defs/id" },
+        "events": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 256,
+          "items": { "$ref": "#/$defs/event" }
+        }
+      }
+    },
+    "edge_intervention": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "target_kind", "target_id", "operation"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "target_kind": { "const": "edge" },
+        "target_id": { "$ref": "#/$defs/id" },
+        "operation": {
+          "enum": ["enable", "disable", "toggle", "sever"]
+        }
+      }
+    },
+    "channel_intervention": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "target_kind", "target_id", "operation"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "target_kind": { "const": "observation_channel" },
+        "target_id": { "$ref": "#/$defs/id" },
+        "operation": { "enum": ["enable", "disable", "toggle"] }
+      }
+    },
+    "policy_intervention": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "target_kind", "target_id", "operation"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "target_kind": { "const": "policy_action" },
+        "target_id": { "$ref": "#/$defs/id" },
+        "operation": { "enum": ["enable", "disable"] }
+      }
+    },
+    "contingency_intervention": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "target_kind", "target_id", "operation"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "target_kind": { "const": "world_contingency" },
+        "target_id": { "$ref": "#/$defs/id" },
+        "operation": { "enum": ["enable", "disable", "toggle"] }
+      }
+    },
+    "intervention": {
+      "oneOf": [
+        { "$ref": "#/$defs/edge_intervention" },
+        { "$ref": "#/$defs/channel_intervention" },
+        { "$ref": "#/$defs/policy_intervention" },
+        { "$ref": "#/$defs/contingency_intervention" }
+      ]
+    },
+    "paired_component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id"],
+      "properties": {
+        "kind": {
+          "enum": [
+            "latent_factor",
+            "process",
+            "emission",
+            "distribution",
+            "outcome",
+            "world_contingency"
+          ]
+        },
+        "id": { "$ref": "#/$defs/id" }
+      }
+    },
+    "paired_stream": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "arms", "components"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "arms": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "components": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "items": { "$ref": "#/$defs/paired_component" }
+        }
+      }
+    },
+    "stopping_rule": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "kind", "max_time"],
+          "properties": {
+            "id": { "$ref": "#/$defs/id" },
+            "kind": { "const": "fixed_horizon" },
+            "max_time": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4096
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "max_time",
+            "field",
+            "comparator",
+            "threshold",
+            "persistence"
+          ],
+          "properties": {
+            "id": { "$ref": "#/$defs/id" },
+            "kind": { "const": "trace_crossing" },
+            "max_time": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4096
+            },
+            "field": { "$ref": "#/$defs/trace_path" },
+            "comparator": { "enum": ["lt", "le", "gt", "ge"] },
+            "threshold": {
+              "type": "number",
+              "minimum": -1000000,
+              "maximum": 1000000
+            },
+            "persistence": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 128
+            }
+          }
+        }
+      ]
+    },
+    "evidence_budget_rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "arms",
+        "arm_pairs",
+        "metric",
+        "scope",
+        "tolerance_fraction"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "arms": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "arm_pairs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/arm_pair" }
+        },
+        "metric": { "const": "delivered_log_likelihood_abs" },
+        "scope": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "tolerance_fraction": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 0.1
+        }
+      }
+    },
+    "arm_pair": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["left", "right"],
+      "properties": {
+        "left": { "$ref": "#/$defs/id" },
+        "right": { "$ref": "#/$defs/id" }
+      }
+    },
+    "control": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "treatment_arms",
+        "control_arms",
+        "intervention_ids",
+        "budget_rule_ids"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "kind": {
+          "enum": [
+            "external_proxy",
+            "matched_capacity",
+            "matched_budget",
+            "impossibility"
+          ]
+        },
+        "treatment_arms": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "control_arms": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "intervention_ids": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "budget_rule_ids": {
+          "type": "array",
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "explanation": {
+          "type": "string",
+          "minLength": 20,
+          "maxLength": 1000
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "kind": { "const": "impossibility" } } },
+          "then": { "required": ["explanation"] },
+          "else": { "not": { "required": ["explanation"] } }
+        }
+      ]
+    }
+  }
+}

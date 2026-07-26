@@ -1,0 +1,576 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ifs-active-inference.local/experiment51/world.schema.json",
+  "title": "Experiment 51 world",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_id",
+    "contract_version",
+    "world_id",
+    "family",
+    "horizon",
+    "episode_length",
+    "development_horizon",
+    "history_generator_id",
+    "seed_namespace",
+    "development_emission_ids",
+    "latent_factors",
+    "distributions",
+    "processes",
+    "emissions",
+    "contingencies",
+    "outcomes"
+  ],
+  "properties": {
+    "contract_id": { "const": "ifs-ai-experiment-51-contract" },
+    "contract_version": { "const": "1.0.0" },
+    "world_id": { "$ref": "#/$defs/id" },
+    "family": {
+      "enum": [
+        "hazard_loop",
+        "context_process",
+        "partner_process",
+        "developmental_composition",
+        "generic_discrete"
+      ]
+    },
+    "horizon": { "type": "integer", "minimum": 1, "maximum": 4096 },
+    "episode_length": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 4096
+    },
+    "development_horizon": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4096
+    },
+    "history_generator_id": { "const": "world-replay-v1" },
+    "seed_namespace": { "$ref": "#/$defs/id" },
+    "development_emission_ids": {
+      "type": "array",
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/id" }
+    },
+    "latent_factors": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "items": { "$ref": "#/$defs/latent_factor" }
+    },
+    "distributions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 128,
+      "items": { "$ref": "#/$defs/distribution" }
+    },
+    "processes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/process" }
+    },
+    "emissions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/emission" }
+    },
+    "contingencies": {
+      "type": "array",
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/contingency" }
+    },
+    "outcomes": {
+      "type": "array",
+      "maxItems": 16,
+      "items": { "$ref": "#/$defs/outcome" }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:[-_][a-z0-9]+)*$",
+      "maxLength": 64
+    },
+    "finite_number": {
+      "type": "number",
+      "minimum": -1000000,
+      "maximum": 1000000
+    },
+    "sampling_scope": {
+      "enum": ["world", "episode", "event"]
+    },
+    "latent_factor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "cardinality",
+        "values",
+        "initial_distribution_id",
+        "evaluator_only"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "cardinality": { "enum": [2, 3, 4, 5] },
+        "values": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "initial_distribution_id": { "$ref": "#/$defs/id" },
+        "evaluator_only": { "const": true }
+      }
+    },
+    "fixed_distribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "family", "sampling_scope", "value"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "family": { "const": "fixed" },
+        "sampling_scope": { "$ref": "#/$defs/sampling_scope" },
+        "value": { "$ref": "#/$defs/finite_number" }
+      }
+    },
+    "uniform_distribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "family", "sampling_scope", "lower", "upper"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "family": { "const": "uniform" },
+        "sampling_scope": { "$ref": "#/$defs/sampling_scope" },
+        "lower": { "$ref": "#/$defs/finite_number" },
+        "upper": { "$ref": "#/$defs/finite_number" }
+      }
+    },
+    "integer_uniform_distribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "family", "sampling_scope", "lower", "upper"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "family": { "const": "integer_uniform" },
+        "sampling_scope": { "$ref": "#/$defs/sampling_scope" },
+        "lower": { "type": "integer", "minimum": 0, "maximum": 4096 },
+        "upper": { "type": "integer", "minimum": 0, "maximum": 4096 }
+      }
+    },
+    "beta_distribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "family", "sampling_scope", "alpha", "beta"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "family": { "const": "beta" },
+        "sampling_scope": { "$ref": "#/$defs/sampling_scope" },
+        "alpha": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1000000
+        },
+        "beta": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1000000
+        }
+      }
+    },
+    "categorical_distribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "family", "values", "probabilities"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "family": { "const": "categorical" },
+        "values": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "probabilities": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 5,
+          "items": { "type": "number", "minimum": 0, "maximum": 1 }
+        }
+      }
+    },
+    "transition_distribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "family", "values", "matrix"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "family": { "const": "transition_matrix" },
+        "values": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "matrix": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 5,
+          "items": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 5,
+            "items": { "type": "number", "minimum": 0, "maximum": 1 }
+          }
+        }
+      }
+    },
+    "distribution": {
+      "oneOf": [
+        { "$ref": "#/$defs/fixed_distribution" },
+        { "$ref": "#/$defs/uniform_distribution" },
+        { "$ref": "#/$defs/integer_uniform_distribution" },
+        { "$ref": "#/$defs/beta_distribution" },
+        { "$ref": "#/$defs/categorical_distribution" },
+        { "$ref": "#/$defs/transition_distribution" }
+      ]
+    },
+    "iid_process": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "target_factor",
+        "distribution_id",
+        "update_interval"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "type": { "const": "iid" },
+        "target_factor": { "$ref": "#/$defs/id" },
+        "distribution_id": { "$ref": "#/$defs/id" },
+        "update_interval": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4096
+        }
+      }
+    },
+    "transition_process": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "target_factor",
+        "transition_distribution_id",
+        "update_interval"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "type": { "enum": ["markov", "drift"] },
+        "target_factor": { "$ref": "#/$defs/id" },
+        "transition_distribution_id": { "$ref": "#/$defs/id" },
+        "update_interval": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4096
+        }
+      }
+    },
+    "change_point_process": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "target_factor",
+        "before_transition_id",
+        "after_transition_id",
+        "change_time_distribution_id",
+        "update_interval"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "type": { "const": "change_point" },
+        "target_factor": { "$ref": "#/$defs/id" },
+        "before_transition_id": { "$ref": "#/$defs/id" },
+        "after_transition_id": { "$ref": "#/$defs/id" },
+        "change_time_distribution_id": { "$ref": "#/$defs/id" },
+        "update_interval": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4096
+        }
+      }
+    },
+    "action_process": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "target_factor",
+        "action",
+        "baseline_transition_id",
+        "action_transition_id",
+        "update_interval"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "type": { "const": "action_contingent" },
+        "target_factor": { "$ref": "#/$defs/id" },
+        "action": { "$ref": "#/$defs/action" },
+        "baseline_transition_id": { "$ref": "#/$defs/id" },
+        "action_transition_id": { "$ref": "#/$defs/id" },
+        "update_interval": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4096
+        }
+      }
+    },
+    "coupled_process": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "target_factor",
+        "source_factors",
+        "conditional_transition_ids",
+        "update_interval"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "type": { "const": "coupled_latent" },
+        "target_factor": { "$ref": "#/$defs/id" },
+        "source_factors": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "conditional_transition_ids": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 625,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "update_interval": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4096
+        }
+      }
+    },
+    "process": {
+      "oneOf": [
+        { "$ref": "#/$defs/iid_process" },
+        { "$ref": "#/$defs/transition_process" },
+        { "$ref": "#/$defs/change_point_process" },
+        { "$ref": "#/$defs/action_process" },
+        { "$ref": "#/$defs/coupled_process" }
+      ]
+    },
+    "discrete_emission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "source_factors",
+        "channel_id",
+        "likelihood_family",
+        "conditional_distribution_ids",
+        "reliability_distribution_id",
+        "masked_scope"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "source_factors": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "channel_id": { "$ref": "#/$defs/id" },
+        "likelihood_family": {
+          "enum": ["categorical", "bernoulli", "ordinal"]
+        },
+        "conditional_distribution_ids": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 625,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "reliability_distribution_id": { "$ref": "#/$defs/id" },
+        "masked_scope": {
+          "type": "array",
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        }
+      }
+    },
+    "gaussian_emission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "source_factors",
+        "channel_id",
+        "likelihood_family",
+        "mean_by_configuration",
+        "noise_scale_distribution_id",
+        "reliability_distribution_id",
+        "masked_scope"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "source_factors": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "channel_id": { "$ref": "#/$defs/id" },
+        "likelihood_family": { "const": "gaussian_bounded" },
+        "mean_by_configuration": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 625,
+          "items": { "$ref": "#/$defs/finite_number" }
+        },
+        "noise_scale_distribution_id": { "$ref": "#/$defs/id" },
+        "reliability_distribution_id": { "$ref": "#/$defs/id" },
+        "masked_scope": {
+          "type": "array",
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        }
+      }
+    },
+    "emission": {
+      "oneOf": [
+        { "$ref": "#/$defs/discrete_emission" },
+        { "$ref": "#/$defs/gaussian_emission" }
+      ]
+    },
+    "action": {
+      "enum": [
+        "approach",
+        "withdraw",
+        "inspect",
+        "request_support",
+        "offer_support",
+        "suppress",
+        "permit",
+        "wait",
+        "observe"
+      ]
+    },
+    "action_outcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "action",
+        "source_factors",
+        "success_probabilities",
+        "exposure_values"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "type": { "const": "action_outcome" },
+        "action": { "$ref": "#/$defs/action" },
+        "source_factors": {
+          "type": "array",
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "success_probabilities": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 625,
+          "items": { "type": "number", "minimum": 0, "maximum": 1 }
+        },
+        "exposure_values": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 625,
+          "items": { "type": "number", "minimum": 0, "maximum": 1000000 }
+        }
+      }
+    },
+    "hazard_outcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "source_factors",
+        "potential_probabilities",
+        "mitigating_actions"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "type": { "const": "hazard_outcome" },
+        "source_factors": {
+          "type": "array",
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "potential_probabilities": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 625,
+          "items": { "type": "number", "minimum": 0, "maximum": 1 }
+        },
+        "mitigating_actions": {
+          "type": "array",
+          "maxItems": 9,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/action" }
+        }
+      }
+    },
+    "outcome": {
+      "oneOf": [
+        { "$ref": "#/$defs/action_outcome" },
+        { "$ref": "#/$defs/hazard_outcome" }
+      ]
+    },
+    "contingency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "action",
+        "target_process",
+        "effect",
+        "enabled"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "action": { "$ref": "#/$defs/action" },
+        "target_process": { "$ref": "#/$defs/id" },
+        "effect": { "const": "activate_action_transition" },
+        "enabled": { "type": "boolean" }
+      }
+    }
+  }
+}

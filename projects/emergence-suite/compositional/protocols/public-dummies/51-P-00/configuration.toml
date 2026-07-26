@@ -1,0 +1,247 @@
+contract_id = "ifs-ai-experiment-51-contract"
+contract_version = "1.0.0"
+configuration_id = "public-contract-dummy"
+initializer_id = "neutral-replay-v1"
+history_generator_id = "world-replay-v1"
+action_reconciler_id = "plurality-safety-priority-v1"
+
+[[nodes]]
+id = "bundle-main"
+type = "BundleNode"
+cardinality = 2
+slot = 1
+active = true
+
+[[nodes]]
+id = "context-main"
+type = "ContextNode"
+cardinality = 3
+slot = 1
+active = true
+
+[[nodes]]
+id = "cue-main"
+type = "CueNode"
+cardinality = 2
+slot = 1
+active = true
+
+[[nodes]]
+id = "local-one"
+type = "LocalPrecisionNode"
+cardinality = 3
+slot = 1
+active = true
+
+[[nodes]]
+id = "global-main"
+type = "GlobalPrecisionNode"
+cardinality = 5
+slot = 1
+active = true
+
+[[nodes]]
+id = "protector-one"
+type = "ProtectorNode"
+cardinality = 3
+slot = 1
+active = true
+
+[[nodes]]
+id = "protector-two"
+type = "ProtectorNode"
+cardinality = 3
+slot = 2
+active = true
+
+[[nodes]]
+id = "protector-three"
+type = "ProtectorNode"
+cardinality = 3
+slot = 3
+active = true
+
+[[nodes]]
+id = "partner-main"
+type = "PartnerNode"
+cardinality = 3
+slot = 1
+active = true
+
+[[nodes]]
+id = "access-main"
+type = "AccessNode"
+cardinality = 2
+slot = 1
+active = true
+
+[[nodes]]
+id = "episode-main"
+type = "EpisodeNode"
+cardinality = 4
+slot = 1
+active = true
+
+[[nodes]]
+id = "structure-main"
+type = "StructureNode"
+cardinality = 2
+slot = 1
+active = true
+
+[[edges]]
+id = "bundle-context"
+type = "bundle_context"
+from = "context-main"
+to = "bundle-main"
+state = "active"
+
+[[edges]]
+id = "cue-root"
+type = "cue_root"
+from = "cue-main"
+to = "bundle-main"
+state = "learnable"
+
+[[edges]]
+id = "local-monitor"
+type = "local_monitor"
+from = "bundle-main"
+to = "local-one"
+state = "active"
+
+[[edges]]
+id = "local-broadcast"
+type = "local_to_global_broadcast"
+from = "local-one"
+to = "global-main"
+state = "active"
+
+[[edges]]
+id = "global-protector-one"
+type = "global_precision_message"
+from = "global-main"
+to = "protector-one"
+state = "active"
+
+[[edges]]
+id = "partner-regulation"
+type = "partner_regulation"
+from = "partner-main"
+to = "global-main"
+state = "active"
+
+[[edges]]
+id = "partner-trust-one"
+type = "partner_trust"
+from = "partner-main"
+to = "protector-one"
+state = "active"
+
+[[edges]]
+id = "protector-one-two"
+type = "protector_cross_prediction"
+from = "protector-one"
+to = "protector-two"
+state = "active"
+
+[[edges]]
+id = "protector-two-three"
+type = "protector_cross_prediction"
+from = "protector-two"
+to = "protector-three"
+state = "active"
+
+[[edges]]
+id = "protector-three-one"
+type = "protector_cross_prediction"
+from = "protector-three"
+to = "protector-one"
+state = "active"
+
+[[edges]]
+id = "joint-one"
+type = "protector_joint_policy"
+from = "protector-one"
+to = "access-main"
+state = "active"
+
+[[edges]]
+id = "joint-two"
+type = "protector_joint_policy"
+from = "protector-two"
+to = "access-main"
+state = "active"
+
+[[edges]]
+id = "joint-three"
+type = "protector_joint_policy"
+from = "protector-three"
+to = "access-main"
+state = "active"
+
+[[edges]]
+id = "access-bundle"
+type = "access_bundle"
+from = "access-main"
+to = "bundle-main"
+state = "active"
+
+[[edges]]
+id = "episode-bundle"
+type = "episode_scope"
+from = "episode-main"
+to = "bundle-main"
+state = "active"
+
+[[edges]]
+id = "structure-episode"
+type = "structure_scope"
+from = "episode-main"
+to = "structure-main"
+state = "active"
+
+[[observation_channels]]
+id = "partner-signal"
+source = "partner"
+scope = ["partner-main", "global-main"]
+likelihood_family = "categorical"
+value_labels = ["helpful", "ambiguous", "adverse"]
+enabled = true
+
+[[observation_channels]]
+id = "episode-signal"
+source = "world"
+scope = ["episode-main", "bundle-main", "context-main"]
+likelihood_family = "categorical"
+value_labels = ["safe", "mixed", "threat", "repair"]
+enabled = true
+
+[[observation_channels]]
+id = "cue-signal"
+source = "world"
+scope = ["cue-main", "bundle-main"]
+likelihood_family = "categorical"
+value_labels = ["negative", "positive"]
+enabled = true
+
+[[policy_families]]
+id = "joint-contact"
+family = "contact"
+actor_nodes = ["protector-one", "protector-two", "protector-three"]
+actions = ["approach", "withdraw", "permit", "suppress", "wait", "observe"]
+enabled = true
+
+[[structure_candidates]]
+id = "full-coupling"
+structure_node = "structure-main"
+family = "full_bundle"
+active_edges = ["episode-bundle", "structure-episode"]
+inactive_edges = []
+
+[[structure_candidates]]
+id = "reduced-coupling"
+structure_node = "structure-main"
+family = "reduced_bundle"
+active_edges = ["structure-episode"]
+inactive_edges = ["episode-bundle"]

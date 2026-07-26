@@ -1,0 +1,480 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ifs-active-inference.local/experiment51/analysis.schema.json",
+  "title": "Experiment 51 analysis plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_id",
+    "contract_version",
+    "analysis_id",
+    "unit_of_analysis",
+    "tie_handling",
+    "non_crossing",
+    "missing_cells",
+    "non_finite",
+    "estimands",
+    "decision_rules"
+  ],
+  "properties": {
+    "contract_id": { "const": "ifs-ai-experiment-51-contract" },
+    "contract_version": { "const": "1.0.0" },
+    "analysis_id": { "$ref": "#/$defs/id" },
+    "unit_of_analysis": { "enum": ["seed", "episode", "event", "genome"] },
+    "tie_handling": { "enum": ["fail", "pass", "half", "missing"] },
+    "non_crossing": { "enum": ["horizon_plus_one", "missing", "fail"] },
+    "missing_cells": { "enum": ["fail", "drop_pair", "missing"] },
+    "non_finite": { "enum": ["fail", "drop_pair", "missing"] },
+    "estimands": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/estimand" }
+    },
+    "decision_rules": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/decision_rule" }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:[-_][a-z0-9]+)*$",
+      "maxLength": 64
+    },
+    "trace_path": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*(?:\\.[a-z0-9_*;=-]+)+$",
+      "maxLength": 256
+    },
+    "finite_number": {
+      "type": "number",
+      "minimum": -1000000,
+      "maximum": 1000000
+    },
+    "scalar": {
+      "oneOf": [
+        { "$ref": "#/$defs/finite_number" },
+        { "type": "boolean" },
+        { "type": "string", "maxLength": 256 }
+      ]
+    },
+    "predicate": {
+      "oneOf": [
+        { "$ref": "#/$defs/equality_predicate" },
+        { "$ref": "#/$defs/numeric_predicate" },
+        { "$ref": "#/$defs/membership_predicate" },
+        { "$ref": "#/$defs/finite_predicate" }
+      ]
+    },
+    "equality_predicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field", "comparator", "value"],
+      "properties": {
+        "field": { "$ref": "#/$defs/trace_path" },
+        "comparator": { "enum": ["eq", "ne"] },
+        "value": { "$ref": "#/$defs/scalar" }
+      }
+    },
+    "numeric_predicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field", "comparator", "value"],
+      "properties": {
+        "field": { "$ref": "#/$defs/trace_path" },
+        "comparator": { "enum": ["lt", "le", "gt", "ge"] },
+        "value": { "$ref": "#/$defs/finite_number" }
+      }
+    },
+    "membership_predicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field", "comparator", "value"],
+      "properties": {
+        "field": { "$ref": "#/$defs/trace_path" },
+        "comparator": { "const": "in" },
+        "value": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "items": { "$ref": "#/$defs/scalar" }
+        }
+      }
+    },
+    "finite_predicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field", "comparator"],
+      "properties": {
+        "field": { "$ref": "#/$defs/trace_path" },
+        "comparator": { "const": "finite" }
+      }
+    },
+    "literal_expression": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "value"],
+      "properties": {
+        "op": { "const": "literal" },
+        "value": { "$ref": "#/$defs/scalar" }
+      }
+    },
+    "field_expression": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "path"],
+      "properties": {
+        "op": { "const": "field" },
+        "path": { "$ref": "#/$defs/trace_path" }
+      }
+    },
+    "where_expression": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "source", "predicates"],
+      "properties": {
+        "op": { "const": "where" },
+        "source": { "$ref": "#/$defs/expression" },
+        "predicates": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "items": { "$ref": "#/$defs/predicate" }
+        }
+      }
+    },
+    "simple_unary_expression": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "arg"],
+      "properties": {
+        "op": {
+          "enum": [
+            "initial",
+            "terminal",
+            "mean",
+            "sum",
+            "min",
+            "max",
+            "std",
+            "count",
+            "rate",
+            "abs",
+            "negate",
+            "log",
+            "exp"
+          ]
+        },
+        "arg": { "$ref": "#/$defs/expression" }
+      }
+    },
+    "lag_expression": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "arg", "steps"],
+      "properties": {
+        "op": { "const": "lag" },
+        "arg": { "$ref": "#/$defs/expression" },
+        "steps": { "type": "integer", "minimum": 1, "maximum": 4096 }
+      }
+    },
+    "crossing_expression": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "arg", "comparator", "threshold", "persistence"],
+      "properties": {
+        "op": { "const": "first_crossing" },
+        "arg": { "$ref": "#/$defs/expression" },
+        "comparator": { "enum": ["lt", "le", "gt", "ge"] },
+        "threshold": { "$ref": "#/$defs/finite_number" },
+        "persistence": { "type": "integer", "minimum": 1, "maximum": 128 }
+      }
+    },
+    "slope_expression": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "arg", "time_path"],
+      "properties": {
+        "op": { "const": "slope" },
+        "arg": { "$ref": "#/$defs/expression" },
+        "time_path": { "$ref": "#/$defs/trace_path" }
+      }
+    },
+    "quantile_expression": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "arg", "probability"],
+      "properties": {
+        "op": { "const": "quantile" },
+        "arg": { "$ref": "#/$defs/expression" },
+        "probability": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "binary_expression": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "left", "right"],
+      "properties": {
+        "op": {
+          "enum": [
+            "add",
+            "subtract",
+            "multiply",
+            "divide",
+            "min2",
+            "max2",
+            "event_precedes"
+          ]
+        },
+        "left": { "$ref": "#/$defs/expression" },
+        "right": { "$ref": "#/$defs/expression" }
+      }
+    },
+    "arm_difference_expression": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "value", "treatment", "control"],
+      "properties": {
+        "op": { "const": "arm_difference" },
+        "value": { "$ref": "#/$defs/expression" },
+        "treatment": { "$ref": "#/$defs/id" },
+        "control": { "$ref": "#/$defs/id" }
+      }
+    },
+    "did_expression": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "op",
+        "value",
+        "treatment_present",
+        "treatment_absent",
+        "control_present",
+        "control_absent"
+      ],
+      "properties": {
+        "op": { "const": "difference_in_differences" },
+        "value": { "$ref": "#/$defs/expression" },
+        "treatment_present": { "$ref": "#/$defs/id" },
+        "treatment_absent": { "$ref": "#/$defs/id" },
+        "control_present": { "$ref": "#/$defs/id" },
+        "control_absent": { "$ref": "#/$defs/id" }
+      }
+    },
+    "classification_expression": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "prediction_path", "truth_path"],
+      "properties": {
+        "op": {
+          "enum": ["classification_accuracy", "confusion_matrix"]
+        },
+        "prediction_path": { "$ref": "#/$defs/trace_path" },
+        "truth_path": { "$ref": "#/$defs/trace_path" },
+        "strata_path": { "$ref": "#/$defs/trace_path" }
+      }
+    },
+    "argmax_expression": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "evidence_path", "selected_path"],
+      "properties": {
+        "op": { "const": "argmax_match" },
+        "evidence_path": { "$ref": "#/$defs/trace_path" },
+        "selected_path": { "$ref": "#/$defs/trace_path" }
+      }
+    },
+    "budget_expression": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "evidence_budget_rule_id"],
+      "properties": {
+        "op": { "const": "budget_relative_error" },
+        "evidence_budget_rule_id": { "$ref": "#/$defs/id" }
+      }
+    },
+    "survival_expression": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "arg", "comparator", "threshold"],
+      "properties": {
+        "op": { "const": "survival_fraction" },
+        "arg": { "$ref": "#/$defs/expression" },
+        "comparator": { "enum": ["eq", "ne", "lt", "le", "gt", "ge"] },
+        "threshold": { "$ref": "#/$defs/scalar" }
+      }
+    },
+    "expression": {
+      "oneOf": [
+        { "$ref": "#/$defs/literal_expression" },
+        { "$ref": "#/$defs/field_expression" },
+        { "$ref": "#/$defs/where_expression" },
+        { "$ref": "#/$defs/simple_unary_expression" },
+        { "$ref": "#/$defs/lag_expression" },
+        { "$ref": "#/$defs/crossing_expression" },
+        { "$ref": "#/$defs/slope_expression" },
+        { "$ref": "#/$defs/quantile_expression" },
+        { "$ref": "#/$defs/binary_expression" },
+        { "$ref": "#/$defs/arm_difference_expression" },
+        { "$ref": "#/$defs/did_expression" },
+        { "$ref": "#/$defs/classification_expression" },
+        { "$ref": "#/$defs/argmax_expression" },
+        { "$ref": "#/$defs/budget_expression" },
+        { "$ref": "#/$defs/survival_expression" }
+      ]
+    },
+    "interval": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["method"],
+          "properties": {
+            "method": { "const": "none" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["method", "level"],
+          "properties": {
+            "method": { "const": "exact_binomial" },
+            "level": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "exclusiveMaximum": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["method", "level", "resamples"],
+          "properties": {
+            "method": {
+              "enum": ["percentile_bootstrap", "basic_bootstrap"]
+            },
+            "level": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "exclusiveMaximum": 1
+            },
+            "resamples": {
+              "type": "integer",
+              "minimum": 100,
+              "maximum": 5000
+            }
+          }
+        }
+      ]
+    },
+    "estimand": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "status",
+        "hypothesis_provenance",
+        "expression",
+        "aggregation",
+        "interval",
+        "control_ids"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "status": { "enum": ["primary", "secondary", "audit", "descriptive"] },
+        "hypothesis_provenance": {
+          "enum": ["theory", "historical", "development", "prospective"]
+        },
+        "expression": { "$ref": "#/$defs/expression" },
+        "aggregation": { "enum": ["identity", "mean", "median", "rate", "matrix"] },
+        "interval": { "$ref": "#/$defs/interval" },
+        "control_ids": {
+          "type": "array",
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        }
+      }
+    },
+    "decision_rule": {
+      "oneOf": [
+        { "$ref": "#/$defs/lower_decision_rule" },
+        { "$ref": "#/$defs/upper_decision_rule" },
+        { "$ref": "#/$defs/between_decision_rule" },
+        { "$ref": "#/$defs/equivalent_decision_rule" }
+      ]
+    },
+    "decision_rule_base": {
+      "type": "object",
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "estimand_id": { "$ref": "#/$defs/id" }
+      }
+    },
+    "lower_decision_rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "estimand_id", "comparator", "threshold", "interval_requirement"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "estimand_id": { "$ref": "#/$defs/id" },
+        "comparator": { "enum": ["gt", "ge"] },
+        "threshold": { "$ref": "#/$defs/finite_number" },
+        "interval_requirement": {
+          "enum": ["none", "lower_above_zero", "lower_above_threshold"]
+        }
+      }
+    },
+    "upper_decision_rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "estimand_id", "comparator", "threshold", "interval_requirement"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "estimand_id": { "$ref": "#/$defs/id" },
+        "comparator": { "enum": ["lt", "le"] },
+        "threshold": { "$ref": "#/$defs/finite_number" },
+        "interval_requirement": {
+          "enum": ["none", "upper_below_zero", "upper_below_threshold"]
+        }
+      }
+    },
+    "between_decision_rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "estimand_id", "comparator", "threshold", "interval_requirement"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "estimand_id": { "$ref": "#/$defs/id" },
+        "comparator": { "const": "between" },
+        "threshold": { "$ref": "#/$defs/ordered_pair" },
+        "interval_requirement": { "const": "none" }
+      }
+    },
+    "equivalent_decision_rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "estimand_id", "comparator", "threshold", "interval_requirement"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "estimand_id": { "$ref": "#/$defs/id" },
+        "comparator": { "const": "equivalent" },
+        "threshold": { "$ref": "#/$defs/ordered_pair" },
+        "interval_requirement": { "const": "inside_equivalence" }
+      }
+    },
+    "ordered_pair": {
+      "type": "array",
+      "prefixItems": [
+        { "$ref": "#/$defs/finite_number" },
+        { "$ref": "#/$defs/finite_number" }
+      ],
+      "minItems": 2,
+      "maxItems": 2
+    }
+  }
+}
