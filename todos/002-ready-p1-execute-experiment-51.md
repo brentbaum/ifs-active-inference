@@ -84,9 +84,9 @@ and continuing through Experiment 51, with Fable review.
       rules are versioned and validated.
 - [x] Canonical uncompressed USTAR builder/verifier passes a public test vector.
 - [x] Fable reviews the public contract and all blocking findings are addressed.
-- [ ] At least three private 51-P bundles meet every §12 requirement.
-- [ ] H/C/P/L seeds are disjoint and release-block commitments are sealed.
-- [ ] Seal commit contains no private challenge or seed plaintext.
+- [x] At least three private 51-P bundles meet every §12 requirement.
+- [x] H/C/P/L seeds are disjoint and release-block commitments are sealed.
+- [x] Seal commit contains no private challenge or seed plaintext.
 - [ ] Generic compiler, engine, runner, evaluator, and provenance trace exist.
 - [ ] Semantic edge/mutation, inference, evidence-accounting, composition, and
       generic-runner gates pass or produce an explicit architecture failure.
@@ -204,3 +204,30 @@ and continuing through Experiment 51, with Fable review.
 **Learnings:**
 - Parser correctness does not establish custody correctness; exact committed
   bytes need an independent regression assertion.
+
+### 2026-07-26 - Stage 0 private seal
+
+**By:** Codex (Sol role)
+
+**Actions:**
+- Reauthored four private 51-P bundles from the approved `1.0.1` apparatus,
+  binding each interpretation lock to contract commit
+  `47ac7688d051b569f1d50f1ea14fff5cfdb8408c` and public-manifest SHA-256
+  `d0d4b3b5f01c500ae991f6b48f4a0cb661b408eb435b99f6e875bb44b4ddbb90`.
+- Passed the authoritative schema/semantic/canonical validator and independent
+  archive reconstruction for every bundle.
+- Generated six OS-CSPRNG release blocks spanning H/C/P/L, expanded all 2,752
+  seeds, and rejected no collisions.
+- AES-256 encrypted the four exact USTAR archives and exact seed escrow outside
+  the repository, stored the recovery secret in macOS Keychain, decrypted and
+  compared every object byte-for-byte, and recorded only hashes, byte counts,
+  and public release commitments in `results/experiment51/seal-hashes.md`.
+- Removed the active plaintext authoring directory to macOS Trash. The
+  repository and active custody directory contain no challenge or seed
+  plaintext.
+
+**Learnings:**
+- Custody verification must exercise the decrypt-and-compare path before
+  plaintext is retired.
+- The public release record can prove staged seed identity without exposing
+  block purposes or seed material.
