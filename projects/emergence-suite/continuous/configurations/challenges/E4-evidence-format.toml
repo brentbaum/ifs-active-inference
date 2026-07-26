@@ -1,0 +1,16 @@
+assay = 504
+id = "sealed-E4-evidence-format"
+nodes = ["vulnerable_bundle", "precision_field", "episodic_memory", "cue_meaning"]
+edges = ["bundle_coupling", "shared_root_parent", "freeze_write", "ordinary_evidence", "field_broadcast"]
+initializers = ["neutral_prior", "developmental_replay", "freeze_history_replay"]
+interventions = ["witnessing", "corrective_evidence", "recursive_broadcast_on"]
+observations = ["self", "world", "policy", "outcome", "root_evidence", "cue_evidence", "overwhelm", "control", "field_forecast_error"]
+[slots]
+vulnerable_bundles = 1
+protectors = 0
+protective_repertoires = 0
+precision_fields = 1
+latent_partners = 0
+episodic_memories = 1
+part_slots = 0
+cue_meanings = 5

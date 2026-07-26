@@ -1,0 +1,16 @@
+assay = 503
+id = "sealed-E3-polarization"
+nodes = ["vulnerable_bundle", "protector", "protective_repertoire", "precision_field", "latent_partner"]
+edges = ["bundle_coupling", "protector_guards_bundle", "repertoire_to_permission", "partner_to_regulation", "partner_to_trust_outcome", "field_to_protector", "field_broadcast", "ordinary_evidence"]
+initializers = ["neutral_prior", "developmental_replay", "partner_history_replay", "policy_history_replay"]
+interventions = ["scaffold_coupled", "witnessing", "corrective_evidence"]
+observations = ["partner_regulation", "partner_outcome", "settling", "field_forecast_error", "permission", "root_evidence", "policy_cost", "policy_success"]
+[slots]
+vulnerable_bundles = 1
+protectors = 2
+protective_repertoires = 2
+precision_fields = 1
+latent_partners = 1
+episodic_memories = 0
+part_slots = 0
+cue_meanings = 0
