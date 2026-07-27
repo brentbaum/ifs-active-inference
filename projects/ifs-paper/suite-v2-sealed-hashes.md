@@ -28,3 +28,11 @@ Added after C-V23 FAIL, before V2.3.1 development (2026-07-27):
 db2d3111dce1ea78d51b05bf39a97571bf32d788a91e3e737cde2a74d04b79c6  C-V23b-formation-challenge.md
 ```
 Escrow: C-V23b seeds 809301:809900.
+
+Added after the V2.3.2 contract/plan freeze (fdbbf52), before implementation (2026-07-27):
+
+```
+5867a92ec3ee8800beedcb17d63832dd1c73f7c80d0bbde019eac00a9d5fed55  C-V23c-F-formation-challenge.md
+320b45dba8bc726e4aaf6cd037350f373ffcd9250587880128dd717075cf6b80  C-V23c-M-maintenance-challenge.md
+```
+Escrow: C-V23c-F seeds 810401:810900; C-V23c-M seeds 811501:812100.
