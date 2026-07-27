@@ -23,3 +23,18 @@ Every gate, freeze, seal, reveal, and failure is committed in order with hashes;
 ## Next
 
 V2.3 (formation and persistence) is the next rung, per spec §4 — it may begin now that the seam holds. The milestone's six exit conditions (spec §8) are all met.
+
+---
+
+# Addendum: the V2.3 arc (same night)
+
+V2.3 was built, gated, and failed its sealed challenge twice; the repair loop is deliberately halted with the failure standing. The arc:
+
+- **V2.3 (dee94c5):** gates 1–5 passed with strong open-assay results, including the full policy → transition → observation → persistence → G causal chain. Sealed C-V23: **FAIL on all four tests** — formation collapsed on a novel schedule family (4/60 vs 0.79 in development), false formation under high control, and twelve acute jumps over the frozen step bound. Diagnosis: the formation boundary was fitted to development-schedule surface features, and the acute path behaved near-boolean.
+- **V2.3.1 (7d5650c):** parametric recalibration (formation now tracks uncontrollability and overwhelm-precision variables; surface features add 2.5% incremental R²) plus a structural per-slice evidence bound with an analytic guarantee. Sealed C-V23b: continuity **PASSED prospectively** (0/492 exceedances) and the controllability dose-response has the right shape (isotonic p = 0.006), but calibration missed (0.19 vs 0.60 at zero control) and **the persistence effect inverted**: avoidance-available worlds ended with *lower* persistent-model evidence than matched replay (−2.97 [−3.79, −2.15]; realized-avoidance correlation −0.63).
+
+The inversion is the finding of the night. Under honest model comparison, a persistent structure that stops receiving evidence loses ground through its complexity penalty — so in this strain, avoidance starves the frozen model rather than protecting it. The C1 claim requires an asymmetry the current world model does not contain: **avoided catastrophe must count as evidence for the threat model** (the safety-behavior attribution loop — "nothing bad happened *because* I avoided"), so that working avoidance generates the model's own confirmation. Exp 50's strain had this authored in; the ladder has to derive it, and that is a theory-level design decision about the world/attribution structure, not a parameter. Halted here after two burned challenges precisely to avoid tuning-by-exhaustion and to put that decision where it belongs.
+
+**Standing after tonight:** V2.0, V2.1, V2.2.1 — built, gated, prospectively validated (with the V2.2 repair arc). V2.3.1 — frozen, continuity solved, formation dose-response shaped correctly, persistence-under-avoidance open with a sharp statement of the missing mechanism. V2.4+ blocked, correctly, by the ratchet.
+
+**Decision needed (Brent):** whether V2.3.2 adds the counterfactual-attribution structure (avoided-outcome evidence routed to the threat model — the formal face of safety-behavior maintenance, with its own gate-1 semantic proof and a fresh sealed challenge), or whether C1's persistence claim should be weakened to activation-dependent maintenance. The first is the clinically faithful reading; it is also a new mechanism, not a repair.
