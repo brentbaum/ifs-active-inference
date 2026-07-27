@@ -1,0 +1,199 @@
+{
+  "challenge": "C-V232-F",
+  "failures": [
+    "test_5_continuity"
+  ],
+  "freeze_identity": {
+    "analytic_bound": 3.801426508560692,
+    "commit": "c67e853",
+    "manifest_sha256": "e412841e02679eee4d831088af4cc240f78a0c122f7a5deb7dce147dc494f7ae",
+    "mismatches": [],
+    "verified_file_count": 33
+  },
+  "seed_block_used": [
+    813101,
+    813300
+  ],
+  "tests": {
+    "test_1_no_event_neutrality": {
+      "formation_count": 0,
+      "formation_rate_95_interval": [
+        0.0,
+        -6.938893903907228e-18,
+        0.08762453925039232
+      ],
+      "localization": [],
+      "maximum_prior_difference": 0.0,
+      "neutral_worlds": 40,
+      "passed": true
+    },
+    "test_2_schedule_invariance": {
+      "localization": [],
+      "passed": true,
+      "relative_variation_95_interval": [
+        1.8381225545829704e-13,
+        1.680629739396428e-14,
+        5.052447700105537e-13
+      ],
+      "selection_identical_count": 20,
+      "selection_identical_rate_95_interval": [
+        1.0,
+        0.8388698745050667,
+        1.0
+      ],
+      "within_15_percent_count": 20,
+      "within_15_percent_rate_95_interval": [
+        1.0,
+        0.8388698745050667,
+        1.0
+      ]
+    },
+    "test_3_D_P_separation": {
+      "D_cell_D_selection_95_interval": [
+        0.96,
+        0.8045552759497747,
+        0.9929039496133008
+      ],
+      "D_cell_P_cross_selection_95_interval": [
+        0.0,
+        0.0,
+        0.13319649395317873
+      ],
+      "P_cell_P_selection_95_interval": [
+        1.0,
+        0.8668035060468213,
+        1.0
+      ],
+      "localization": {
+        "D_cell_not_D": [
+          813217
+        ],
+        "D_cell_selected_P": [],
+        "P_cell_not_P": []
+      },
+      "passed": true
+    },
+    "test_4_calibration_profile": {
+      "Brier": 0.01250093151870845,
+      "Brier_95_interval": [
+        0.01250093151870845,
+        0.00906373333929224,
+        0.015938567466053485
+      ],
+      "ECE": 0.050225672685235256,
+      "false_P_95_interval": [
+        0.0,
+        -3.469446951953614e-18,
+        0.03664194365595336
+      ],
+      "false_P_eligible_count": 101,
+      "localization": [],
+      "passed": true,
+      "shape": {
+        "selected_counts": {
+          "D": 65,
+          "P": 59,
+          "T": 76
+        },
+        "truth_counts": {
+          "D": 63,
+          "P": 59,
+          "T": 78
+        }
+      }
+    },
+    "test_5_continuity": {
+      "analytic_bound": 3.801426508560692,
+      "analytic_clause_passed": true,
+      "analytic_exceedances": 0,
+      "frozen_empirical_p99_rate_bound": null,
+      "localization": {
+        "analytic_exceedance_seeds": [],
+        "missing_definition": [
+          "contracts/v2.3.2-formation-contract.md",
+          "protocols/v2.3.2-formation-analysis-plan.md",
+          "results/V2.3.2-formation/stage-report.json",
+          "results/V2.3.2-formation/frozen-one-slice-sign-table-summary.json",
+          "results/V2.3.2-formation/freeze-manifest.json"
+        ]
+      },
+      "maximum_slice_log_bf": 2.670557431416735,
+      "multiplier": 1.75,
+      "observed_world_maximum_step_95_interval": [
+        0.28914849522666103,
+        0.26321403012055106,
+        0.31347696641891265
+      ],
+      "observed_world_maximum_step_p99": 0.5044486293022921,
+      "passed": false,
+      "second_clause": "INEXPRESSIBLE: c67e853 froze no empirical p99 rate bound"
+    },
+    "test_6_constitution_spot_audit": {
+      "error_95_interval": [
+        1.7763568394002505e-14,
+        9.237055564881303e-15,
+        2.842170943040401e-14
+      ],
+      "independent_module": "challenges/c_v232_f_independent.py",
+      "localization": [
+        {
+          "maximum_error": 1.4210854715202004e-14,
+          "seed": 813177
+        },
+        {
+          "maximum_error": 1.4210854715202004e-14,
+          "seed": 813276
+        },
+        {
+          "maximum_error": 0.0,
+          "seed": 813110
+        },
+        {
+          "maximum_error": 5.684341886080802e-14,
+          "seed": 813143
+        },
+        {
+          "maximum_error": 1.4210854715202004e-14,
+          "seed": 813263
+        },
+        {
+          "maximum_error": 0.0,
+          "seed": 813258
+        },
+        {
+          "maximum_error": 2.842170943040401e-14,
+          "seed": 813256
+        },
+        {
+          "maximum_error": 7.105427357601002e-15,
+          "seed": 813202
+        },
+        {
+          "maximum_error": 1.4210854715202004e-14,
+          "seed": 813299
+        },
+        {
+          "maximum_error": 2.842170943040401e-14,
+          "seed": 813158
+        }
+      ],
+      "maximum_recombination_error": 5.684341886080802e-14,
+      "passed": true,
+      "seed_count": 10,
+      "seeds": [
+        813177,
+        813276,
+        813110,
+        813143,
+        813263,
+        813258,
+        813256,
+        813202,
+        813299,
+        813158
+      ]
+    }
+  },
+  "verdict": "FAIL",
+  "world_count": 200
+}

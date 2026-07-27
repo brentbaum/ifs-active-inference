@@ -1,0 +1,34 @@
+{
+  "challenge": "C-V232-F",
+  "freeze_commit": "c67e853",
+  "freeze_identity": {
+    "manifest_file_count": 33,
+    "manifest_sha256": "e412841e02679eee4d831088af4cc240f78a0c122f7a5deb7dce147dc494f7ae",
+    "mismatches": 0
+  },
+  "released_seed_block": [813101, 813700],
+  "seed_block_used": [813101, 813300],
+  "world_count": 200,
+  "sealed_gate_6_run": true,
+  "verdict": "FAIL",
+  "test_verdicts": {
+    "test_1_no_event_neutrality": "PASS",
+    "test_2_schedule_invariance": "PASS",
+    "test_3_D_P_separation": "PASS",
+    "test_4_calibration_profile": "PASS",
+    "test_5_continuity": "FAIL_INEXPRESSIBLE_FROZEN_THRESHOLD",
+    "test_6_constitution_spot_audit": "PASS"
+  },
+  "failure_verbatim": "Test 5 second clause is inexpressible: c67e853 froze no empirical p99 rate bound to which the challenge's 1.75 multiplier can be applied. No post-seal threshold was invented.",
+  "challenge_spec_sha256": "0d578fda4fe1097e3d3f681e1499935d0ecb797b3efabd000d94b66ba98e6a09",
+  "challenge_runner_sha256": "b98470bad8dc0146856d4b4dbfaa86394b6a0328a4340483f94aa1fdc3070f8e",
+  "independent_summation_sha256": "a77a2906df10d340ccc571f2f60750a14c1a75a4dd0503b8068dbb294e9d4b7f",
+  "result_hashes": {
+    "results/challenges/C-V232-F/per_seed.csv": "8feb6b76764c88bda132c7adc0b39bd148bdc29456a3334f0da439d71a622ff4",
+    "results/challenges/C-V232-F/report.md": "24c91f3474c19ae9a94851f11635707f6edeaa38477911186aa214c8cdc7a24b",
+    "results/challenges/C-V232-F/summary.json": "868522618684bb359ce3d1e64bce4f0384f7d5d67943e8c6fc2c8f59c9698664",
+    "results/milestone-3-v2.3.2-formation-gate6-update.md": "179e57dc56b4c22b02d136fde4d8f202cd9d5e715fccb7230aecb620697ce007"
+  },
+  "frozen_stage_modified": false,
+  "sealed_material_accessed": ["sealed-revealed/C-V232-F-formation-challenge.md"]
+}
