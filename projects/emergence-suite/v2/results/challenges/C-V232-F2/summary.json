@@ -1,0 +1,1161 @@
+{
+  "challenge": "C-V232-F2",
+  "distribution": {
+    "acute_event_slices": {
+      "count": 2200,
+      "maximum": 0.5738530840331161,
+      "p50": 5.792418274592085e-05,
+      "p90": 0.12489410663502215,
+      "p99": 0.5044486293022921
+    },
+    "all_slices": {
+      "count": 5192,
+      "maximum": 0.5738530840331161,
+      "p50": 0.0,
+      "p90": 0.008664643491927092,
+      "p99": 0.4202333134435244
+    },
+    "cluster_bootstrap_95_intervals": {
+      "acute_event_slices": {
+        "maximum": [
+          0.5044486293022921,
+          0.5738530840331161
+        ],
+        "p50": [
+          2.48923316327063e-05,
+          0.00014454213906058575
+        ],
+        "p90": [
+          0.06493201449506626,
+          0.16757679964655836
+        ],
+        "p99": [
+          0.5044486293022921,
+          0.5044486293022921
+        ]
+      },
+      "all_slices": {
+        "maximum": [
+          0.5044486293022921,
+          0.5738530840331161
+        ],
+        "p50": [
+          0.0,
+          2.195509399283245e-19
+        ],
+        "p90": [
+          0.0038006787103302547,
+          0.018597468953213372
+        ],
+        "p99": [
+          0.2879735059698779,
+          0.4870167520406129
+        ]
+      },
+      "method": "4,000 deterministic nonparametric bootstrap replicates resampling whole worlds with replacement"
+    },
+    "definition": "Absolute q_t(P)-q_{t-1}(P) magnitude; the first slice uses the frozen prior q_0(P)=0.25. Quantiles use NumPy's linear method."
+  },
+  "failures": [
+    "clause_a_acute_empirical_p99_exceedance_rate"
+  ],
+  "freeze_identity": {
+    "analytic_bound": 3.801426508560692,
+    "commit": "c67e853",
+    "continuity_addendum_commit": "97098db",
+    "continuity_addendum_sha256": "8e45107a68fc84e6c723d9e9e5f2265cdacf6913908e5be2b3e6d5525f766d5b",
+    "empirical_p99": 0.3345519502357523,
+    "manifest_sha256": "e412841e02679eee4d831088af4cc240f78a0c122f7a5deb7dce147dc494f7ae",
+    "mismatches": [],
+    "verified_file_count": 33
+  },
+  "population": {
+    "D_favoring_worlds": 25,
+    "P_favoring_worlds": 25,
+    "acute_event_slice_count": 2200,
+    "all_slice_count": 5192,
+    "discriminator_worlds": 50,
+    "mixed_provocation_worlds": 50
+  },
+  "seed_block_used": [
+    813301,
+    813400
+  ],
+  "tests": {
+    "clause_a_acute_empirical_p99_exceedance_rate": {
+      "acute_event_slice_count": 2200,
+      "empirical_p99_bound": 0.3345519502357523,
+      "exceedance_count": 66,
+      "exceedance_rate_95_wilson_interval": [
+        0.03,
+        0.023650137764957647,
+        0.03798841193843301
+      ],
+      "localization": [
+        {
+          "absolute_persistent_posterior_change": 0.3791133553416757,
+          "cell": "D_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 1.7981654234372195,
+          "seed": 813309,
+          "slice_index": 0
+        },
+        {
+          "absolute_persistent_posterior_change": 0.33948744931048863,
+          "cell": "D_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 1.577571968183247,
+          "seed": 813309,
+          "slice_index": 1
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5035062700871445,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813326,
+          "slice_index": 1
+        },
+        {
+          "absolute_persistent_posterior_change": 0.4202333134435244,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813327,
+          "slice_index": 1
+        },
+        {
+          "absolute_persistent_posterior_change": 0.3566914768600077,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813327,
+          "slice_index": 3
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813328,
+          "slice_index": 0
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813329,
+          "slice_index": 0
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813330,
+          "slice_index": 0
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813331,
+          "slice_index": 0
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813332,
+          "slice_index": 0
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813333,
+          "slice_index": 0
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813334,
+          "slice_index": 0
+        },
+        {
+          "absolute_persistent_posterior_change": 0.502921697722281,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813335,
+          "slice_index": 4
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813336,
+          "slice_index": 0
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813337,
+          "slice_index": 0
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813338,
+          "slice_index": 0
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813339,
+          "slice_index": 0
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5738530840331161,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.670557431416735,
+          "seed": 813339,
+          "slice_index": 1
+        },
+        {
+          "absolute_persistent_posterior_change": 0.4870167520406129,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813339,
+          "slice_index": 2
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813340,
+          "slice_index": 0
+        },
+        {
+          "absolute_persistent_posterior_change": 0.44117067518554254,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813341,
+          "slice_index": 2
+        },
+        {
+          "absolute_persistent_posterior_change": 0.47956162634313504,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.670557431416735,
+          "seed": 813341,
+          "slice_index": 3
+        },
+        {
+          "absolute_persistent_posterior_change": 0.3734527764612371,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813341,
+          "slice_index": 4
+        },
+        {
+          "absolute_persistent_posterior_change": 0.4246489769418026,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813341,
+          "slice_index": 5
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813342,
+          "slice_index": 0
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5738530840331161,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.670557431416735,
+          "seed": 813342,
+          "slice_index": 1
+        },
+        {
+          "absolute_persistent_posterior_change": 0.4870167520406129,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813342,
+          "slice_index": 2
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813343,
+          "slice_index": 0
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813344,
+          "slice_index": 0
+        },
+        {
+          "absolute_persistent_posterior_change": 0.4202333134435244,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813345,
+          "slice_index": 1
+        },
+        {
+          "absolute_persistent_posterior_change": 0.380186856452165,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813345,
+          "slice_index": 2
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813346,
+          "slice_index": 0
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813347,
+          "slice_index": 0
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813348,
+          "slice_index": 0
+        },
+        {
+          "absolute_persistent_posterior_change": 0.487740892915249,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813349,
+          "slice_index": 4
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "P_favoring",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813350,
+          "slice_index": 0
+        },
+        {
+          "absolute_persistent_posterior_change": 0.43186814752688996,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813352,
+          "slice_index": 4
+        },
+        {
+          "absolute_persistent_posterior_change": 0.3658562585565835,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 1.8130689571416139,
+          "seed": 813352,
+          "slice_index": 5
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813353,
+          "slice_index": 4
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813356,
+          "slice_index": 4
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813359,
+          "slice_index": 4
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813362,
+          "slice_index": 4
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813365,
+          "slice_index": 4
+        },
+        {
+          "absolute_persistent_posterior_change": 0.4124314266419844,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813367,
+          "slice_index": 6
+        },
+        {
+          "absolute_persistent_posterior_change": 0.491715701014021,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.2199785861241947,
+          "seed": 813367,
+          "slice_index": 70
+        },
+        {
+          "absolute_persistent_posterior_change": 0.4202333134435244,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813368,
+          "slice_index": 5
+        },
+        {
+          "absolute_persistent_posterior_change": 0.3367015972559134,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 1.7321727881872817,
+          "seed": 813368,
+          "slice_index": 36
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813369,
+          "slice_index": 4
+        },
+        {
+          "absolute_persistent_posterior_change": 0.4870167520406127,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813371,
+          "slice_index": 6
+        },
+        {
+          "absolute_persistent_posterior_change": 0.47877276588161477,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.239113105360363,
+          "seed": 813371,
+          "slice_index": 7
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813374,
+          "slice_index": 4
+        },
+        {
+          "absolute_persistent_posterior_change": 0.3689191420772825,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.2199785861241947,
+          "seed": 813376,
+          "slice_index": 33
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813377,
+          "slice_index": 4
+        },
+        {
+          "absolute_persistent_posterior_change": 0.43186814752688996,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813379,
+          "slice_index": 4
+        },
+        {
+          "absolute_persistent_posterior_change": 0.3658562585565835,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 1.8130689571416139,
+          "seed": 813379,
+          "slice_index": 5
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813380,
+          "slice_index": 4
+        },
+        {
+          "absolute_persistent_posterior_change": 0.4202333134435244,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813383,
+          "slice_index": 5
+        },
+        {
+          "absolute_persistent_posterior_change": 0.380186856452165,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813383,
+          "slice_index": 6
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813386,
+          "slice_index": 4
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813389,
+          "slice_index": 4
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813392,
+          "slice_index": 4
+        },
+        {
+          "absolute_persistent_posterior_change": 0.380186856452165,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813392,
+          "slice_index": 6
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5044486293022921,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813395,
+          "slice_index": 4
+        },
+        {
+          "absolute_persistent_posterior_change": 0.5035062700871445,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813398,
+          "slice_index": 5
+        },
+        {
+          "absolute_persistent_posterior_change": 0.4202333134435244,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "seed": 813399,
+          "slice_index": 5
+        },
+        {
+          "absolute_persistent_posterior_change": 0.4549586424281154,
+          "cell": "mixed_provocation",
+          "event": true,
+          "maximum_absolute_pairwise_log_bf": 2.670557431416735,
+          "seed": 813399,
+          "slice_index": 6
+        }
+      ],
+      "passed": false,
+      "per_seed_localization": [
+        {
+          "cell": "D_favoring",
+          "exceedance_count": 2,
+          "maximum_absolute_pairwise_log_bf": 1.7981654234372195,
+          "maximum_absolute_persistent_posterior_change": 0.3791133553416757,
+          "seed": 813309,
+          "slice_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "cell": "P_favoring",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5035062700871445,
+          "seed": 813326,
+          "slice_indices": [
+            1
+          ]
+        },
+        {
+          "cell": "P_favoring",
+          "exceedance_count": 2,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.4202333134435244,
+          "seed": 813327,
+          "slice_indices": [
+            1,
+            3
+          ]
+        },
+        {
+          "cell": "P_favoring",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813328,
+          "slice_indices": [
+            0
+          ]
+        },
+        {
+          "cell": "P_favoring",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813329,
+          "slice_indices": [
+            0
+          ]
+        },
+        {
+          "cell": "P_favoring",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813330,
+          "slice_indices": [
+            0
+          ]
+        },
+        {
+          "cell": "P_favoring",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813331,
+          "slice_indices": [
+            0
+          ]
+        },
+        {
+          "cell": "P_favoring",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813332,
+          "slice_indices": [
+            0
+          ]
+        },
+        {
+          "cell": "P_favoring",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813333,
+          "slice_indices": [
+            0
+          ]
+        },
+        {
+          "cell": "P_favoring",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813334,
+          "slice_indices": [
+            0
+          ]
+        },
+        {
+          "cell": "P_favoring",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.502921697722281,
+          "seed": 813335,
+          "slice_indices": [
+            4
+          ]
+        },
+        {
+          "cell": "P_favoring",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813336,
+          "slice_indices": [
+            0
+          ]
+        },
+        {
+          "cell": "P_favoring",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813337,
+          "slice_indices": [
+            0
+          ]
+        },
+        {
+          "cell": "P_favoring",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813338,
+          "slice_indices": [
+            0
+          ]
+        },
+        {
+          "cell": "P_favoring",
+          "exceedance_count": 3,
+          "maximum_absolute_pairwise_log_bf": 2.670557431416735,
+          "maximum_absolute_persistent_posterior_change": 0.5738530840331161,
+          "seed": 813339,
+          "slice_indices": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "cell": "P_favoring",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813340,
+          "slice_indices": [
+            0
+          ]
+        },
+        {
+          "cell": "P_favoring",
+          "exceedance_count": 4,
+          "maximum_absolute_pairwise_log_bf": 2.670557431416735,
+          "maximum_absolute_persistent_posterior_change": 0.47956162634313504,
+          "seed": 813341,
+          "slice_indices": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "cell": "P_favoring",
+          "exceedance_count": 3,
+          "maximum_absolute_pairwise_log_bf": 2.670557431416735,
+          "maximum_absolute_persistent_posterior_change": 0.5738530840331161,
+          "seed": 813342,
+          "slice_indices": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "cell": "P_favoring",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813343,
+          "slice_indices": [
+            0
+          ]
+        },
+        {
+          "cell": "P_favoring",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813344,
+          "slice_indices": [
+            0
+          ]
+        },
+        {
+          "cell": "P_favoring",
+          "exceedance_count": 2,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.4202333134435244,
+          "seed": 813345,
+          "slice_indices": [
+            1,
+            2
+          ]
+        },
+        {
+          "cell": "P_favoring",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813346,
+          "slice_indices": [
+            0
+          ]
+        },
+        {
+          "cell": "P_favoring",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813347,
+          "slice_indices": [
+            0
+          ]
+        },
+        {
+          "cell": "P_favoring",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813348,
+          "slice_indices": [
+            0
+          ]
+        },
+        {
+          "cell": "P_favoring",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.487740892915249,
+          "seed": 813349,
+          "slice_indices": [
+            4
+          ]
+        },
+        {
+          "cell": "P_favoring",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813350,
+          "slice_indices": [
+            0
+          ]
+        },
+        {
+          "cell": "mixed_provocation",
+          "exceedance_count": 2,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.43186814752688996,
+          "seed": 813352,
+          "slice_indices": [
+            4,
+            5
+          ]
+        },
+        {
+          "cell": "mixed_provocation",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813353,
+          "slice_indices": [
+            4
+          ]
+        },
+        {
+          "cell": "mixed_provocation",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813356,
+          "slice_indices": [
+            4
+          ]
+        },
+        {
+          "cell": "mixed_provocation",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813359,
+          "slice_indices": [
+            4
+          ]
+        },
+        {
+          "cell": "mixed_provocation",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813362,
+          "slice_indices": [
+            4
+          ]
+        },
+        {
+          "cell": "mixed_provocation",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813365,
+          "slice_indices": [
+            4
+          ]
+        },
+        {
+          "cell": "mixed_provocation",
+          "exceedance_count": 2,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.491715701014021,
+          "seed": 813367,
+          "slice_indices": [
+            6,
+            70
+          ]
+        },
+        {
+          "cell": "mixed_provocation",
+          "exceedance_count": 2,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.4202333134435244,
+          "seed": 813368,
+          "slice_indices": [
+            5,
+            36
+          ]
+        },
+        {
+          "cell": "mixed_provocation",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813369,
+          "slice_indices": [
+            4
+          ]
+        },
+        {
+          "cell": "mixed_provocation",
+          "exceedance_count": 2,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.4870167520406127,
+          "seed": 813371,
+          "slice_indices": [
+            6,
+            7
+          ]
+        },
+        {
+          "cell": "mixed_provocation",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813374,
+          "slice_indices": [
+            4
+          ]
+        },
+        {
+          "cell": "mixed_provocation",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.2199785861241947,
+          "maximum_absolute_persistent_posterior_change": 0.3689191420772825,
+          "seed": 813376,
+          "slice_indices": [
+            33
+          ]
+        },
+        {
+          "cell": "mixed_provocation",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813377,
+          "slice_indices": [
+            4
+          ]
+        },
+        {
+          "cell": "mixed_provocation",
+          "exceedance_count": 2,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.43186814752688996,
+          "seed": 813379,
+          "slice_indices": [
+            4,
+            5
+          ]
+        },
+        {
+          "cell": "mixed_provocation",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813380,
+          "slice_indices": [
+            4
+          ]
+        },
+        {
+          "cell": "mixed_provocation",
+          "exceedance_count": 2,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.4202333134435244,
+          "seed": 813383,
+          "slice_indices": [
+            5,
+            6
+          ]
+        },
+        {
+          "cell": "mixed_provocation",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813386,
+          "slice_indices": [
+            4
+          ]
+        },
+        {
+          "cell": "mixed_provocation",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813389,
+          "slice_indices": [
+            4
+          ]
+        },
+        {
+          "cell": "mixed_provocation",
+          "exceedance_count": 2,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813392,
+          "slice_indices": [
+            4,
+            6
+          ]
+        },
+        {
+          "cell": "mixed_provocation",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5044486293022921,
+          "seed": 813395,
+          "slice_indices": [
+            4
+          ]
+        },
+        {
+          "cell": "mixed_provocation",
+          "exceedance_count": 1,
+          "maximum_absolute_pairwise_log_bf": 2.3196827878973805,
+          "maximum_absolute_persistent_posterior_change": 0.5035062700871445,
+          "seed": 813398,
+          "slice_indices": [
+            5
+          ]
+        },
+        {
+          "cell": "mixed_provocation",
+          "exceedance_count": 2,
+          "maximum_absolute_pairwise_log_bf": 2.670557431416735,
+          "maximum_absolute_persistent_posterior_change": 0.4549586424281154,
+          "seed": 813399,
+          "slice_indices": [
+            5,
+            6
+          ]
+        }
+      ],
+      "threshold": 0.015
+    },
+    "clause_b_no_slice_exceeds_multiplied_bound": {
+      "all_slice_count": 5192,
+      "bound": 0.5854659129125666,
+      "bound_exact_decimal": "0.5854659129125665",
+      "exceedance_count": 0,
+      "exceedance_rate_95_wilson_interval": [
+        0.0,
+        0.0,
+        0.0007393604916670284
+      ],
+      "localization": [],
+      "maximum_observed_change": 0.5738530840331161,
+      "multiplier": 1.75,
+      "passed": true,
+      "per_seed_localization": []
+    },
+    "clause_c_frozen_analytic_bound": {
+      "all_slice_count": 5192,
+      "bound": 3.801426508560692,
+      "exceedance_count": 0,
+      "exceedance_rate_95_wilson_interval": [
+        0.0,
+        0.0,
+        0.0007393604916670284
+      ],
+      "localization": [],
+      "maximum_observed_absolute_pairwise_log_bf": 2.670557431416735,
+      "passed": true,
+      "per_seed_localization": [],
+      "tolerance": 1e-10
+    }
+  },
+  "verdict": "FAIL",
+  "world_count": 100
+}

@@ -27,8 +27,57 @@
     "results/challenges/C-V232-F/per_seed.csv": "8feb6b76764c88bda132c7adc0b39bd148bdc29456a3334f0da439d71a622ff4",
     "results/challenges/C-V232-F/report.md": "24c91f3474c19ae9a94851f11635707f6edeaa38477911186aa214c8cdc7a24b",
     "results/challenges/C-V232-F/summary.json": "868522618684bb359ce3d1e64bce4f0384f7d5d67943e8c6fc2c8f59c9698664",
-    "results/milestone-3-v2.3.2-formation-gate6-update.md": "179e57dc56b4c22b02d136fde4d8f202cd9d5e715fccb7230aecb620697ce007"
+    "results/milestone-3-v2.3.2-formation-gate6-update.md": "d5480ae040b52ea6e30354a4c952c29ed92f03b61265bf5736aa2de6c4ca145f"
   },
+  "supplementary_challenge": {
+    "challenge": "C-V232-F2",
+    "purpose": "Prospectively test only the continuity clause that C-V232-F could not evaluate.",
+    "seed_block_used": [813301, 813400],
+    "world_count": 100,
+    "verdict": "FAIL",
+    "clause_verdicts": {
+      "acute_event_empirical_p99_exceedance_rate": "FAIL",
+      "no_slice_exceeds_1.75_times_empirical_p99": "PASS",
+      "frozen_analytic_bound_holds": "PASS"
+    },
+    "failure_verbatim": "66/2200 acute-event slices exceeded the committed empirical p99, an exceedance rate of 0.030000 (95% Wilson interval [0.023650137764957647, 0.03798841193843301]) against the <= 0.015 threshold.",
+    "full_distribution": {
+      "all_slices": {
+        "count": 5192,
+        "p50": 0.0,
+        "p90": 0.008664643491927092,
+        "p99": 0.4202333134435244,
+        "maximum": 0.5738530840331161
+      },
+      "acute_event_slices": {
+        "count": 2200,
+        "p50": 0.00005792418274592085,
+        "p90": 0.12489410663502215,
+        "p99": 0.5044486293022921,
+        "maximum": 0.5738530840331161
+      }
+    },
+    "localization_summary": {
+      "seeds_with_empirical_p99_exceedances": 48,
+      "D_favoring_exceedances": 2,
+      "P_favoring_exceedances": 34,
+      "mixed_provocation_exceedances": 30,
+      "multiplied_bound_exceedances": 0,
+      "analytic_bound_exceedances": 0
+    },
+    "challenge_spec_sha256": "1944f31a48576a03cd455b1327099a45c7b6a0e84e804d8e713009950691f491",
+    "challenge_runner_sha256": "71666423a934664218fc90e806af2b1f7e370de0a708ece1bbce43dd6aea4e06",
+    "result_hashes": {
+      "results/challenges/C-V232-F2/per_seed.csv": "12a10a1549bdbd4b5541009e89910839e81b8a4850e05b932e337f34f1023e83",
+      "results/challenges/C-V232-F2/per_slice.csv": "447fe30dfca75a222ab957a0aef386d943af27f3856700bb74c2bbd121796d4e",
+      "results/challenges/C-V232-F2/report.md": "551e49a03af8116465762dd41da6cb3cb7d1ddf8a4a2af109b77869d2e1d4341",
+      "results/challenges/C-V232-F2/summary.json": "06d616cf670466c16c642895be907c74dea93838d7fc06844c5303cfb1a3d6cb"
+    }
+  },
+  "combined_formation_standing": "C-V232-F retains five substantive passes and its formal FAIL as recorded; supplementary C-V232-F2 FAILS clause (a) and passes clauses (b) and (c).",
   "frozen_stage_modified": false,
-  "sealed_material_accessed": ["sealed-revealed/C-V232-F-formation-challenge.md"]
+  "sealed_material_accessed": [
+    "sealed-revealed/C-V232-F-formation-challenge.md",
+    "sealed-revealed/C-V232-F2-continuity-challenge.md"
+  ]
 }
