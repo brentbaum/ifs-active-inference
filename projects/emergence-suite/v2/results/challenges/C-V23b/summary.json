@@ -1,0 +1,272 @@
+{
+  "challenge": "C-V23b",
+  "failures_verbatim": [
+    "Test 1 calibration failure: the level-1 no-control formation rate in one-acute worlds was below 0.60.",
+    "Test 1 calibration failure: the chronic-only bursty no-control formation rate was below 0.25.",
+    "Test 4 localization failure: fewer than 40 matched low-control pairs formed in the replay arm.",
+    "Test 4 failure: the paired 95% interval for the avoidance-available persistence advantage did not exclude zero.",
+    "Test 4 failure: end-state persistence did not track realized avoidance with a positive 95% interval while scheduled dose vanished after conditioning on that mediator."
+  ],
+  "identity": {
+    "commit": "7d5650c",
+    "frozen_p99_exact": 0.09706711551021664,
+    "frozen_p99_reported": 0.097067,
+    "manifest_path": "projects/emergence-suite/v2/results/V2.3.1/freeze-manifest.json",
+    "manifest_sha256": "9469a2fcdd9413199c82135c664769d009b4da174b8912a1870697114080cb94",
+    "status": "PASS",
+    "verified_file_count": 64
+  },
+  "protocol": {
+    "acute_counts": [
+      0,
+      1,
+      2
+    ],
+    "acute_intensity_band_slices": [
+      1,
+      2,
+      3
+    ],
+    "avoidance_filter_probability": 0.82,
+    "base_worlds": 120,
+    "chronic_profiles": [
+      "none",
+      "steady-low",
+      "bursty-moderate"
+    ],
+    "control_action_dependence": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "event_slice_low_control_fractions": [
+      1.0,
+      0.75,
+      0.5,
+      0.25,
+      0.0
+    ],
+    "lengths": [
+      60,
+      90,
+      120
+    ],
+    "paired_arms": [
+      "avoidance_available",
+      "matched_replay"
+    ],
+    "released_seed_block": [
+      809301,
+      809900
+    ],
+    "trajectories": 240,
+    "used_seed_block": [
+      809301,
+      809420
+    ]
+  },
+  "tests": [
+    {
+      "calibration": {
+        "chronic_only_bursty_no_control": {
+          "ci95": [
+            0.0,
+            0.3903430336530645
+          ],
+          "n": 6,
+          "rate": 0.0,
+          "successes": 0
+        },
+        "chronic_only_bursty_no_control_at_least_0_25": false,
+        "one_acute_level_1_at_least_0_60": false,
+        "one_acute_level_5_at_most_0_15": true,
+        "pass": false
+      },
+      "name": "formation dose-response",
+      "pass": false,
+      "shape": {
+        "criterion": "permutation p <= 0.05, non-increasing fit, strict endpoint decline",
+        "isotonic": {
+          "fitted_rates": [
+            0.1875,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "p_value": 0.006,
+          "permutations": 9999,
+          "statistic": 0.22500000000000003
+        },
+        "pass": true,
+        "raw_curve": [
+          {
+            "action_dependence": 0.0,
+            "ci95": [
+              0.06591478773586765,
+              0.4300935986845823
+            ],
+            "control_level": 1,
+            "n": 16,
+            "rate": 0.1875,
+            "successes": 3
+          },
+          {
+            "action_dependence": 0.25,
+            "ci95": [
+              0.0,
+              0.19361341827271994
+            ],
+            "control_level": 2,
+            "n": 16,
+            "rate": 0.0,
+            "successes": 0
+          },
+          {
+            "action_dependence": 0.5,
+            "ci95": [
+              0.0,
+              0.19361341827271994
+            ],
+            "control_level": 3,
+            "n": 16,
+            "rate": 0.0,
+            "successes": 0
+          },
+          {
+            "action_dependence": 0.75,
+            "ci95": [
+              0.0,
+              0.19361341827271994
+            ],
+            "control_level": 4,
+            "n": 16,
+            "rate": 0.0,
+            "successes": 0
+          },
+          {
+            "action_dependence": 1.0,
+            "ci95": [
+              0.0,
+              0.19361341827271994
+            ],
+            "control_level": 5,
+            "n": 16,
+            "rate": 0.0,
+            "successes": 0
+          }
+        ]
+      }
+    },
+    {
+      "criterion": "formation rate <= 0.05 at every controllability level",
+      "levels": [
+        {
+          "ci95": [
+            0.0,
+            0.48990002040399916
+          ],
+          "control_level": 1,
+          "n": 4,
+          "pass": true,
+          "rate": 0.0,
+          "successes": 0
+        },
+        {
+          "ci95": [
+            0.0,
+            0.48990002040399916
+          ],
+          "control_level": 2,
+          "n": 4,
+          "pass": true,
+          "rate": 0.0,
+          "successes": 0
+        },
+        {
+          "ci95": [
+            -2.7755575615628914e-17,
+            0.2775401687666166
+          ],
+          "control_level": 3,
+          "n": 10,
+          "pass": true,
+          "rate": 0.0,
+          "successes": 0
+        },
+        {
+          "ci95": [
+            0.0,
+            0.3903430336530645
+          ],
+          "control_level": 4,
+          "n": 6,
+          "pass": true,
+          "rate": 0.0,
+          "successes": 0
+        },
+        {
+          "ci95": [
+            0.0,
+            0.3903430336530645
+          ],
+          "control_level": 5,
+          "n": 6,
+          "pass": true,
+          "rate": 0.0,
+          "successes": 0
+        }
+      ],
+      "name": "no-event floor",
+      "pass": true
+    },
+    {
+      "acute_exceedance_count": 0,
+      "acute_exceedance_rate": 0.0,
+      "acute_exceedance_rate_limit": 0.015,
+      "acute_slice_count": 492,
+      "challenge_multiplier": 1.75,
+      "frozen_p99_bound": 0.09706711551021664,
+      "hard_maximum": 0.16986745214287913,
+      "maximum_acute_slice_change": 0.08683416552005874,
+      "maximum_all_slice_change": 0.08683416552005874,
+      "name": "continuity",
+      "pass": true
+    },
+    {
+      "expected_minimum_pair_count": 40,
+      "formed_low_control_pair_count": 4,
+      "mediator_definition": "mean(A_t=avoid and W_(t-1)=threat and W_t=threat)",
+      "name": "persistence advantage and realized mediation",
+      "paired_persistence_advantage": {
+        "ci95": [
+          -3.7880130576999993,
+          -2.147480415849635
+        ],
+        "mean": -2.967746736774817,
+        "pass": false,
+        "readout": "available-minus-replay end persistent evidence margin"
+      },
+      "pass": false,
+      "realized_avoidance_correlation": {
+        "ci95": [
+          -0.9231417540074157,
+          0.14223005985310444
+        ],
+        "pass": false,
+        "r": -0.6251030742315294
+      },
+      "scheduled_dose_partial_correlation": {
+        "ci95": [
+          -0.3974194290483582,
+          0.8698582207164802
+        ],
+        "pass": true,
+        "r": 0.426784203762919
+      }
+    }
+  ],
+  "verdict": "FAIL"
+}

@@ -1,0 +1,23 @@
+{
+  "base_freeze_commit": "7d5650c",
+  "base_freeze_manifest": "projects/emergence-suite/v2/results/V2.3.1/freeze-manifest.json",
+  "base_freeze_manifest_sha256": "9469a2fcdd9413199c82135c664769d009b4da174b8912a1870697114080cb94",
+  "base_manifest_file_count_verified": 64,
+  "base_manifest_mismatches": [],
+  "challenge_runner_sha256": "ff936a48456d4a2a60617112a9aebe16d16224055757b8a3e66407ffd0c14e04",
+  "challenge_spec_sha256": "db2d3111dce1ea78d51b05bf39a97571bf32d788a91e3e737cde2a74d04b79c6",
+  "overlay": {
+    "prospective_challenge": "C-V23b",
+    "prospective_challenge_revealed": true,
+    "prospective_challenge_run": true,
+    "sealed_gate_6_run": true,
+    "verdict": "FAIL"
+  },
+  "result_hashes": {
+    "results/challenges/C-V23b/per_seed.csv": "040218463dc85fe83cd77256ec8695a0841175ecfd5531cca748f1b1603603e5",
+    "results/challenges/C-V23b/report.md": "f5658679ac12807695476c7805f69865af054c83dc68a4614263532782f7b22b",
+    "results/challenges/C-V23b/summary.json": "b28ec2be669d4a5381a9ed051a605d4b0340cdb6915ff6be3123d95ca072f440",
+    "results/milestone-2-v2.3.1-gate6-update.md": "926ebc284eecd61ae59f62fbf322440e82672945e776741778bcfaabd5a614cb"
+  },
+  "strain": "V2.3.1"
+}
