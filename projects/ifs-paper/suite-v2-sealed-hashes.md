@@ -36,3 +36,12 @@ Added after the V2.3.2 contract/plan freeze (fdbbf52), before implementation (20
 320b45dba8bc726e4aaf6cd037350f373ffcd9250587880128dd717075cf6b80  C-V23c-M-maintenance-challenge.md
 ```
 Escrow: C-V23c-F seeds 810401:810900; C-V23c-M seeds 811501:812100.
+
+Disposition note (2026-07-27, per `suite-v2-c1-restructure-plan.md`): C-V23c-M is SET ASIDE UNOPENED — never revealed, never run; no maintenance challenge burns on a formation-starved model. C-V23c-F is SUPERSEDED unopened by the formation re-foundation; replaced by C-V232-F below.
+
+Added with the C1 restructure plan, before the V2.3.2 formation contract exists (2026-07-27):
+
+```
+0d578fda4fe1097e3d3f681e1499935d0ecb797b3efabd000d94b66ba98e6a09  C-V232-F-formation-challenge.md
+```
+Escrow: C-V232-F seeds 813101:813700.

@@ -19,10 +19,10 @@ A part is not a kind of psychological object but a phase of one. A burdened part
 - A burdened part is a frozen phase of inference, not a separate kind of mental object. Its precision has risen until the bundle functions as architecture rather than as one revisable hypothesis among others.
 - Freezing becomes likely under overwhelm plus low control. Extreme error favors a new latent cause; collapsed reflexivity installs it transparently; low control prevents the active testing that could bound or revise it.
 - The characteristic signature is whole-world activation, resumption of an earlier self-position rather than recollection alone, and broad transfer when revision reaches the shared identity root.
-- **C1 splits into three subclaims (locked 2026-07-27, from the Suite v2 V2.3 arc; propagate into §§3–4 at the post-simulation edit pass):**
-  - **C1a — Formation.** Overwhelming, poorly controllable experience under collapsed recursive integration can favor a persistent identity-level organization over a transient event model.
-  - **C1b — Maintenance.** Once formed, that organization may be maintained by policies that alter what evidence becomes available and how safe outcomes are causally attributed. Effective avoidance can protect a threat organization from disconfirmation; irrelevant or information-preserving safety behavior should not.
-  - **C1c — Strengthening.** Avoidance strengthens rather than merely preserves the organization only when additional observations support the inference that danger was present and successfully prevented, or when the policy creates other confirming observations. Mere absence of catastrophe is insufficient.
+- **C1 splits into three subclaims (locked 2026-07-27; reworded same day after the v2.3.1r correction — see `suite-v2-c1-restructure-plan.md`; propagate into §§3–4 at the post-simulation edit pass):**
+  - **C1a — Formation.** Under what observations does a persistent identity organization become a better explanation than a transient event or persistent external danger? (Overwhelm + low control + collapsed recursive integration are the proposed conditions; persistent external danger is a distinct candidate that adaptive threat should favor — identity formation is not sustained threat expectancy.)
+  - **C1b — Maintenance through sampling.** Once formed, can policies preserve the organization by changing which observations become available? (Effective avoidance protects by censoring; irrelevant or information-preserving safety behavior should not.)
+  - **C1c — Maintenance or strengthening through causal attribution.** When safe outcomes occur after protection, does inferred action efficacy preserve or strengthen the threat/identity model? (Mere absence of catastrophe is insufficient; requires the counterfactual-attribution machinery, deferred until C1a/C1b are established.)
 
 ### C2 — Regime and Epistemic Depth
 
