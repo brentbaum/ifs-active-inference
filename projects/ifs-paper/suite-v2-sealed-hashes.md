@@ -21,3 +21,10 @@ Added before V2.3 development (2026-07-27):
 c8413557dc628fabd1487cc12a1e829a31a09d5b034cb36e394b0570a4f69e89  C-V23-formation-challenge.md
 ```
 Escrow: C-V23 seeds 807203:807502; V23-regression 808110:808409.
+
+Added after C-V23 FAIL, before V2.3.1 development (2026-07-27):
+
+```
+db2d3111dce1ea78d51b05bf39a97571bf32d788a91e3e737cde2a74d04b79c6  C-V23b-formation-challenge.md
+```
+Escrow: C-V23b seeds 809301:809900.
