@@ -19,6 +19,10 @@ A part is not a kind of psychological object but a phase of one. A burdened part
 - A burdened part is a frozen phase of inference, not a separate kind of mental object. Its precision has risen until the bundle functions as architecture rather than as one revisable hypothesis among others.
 - Freezing becomes likely under overwhelm plus low control. Extreme error favors a new latent cause; collapsed reflexivity installs it transparently; low control prevents the active testing that could bound or revise it.
 - The characteristic signature is whole-world activation, resumption of an earlier self-position rather than recollection alone, and broad transfer when revision reaches the shared identity root.
+- **C1 splits into three subclaims (locked 2026-07-27, from the Suite v2 V2.3 arc; propagate into §§3–4 at the post-simulation edit pass):**
+  - **C1a — Formation.** Overwhelming, poorly controllable experience under collapsed recursive integration can favor a persistent identity-level organization over a transient event model.
+  - **C1b — Maintenance.** Once formed, that organization may be maintained by policies that alter what evidence becomes available and how safe outcomes are causally attributed. Effective avoidance can protect a threat organization from disconfirmation; irrelevant or information-preserving safety behavior should not.
+  - **C1c — Strengthening.** Avoidance strengthens rather than merely preserves the organization only when additional observations support the inference that danger was present and successfully prevented, or when the policy creates other confirming observations. Mere absence of catastrophe is insufficient.
 
 ### C2 — Regime and Epistemic Depth
 
@@ -199,6 +203,7 @@ A part is not a kind of psychological object but a phase of one. A burdened part
 
 - **Simulation round specced: Experiments 44–49 (`experiments-44-49-sufficiency-round-spec.md`) — context-split redescription with derived revision + do-over (44), formation-substrate triad (45), wager-violation construction (46), protector trust (47), exiling emergence (48), dyad-gate descent (49). Each targets a named Appendix A entry; results flip entries and revise the named manuscript sites, nothing else.**
 
+- **Post-simulation edit pass (pending): propagate the locked C1a/b/c subclaim structure (see C1 section above) into §§3–4, §9, and Appendix A — the maintenance claim becomes conditional (counterfactual censoring / attribution), strengthening becomes evidence-dependent. Source: Suite v2 V2.3 arc + adopted V2.3.2 plan (`suite-v2-v232-plan.md` §2).**
 - Add an abstract; it must carry the sufficiency bet.
 - Complete and verify the reference list, especially source years, titles, and the precise claims attributed to Gendlin, March, Beautiful Loop Theory, object relations, latent-cause learning, Bayesian model reduction, autonomic accounts, and recent preprints.
 - ~~Decide how much quantitative detail from §9 belongs in the body versus appendices; preserve every material failure and scope condition wherever it lands.~~ **Resolved 2026-07-23: §9 compressed by claim; full record in Appendix B; failures preserved in both.**
