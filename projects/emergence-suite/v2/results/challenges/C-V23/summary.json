@@ -1,0 +1,134 @@
+{
+  "challenge": "C-V23",
+  "configuration": {
+    "acute_slice_range_inclusive": [
+      30,
+      55
+    ],
+    "avoidance_encounter_reduction": 0.82,
+    "cells": [
+      {
+        "avoidance_available": true,
+        "controllability": 0,
+        "name": "low_available"
+      },
+      {
+        "avoidance_available": false,
+        "controllability": 0,
+        "name": "low_unavailable"
+      },
+      {
+        "avoidance_available": true,
+        "controllability": 1,
+        "name": "high_available"
+      },
+      {
+        "avoidance_available": false,
+        "controllability": 1,
+        "name": "high_unavailable"
+      }
+    ],
+    "chronic_rate_band": [
+      0.08,
+      0.16
+    ],
+    "formation_predicate_consulted_by_inference": false,
+    "matched_replay": "same seed-generated context opportunities and component uniforms; unavailable arm removes only the policy filter",
+    "step_injection_bound": 0.294529387
+  },
+  "failure_localization": [
+    "Test 1: the sealed joint formation boundary was not met (persistent evidence margin >= 1 nat in >=45/60 low-control and <=12/60 high-control worlds).",
+    "Test 2: the acute-event persistent posterior did not rise with a 95% interval bounded above zero and no individual acute single-slice change above 0.294529387.",
+    "Test 3: among low-control formed worlds, avoidance availability did not both reduce realized disconfirming-context encounters and increase the end persistent evidence margin with both paired 95% intervals bounded away from zero.",
+    "Test 4: end persistence did not correlate positively with realized avoidance, or scheduled dose retained a non-null partial correlation after conditioning on realized avoidance."
+  ],
+  "frozen_identity": {
+    "challenge_step_injection_bound": 0.294529387,
+    "commit": "dee94c5",
+    "frozen_step_injection_value": 0.29452938694825587,
+    "manifest": "projects/emergence-suite/v2/results/V2.3/freeze-manifest.json",
+    "manifest_file_count": 56,
+    "manifest_sha256": "2ed9e3c99522b245c40ca7705c289035a25ca5d352a6186469ed95416964743d",
+    "mismatches": []
+  },
+  "paired_streams": true,
+  "passed": false,
+  "seed_block_released": [
+    807203,
+    807502
+  ],
+  "seed_block_used": [
+    807203,
+    807262
+  ],
+  "slice_count": 80,
+  "stage": "V2.3",
+  "tests": {
+    "active_persistence": {
+      "encounter_reduction_95_interval": [
+        0.25,
+        -0.03290163190291662,
+        0.5329016319029166
+      ],
+      "formation_selection_cell": "low_unavailable",
+      "formed_pair_count": 4,
+      "passed": false,
+      "persistence_margin_effect_95_interval": [
+        1.0166966723134825,
+        -2.6652613266760508,
+        4.698654671303016
+      ]
+    },
+    "continuity": {
+      "acute_bound_exceedances": 12,
+      "acute_change_95_interval": [
+        0.057537216109757656,
+        0.04210284669921794,
+        0.07297158552029738
+      ],
+      "frozen_unrounded_value": 0.29452938694825587,
+      "maximum_acute_step": 0.5177669491215048,
+      "passed": false,
+      "step_injection_bound": 0.294529387,
+      "trajectory_count": 240
+    },
+    "joint_formation_boundary": {
+      "evidence_margin_threshold_nats": 1.0,
+      "high_control_formed_95_interval": [
+        0.18333333333333332,
+        0.1055768903713613,
+        0.29919993226466285
+      ],
+      "high_control_formed_worlds": 11,
+      "high_control_maximum": 12,
+      "low_control_formed_95_interval": [
+        0.06666666666666667,
+        0.02622827414319792,
+        0.15925579893767722
+      ],
+      "low_control_formed_worlds": 4,
+      "low_control_minimum": 45,
+      "passed": false,
+      "primary_cells": [
+        "low_unavailable",
+        "high_unavailable"
+      ]
+    },
+    "mediation": {
+      "avoidance_correlation_95_interval": [
+        -0.12905541951085747,
+        -0.7642347287514091,
+        0.6332117331413993
+      ],
+      "dose_partial_correlation_95_interval": [
+        0.6193038043030812,
+        -0.25066759721768894,
+        0.9358917266543219
+      ],
+      "mediator_definition": "mean of realized A=avoid and W(previous)=threat and W(next)=threat indicators; actions and transitions only",
+      "observation_count": 8,
+      "passed": false
+    }
+  },
+  "world_count_per_cell": 60
+}
