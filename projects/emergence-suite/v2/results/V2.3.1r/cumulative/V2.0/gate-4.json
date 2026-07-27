@@ -1,0 +1,28 @@
+{
+  "failures": [],
+  "gate": 4,
+  "instrument": "V2.3.1r",
+  "name": "gate_4_batch_mutation",
+  "passed": true,
+  "rerun_stage": "V2.0",
+  "results": {
+    "factor_sensitivity": {
+      "deletion_tv": 0.18673469387755104,
+      "mutation_tv": 0.15939794611826802
+    },
+    "recovery": {
+      "audit_failures": [],
+      "paired_draw_mismatches": 0,
+      "parameter_95_interval_coverage": 1.0,
+      "parameter_error_95_interval": [
+        0.017785493827160513,
+        0.02465277777777778
+      ],
+      "parameter_mean_absolute_error": 0.02118055555555556,
+      "seed_count": 64,
+      "state_accuracy": 0.84765625,
+      "state_brier": 0.12914062499999995,
+      "state_ece": 0.005087890624999977
+    }
+  }
+}

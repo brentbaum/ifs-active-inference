@@ -1,0 +1,32 @@
+{
+  "failures": [],
+  "gate": 5,
+  "instrument": "V2.3.1r",
+  "name": "gate_5_cumulative_regression",
+  "passed": true,
+  "rerun_stage": "V2.2.1",
+  "results": {
+    "batch": {
+      "mean_transfer": 0.1940592188720897,
+      "seed_count": 64,
+      "transfer_95_interval": [
+        0.18749921026464092,
+        0.20066158828207997
+      ]
+    },
+    "v2.0_regression": {
+      "gate_1_semantic": true,
+      "gate_2_recovery": true,
+      "gate_3_comparison": true,
+      "gate_4_batch_mutation": true,
+      "gate_5_one_posterior": true
+    },
+    "v2.1_regression": {
+      "gate_1_semantic": true,
+      "gate_2_recovery": true,
+      "gate_3_composition": true,
+      "gate_4_selective_lesion": true,
+      "gate_5_cumulative_regression": true
+    }
+  }
+}

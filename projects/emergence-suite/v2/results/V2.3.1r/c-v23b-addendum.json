@@ -1,0 +1,30 @@
+{
+  "challenge": "C-V23b (repaired instrument)",
+  "files": {
+    "challenges/run_c_v23b_repaired.py": "ceb954ca60fdc5f3391f19c580b7b9e7bd53be81e605f4caec8fda10db474682",
+    "results/challenges/C-V23b-repaired-instrument/per_seed.csv": "93cf9ad5c6cded087166fd1475262dc66f44a5645a9a8497ca2fbc44284b1a38",
+    "results/challenges/C-V23b-repaired-instrument/report.md": "8efc32495a63eef5ff55b3b9c4ab5a7f9b4c29360091efa5f04f6d4b10b29e01",
+    "results/challenges/C-V23b-repaired-instrument/summary.json": "2050a7134be4d63ea14f419de2d6dfb983b6915e631532ae8e25ecbbfcd9ec6a"
+  },
+  "identity": {
+    "authorized_repair_mismatch": {
+      "actual": "16e497faf0e08b3dcf7731412bd7d09f99e8a371ffea9f8b95c5a3892f49af46",
+      "expected": "2f6478c8a060f8a6695d8a7efcf62f1aaa0dc4acd82d4dad4eb96a4b9c466dac",
+      "path": "ref/v231.py"
+    },
+    "commit": "7d5650c",
+    "frozen_p99_exact": 0.09706711551021664,
+    "frozen_p99_reported": 0.097067,
+    "instrument": "V2.3.1r",
+    "manifest_path": "projects/emergence-suite/v2/results/V2.3.1/freeze-manifest.json",
+    "manifest_sha256": "9469a2fcdd9413199c82135c664769d009b4da174b8912a1870697114080cb94",
+    "parameters_unchanged": true,
+    "status": "PASS",
+    "verified_file_count": 64
+  },
+  "instrument": "V2.3.1r",
+  "invalidate_and_repeat": true,
+  "original_defective_result": "results/challenges/C-V23b/",
+  "runner_exit_code": 1,
+  "verdict": "FAIL"
+}

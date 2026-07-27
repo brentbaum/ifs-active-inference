@@ -187,3 +187,42 @@ Component `(iii)` is decisively nonzero. Under the binding Phase-1 rule,
 this report is the only deliverable produced. No V2.3.2 mechanism contract,
 analysis plan, dummy bundle, implementation, or repair is included; repair
 classification is deferred to evaluator adjudication.
+
+## Repair addendum — evaluator adjudication and V2.3.1r
+
+The evaluator subsequently adjudicated the H-dependent partition function as
+a pure software error in the “demonstrably erroneous normalization” class.
+Invalidate-and-repeat instrument repair was authorized without changing the
+declared model, strain parameters, priors, protocols, seeds, or thresholds.
+
+V2.3.1r now computes the exact no-observation partition of each compiled
+structure candidate and divides that candidate's likelihood by the partition.
+For `do(A)`, normalization is conditional on the externally fixed action.
+Normalized leaf likelihoods are marginalized analytically; the remaining
+finite variables are summed exactly. This preserves every within-candidate
+potential ratio and the declared structure prior.
+
+Post-repair verification:
+
+- masked `do(A=engage)` BF: 1 to `4.44e-16`;
+- masked `do(A=avoid)` BF: 1 to `4.44e-16`;
+- generated-action masked BF: 1 to `4.44e-16`;
+- equally predicted outcome contribution: 1 to enumeration tolerance;
+- 60 repeated masked slices: posterior structure equals the declared
+  transition prediction on every slice to `1e-12`;
+- fresh Cartesian oracle versus engine: below `1e-10`;
+- all 900 slices in the eight audited C-V23b trajectories: maximum absolute
+  artifact log BF `4.44e-16`;
+- maximum absolute summed artifact over any audited trajectory:
+  `1.67e-15`.
+
+Thus the repaired decomposition has component `(iii)` equal to zero within
+floating-point tolerance on every audited slice. The earlier decomposition
+in this document remains the correct diagnosis of the defective instrument,
+not a claim about the repaired model.
+
+The full same-parameter, same-seed V2.3.1r gate repeat did not preserve all
+stage gates: Gates 2 and 3 fail after invalidation, while Gates 1, 4, 5 and
+all cumulative V2.0/V2.1/V2.2.1 gates pass. C-V23b was also repeated and
+remains a FAIL under the repaired instrument. Details are recorded in
+`results/V2.3.1/repair-errata.md`.

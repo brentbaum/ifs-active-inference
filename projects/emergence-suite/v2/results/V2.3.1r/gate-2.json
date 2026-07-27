@@ -1,0 +1,35 @@
+{
+  "failures": [
+    "gate_2_recovery threshold not met"
+  ],
+  "gate": 2,
+  "instrument": "V2.3.1r",
+  "name": "gate_2_recovery",
+  "passed": false,
+  "results": {
+    "recovery": {
+      "broadcast_accuracy": 1.0,
+      "controllability_accuracy": 1.0,
+      "mean_true_structure_probability": 0.8766216458967879,
+      "policy_parameter_95_interval_coverage": 0.9453125,
+      "policy_parameter_mean_absolute_error": 0.029715221774193553,
+      "structure_accuracy": 0.953125,
+      "structure_brier": 0.05450484351817403,
+      "structure_confusion_matrix": [
+        [
+          58,
+          6
+        ],
+        [
+          0,
+          64
+        ]
+      ],
+      "structure_ece": 0.10579451215553712,
+      "structure_recovery_generator": "paired controlled-integrated versus low-control-collapsed regimes",
+      "structure_recovery_slice_count": 24,
+      "world_count": 128
+    }
+  },
+  "stage": "V2.3.1"
+}

@@ -254,6 +254,85 @@ def _accumulation_factor(
     )
 
 
+def _normalize_candidate_partition(
+    model: FiniteModel, *, action_intervention: bool
+) -> None:
+    """Normalize each compiled structure candidate before model comparison.
+
+    The accumulation factor is an energy potential.  Its within-candidate
+    relative weights are the declared model, but candidate evidence requires
+    the corresponding partition function.  For an interventional action the
+    normalization is conditional on the externally fixed action value.
+    """
+    # B, Q, X, and O are normalized leaf likelihoods.  With those channels
+    # masked they sum to one analytically, so omit them from the exact
+    # partition sum.  This avoids a second general-purpose inference call
+    # (and its independent oracle) for every protocol slice.
+    masked_leaves = {"B", "Q", "X", "O"}
+    factors = [
+        factor
+        for factor in model.factors
+        if factor.variables != ("H",)
+        and not masked_leaves.intersection(factor.variables)
+    ]
+    fixed = {"H"}
+    if action_intervention:
+        fixed.add("A")
+    latent = sorted(
+        {
+            name
+            for factor in factors
+            for name in factor.variables
+            if name not in fixed
+        }
+    )
+
+    if action_intervention:
+        partition = np.zeros((2, 2))
+        for structure, action in itertools.product(range(2), repeat=2):
+            for values in itertools.product((0, 1), repeat=len(latent)):
+                assignment = dict(zip(latent, values))
+                assignment.update({"H": structure, "A": action})
+                mass = 1.0
+                for factor in factors:
+                    index = tuple(
+                        assignment[name] for name in factor.variables
+                    )
+                    mass *= float(factor.values[index])
+                partition[structure, action] += mass
+        if np.any(partition <= 0.0):
+            raise ValueError("candidate-action partition must be positive")
+        model.add_factor(
+            Factor(
+                ("H", "A"),
+                1.0 / partition,
+                "candidate_partition_normalization",
+            )
+        )
+    else:
+        partition = np.zeros(2)
+        for structure in range(2):
+            for values in itertools.product((0, 1), repeat=len(latent)):
+                assignment = dict(zip(latent, values))
+                assignment["H"] = structure
+                mass = 1.0
+                for factor in factors:
+                    index = tuple(
+                        assignment[name] for name in factor.variables
+                    )
+                    mass *= float(factor.values[index])
+                partition[structure] += mass
+        if np.any(partition <= 0.0):
+            raise ValueError("candidate partition must be positive")
+        model.add_factor(
+            Factor(
+                ("H",),
+                1.0 / partition,
+                "candidate_partition_normalization",
+            )
+        )
+
+
 def formation_model(
     *,
     structure_prior: np.ndarray,
@@ -306,6 +385,9 @@ def formation_model(
         model.add_factor(
             _accumulation_factor(broadcast_lesion=broadcast_lesion)
         )
+    _normalize_candidate_partition(
+        model, action_intervention=action_intervention
+    )
     return model
 
 

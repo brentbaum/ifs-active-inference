@@ -1,0 +1,32 @@
+{
+  "failures": [],
+  "gate": 2,
+  "instrument": "V2.3.1r",
+  "name": "gate_2_recovery",
+  "passed": true,
+  "rerun_stage": "V2.1",
+  "results": {
+    "recovery": {
+      "accuracy": 0.9,
+      "confusion_matrix": [
+        [
+          90,
+          5,
+          5
+        ],
+        [
+          5,
+          90,
+          5
+        ],
+        [
+          5,
+          5,
+          90
+        ]
+      ],
+      "parameter_95_interval_coverage": 0.96875,
+      "parameter_mean_absolute_error": 0.017736950549450556
+    }
+  }
+}

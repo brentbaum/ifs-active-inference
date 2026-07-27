@@ -1,0 +1,68 @@
+{
+  "all_gates_1_to_5_passed": false,
+  "cumulative_gates": {
+    "V2.0": {
+      "gate_1_semantic": true,
+      "gate_2_recovery": true,
+      "gate_3_comparison": true,
+      "gate_4_batch_mutation": true,
+      "gate_5_one_posterior": true
+    },
+    "V2.1": {
+      "gate_1_semantic": true,
+      "gate_2_recovery": true,
+      "gate_3_composition": true,
+      "gate_4_selective_lesion": true,
+      "gate_5_cumulative_regression": true
+    },
+    "V2.2.1": {
+      "gate_1_structure_semantics": true,
+      "gate_2_recovery": true,
+      "gate_3_precision_root_transfer": true,
+      "gate_4_selective_lesions": true,
+      "gate_5_cumulative_regression": true
+    }
+  },
+  "declared_stage": "V2.3.1",
+  "development_seed_maximum": 63980,
+  "files": {
+    "results/V2.3.1r/cumulative/V2.0/gate-1.json": "ad22936c048157355036232908e49787579f73c5a615fb99d952752a7a1cc7cd",
+    "results/V2.3.1r/cumulative/V2.0/gate-2.json": "f9396f249bbb8f6d688a0e842748e1d6f996d4fb90e1efe9bca6486066e9cc17",
+    "results/V2.3.1r/cumulative/V2.0/gate-3.json": "5248483fcf736075923bf0f28e58a34222eb133408e9d0f7ad6df42ee46a37db",
+    "results/V2.3.1r/cumulative/V2.0/gate-4.json": "fd3689807a28074ced69a00cd8d3b41239561bc19b1d1c59487d7009de439ae6",
+    "results/V2.3.1r/cumulative/V2.0/gate-5.json": "a16865b1644c2db6a77f7d54862b526ba4f86136819acbd940e1e1203037f0ed",
+    "results/V2.3.1r/cumulative/V2.0/stage-report.json": "872d51a39272d3c4ee72e978f35900bb4e24a192545be40871c13464fcdc716e",
+    "results/V2.3.1r/cumulative/V2.1/gate-1.json": "196510964d5c240d3f2356fae84545790bb0144a41cfe4c6f1859d84eb5fa7a2",
+    "results/V2.3.1r/cumulative/V2.1/gate-2.json": "8f81c419915cc01ff05029d7c6f4d032b22a39c84a88cdf0a8fda90ce03b4e64",
+    "results/V2.3.1r/cumulative/V2.1/gate-3.json": "a62253d7452ccb479a62cd86c15a30e64af2eb156084e4cc2ccb49afdf4cb924",
+    "results/V2.3.1r/cumulative/V2.1/gate-4.json": "289676099e20be198ed1e7407a99243d7bc6f797ca004553b34e9ada3d4efe8d",
+    "results/V2.3.1r/cumulative/V2.1/gate-5.json": "e2e6eda51139a2d0b6f61cf6002312b114e252d2be70c7bcb20b69e6aa6c65a7",
+    "results/V2.3.1r/cumulative/V2.1/stage-report.json": "08599abc9ec421935c8600041ebd45a16cd2a45c2d0bf2f5fb30ca48a807fad3",
+    "results/V2.3.1r/cumulative/V2.2.1/gate-1.json": "8b529c70e11713e63972e7cbaaa610100c0f9aa15e2ff8b75720b1bb6896c5a1",
+    "results/V2.3.1r/cumulative/V2.2.1/gate-2.json": "9ef177f02f6d21a65857bce7b22a2bfd0df1e189ae87d6f91e411f62513aec23",
+    "results/V2.3.1r/cumulative/V2.2.1/gate-3.json": "6163e469bd6f325705128f5dd54189e8d2051da5c9fa11417176579338a9c8dc",
+    "results/V2.3.1r/cumulative/V2.2.1/gate-4.json": "48c411a8138d61e97c03844d3eaf142d7191f3d52fae11abe039c21fee5286c7",
+    "results/V2.3.1r/cumulative/V2.2.1/gate-5.json": "beeef8168fbc786e6db4d03f2f93911501b0443d37335e55fa67291ad963a9f4",
+    "results/V2.3.1r/cumulative/V2.2.1/stage-report.json": "324d653c944be4d2908ff65f16a18fa2b467db9a4e46136885db4255943a51a7",
+    "results/V2.3.1r/gate-1.json": "374c42db0f38c9abb6e07d9df9229163dba50b81ca492eb965ae5279b80b9828",
+    "results/V2.3.1r/gate-2.json": "9698b5cb4327264321222ade33cfd735166b66a2836f5495f234e9eeab684365",
+    "results/V2.3.1r/gate-3.json": "058fa0f28403a9b94e7539701d52aed7499c8c367ea94c6472a829ca399cbdde",
+    "results/V2.3.1r/gate-4.json": "d52ad16e75972c4411c4f4ad41bf9675cf9dad79eaa2c66bd3684e1a571e38f6",
+    "results/V2.3.1r/gate-5.json": "e34d5818c6426a54229eb992a625dc87a9cf8e0ab14fa35ddb40ff0d4ee74959",
+    "results/V2.3.1r/generalization-calibration-per_world.csv": "d5df35ce8e2fcbaab5f7ea5e8fb2258bee623c2de170580e7c91e513be493f48",
+    "results/V2.3.1r/generalization-paired-per_world.csv": "645ab2269a12a17df3cc89701e494543342de9a7f19e92aadf2dcd79065674c5",
+    "results/V2.3.1r/metric-diff.json": "3ca15ca0231e680de25839a1460e93b5a9a5e29b251736c0a01a1ec537b37762",
+    "results/V2.3.1r/neighborhood-profile.csv": "0ffc4f8f57e9cb1035556fa54089115238aff1b42aaecace8498da433675d7ae",
+    "results/V2.3.1r/open-assays-per_seed.csv": "3978b941d74bc5c9334381b025d39a67ad33cb1d7fcc704e25e5fbf2ef73a08f",
+    "results/V2.3.1r/stage-report.json": "3c0c61d641e16e403e8ab05ae6d730a72d3132694d6dd2b8960c3d26dec3ca38"
+  },
+  "instrument": "V2.3.1r",
+  "parameters_changed": false,
+  "stage_gates": {
+    "gate_1_semantic_routes": true,
+    "gate_2_recovery": false,
+    "gate_3_direct_composition": false,
+    "gate_4_selective_lesions": true,
+    "gate_5_cumulative_regression": true
+  }
+}

@@ -1,0 +1,5197 @@
+{
+  "comparison": "V2.3.1r repaired instrument minus frozen defective V2.3.1",
+  "moved": [
+    {
+      "defective": 0.1689477890656611,
+      "delta": -0.024832147899737145,
+      "path": "expanded_step_injection.maximum",
+      "repaired": 0.14411564116592396
+    },
+    {
+      "defective": 0.09706711551021664,
+      "delta": -0.017949127519881328,
+      "path": "expanded_step_injection.percentile_99",
+      "repaired": 0.07911798799033531
+    },
+    {
+      "defective": 0.3148148148148148,
+      "delta": 0.3518518518518518,
+      "path": "generalization_assay.calibration_curves.cumulative_overwhelm_precision[0].formation_rate_above_half",
+      "repaired": 0.6666666666666666
+    },
+    {
+      "defective": -1.2051113469558539,
+      "delta": 0.5801054049808532,
+      "path": "generalization_assay.calibration_curves.cumulative_overwhelm_precision[0].held_constant_value",
+      "repaired": -0.6250059419750007
+    },
+    {
+      "defective": 0.39995689105058196,
+      "delta": 0.19494169715754572,
+      "path": "generalization_assay.calibration_curves.cumulative_overwhelm_precision[0].marginal_mean_formation_probability",
+      "repaired": 0.5948985882081277
+    },
+    {
+      "defective": 0.38365472205760154,
+      "delta": 0.21483984877437823,
+      "path": "generalization_assay.calibration_curves.cumulative_overwhelm_precision[0].mean_formation_probability",
+      "repaired": 0.5984945708319798
+    },
+    {
+      "defective": 0.1875,
+      "delta": 0.5520833333333334,
+      "path": "generalization_assay.calibration_curves.cumulative_overwhelm_precision[1].formation_rate_above_half",
+      "repaired": 0.7395833333333334
+    },
+    {
+      "defective": -1.2051113469558539,
+      "delta": 0.5801054049808532,
+      "path": "generalization_assay.calibration_curves.cumulative_overwhelm_precision[1].held_constant_value",
+      "repaired": -0.6250059419750007
+    },
+    {
+      "defective": 0.3789525236463411,
+      "delta": 0.2322351497248752,
+      "path": "generalization_assay.calibration_curves.cumulative_overwhelm_precision[1].marginal_mean_formation_probability",
+      "repaired": 0.6111876733712163
+    },
+    {
+      "defective": 0.3878247935689193,
+      "delta": 0.21966764985364218,
+      "path": "generalization_assay.calibration_curves.cumulative_overwhelm_precision[1].mean_formation_probability",
+      "repaired": 0.6074924434225615
+    },
+    {
+      "defective": 0.2631578947368421,
+      "delta": 0.5300751879699248,
+      "path": "generalization_assay.calibration_curves.cumulative_overwhelm_precision[2].formation_rate_above_half",
+      "repaired": 0.793233082706767
+    },
+    {
+      "defective": -1.2051113469558539,
+      "delta": 0.5801054049808532,
+      "path": "generalization_assay.calibration_curves.cumulative_overwhelm_precision[2].held_constant_value",
+      "repaired": -0.6250059419750007
+    },
+    {
+      "defective": 0.39228745202148047,
+      "delta": 0.21621970459318623,
+      "path": "generalization_assay.calibration_curves.cumulative_overwhelm_precision[2].marginal_mean_formation_probability",
+      "repaired": 0.6085071566146667
+    },
+    {
+      "defective": 0.38919287044436024,
+      "delta": 0.22125150830735085,
+      "path": "generalization_assay.calibration_curves.cumulative_overwhelm_precision[2].mean_formation_probability",
+      "repaired": 0.6104443787517111
+    },
+    {
+      "defective": 0.0,
+      "delta": 0.7087378640776699,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[0].formation_rate_above_half",
+      "repaired": 0.7087378640776699
+    },
+    {
+      "defective": -4.616448704918133,
+      "delta": 0.8074546695630733,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[0].lower",
+      "repaired": -3.8089940353550595
+    },
+    {
+      "defective": 0.1956447291626539,
+      "delta": 0.3759074694502174,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[0].marginal_mean_formation_probability",
+      "repaired": 0.5715521986128713
+    },
+    {
+      "defective": 0.15732001198304268,
+      "delta": 0.3887650448289034,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[0].mean_formation_probability",
+      "repaired": 0.5460850568119461
+    },
+    {
+      "defective": -3.2113357057870373,
+      "delta": 0.6814680011648124,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[0].mean_predictor",
+      "repaired": -2.529867704622225
+    },
+    {
+      "defective": -2.7064150271519902,
+      "delta": 0.7275778532150761,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[0].upper",
+      "repaired": -1.9788371739369142
+    },
+    {
+      "defective": 0.00980392156862745,
+      "delta": 0.6274509803921569,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[1].formation_rate_above_half",
+      "repaired": 0.6372549019607843
+    },
+    {
+      "defective": -2.7064150271519902,
+      "delta": 0.7275778532150761,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[1].lower",
+      "repaired": -1.9788371739369142
+    },
+    {
+      "defective": 0.25530884351975963,
+      "delta": 0.3187522476675389,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[1].marginal_mean_formation_probability",
+      "repaired": 0.5740610911872985
+    },
+    {
+      "defective": 0.25604139071750726,
+      "delta": 0.32031424982315665,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[1].mean_formation_probability",
+      "repaired": 0.5763556405406639
+    },
+    {
+      "defective": -2.3531118516928524,
+      "delta": 0.7533845463248352,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[1].mean_predictor",
+      "repaired": -1.5997273053680172
+    },
+    {
+      "defective": -1.9613163440586623,
+      "delta": 0.763637876795997,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[1].upper",
+      "repaired": -1.1976784672626652
+    },
+    {
+      "defective": 0.0196078431372549,
+      "delta": 0.696078431372549,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[2].formation_rate_above_half",
+      "repaired": 0.7156862745098039
+    },
+    {
+      "defective": -1.9613163440586623,
+      "delta": 0.763637876795997,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[2].lower",
+      "repaired": -1.1976784672626652
+    },
+    {
+      "defective": 0.3169452791250252,
+      "delta": 0.2716314418793125,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[2].marginal_mean_formation_probability",
+      "repaired": 0.5885767210043377
+    },
+    {
+      "defective": 0.3506145994023513,
+      "delta": 0.25410533630767973,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[2].mean_formation_probability",
+      "repaired": 0.604719935710031
+    },
+    {
+      "defective": -1.5309496747456108,
+      "delta": 0.8027872215733542,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[2].mean_predictor",
+      "repaired": -0.7281624531722566
+    },
+    {
+      "defective": -0.9208906716585981,
+      "delta": 0.6303110441021533,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[2].upper",
+      "repaired": -0.2905796275564448
+    },
+    {
+      "defective": 0.21568627450980393,
+      "delta": 0.5490196078431372,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[3].formation_rate_above_half",
+      "repaired": 0.7647058823529411
+    },
+    {
+      "defective": -0.9208906716585981,
+      "delta": 0.6303110441021533,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[3].lower",
+      "repaired": -0.2905796275564448
+    },
+    {
+      "defective": 0.438761215992037,
+      "delta": 0.16544549589985835,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[3].marginal_mean_formation_probability",
+      "repaired": 0.6042067118918953
+    },
+    {
+      "defective": 0.4857137900802936,
+      "delta": 0.14756387646986424,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[3].mean_formation_probability",
+      "repaired": 0.6332776665501578
+    },
+    {
+      "defective": -0.35647916395085816,
+      "delta": 0.5058253641789515,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[3].mean_predictor",
+      "repaired": 0.1493462002280934
+    },
+    {
+      "defective": 0.21860336149334159,
+      "delta": 0.5411882179871702,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[3].upper",
+      "repaired": 0.7597915794805118
+    },
+    {
+      "defective": 0.9514563106796117,
+      "delta": 0.01941747572815533,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[4].formation_rate_above_half",
+      "repaired": 0.970873786407767
+    },
+    {
+      "defective": 0.21860336149334159,
+      "delta": 0.5411882179871702,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[4].lower",
+      "repaired": 0.7597915794805118
+    },
+    {
+      "defective": 0.7323305558236263,
+      "delta": -0.030899072363744895,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[4].marginal_mean_formation_probability",
+      "repaired": 0.7014314834598814
+    },
+    {
+      "defective": 0.6900906803871264,
+      "delta": -0.010239524147354961,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[4].mean_formation_probability",
+      "repaired": 0.6798511562397714
+    },
+    {
+      "defective": 1.4202496939260054,
+      "delta": 0.16018500736264718,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[4].mean_predictor",
+      "repaired": 1.5804347012886526
+    },
+    {
+      "defective": 3.3979585457687995,
+      "delta": -0.14952407782719757,
+      "path": "generalization_assay.calibration_curves.uncontrollability_log_evidence[4].upper",
+      "repaired": 3.248434467941602
+    },
+    {
+      "defective": 0.8867049845092326,
+      "delta": -0.1186443922477961,
+      "path": "generalization_assay.combined_cv_r2",
+      "repaired": 0.7680605922614365
+    },
+    {
+      "defective": 0.3148148148148148,
+      "delta": 0.3518518518518518,
+      "path": "generalization_assay.marginal_calibration_curves.cumulative_overwhelm_precision[0].formation_rate_above_half",
+      "repaired": 0.6666666666666666
+    },
+    {
+      "defective": 0.39995689105058196,
+      "delta": 0.19494169715754572,
+      "path": "generalization_assay.marginal_calibration_curves.cumulative_overwhelm_precision[0].mean_formation_probability",
+      "repaired": 0.5948985882081277
+    },
+    {
+      "defective": 0.1875,
+      "delta": 0.5520833333333334,
+      "path": "generalization_assay.marginal_calibration_curves.cumulative_overwhelm_precision[1].formation_rate_above_half",
+      "repaired": 0.7395833333333334
+    },
+    {
+      "defective": 0.3789525236463411,
+      "delta": 0.2322351497248752,
+      "path": "generalization_assay.marginal_calibration_curves.cumulative_overwhelm_precision[1].mean_formation_probability",
+      "repaired": 0.6111876733712163
+    },
+    {
+      "defective": 0.2631578947368421,
+      "delta": 0.5300751879699248,
+      "path": "generalization_assay.marginal_calibration_curves.cumulative_overwhelm_precision[2].formation_rate_above_half",
+      "repaired": 0.793233082706767
+    },
+    {
+      "defective": 0.39228745202148047,
+      "delta": 0.21621970459318623,
+      "path": "generalization_assay.marginal_calibration_curves.cumulative_overwhelm_precision[2].mean_formation_probability",
+      "repaired": 0.6085071566146667
+    },
+    {
+      "defective": 0.0,
+      "delta": 0.7087378640776699,
+      "path": "generalization_assay.marginal_calibration_curves.uncontrollability_log_evidence[0].formation_rate_above_half",
+      "repaired": 0.7087378640776699
+    },
+    {
+      "defective": -4.616448704918133,
+      "delta": 0.8074546695630733,
+      "path": "generalization_assay.marginal_calibration_curves.uncontrollability_log_evidence[0].lower",
+      "repaired": -3.8089940353550595
+    },
+    {
+      "defective": 0.1956447291626539,
+      "delta": 0.3759074694502174,
+      "path": "generalization_assay.marginal_calibration_curves.uncontrollability_log_evidence[0].mean_formation_probability",
+      "repaired": 0.5715521986128713
+    },
+    {
+      "defective": -3.2113357057870373,
+      "delta": 0.6814680011648124,
+      "path": "generalization_assay.marginal_calibration_curves.uncontrollability_log_evidence[0].mean_predictor",
+      "repaired": -2.529867704622225
+    },
+    {
+      "defective": -2.7064150271519902,
+      "delta": 0.7275778532150761,
+      "path": "generalization_assay.marginal_calibration_curves.uncontrollability_log_evidence[0].upper",
+      "repaired": -1.9788371739369142
+    },
+    {
+      "defective": 0.00980392156862745,
+      "delta": 0.6274509803921569,
+      "path": "generalization_assay.marginal_calibration_curves.uncontrollability_log_evidence[1].formation_rate_above_half",
+      "repaired": 0.6372549019607843
+    },
+    {
+      "defective": -2.7064150271519902,
+      "delta": 0.7275778532150761,
+      "path": "generalization_assay.marginal_calibration_curves.uncontrollability_log_evidence[1].lower",
+      "repaired": -1.9788371739369142
+    },
+    {
+      "defective": 0.25530884351975963,
+      "delta": 0.3187522476675389,
+      "path": "generalization_assay.marginal_calibration_curves.uncontrollability_log_evidence[1].mean_formation_probability",
+      "repaired": 0.5740610911872985
+    },
+    {
+      "defective": -2.3531118516928524,
+      "delta": 0.7533845463248352,
+      "path": "generalization_assay.marginal_calibration_curves.uncontrollability_log_evidence[1].mean_predictor",
+      "repaired": -1.5997273053680172
+    },
+    {
+      "defective": -1.9613163440586623,
+      "delta": 0.763637876795997,
+      "path": "generalization_assay.marginal_calibration_curves.uncontrollability_log_evidence[1].upper",
+      "repaired": -1.1976784672626652
+    },
+    {
+      "defective": 0.0196078431372549,
+      "delta": 0.696078431372549,
+      "path": "generalization_assay.marginal_calibration_curves.uncontrollability_log_evidence[2].formation_rate_above_half",
+      "repaired": 0.7156862745098039
+    },
+    {
+      "defective": -1.9613163440586623,
+      "delta": 0.763637876795997,
+      "path": "generalization_assay.marginal_calibration_curves.uncontrollability_log_evidence[2].lower",
+      "repaired": -1.1976784672626652
+    },
+    {
+      "defective": 0.3169452791250252,
+      "delta": 0.2716314418793125,
+      "path": "generalization_assay.marginal_calibration_curves.uncontrollability_log_evidence[2].mean_formation_probability",
+      "repaired": 0.5885767210043377
+    },
+    {
+      "defective": -1.5309496747456108,
+      "delta": 0.8027872215733542,
+      "path": "generalization_assay.marginal_calibration_curves.uncontrollability_log_evidence[2].mean_predictor",
+      "repaired": -0.7281624531722566
+    },
+    {
+      "defective": -0.9208906716585981,
+      "delta": 0.6303110441021533,
+      "path": "generalization_assay.marginal_calibration_curves.uncontrollability_log_evidence[2].upper",
+      "repaired": -0.2905796275564448
+    },
+    {
+      "defective": 0.21568627450980393,
+      "delta": 0.5490196078431372,
+      "path": "generalization_assay.marginal_calibration_curves.uncontrollability_log_evidence[3].formation_rate_above_half",
+      "repaired": 0.7647058823529411
+    },
+    {
+      "defective": -0.9208906716585981,
+      "delta": 0.6303110441021533,
+      "path": "generalization_assay.marginal_calibration_curves.uncontrollability_log_evidence[3].lower",
+      "repaired": -0.2905796275564448
+    },
+    {
+      "defective": 0.438761215992037,
+      "delta": 0.16544549589985835,
+      "path": "generalization_assay.marginal_calibration_curves.uncontrollability_log_evidence[3].mean_formation_probability",
+      "repaired": 0.6042067118918953
+    },
+    {
+      "defective": -0.35647916395085816,
+      "delta": 0.5058253641789515,
+      "path": "generalization_assay.marginal_calibration_curves.uncontrollability_log_evidence[3].mean_predictor",
+      "repaired": 0.1493462002280934
+    },
+    {
+      "defective": 0.21860336149334159,
+      "delta": 0.5411882179871702,
+      "path": "generalization_assay.marginal_calibration_curves.uncontrollability_log_evidence[3].upper",
+      "repaired": 0.7597915794805118
+    },
+    {
+      "defective": 0.9514563106796117,
+      "delta": 0.01941747572815533,
+      "path": "generalization_assay.marginal_calibration_curves.uncontrollability_log_evidence[4].formation_rate_above_half",
+      "repaired": 0.970873786407767
+    },
+    {
+      "defective": 0.21860336149334159,
+      "delta": 0.5411882179871702,
+      "path": "generalization_assay.marginal_calibration_curves.uncontrollability_log_evidence[4].lower",
+      "repaired": 0.7597915794805118
+    },
+    {
+      "defective": 0.7323305558236263,
+      "delta": -0.030899072363744895,
+      "path": "generalization_assay.marginal_calibration_curves.uncontrollability_log_evidence[4].mean_formation_probability",
+      "repaired": 0.7014314834598814
+    },
+    {
+      "defective": 1.4202496939260054,
+      "delta": 0.16018500736264718,
+      "path": "generalization_assay.marginal_calibration_curves.uncontrollability_log_evidence[4].mean_predictor",
+      "repaired": 1.5804347012886526
+    },
+    {
+      "defective": 3.3979585457687995,
+      "delta": -0.14952407782719757,
+      "path": "generalization_assay.marginal_calibration_curves.uncontrollability_log_evidence[4].upper",
+      "repaired": 3.248434467941602
+    },
+    {
+      "defective": 0.16193025886244977,
+      "delta": -0.020952993253505137,
+      "path": "generalization_assay.step_injection.maximum",
+      "repaired": 0.14097726560894464
+    },
+    {
+      "defective": 0.0542460126832704,
+      "delta": 0.0012444881845499259,
+      "path": "generalization_assay.step_injection.percentile_99",
+      "repaired": 0.05549050086782033
+    },
+    {
+      "defective": 0.025006096036659486,
+      "delta": 0.5923266770543678,
+      "path": "generalization_assay.surface_incremental_cv_r2",
+      "repaired": 0.6173327730910273
+    },
+    {
+      "defective": 0.8616988884725731,
+      "delta": -0.7109710693021639,
+      "path": "generalization_assay.theory_only_cv_r2",
+      "repaired": 0.15072781917040923
+    },
+    {
+      "defective": 0.030272961919065422,
+      "delta": -0.03102751573999807,
+      "path": "lesions.controllability_inference.intact_contrast",
+      "repaired": -0.0007545538209326463
+    },
+    {
+      "defective": 0.2651563279324217,
+      "delta": -0.0003158056593740022,
+      "path": "lesions.formation_coupling.intact_persistent_probability",
+      "repaired": 0.2648405222730477
+    },
+    {
+      "defective": 0.013518050382447744,
+      "delta": -0.011951381883744283,
+      "path": "lesions.reflexive_broadcast_context.intact_contrast",
+      "repaired": 0.0015666684987034607
+    },
+    {
+      "defective": 0.06873254148884766,
+      "delta": -0.014613530783651116,
+      "path": "open_assays.gradual_accumulation.acute_minus_gradual_maximum_step",
+      "repaired": 0.05411901070519655
+    },
+    {
+      "defective": 0.903669435404522,
+      "delta": -0.09149072624565113,
+      "path": "open_assays.per_seed[0].acute_final",
+      "repaired": 0.8121787091588709
+    },
+    {
+      "defective": 0.9664008331405665,
+      "delta": -0.08960128032879733,
+      "path": "open_assays.per_seed[0].adaptive_threat_final",
+      "repaired": 0.8767995528117691
+    },
+    {
+      "defective": 0.4518592352744232,
+      "delta": -0.01032867111207636,
+      "path": "open_assays.per_seed[0].closed_loop_final",
+      "repaired": 0.4415305641623468
+    },
+    {
+      "defective": 0.37090289392478343,
+      "delta": 0.00039567068398432825,
+      "path": "open_assays.per_seed[0].closed_loop_root",
+      "repaired": 0.37129856460876776
+    },
+    {
+      "defective": 0.4600989377278405,
+      "delta": 0.0031503436467746893,
+      "path": "open_assays.per_seed[0].exact_replay_final",
+      "repaired": 0.4632492813746152
+    },
+    {
+      "defective": 0.309929455429054,
+      "delta": 9.37038226504483e-05,
+      "path": "open_assays.per_seed[0].exact_replay_root",
+      "repaired": 0.3100231592517044
+    },
+    {
+      "defective": 0.9945817045252976,
+      "delta": -0.029030498691332562,
+      "path": "open_assays.per_seed[0].gradual_final",
+      "repaired": 0.965551205833965
+    },
+    {
+      "defective": 0.764670884301516,
+      "delta": -0.07152002110740896,
+      "path": "open_assays.per_seed[0].high_control_final",
+      "repaired": 0.693150863194107
+    },
+    {
+      "defective": 0.9840416100322531,
+      "delta": -0.03912449146523378,
+      "path": "open_assays.per_seed[0].low_control_final",
+      "repaired": 0.9449171185670193
+    },
+    {
+      "defective": 0.10870934709777827,
+      "delta": 0.05440562340476965,
+      "path": "open_assays.per_seed[0].overwhelm_control_final",
+      "repaired": 0.16311497050254792
+    },
+    {
+      "defective": 0.7481859114368059,
+      "delta": -0.0722036593008597,
+      "path": "open_assays.per_seed[10].acute_final",
+      "repaired": 0.6759822521359462
+    },
+    {
+      "defective": 0.9270684802158703,
+      "delta": -0.11759137384730745,
+      "path": "open_assays.per_seed[10].adaptive_threat_final",
+      "repaired": 0.8094771063685628
+    },
+    {
+      "defective": 0.4840469359306888,
+      "delta": -0.003437974912852082,
+      "path": "open_assays.per_seed[10].closed_loop_final",
+      "repaired": 0.48060896101783673
+    },
+    {
+      "defective": 0.5979204141714434,
+      "delta": 4.390449561686438e-05,
+      "path": "open_assays.per_seed[10].closed_loop_root",
+      "repaired": 0.5979643186670602
+    },
+    {
+      "defective": 0.47099314937226144,
+      "delta": 0.006922960382429955,
+      "path": "open_assays.per_seed[10].exact_replay_final",
+      "repaired": 0.4779161097546914
+    },
+    {
+      "defective": 0.4584344717314145,
+      "delta": 0.00014973988511413072,
+      "path": "open_assays.per_seed[10].exact_replay_root",
+      "repaired": 0.4585842116165286
+    },
+    {
+      "defective": 0.9946684100026411,
+      "delta": -0.02734677204113234,
+      "path": "open_assays.per_seed[10].gradual_final",
+      "repaired": 0.9673216379615087
+    },
+    {
+      "defective": 0.8126173766623451,
+      "delta": -0.06952239232258528,
+      "path": "open_assays.per_seed[10].high_control_final",
+      "repaired": 0.7430949843397598
+    },
+    {
+      "defective": 0.9875069365548841,
+      "delta": -0.016923925952813113,
+      "path": "open_assays.per_seed[10].low_control_final",
+      "repaired": 0.970583010602071
+    },
+    {
+      "defective": 0.1911057180429882,
+      "delta": 0.069850791503132,
+      "path": "open_assays.per_seed[10].overwhelm_control_final",
+      "repaired": 0.2609565095461202
+    },
+    {
+      "defective": 0.8659873387637019,
+      "delta": -0.08004379653825244,
+      "path": "open_assays.per_seed[11].acute_final",
+      "repaired": 0.7859435422254495
+    },
+    {
+      "defective": 0.9739030473982634,
+      "delta": -0.08395559335340341,
+      "path": "open_assays.per_seed[11].adaptive_threat_final",
+      "repaired": 0.88994745404486
+    },
+    {
+      "defective": 0.47519617482266074,
+      "delta": 0.007016313277076303,
+      "path": "open_assays.per_seed[11].closed_loop_final",
+      "repaired": 0.48221248809973705
+    },
+    {
+      "defective": 0.7993349314729372,
+      "delta": -0.00026997295022734846,
+      "path": "open_assays.per_seed[11].closed_loop_root",
+      "repaired": 0.7990649585227099
+    },
+    {
+      "defective": 0.37154332379082833,
+      "delta": 0.03162256772303412,
+      "path": "open_assays.per_seed[11].exact_replay_final",
+      "repaired": 0.40316589151386245
+    },
+    {
+      "defective": 0.20839175332290744,
+      "delta": -0.001415105840725378,
+      "path": "open_assays.per_seed[11].exact_replay_root",
+      "repaired": 0.20697664748218206
+    },
+    {
+      "defective": 0.9932804715532471,
+      "delta": -0.04688553174888799,
+      "path": "open_assays.per_seed[11].gradual_final",
+      "repaired": 0.9463949398043591
+    },
+    {
+      "defective": 0.8763846638070643,
+      "delta": -0.08587823873237244,
+      "path": "open_assays.per_seed[11].high_control_final",
+      "repaired": 0.7905064250746918
+    },
+    {
+      "defective": 0.9783192505659059,
+      "delta": -0.06052771785684519,
+      "path": "open_assays.per_seed[11].low_control_final",
+      "repaired": 0.9177915327090607
+    },
+    {
+      "defective": 0.09885536652779209,
+      "delta": 0.05816212497080428,
+      "path": "open_assays.per_seed[11].overwhelm_control_final",
+      "repaired": 0.15701749149859637
+    },
+    {
+      "defective": 0.8985324181364345,
+      "delta": -0.09784620285588941,
+      "path": "open_assays.per_seed[12].acute_final",
+      "repaired": 0.8006862152805451
+    },
+    {
+      "defective": 0.9706400840578441,
+      "delta": -0.09778565542831397,
+      "path": "open_assays.per_seed[12].adaptive_threat_final",
+      "repaired": 0.8728544286295301
+    },
+    {
+      "defective": 0.8096803870677223,
+      "delta": -0.10721513703167351,
+      "path": "open_assays.per_seed[12].closed_loop_final",
+      "repaired": 0.7024652500360488
+    },
+    {
+      "defective": 0.9967993615657111,
+      "delta": -4.199895778567164e-05,
+      "path": "open_assays.per_seed[12].closed_loop_root",
+      "repaired": 0.9967573626079255
+    },
+    {
+      "defective": 0.44767833620848074,
+      "delta": 0.011728644674673716,
+      "path": "open_assays.per_seed[12].exact_replay_final",
+      "repaired": 0.45940698088315446
+    },
+    {
+      "defective": 0.689408437380229,
+      "delta": 0.00017883733524337586,
+      "path": "open_assays.per_seed[12].exact_replay_root",
+      "repaired": 0.6895872747154723
+    },
+    {
+      "defective": 0.9936391566236031,
+      "delta": -0.048220479542741,
+      "path": "open_assays.per_seed[12].gradual_final",
+      "repaired": 0.9454186770808621
+    },
+    {
+      "defective": 0.8331490953541991,
+      "delta": -0.06824746695888573,
+      "path": "open_assays.per_seed[12].high_control_final",
+      "repaired": 0.7649016283953134
+    },
+    {
+      "defective": 0.9827575063398508,
+      "delta": -0.03828272782040809,
+      "path": "open_assays.per_seed[12].low_control_final",
+      "repaired": 0.9444747785194427
+    },
+    {
+      "defective": 0.12116730112742258,
+      "delta": 0.07749355988633433,
+      "path": "open_assays.per_seed[12].overwhelm_control_final",
+      "repaired": 0.1986608610137569
+    },
+    {
+      "defective": 0.8243033163960866,
+      "delta": -0.06843645678862287,
+      "path": "open_assays.per_seed[13].acute_final",
+      "repaired": 0.7558668596074637
+    },
+    {
+      "defective": 0.9828422307317884,
+      "delta": -0.0609457075145905,
+      "path": "open_assays.per_seed[13].adaptive_threat_final",
+      "repaired": 0.921896523217198
+    },
+    {
+      "defective": 0.47369480378144724,
+      "delta": 0.017116354470801676,
+      "path": "open_assays.per_seed[13].closed_loop_final",
+      "repaired": 0.4908111582522489
+    },
+    {
+      "defective": 0.4423185874034261,
+      "delta": -6.510509258161878e-05,
+      "path": "open_assays.per_seed[13].closed_loop_root",
+      "repaired": 0.4422534823108445
+    },
+    {
+      "defective": 0.4602427850424695,
+      "delta": 0.0011567856838449186,
+      "path": "open_assays.per_seed[13].exact_replay_final",
+      "repaired": 0.46139957072631443
+    },
+    {
+      "defective": 0.39797044492869965,
+      "delta": -7.437450145586499e-06,
+      "path": "open_assays.per_seed[13].exact_replay_root",
+      "repaired": 0.39796300747855406
+    },
+    {
+      "defective": 0.9748521982031944,
+      "delta": -0.1473754418827402,
+      "path": "open_assays.per_seed[13].gradual_final",
+      "repaired": 0.8274767563204541
+    },
+    {
+      "defective": 0.8205851623640119,
+      "delta": -0.07853444013417055,
+      "path": "open_assays.per_seed[13].high_control_final",
+      "repaired": 0.7420507222298414
+    },
+    {
+      "defective": 0.985116186032122,
+      "delta": -0.033583269655468206,
+      "path": "open_assays.per_seed[13].low_control_final",
+      "repaired": 0.9515329163766538
+    },
+    {
+      "defective": 0.21600915271483032,
+      "delta": 0.061628167557785746,
+      "path": "open_assays.per_seed[13].overwhelm_control_final",
+      "repaired": 0.27763732027261606
+    },
+    {
+      "defective": 0.8796577887919557,
+      "delta": -0.1444845380074371,
+      "path": "open_assays.per_seed[14].acute_final",
+      "repaired": 0.7351732507845186
+    },
+    {
+      "defective": 0.982032444324654,
+      "delta": -0.05845463168842391,
+      "path": "open_assays.per_seed[14].adaptive_threat_final",
+      "repaired": 0.9235778126362301
+    },
+    {
+      "defective": 0.6183907160801693,
+      "delta": -0.11371026573413234,
+      "path": "open_assays.per_seed[14].closed_loop_final",
+      "repaired": 0.5046804503460369
+    },
+    {
+      "defective": 0.8800699028694485,
+      "delta": -0.0021274278505138966,
+      "path": "open_assays.per_seed[14].closed_loop_root",
+      "repaired": 0.8779424750189346
+    },
+    {
+      "defective": 0.48612191436193264,
+      "delta": -0.009304011365918297,
+      "path": "open_assays.per_seed[14].exact_replay_final",
+      "repaired": 0.47681790299601434
+    },
+    {
+      "defective": 0.1196056015168109,
+      "delta": -0.0001130397753993928,
+      "path": "open_assays.per_seed[14].exact_replay_root",
+      "repaired": 0.11949256174141151
+    },
+    {
+      "defective": 0.9915259474135567,
+      "delta": -0.05249227447520033,
+      "path": "open_assays.per_seed[14].gradual_final",
+      "repaired": 0.9390336729383564
+    },
+    {
+      "defective": 0.8335560374438125,
+      "delta": -0.06641661048289971,
+      "path": "open_assays.per_seed[14].high_control_final",
+      "repaired": 0.7671394269609128
+    },
+    {
+      "defective": 0.9815599052442379,
+      "delta": -0.057726923651491235,
+      "path": "open_assays.per_seed[14].low_control_final",
+      "repaired": 0.9238329815927466
+    },
+    {
+      "defective": 0.1616124839333191,
+      "delta": 0.04833967027998495,
+      "path": "open_assays.per_seed[14].overwhelm_control_final",
+      "repaired": 0.20995215421330404
+    },
+    {
+      "defective": 0.7272199768045654,
+      "delta": -0.16514590476314484,
+      "path": "open_assays.per_seed[15].acute_final",
+      "repaired": 0.5620740720414206
+    },
+    {
+      "defective": 0.9753886867107013,
+      "delta": -0.08685993556010407,
+      "path": "open_assays.per_seed[15].adaptive_threat_final",
+      "repaired": 0.8885287511505973
+    },
+    {
+      "defective": 0.9488887657130681,
+      "delta": -0.15965521542380035,
+      "path": "open_assays.per_seed[15].closed_loop_final",
+      "repaired": 0.7892335502892678
+    },
+    {
+      "defective": 0.9999662874620283,
+      "delta": -7.842242832012403e-06,
+      "path": "open_assays.per_seed[15].closed_loop_root",
+      "repaired": 0.9999584452191963
+    },
+    {
+      "defective": 0.4596300216507688,
+      "delta": 0.011874564166172774,
+      "path": "open_assays.per_seed[15].exact_replay_final",
+      "repaired": 0.4715045858169416
+    },
+    {
+      "defective": 0.21473098641445543,
+      "delta": -7.855455864436145e-05,
+      "path": "open_assays.per_seed[15].exact_replay_root",
+      "repaired": 0.21465243185581107
+    },
+    {
+      "defective": 0.9940813555262569,
+      "delta": -0.03119779207436224,
+      "path": "open_assays.per_seed[15].gradual_final",
+      "repaired": 0.9628835634518946
+    },
+    {
+      "defective": 0.8413748809068609,
+      "delta": -0.060317794962040816,
+      "path": "open_assays.per_seed[15].high_control_final",
+      "repaired": 0.78105708594482
+    },
+    {
+      "defective": 0.9849848097425165,
+      "delta": -0.05120270462332577,
+      "path": "open_assays.per_seed[15].low_control_final",
+      "repaired": 0.9337821051191907
+    },
+    {
+      "defective": 0.1268108622638684,
+      "delta": 0.06238838624146528,
+      "path": "open_assays.per_seed[15].overwhelm_control_final",
+      "repaired": 0.18919924850533368
+    },
+    {
+      "defective": 0.6736737780410228,
+      "delta": -0.13730536519044678,
+      "path": "open_assays.per_seed[16].acute_final",
+      "repaired": 0.536368412850576
+    },
+    {
+      "defective": 0.9731257998456472,
+      "delta": -0.0821378171110897,
+      "path": "open_assays.per_seed[16].adaptive_threat_final",
+      "repaired": 0.8909879827345575
+    },
+    {
+      "defective": 0.6983136326176541,
+      "delta": -0.15452040033038927,
+      "path": "open_assays.per_seed[16].closed_loop_final",
+      "repaired": 0.5437932322872648
+    },
+    {
+      "defective": 0.8476824049723871,
+      "delta": -0.0024064949675880465,
+      "path": "open_assays.per_seed[16].closed_loop_root",
+      "repaired": 0.8452759100047991
+    },
+    {
+      "defective": 0.5538331337213775,
+      "delta": -0.02475060433744969,
+      "path": "open_assays.per_seed[16].exact_replay_final",
+      "repaired": 0.5290825293839279
+    },
+    {
+      "defective": 0.25614796320540134,
+      "delta": -0.0011403613693254933,
+      "path": "open_assays.per_seed[16].exact_replay_root",
+      "repaired": 0.25500760183607585
+    },
+    {
+      "defective": 0.9944991851456504,
+      "delta": -0.027931645131288207,
+      "path": "open_assays.per_seed[16].gradual_final",
+      "repaired": 0.9665675400143622
+    },
+    {
+      "defective": 0.8595030518679291,
+      "delta": -0.08035787236140779,
+      "path": "open_assays.per_seed[16].high_control_final",
+      "repaired": 0.7791451795065213
+    },
+    {
+      "defective": 0.9837862111800323,
+      "delta": -0.024938387736751833,
+      "path": "open_assays.per_seed[16].low_control_final",
+      "repaired": 0.9588478234432805
+    },
+    {
+      "defective": 0.12235536074853812,
+      "delta": 0.046991950214370554,
+      "path": "open_assays.per_seed[16].overwhelm_control_final",
+      "repaired": 0.16934731096290867
+    },
+    {
+      "defective": 0.8614737604522933,
+      "delta": -0.07208129901011318,
+      "path": "open_assays.per_seed[17].acute_final",
+      "repaired": 0.7893924614421801
+    },
+    {
+      "defective": 0.9710690268624255,
+      "delta": -0.07775751883684168,
+      "path": "open_assays.per_seed[17].adaptive_threat_final",
+      "repaired": 0.8933115080255838
+    },
+    {
+      "defective": 0.4916202618844822,
+      "delta": -0.015248268083390415,
+      "path": "open_assays.per_seed[17].closed_loop_final",
+      "repaired": 0.4763719938010918
+    },
+    {
+      "defective": 0.022321275305008142,
+      "delta": 1.83839605178808e-05,
+      "path": "open_assays.per_seed[17].closed_loop_root",
+      "repaired": 0.022339659265526023
+    },
+    {
+      "defective": 0.4573035559148093,
+      "delta": -0.0010214860243930035,
+      "path": "open_assays.per_seed[17].exact_replay_final",
+      "repaired": 0.4562820698904163
+    },
+    {
+      "defective": 0.00915630452525252,
+      "delta": -7.753194905696717e-06,
+      "path": "open_assays.per_seed[17].exact_replay_root",
+      "repaired": 0.009148551330346824
+    },
+    {
+      "defective": 0.9920738630555676,
+      "delta": -0.04318261913687549,
+      "path": "open_assays.per_seed[17].gradual_final",
+      "repaired": 0.9488912439186921
+    },
+    {
+      "defective": 0.8483041467778385,
+      "delta": -0.06423949958155939,
+      "path": "open_assays.per_seed[17].high_control_final",
+      "repaired": 0.7840646471962791
+    },
+    {
+      "defective": 0.9875775584994003,
+      "delta": -0.019250969651188554,
+      "path": "open_assays.per_seed[17].low_control_final",
+      "repaired": 0.9683265888482118
+    },
+    {
+      "defective": 0.11564272269847112,
+      "delta": 0.05049702679549997,
+      "path": "open_assays.per_seed[17].overwhelm_control_final",
+      "repaired": 0.1661397494939711
+    },
+    {
+      "defective": 0.9013258721180422,
+      "delta": -0.1050352158756721,
+      "path": "open_assays.per_seed[18].acute_final",
+      "repaired": 0.79629065624237
+    },
+    {
+      "defective": 0.9820063650134689,
+      "delta": -0.0542564364409589,
+      "path": "open_assays.per_seed[18].adaptive_threat_final",
+      "repaired": 0.92774992857251
+    },
+    {
+      "defective": 0.5561058407970818,
+      "delta": -0.00733466010652295,
+      "path": "open_assays.per_seed[18].closed_loop_final",
+      "repaired": 0.5487711806905589
+    },
+    {
+      "defective": 0.972183791805401,
+      "delta": 0.00026401505294093575,
+      "path": "open_assays.per_seed[18].closed_loop_root",
+      "repaired": 0.972447806858342
+    },
+    {
+      "defective": 0.45506493358742295,
+      "delta": 0.011035022227869229,
+      "path": "open_assays.per_seed[18].exact_replay_final",
+      "repaired": 0.4660999558152922
+    },
+    {
+      "defective": 0.203240782688847,
+      "delta": -9.59163862537249e-05,
+      "path": "open_assays.per_seed[18].exact_replay_root",
+      "repaired": 0.20314486630259326
+    },
+    {
+      "defective": 0.9885923161928174,
+      "delta": -0.06297205446003806,
+      "path": "open_assays.per_seed[18].gradual_final",
+      "repaired": 0.9256202617327793
+    },
+    {
+      "defective": 0.8441227944289191,
+      "delta": -0.07456972876512247,
+      "path": "open_assays.per_seed[18].high_control_final",
+      "repaired": 0.7695530656637967
+    },
+    {
+      "defective": 0.9779523422694542,
+      "delta": -0.07738673007544628,
+      "path": "open_assays.per_seed[18].low_control_final",
+      "repaired": 0.9005656121940079
+    },
+    {
+      "defective": 0.25852538805618897,
+      "delta": 0.08194733751209787,
+      "path": "open_assays.per_seed[18].overwhelm_control_final",
+      "repaired": 0.34047272556828684
+    },
+    {
+      "defective": 0.7720956646420571,
+      "delta": -0.07514598282322915,
+      "path": "open_assays.per_seed[19].acute_final",
+      "repaired": 0.696949681818828
+    },
+    {
+      "defective": 0.9774540846326788,
+      "delta": -0.06465488594828195,
+      "path": "open_assays.per_seed[19].adaptive_threat_final",
+      "repaired": 0.9127991986843969
+    },
+    {
+      "defective": 0.5569348685328229,
+      "delta": -0.026282916004784163,
+      "path": "open_assays.per_seed[19].closed_loop_final",
+      "repaired": 0.5306519525280388
+    },
+    {
+      "defective": 0.9518809264363983,
+      "delta": 6.216397422753595e-05,
+      "path": "open_assays.per_seed[19].closed_loop_root",
+      "repaired": 0.9519430904106259
+    },
+    {
+      "defective": 0.46395514137734173,
+      "delta": 0.00044601131548077655,
+      "path": "open_assays.per_seed[19].exact_replay_final",
+      "repaired": 0.4644011526928225
+    },
+    {
+      "defective": 0.4960961450041447,
+      "delta": 0.0005624041094585697,
+      "path": "open_assays.per_seed[19].exact_replay_root",
+      "repaired": 0.49665854911360324
+    },
+    {
+      "defective": 0.9928662187674262,
+      "delta": -0.04575332661189746,
+      "path": "open_assays.per_seed[19].gradual_final",
+      "repaired": 0.9471128921555287
+    },
+    {
+      "defective": 0.8508009067491356,
+      "delta": -0.05215448257213451,
+      "path": "open_assays.per_seed[19].high_control_final",
+      "repaired": 0.798646424177001
+    },
+    {
+      "defective": 0.9853871078756856,
+      "delta": -0.06213840780892377,
+      "path": "open_assays.per_seed[19].low_control_final",
+      "repaired": 0.9232487000667619
+    },
+    {
+      "defective": 0.15416074603876811,
+      "delta": 0.05295799396021367,
+      "path": "open_assays.per_seed[19].overwhelm_control_final",
+      "repaired": 0.20711873999898178
+    },
+    {
+      "defective": 0.7165183127974375,
+      "delta": -0.10827859221106972,
+      "path": "open_assays.per_seed[1].acute_final",
+      "repaired": 0.6082397205863678
+    },
+    {
+      "defective": 0.9105686374563875,
+      "delta": -0.1247408416790241,
+      "path": "open_assays.per_seed[1].adaptive_threat_final",
+      "repaired": 0.7858277957773634
+    },
+    {
+      "defective": 0.5512520060811813,
+      "delta": 0.0023513581872044442,
+      "path": "open_assays.per_seed[1].closed_loop_final",
+      "repaired": 0.5536033642683857
+    },
+    {
+      "defective": 0.9296990642734492,
+      "delta": -1.0876381504654198e-05,
+      "path": "open_assays.per_seed[1].closed_loop_root",
+      "repaired": 0.9296881878919445
+    },
+    {
+      "defective": 0.45610239142383063,
+      "delta": 0.009014129045022579,
+      "path": "open_assays.per_seed[1].exact_replay_final",
+      "repaired": 0.4651165204688532
+    },
+    {
+      "defective": 0.8123188920296023,
+      "delta": 0.00024339770008241501,
+      "path": "open_assays.per_seed[1].exact_replay_root",
+      "repaired": 0.8125622897296847
+    },
+    {
+      "defective": 0.9816628854908708,
+      "delta": -0.13654600125507943,
+      "path": "open_assays.per_seed[1].gradual_final",
+      "repaired": 0.8451168842357913
+    },
+    {
+      "defective": 0.8105027281710723,
+      "delta": -0.06815737730060978,
+      "path": "open_assays.per_seed[1].high_control_final",
+      "repaired": 0.7423453508704625
+    },
+    {
+      "defective": 0.9857541301997914,
+      "delta": -0.023476351323839184,
+      "path": "open_assays.per_seed[1].low_control_final",
+      "repaired": 0.9622777788759522
+    },
+    {
+      "defective": 0.0908219858722023,
+      "delta": 0.04535840173407152,
+      "path": "open_assays.per_seed[1].overwhelm_control_final",
+      "repaired": 0.13618038760627382
+    },
+    {
+      "defective": 0.8962504822551203,
+      "delta": -0.06655373230766437,
+      "path": "open_assays.per_seed[20].acute_final",
+      "repaired": 0.8296967499474559
+    },
+    {
+      "defective": 0.9723395019973069,
+      "delta": -0.07809434168996987,
+      "path": "open_assays.per_seed[20].adaptive_threat_final",
+      "repaired": 0.894245160307337
+    },
+    {
+      "defective": 0.48811364854228867,
+      "delta": -0.0143210118686945,
+      "path": "open_assays.per_seed[20].closed_loop_final",
+      "repaired": 0.47379263667359417
+    },
+    {
+      "defective": 0.9228261337337962,
+      "delta": 0.00023198936840651552,
+      "path": "open_assays.per_seed[20].closed_loop_root",
+      "repaired": 0.9230581231022027
+    },
+    {
+      "defective": 0.33930196088240616,
+      "delta": 0.03761803004612241,
+      "path": "open_assays.per_seed[20].exact_replay_final",
+      "repaired": 0.37691999092852857
+    },
+    {
+      "defective": 0.2678032589916045,
+      "delta": -0.00241685685445997,
+      "path": "open_assays.per_seed[20].exact_replay_root",
+      "repaired": 0.26538640213714454
+    },
+    {
+      "defective": 0.9950243275009152,
+      "delta": -0.015674147578594866,
+      "path": "open_assays.per_seed[20].gradual_final",
+      "repaired": 0.9793501799223203
+    },
+    {
+      "defective": 0.8066095662396522,
+      "delta": -0.06898217757933167,
+      "path": "open_assays.per_seed[20].high_control_final",
+      "repaired": 0.7376273886603205
+    },
+    {
+      "defective": 0.9833400063694583,
+      "delta": -0.05409156271696458,
+      "path": "open_assays.per_seed[20].low_control_final",
+      "repaired": 0.9292484436524937
+    },
+    {
+      "defective": 0.11865175439080737,
+      "delta": 0.04522955718145395,
+      "path": "open_assays.per_seed[20].overwhelm_control_final",
+      "repaired": 0.16388131157226132
+    },
+    {
+      "defective": 0.7693643696379332,
+      "delta": -0.0875785837190235,
+      "path": "open_assays.per_seed[21].acute_final",
+      "repaired": 0.6817857859189097
+    },
+    {
+      "defective": 0.9514141581201606,
+      "delta": -0.12100516339763978,
+      "path": "open_assays.per_seed[21].adaptive_threat_final",
+      "repaired": 0.8304089947225208
+    },
+    {
+      "defective": 0.49592344768569785,
+      "delta": -0.020838536904386418,
+      "path": "open_assays.per_seed[21].closed_loop_final",
+      "repaired": 0.47508491078131143
+    },
+    {
+      "defective": 0.4146053668746056,
+      "delta": 0.0010773200053527665,
+      "path": "open_assays.per_seed[21].closed_loop_root",
+      "repaired": 0.41568268687995835
+    },
+    {
+      "defective": 0.444495117842488,
+      "delta": 0.003552918059196386,
+      "path": "open_assays.per_seed[21].exact_replay_final",
+      "repaired": 0.4480480359016844
+    },
+    {
+      "defective": 0.3640019466716252,
+      "delta": 4.675164063661086e-06,
+      "path": "open_assays.per_seed[21].exact_replay_root",
+      "repaired": 0.3640066218356889
+    },
+    {
+      "defective": 0.9913607608146914,
+      "delta": -0.05309662999464482,
+      "path": "open_assays.per_seed[21].gradual_final",
+      "repaired": 0.9382641308200466
+    },
+    {
+      "defective": 0.8101862227438713,
+      "delta": -0.07182627582308587,
+      "path": "open_assays.per_seed[21].high_control_final",
+      "repaired": 0.7383599469207854
+    },
+    {
+      "defective": 0.9873858638129427,
+      "delta": -0.018817147709121906,
+      "path": "open_assays.per_seed[21].low_control_final",
+      "repaired": 0.9685687161038208
+    },
+    {
+      "defective": 0.7546024462073713,
+      "delta": -0.0995307561411315,
+      "path": "open_assays.per_seed[21].overwhelm_control_final",
+      "repaired": 0.6550716900662398
+    },
+    {
+      "defective": 0.9266632106004168,
+      "delta": -0.09142504970211152,
+      "path": "open_assays.per_seed[22].acute_final",
+      "repaired": 0.8352381608983053
+    },
+    {
+      "defective": 0.9319463205502528,
+      "delta": -0.1601113002650454,
+      "path": "open_assays.per_seed[22].adaptive_threat_final",
+      "repaired": 0.7718350202852075
+    },
+    {
+      "defective": 0.7961063687660626,
+      "delta": -0.16586318979109638,
+      "path": "open_assays.per_seed[22].closed_loop_final",
+      "repaired": 0.6302431789749662
+    },
+    {
+      "defective": 0.9954374803405395,
+      "delta": -0.0002900704990462799,
+      "path": "open_assays.per_seed[22].closed_loop_root",
+      "repaired": 0.9951474098414932
+    },
+    {
+      "defective": 0.44537466326803843,
+      "delta": 0.009887376670837889,
+      "path": "open_assays.per_seed[22].exact_replay_final",
+      "repaired": 0.4552620399388763
+    },
+    {
+      "defective": 0.20615961262011345,
+      "delta": 2.759863912404903e-06,
+      "path": "open_assays.per_seed[22].exact_replay_root",
+      "repaired": 0.20616237248402586
+    },
+    {
+      "defective": 0.9930932013223183,
+      "delta": -0.05601247181990354,
+      "path": "open_assays.per_seed[22].gradual_final",
+      "repaired": 0.9370807295024147
+    },
+    {
+      "defective": 0.7735801381098668,
+      "delta": -0.05483472832062941,
+      "path": "open_assays.per_seed[22].high_control_final",
+      "repaired": 0.7187454097892374
+    },
+    {
+      "defective": 0.9877505833157507,
+      "delta": -0.026679291082418732,
+      "path": "open_assays.per_seed[22].low_control_final",
+      "repaired": 0.961071292233332
+    },
+    {
+      "defective": 0.14492946535744936,
+      "delta": 0.049185545058315405,
+      "path": "open_assays.per_seed[22].overwhelm_control_final",
+      "repaired": 0.19411501041576476
+    },
+    {
+      "defective": 0.8425906142285646,
+      "delta": -0.08247890874663821,
+      "path": "open_assays.per_seed[23].acute_final",
+      "repaired": 0.7601117054819264
+    },
+    {
+      "defective": 0.9796877228519939,
+      "delta": -0.06660014766573263,
+      "path": "open_assays.per_seed[23].adaptive_threat_final",
+      "repaired": 0.9130875751862613
+    },
+    {
+      "defective": 0.7234354369316015,
+      "delta": -0.12590793995979088,
+      "path": "open_assays.per_seed[23].closed_loop_final",
+      "repaired": 0.5975274969718106
+    },
+    {
+      "defective": 0.9871152592196382,
+      "delta": 3.805836866965784e-05,
+      "path": "open_assays.per_seed[23].closed_loop_root",
+      "repaired": 0.9871533175883078
+    },
+    {
+      "defective": 0.5008841989812544,
+      "delta": -0.014811873304803047,
+      "path": "open_assays.per_seed[23].exact_replay_final",
+      "repaired": 0.4860723256764513
+    },
+    {
+      "defective": 0.5242607947605737,
+      "delta": -1.0686233371526299e-05,
+      "path": "open_assays.per_seed[23].exact_replay_root",
+      "repaired": 0.5242501085272022
+    },
+    {
+      "defective": 0.9915679450964658,
+      "delta": -0.11852133383936991,
+      "path": "open_assays.per_seed[23].gradual_final",
+      "repaired": 0.8730466112570959
+    },
+    {
+      "defective": 0.917130647486362,
+      "delta": -0.10727453531972375,
+      "path": "open_assays.per_seed[23].high_control_final",
+      "repaired": 0.8098561121666382
+    },
+    {
+      "defective": 0.9862491385611396,
+      "delta": -0.03279170294470768,
+      "path": "open_assays.per_seed[23].low_control_final",
+      "repaired": 0.9534574356164319
+    },
+    {
+      "defective": 0.10670051938677273,
+      "delta": 0.047773087626542324,
+      "path": "open_assays.per_seed[23].overwhelm_control_final",
+      "repaired": 0.15447360701331506
+    },
+    {
+      "defective": 0.917441039280512,
+      "delta": -0.09318207437754278,
+      "path": "open_assays.per_seed[24].acute_final",
+      "repaired": 0.8242589649029692
+    },
+    {
+      "defective": 0.9562586812216702,
+      "delta": -0.10761518492811384,
+      "path": "open_assays.per_seed[24].adaptive_threat_final",
+      "repaired": 0.8486434962935564
+    },
+    {
+      "defective": 0.4617829148223927,
+      "delta": 0.015282106027915965,
+      "path": "open_assays.per_seed[24].closed_loop_final",
+      "repaired": 0.47706502085030866
+    },
+    {
+      "defective": 0.4816443174361651,
+      "delta": -0.0007593165226523757,
+      "path": "open_assays.per_seed[24].closed_loop_root",
+      "repaired": 0.4808850009135127
+    },
+    {
+      "defective": 0.5509024965866336,
+      "delta": -0.03339688512278749,
+      "path": "open_assays.per_seed[24].exact_replay_final",
+      "repaired": 0.5175056114638461
+    },
+    {
+      "defective": 0.8934550970328302,
+      "delta": -0.00030188147108634045,
+      "path": "open_assays.per_seed[24].exact_replay_root",
+      "repaired": 0.8931532155617439
+    },
+    {
+      "defective": 0.9947826388388689,
+      "delta": -0.020448141322850444,
+      "path": "open_assays.per_seed[24].gradual_final",
+      "repaired": 0.9743344975160184
+    },
+    {
+      "defective": 0.8620089279065152,
+      "delta": -0.08065415036658274,
+      "path": "open_assays.per_seed[24].high_control_final",
+      "repaired": 0.7813547775399324
+    },
+    {
+      "defective": 0.9868399276625539,
+      "delta": -0.02613211302955687,
+      "path": "open_assays.per_seed[24].low_control_final",
+      "repaired": 0.960707814632997
+    },
+    {
+      "defective": 0.18720429333999106,
+      "delta": 0.040365505917800415,
+      "path": "open_assays.per_seed[24].overwhelm_control_final",
+      "repaired": 0.22756979925779147
+    },
+    {
+      "defective": 0.8200770167862578,
+      "delta": -0.12212605965431722,
+      "path": "open_assays.per_seed[25].acute_final",
+      "repaired": 0.6979509571319406
+    },
+    {
+      "defective": 0.9783813956173202,
+      "delta": -0.06575856589893292,
+      "path": "open_assays.per_seed[25].adaptive_threat_final",
+      "repaired": 0.9126228297183873
+    },
+    {
+      "defective": 0.52628028032102,
+      "delta": -0.019692682914682624,
+      "path": "open_assays.per_seed[25].closed_loop_final",
+      "repaired": 0.5065875974063374
+    },
+    {
+      "defective": 0.5776916597092242,
+      "delta": 0.0004394465007343529,
+      "path": "open_assays.per_seed[25].closed_loop_root",
+      "repaired": 0.5781311062099586
+    },
+    {
+      "defective": 0.3795015292375307,
+      "delta": 0.03273271155392515,
+      "path": "open_assays.per_seed[25].exact_replay_final",
+      "repaired": 0.4122342407914559
+    },
+    {
+      "defective": 0.409150308346407,
+      "delta": -0.0012781891178823002,
+      "path": "open_assays.per_seed[25].exact_replay_root",
+      "repaired": 0.4078721192285247
+    },
+    {
+      "defective": 0.9935330964763627,
+      "delta": -0.028134548605066256,
+      "path": "open_assays.per_seed[25].gradual_final",
+      "repaired": 0.9653985478712964
+    },
+    {
+      "defective": 0.8573926397939536,
+      "delta": -0.05461054358995232,
+      "path": "open_assays.per_seed[25].high_control_final",
+      "repaired": 0.8027820962040013
+    },
+    {
+      "defective": 0.9837758948358913,
+      "delta": -0.036314386713459434,
+      "path": "open_assays.per_seed[25].low_control_final",
+      "repaired": 0.9474615081224319
+    },
+    {
+      "defective": 0.2027627457561514,
+      "delta": 0.060506353941344154,
+      "path": "open_assays.per_seed[25].overwhelm_control_final",
+      "repaired": 0.26326909969749557
+    },
+    {
+      "defective": 0.7903193926970684,
+      "delta": -0.07873803803853696,
+      "path": "open_assays.per_seed[26].acute_final",
+      "repaired": 0.7115813546585315
+    },
+    {
+      "defective": 0.9725000700044014,
+      "delta": -0.09668478443716011,
+      "path": "open_assays.per_seed[26].adaptive_threat_final",
+      "repaired": 0.8758152855672413
+    },
+    {
+      "defective": 0.48815296632256533,
+      "delta": -0.016586325745734598,
+      "path": "open_assays.per_seed[26].closed_loop_final",
+      "repaired": 0.47156664057683073
+    },
+    {
+      "defective": 0.8762861771407957,
+      "delta": 0.0001859777047812372,
+      "path": "open_assays.per_seed[26].closed_loop_root",
+      "repaired": 0.876472154845577
+    },
+    {
+      "defective": 0.5202206515484719,
+      "delta": -0.02847567258789535,
+      "path": "open_assays.per_seed[26].exact_replay_final",
+      "repaired": 0.4917449789605765
+    },
+    {
+      "defective": 0.779471716185242,
+      "delta": -8.94292152060494e-05,
+      "path": "open_assays.per_seed[26].exact_replay_root",
+      "repaired": 0.779382286970036
+    },
+    {
+      "defective": 0.9933551013527598,
+      "delta": -0.05099414695720894,
+      "path": "open_assays.per_seed[26].gradual_final",
+      "repaired": 0.9423609543955509
+    },
+    {
+      "defective": 0.8221404228152045,
+      "delta": -0.08305440235418682,
+      "path": "open_assays.per_seed[26].high_control_final",
+      "repaired": 0.7390860204610177
+    },
+    {
+      "defective": 0.9846803882061049,
+      "delta": -0.050109119010895875,
+      "path": "open_assays.per_seed[26].low_control_final",
+      "repaired": 0.934571269195209
+    },
+    {
+      "defective": 0.20406620002696,
+      "delta": 0.03456274443367688,
+      "path": "open_assays.per_seed[26].overwhelm_control_final",
+      "repaired": 0.23862894446063687
+    },
+    {
+      "defective": 0.915346909189678,
+      "delta": -0.09980922001164638,
+      "path": "open_assays.per_seed[27].acute_final",
+      "repaired": 0.8155376891780316
+    },
+    {
+      "defective": 0.9784317620140127,
+      "delta": -0.05971532702455129,
+      "path": "open_assays.per_seed[27].adaptive_threat_final",
+      "repaired": 0.9187164349894614
+    },
+    {
+      "defective": 0.38838882151795584,
+      "delta": 0.02480696097860019,
+      "path": "open_assays.per_seed[27].closed_loop_final",
+      "repaired": 0.41319578249655603
+    },
+    {
+      "defective": 0.10802609531708962,
+      "delta": -0.00070549818426556,
+      "path": "open_assays.per_seed[27].closed_loop_root",
+      "repaired": 0.10732059713282406
+    },
+    {
+      "defective": 0.4334808178883663,
+      "delta": 0.007497954433626497,
+      "path": "open_assays.per_seed[27].exact_replay_final",
+      "repaired": 0.4409787723219928
+    },
+    {
+      "defective": 0.43768630847421686,
+      "delta": -0.0002918469643969357,
+      "path": "open_assays.per_seed[27].exact_replay_root",
+      "repaired": 0.4373944615098199
+    },
+    {
+      "defective": 0.9920624460856509,
+      "delta": -0.06196653914635175,
+      "path": "open_assays.per_seed[27].gradual_final",
+      "repaired": 0.9300959069392991
+    },
+    {
+      "defective": 0.8475457793095575,
+      "delta": -0.08731949601416544,
+      "path": "open_assays.per_seed[27].high_control_final",
+      "repaired": 0.7602262832953921
+    },
+    {
+      "defective": 0.9804593168845148,
+      "delta": -0.026441333110547083,
+      "path": "open_assays.per_seed[27].low_control_final",
+      "repaired": 0.9540179837739677
+    },
+    {
+      "defective": 0.27022471027517764,
+      "delta": 0.029839380814714656,
+      "path": "open_assays.per_seed[27].overwhelm_control_final",
+      "repaired": 0.3000640910898923
+    },
+    {
+      "defective": 0.9271843578956834,
+      "delta": -0.0885658549495858,
+      "path": "open_assays.per_seed[28].acute_final",
+      "repaired": 0.8386185029460976
+    },
+    {
+      "defective": 0.9643183458464368,
+      "delta": -0.10103982571740178,
+      "path": "open_assays.per_seed[28].adaptive_threat_final",
+      "repaired": 0.863278520129035
+    },
+    {
+      "defective": 0.5993051017311992,
+      "delta": -0.044754307609590205,
+      "path": "open_assays.per_seed[28].closed_loop_final",
+      "repaired": 0.554550794121609
+    },
+    {
+      "defective": 0.9703254028573678,
+      "delta": -0.00025969930929015117,
+      "path": "open_assays.per_seed[28].closed_loop_root",
+      "repaired": 0.9700657035480776
+    },
+    {
+      "defective": 0.45806088099811626,
+      "delta": 0.01033821223545972,
+      "path": "open_assays.per_seed[28].exact_replay_final",
+      "repaired": 0.468399093233576
+    },
+    {
+      "defective": 0.5251214851297439,
+      "delta": 0.0001727144253415025,
+      "path": "open_assays.per_seed[28].exact_replay_root",
+      "repaired": 0.5252941995550854
+    },
+    {
+      "defective": 0.9936384461373281,
+      "delta": -0.05034941283519556,
+      "path": "open_assays.per_seed[28].gradual_final",
+      "repaired": 0.9432890333021325
+    },
+    {
+      "defective": 0.8495214580403585,
+      "delta": -0.09160207195713743,
+      "path": "open_assays.per_seed[28].high_control_final",
+      "repaired": 0.7579193860832211
+    },
+    {
+      "defective": 0.9833494329793449,
+      "delta": -0.047546825666659576,
+      "path": "open_assays.per_seed[28].low_control_final",
+      "repaired": 0.9358026073126853
+    },
+    {
+      "defective": 0.6114272294823175,
+      "delta": -0.06535854560252774,
+      "path": "open_assays.per_seed[28].overwhelm_control_final",
+      "repaired": 0.5460686838797898
+    },
+    {
+      "defective": 0.8537028460733168,
+      "delta": -0.11057551408411415,
+      "path": "open_assays.per_seed[29].acute_final",
+      "repaired": 0.7431273319892027
+    },
+    {
+      "defective": 0.9063918216685346,
+      "delta": -0.12640594448098086,
+      "path": "open_assays.per_seed[29].adaptive_threat_final",
+      "repaired": 0.7799858771875537
+    },
+    {
+      "defective": 0.46245901830172087,
+      "delta": 0.013599839810114256,
+      "path": "open_assays.per_seed[29].closed_loop_final",
+      "repaired": 0.4760588581118351
+    },
+    {
+      "defective": 0.18301117437225112,
+      "delta": -0.0005268304860193695,
+      "path": "open_assays.per_seed[29].closed_loop_root",
+      "repaired": 0.18248434388623175
+    },
+    {
+      "defective": 0.44308464933050173,
+      "delta": 0.012628899512559189,
+      "path": "open_assays.per_seed[29].exact_replay_final",
+      "repaired": 0.4557135488430609
+    },
+    {
+      "defective": 0.11698455490820012,
+      "delta": -0.00024008960124558,
+      "path": "open_assays.per_seed[29].exact_replay_root",
+      "repaired": 0.11674446530695454
+    },
+    {
+      "defective": 0.9933421212255392,
+      "delta": -0.05183937273566963,
+      "path": "open_assays.per_seed[29].gradual_final",
+      "repaired": 0.9415027484898696
+    },
+    {
+      "defective": 0.8347542987672344,
+      "delta": -0.06888261736136059,
+      "path": "open_assays.per_seed[29].high_control_final",
+      "repaired": 0.7658716814058738
+    },
+    {
+      "defective": 0.9854792329896694,
+      "delta": -0.044176540748595006,
+      "path": "open_assays.per_seed[29].low_control_final",
+      "repaired": 0.9413026922410744
+    },
+    {
+      "defective": 0.3930770042343531,
+      "delta": -0.036139718903718254,
+      "path": "open_assays.per_seed[29].overwhelm_control_final",
+      "repaired": 0.35693728533063485
+    },
+    {
+      "defective": 0.9267138504543548,
+      "delta": -0.0852967125701859,
+      "path": "open_assays.per_seed[2].acute_final",
+      "repaired": 0.8414171378841689
+    },
+    {
+      "defective": 0.8476996680216237,
+      "delta": -0.21197220549827755,
+      "path": "open_assays.per_seed[2].adaptive_threat_final",
+      "repaired": 0.6357274625233461
+    },
+    {
+      "defective": 0.4749229949954681,
+      "delta": 0.022388149922402623,
+      "path": "open_assays.per_seed[2].closed_loop_final",
+      "repaired": 0.4973111449178707
+    },
+    {
+      "defective": 0.3512060447741774,
+      "delta": -0.0004050600944311422,
+      "path": "open_assays.per_seed[2].closed_loop_root",
+      "repaired": 0.35080098467974624
+    },
+    {
+      "defective": 0.46983581317396994,
+      "delta": 0.001564707155384315,
+      "path": "open_assays.per_seed[2].exact_replay_final",
+      "repaired": 0.47140052032935426
+    },
+    {
+      "defective": 0.16946463919503724,
+      "delta": -9.314810752919511e-05,
+      "path": "open_assays.per_seed[2].exact_replay_root",
+      "repaired": 0.16937149108750804
+    },
+    {
+      "defective": 0.9907346897314495,
+      "delta": -0.07360720352711536,
+      "path": "open_assays.per_seed[2].gradual_final",
+      "repaired": 0.9171274862043342
+    },
+    {
+      "defective": 0.8660627292711133,
+      "delta": -0.08279020393259806,
+      "path": "open_assays.per_seed[2].high_control_final",
+      "repaired": 0.7832725253385152
+    },
+    {
+      "defective": 0.9830183239270651,
+      "delta": -0.02996054879183596,
+      "path": "open_assays.per_seed[2].low_control_final",
+      "repaired": 0.9530577751352292
+    },
+    {
+      "defective": 0.15176826052514056,
+      "delta": 0.059739735035251346,
+      "path": "open_assays.per_seed[2].overwhelm_control_final",
+      "repaired": 0.2115079955603919
+    },
+    {
+      "defective": 0.63920175465836,
+      "delta": -0.06298347499920254,
+      "path": "open_assays.per_seed[30].acute_final",
+      "repaired": 0.5762182796591575
+    },
+    {
+      "defective": 0.9547160958807919,
+      "delta": -0.11981353474271594,
+      "path": "open_assays.per_seed[30].adaptive_threat_final",
+      "repaired": 0.8349025611380759
+    },
+    {
+      "defective": 0.7446393275646803,
+      "delta": -0.08514301479544073,
+      "path": "open_assays.per_seed[30].closed_loop_final",
+      "repaired": 0.6594963127692396
+    },
+    {
+      "defective": 0.9851741157249094,
+      "delta": -0.00033064449378905625,
+      "path": "open_assays.per_seed[30].closed_loop_root",
+      "repaired": 0.9848434712311204
+    },
+    {
+      "defective": 0.6290559129740347,
+      "delta": -0.06014637868106165,
+      "path": "open_assays.per_seed[30].exact_replay_final",
+      "repaired": 0.5689095342929731
+    },
+    {
+      "defective": 0.7489102001090577,
+      "delta": -0.0017887728826277982,
+      "path": "open_assays.per_seed[30].exact_replay_root",
+      "repaired": 0.7471214272264299
+    },
+    {
+      "defective": 0.9894782894418174,
+      "delta": -0.0742375323696971,
+      "path": "open_assays.per_seed[30].gradual_final",
+      "repaired": 0.9152407570721203
+    },
+    {
+      "defective": 0.8513434716844743,
+      "delta": -0.06191051536410208,
+      "path": "open_assays.per_seed[30].high_control_final",
+      "repaired": 0.7894329563203722
+    },
+    {
+      "defective": 0.9860255090711485,
+      "delta": -0.040698801087278746,
+      "path": "open_assays.per_seed[30].low_control_final",
+      "repaired": 0.9453267079838698
+    },
+    {
+      "defective": 0.5758080797186576,
+      "delta": -0.05148599399432441,
+      "path": "open_assays.per_seed[30].overwhelm_control_final",
+      "repaired": 0.5243220857243331
+    },
+    {
+      "defective": 0.9277608815663596,
+      "delta": -0.09997805367317425,
+      "path": "open_assays.per_seed[31].acute_final",
+      "repaired": 0.8277828278931854
+    },
+    {
+      "defective": 0.9194661111948221,
+      "delta": -0.15961575673623707,
+      "path": "open_assays.per_seed[31].adaptive_threat_final",
+      "repaired": 0.7598503544585851
+    },
+    {
+      "defective": 0.49630470802387466,
+      "delta": -0.0193327676282275,
+      "path": "open_assays.per_seed[31].closed_loop_final",
+      "repaired": 0.47697194039564716
+    },
+    {
+      "defective": 0.7525640424895649,
+      "delta": 0.0006632057479767361,
+      "path": "open_assays.per_seed[31].closed_loop_root",
+      "repaired": 0.7532272482375416
+    },
+    {
+      "defective": 0.4313973959544368,
+      "delta": 0.016757226154108906,
+      "path": "open_assays.per_seed[31].exact_replay_final",
+      "repaired": 0.44815462210854573
+    },
+    {
+      "defective": 0.24422605190031094,
+      "delta": -0.00028984340729656943,
+      "path": "open_assays.per_seed[31].exact_replay_root",
+      "repaired": 0.24393620849301437
+    },
+    {
+      "defective": 0.9941170166019055,
+      "delta": -0.030301689605286564,
+      "path": "open_assays.per_seed[31].gradual_final",
+      "repaired": 0.963815326996619
+    },
+    {
+      "defective": 0.8617891337135866,
+      "delta": -0.08040235570404153,
+      "path": "open_assays.per_seed[31].high_control_final",
+      "repaired": 0.781386778009545
+    },
+    {
+      "defective": 0.9817505091580172,
+      "delta": -0.06625334389818516,
+      "path": "open_assays.per_seed[31].low_control_final",
+      "repaired": 0.915497165259832
+    },
+    {
+      "defective": 0.17740604278440547,
+      "delta": 0.031353767724303955,
+      "path": "open_assays.per_seed[31].overwhelm_control_final",
+      "repaired": 0.20875981050870943
+    },
+    {
+      "defective": 0.8707396102381653,
+      "delta": -0.1468931541824261,
+      "path": "open_assays.per_seed[32].acute_final",
+      "repaired": 0.7238464560557392
+    },
+    {
+      "defective": 0.9639134136360408,
+      "delta": -0.11361097193362912,
+      "path": "open_assays.per_seed[32].adaptive_threat_final",
+      "repaired": 0.8503024417024116
+    },
+    {
+      "defective": 0.44192681322708033,
+      "delta": 0.008176113579637545,
+      "path": "open_assays.per_seed[32].closed_loop_final",
+      "repaired": 0.4501029268067179
+    },
+    {
+      "defective": 0.2439545936349976,
+      "delta": -0.0004522286405085896,
+      "path": "open_assays.per_seed[32].closed_loop_root",
+      "repaired": 0.24350236499448902
+    },
+    {
+      "defective": 0.4495539422388142,
+      "delta": 0.008627640663198155,
+      "path": "open_assays.per_seed[32].exact_replay_final",
+      "repaired": 0.45818158290201233
+    },
+    {
+      "defective": 0.08590126036039283,
+      "delta": -0.00015135802681499888,
+      "path": "open_assays.per_seed[32].exact_replay_root",
+      "repaired": 0.08574990233357783
+    },
+    {
+      "defective": 0.9930562433051717,
+      "delta": -0.05629162076936023,
+      "path": "open_assays.per_seed[32].gradual_final",
+      "repaired": 0.9367646225358115
+    },
+    {
+      "defective": 0.7720658624598398,
+      "delta": -0.08693980850113647,
+      "path": "open_assays.per_seed[32].high_control_final",
+      "repaired": 0.6851260539587033
+    },
+    {
+      "defective": 0.9846015854326693,
+      "delta": -0.041639182920934714,
+      "path": "open_assays.per_seed[32].low_control_final",
+      "repaired": 0.9429624025117346
+    },
+    {
+      "defective": 0.5573980907176905,
+      "delta": -0.07402777352441742,
+      "path": "open_assays.per_seed[32].overwhelm_control_final",
+      "repaired": 0.4833703171932731
+    },
+    {
+      "defective": 0.8733025493943201,
+      "delta": -0.08774201577933793,
+      "path": "open_assays.per_seed[33].acute_final",
+      "repaired": 0.7855605336149821
+    },
+    {
+      "defective": 0.977846696038827,
+      "delta": -0.07012079916968927,
+      "path": "open_assays.per_seed[33].adaptive_threat_final",
+      "repaired": 0.9077258968691377
+    },
+    {
+      "defective": 0.5749080490711898,
+      "delta": -0.005676484427265538,
+      "path": "open_assays.per_seed[33].closed_loop_final",
+      "repaired": 0.5692315646439242
+    },
+    {
+      "defective": 0.9948505049643457,
+      "delta": 5.3934709286274085e-05,
+      "path": "open_assays.per_seed[33].closed_loop_root",
+      "repaired": 0.994904439673632
+    },
+    {
+      "defective": 0.4146924789871776,
+      "delta": 0.024005532503476812,
+      "path": "open_assays.per_seed[33].exact_replay_final",
+      "repaired": 0.4386980114906544
+    },
+    {
+      "defective": 0.5294407747242107,
+      "delta": -0.0005450648334228703,
+      "path": "open_assays.per_seed[33].exact_replay_root",
+      "repaired": 0.5288957098907878
+    },
+    {
+      "defective": 0.9876216218879768,
+      "delta": -0.07459038939696372,
+      "path": "open_assays.per_seed[33].gradual_final",
+      "repaired": 0.913031232491013
+    },
+    {
+      "defective": 0.8579914951720082,
+      "delta": -0.06931946593059612,
+      "path": "open_assays.per_seed[33].high_control_final",
+      "repaired": 0.7886720292414121
+    },
+    {
+      "defective": 0.9857202579153819,
+      "delta": -0.03636807490008076,
+      "path": "open_assays.per_seed[33].low_control_final",
+      "repaired": 0.9493521830153011
+    },
+    {
+      "defective": 0.10726216329479665,
+      "delta": 0.05495911233094408,
+      "path": "open_assays.per_seed[33].overwhelm_control_final",
+      "repaired": 0.16222127562574074
+    },
+    {
+      "defective": 0.8892618029183744,
+      "delta": -0.08784152689010838,
+      "path": "open_assays.per_seed[34].acute_final",
+      "repaired": 0.801420276028266
+    },
+    {
+      "defective": 0.900308912318377,
+      "delta": -0.17939891526406815,
+      "path": "open_assays.per_seed[34].adaptive_threat_final",
+      "repaired": 0.7209099970543088
+    },
+    {
+      "defective": 0.4408059786969191,
+      "delta": 0.007876277411548949,
+      "path": "open_assays.per_seed[34].closed_loop_final",
+      "repaired": 0.44868225610846807
+    },
+    {
+      "defective": 0.06784471268921949,
+      "delta": -7.29177629059663e-05,
+      "path": "open_assays.per_seed[34].closed_loop_root",
+      "repaired": 0.06777179492631352
+    },
+    {
+      "defective": 0.46299592603728645,
+      "delta": 0.008297167984702036,
+      "path": "open_assays.per_seed[34].exact_replay_final",
+      "repaired": 0.4712930940219885
+    },
+    {
+      "defective": 0.05339814414404985,
+      "delta": -9.504029568874195e-05,
+      "path": "open_assays.per_seed[34].exact_replay_root",
+      "repaired": 0.05330310384836111
+    },
+    {
+      "defective": 0.9932488961780662,
+      "delta": -0.03575785683213273,
+      "path": "open_assays.per_seed[34].gradual_final",
+      "repaired": 0.9574910393459335
+    },
+    {
+      "defective": 0.8233009680719192,
+      "delta": -0.07317353839431917,
+      "path": "open_assays.per_seed[34].high_control_final",
+      "repaired": 0.7501274296776
+    },
+    {
+      "defective": 0.9820220160110278,
+      "delta": -0.02914524139816732,
+      "path": "open_assays.per_seed[34].low_control_final",
+      "repaired": 0.9528767746128605
+    },
+    {
+      "defective": 0.5636725584182692,
+      "delta": -0.001354579561385516,
+      "path": "open_assays.per_seed[34].overwhelm_control_final",
+      "repaired": 0.5623179788568837
+    },
+    {
+      "defective": 0.9079659471880784,
+      "delta": -0.08373928612609038,
+      "path": "open_assays.per_seed[35].acute_final",
+      "repaired": 0.824226661061988
+    },
+    {
+      "defective": 0.9770138738288408,
+      "delta": -0.06847918951128473,
+      "path": "open_assays.per_seed[35].adaptive_threat_final",
+      "repaired": 0.908534684317556
+    },
+    {
+      "defective": 0.6096434577164184,
+      "delta": -0.04174880518265234,
+      "path": "open_assays.per_seed[35].closed_loop_final",
+      "repaired": 0.567894652533766
+    },
+    {
+      "defective": 0.9905432299275627,
+      "delta": -4.89734334354619e-05,
+      "path": "open_assays.per_seed[35].closed_loop_root",
+      "repaired": 0.9904942564941273
+    },
+    {
+      "defective": 0.4022136238842965,
+      "delta": 0.016211225407120222,
+      "path": "open_assays.per_seed[35].exact_replay_final",
+      "repaired": 0.4184248492914167
+    },
+    {
+      "defective": 0.6779977264564737,
+      "delta": 0.000331262820907674,
+      "path": "open_assays.per_seed[35].exact_replay_root",
+      "repaired": 0.6783289892773814
+    },
+    {
+      "defective": 0.9946063275958898,
+      "delta": -0.029532567938267307,
+      "path": "open_assays.per_seed[35].gradual_final",
+      "repaired": 0.9650737596576225
+    },
+    {
+      "defective": 0.7951423572703008,
+      "delta": -0.08168116427328309,
+      "path": "open_assays.per_seed[35].high_control_final",
+      "repaired": 0.7134611929970177
+    },
+    {
+      "defective": 0.9812349624580117,
+      "delta": -0.08454166107409233,
+      "path": "open_assays.per_seed[35].low_control_final",
+      "repaired": 0.8966933013839193
+    },
+    {
+      "defective": 0.6051708844210735,
+      "delta": -0.058439418415235034,
+      "path": "open_assays.per_seed[35].overwhelm_control_final",
+      "repaired": 0.5467314660058384
+    },
+    {
+      "defective": 0.8653973654033633,
+      "delta": -0.09100322860883181,
+      "path": "open_assays.per_seed[36].acute_final",
+      "repaired": 0.7743941367945315
+    },
+    {
+      "defective": 0.9481897769611362,
+      "delta": -0.14405518094890335,
+      "path": "open_assays.per_seed[36].adaptive_threat_final",
+      "repaired": 0.8041345960122328
+    },
+    {
+      "defective": 0.625,
+      "delta": -0.0625,
+      "path": "open_assays.per_seed[36].closed_loop_adverse_outcome_rate",
+      "repaired": 0.5625
+    },
+    {
+      "defective": 0.5625,
+      "delta": -0.0625,
+      "path": "open_assays.per_seed[36].closed_loop_adverse_transition_rate",
+      "repaired": 0.5
+    },
+    {
+      "defective": 0.5625,
+      "delta": -0.0625,
+      "path": "open_assays.per_seed[36].closed_loop_avoidance_rate",
+      "repaired": 0.5
+    },
+    {
+      "defective": 0.7511688639592794,
+      "delta": -0.15041060543107387,
+      "path": "open_assays.per_seed[36].closed_loop_final",
+      "repaired": 0.6007582585282055
+    },
+    {
+      "defective": 0.5625,
+      "delta": -0.0625,
+      "path": "open_assays.per_seed[36].closed_loop_mediator",
+      "repaired": 0.5
+    },
+    {
+      "defective": 0.9913788112827907,
+      "delta": -0.01822876714378896,
+      "path": "open_assays.per_seed[36].closed_loop_root",
+      "repaired": 0.9731500441390017
+    },
+    {
+      "defective": 0.5135471050721203,
+      "delta": -0.017671239395587457,
+      "path": "open_assays.per_seed[36].exact_replay_final",
+      "repaired": 0.49587586567653286
+    },
+    {
+      "defective": 0.17311254271150003,
+      "delta": 3.9639289095255714e-05,
+      "path": "open_assays.per_seed[36].exact_replay_root",
+      "repaired": 0.1731521820005953
+    },
+    {
+      "defective": 0.9942469062453371,
+      "delta": -0.02944345803308568,
+      "path": "open_assays.per_seed[36].gradual_final",
+      "repaired": 0.9648034482122514
+    },
+    {
+      "defective": 0.8311242862506872,
+      "delta": -0.06838879691653277,
+      "path": "open_assays.per_seed[36].high_control_final",
+      "repaired": 0.7627354893341545
+    },
+    {
+      "defective": 0.9854835961650863,
+      "delta": -0.030656160252693576,
+      "path": "open_assays.per_seed[36].low_control_final",
+      "repaired": 0.9548274359123927
+    },
+    {
+      "defective": 0.12596090941581323,
+      "delta": 0.041404212768327064,
+      "path": "open_assays.per_seed[36].overwhelm_control_final",
+      "repaired": 0.1673651221841403
+    },
+    {
+      "defective": 0.9237534072926467,
+      "delta": -0.10239372504807742,
+      "path": "open_assays.per_seed[37].acute_final",
+      "repaired": 0.8213596822445692
+    },
+    {
+      "defective": 0.9497690710810293,
+      "delta": -0.11048668590527322,
+      "path": "open_assays.per_seed[37].adaptive_threat_final",
+      "repaired": 0.839282385175756
+    },
+    {
+      "defective": 0.6386319876347194,
+      "delta": -0.08111220608992276,
+      "path": "open_assays.per_seed[37].closed_loop_final",
+      "repaired": 0.5575197815447966
+    },
+    {
+      "defective": 0.9743112578394901,
+      "delta": -1.929325940819293e-05,
+      "path": "open_assays.per_seed[37].closed_loop_root",
+      "repaired": 0.9742919645800819
+    },
+    {
+      "defective": 0.512597618212034,
+      "delta": -0.03429970378184066,
+      "path": "open_assays.per_seed[37].exact_replay_final",
+      "repaired": 0.4782979144301933
+    },
+    {
+      "defective": 0.39224406161818337,
+      "delta": 0.0004777531765751686,
+      "path": "open_assays.per_seed[37].exact_replay_root",
+      "repaired": 0.39272181479475854
+    },
+    {
+      "defective": 0.9720827349170454,
+      "delta": -0.17692666857520045,
+      "path": "open_assays.per_seed[37].gradual_final",
+      "repaired": 0.795156066341845
+    },
+    {
+      "defective": 0.8272561521559021,
+      "delta": -0.06316033746910743,
+      "path": "open_assays.per_seed[37].high_control_final",
+      "repaired": 0.7640958146867947
+    },
+    {
+      "defective": 0.9843725512540589,
+      "delta": -0.04198468502042574,
+      "path": "open_assays.per_seed[37].low_control_final",
+      "repaired": 0.9423878662336331
+    },
+    {
+      "defective": 0.1549635320739088,
+      "delta": 0.05032006608326797,
+      "path": "open_assays.per_seed[37].overwhelm_control_final",
+      "repaired": 0.20528359815717678
+    },
+    {
+      "defective": 0.9180069995886485,
+      "delta": -0.07781482708299647,
+      "path": "open_assays.per_seed[38].acute_final",
+      "repaired": 0.840192172505652
+    },
+    {
+      "defective": 0.9623956815685747,
+      "delta": -0.11244250737686912,
+      "path": "open_assays.per_seed[38].adaptive_threat_final",
+      "repaired": 0.8499531741917056
+    },
+    {
+      "defective": 0.4238886681927983,
+      "delta": 0.040271613696272024,
+      "path": "open_assays.per_seed[38].closed_loop_final",
+      "repaired": 0.4641602818890703
+    },
+    {
+      "defective": 0.9667560674464237,
+      "delta": 0.0001783609883083681,
+      "path": "open_assays.per_seed[38].closed_loop_root",
+      "repaired": 0.9669344284347321
+    },
+    {
+      "defective": 0.38174849307805525,
+      "delta": 0.032881215010884424,
+      "path": "open_assays.per_seed[38].exact_replay_final",
+      "repaired": 0.4146297080889397
+    },
+    {
+      "defective": 0.9097054459634742,
+      "delta": 0.0004972659941231417,
+      "path": "open_assays.per_seed[38].exact_replay_root",
+      "repaired": 0.9102027119575974
+    },
+    {
+      "defective": 0.9932720727335502,
+      "delta": -0.03967040058043525,
+      "path": "open_assays.per_seed[38].gradual_final",
+      "repaired": 0.953601672153115
+    },
+    {
+      "defective": 0.7923063529169634,
+      "delta": -0.0805588331870718,
+      "path": "open_assays.per_seed[38].high_control_final",
+      "repaired": 0.7117475197298916
+    },
+    {
+      "defective": 0.9811938575905848,
+      "delta": -0.057323021742492375,
+      "path": "open_assays.per_seed[38].low_control_final",
+      "repaired": 0.9238708358480924
+    },
+    {
+      "defective": 0.14678437064313832,
+      "delta": 0.05348600899721695,
+      "path": "open_assays.per_seed[38].overwhelm_control_final",
+      "repaired": 0.20027037964035527
+    },
+    {
+      "defective": 0.8716289375732118,
+      "delta": -0.10595162273831316,
+      "path": "open_assays.per_seed[39].acute_final",
+      "repaired": 0.7656773148348986
+    },
+    {
+      "defective": 0.9805603022720452,
+      "delta": -0.0584968822583154,
+      "path": "open_assays.per_seed[39].adaptive_threat_final",
+      "repaired": 0.9220634200137298
+    },
+    {
+      "defective": 0.9225693944244412,
+      "delta": -0.14934193033789345,
+      "path": "open_assays.per_seed[39].closed_loop_final",
+      "repaired": 0.7732274640865477
+    },
+    {
+      "defective": 0.9999498674819569,
+      "delta": -7.228788019952859e-06,
+      "path": "open_assays.per_seed[39].closed_loop_root",
+      "repaired": 0.999942638693937
+    },
+    {
+      "defective": 0.4378439080614522,
+      "delta": 0.01476661256675954,
+      "path": "open_assays.per_seed[39].exact_replay_final",
+      "repaired": 0.4526105206282117
+    },
+    {
+      "defective": 0.2254284567910253,
+      "delta": -0.0002357016142936763,
+      "path": "open_assays.per_seed[39].exact_replay_root",
+      "repaired": 0.22519275517673162
+    },
+    {
+      "defective": 0.9925453741524293,
+      "delta": -0.053721086784845884,
+      "path": "open_assays.per_seed[39].gradual_final",
+      "repaired": 0.9388242873675834
+    },
+    {
+      "defective": 0.8385797636807617,
+      "delta": -0.07144552349400557,
+      "path": "open_assays.per_seed[39].high_control_final",
+      "repaired": 0.7671342401867561
+    },
+    {
+      "defective": 0.9830107954311121,
+      "delta": -0.03136677763205531,
+      "path": "open_assays.per_seed[39].low_control_final",
+      "repaired": 0.9516440177990568
+    },
+    {
+      "defective": 0.7074577241217619,
+      "delta": -0.08086619354661229,
+      "path": "open_assays.per_seed[39].overwhelm_control_final",
+      "repaired": 0.6265915305751496
+    },
+    {
+      "defective": 0.8848259540024536,
+      "delta": -0.09374408639464427,
+      "path": "open_assays.per_seed[3].acute_final",
+      "repaired": 0.7910818676078093
+    },
+    {
+      "defective": 0.9553062902970622,
+      "delta": -0.12170698559396831,
+      "path": "open_assays.per_seed[3].adaptive_threat_final",
+      "repaired": 0.8335993047030938
+    },
+    {
+      "defective": 0.44948906091678376,
+      "delta": 0.010498783738937978,
+      "path": "open_assays.per_seed[3].closed_loop_final",
+      "repaired": 0.45998784465572173
+    },
+    {
+      "defective": 0.11964037418659602,
+      "delta": -0.0006393539221181271,
+      "path": "open_assays.per_seed[3].closed_loop_root",
+      "repaired": 0.1190010202644779
+    },
+    {
+      "defective": 0.4659630890474902,
+      "delta": 0.001093816575145623,
+      "path": "open_assays.per_seed[3].exact_replay_final",
+      "repaired": 0.4670569056226358
+    },
+    {
+      "defective": 0.3097005938052302,
+      "delta": -0.00038880847657968287,
+      "path": "open_assays.per_seed[3].exact_replay_root",
+      "repaired": 0.3093117853286505
+    },
+    {
+      "defective": 0.9939576374830684,
+      "delta": -0.0395682546694609,
+      "path": "open_assays.per_seed[3].gradual_final",
+      "repaired": 0.9543893828136075
+    },
+    {
+      "defective": 0.7953997750997085,
+      "delta": -0.07026364841751509,
+      "path": "open_assays.per_seed[3].high_control_final",
+      "repaired": 0.7251361266821934
+    },
+    {
+      "defective": 0.9833614669418496,
+      "delta": -0.042282270018638934,
+      "path": "open_assays.per_seed[3].low_control_final",
+      "repaired": 0.9410791969232106
+    },
+    {
+      "defective": 0.08578350461433992,
+      "delta": 0.04865887232652508,
+      "path": "open_assays.per_seed[3].overwhelm_control_final",
+      "repaired": 0.134442376940865
+    },
+    {
+      "defective": 0.9431941457278853,
+      "delta": -0.11866723701062487,
+      "path": "open_assays.per_seed[40].acute_final",
+      "repaired": 0.8245269087172604
+    },
+    {
+      "defective": 0.9788265614979101,
+      "delta": -0.06287897146855892,
+      "path": "open_assays.per_seed[40].adaptive_threat_final",
+      "repaired": 0.9159475900293512
+    },
+    {
+      "defective": 0.45528502102894586,
+      "delta": 0.02260720135351385,
+      "path": "open_assays.per_seed[40].closed_loop_final",
+      "repaired": 0.4778922223824597
+    },
+    {
+      "defective": 0.12439926377759439,
+      "delta": -0.0003055365057752085,
+      "path": "open_assays.per_seed[40].closed_loop_root",
+      "repaired": 0.12409372727181918
+    },
+    {
+      "defective": 0.47861263698653284,
+      "delta": -0.0011574011177885035,
+      "path": "open_assays.per_seed[40].exact_replay_final",
+      "repaired": 0.47745523586874433
+    },
+    {
+      "defective": 0.27342194565176725,
+      "delta": 6.926120136674374e-05,
+      "path": "open_assays.per_seed[40].exact_replay_root",
+      "repaired": 0.273491206853134
+    },
+    {
+      "defective": 0.99444752418208,
+      "delta": -0.027134174920914633,
+      "path": "open_assays.per_seed[40].gradual_final",
+      "repaired": 0.9673133492611654
+    },
+    {
+      "defective": 0.8379003520334848,
+      "delta": -0.06872479597171466,
+      "path": "open_assays.per_seed[40].high_control_final",
+      "repaired": 0.7691755560617701
+    },
+    {
+      "defective": 0.9741933012174404,
+      "delta": -0.09875323216217435,
+      "path": "open_assays.per_seed[40].low_control_final",
+      "repaired": 0.8754400690552661
+    },
+    {
+      "defective": 0.21079333060009722,
+      "delta": 0.05530959001395194,
+      "path": "open_assays.per_seed[40].overwhelm_control_final",
+      "repaired": 0.26610292061404917
+    },
+    {
+      "defective": 0.9149950179975145,
+      "delta": -0.10299590335148223,
+      "path": "open_assays.per_seed[41].acute_final",
+      "repaired": 0.8119991146460322
+    },
+    {
+      "defective": 0.949473755421824,
+      "delta": -0.11816380184051212,
+      "path": "open_assays.per_seed[41].adaptive_threat_final",
+      "repaired": 0.8313099535813119
+    },
+    {
+      "defective": 0.8918563664701515,
+      "delta": -0.12968618862473047,
+      "path": "open_assays.per_seed[41].closed_loop_final",
+      "repaired": 0.7621701778454211
+    },
+    {
+      "defective": 0.9995499341172792,
+      "delta": -6.038661402252288e-05,
+      "path": "open_assays.per_seed[41].closed_loop_root",
+      "repaired": 0.9994895475032567
+    },
+    {
+      "defective": 0.40322688807348506,
+      "delta": 0.028225414055399467,
+      "path": "open_assays.per_seed[41].exact_replay_final",
+      "repaired": 0.4314523021288845
+    },
+    {
+      "defective": 0.390646790593607,
+      "delta": -0.0010632288344993857,
+      "path": "open_assays.per_seed[41].exact_replay_root",
+      "repaired": 0.38958356175910763
+    },
+    {
+      "defective": 0.9887365297072817,
+      "delta": -0.052035630456260695,
+      "path": "open_assays.per_seed[41].gradual_final",
+      "repaired": 0.936700899251021
+    },
+    {
+      "defective": 0.8240711745425822,
+      "delta": -0.08368465239768641,
+      "path": "open_assays.per_seed[41].high_control_final",
+      "repaired": 0.7403865221448958
+    },
+    {
+      "defective": 0.9819308990586548,
+      "delta": -0.038152707823376764,
+      "path": "open_assays.per_seed[41].low_control_final",
+      "repaired": 0.9437781912352781
+    },
+    {
+      "defective": 0.17387763050363872,
+      "delta": 0.05865961966822747,
+      "path": "open_assays.per_seed[41].overwhelm_control_final",
+      "repaired": 0.2325372501718662
+    },
+    {
+      "defective": 0.8662621032634891,
+      "delta": -0.13109380312800056,
+      "path": "open_assays.per_seed[42].acute_final",
+      "repaired": 0.7351683001354885
+    },
+    {
+      "defective": 0.9879518573469273,
+      "delta": -0.05229839470245412,
+      "path": "open_assays.per_seed[42].adaptive_threat_final",
+      "repaired": 0.9356534626444731
+    },
+    {
+      "defective": 0.8720743136910551,
+      "delta": -0.20192864980198033,
+      "path": "open_assays.per_seed[42].closed_loop_final",
+      "repaired": 0.6701456638890748
+    },
+    {
+      "defective": 0.9992108358984984,
+      "delta": -0.00012137563128788997,
+      "path": "open_assays.per_seed[42].closed_loop_root",
+      "repaired": 0.9990894602672105
+    },
+    {
+      "defective": 0.4116120488853174,
+      "delta": 0.024106608302617905,
+      "path": "open_assays.per_seed[42].exact_replay_final",
+      "repaired": 0.4357186571879353
+    },
+    {
+      "defective": 0.05688648746139011,
+      "delta": -0.000507309608240962,
+      "path": "open_assays.per_seed[42].exact_replay_root",
+      "repaired": 0.05637917785314915
+    },
+    {
+      "defective": 0.9911492457396462,
+      "delta": -0.07125283485651257,
+      "path": "open_assays.per_seed[42].gradual_final",
+      "repaired": 0.9198964108831337
+    },
+    {
+      "defective": 0.8867302990628267,
+      "delta": -0.08920322606059394,
+      "path": "open_assays.per_seed[42].high_control_final",
+      "repaired": 0.7975270730022328
+    },
+    {
+      "defective": 0.9855029908391582,
+      "delta": -0.04947750639081838,
+      "path": "open_assays.per_seed[42].low_control_final",
+      "repaired": 0.9360254844483398
+    },
+    {
+      "defective": 0.7857663087986666,
+      "delta": -0.15536994709480423,
+      "path": "open_assays.per_seed[42].overwhelm_control_final",
+      "repaired": 0.6303963617038624
+    },
+    {
+      "defective": 0.8598810947481124,
+      "delta": -0.13656583157418778,
+      "path": "open_assays.per_seed[43].acute_final",
+      "repaired": 0.7233152631739246
+    },
+    {
+      "defective": 0.9496967264905503,
+      "delta": -0.14095100992641618,
+      "path": "open_assays.per_seed[43].adaptive_threat_final",
+      "repaired": 0.8087457165641341
+    },
+    {
+      "defective": 0.48227796144320245,
+      "delta": -0.021812237213969854,
+      "path": "open_assays.per_seed[43].closed_loop_final",
+      "repaired": 0.4604657242292326
+    },
+    {
+      "defective": 0.885494998452685,
+      "delta": 0.0003491428350939074,
+      "path": "open_assays.per_seed[43].closed_loop_root",
+      "repaired": 0.8858441412877789
+    },
+    {
+      "defective": 0.4242311028353926,
+      "delta": 0.016279569309086916,
+      "path": "open_assays.per_seed[43].exact_replay_final",
+      "repaired": 0.44051067214447953
+    },
+    {
+      "defective": 0.3900131186729045,
+      "delta": -0.00016778245683851667,
+      "path": "open_assays.per_seed[43].exact_replay_root",
+      "repaired": 0.389845336216066
+    },
+    {
+      "defective": 0.9941853434403856,
+      "delta": -0.03360888152907282,
+      "path": "open_assays.per_seed[43].gradual_final",
+      "repaired": 0.9605764619113127
+    },
+    {
+      "defective": 0.8131046771501398,
+      "delta": -0.06184859344391469,
+      "path": "open_assays.per_seed[43].high_control_final",
+      "repaired": 0.7512560837062251
+    },
+    {
+      "defective": 0.9850175232445968,
+      "delta": -0.04410560548915721,
+      "path": "open_assays.per_seed[43].low_control_final",
+      "repaired": 0.9409119177554396
+    },
+    {
+      "defective": 0.801931331184627,
+      "delta": -0.1102899623110879,
+      "path": "open_assays.per_seed[43].overwhelm_control_final",
+      "repaired": 0.6916413688735391
+    },
+    {
+      "defective": 0.8918799342918292,
+      "delta": -0.09366228799518339,
+      "path": "open_assays.per_seed[44].acute_final",
+      "repaired": 0.7982176462966458
+    },
+    {
+      "defective": 0.9405122812845861,
+      "delta": -0.0981793330741434,
+      "path": "open_assays.per_seed[44].adaptive_threat_final",
+      "repaired": 0.8423329482104427
+    },
+    {
+      "defective": 0.6636852515685616,
+      "delta": -0.08644786344572097,
+      "path": "open_assays.per_seed[44].closed_loop_final",
+      "repaired": 0.5772373881228406
+    },
+    {
+      "defective": 0.8184414262043713,
+      "delta": -0.0009198366441036665,
+      "path": "open_assays.per_seed[44].closed_loop_root",
+      "repaired": 0.8175215895602677
+    },
+    {
+      "defective": 0.5248785803698381,
+      "delta": -0.01915189176200749,
+      "path": "open_assays.per_seed[44].exact_replay_final",
+      "repaired": 0.5057266886078307
+    },
+    {
+      "defective": 0.07238187274722355,
+      "delta": 0.0002010663691796727,
+      "path": "open_assays.per_seed[44].exact_replay_root",
+      "repaired": 0.07258293911640322
+    },
+    {
+      "defective": 0.9880411288984794,
+      "delta": -0.07743460569278726,
+      "path": "open_assays.per_seed[44].gradual_final",
+      "repaired": 0.9106065232056921
+    },
+    {
+      "defective": 0.7562316493749834,
+      "delta": -0.07342026472990826,
+      "path": "open_assays.per_seed[44].high_control_final",
+      "repaired": 0.6828113846450752
+    },
+    {
+      "defective": 0.9825106789723045,
+      "delta": -0.03011350409524538,
+      "path": "open_assays.per_seed[44].low_control_final",
+      "repaired": 0.9523971748770591
+    },
+    {
+      "defective": 0.4753849879999064,
+      "delta": -0.03126101080918714,
+      "path": "open_assays.per_seed[44].overwhelm_control_final",
+      "repaired": 0.4441239771907193
+    },
+    {
+      "defective": 0.733417400193174,
+      "delta": -0.09153350252706527,
+      "path": "open_assays.per_seed[45].acute_final",
+      "repaired": 0.6418838976661088
+    },
+    {
+      "defective": 0.9868531699738712,
+      "delta": -0.05238003383203227,
+      "path": "open_assays.per_seed[45].adaptive_threat_final",
+      "repaired": 0.9344731361418389
+    },
+    {
+      "defective": 0.5099654352061399,
+      "delta": -0.009426018177274398,
+      "path": "open_assays.per_seed[45].closed_loop_final",
+      "repaired": 0.5005394170288655
+    },
+    {
+      "defective": 0.5302606265687728,
+      "delta": -0.0013628799439246997,
+      "path": "open_assays.per_seed[45].closed_loop_root",
+      "repaired": 0.5288977466248481
+    },
+    {
+      "defective": 0.6300039026931235,
+      "delta": -0.07681508642051338,
+      "path": "open_assays.per_seed[45].exact_replay_final",
+      "repaired": 0.5531888162726101
+    },
+    {
+      "defective": 0.7466919781357596,
+      "delta": -0.002564241274531587,
+      "path": "open_assays.per_seed[45].exact_replay_root",
+      "repaired": 0.744127736861228
+    },
+    {
+      "defective": 0.9877873405535464,
+      "delta": -0.06429874587120221,
+      "path": "open_assays.per_seed[45].gradual_final",
+      "repaired": 0.9234885946823442
+    },
+    {
+      "defective": 0.830022191903476,
+      "delta": -0.0572349192473568,
+      "path": "open_assays.per_seed[45].high_control_final",
+      "repaired": 0.7727872726561192
+    },
+    {
+      "defective": 0.9824266447916796,
+      "delta": -0.0512925042944673,
+      "path": "open_assays.per_seed[45].low_control_final",
+      "repaired": 0.9311341404972123
+    },
+    {
+      "defective": 0.20446060474407243,
+      "delta": 0.11477544708674484,
+      "path": "open_assays.per_seed[45].overwhelm_control_final",
+      "repaired": 0.31923605183081727
+    },
+    {
+      "defective": 0.7623374150778993,
+      "delta": -0.06072732100552014,
+      "path": "open_assays.per_seed[46].acute_final",
+      "repaired": 0.7016100940723792
+    },
+    {
+      "defective": 0.976374066853184,
+      "delta": -0.06723510948877909,
+      "path": "open_assays.per_seed[46].adaptive_threat_final",
+      "repaired": 0.9091389573644049
+    },
+    {
+      "defective": 0.5,
+      "delta": -0.0625,
+      "path": "open_assays.per_seed[46].closed_loop_adverse_outcome_rate",
+      "repaired": 0.4375
+    },
+    {
+      "defective": 0.5625,
+      "delta": -0.0625,
+      "path": "open_assays.per_seed[46].closed_loop_adverse_transition_rate",
+      "repaired": 0.5
+    },
+    {
+      "defective": 0.5625,
+      "delta": -0.0625,
+      "path": "open_assays.per_seed[46].closed_loop_avoidance_rate",
+      "repaired": 0.5
+    },
+    {
+      "defective": 0.5938418778647578,
+      "delta": -0.10872607922386851,
+      "path": "open_assays.per_seed[46].closed_loop_final",
+      "repaired": 0.48511579864088933
+    },
+    {
+      "defective": 0.5625,
+      "delta": -0.0625,
+      "path": "open_assays.per_seed[46].closed_loop_mediator",
+      "repaired": 0.5
+    },
+    {
+      "defective": 0.9765833885241967,
+      "delta": -0.04408284473963531,
+      "path": "open_assays.per_seed[46].closed_loop_root",
+      "repaired": 0.9325005437845614
+    },
+    {
+      "defective": 0.40308171264405834,
+      "delta": 0.029128690210396657,
+      "path": "open_assays.per_seed[46].exact_replay_final",
+      "repaired": 0.432210402854455
+    },
+    {
+      "defective": 0.1918397825847089,
+      "delta": -0.0008594731761312202,
+      "path": "open_assays.per_seed[46].exact_replay_root",
+      "repaired": 0.1909803094085777
+    },
+    {
+      "defective": 0.993254234341239,
+      "delta": -0.05934802231514935,
+      "path": "open_assays.per_seed[46].gradual_final",
+      "repaired": 0.9339062120260897
+    },
+    {
+      "defective": 0.8709166709437155,
+      "delta": -0.08624570429278355,
+      "path": "open_assays.per_seed[46].high_control_final",
+      "repaired": 0.784670966650932
+    },
+    {
+      "defective": 0.9768600603273323,
+      "delta": -0.06996798876919774,
+      "path": "open_assays.per_seed[46].low_control_final",
+      "repaired": 0.9068920715581346
+    },
+    {
+      "defective": 0.12040646904892965,
+      "delta": 0.04217361664813024,
+      "path": "open_assays.per_seed[46].overwhelm_control_final",
+      "repaired": 0.1625800856970599
+    },
+    {
+      "defective": 0.7653432738937586,
+      "delta": -0.07574383534564721,
+      "path": "open_assays.per_seed[47].acute_final",
+      "repaired": 0.6895994385481113
+    },
+    {
+      "defective": 0.9798732320122794,
+      "delta": -0.06199995981560269,
+      "path": "open_assays.per_seed[47].adaptive_threat_final",
+      "repaired": 0.9178732721966767
+    },
+    {
+      "defective": 0.6519844315589216,
+      "delta": -0.08107801033884487,
+      "path": "open_assays.per_seed[47].closed_loop_final",
+      "repaired": 0.5709064212200767
+    },
+    {
+      "defective": 0.7384792384608205,
+      "delta": -0.0001065896567404856,
+      "path": "open_assays.per_seed[47].closed_loop_root",
+      "repaired": 0.73837264880408
+    },
+    {
+      "defective": 0.45836563253513446,
+      "delta": 0.0003312372833317312,
+      "path": "open_assays.per_seed[47].exact_replay_final",
+      "repaired": 0.4586968698184662
+    },
+    {
+      "defective": 0.15279113731032692,
+      "delta": 4.224176771103205e-05,
+      "path": "open_assays.per_seed[47].exact_replay_root",
+      "repaired": 0.15283337907803796
+    },
+    {
+      "defective": 0.9867145040568341,
+      "delta": -0.070717346264765,
+      "path": "open_assays.per_seed[47].gradual_final",
+      "repaired": 0.9159971577920691
+    },
+    {
+      "defective": 0.8689220629143399,
+      "delta": -0.06514354681383128,
+      "path": "open_assays.per_seed[47].high_control_final",
+      "repaired": 0.8037785161005087
+    },
+    {
+      "defective": 0.9782989594341333,
+      "delta": -0.05239680687424897,
+      "path": "open_assays.per_seed[47].low_control_final",
+      "repaired": 0.9259021525598843
+    },
+    {
+      "defective": 0.45764563007066705,
+      "delta": -0.008941856934197745,
+      "path": "open_assays.per_seed[47].overwhelm_control_final",
+      "repaired": 0.4487037731364693
+    },
+    {
+      "defective": 0.7636514199970644,
+      "delta": -0.08468561403665664,
+      "path": "open_assays.per_seed[48].acute_final",
+      "repaired": 0.6789658059604078
+    },
+    {
+      "defective": 0.9753559992081857,
+      "delta": -0.07066028641736632,
+      "path": "open_assays.per_seed[48].adaptive_threat_final",
+      "repaired": 0.9046957127908194
+    },
+    {
+      "defective": 0.5217310534191598,
+      "delta": -0.03105921506496262,
+      "path": "open_assays.per_seed[48].closed_loop_final",
+      "repaired": 0.4906718383541972
+    },
+    {
+      "defective": 0.30780516039709666,
+      "delta": 0.0002290903536029676,
+      "path": "open_assays.per_seed[48].closed_loop_root",
+      "repaired": 0.3080342507506996
+    },
+    {
+      "defective": 0.4932140265422434,
+      "delta": -0.01000407896857497,
+      "path": "open_assays.per_seed[48].exact_replay_final",
+      "repaired": 0.4832099475736684
+    },
+    {
+      "defective": 0.08313074638174925,
+      "delta": -2.3368530482001382e-05,
+      "path": "open_assays.per_seed[48].exact_replay_root",
+      "repaired": 0.08310737785126725
+    },
+    {
+      "defective": 0.9930716524585572,
+      "delta": -0.05016345010459011,
+      "path": "open_assays.per_seed[48].gradual_final",
+      "repaired": 0.9429082023539671
+    },
+    {
+      "defective": 0.8438006881195732,
+      "delta": -0.08935702624774522,
+      "path": "open_assays.per_seed[48].high_control_final",
+      "repaired": 0.754443661871828
+    },
+    {
+      "defective": 0.9853168360020719,
+      "delta": -0.0670491187867639,
+      "path": "open_assays.per_seed[48].low_control_final",
+      "repaired": 0.918267717215308
+    },
+    {
+      "defective": 0.1648084277326295,
+      "delta": 0.04629409499829662,
+      "path": "open_assays.per_seed[48].overwhelm_control_final",
+      "repaired": 0.2111025227309261
+    },
+    {
+      "defective": 0.8445985750224994,
+      "delta": -0.07979649100034958,
+      "path": "open_assays.per_seed[49].acute_final",
+      "repaired": 0.7648020840221498
+    },
+    {
+      "defective": 0.9714727936515816,
+      "delta": -0.07454052804327516,
+      "path": "open_assays.per_seed[49].adaptive_threat_final",
+      "repaired": 0.8969322656083064
+    },
+    {
+      "defective": 0.9412829164709251,
+      "delta": -0.16394103215714084,
+      "path": "open_assays.per_seed[49].closed_loop_final",
+      "repaired": 0.7773418843137843
+    },
+    {
+      "defective": 0.9998490648277036,
+      "delta": -2.8502801884267015e-05,
+      "path": "open_assays.per_seed[49].closed_loop_root",
+      "repaired": 0.9998205620258194
+    },
+    {
+      "defective": 0.4382953140085529,
+      "delta": 0.009054503035198724,
+      "path": "open_assays.per_seed[49].exact_replay_final",
+      "repaired": 0.44734981704375165
+    },
+    {
+      "defective": 0.2788690948092708,
+      "delta": -0.0001694133941163578,
+      "path": "open_assays.per_seed[49].exact_replay_root",
+      "repaired": 0.27869968141515444
+    },
+    {
+      "defective": 0.9945445153922702,
+      "delta": -0.022718818482069802,
+      "path": "open_assays.per_seed[49].gradual_final",
+      "repaired": 0.9718256969102004
+    },
+    {
+      "defective": 0.8305912266101179,
+      "delta": -0.10767232253722303,
+      "path": "open_assays.per_seed[49].high_control_final",
+      "repaired": 0.7229189040728948
+    },
+    {
+      "defective": 0.9860959507073028,
+      "delta": -0.03437113522024593,
+      "path": "open_assays.per_seed[49].low_control_final",
+      "repaired": 0.9517248154870569
+    },
+    {
+      "defective": 0.09695909684065174,
+      "delta": 0.03894228730020133,
+      "path": "open_assays.per_seed[49].overwhelm_control_final",
+      "repaired": 0.13590138414085307
+    },
+    {
+      "defective": 0.8580306747239961,
+      "delta": -0.10076333623012412,
+      "path": "open_assays.per_seed[4].acute_final",
+      "repaired": 0.757267338493872
+    },
+    {
+      "defective": 0.9737675077176687,
+      "delta": -0.09843468857422011,
+      "path": "open_assays.per_seed[4].adaptive_threat_final",
+      "repaired": 0.8753328191434486
+    },
+    {
+      "defective": 0.39618430269325355,
+      "delta": 0.0324627643235772,
+      "path": "open_assays.per_seed[4].closed_loop_final",
+      "repaired": 0.42864706701683075
+    },
+    {
+      "defective": 0.5937320067394307,
+      "delta": -0.0010507137761383012,
+      "path": "open_assays.per_seed[4].closed_loop_root",
+      "repaired": 0.5926812929632924
+    },
+    {
+      "defective": 0.3808802110097181,
+      "delta": 0.0339750164963501,
+      "path": "open_assays.per_seed[4].exact_replay_final",
+      "repaired": 0.4148552275060682
+    },
+    {
+      "defective": 0.5463990722003591,
+      "delta": -0.0016000372657457573,
+      "path": "open_assays.per_seed[4].exact_replay_root",
+      "repaired": 0.5447990349346133
+    },
+    {
+      "defective": 0.9943395645974279,
+      "delta": -0.03448834182151128,
+      "path": "open_assays.per_seed[4].gradual_final",
+      "repaired": 0.9598512227759166
+    },
+    {
+      "defective": 0.8274236818227282,
+      "delta": -0.057571326951112556,
+      "path": "open_assays.per_seed[4].high_control_final",
+      "repaired": 0.7698523548716156
+    },
+    {
+      "defective": 0.9780092617595699,
+      "delta": -0.0491554543016266,
+      "path": "open_assays.per_seed[4].low_control_final",
+      "repaired": 0.9288538074579433
+    },
+    {
+      "defective": 0.11256087334744314,
+      "delta": 0.05288809266985539,
+      "path": "open_assays.per_seed[4].overwhelm_control_final",
+      "repaired": 0.16544896601729853
+    },
+    {
+      "defective": 0.9173958176903905,
+      "delta": -0.06911421329438483,
+      "path": "open_assays.per_seed[50].acute_final",
+      "repaired": 0.8482816043960056
+    },
+    {
+      "defective": 0.9744278842569543,
+      "delta": -0.07488048606765296,
+      "path": "open_assays.per_seed[50].adaptive_threat_final",
+      "repaired": 0.8995473981893013
+    },
+    {
+      "defective": 0.5580471730794854,
+      "delta": -0.044460678917337404,
+      "path": "open_assays.per_seed[50].closed_loop_final",
+      "repaired": 0.513586494162148
+    },
+    {
+      "defective": 0.5133647622021174,
+      "delta": -0.00039092350965286293,
+      "path": "open_assays.per_seed[50].closed_loop_root",
+      "repaired": 0.5129738386924645
+    },
+    {
+      "defective": 0.46117292439949165,
+      "delta": 0.0020611325418194992,
+      "path": "open_assays.per_seed[50].exact_replay_final",
+      "repaired": 0.46323405694131115
+    },
+    {
+      "defective": 0.14912416836582598,
+      "delta": -0.00014195034757605307,
+      "path": "open_assays.per_seed[50].exact_replay_root",
+      "repaired": 0.14898221801824993
+    },
+    {
+      "defective": 0.9939151264158778,
+      "delta": -0.0410169629989251,
+      "path": "open_assays.per_seed[50].gradual_final",
+      "repaired": 0.9528981634169527
+    },
+    {
+      "defective": 0.8639981265312062,
+      "delta": -0.05465761965189231,
+      "path": "open_assays.per_seed[50].high_control_final",
+      "repaired": 0.8093405068793139
+    },
+    {
+      "defective": 0.9797853960626699,
+      "delta": -0.08728780425797888,
+      "path": "open_assays.per_seed[50].low_control_final",
+      "repaired": 0.892497591804691
+    },
+    {
+      "defective": 0.33160103621412823,
+      "delta": -0.007272574053329595,
+      "path": "open_assays.per_seed[50].overwhelm_control_final",
+      "repaired": 0.32432846216079864
+    },
+    {
+      "defective": 0.840364129170918,
+      "delta": -0.11518297110795683,
+      "path": "open_assays.per_seed[51].acute_final",
+      "repaired": 0.7251811580629611
+    },
+    {
+      "defective": 0.9613158157405459,
+      "delta": -0.10514428423045918,
+      "path": "open_assays.per_seed[51].adaptive_threat_final",
+      "repaired": 0.8561715315100867
+    },
+    {
+      "defective": 0.7819776526158506,
+      "delta": -0.1843545166667604,
+      "path": "open_assays.per_seed[51].closed_loop_final",
+      "repaired": 0.5976231359490902
+    },
+    {
+      "defective": 0.9159166059977155,
+      "delta": 0.0014661758151748305,
+      "path": "open_assays.per_seed[51].closed_loop_root",
+      "repaired": 0.9173827818128903
+    },
+    {
+      "defective": 0.4367520113923089,
+      "delta": 0.014410123945315045,
+      "path": "open_assays.per_seed[51].exact_replay_final",
+      "repaired": 0.45116213533762395
+    },
+    {
+      "defective": 0.06375225225978189,
+      "delta": -0.00018414534481570044,
+      "path": "open_assays.per_seed[51].exact_replay_root",
+      "repaired": 0.06356810691496619
+    },
+    {
+      "defective": 0.9945794134846974,
+      "delta": -0.025585689444184934,
+      "path": "open_assays.per_seed[51].gradual_final",
+      "repaired": 0.9689937240405124
+    },
+    {
+      "defective": 0.8475678641875374,
+      "delta": -0.07554907073560602,
+      "path": "open_assays.per_seed[51].high_control_final",
+      "repaired": 0.7720187934519314
+    },
+    {
+      "defective": 0.9825426725767741,
+      "delta": -0.04717551625799754,
+      "path": "open_assays.per_seed[51].low_control_final",
+      "repaired": 0.9353671563187765
+    },
+    {
+      "defective": 0.29376751138625623,
+      "delta": 0.019366019475229146,
+      "path": "open_assays.per_seed[51].overwhelm_control_final",
+      "repaired": 0.3131335308614854
+    },
+    {
+      "defective": 0.7712551538457242,
+      "delta": -0.140951298679596,
+      "path": "open_assays.per_seed[52].acute_final",
+      "repaired": 0.6303038551661282
+    },
+    {
+      "defective": 0.9597667317194915,
+      "delta": -0.10901798176491817,
+      "path": "open_assays.per_seed[52].adaptive_threat_final",
+      "repaired": 0.8507487499545733
+    },
+    {
+      "defective": 0.4467755068092503,
+      "delta": 0.014560822882626723,
+      "path": "open_assays.per_seed[52].closed_loop_final",
+      "repaired": 0.46133632969187705
+    },
+    {
+      "defective": 0.24592044467997903,
+      "delta": 0.00013244510003951326,
+      "path": "open_assays.per_seed[52].closed_loop_root",
+      "repaired": 0.24605288978001855
+    },
+    {
+      "defective": 0.4456218742806448,
+      "delta": 0.008638925930147034,
+      "path": "open_assays.per_seed[52].exact_replay_final",
+      "repaired": 0.45426080021079185
+    },
+    {
+      "defective": 0.3111894611248882,
+      "delta": 1.2165656326112995e-05,
+      "path": "open_assays.per_seed[52].exact_replay_root",
+      "repaired": 0.3112016267812143
+    },
+    {
+      "defective": 0.9897397686792816,
+      "delta": -0.10201436152563359,
+      "path": "open_assays.per_seed[52].gradual_final",
+      "repaired": 0.887725407153648
+    },
+    {
+      "defective": 0.8676779693547381,
+      "delta": -0.08830695487249396,
+      "path": "open_assays.per_seed[52].high_control_final",
+      "repaired": 0.7793710144822441
+    },
+    {
+      "defective": 0.9853527668804493,
+      "delta": -0.048174248998265945,
+      "path": "open_assays.per_seed[52].low_control_final",
+      "repaired": 0.9371785178821833
+    },
+    {
+      "defective": 0.10661332102821265,
+      "delta": 0.06766743174277416,
+      "path": "open_assays.per_seed[52].overwhelm_control_final",
+      "repaired": 0.1742807527709868
+    },
+    {
+      "defective": 0.545862713081755,
+      "delta": -0.06527810133909645,
+      "path": "open_assays.per_seed[53].acute_final",
+      "repaired": 0.4805846117426586
+    },
+    {
+      "defective": 0.9830517042354389,
+      "delta": -0.05837093134080884,
+      "path": "open_assays.per_seed[53].adaptive_threat_final",
+      "repaired": 0.92468077289463
+    },
+    {
+      "defective": 0.8663586042740522,
+      "delta": -0.15989437552817454,
+      "path": "open_assays.per_seed[53].closed_loop_final",
+      "repaired": 0.7064642287458777
+    },
+    {
+      "defective": 0.9999320885877881,
+      "delta": -5.100942778724082e-06,
+      "path": "open_assays.per_seed[53].closed_loop_root",
+      "repaired": 0.9999269876450094
+    },
+    {
+      "defective": 0.461812674496201,
+      "delta": -0.00362203750648743,
+      "path": "open_assays.per_seed[53].exact_replay_final",
+      "repaired": 0.4581906369897136
+    },
+    {
+      "defective": 0.29826812265252,
+      "delta": 0.00013480385944664164,
+      "path": "open_assays.per_seed[53].exact_replay_root",
+      "repaired": 0.29840292651196665
+    },
+    {
+      "defective": 0.993595360292434,
+      "delta": -0.04463659055508418,
+      "path": "open_assays.per_seed[53].gradual_final",
+      "repaired": 0.9489587697373498
+    },
+    {
+      "defective": 0.6953114488292363,
+      "delta": -0.06652795983886206,
+      "path": "open_assays.per_seed[53].high_control_final",
+      "repaired": 0.6287834889903743
+    },
+    {
+      "defective": 0.9881670760959477,
+      "delta": -0.018583112439495397,
+      "path": "open_assays.per_seed[53].low_control_final",
+      "repaired": 0.9695839636564523
+    },
+    {
+      "defective": 0.24314212956588324,
+      "delta": 0.034436005629425975,
+      "path": "open_assays.per_seed[53].overwhelm_control_final",
+      "repaired": 0.2775781351953092
+    },
+    {
+      "defective": 0.8591750372764011,
+      "delta": -0.17247595556896422,
+      "path": "open_assays.per_seed[54].acute_final",
+      "repaired": 0.6866990817074369
+    },
+    {
+      "defective": 0.9828295177180382,
+      "delta": -0.05727461415564994,
+      "path": "open_assays.per_seed[54].adaptive_threat_final",
+      "repaired": 0.9255549035623882
+    },
+    {
+      "defective": 0.7912286777985404,
+      "delta": -0.12220592251479512,
+      "path": "open_assays.per_seed[54].closed_loop_final",
+      "repaired": 0.6690227552837453
+    },
+    {
+      "defective": 0.9941747255110245,
+      "delta": -0.00022690077960163535,
+      "path": "open_assays.per_seed[54].closed_loop_root",
+      "repaired": 0.9939478247314228
+    },
+    {
+      "defective": 0.501876979482667,
+      "delta": -0.007281285281825034,
+      "path": "open_assays.per_seed[54].exact_replay_final",
+      "repaired": 0.49459569420084193
+    },
+    {
+      "defective": 0.2794000819364692,
+      "delta": 0.00035044390924637847,
+      "path": "open_assays.per_seed[54].exact_replay_root",
+      "repaired": 0.2797505258457156
+    },
+    {
+      "defective": 0.9871099273828257,
+      "delta": -0.11013143663753966,
+      "path": "open_assays.per_seed[54].gradual_final",
+      "repaired": 0.876978490745286
+    },
+    {
+      "defective": 0.8917887260577662,
+      "delta": -0.09621835609433593,
+      "path": "open_assays.per_seed[54].high_control_final",
+      "repaired": 0.7955703699634302
+    },
+    {
+      "defective": 0.9804423602605816,
+      "delta": -0.05198440005422644,
+      "path": "open_assays.per_seed[54].low_control_final",
+      "repaired": 0.9284579602063552
+    },
+    {
+      "defective": 0.181782524041333,
+      "delta": 0.1023522873001923,
+      "path": "open_assays.per_seed[54].overwhelm_control_final",
+      "repaired": 0.2841348113415253
+    },
+    {
+      "defective": 0.6829561601083224,
+      "delta": -0.1341387106480676,
+      "path": "open_assays.per_seed[55].acute_final",
+      "repaired": 0.5488174494602548
+    },
+    {
+      "defective": 0.95991750114305,
+      "delta": -0.0875456022605221,
+      "path": "open_assays.per_seed[55].adaptive_threat_final",
+      "repaired": 0.8723718988825279
+    },
+    {
+      "defective": 0.40801849792133,
+      "delta": 0.02674041374939362,
+      "path": "open_assays.per_seed[55].closed_loop_final",
+      "repaired": 0.4347589116707236
+    },
+    {
+      "defective": 0.008811293971049855,
+      "delta": -9.632536190755554e-05,
+      "path": "open_assays.per_seed[55].closed_loop_root",
+      "repaired": 0.008714968609142299
+    },
+    {
+      "defective": 0.4462443308833752,
+      "delta": 0.00454972192108799,
+      "path": "open_assays.per_seed[55].exact_replay_final",
+      "repaired": 0.45079405280446316
+    },
+    {
+      "defective": 0.13558957029113916,
+      "delta": -0.00013298157888541606,
+      "path": "open_assays.per_seed[55].exact_replay_root",
+      "repaired": 0.13545658871225374
+    },
+    {
+      "defective": 0.9933647886235772,
+      "delta": -0.04217780003936589,
+      "path": "open_assays.per_seed[55].gradual_final",
+      "repaired": 0.9511869885842114
+    },
+    {
+      "defective": 0.815003433335771,
+      "delta": -0.06148137293824285,
+      "path": "open_assays.per_seed[55].high_control_final",
+      "repaired": 0.7535220603975281
+    },
+    {
+      "defective": 0.9854755192631376,
+      "delta": -0.039507709833034976,
+      "path": "open_assays.per_seed[55].low_control_final",
+      "repaired": 0.9459678094301026
+    },
+    {
+      "defective": 0.6730031806167655,
+      "delta": -0.05100203229967737,
+      "path": "open_assays.per_seed[55].overwhelm_control_final",
+      "repaired": 0.6220011483170881
+    },
+    {
+      "defective": 0.835281367139814,
+      "delta": -0.07039868785503933,
+      "path": "open_assays.per_seed[56].acute_final",
+      "repaired": 0.7648826792847747
+    },
+    {
+      "defective": 0.9799265299049128,
+      "delta": -0.0946212889837984,
+      "path": "open_assays.per_seed[56].adaptive_threat_final",
+      "repaired": 0.8853052409211144
+    },
+    {
+      "defective": 0.5888012663624727,
+      "delta": -0.03612610512182157,
+      "path": "open_assays.per_seed[56].closed_loop_final",
+      "repaired": 0.5526751612406511
+    },
+    {
+      "defective": 0.950986042103718,
+      "delta": -0.00012543191708780377,
+      "path": "open_assays.per_seed[56].closed_loop_root",
+      "repaired": 0.9508606101866302
+    },
+    {
+      "defective": 0.5496820467344489,
+      "delta": -0.02032458029954609,
+      "path": "open_assays.per_seed[56].exact_replay_final",
+      "repaired": 0.5293574664349028
+    },
+    {
+      "defective": 0.8591465405844365,
+      "delta": -0.0001890854436581435,
+      "path": "open_assays.per_seed[56].exact_replay_root",
+      "repaired": 0.8589574551407784
+    },
+    {
+      "defective": 0.9944338674962844,
+      "delta": -0.028982249504258095,
+      "path": "open_assays.per_seed[56].gradual_final",
+      "repaired": 0.9654516179920263
+    },
+    {
+      "defective": 0.9047778054613591,
+      "delta": -0.08589951333971757,
+      "path": "open_assays.per_seed[56].high_control_final",
+      "repaired": 0.8188782921216415
+    },
+    {
+      "defective": 0.9840069214198562,
+      "delta": -0.03845655080268451,
+      "path": "open_assays.per_seed[56].low_control_final",
+      "repaired": 0.9455503706171717
+    },
+    {
+      "defective": 0.8454074006353411,
+      "delta": -0.15983424339151642,
+      "path": "open_assays.per_seed[56].overwhelm_control_final",
+      "repaired": 0.6855731572438247
+    },
+    {
+      "defective": 0.6895690985080827,
+      "delta": -0.12807923345154126,
+      "path": "open_assays.per_seed[57].acute_final",
+      "repaired": 0.5614898650565414
+    },
+    {
+      "defective": 0.9753693233139925,
+      "delta": -0.07295997046544478,
+      "path": "open_assays.per_seed[57].adaptive_threat_final",
+      "repaired": 0.9024093528485477
+    },
+    {
+      "defective": 0.6199788719302776,
+      "delta": -0.07736904832245273,
+      "path": "open_assays.per_seed[57].closed_loop_final",
+      "repaired": 0.5426098236078248
+    },
+    {
+      "defective": 0.939925684530253,
+      "delta": -0.00033490950185555146,
+      "path": "open_assays.per_seed[57].closed_loop_root",
+      "repaired": 0.9395907750283975
+    },
+    {
+      "defective": 0.4226293558586177,
+      "delta": 0.01745095012068132,
+      "path": "open_assays.per_seed[57].exact_replay_final",
+      "repaired": 0.44008030597929904
+    },
+    {
+      "defective": 0.6468407519048449,
+      "delta": 0.00030942771904629573,
+      "path": "open_assays.per_seed[57].exact_replay_root",
+      "repaired": 0.6471501796238912
+    },
+    {
+      "defective": 0.9902828353446023,
+      "delta": -0.05041342125579096,
+      "path": "open_assays.per_seed[57].gradual_final",
+      "repaired": 0.9398694140888113
+    },
+    {
+      "defective": 0.81508777434735,
+      "delta": -0.06414350939317337,
+      "path": "open_assays.per_seed[57].high_control_final",
+      "repaired": 0.7509442649541767
+    },
+    {
+      "defective": 0.9837703118354327,
+      "delta": -0.036896754745334825,
+      "path": "open_assays.per_seed[57].low_control_final",
+      "repaired": 0.9468735570900979
+    },
+    {
+      "defective": 0.15405851186215253,
+      "delta": 0.05326743945659429,
+      "path": "open_assays.per_seed[57].overwhelm_control_final",
+      "repaired": 0.20732595131874682
+    },
+    {
+      "defective": 0.7950263415801644,
+      "delta": -0.10308708586627102,
+      "path": "open_assays.per_seed[58].acute_final",
+      "repaired": 0.6919392557138934
+    },
+    {
+      "defective": 0.9764900304385762,
+      "delta": -0.06749168325536647,
+      "path": "open_assays.per_seed[58].adaptive_threat_final",
+      "repaired": 0.9089983471832097
+    },
+    {
+      "defective": 0.6875,
+      "delta": -0.125,
+      "path": "open_assays.per_seed[58].closed_loop_adverse_outcome_rate",
+      "repaired": 0.5625
+    },
+    {
+      "defective": 0.6875,
+      "delta": -0.125,
+      "path": "open_assays.per_seed[58].closed_loop_adverse_transition_rate",
+      "repaired": 0.5625
+    },
+    {
+      "defective": 0.6875,
+      "delta": -0.125,
+      "path": "open_assays.per_seed[58].closed_loop_avoidance_rate",
+      "repaired": 0.5625
+    },
+    {
+      "defective": 0.9281593149139533,
+      "delta": -0.2796083032221921,
+      "path": "open_assays.per_seed[58].closed_loop_final",
+      "repaired": 0.6485510116917612
+    },
+    {
+      "defective": 0.6875,
+      "delta": -0.125,
+      "path": "open_assays.per_seed[58].closed_loop_mediator",
+      "repaired": 0.5625
+    },
+    {
+      "defective": 0.9992296578349538,
+      "delta": -0.007059574329506102,
+      "path": "open_assays.per_seed[58].closed_loop_root",
+      "repaired": 0.9921700835054477
+    },
+    {
+      "defective": 0.4444782893878816,
+      "delta": 0.010113257331364256,
+      "path": "open_assays.per_seed[58].exact_replay_final",
+      "repaired": 0.45459154671924584
+    },
+    {
+      "defective": 0.31394039650617234,
+      "delta": -0.00029081713073941806,
+      "path": "open_assays.per_seed[58].exact_replay_root",
+      "repaired": 0.3136495793754329
+    },
+    {
+      "defective": 0.993275303168508,
+      "delta": -0.045989088939623946,
+      "path": "open_assays.per_seed[58].gradual_final",
+      "repaired": 0.947286214228884
+    },
+    {
+      "defective": 0.8101951179795877,
+      "delta": -0.06821606715213346,
+      "path": "open_assays.per_seed[58].high_control_final",
+      "repaired": 0.7419790508274542
+    },
+    {
+      "defective": 0.9879150703845001,
+      "delta": -0.018760712933928447,
+      "path": "open_assays.per_seed[58].low_control_final",
+      "repaired": 0.9691543574505717
+    },
+    {
+      "defective": 0.14273723998822027,
+      "delta": 0.02912689600300941,
+      "path": "open_assays.per_seed[58].overwhelm_control_final",
+      "repaired": 0.17186413599122968
+    },
+    {
+      "defective": 0.8862283073922582,
+      "delta": -0.08666138269084078,
+      "path": "open_assays.per_seed[59].acute_final",
+      "repaired": 0.7995669247014174
+    },
+    {
+      "defective": 0.97317959509118,
+      "delta": -0.07269275553011056,
+      "path": "open_assays.per_seed[59].adaptive_threat_final",
+      "repaired": 0.9004868395610695
+    },
+    {
+      "defective": 0.6348079073517814,
+      "delta": -0.05352727841559868,
+      "path": "open_assays.per_seed[59].closed_loop_final",
+      "repaired": 0.5812806289361827
+    },
+    {
+      "defective": 0.70301373486665,
+      "delta": -0.0012591300815998352,
+      "path": "open_assays.per_seed[59].closed_loop_root",
+      "repaired": 0.7017546047850501
+    },
+    {
+      "defective": 0.6365338936921069,
+      "delta": -0.06649596881865671,
+      "path": "open_assays.per_seed[59].exact_replay_final",
+      "repaired": 0.5700379248734502
+    },
+    {
+      "defective": 0.7581873817819723,
+      "delta": -0.0022648869304797703,
+      "path": "open_assays.per_seed[59].exact_replay_root",
+      "repaired": 0.7559224948514925
+    },
+    {
+      "defective": 0.9859158925562762,
+      "delta": -0.0682653604116894,
+      "path": "open_assays.per_seed[59].gradual_final",
+      "repaired": 0.9176505321445868
+    },
+    {
+      "defective": 0.8942903230373891,
+      "delta": -0.05827708045259572,
+      "path": "open_assays.per_seed[59].high_control_final",
+      "repaired": 0.8360132425847934
+    },
+    {
+      "defective": 0.9846560610434916,
+      "delta": -0.03438201019641396,
+      "path": "open_assays.per_seed[59].low_control_final",
+      "repaired": 0.9502740508470776
+    },
+    {
+      "defective": 0.38209748424361445,
+      "delta": 0.020135065033846933,
+      "path": "open_assays.per_seed[59].overwhelm_control_final",
+      "repaired": 0.4022325492774614
+    },
+    {
+      "defective": 0.8955228158562595,
+      "delta": -0.07963962318307527,
+      "path": "open_assays.per_seed[5].acute_final",
+      "repaired": 0.8158831926731842
+    },
+    {
+      "defective": 0.9810805542504694,
+      "delta": -0.059966778988612246,
+      "path": "open_assays.per_seed[5].adaptive_threat_final",
+      "repaired": 0.9211137752618571
+    },
+    {
+      "defective": 0.593563642291269,
+      "delta": -0.07366984215985928,
+      "path": "open_assays.per_seed[5].closed_loop_final",
+      "repaired": 0.5198938001314097
+    },
+    {
+      "defective": 0.45723479165546266,
+      "delta": -0.0017105838028511622,
+      "path": "open_assays.per_seed[5].closed_loop_root",
+      "repaired": 0.4555242078526115
+    },
+    {
+      "defective": 0.6030019370312176,
+      "delta": -0.08596604075771608,
+      "path": "open_assays.per_seed[5].exact_replay_final",
+      "repaired": 0.5170358962735015
+    },
+    {
+      "defective": 0.29492774290297413,
+      "delta": -0.00241701831245017,
+      "path": "open_assays.per_seed[5].exact_replay_root",
+      "repaired": 0.29251072459052396
+    },
+    {
+      "defective": 0.9866102078574437,
+      "delta": -0.09842135485043857,
+      "path": "open_assays.per_seed[5].gradual_final",
+      "repaired": 0.8881888530070051
+    },
+    {
+      "defective": 0.797727367216043,
+      "delta": -0.07099895314572024,
+      "path": "open_assays.per_seed[5].high_control_final",
+      "repaired": 0.7267284140703227
+    },
+    {
+      "defective": 0.9799389932039999,
+      "delta": -0.08314384248675188,
+      "path": "open_assays.per_seed[5].low_control_final",
+      "repaired": 0.896795150717248
+    },
+    {
+      "defective": 0.10293895671555595,
+      "delta": 0.04910161341981534,
+      "path": "open_assays.per_seed[5].overwhelm_control_final",
+      "repaired": 0.15204057013537128
+    },
+    {
+      "defective": 0.9188004926012252,
+      "delta": -0.08600482332532267,
+      "path": "open_assays.per_seed[60].acute_final",
+      "repaired": 0.8327956692759025
+    },
+    {
+      "defective": 0.9751253878408411,
+      "delta": -0.07655008380609762,
+      "path": "open_assays.per_seed[60].adaptive_threat_final",
+      "repaired": 0.8985753040347435
+    },
+    {
+      "defective": 0.4847626667279047,
+      "delta": 0.007537454332576465,
+      "path": "open_assays.per_seed[60].closed_loop_final",
+      "repaired": 0.49230012106048116
+    },
+    {
+      "defective": 0.5861286895183899,
+      "delta": 0.0009962251783850462,
+      "path": "open_assays.per_seed[60].closed_loop_root",
+      "repaired": 0.587124914696775
+    },
+    {
+      "defective": 0.5567554918643728,
+      "delta": -0.03767744807757134,
+      "path": "open_assays.per_seed[60].exact_replay_final",
+      "repaired": 0.5190780437868014
+    },
+    {
+      "defective": 0.7553673866461817,
+      "delta": -0.00015222549343973935,
+      "path": "open_assays.per_seed[60].exact_replay_root",
+      "repaired": 0.755215161152742
+    },
+    {
+      "defective": 0.9925094265492072,
+      "delta": -0.05119573599340066,
+      "path": "open_assays.per_seed[60].gradual_final",
+      "repaired": 0.9413136905558065
+    },
+    {
+      "defective": 0.8266447373250874,
+      "delta": -0.06432830121861499,
+      "path": "open_assays.per_seed[60].high_control_final",
+      "repaired": 0.7623164361064724
+    },
+    {
+      "defective": 0.9838693068211681,
+      "delta": -0.04620663008548109,
+      "path": "open_assays.per_seed[60].low_control_final",
+      "repaired": 0.937662676735687
+    },
+    {
+      "defective": 0.18098109723200426,
+      "delta": 0.07683358444583896,
+      "path": "open_assays.per_seed[60].overwhelm_control_final",
+      "repaired": 0.2578146816778432
+    },
+    {
+      "defective": 0.7642409211584835,
+      "delta": -0.12476111551255653,
+      "path": "open_assays.per_seed[61].acute_final",
+      "repaired": 0.639479805645927
+    },
+    {
+      "defective": 0.9531841098553764,
+      "delta": -0.10476406235134728,
+      "path": "open_assays.per_seed[61].adaptive_threat_final",
+      "repaired": 0.8484200475040291
+    },
+    {
+      "defective": 0.5831567131446542,
+      "delta": -0.036792218416831,
+      "path": "open_assays.per_seed[61].closed_loop_final",
+      "repaired": 0.5463644947278232
+    },
+    {
+      "defective": 0.9523855457371951,
+      "delta": -5.548839640290293e-05,
+      "path": "open_assays.per_seed[61].closed_loop_root",
+      "repaired": 0.9523300573407922
+    },
+    {
+      "defective": 0.4220666636147944,
+      "delta": 0.015319977049381261,
+      "path": "open_assays.per_seed[61].exact_replay_final",
+      "repaired": 0.43738664066417565
+    },
+    {
+      "defective": 0.38922337409266017,
+      "delta": -0.00013607788068520366,
+      "path": "open_assays.per_seed[61].exact_replay_root",
+      "repaired": 0.38908729621197496
+    },
+    {
+      "defective": 0.9945035314148529,
+      "delta": -0.024242653905490408,
+      "path": "open_assays.per_seed[61].gradual_final",
+      "repaired": 0.9702608775093625
+    },
+    {
+      "defective": 0.8435086736622297,
+      "delta": -0.08045709059388673,
+      "path": "open_assays.per_seed[61].high_control_final",
+      "repaired": 0.763051583068343
+    },
+    {
+      "defective": 0.9822121802861765,
+      "delta": -0.042522173881814895,
+      "path": "open_assays.per_seed[61].low_control_final",
+      "repaired": 0.9396900064043616
+    },
+    {
+      "defective": 0.11248103362840214,
+      "delta": 0.043808348353479326,
+      "path": "open_assays.per_seed[61].overwhelm_control_final",
+      "repaired": 0.15628938198188147
+    },
+    {
+      "defective": 0.720042832830133,
+      "delta": -0.14879764464187129,
+      "path": "open_assays.per_seed[62].acute_final",
+      "repaired": 0.5712451881882618
+    },
+    {
+      "defective": 0.9468735559639188,
+      "delta": -0.11999933587648082,
+      "path": "open_assays.per_seed[62].adaptive_threat_final",
+      "repaired": 0.8268742200874379
+    },
+    {
+      "defective": 0.5715386243511336,
+      "delta": -0.009700938306468343,
+      "path": "open_assays.per_seed[62].closed_loop_final",
+      "repaired": 0.5618376860446652
+    },
+    {
+      "defective": 0.995171817699684,
+      "delta": 1.174862345454386e-05,
+      "path": "open_assays.per_seed[62].closed_loop_root",
+      "repaired": 0.9951835663231385
+    },
+    {
+      "defective": 0.39724833437237916,
+      "delta": 0.02819137223063517,
+      "path": "open_assays.per_seed[62].exact_replay_final",
+      "repaired": 0.42543970660301433
+    },
+    {
+      "defective": 0.7433513252335343,
+      "delta": 1.8098999088000944e-05,
+      "path": "open_assays.per_seed[62].exact_replay_root",
+      "repaired": 0.7433694242326223
+    },
+    {
+      "defective": 0.9938028924829571,
+      "delta": -0.03486899492464546,
+      "path": "open_assays.per_seed[62].gradual_final",
+      "repaired": 0.9589338975583116
+    },
+    {
+      "defective": 0.7851495897285407,
+      "delta": -0.07620705468350053,
+      "path": "open_assays.per_seed[62].high_control_final",
+      "repaired": 0.7089425350450401
+    },
+    {
+      "defective": 0.9851661872292291,
+      "delta": -0.03752338676951916,
+      "path": "open_assays.per_seed[62].low_control_final",
+      "repaired": 0.9476428004597099
+    },
+    {
+      "defective": 0.17048620198492728,
+      "delta": 0.06264417843787126,
+      "path": "open_assays.per_seed[62].overwhelm_control_final",
+      "repaired": 0.23313038042279854
+    },
+    {
+      "defective": 0.753604950536863,
+      "delta": -0.11063714420405046,
+      "path": "open_assays.per_seed[63].acute_final",
+      "repaired": 0.6429678063328126
+    },
+    {
+      "defective": 0.9626538103617073,
+      "delta": -0.09460276254582223,
+      "path": "open_assays.per_seed[63].adaptive_threat_final",
+      "repaired": 0.868051047815885
+    },
+    {
+      "defective": 0.544994742584748,
+      "delta": 0.007790093950369115,
+      "path": "open_assays.per_seed[63].closed_loop_final",
+      "repaired": 0.5527848365351171
+    },
+    {
+      "defective": 0.7528618632443926,
+      "delta": 0.0005943642013099826,
+      "path": "open_assays.per_seed[63].closed_loop_root",
+      "repaired": 0.7534562274457026
+    },
+    {
+      "defective": 0.4889826407599388,
+      "delta": -0.0017842119579519755,
+      "path": "open_assays.per_seed[63].exact_replay_final",
+      "repaired": 0.4871984288019868
+    },
+    {
+      "defective": 0.4331955769777849,
+      "delta": 1.3151193617111367e-05,
+      "path": "open_assays.per_seed[63].exact_replay_root",
+      "repaired": 0.433208728171402
+    },
+    {
+      "defective": 0.9939123206834942,
+      "delta": -0.028840805342822184,
+      "path": "open_assays.per_seed[63].gradual_final",
+      "repaired": 0.965071515340672
+    },
+    {
+      "defective": 0.8191621061964679,
+      "delta": -0.06819910946807972,
+      "path": "open_assays.per_seed[63].high_control_final",
+      "repaired": 0.7509629967283882
+    },
+    {
+      "defective": 0.9844660397779867,
+      "delta": -0.04787452962074379,
+      "path": "open_assays.per_seed[63].low_control_final",
+      "repaired": 0.936591510157243
+    },
+    {
+      "defective": 0.21193549032290016,
+      "delta": 0.07464734978174781,
+      "path": "open_assays.per_seed[63].overwhelm_control_final",
+      "repaired": 0.28658284010464796
+    },
+    {
+      "defective": 0.6167505827056242,
+      "delta": -0.052349158728751455,
+      "path": "open_assays.per_seed[6].acute_final",
+      "repaired": 0.5644014239768728
+    },
+    {
+      "defective": 0.9608673890156798,
+      "delta": -0.08650478503204795,
+      "path": "open_assays.per_seed[6].adaptive_threat_final",
+      "repaired": 0.8743626039836319
+    },
+    {
+      "defective": 0.8858901751621726,
+      "delta": -0.1011422068147122,
+      "path": "open_assays.per_seed[6].closed_loop_final",
+      "repaired": 0.7847479683474604
+    },
+    {
+      "defective": 0.9994462251189786,
+      "delta": -3.9987300350263766e-05,
+      "path": "open_assays.per_seed[6].closed_loop_root",
+      "repaired": 0.9994062378186284
+    },
+    {
+      "defective": 0.632831332580276,
+      "delta": -0.060529296177252445,
+      "path": "open_assays.per_seed[6].exact_replay_final",
+      "repaired": 0.5723020364030236
+    },
+    {
+      "defective": 0.873044528121524,
+      "delta": -0.0013979418826131074,
+      "path": "open_assays.per_seed[6].exact_replay_root",
+      "repaired": 0.8716465862389109
+    },
+    {
+      "defective": 0.9939378500353999,
+      "delta": -0.032119978347544875,
+      "path": "open_assays.per_seed[6].gradual_final",
+      "repaired": 0.961817871687855
+    },
+    {
+      "defective": 0.8307880192546098,
+      "delta": -0.06554524231627257,
+      "path": "open_assays.per_seed[6].high_control_final",
+      "repaired": 0.7652427769383372
+    },
+    {
+      "defective": 0.9860095179764643,
+      "delta": -0.0299463706681089,
+      "path": "open_assays.per_seed[6].low_control_final",
+      "repaired": 0.9560631473083554
+    },
+    {
+      "defective": 0.20583115306805705,
+      "delta": 0.06616970349668122,
+      "path": "open_assays.per_seed[6].overwhelm_control_final",
+      "repaired": 0.27200085656473827
+    },
+    {
+      "defective": 0.7583815994437999,
+      "delta": -0.09219373438001921,
+      "path": "open_assays.per_seed[7].acute_final",
+      "repaired": 0.6661878650637807
+    },
+    {
+      "defective": 0.9731215779833875,
+      "delta": -0.06281192194028751,
+      "path": "open_assays.per_seed[7].adaptive_threat_final",
+      "repaired": 0.9103096560431
+    },
+    {
+      "defective": 0.75,
+      "delta": -0.0625,
+      "path": "open_assays.per_seed[7].closed_loop_adverse_outcome_rate",
+      "repaired": 0.6875
+    },
+    {
+      "defective": 0.6875,
+      "delta": -0.0625,
+      "path": "open_assays.per_seed[7].closed_loop_adverse_transition_rate",
+      "repaired": 0.625
+    },
+    {
+      "defective": 0.625,
+      "delta": -0.0625,
+      "path": "open_assays.per_seed[7].closed_loop_avoidance_rate",
+      "repaired": 0.5625
+    },
+    {
+      "defective": 0.9392579730848893,
+      "delta": -0.185161660693562,
+      "path": "open_assays.per_seed[7].closed_loop_final",
+      "repaired": 0.7540963123913274
+    },
+    {
+      "defective": 0.5208333333333334,
+      "delta": -0.038690476190476164,
+      "path": "open_assays.per_seed[7].closed_loop_mediator",
+      "repaired": 0.4821428571428572
+    },
+    {
+      "defective": 0.9994434831147908,
+      "delta": -0.0014941099932225255,
+      "path": "open_assays.per_seed[7].closed_loop_root",
+      "repaired": 0.9979493731215683
+    },
+    {
+      "defective": 0.5188117417128806,
+      "delta": -0.01318326521718216,
+      "path": "open_assays.per_seed[7].exact_replay_final",
+      "repaired": 0.5056284764956984
+    },
+    {
+      "defective": 0.8423297213689873,
+      "delta": -2.4571993801680847e-05,
+      "path": "open_assays.per_seed[7].exact_replay_root",
+      "repaired": 0.8423051493751856
+    },
+    {
+      "defective": 0.9906823088128769,
+      "delta": -0.071073938118149,
+      "path": "open_assays.per_seed[7].gradual_final",
+      "repaired": 0.9196083706947279
+    },
+    {
+      "defective": 0.8374334668917636,
+      "delta": -0.0630913685438309,
+      "path": "open_assays.per_seed[7].high_control_final",
+      "repaired": 0.7743420983479327
+    },
+    {
+      "defective": 0.9794888807699914,
+      "delta": -0.05318810804926766,
+      "path": "open_assays.per_seed[7].low_control_final",
+      "repaired": 0.9263007727207238
+    },
+    {
+      "defective": 0.11275323857128153,
+      "delta": 0.055969826313836096,
+      "path": "open_assays.per_seed[7].overwhelm_control_final",
+      "repaired": 0.16872306488511762
+    },
+    {
+      "defective": 0.9164752665745873,
+      "delta": -0.08737287101272317,
+      "path": "open_assays.per_seed[8].acute_final",
+      "repaired": 0.8291023955618642
+    },
+    {
+      "defective": 0.9781155525503116,
+      "delta": -0.05627292910048076,
+      "path": "open_assays.per_seed[8].adaptive_threat_final",
+      "repaired": 0.9218426234498308
+    },
+    {
+      "defective": 0.558573625274816,
+      "delta": -0.041669084834614956,
+      "path": "open_assays.per_seed[8].closed_loop_final",
+      "repaired": 0.5169045404402011
+    },
+    {
+      "defective": 0.991805317310791,
+      "delta": 1.7154783546136088e-05,
+      "path": "open_assays.per_seed[8].closed_loop_root",
+      "repaired": 0.9918224720943372
+    },
+    {
+      "defective": 0.3718311742689531,
+      "delta": 0.02496008515569509,
+      "path": "open_assays.per_seed[8].exact_replay_final",
+      "repaired": 0.3967912594246482
+    },
+    {
+      "defective": 0.6102330309905863,
+      "delta": -0.0005421767395151766,
+      "path": "open_assays.per_seed[8].exact_replay_root",
+      "repaired": 0.6096908542510712
+    },
+    {
+      "defective": 0.9921399174576802,
+      "delta": -0.06225633281795939,
+      "path": "open_assays.per_seed[8].gradual_final",
+      "repaired": 0.9298835846397208
+    },
+    {
+      "defective": 0.8498744850327629,
+      "delta": -0.059307902816364555,
+      "path": "open_assays.per_seed[8].high_control_final",
+      "repaired": 0.7905665822163983
+    },
+    {
+      "defective": 0.9847646180617474,
+      "delta": -0.053111572176693156,
+      "path": "open_assays.per_seed[8].low_control_final",
+      "repaired": 0.9316530458850543
+    },
+    {
+      "defective": 0.19282627056270848,
+      "delta": 0.0913974152841088,
+      "path": "open_assays.per_seed[8].overwhelm_control_final",
+      "repaired": 0.2842236858468173
+    },
+    {
+      "defective": 0.8912175419575059,
+      "delta": -0.1364275205899005,
+      "path": "open_assays.per_seed[9].acute_final",
+      "repaired": 0.7547900213676054
+    },
+    {
+      "defective": 0.9782247353121477,
+      "delta": -0.06428318968479363,
+      "path": "open_assays.per_seed[9].adaptive_threat_final",
+      "repaired": 0.9139415456273541
+    },
+    {
+      "defective": 0.4832945195612532,
+      "delta": 0.007812592324155487,
+      "path": "open_assays.per_seed[9].closed_loop_final",
+      "repaired": 0.4911071118854087
+    },
+    {
+      "defective": 0.3898948695265551,
+      "delta": 0.0007934012378451594,
+      "path": "open_assays.per_seed[9].closed_loop_root",
+      "repaired": 0.39068827076440027
+    },
+    {
+      "defective": 0.5230779747528901,
+      "delta": -0.0028835099283426313,
+      "path": "open_assays.per_seed[9].exact_replay_final",
+      "repaired": 0.5201944648245475
+    },
+    {
+      "defective": 0.7494431815174956,
+      "delta": 5.968513585519197e-05,
+      "path": "open_assays.per_seed[9].exact_replay_root",
+      "repaired": 0.7495028666533508
+    },
+    {
+      "defective": 0.9901150606292746,
+      "delta": -0.08582589635077675,
+      "path": "open_assays.per_seed[9].gradual_final",
+      "repaired": 0.9042891642784978
+    },
+    {
+      "defective": 0.7690734129639245,
+      "delta": -0.08259034795036402,
+      "path": "open_assays.per_seed[9].high_control_final",
+      "repaired": 0.6864830650135605
+    },
+    {
+      "defective": 0.9848218009321836,
+      "delta": -0.025980781363612482,
+      "path": "open_assays.per_seed[9].low_control_final",
+      "repaired": 0.9588410195685712
+    },
+    {
+      "defective": 0.10754480025562047,
+      "delta": 0.05544239275386184,
+      "path": "open_assays.per_seed[9].overwhelm_control_final",
+      "repaired": 0.1629871930094823
+    },
+    {
+      "defective": 0.1689477890656611,
+      "delta": -0.024832147899737145,
+      "path": "open_assays.step_injection.maximum",
+      "repaired": 0.14411564116592396
+    },
+    {
+      "defective": 0.1331790873292579,
+      "delta": -0.025382937720539955,
+      "path": "open_assays.step_injection.percentile_99",
+      "repaired": 0.10779614960871794
+    },
+    {
+      "defective": 0.9921875,
+      "delta": 0.0078125,
+      "path": "recovery.controllability_accuracy",
+      "repaired": 1.0
+    },
+    {
+      "defective": 0.9045833328364745,
+      "delta": -0.027961686939686592,
+      "path": "recovery.mean_true_structure_probability",
+      "repaired": 0.8766216458967879
+    },
+    {
+      "defective": 0.9296875,
+      "delta": 0.0234375,
+      "path": "recovery.structure_accuracy",
+      "repaired": 0.953125
+    },
+    {
+      "defective": 0.06567102063006844,
+      "delta": -0.01116617711189441,
+      "path": "recovery.structure_brier",
+      "repaired": 0.05450484351817403
+    },
+    {
+      "defective": 55.0,
+      "delta": 3.0,
+      "path": "recovery.structure_confusion_matrix[0][0]",
+      "repaired": 58.0
+    },
+    {
+      "defective": 9.0,
+      "delta": -3.0,
+      "path": "recovery.structure_confusion_matrix[0][1]",
+      "repaired": 6.0
+    },
+    {
+      "defective": 0.08936561809028504,
+      "delta": 0.01642889406525208,
+      "path": "recovery.structure_ece",
+      "repaired": 0.10579451215553712
+    },
+    {
+      "defective": 0.6638445189057028,
+      "delta": 0.010958620719505374,
+      "path": "semantic_proofs.finite_comparison.engine_posterior[0]",
+      "repaired": 0.6748031396252082
+    },
+    {
+      "defective": 0.33615548109429716,
+      "delta": -0.010958620719505374,
+      "path": "semantic_proofs.finite_comparison.engine_posterior[1]",
+      "repaired": 0.3251968603747918
+    },
+    {
+      "defective": 0.6638445189057031,
+      "delta": 0.010958620719505374,
+      "path": "semantic_proofs.finite_comparison.manual_posterior[0]",
+      "repaired": 0.6748031396252084
+    },
+    {
+      "defective": 0.33615548109429705,
+      "delta": -0.010958620719505374,
+      "path": "semantic_proofs.finite_comparison.manual_posterior[1]",
+      "repaired": 0.3251968603747917
+    },
+    {
+      "defective": 0.8626007769401306,
+      "delta": -0.1760012443941924,
+      "path": "sensitivity.full_profile[0].adaptive_persistence",
+      "repaired": 0.6865995325459382
+    },
+    {
+      "defective": -0.009076033212199599,
+      "delta": 4.012558756212245e-05,
+      "path": "sensitivity.full_profile[0].root_effect",
+      "repaired": -0.009035907624637476
+    },
+    {
+      "defective": 0.0017811571456199937,
+      "delta": -0.003286479486676097,
+      "path": "sensitivity.full_profile[0].structure_effect",
+      "repaired": -0.0015053223410561034
+    },
+    {
+      "defective": 0.9704262502973194,
+      "delta": -0.07976095291455243,
+      "path": "sensitivity.full_profile[10].adaptive_persistence",
+      "repaired": 0.890665297382767
+    },
+    {
+      "defective": 0.0672652145312157,
+      "delta": 0.0020713069137031637,
+      "path": "sensitivity.full_profile[10].root_effect",
+      "repaired": 0.06933652144491886
+    },
+    {
+      "defective": 0.21694936134710008,
+      "delta": 0.002266305000576674,
+      "path": "sensitivity.full_profile[10].structure_effect",
+      "repaired": 0.21921566634767675
+    },
+    {
+      "defective": 0.9002485746528189,
+      "delta": -0.188875084265261,
+      "path": "sensitivity.full_profile[11].adaptive_persistence",
+      "repaired": 0.7113734903875579
+    },
+    {
+      "defective": 0.40725774261795067,
+      "delta": -0.0001736446849009976,
+      "path": "sensitivity.full_profile[11].root_effect",
+      "repaired": 0.40708409793304967
+    },
+    {
+      "defective": 0.04583045609202352,
+      "delta": 0.006112505412221081,
+      "path": "sensitivity.full_profile[11].structure_effect",
+      "repaired": 0.0519429615042446
+    },
+    {
+      "defective": 0.9586963991918344,
+      "delta": -0.11637589858658914,
+      "path": "sensitivity.full_profile[12].adaptive_persistence",
+      "repaired": 0.8423205006052452
+    },
+    {
+      "defective": 0.1404198995435687,
+      "delta": 0.0004885554544563631,
+      "path": "sensitivity.full_profile[12].root_effect",
+      "repaired": 0.14090845499802507
+    },
+    {
+      "defective": 0.04499715783526742,
+      "delta": 0.012544420199181505,
+      "path": "sensitivity.full_profile[12].structure_effect",
+      "repaired": 0.057541578034448926
+    },
+    {
+      "defective": 0.9788701609333885,
+      "delta": -0.05915789673430116,
+      "path": "sensitivity.full_profile[13].adaptive_persistence",
+      "repaired": 0.9197122641990874
+    },
+    {
+      "defective": 0.024091160911087872,
+      "delta": -0.00048218477003209026,
+      "path": "sensitivity.full_profile[13].root_effect",
+      "repaired": 0.023608976141055782
+    },
+    {
+      "defective": -0.036985228009837834,
+      "delta": 0.012587102883540036,
+      "path": "sensitivity.full_profile[13].structure_effect",
+      "repaired": -0.0243981251262978
+    },
+    {
+      "defective": 0.9733068607401234,
+      "delta": -0.08265483218319591,
+      "path": "sensitivity.full_profile[14].adaptive_persistence",
+      "repaired": 0.8906520285569275
+    },
+    {
+      "defective": -0.04888943221137954,
+      "delta": 1.2322493902074128e-05,
+      "path": "sensitivity.full_profile[14].root_effect",
+      "repaired": -0.04887710971747747
+    },
+    {
+      "defective": 0.0027235201224613537,
+      "delta": 0.012336686145585196,
+      "path": "sensitivity.full_profile[14].structure_effect",
+      "repaired": 0.01506020626804655
+    },
+    {
+      "defective": 0.9256514399937777,
+      "delta": -0.14973992117076185,
+      "path": "sensitivity.full_profile[15].adaptive_persistence",
+      "repaired": 0.7759115188230159
+    },
+    {
+      "defective": 0.2551719540453443,
+      "delta": -0.0005168843886178554,
+      "path": "sensitivity.full_profile[15].root_effect",
+      "repaired": 0.25465506965672646
+    },
+    {
+      "defective": 0.1321018670424441,
+      "delta": -0.030726325602118465,
+      "path": "sensitivity.full_profile[15].structure_effect",
+      "repaired": 0.10137554144032562
+    },
+    {
+      "defective": 0.9538620636450666,
+      "delta": -0.10176829886001881,
+      "path": "sensitivity.full_profile[16].adaptive_persistence",
+      "repaired": 0.8520937647850478
+    },
+    {
+      "defective": 0.18455208865136818,
+      "delta": -0.0006377534221225778,
+      "path": "sensitivity.full_profile[16].root_effect",
+      "repaired": 0.1839143352292456
+    },
+    {
+      "defective": 0.16478046793074375,
+      "delta": -0.0605168084275447,
+      "path": "sensitivity.full_profile[16].structure_effect",
+      "repaired": 0.10426365950319905
+    },
+    {
+      "defective": 0.8817776424288085,
+      "delta": -0.2108192797190377,
+      "path": "sensitivity.full_profile[17].adaptive_persistence",
+      "repaired": 0.6709583627097708
+    },
+    {
+      "defective": 0.695742168941828,
+      "delta": 0.0003993752063421452,
+      "path": "sensitivity.full_profile[17].root_effect",
+      "repaired": 0.6961415441481702
+    },
+    {
+      "defective": 0.06349466602359666,
+      "delta": -0.014073352058995403,
+      "path": "sensitivity.full_profile[17].structure_effect",
+      "repaired": 0.049421313964601254
+    },
+    {
+      "defective": 0.9736961757477861,
+      "delta": -0.08186811039587727,
+      "path": "sensitivity.full_profile[18].adaptive_persistence",
+      "repaired": 0.8918280653519088
+    },
+    {
+      "defective": 0.05242440419077454,
+      "delta": 0.00012080943231651542,
+      "path": "sensitivity.full_profile[18].root_effect",
+      "repaired": 0.05254521362309106
+    },
+    {
+      "defective": 0.04475239519115304,
+      "delta": -0.004960443005942394,
+      "path": "sensitivity.full_profile[18].structure_effect",
+      "repaired": 0.039791952185210644
+    },
+    {
+      "defective": 0.8661557449929899,
+      "delta": -0.22075111903509848,
+      "path": "sensitivity.full_profile[19].adaptive_persistence",
+      "repaired": 0.6454046259578914
+    },
+    {
+      "defective": 0.0684557294972693,
+      "delta": -2.464250857481254e-06,
+      "path": "sensitivity.full_profile[19].root_effect",
+      "repaired": 0.06845326524641182
+    },
+    {
+      "defective": 0.054190228134559926,
+      "delta": 0.0033999687835878922,
+      "path": "sensitivity.full_profile[19].structure_effect",
+      "repaired": 0.05759019691814782
+    },
+    {
+      "defective": 0.8597971708981058,
+      "delta": -0.23962525543790658,
+      "path": "sensitivity.full_profile[1].adaptive_persistence",
+      "repaired": 0.6201719154601992
+    },
+    {
+      "defective": 0.8869133056847651,
+      "delta": -0.002954405716994235,
+      "path": "sensitivity.full_profile[1].root_effect",
+      "repaired": 0.8839588999677709
+    },
+    {
+      "defective": 0.2306180594826966,
+      "delta": -0.08699403998587929,
+      "path": "sensitivity.full_profile[1].structure_effect",
+      "repaired": 0.1436240194968173
+    },
+    {
+      "defective": 0.714776723889374,
+      "delta": -0.18499304770383784,
+      "path": "sensitivity.full_profile[20].adaptive_persistence",
+      "repaired": 0.5297836761855361
+    },
+    {
+      "defective": -0.024212741299757923,
+      "delta": -1.2401790118549139e-05,
+      "path": "sensitivity.full_profile[20].root_effect",
+      "repaired": -0.024225143089876472
+    },
+    {
+      "defective": 0.011628498946368804,
+      "delta": -0.0023770577343840693,
+      "path": "sensitivity.full_profile[20].structure_effect",
+      "repaired": 0.009251441211984734
+    },
+    {
+      "defective": 0.9841627668254227,
+      "delta": -0.04984015625606719,
+      "path": "sensitivity.full_profile[21].adaptive_persistence",
+      "repaired": 0.9343226105693555
+    },
+    {
+      "defective": 0.014591737638181557,
+      "delta": 0.00035684638745847597,
+      "path": "sensitivity.full_profile[21].root_effect",
+      "repaired": 0.014948584025640033
+    },
+    {
+      "defective": -0.054994903899360015,
+      "delta": 0.058528844040953154,
+      "path": "sensitivity.full_profile[21].structure_effect",
+      "repaired": 0.0035339401415931393
+    },
+    {
+      "defective": 0.9667667517169423,
+      "delta": -0.07238722908051365,
+      "path": "sensitivity.full_profile[22].adaptive_persistence",
+      "repaired": 0.8943795226364286
+    },
+    {
+      "defective": 0.2464448452262089,
+      "delta": -0.00029973950623418677,
+      "path": "sensitivity.full_profile[22].root_effect",
+      "repaired": 0.24614510571997472
+    },
+    {
+      "defective": 0.0775383992002589,
+      "delta": -0.012578345424313297,
+      "path": "sensitivity.full_profile[22].structure_effect",
+      "repaired": 0.0649600537759456
+    },
+    {
+      "defective": 0.9097759397869605,
+      "delta": -0.197055583831925,
+      "path": "sensitivity.full_profile[23].adaptive_persistence",
+      "repaired": 0.7127203559550355
+    },
+    {
+      "defective": 0.7535796581560124,
+      "delta": -3.955310880443541e-05,
+      "path": "sensitivity.full_profile[23].root_effect",
+      "repaired": 0.7535401050472079
+    },
+    {
+      "defective": 0.28154725686048804,
+      "delta": -0.18088683372607406,
+      "path": "sensitivity.full_profile[23].structure_effect",
+      "repaired": 0.10066042313441398
+    },
+    {
+      "defective": 0.9360827394968722,
+      "delta": -0.14728131961462687,
+      "path": "sensitivity.full_profile[24].adaptive_persistence",
+      "repaired": 0.7888014198822453
+    },
+    {
+      "defective": -0.09717294272385762,
+      "delta": -3.0067818900220145e-05,
+      "path": "sensitivity.full_profile[24].root_effect",
+      "repaired": -0.09720301054275785
+    },
+    {
+      "defective": -0.022647613764422148,
+      "delta": 0.010609111588542719,
+      "path": "sensitivity.full_profile[24].structure_effect",
+      "repaired": -0.012038502175879429
+    },
+    {
+      "defective": 0.9567462712148874,
+      "delta": -0.12662233579494553,
+      "path": "sensitivity.full_profile[25].adaptive_persistence",
+      "repaired": 0.8301239354199419
+    },
+    {
+      "defective": -0.44392787440941994,
+      "delta": -0.0001093711467789471,
+      "path": "sensitivity.full_profile[25].root_effect",
+      "repaired": -0.4440372455561989
+    },
+    {
+      "defective": -0.04143461835346457,
+      "delta": 0.019229143957644468,
+      "path": "sensitivity.full_profile[25].structure_effect",
+      "repaired": -0.022205474395820102
+    },
+    {
+      "defective": 0.980267558562902,
+      "delta": -0.0614550531088236,
+      "path": "sensitivity.full_profile[26].adaptive_persistence",
+      "repaired": 0.9188125054540784
+    },
+    {
+      "defective": 0.9196101211295985,
+      "delta": 0.0003283476690389975,
+      "path": "sensitivity.full_profile[26].root_effect",
+      "repaired": 0.9199384687986375
+    },
+    {
+      "defective": 0.24393520516804418,
+      "delta": -0.22347905024475528,
+      "path": "sensitivity.full_profile[26].structure_effect",
+      "repaired": 0.020456154923288894
+    },
+    {
+      "defective": 0.9554659022464496,
+      "delta": -0.1208351597402113,
+      "path": "sensitivity.full_profile[27].adaptive_persistence",
+      "repaired": 0.8346307425062383
+    },
+    {
+      "defective": 0.5128210918865024,
+      "delta": 5.1572615832773394e-05,
+      "path": "sensitivity.full_profile[27].root_effect",
+      "repaired": 0.5128726645023352
+    },
+    {
+      "defective": 0.06228160754971923,
+      "delta": -0.0022873796606313612,
+      "path": "sensitivity.full_profile[27].structure_effect",
+      "repaired": 0.05999422788908787
+    },
+    {
+      "defective": 0.8649345563032477,
+      "delta": -0.23655845136873443,
+      "path": "sensitivity.full_profile[28].adaptive_persistence",
+      "repaired": 0.6283761049345132
+    },
+    {
+      "defective": 0.398809374943323,
+      "delta": -0.0002726185137836845,
+      "path": "sensitivity.full_profile[28].root_effect",
+      "repaired": 0.39853675642953934
+    },
+    {
+      "defective": 0.23925236702016744,
+      "delta": -0.12811391971255454,
+      "path": "sensitivity.full_profile[28].structure_effect",
+      "repaired": 0.11113844730761291
+    },
+    {
+      "defective": 0.95823359488526,
+      "delta": -0.11880704251850005,
+      "path": "sensitivity.full_profile[29].adaptive_persistence",
+      "repaired": 0.83942655236676
+    },
+    {
+      "defective": 0.11307245910015429,
+      "delta": -0.0005135597965684191,
+      "path": "sensitivity.full_profile[29].root_effect",
+      "repaired": 0.11255889930358587
+    },
+    {
+      "defective": 0.41226300772312485,
+      "delta": -0.11460314115404424,
+      "path": "sensitivity.full_profile[29].structure_effect",
+      "repaired": 0.2976598665690806
+    },
+    {
+      "defective": 0.9432447084958868,
+      "delta": -0.12793863088843205,
+      "path": "sensitivity.full_profile[2].adaptive_persistence",
+      "repaired": 0.8153060776074548
+    },
+    {
+      "defective": 0.027753388893975717,
+      "delta": -0.0002315509397896598,
+      "path": "sensitivity.full_profile[2].root_effect",
+      "repaired": 0.027521837954186057
+    },
+    {
+      "defective": -0.01570014107555151,
+      "delta": 0.033597154007075636,
+      "path": "sensitivity.full_profile[2].structure_effect",
+      "repaired": 0.017897012931524126
+    },
+    {
+      "defective": 0.9347745544806001,
+      "delta": -0.15257126056301518,
+      "path": "sensitivity.full_profile[30].adaptive_persistence",
+      "repaired": 0.7822032939175849
+    },
+    {
+      "defective": 0.21724223310047108,
+      "delta": -0.00026789736471888315,
+      "path": "sensitivity.full_profile[30].root_effect",
+      "repaired": 0.2169743357357522
+    },
+    {
+      "defective": 0.09905531044003957,
+      "delta": -0.01606221194272478,
+      "path": "sensitivity.full_profile[30].structure_effect",
+      "repaired": 0.08299309849731479
+    },
+    {
+      "defective": 0.9423391325680768,
+      "delta": -0.14130991097428458,
+      "path": "sensitivity.full_profile[31].adaptive_persistence",
+      "repaired": 0.8010292215937922
+    },
+    {
+      "defective": -0.18372385256131973,
+      "delta": 0.00010242127614545904,
+      "path": "sensitivity.full_profile[31].root_effect",
+      "repaired": -0.18362143128517427
+    },
+    {
+      "defective": -0.01366648416977434,
+      "delta": -0.006237350113198092,
+      "path": "sensitivity.full_profile[31].structure_effect",
+      "repaired": -0.019903834282972432
+    },
+    {
+      "defective": 0.9055932810129372,
+      "delta": -0.19622228506695283,
+      "path": "sensitivity.full_profile[3].adaptive_persistence",
+      "repaired": 0.7093709959459844
+    },
+    {
+      "defective": 0.059829775021462084,
+      "delta": 0.00018940135205859632,
+      "path": "sensitivity.full_profile[3].root_effect",
+      "repaired": 0.06001917637352068
+    },
+    {
+      "defective": 0.037913054975454885,
+      "delta": -0.008023639857808407,
+      "path": "sensitivity.full_profile[3].structure_effect",
+      "repaired": 0.02988941511764648
+    },
+    {
+      "defective": 0.9064710040204131,
+      "delta": -0.14337427644460798,
+      "path": "sensitivity.full_profile[4].adaptive_persistence",
+      "repaired": 0.7630967275758052
+    },
+    {
+      "defective": 0.22884133108663435,
+      "delta": 0.0003283660286703127,
+      "path": "sensitivity.full_profile[4].root_effect",
+      "repaired": 0.22916969711530466
+    },
+    {
+      "defective": 0.046306043806522756,
+      "delta": -0.01748962859683062,
+      "path": "sensitivity.full_profile[4].structure_effect",
+      "repaired": 0.028816415209692137
+    },
+    {
+      "defective": 0.9790863484582429,
+      "delta": -0.06979498081589697,
+      "path": "sensitivity.full_profile[5].adaptive_persistence",
+      "repaired": 0.909291367642346
+    },
+    {
+      "defective": 0.6065018358560531,
+      "delta": -0.0004972504029454594,
+      "path": "sensitivity.full_profile[5].root_effect",
+      "repaired": 0.6060045854531076
+    },
+    {
+      "defective": 0.4077452102857132,
+      "delta": -0.09595806695384373,
+      "path": "sensitivity.full_profile[5].structure_effect",
+      "repaired": 0.31178714333186947
+    },
+    {
+      "defective": 0.9582412809110182,
+      "delta": -0.1261822729782508,
+      "path": "sensitivity.full_profile[6].adaptive_persistence",
+      "repaired": 0.8320590079327674
+    },
+    {
+      "defective": 0.2278157577618971,
+      "delta": -0.00017023297865503828,
+      "path": "sensitivity.full_profile[6].root_effect",
+      "repaired": 0.22764552478324207
+    },
+    {
+      "defective": 0.49051746689264664,
+      "delta": -0.18754802317596142,
+      "path": "sensitivity.full_profile[6].structure_effect",
+      "repaired": 0.3029694437166852
+    },
+    {
+      "defective": 0.9519258236512438,
+      "delta": -0.13317332576276086,
+      "path": "sensitivity.full_profile[7].adaptive_persistence",
+      "repaired": 0.8187524978884829
+    },
+    {
+      "defective": 0.19563732987464277,
+      "delta": -0.00021769462831500164,
+      "path": "sensitivity.full_profile[7].root_effect",
+      "repaired": 0.19541963524632777
+    },
+    {
+      "defective": 0.583509548390817,
+      "delta": -0.16905767637153524,
+      "path": "sensitivity.full_profile[7].structure_effect",
+      "repaired": 0.4144518720192818
+    },
+    {
+      "defective": 0.9511287952208282,
+      "delta": -0.12217605171694945,
+      "path": "sensitivity.full_profile[8].adaptive_persistence",
+      "repaired": 0.8289527435038787
+    },
+    {
+      "defective": 0.021751067821306425,
+      "delta": 0.0003722633669583919,
+      "path": "sensitivity.full_profile[8].root_effect",
+      "repaired": 0.022123331188264816
+    },
+    {
+      "defective": 0.012910407666682,
+      "delta": 0.005836750066423202,
+      "path": "sensitivity.full_profile[8].structure_effect",
+      "repaired": 0.018747157733105202
+    },
+    {
+      "defective": 0.9455064078681623,
+      "delta": -0.11725806082085899,
+      "path": "sensitivity.full_profile[9].adaptive_persistence",
+      "repaired": 0.8282483470473033
+    },
+    {
+      "defective": 0.6954232547625141,
+      "delta": 0.00046923175510660275,
+      "path": "sensitivity.full_profile[9].root_effect",
+      "repaired": 0.6958924865176207
+    },
+    {
+      "defective": 0.16198760510487686,
+      "delta": -0.052464754952126436,
+      "path": "sensitivity.full_profile[9].structure_effect",
+      "repaired": 0.10952285015275043
+    },
+    {
+      "defective": 0.9411070040821997,
+      "delta": -0.11295620357356362,
+      "path": "sensitivity.joint_reliability_perturbations.minus_10_percent.adaptive_persistence",
+      "repaired": 0.8281508005086361
+    },
+    {
+      "defective": 0.09231075908297633,
+      "delta": -0.030716042010173472,
+      "path": "sensitivity.joint_reliability_perturbations.minus_10_percent.chain_effects.persistent_model",
+      "repaired": 0.061594717072802854
+    },
+    {
+      "defective": 0.18232233070428575,
+      "delta": -6.007787723930069e-05,
+      "path": "sensitivity.joint_reliability_perturbations.minus_10_percent.chain_effects.root_persistence",
+      "repaired": 0.18226225282704644
+    },
+    {
+      "defective": 0.9666252404972168,
+      "delta": -0.08512800469895976,
+      "path": "sensitivity.joint_reliability_perturbations.plus_10_percent.adaptive_persistence",
+      "repaired": 0.881497235798257
+    },
+    {
+      "defective": 0.28125,
+      "delta": -0.00390625,
+      "path": "sensitivity.joint_reliability_perturbations.plus_10_percent.chain_effects.observed_evidence",
+      "repaired": 0.27734375
+    },
+    {
+      "defective": 0.13144612666613859,
+      "delta": -0.03915328855692683,
+      "path": "sensitivity.joint_reliability_perturbations.plus_10_percent.chain_effects.persistent_model",
+      "repaired": 0.09229283810921175
+    },
+    {
+      "defective": 0.3828125,
+      "delta": -0.00390625,
+      "path": "sensitivity.joint_reliability_perturbations.plus_10_percent.chain_effects.policy_avoidance",
+      "repaired": 0.37890625
+    },
+    {
+      "defective": 0.3625202922077922,
+      "delta": -0.00390625,
+      "path": "sensitivity.joint_reliability_perturbations.plus_10_percent.chain_effects.realized_mediator",
+      "repaired": 0.3586140422077922
+    },
+    {
+      "defective": 0.19051142466070092,
+      "delta": -0.0002683474068906899,
+      "path": "sensitivity.joint_reliability_perturbations.plus_10_percent.chain_effects.root_persistence",
+      "repaired": 0.19024307725381023
+    },
+    {
+      "defective": 0.375,
+      "delta": -0.00390625,
+      "path": "sensitivity.joint_reliability_perturbations.plus_10_percent.chain_effects.world_transition",
+      "repaired": 0.37109375
+    },
+    {
+      "defective": 0.9060682704448169,
+      "delta": -0.1631096226098272,
+      "path": "sensitivity.structure_prior_sensitivity.0.1.adaptive_persistence",
+      "repaired": 0.7429586478349897
+    },
+    {
+      "defective": 0.08835368470678526,
+      "delta": -0.03298027897026783,
+      "path": "sensitivity.structure_prior_sensitivity.0.1.closed_loop_structure_effect",
+      "repaired": 0.055373405736517424
+    },
+    {
+      "defective": 0.9585642324490267,
+      "delta": -0.09261803148829073,
+      "path": "sensitivity.structure_prior_sensitivity.0.3.adaptive_persistence",
+      "repaired": 0.8659462009607359
+    },
+    {
+      "defective": 0.12597132409846615,
+      "delta": -0.04134632748320273,
+      "path": "sensitivity.structure_prior_sensitivity.0.3.closed_loop_structure_effect",
+      "repaired": 0.08462499661526342
+    },
+    {
+      "defective": 0.9651277048059792,
+      "delta": -0.08075177604604189,
+      "path": "sensitivity.structure_prior_sensitivity.0.35.adaptive_persistence",
+      "repaired": 0.8843759287599373
+    },
+    {
+      "defective": 0.12169293994281924,
+      "delta": -0.03433960339868815,
+      "path": "sensitivity.structure_prior_sensitivity.0.35.closed_loop_structure_effect",
+      "repaired": 0.08735333654413109
+    }
+  ],
+  "moved_numeric_leaf_count": 865,
+  "shared_numeric_leaf_count": 1818
+}

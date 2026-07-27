@@ -1,0 +1,49 @@
+{
+  "failures": [],
+  "gate": 4,
+  "instrument": "V2.3.1r",
+  "name": "gate_4_selective_lesions",
+  "passed": true,
+  "results": {
+    "inherited_regressions": {
+      "V2.0": {
+        "gate_1_semantic": true,
+        "gate_2_recovery": true,
+        "gate_3_comparison": true,
+        "gate_4_batch_mutation": true,
+        "gate_5_one_posterior": true
+      },
+      "V2.1": {
+        "gate_1_semantic": true,
+        "gate_2_recovery": true,
+        "gate_3_composition": true,
+        "gate_4_selective_lesion": true,
+        "gate_5_cumulative_regression": true
+      },
+      "V2.2.1": {
+        "gate_1_structure_semantics": true,
+        "gate_2_recovery": true,
+        "gate_3_precision_root_transfer": true,
+        "gate_4_selective_lesions": true,
+        "gate_5_cumulative_regression": true
+      }
+    },
+    "lesions": {
+      "controllability_inference": {
+        "intact_contrast": -0.0007545538209326463,
+        "lesioned_contrast": 0.0
+      },
+      "formation_coupling": {
+        "intact_persistent_probability": 0.2648405222730477,
+        "lesioned_distance_from_prior": 0.014499999999999985,
+        "lesioned_persistent_probability": 0.2345,
+        "persistent_prior": 0.22
+      },
+      "reflexive_broadcast_context": {
+        "intact_contrast": 0.0015666684987034607,
+        "lesioned_contrast": 5.551115123125783e-17
+      }
+    }
+  },
+  "stage": "V2.3.1"
+}
