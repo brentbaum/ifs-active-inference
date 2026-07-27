@@ -1,0 +1,50 @@
+{
+  "addendum_type": "POST_GATE_6_FREEZE_ADDENDUM",
+  "stage": "V2.3.2-formation",
+  "base_freeze": {
+    "commit": "c67e8530cb8aff6743e49708a3544095314a5365",
+    "manifest_path": "results/V2.3.2-formation/freeze-manifest.json",
+    "manifest_sha256": "e412841e02679eee4d831088af4cc240f78a0c122f7a5deb7dce147dc494f7ae",
+    "manifest_file_count": 33,
+    "manifest_mismatches_before_run": 0
+  },
+  "scope": {
+    "c_v232_f_verdict_changed": false,
+    "frozen_manifest_changed": false,
+    "frozen_stage_files_changed": false,
+    "purpose": "Supply the empirical p99 single-slice persistent-candidate posterior-change rate bound omitted from the c67e853 freeze."
+  },
+  "computation": {
+    "entrypoint": "ref.v232_formation.open_assays()",
+    "seed_block": [
+      751000,
+      751299
+    ],
+    "seed_policy": "The complete frozen development open_seed_block was rerun.",
+    "persistent_candidate": "P (index 2 of the frozen [T, D, P] candidate order)",
+    "change_definition": "For every score_history trajectory actually evaluated by open_assays(), record abs(q_t(P) - q_{t-1}(P)) after every observed slice t. For the first slice of each trajectory, q_0(P) is that score_history call's declared prior; all calls in this battery use the frozen prior q_0(P)=0.25.",
+    "pooling_definition": "Pool every recorded absolute change from every score_history call made by the frozen open-assay entrypoint, including the 300 primary profiles, 100 high-control T profiles, four matched-statistic permutations, and the four no-event trajectories of lengths 16, 64, 80, and 160.",
+    "trajectory_count": 408,
+    "trajectory_length_counts": {
+      "16": 1,
+      "24": 404,
+      "64": 1,
+      "80": 1,
+      "160": 1
+    },
+    "single_slice_change_count": 10016,
+    "quantile_definition": "numpy.quantile(pooled_absolute_changes, 0.99, method='linear')",
+    "numpy_version": "2.4.3"
+  },
+  "results": {
+    "empirical_p99_single_slice_persistent_posterior_change": 0.3345519502357523,
+    "maximum_observed_single_slice_persistent_posterior_change": 0.4327478291686412
+  },
+  "frozen_input_hashes_sha256": {
+    "ref/v232_formation.py": "499e0688a114ce86ac67878c8d1e986596e2cd3a54fa1ebe3c9d4b7917a03b0e",
+    "protocols/v2.3.2-formation-parameters.json": "d1e3b7e329682802c72d8a35e2e53a18ae259e34cfb6800b899a794342d50d91",
+    "protocols/v2.3.2-formation-analysis-plan.md": "d0526bd4834ba8a7644ea94f2a22ad13e0795dd822e1d5d60a1214fd0e4711f8",
+    "results/V2.3.2-formation/gate-3.json": "79f0d08197af99578de2d666177994fbb9f2837092dd5aeaf0fadcae3b7ff523",
+    "results/V2.3.2-formation/stage-report.json": "e2055a421cf610077578412c115dc06e64929cb8ed6c347a279455d5a3d451e7"
+  }
+}
