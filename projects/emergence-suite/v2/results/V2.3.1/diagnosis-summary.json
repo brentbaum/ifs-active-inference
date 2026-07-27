@@ -1,0 +1,257 @@
+{
+  "acute_path": {
+    "acute_slice_count": 608,
+    "all_surface_step_spreads": {
+      "acute_count": 0.004625740552354235,
+      "acute_timing": 0.013084556725256435,
+      "regularity": 0.025377456347121602,
+      "run_length": 0.01300049034408346
+    },
+    "bound": 0.294529387,
+    "bound_exceedances": 68,
+    "largest_surface_step_feature": "regularity",
+    "largest_surface_step_spread": 0.025377456347121602,
+    "maximum_acute_step": 0.5274100721863539,
+    "step_preacute_probability_correlation": 0.04035170220345907
+  },
+  "calibration_curves": {
+    "cumulative_overwhelm_precision": [
+      {
+        "count": 57,
+        "formation_rate_above_half": 0.2982456140350877,
+        "lower": -2.3735560517895964,
+        "mean_formation_probability": 0.3384965015106079,
+        "mean_predictor": -0.9437769996583116,
+        "upper": 0.0
+      },
+      {
+        "count": 192,
+        "formation_rate_above_half": 0.14583333333333334,
+        "lower": 0.0,
+        "mean_formation_probability": 0.26635884763744866,
+        "mean_predictor": 0.0,
+        "upper": 0.36459807971391744
+      },
+      {
+        "count": 263,
+        "formation_rate_above_half": 0.2965779467680608,
+        "lower": 0.36459807971391744,
+        "mean_formation_probability": 0.36563705409458674,
+        "mean_predictor": 0.6584946306620182,
+        "upper": 1.0937942391417523
+      }
+    ],
+    "uncontrollability_log_evidence": [
+      {
+        "count": 103,
+        "formation_rate_above_half": 0.18446601941747573,
+        "lower": -16.875178364829292,
+        "mean_formation_probability": 0.28122109703590675,
+        "mean_predictor": -9.792263895368407,
+        "upper": -7.396007905665107
+      },
+      {
+        "count": 102,
+        "formation_rate_above_half": 0.2647058823529412,
+        "lower": -7.396007905665107,
+        "mean_formation_probability": 0.32621156478094887,
+        "mean_predictor": -5.985281106232104,
+        "upper": -4.811590829474667
+      },
+      {
+        "count": 102,
+        "formation_rate_above_half": 0.30392156862745096,
+        "lower": -4.811590829474667,
+        "mean_formation_probability": 0.3498194752387002,
+        "mean_predictor": -3.7197459827281887,
+        "upper": -2.786802519355999
+      },
+      {
+        "count": 102,
+        "formation_rate_above_half": 0.22549019607843138,
+        "lower": -2.786802519355999,
+        "mean_formation_probability": 0.3267176105808376,
+        "mean_predictor": -2.065847328992571,
+        "upper": -1.3133774859738556
+      },
+      {
+        "count": 103,
+        "formation_rate_above_half": 0.22330097087378642,
+        "lower": -1.3133774859738556,
+        "mean_formation_probability": 0.3432195068293506,
+        "mean_predictor": -0.3158021599607571,
+        "upper": 1.7720752919991023
+      }
+    ]
+  },
+  "dimensions": {
+    "acute_counts": [
+      0,
+      1,
+      3
+    ],
+    "acute_timings": [
+      "early",
+      "middle",
+      "late"
+    ],
+    "low_control_fractions": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "regularities": [
+      "periodic",
+      "jittered",
+      "bernoulli",
+      "clustered"
+    ],
+    "run_lengths": [
+      16,
+      32,
+      64,
+      80
+    ]
+  },
+  "predictive_alignment": {
+    "all_surface_group_spreads": {
+      "acute_count": 0.16247662893703024,
+      "acute_timing": 0.020269863344015593,
+      "low_control_fraction": 0.05378504152274827,
+      "regularity": 0.016341980062369865,
+      "run_length": 0.03565533027289025
+    },
+    "combined_cv_r2": 0.057729383214291885,
+    "largest_surface_group_feature": "acute_count",
+    "largest_surface_group_spread": 0.1146452153738858,
+    "surface_incremental_cv_r2": 0.02788692815262872,
+    "surface_only_cv_r2": 0.05122750150287492,
+    "theory_adjusted_surface_group_spreads": {
+      "acute_count": 0.1146452153738858,
+      "acute_timing": 0.03418509236726647,
+      "low_control_fraction": 0.05719188236179447,
+      "regularity": 0.015221047151381738,
+      "run_length": 0.048153423817249665
+    },
+    "theory_only_cv_r2": 0.029842455061663165
+  },
+  "seed_block": [
+    63000,
+    63511
+  ],
+  "strain_diagnosed": "V2.3",
+  "surface_groups": {
+    "acute_count": [
+      {
+        "count": 192,
+        "mean_formation_probability": 0.26635884763744866,
+        "value": 0
+      },
+      {
+        "count": 176,
+        "mean_formation_probability": 0.3051394158310001,
+        "value": 1
+      },
+      {
+        "count": 144,
+        "mean_formation_probability": 0.4288354765744789,
+        "value": 3
+      }
+    ],
+    "acute_timing": [
+      {
+        "count": 176,
+        "mean_formation_probability": 0.3239209387568188,
+        "value": "early"
+      },
+      {
+        "count": 160,
+        "mean_formation_probability": 0.3367712954961838,
+        "value": "late"
+      },
+      {
+        "count": 176,
+        "mean_formation_probability": 0.3165014321521682,
+        "value": "middle"
+      }
+    ],
+    "low_control_fraction": [
+      {
+        "count": 102,
+        "mean_formation_probability": 0.3027737258820842,
+        "value": 0.0
+      },
+      {
+        "count": 103,
+        "mean_formation_probability": 0.31085421041464395,
+        "value": 0.25
+      },
+      {
+        "count": 102,
+        "mean_formation_probability": 0.3544083628756927,
+        "value": 0.5
+      },
+      {
+        "count": 102,
+        "mean_formation_probability": 0.35652218102542743,
+        "value": 0.75
+      },
+      {
+        "count": 103,
+        "mean_formation_probability": 0.30273713950267916,
+        "value": 1.0
+      }
+    ],
+    "regularity": [
+      {
+        "count": 128,
+        "mean_formation_probability": 0.33385484149014033,
+        "value": "bernoulli"
+      },
+      {
+        "count": 128,
+        "mean_formation_probability": 0.31756821115238165,
+        "value": "clustered"
+      },
+      {
+        "count": 128,
+        "mean_formation_probability": 0.33260896529979445,
+        "value": "jittered"
+      },
+      {
+        "count": 128,
+        "mean_formation_probability": 0.31751286142777047,
+        "value": "periodic"
+      }
+    ],
+    "run_length": [
+      {
+        "count": 128,
+        "mean_formation_probability": 0.34608080770662963,
+        "value": 16
+      },
+      {
+        "count": 128,
+        "mean_formation_probability": 0.3104254774337394,
+        "value": 32
+      },
+      {
+        "count": 128,
+        "mean_formation_probability": 0.3198877479722952,
+        "value": 64
+      },
+      {
+        "count": 128,
+        "mean_formation_probability": 0.3251508462574227,
+        "value": 80
+      }
+    ]
+  },
+  "verdict": {
+    "acute_path": "representational",
+    "generalization": "parametric"
+  },
+  "world_count": 512
+}

@@ -1,0 +1,51 @@
+{
+  "version": "V2.3.1-1",
+  "seed_block": [63600, 63663],
+  "recovery_seed_block": [63700, 63827],
+  "sensitivity_seed_block": [63840, 63871],
+  "initial_structure_prior": [0.7, 0.3],
+  "structure_transition": [[0.98, 0.02], [0.005, 0.995]],
+  "controllability_transition": [[0.995, 0.005], [0.005, 0.995]],
+  "candidate_evidence_contrasts": {
+    "self": 0.0,
+    "event": 0.05,
+    "policy": 0.01,
+    "transition": 0.04,
+    "outcome": 0.03,
+    "context": 0.02
+  },
+  "accumulation_weights": {
+    "overwhelm_uncontrollability": 0.0,
+    "overwhelm_collapsed_broadcast": 0.4,
+    "overwhelm_precision": 0.15,
+    "uncontrollability": 0.5,
+    "collapsed_broadcast": 0.0,
+    "adverse_outcome": 0.15
+  },
+  "high_controllability_penalty": 0.0,
+  "integrated_control_penalty": 0.8,
+  "controllability_evidence_precision": 10.0,
+  "event_precision_support": [2.0, 3.0],
+  "reflexive_monitor_reliability": 0.99,
+  "accumulation_offset": 0.05,
+  "accumulation_gain": 0.7,
+  "accumulation_log_score_cap": 0.8,
+  "rationales": {
+    "seed_block": "A fresh 64-world block repeats every original and varied open assay without reusing diagnosis worlds.",
+    "recovery_seed_block": "A fresh 128-world block measures repaired candidate, controllability, broadcast, and parameter recovery.",
+    "sensitivity_seed_block": "A fresh 32-world block samples the repaired stage-local neighborhood.",
+    "initial_structure_prior": "A 0.30 persistent complexity prior modestly corrects the diagnosed underweighting; the failed 0.40 attempt bounds the adjustment and recovery tests its false-formation cost.",
+    "structure_transition": "A schedule-blind 0.02 formation hazard and 0.005 recovery hazard prevent either candidate from becoming absorbing while remaining inside the declared continuity budget.",
+    "controllability_transition": "A symmetric 0.005 hazard lets the posterior summarize accumulated action-transition evidence across a history while still assigning nonzero probability to changing controllability; the failed 0.05 calibration made the final theory-variable readout forget earlier event contexts.",
+    "candidate_evidence_contrasts": "Small factor-specific midpoint blends preserve the persistent candidate's downstream couplings while reserving most of the fixed log-evidence budget for explicit accumulation.",
+    "accumulation_weights": "The fixed score budget is assigned to inferred uncontrollability and overwhelm under collapsed reflexive broadcast, with a small realized-adverse contribution; an unconditional collapsed-broadcast term is zero because the full varied assay showed that it responded to event count even when controllability evidence did not.",
+    "high_controllability_penalty": "The independent penalty is fixed at zero because a development attempt showed it penalized low-control acute worlds before C was identified.",
+    "integrated_control_penalty": "A 0.80 high-control-by-integrated penalty makes repeated contextualized controllable events calibrate the transient candidate without changing the positive low-control score bound.",
+    "controllability_evidence_precision": "A dimensionless contrast precision of 10 separates the declared low- and high-control action-transition rows around their shared midpoint in event contexts; the finite 0.01 probability floor preserves support, and generation and inference use the identical normalized CPT.",
+    "event_precision_support": "Ordinary-event precision 2 makes event contexts identifiable in finite irregular histories; overwhelm remains at the inherited precision 3, so it still sharpens the same likelihood without a separate observation route.",
+    "reflexive_monitor_reliability": "A 0.99 stage-local monitor reliability makes collapsed versus integrated reflexive context identifiable before the bounded conjunction contributes; it sharpens the existing likelihood rather than adding evidence.",
+    "accumulation_offset": "A small event-conditioned 0.05 base cost keeps non-event slices neutral while conditional penalties carry the transient boundary.",
+    "accumulation_gain": "Gain 0.70 preserves relative calibration before the generative factor's declared score bound is applied.",
+    "accumulation_log_score_cap": "A symmetric finite-factor log-score cap of 0.80 makes large single-slice posterior jumps structurally impossible; it bounds a declared likelihood potential, never a posterior or readout."
+  }
+}

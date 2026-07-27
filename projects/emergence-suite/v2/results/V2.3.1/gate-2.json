@@ -1,0 +1,32 @@
+{
+  "failures": [],
+  "gate": 2,
+  "name": "gate_2_recovery",
+  "passed": true,
+  "results": {
+    "recovery": {
+      "broadcast_accuracy": 1.0,
+      "controllability_accuracy": 0.9921875,
+      "mean_true_structure_probability": 0.9045833328364745,
+      "policy_parameter_95_interval_coverage": 0.9453125,
+      "policy_parameter_mean_absolute_error": 0.029715221774193553,
+      "structure_accuracy": 0.9296875,
+      "structure_brier": 0.06567102063006844,
+      "structure_confusion_matrix": [
+        [
+          55,
+          9
+        ],
+        [
+          0,
+          64
+        ]
+      ],
+      "structure_ece": 0.08936561809028504,
+      "structure_recovery_generator": "paired controlled-integrated versus low-control-collapsed regimes",
+      "structure_recovery_slice_count": 24,
+      "world_count": 128
+    }
+  },
+  "stage": "V2.3.1"
+}

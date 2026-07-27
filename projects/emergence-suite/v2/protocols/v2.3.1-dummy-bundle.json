@@ -1,0 +1,69 @@
+{
+  "name": "v2.3.1-public-dummy",
+  "seed_block": [63900, 63900],
+  "world_count": 1,
+  "initial_structure_prior": [0.7, 0.3],
+  "structure_transition": [[0.98, 0.02], [0.005, 0.995]],
+  "controllability_transition": [[0.995, 0.005], [0.005, 0.995]],
+  "candidate_evidence_contrasts": {
+    "self": 0.0,
+    "event": 0.05,
+    "policy": 0.01,
+    "transition": 0.04,
+    "outcome": 0.03,
+    "context": 0.02
+  },
+  "accumulation_weights": {
+    "overwhelm_uncontrollability": 0.0,
+    "overwhelm_collapsed_broadcast": 0.4,
+    "overwhelm_precision": 0.15,
+    "uncontrollability": 0.5,
+    "collapsed_broadcast": 0.0,
+    "adverse_outcome": 0.15
+  },
+  "high_controllability_penalty": 0.0,
+  "integrated_control_penalty": 0.8,
+  "controllability_evidence_precision": 10.0,
+  "event_precision_support": [2.0, 3.0],
+  "reflexive_monitor_reliability": 0.99,
+  "accumulation_offset": 0.05,
+  "accumulation_gain": 0.7,
+  "accumulation_log_score_cap": 0.8,
+  "schedule": [
+    {
+      "event": 0,
+      "overwhelm": 0,
+      "controllability": 1,
+      "broadcast": 1,
+      "real_danger": false,
+      "action": 0
+    },
+    {
+      "event": 1,
+      "overwhelm": 1,
+      "controllability": 0,
+      "broadcast": 0,
+      "real_danger": false,
+      "action": 1
+    }
+  ],
+  "action_mode": "declared",
+  "lesions": [
+    "controllability_inference",
+    "formation_coupling",
+    "reflexive_broadcast_context"
+  ],
+  "requested": {
+    "posteriors": ["H", "G", "C", "R", "E", "A", "W", "Y"],
+    "parameter_posteriors": [
+      "theta_consequence_engage",
+      "theta_consequence_avoid"
+    ],
+    "evidence": ["total", "transient_conditional", "persistent_conditional"],
+    "readouts": [
+      "predicted_persistent_probability",
+      "slice_log_bayes_factor",
+      "analytic_step_bound"
+    ]
+  }
+}

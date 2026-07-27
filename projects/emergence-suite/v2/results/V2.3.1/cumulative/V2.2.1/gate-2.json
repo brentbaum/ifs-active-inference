@@ -1,0 +1,24 @@
+{
+  "failures": [],
+  "gate": 2,
+  "name": "gate_2_recovery",
+  "passed": true,
+  "rerun_stage": "V2.2.1",
+  "results": {
+    "association_recovery": {
+      "existence_accuracy": 1.0,
+      "legacy_associated_recovery": {
+        "coverage_95": 0.953125,
+        "error_95_interval": [
+          0.019440317622950842,
+          0.026742443647541008
+        ],
+        "mean_absolute_error": 0.02295081967213117
+      },
+      "mean_true_existence_probability": 0.9969428557947324,
+      "slab_parameter_95_interval_coverage": 1.0,
+      "slab_parameter_mean_absolute_error": 0.020673076923076922
+    }
+  },
+  "strain": "V2.3.1"
+}

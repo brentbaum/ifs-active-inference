@@ -1,0 +1,38 @@
+{
+  "failures": [],
+  "gate": 4,
+  "name": "gate_4_selective_lesion",
+  "passed": true,
+  "rerun_stage": "V2.1",
+  "results": {
+    "batch": {
+      "depth_effect_95_interval": [
+        0.2824479166666667,
+        0.37674479166666663
+      ],
+      "maximum_oracle_error": 2.220446049250313e-16,
+      "mean_depth_effect": 0.3309244791666666,
+      "paired_draw_mismatches": 0,
+      "seed_count": 64
+    },
+    "broadcast": {
+      "depth_effect": 0.39666666666666667,
+      "depth_off": 0.3333333333333333,
+      "depth_on": 0.73,
+      "engine_oracle_error": 2.7755575615628914e-17,
+      "local_max_difference": 0.0,
+      "local_off": [
+        0.04999999999999999,
+        0.04999999999999999,
+        0.9
+      ],
+      "local_on": [
+        0.04999999999999999,
+        0.04999999999999999,
+        0.9
+      ],
+      "off_monitor_depth_effect": 0.0
+    }
+  },
+  "strain": "V2.3.1"
+}
