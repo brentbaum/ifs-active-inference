@@ -1,0 +1,48 @@
+{
+  "version": "V2.3.2-1",
+  "formation_seed_block": [742000, 742959],
+  "formation_recovery_seed_block": [743000, 743255],
+  "maintenance_seed_block": [744000, 746303],
+  "maintenance_recovery_seed_block": [747000, 747255],
+  "sensitivity_seed_block": [749000, 749031],
+  "formation_coefficients": {
+    "intercept": -1.35,
+    "overwhelm": 0.9,
+    "uncontrollability": 0.85,
+    "collapsed_integration": 0.45,
+    "overwhelm_uncontrollability": 0.7,
+    "real_danger": 0.7,
+    "prevalence": 0.3
+  },
+  "formation_evidence_temperature": 1.0,
+  "formation_slice_log_bayes_cap": 0.35,
+  "theta_support": [0.1, 0.3, 0.5, 0.7, 0.9],
+  "eta_support": [0.0, 0.25, 0.5, 0.8, 1.0],
+  "efficacy_candidate_prior": [0.35, 0.0975, 0.1625, 0.2275, 0.1625],
+  "transient_theta_prior": [0.48, 0.28, 0.14, 0.07, 0.03],
+  "persistent_theta_prior": [0.03, 0.07, 0.14, 0.28, 0.48],
+  "outcome_reliability": {
+    "full": 0.98,
+    "attenuated": 0.7,
+    "censored": 0.5
+  },
+  "cue_reliability": 0.9,
+  "relief_prior": [2.0, 2.0],
+  "maintenance_initial_persistent_probability": 0.9,
+  "formation_prelude_probability": 0.9,
+  "rationales": {
+    "seed_blocks": "The four frozen public analysis-plan blocks are used exactly; the fresh 32-world sensitivity block remains below 800000.",
+    "formation_coefficients": "The coefficients are the centers of the design priors frozen before sealing, so the implementation instantiates the preregistered attainable profile without reading schedule surfaces.",
+    "formation_evidence_temperature": "Unit temperature preserves the declared likelihood scale and avoids post-inference calibration.",
+    "formation_slice_log_bayes_cap": "A symmetric 0.35-nat likelihood-increment bound gives a mathematical posterior-step ceiling below the frozen 0.12 maximum.",
+    "theta_support": "Five symmetric prevalence points span the frozen low/high factorial while keeping exact Cartesian inference auditable.",
+    "eta_support": "The support contains an exact zero spike, two partial values, a high value, and exact prevention at one.",
+    "efficacy_candidate_prior": "The exact irrelevant mass is 0.35 and the remaining 0.65 follows the public dummy slab weights, preserving finite complexity accounting.",
+    "structure_theta_priors": "Mirror-image broad priors let persistent and transient candidates share D while differing only in declared prevalence expectations.",
+    "outcome_reliability": "The full, attenuated, and censored values are frozen in the public dummy bundle; censored observations are candidate-constant.",
+    "cue_reliability": "A dimensionless 0.90 cue channel is diagnostic without making D directly observed.",
+    "relief_prior": "Beta(2,2) is the prior used in the frozen prior-predictive policy calculation.",
+    "maintenance_initial_persistent_probability": "The maintenance subclaim conditions on an established organization after the preregistered formation-guaranteeing prelude.",
+    "formation_prelude_probability": "A continuous 0.90 posterior is above both frozen prelude thresholds without a boolean formation write."
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "failures": [
+    "V2.3.2-F structure ECE: observed 0.065700439838; required <= 0.040000000000.",
+    "V2.3.2-M context efficacy classification accuracy: observed 0.734375000000; required >= 0.750000000000."
+  ],
+  "gate": 2,
+  "name": "identifiable recovery and calibrated non-identifiability",
+  "passed": false,
+  "results": {
+    "formation": {
+      "controllability_accuracy": 0.92578125,
+      "identifiable_parameter_coverage": {
+        "collapsed_integration": 1.0,
+        "intercept": 1.0,
+        "overwhelm": 1.0,
+        "overwhelm_uncontrollability": 1.0,
+        "prevalence": 1.0,
+        "real_danger": 1.0,
+        "uncontrollability": 1.0
+      },
+      "identifiable_parameter_mean_absolute_error": 0.031109300675202397,
+      "integration_accuracy": 0.83203125,
+      "maximum_benign_false_formation": 0.0,
+      "real_danger_accuracy": 1.0,
+      "structure_accuracy": 0.72265625,
+      "structure_brier": 0.1947115659332257,
+      "structure_ece": 0.06570043983828647,
+      "world_count": 256
+    },
+    "maintenance": {
+      "identifiable": {
+        "H_E_accuracy": 0.90625,
+        "H_E_brier": 0.060852356504424714,
+        "H_E_ece": 0.06582928548984006,
+        "context_efficacy_classification_accuracy": 0.734375,
+        "eta_coverage": 0.97265625,
+        "eta_mean_absolute_error": 0.08338992748298368,
+        "exact_zero_accuracy": 0.88671875,
+        "theta_coverage": 0.99609375,
+        "theta_mean_absolute_error": 0.027893626066785027,
+        "world_count": 256
+      },
+      "nonidentifiable": {
+        "false_certainty_rate": 0.0,
+        "joint_coverage": 0.94140625,
+        "median_correlation": 0.5041733664867433,
+        "median_probe_correlation_reduction": 0.16149160393065565,
+        "minimum_H_E_entropy": 0.2754716424288533,
+        "minimum_eta_entropy": 1.2104484308640608,
+        "minimum_theta_entropy": 1.5558939579724995,
+        "world_count": 256
+      }
+    }
+  },
+  "stage": "V2.3.2"
+}

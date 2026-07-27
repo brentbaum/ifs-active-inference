@@ -1,0 +1,25 @@
+{
+  "development_seed_maximum": 747255,
+  "files": {
+    "contracts/v2.3.2-attribution-contract.md": "e530987afef8b1379c98f2daeab640b1889796ea673ad3e24f9a6efa9d337f22",
+    "protocols/v2.3.2-F-analysis-plan.md": "452cbc5315fb48da36c8c28e153995d6c43f6af4990fd5dcd247836ccf35e75c",
+    "protocols/v2.3.2-F-dummy-bundle.json": "ea9922cc5a02a654fdaf9e7bfa33c541fc9c898d388e5d086a19cdb8f14351d2",
+    "protocols/v2.3.2-M-analysis-plan.md": "4d22c28df8a656159d7c3f49c300bf427dfa68bc1475d32855e05f3b01e11fc2",
+    "protocols/v2.3.2-M-dummy-bundle.json": "680d89d05c59e9d1ce091b9d8009b5f3e065003541f986ee733373a4a560674f",
+    "protocols/v2.3.2-parameters.json": "85d08699b4378d08acab1b0b2c9f2ba33f36b9873f3e68d3c393e4c637ae0944",
+    "ref/v232.py": "fd8aa79549bb6534d2e8ec4cbad5e536ad7225045996fa640a36c7f57e3928aa",
+    "results/V2.3.2/contract-conformance-audit.json": "b7e50c984edea650926b88a49e1beb9ca5187245e60c37a8a68c8e083115b009",
+    "results/V2.3.2/decisions.md": "2a4e39e36c3eb2e250f31d1a281c94c6a34cc280c11d670fb3a2e40735b6c90f",
+    "results/V2.3.2/development-failures.md": "3da901ab55c4a50ce57da2b3a031e9a9c7c557b13d1c6eb073f411deaa261436",
+    "results/V2.3.2/gate-1.json": "3798fa89c631922208aabd25d5644c0a412ab208a29758ebf59cd963da85ab56",
+    "results/V2.3.2/gate-2.json": "7a6d3cd958aa2cc5dff2ebbf429c363080e9bc05967daf59a9e271ea45ba1fad",
+    "results/V2.3.2/stage-report.json": "51fb033852d46a5f3487d2d9ab3cc2e7dfceb172efa4bb56354a70c6b304aac3",
+    "results/milestone-3-v2.3.2-report.md": "f1a6733689c66e5b9536faf2838dbf6cd44da97dce6ba099dff340c9118fa518",
+    "run_v232_freeze.py": "d27c5eaef74f1584bd231c6ceb445b6ea1cb0aebc054e0fcfc0e7ba2c1c4152a",
+    "tests/test_v232_attribution.py": "670c8bf5784fbc3cf4148dd3934fd58263cb8e1effbe4bc14c34af298dc8e084"
+  },
+  "gates_3_to_5_run": false,
+  "sealed_challenges_accessed": false,
+  "stage": "V2.3.2",
+  "status": "failed_gate_2_no_freeze"
+}

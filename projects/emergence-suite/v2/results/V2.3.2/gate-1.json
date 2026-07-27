@@ -1,0 +1,58 @@
+{
+  "failures": [],
+  "gate": 1,
+  "name": "ten semantic proofs",
+  "passed": true,
+  "results": {
+    "10_enumeration_tolerance": {
+      "checked_updates": 83,
+      "maximum_evidence_error": 0.0,
+      "maximum_posterior_error": 0.0
+    },
+    "1_masked_bf": {
+      "bayes_factor": 1.0,
+      "evidence": 1.0000000000000002,
+      "maximum_posterior_change": 2.7755575615628914e-17,
+      "repeated_60_maximum_change": 2.7755575615628914e-17
+    },
+    "2_eta_zero_equivalence": {
+      "evidence_difference": 0.0,
+      "posterior_maximum_difference": 0.0
+    },
+    "3_eta_one_non_disconfirmation": {
+      "evidence": 0.98,
+      "persistent_change": 0.0,
+      "theta_change": 0.0
+    },
+    "4_engagement_disconfirms": {
+      "evidence": 0.39344000000000007,
+      "persistent_change": -0.20313135420902806,
+      "theta_change": -0.20320211468076466
+    },
+    "5_action_no_direct_update": {
+      "evidence": 1.0000000000000002,
+      "maximum_posterior_change": 2.7755575615628914e-17
+    },
+    "6_relief_policy_only": {
+      "environment_maximum_change": 0.0,
+      "policy_probability_change": 0.31757447619364365
+    },
+    "7_exact_spike_mass": {
+      "eta_value": 0.0,
+      "prior_mass": 0.3500000000000001,
+      "represented_exactly": true
+    },
+    "8_pure_avoidance_confound": {
+      "correlation": 0.5044031005809533,
+      "eta_entropy": 1.0707094147549472,
+      "theta_entropy": 1.549695288350206
+    },
+    "9_probe_breaks_confound": {
+      "absolute_reduction": 0.15300688015679426,
+      "correlation_after": 0.351396220424159,
+      "correlation_before": 0.5044031005809533,
+      "theta_reduction": 0.278419902713563
+    }
+  },
+  "stage": "V2.3.2"
+}

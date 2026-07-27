@@ -1,0 +1,24 @@
+{
+  "anti_authoring_assertions": {
+    "checks": {
+      "all counterfactual readouts posterior-derived": true,
+      "irrelevant-action safety reduces threat": true,
+      "masked outcomes create no evidence": true,
+      "no K\u2192root update": true,
+      "no avoidance\u2192persistence factor": true,
+      "no outcome-label branch": true,
+      "relief never touches threat": true
+    },
+    "passed": true
+  },
+  "obligations": {
+    "K_is_readout_only": true,
+    "bounded_continuous_formation": true,
+    "declares_D_A_P_Y_M_H_E_eta": true,
+    "environment_policy_functions_separate": true,
+    "exact_zero_spike_in_source": true,
+    "independent_cartesian_oracle": true,
+    "interventional_public_api": true
+  },
+  "passed": true
+}

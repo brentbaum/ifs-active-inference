@@ -1,0 +1,136 @@
+{
+  "contract_conformance": {
+    "anti_authoring_assertions": {
+      "checks": {
+        "all counterfactual readouts posterior-derived": true,
+        "irrelevant-action safety reduces threat": true,
+        "masked outcomes create no evidence": true,
+        "no K\u2192root update": true,
+        "no avoidance\u2192persistence factor": true,
+        "no outcome-label branch": true,
+        "relief never touches threat": true
+      },
+      "passed": true
+    },
+    "obligations": {
+      "K_is_readout_only": true,
+      "bounded_continuous_formation": true,
+      "declares_D_A_P_Y_M_H_E_eta": true,
+      "environment_policy_functions_separate": true,
+      "exact_zero_spike_in_source": true,
+      "independent_cartesian_oracle": true,
+      "interventional_public_api": true
+    },
+    "passed": true
+  },
+  "failures": [
+    "V2.3.2-F structure ECE: observed 0.065700439838; required <= 0.040000000000.",
+    "V2.3.2-M context efficacy classification accuracy: observed 0.734375000000; required >= 0.750000000000."
+  ],
+  "formation_recovery": {
+    "controllability_accuracy": 0.92578125,
+    "identifiable_parameter_coverage": {
+      "collapsed_integration": 1.0,
+      "intercept": 1.0,
+      "overwhelm": 1.0,
+      "overwhelm_uncontrollability": 1.0,
+      "prevalence": 1.0,
+      "real_danger": 1.0,
+      "uncontrollability": 1.0
+    },
+    "identifiable_parameter_mean_absolute_error": 0.031109300675202397,
+    "integration_accuracy": 0.83203125,
+    "maximum_benign_false_formation": 0.0,
+    "real_danger_accuracy": 1.0,
+    "structure_accuracy": 0.72265625,
+    "structure_brier": 0.1947115659332257,
+    "structure_ece": 0.06570043983828647,
+    "world_count": 256
+  },
+  "freeze_candidate_created": false,
+  "gate_status": {
+    "gate_1_ten_semantic_proofs": true,
+    "gate_2_recovery_and_nonidentifiability": false,
+    "gate_3_formation_and_maintenance_assays": "not_run",
+    "gate_4_seven_selective_lesions": "not_run",
+    "gate_5_cumulative_robustness_anti_authoring": "not_run"
+  },
+  "maintenance_recovery": {
+    "identifiable": {
+      "H_E_accuracy": 0.90625,
+      "H_E_brier": 0.060852356504424714,
+      "H_E_ece": 0.06582928548984006,
+      "context_efficacy_classification_accuracy": 0.734375,
+      "eta_coverage": 0.97265625,
+      "eta_mean_absolute_error": 0.08338992748298368,
+      "exact_zero_accuracy": 0.88671875,
+      "theta_coverage": 0.99609375,
+      "theta_mean_absolute_error": 0.027893626066785027,
+      "world_count": 256
+    },
+    "nonidentifiable": {
+      "false_certainty_rate": 0.0,
+      "joint_coverage": 0.94140625,
+      "median_correlation": 0.5041733664867433,
+      "median_probe_correlation_reduction": 0.16149160393065565,
+      "minimum_H_E_entropy": 0.2754716424288533,
+      "minimum_eta_entropy": 1.2104484308640608,
+      "minimum_theta_entropy": 1.5558939579724995,
+      "world_count": 256
+    }
+  },
+  "sealed_challenges_accessed": false,
+  "semantic_proofs": {
+    "10_enumeration_tolerance": {
+      "checked_updates": 83,
+      "maximum_evidence_error": 0.0,
+      "maximum_posterior_error": 0.0
+    },
+    "1_masked_bf": {
+      "bayes_factor": 1.0,
+      "evidence": 1.0000000000000002,
+      "maximum_posterior_change": 2.7755575615628914e-17,
+      "repeated_60_maximum_change": 2.7755575615628914e-17
+    },
+    "2_eta_zero_equivalence": {
+      "evidence_difference": 0.0,
+      "posterior_maximum_difference": 0.0
+    },
+    "3_eta_one_non_disconfirmation": {
+      "evidence": 0.98,
+      "persistent_change": 0.0,
+      "theta_change": 0.0
+    },
+    "4_engagement_disconfirms": {
+      "evidence": 0.39344000000000007,
+      "persistent_change": -0.20313135420902806,
+      "theta_change": -0.20320211468076466
+    },
+    "5_action_no_direct_update": {
+      "evidence": 1.0000000000000002,
+      "maximum_posterior_change": 2.7755575615628914e-17
+    },
+    "6_relief_policy_only": {
+      "environment_maximum_change": 0.0,
+      "policy_probability_change": 0.31757447619364365
+    },
+    "7_exact_spike_mass": {
+      "eta_value": 0.0,
+      "prior_mass": 0.3500000000000001,
+      "represented_exactly": true
+    },
+    "8_pure_avoidance_confound": {
+      "correlation": 0.5044031005809533,
+      "eta_entropy": 1.0707094147549472,
+      "theta_entropy": 1.549695288350206
+    },
+    "9_probe_breaks_confound": {
+      "absolute_reduction": 0.15300688015679426,
+      "correlation_after": 0.351396220424159,
+      "correlation_before": 0.5044031005809533,
+      "theta_reduction": 0.278419902713563
+    }
+  },
+  "stage": "V2.3.2",
+  "verdict": "FAIL_AT_GATE_2"
+}
