@@ -45,3 +45,10 @@ Added with the C1 restructure plan, before the V2.3.2 formation contract exists 
 0d578fda4fe1097e3d3f681e1499935d0ecb797b3efabd000d94b66ba98e6a09  C-V232-F-formation-challenge.md
 ```
 Escrow: C-V232-F seeds 813101:813700.
+
+Added after the empirical-bound addendum, before the F2 run (2026-07-28):
+
+```
+1944f31a48576a03cd455b1327099a45c7b6a0e84e804d8e713009950691f491  C-V232-F2-continuity-challenge.md
+```
+Seeds: 813301:813400 (escrow remainder).
