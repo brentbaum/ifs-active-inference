@@ -1,0 +1,144 @@
+{
+  "name": "v2.3.2-F-public-dummy",
+  "subclaim": "F",
+  "seed_block": [748000, 748007],
+  "world_count": 8,
+  "baseline": {
+    "instrument": "V2.3.1r",
+    "rescinded_gates": [2, 3],
+    "full_strain_version_bump": true,
+    "inherited_parameter_blocks_modified": false
+  },
+  "population_profile": {
+    "cumulative_overwhelm_precision_levels": [0.0, 0.25, 0.5, 0.75, 1.0],
+    "uncontrollability_evidence_levels": [0.0, 0.25, 0.5, 0.75, 1.0],
+    "reflexive_integration_levels": [
+      "collapsed",
+      "intermittently_restored",
+      "integrated"
+    ],
+    "real_danger_levels": [false, true],
+    "danger_prevalence_levels": [0.1, 0.3, 0.5],
+    "initial_structure_prior_levels": [0.15, 0.3, 0.45]
+  },
+  "schedule_nuisance": {
+    "lengths": [48, 72, 96],
+    "chronic_regularities": [
+      "periodic",
+      "jittered",
+      "bernoulli",
+      "clustered"
+    ],
+    "acute_counts": [0, 1, 3],
+    "acute_timings": ["early", "middle", "late"],
+    "orderings": ["chronic_first", "acute_first", "interleaved"]
+  },
+  "initial_structure_prior": [0.7, 0.3],
+  "structure_transition": [[0.98, 0.02], [0.005, 0.995]],
+  "controllability_transition": [[0.995, 0.005], [0.005, 0.995]],
+  "candidate_evidence_contrasts": {
+    "self": 0.0,
+    "event": 0.05,
+    "policy": 0.01,
+    "transition": 0.04,
+    "outcome": 0.03,
+    "context": 0.02
+  },
+  "accumulation_weights": {
+    "overwhelm_uncontrollability": 0.0,
+    "overwhelm_collapsed_broadcast": 0.4,
+    "overwhelm_precision": 0.15,
+    "uncontrollability": 0.5,
+    "collapsed_broadcast": 0.0,
+    "adverse_outcome": 0.15
+  },
+  "high_controllability_penalty": 0.0,
+  "integrated_control_penalty": 0.8,
+  "controllability_evidence_precision": 10.0,
+  "event_precision_support": [2.0, 3.0],
+  "reflexive_monitor_reliability": 0.99,
+  "accumulation_offset": 0.05,
+  "accumulation_gain": 0.7,
+  "accumulation_log_score_cap": 0.8,
+  "paired_stream_family": "v232-F-public-dummy",
+  "action_mode": "declared",
+  "schedule": [
+    {
+      "event": 0,
+      "overwhelm": 0,
+      "controllability": 1,
+      "broadcast": 1,
+      "real_danger": false,
+      "action": 0,
+      "schedule_role": "safe_nuisance"
+    },
+    {
+      "event": 1,
+      "overwhelm": 0,
+      "controllability": 0,
+      "broadcast": 1,
+      "real_danger": false,
+      "action": 0,
+      "schedule_role": "chronic_integrated"
+    },
+    {
+      "event": 1,
+      "overwhelm": 1,
+      "controllability": 0,
+      "broadcast": 0,
+      "real_danger": true,
+      "action": 0,
+      "schedule_role": "acute_collapsed"
+    },
+    {
+      "event": 1,
+      "overwhelm": 0,
+      "controllability": 1,
+      "broadcast": 1,
+      "real_danger": false,
+      "action": 1,
+      "schedule_role": "controlled_context"
+    }
+  ],
+  "formation_scoring": {
+    "selection_margin_nats": 1.0,
+    "minimum_accuracy": 0.68,
+    "maximum_brier": 0.21,
+    "maximum_ece": 0.04,
+    "minimum_control_contrast": 0.12,
+    "minimum_monotonic_contrast": 0.08,
+    "maximum_false_formation_rate": 0.05,
+    "maximum_p99_step": 0.11,
+    "maximum_single_step": 0.12,
+    "maximum_surface_incremental_cv_r2": 0.05
+  },
+  "lesions": [
+    "controllability_inference",
+    "formation_coupling",
+    "reflexive_broadcast_context",
+    "real_danger"
+  ],
+  "requested": {
+    "posteriors": ["H", "G", "C", "R", "E", "A", "W", "Y"],
+    "parameter_posteriors": [
+      "theta_consequence_engage",
+      "theta_consequence_avoid"
+    ],
+    "evidence": [
+      "total",
+      "transient_conditional",
+      "persistent_conditional"
+    ],
+    "readouts": [
+      "predicted_persistent_probability",
+      "slice_log_bayes_factor",
+      "analytic_step_bound",
+      "structure_accuracy",
+      "structure_brier",
+      "structure_ece",
+      "theory_monotonicity",
+      "surface_incremental_cv_r2",
+      "false_formation_rate"
+    ]
+  }
+}

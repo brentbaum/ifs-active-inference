@@ -1,0 +1,228 @@
+{
+  "name": "v2.3.2-M-public-dummy",
+  "subclaim": "M",
+  "seed_block": [748100, 748107],
+  "world_count": 8,
+  "formation_prelude": {
+    "slice_count": 36,
+    "ordinary_event_count": 24,
+    "overwhelming_event_count": 2,
+    "controllability": "low_in_event_contexts",
+    "reflexive_integration": "collapsed_in_event_contexts",
+    "avoidance_available": false,
+    "minimum_margin_nats": 1.0,
+    "minimum_persistent_probability": 0.75,
+    "minimum_qualification_rate": 0.9,
+    "minimum_pairs_per_primary_contrast": 80,
+    "post_hoc_extension_allowed": false
+  },
+  "contexts": [
+    {
+      "name": "training",
+      "threat_prior": {"family": "beta", "parameters": [2.0, 2.0]},
+      "efficacy_slab_prior": {
+        "support": [0.25, 0.5, 0.8, 1.0],
+        "weights": [0.15, 0.25, 0.35, 0.25]
+      }
+    },
+    {
+      "name": "transfer",
+      "threat_prior": {"family": "beta", "parameters": [2.0, 2.0]},
+      "efficacy_slab_prior": {
+        "support": [0.1, 0.25, 0.5, 1.0],
+        "weights": [0.25, 0.25, 0.25, 0.25]
+      }
+    }
+  ],
+  "context_transition": [
+    [0.95, 0.05],
+    [0.1, 0.9]
+  ],
+  "context_stability": "switched",
+  "efficacy_existence_prior": {
+    "structures": ["irrelevant", "causal"],
+    "probabilities": [0.35, 0.65],
+    "irrelevant_spike": 0.0
+  },
+  "candidate_structures": [
+    {
+      "label": "irrelevant",
+      "H_E": "irrelevant",
+      "eta_support": [0.0]
+    },
+    {
+      "label": "attenuating",
+      "H_E": "causal",
+      "eta_support_rule": "0 < eta < 1"
+    },
+    {
+      "label": "preventive",
+      "H_E": "causal",
+      "eta_support": [1.0]
+    }
+  ],
+  "efficacy_knowledge": "uncertain",
+  "observation_modes": {
+    "full": {
+      "outcome_reliability": 0.98,
+      "missing_probability": 0.0
+    },
+    "attenuated": {
+      "outcome_reliability": 0.7,
+      "missing_probability": 0.0
+    },
+    "censored": {
+      "outcome_reliability": 0.5,
+      "missing_probability": 1.0,
+      "missing_symbol": "missing"
+    }
+  },
+  "protocol_mode": "closed_loop",
+  "protocol_arms": [
+    "closed_loop",
+    "forced_engage",
+    "yoked_sham",
+    "relief_only"
+  ],
+  "paired_stream_family": "v232-M-public-dummy",
+  "policy_learning": {
+    "relief_consequence_prior": [2.0, 2.0],
+    "relief_updates_environment": false
+  },
+  "world_truth": {
+    "available_to_evaluator_only": true,
+    "theta_by_context": {
+      "training": 0.6,
+      "transfer": 0.35
+    },
+    "H_E": "causal",
+    "eta_by_context": {
+      "training": 0.8,
+      "transfer": 0.25
+    }
+  },
+  "schedule": [
+    {
+      "time": 0,
+      "context": "training",
+      "action": "engage",
+      "action_is_intervention": true,
+      "observation_mode": "full",
+      "outcome_observation": "safe",
+      "danger_cue_observation": "absent",
+      "relief_observation": "absent"
+    },
+    {
+      "time": 1,
+      "context": "training",
+      "action": "avoid",
+      "action_is_intervention": true,
+      "observation_mode": "full",
+      "outcome_observation": "safe",
+      "danger_cue_observation": "present",
+      "relief_observation": "present"
+    },
+    {
+      "time": 2,
+      "context": "training",
+      "action": "avoid",
+      "action_is_intervention": false,
+      "observation_mode": "attenuated",
+      "outcome_observation": "safe",
+      "danger_cue_observation": "absent",
+      "relief_observation": "present"
+    },
+    {
+      "time": 3,
+      "context": "training",
+      "action": "avoid",
+      "action_is_intervention": false,
+      "observation_mode": "censored",
+      "outcome_observation": "missing",
+      "danger_cue_observation": "missing",
+      "relief_observation": "present"
+    },
+    {
+      "time": 4,
+      "context": "transfer",
+      "action": "avoid",
+      "action_is_intervention": true,
+      "observation_mode": "full",
+      "outcome_observation": "adverse",
+      "danger_cue_observation": "present",
+      "relief_observation": "absent"
+    },
+    {
+      "time": 5,
+      "context": "transfer",
+      "action": "engage",
+      "action_is_intervention": true,
+      "observation_mode": "full",
+      "outcome_observation": "safe",
+      "danger_cue_observation": "absent",
+      "relief_observation": "absent"
+    }
+  ],
+  "factorial_levels": {
+    "threat_base_rate": ["low", "high"],
+    "efficacy": ["exact_zero", "partial", "high"],
+    "observation_mode": ["full", "attenuated", "censored"],
+    "protocol": [
+      "closed_loop",
+      "forced_engage",
+      "yoked_sham",
+      "relief_only"
+    ],
+    "efficacy_knowledge": ["known", "uncertain"],
+    "context_stability": ["stable", "switched"]
+  },
+  "lesions": [
+    "policy_closure",
+    "outcome_censoring",
+    "efficacy_existence",
+    "prevention_link",
+    "efficacy_learning",
+    "negative_reinforcement",
+    "context_efficacy"
+  ],
+  "requested": {
+    "posteriors": ["H", "G", "D", "A", "P", "Y", "M", "H_E"],
+    "parameter_posteriors": [
+      "theta_training",
+      "theta_transfer",
+      "eta_training",
+      "eta_transfer",
+      "rho_relief_engage",
+      "rho_relief_avoid"
+    ],
+    "evidence": [
+      "total",
+      "efficacy_irrelevant_conditional",
+      "efficacy_attenuating_conditional",
+      "efficacy_preventive_conditional",
+      "efficacy_causal_conditional",
+      "transient_conditional",
+      "persistent_conditional"
+    ],
+    "readouts": [
+      "prevented_catastrophe_probability_K",
+      "threat_efficacy_correlation",
+      "theta_entropy",
+      "eta_entropy",
+      "H_E_entropy",
+      "protection_from_extinction",
+      "policy_avoid_probability",
+      "realized_action_transition_mediator",
+      "context_specific_transfer"
+    ]
+  },
+  "anti_authoring_assertions": [
+    "no avoidance→persistence factor",
+    "no K→root update",
+    "no outcome-label branch",
+    "irrelevant-action safety reduces threat",
+    "masked outcomes create no evidence",
+    "relief never touches threat",
+    "all counterfactual readouts posterior-derived"
+  ]
+}
