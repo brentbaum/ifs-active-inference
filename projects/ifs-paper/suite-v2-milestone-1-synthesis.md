@@ -38,3 +38,11 @@ The inversion is the finding of the night. Under honest model comparison, a pers
 **Standing after tonight:** V2.0, V2.1, V2.2.1 — built, gated, prospectively validated (with the V2.2 repair arc). V2.3.1 — frozen, continuity solved, formation dose-response shaped correctly, persistence-under-avoidance open with a sharp statement of the missing mechanism. V2.4+ blocked, correctly, by the ratchet.
 
 **Decision needed (Brent):** whether V2.3.2 adds the counterfactual-attribution structure (avoided-outcome evidence routed to the threat model — the formal face of safety-behavior maintenance, with its own gate-1 semantic proof and a fresh sealed challenge), or whether C1's persistence claim should be weakened to activation-dependent maintenance. The first is the clinically faithful reading; it is also a new mechanism, not a repair.
+
+---
+
+# Correction (2026-07-27, after the neutrality audit and v2.3.1r)
+
+The persistence inversion reported above is **retracted as an instrument artifact.** The V2.3.2 plan's pre-mechanism neutrality audit found that the accumulation potential carried an H-dependent partition function, charging structure evidence on slices with no observation (masked-slice Bayes factor 1.0032, compounding). Decomposing C-V23b's paired erosion: declared dynamics +2.10, genuine likelihood +0.20, artifact −3.16 — the legitimate terms favored persistence; the artifact reversed the sign. The repair (v2.3.1r) is exact (residual ≤ 4.4e-16; all other stages clean; the original C-V23 verdict unaffected within 2e-14).
+
+Under the corrected instrument the honest state is worse but truer: v2.3.1's gates 2–3 passes were artifact-supported and are **rescinded**; repaired C-V23b fails tests 1, 2, and 4 (flat controllability dose-response, false formation in no-event worlds, null persistence contrast on a formation-starved sample) with continuity still passing. Formation is broken at the structure-comparison level on novel schedules; maintenance is untested for lack of formed worlds — no longer inverted, simply unreached. The C1a/b/c split and the V2.3.2 plan (adopted before this correction) stand: formation calibration and counterfactual maintenance are separately scored subclaims, and the audit-first ordering did exactly what it was designed to do.
