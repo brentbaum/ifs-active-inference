@@ -1,0 +1,122 @@
+{
+  "failures": [],
+  "gate": 3,
+  "name": "open composition and schedule invariance",
+  "passed": true,
+  "results": {
+    "V2.1_composition": {
+      "gate_1_semantic": true,
+      "gate_2_recovery": true,
+      "gate_3_composition": true,
+      "gate_4_selective_lesion": true,
+      "gate_5_cumulative_regression": true
+    },
+    "V2.2.1_composition": {
+      "gate_1_structure_semantics": true,
+      "gate_2_recovery": true,
+      "gate_3_precision_root_transfer": true,
+      "gate_4_selective_lesions": true,
+      "gate_5_cumulative_regression": true
+    },
+    "open_assays": {
+      "acute_formation": {
+        "P_over_T_95_interval": [
+          0.9836186071704012,
+          0.9645617121622058,
+          0.9979542569714963
+        ]
+      },
+      "broadcast_localization_effect": [
+        0.32993934759898363,
+        0.32993934759898363,
+        0.32993934759898363
+      ],
+      "failed_worlds": [],
+      "gradual_accumulation": {
+        "P_over_T_95_interval": [
+          0.9836186071704012,
+          0.9645617121622058,
+          0.9979542569714963
+        ]
+      },
+      "high_control_false_P_rate": 0.01,
+      "low_control_without_overwhelm": {
+        "P_over_T_expected_log_bf": 0.5846980443125881
+      },
+      "matched_statistic_permutations": {
+        "maximum_log_joint_difference": 7.105427357601002e-15,
+        "profiles": [
+          {
+            "log_joint": [
+              -29.368431403761424,
+              -30.074695315177856,
+              -48.24525988251224
+            ],
+            "name": "original"
+          },
+          {
+            "log_joint": [
+              -29.368431403761424,
+              -30.074695315177856,
+              -48.24525988251224
+            ],
+            "name": "reversed"
+          },
+          {
+            "log_joint": [
+              -29.36843140376143,
+              -30.074695315177852,
+              -48.24525988251223
+            ],
+            "name": "clustered"
+          },
+          {
+            "log_joint": [
+              -29.368431403761424,
+              -30.074695315177856,
+              -48.24525988251224
+            ],
+            "name": "interleaved"
+          }
+        ]
+      },
+      "no_event_endpoints": {
+        "16": [
+          0.5,
+          0.25,
+          0.25
+        ],
+        "160": [
+          0.5,
+          0.25,
+          0.25
+        ],
+        "64": [
+          0.5,
+          0.25,
+          0.25
+        ],
+        "80": [
+          0.5,
+          0.25,
+          0.25
+        ]
+      },
+      "no_event_maximum_prior_difference": 0.0,
+      "overwhelm_precision_effect": [
+        0.8827656981210905,
+        0.8827656981210905,
+        0.8827656981210905
+      ],
+      "overwhelm_with_control": {
+        "T_over_P_expected_log_bf": 1.3228661490086318
+      },
+      "real_danger_D_over_P": [
+        0.8809256818840875,
+        0.8157275412340723,
+        0.9354666909873072
+      ]
+    }
+  },
+  "stage": "V2.3.2-formation"
+}

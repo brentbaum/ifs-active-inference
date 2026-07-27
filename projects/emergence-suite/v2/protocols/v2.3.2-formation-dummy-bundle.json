@@ -1,0 +1,31 @@
+{
+  "name": "v2.3.2-formation-public-dummy",
+  "stage": "V2.3.2-formation",
+  "candidate_labels": ["T", "D", "P"],
+  "candidate_prior": [0.5, 0.25, 0.25],
+  "static_structure": true,
+  "seed_block": [753000, 753005],
+  "world_count": 6,
+  "theory_grid": {
+    "event": [false, true],
+    "precision": ["ordinary", "overwhelm"],
+    "control": ["low", "high"],
+    "broadcast": ["collapsed", "integrated"],
+    "real_danger": [false, true],
+    "masked": [false, true]
+  },
+  "schedule": [
+    {"event": false, "precision": "ordinary", "control": "high", "broadcast": "integrated", "real_danger": false, "masked": false},
+    {"event": true, "precision": "ordinary", "control": "low", "broadcast": "integrated", "real_danger": false, "masked": false},
+    {"event": true, "precision": "overwhelm", "control": "low", "broadcast": "collapsed", "real_danger": false, "masked": false},
+    {"event": true, "precision": "overwhelm", "control": "high", "broadcast": "integrated", "real_danger": true, "masked": false},
+    {"event": true, "precision": "ordinary", "control": "low", "broadcast": "collapsed", "real_danger": true, "masked": true}
+  ],
+  "matched_statistic_permutations": ["original", "reversed", "clustered", "interleaved"],
+  "lesions": ["root_coupling", "control_inference", "context_route", "event_precision", "structure_comparison"],
+  "requested": {
+    "posteriors": ["H_formation"],
+    "evidence": ["total", "T", "D", "P", "prequential_contributions"],
+    "readouts": ["candidate_confusion", "multiclass_brier", "ece", "false_P_rate", "schedule_invariance", "bf_decomposition"]
+  }
+}

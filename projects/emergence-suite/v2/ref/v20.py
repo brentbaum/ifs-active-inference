@@ -170,15 +170,10 @@ def recovery(seed_start: int | None = None, seed_end: int | None = None) -> dict
     }
 
 
-def model_comparison() -> dict[str, float]:
+def model_comparison_model() -> tuple[FiniteModel, int]:
+    """Public finite comparison used by the permanent evidence constitution."""
     successes, trials = 8, 10
-    evidence_fixed = 0.5**trials
-    evidence_flexible = math.exp(
-        math.lgamma(successes + 1)
-        + math.lgamma(trials - successes + 1)
-        - math.lgamma(trials + 2)
-    )
-    engine_model = _model(
+    model = _model(
         [Variable("H", 2, "structure"), Variable("D", trials + 1, "observation")],
         [
             categorical_prior("H", [0.5, 0.5]),
@@ -198,7 +193,21 @@ def model_comparison() -> dict[str, float]:
             ),
         ],
     )
-    posterior, total_evidence = ExactEngine().infer(engine_model, ("H",), {"D": successes})
+    return model, successes
+
+
+def model_comparison() -> dict[str, float]:
+    successes, trials = 8, 10
+    evidence_fixed = 0.5**trials
+    evidence_flexible = math.exp(
+        math.lgamma(successes + 1)
+        + math.lgamma(trials - successes + 1)
+        - math.lgamma(trials + 2)
+    )
+    engine_model, observed_successes = model_comparison_model()
+    posterior, total_evidence = ExactEngine().infer(
+        engine_model, ("H",), {"D": observed_successes}
+    )
     engine_log_bf = float(np.log(posterior[1]) - np.log(posterior[0]))
     analytic_log_bf = float(np.log(evidence_flexible) - np.log(evidence_fixed))
     maximum_likelihood_flexible = (successes / trials) ** successes * (

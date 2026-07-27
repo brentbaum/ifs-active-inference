@@ -1,0 +1,41 @@
+{
+  "failures": [],
+  "gate": 2,
+  "name": "T/D/P recovery and calibration",
+  "passed": true,
+  "results": {
+    "D_to_P_confusion_rate": 0.0,
+    "P_to_D_confusion_rate": 0.0,
+    "accuracy": 0.9533333333333334,
+    "candidate_95_coverage": 0.9966666666666667,
+    "confidence_ece": 0.019491053502579875,
+    "confusion_matrix": [
+      [
+        88,
+        12,
+        0
+      ],
+      [
+        2,
+        98,
+        0
+      ],
+      [
+        0,
+        0,
+        100
+      ]
+    ],
+    "diagonal_rates": [
+      0.88,
+      0.98,
+      1.0
+    ],
+    "false_P_high_control_rate": 0.02,
+    "false_P_no_event_rate": 0.0,
+    "multiclass_brier": 0.022815678083483077,
+    "row_parameter_mean_absolute_error": 0.03865665516406738,
+    "world_count": 300
+  },
+  "stage": "V2.3.2-formation"
+}

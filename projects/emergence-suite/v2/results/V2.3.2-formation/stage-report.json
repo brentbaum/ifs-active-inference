@@ -1,0 +1,401 @@
+{
+  "development_seed_maximum": 752031,
+  "gates": {
+    "gate_1": true,
+    "gate_2": true,
+    "gate_3": true,
+    "gate_4": true,
+    "gate_5": true
+  },
+  "lesions": {
+    "context_route": {
+      "intact": 0.7987934300136836,
+      "lesioned": 0.0,
+      "survivor": 1.4674637424336787
+    },
+    "control_inference": {
+      "intact": 0.4594442244408583,
+      "lesioned": 0.0,
+      "survivor": 1.8378331781439838
+    },
+    "event_precision": {
+      "intact": 1.0877641349974094,
+      "lesioned": 0.0,
+      "survivor": 0.7124267852145827
+    },
+    "root_coupling": {
+      "intact": 0.9871404112216945,
+      "lesioned": 0.0,
+      "survivor": 0.646333077336721
+    },
+    "structure_comparison": {
+      "intact": 1.8001909202119921,
+      "lesioned": 0.0,
+      "survivor": 1.0
+    }
+  },
+  "open_assays": {
+    "acute_formation": {
+      "P_over_T_95_interval": [
+        0.9836186071704012,
+        0.9645617121622058,
+        0.9979542569714963
+      ]
+    },
+    "broadcast_localization_effect": [
+      0.32993934759898363,
+      0.32993934759898363,
+      0.32993934759898363
+    ],
+    "failed_worlds": [],
+    "gradual_accumulation": {
+      "P_over_T_95_interval": [
+        0.9836186071704012,
+        0.9645617121622058,
+        0.9979542569714963
+      ]
+    },
+    "high_control_false_P_rate": 0.01,
+    "low_control_without_overwhelm": {
+      "P_over_T_expected_log_bf": 0.5846980443125881
+    },
+    "matched_statistic_permutations": {
+      "maximum_log_joint_difference": 7.105427357601002e-15,
+      "profiles": [
+        {
+          "log_joint": [
+            -29.368431403761424,
+            -30.074695315177856,
+            -48.24525988251224
+          ],
+          "name": "original"
+        },
+        {
+          "log_joint": [
+            -29.368431403761424,
+            -30.074695315177856,
+            -48.24525988251224
+          ],
+          "name": "reversed"
+        },
+        {
+          "log_joint": [
+            -29.36843140376143,
+            -30.074695315177852,
+            -48.24525988251223
+          ],
+          "name": "clustered"
+        },
+        {
+          "log_joint": [
+            -29.368431403761424,
+            -30.074695315177856,
+            -48.24525988251224
+          ],
+          "name": "interleaved"
+        }
+      ]
+    },
+    "no_event_endpoints": {
+      "16": [
+        0.5,
+        0.25,
+        0.25
+      ],
+      "160": [
+        0.5,
+        0.25,
+        0.25
+      ],
+      "64": [
+        0.5,
+        0.25,
+        0.25
+      ],
+      "80": [
+        0.5,
+        0.25,
+        0.25
+      ]
+    },
+    "no_event_maximum_prior_difference": 0.0,
+    "overwhelm_precision_effect": [
+      0.8827656981210905,
+      0.8827656981210905,
+      0.8827656981210905
+    ],
+    "overwhelm_with_control": {
+      "T_over_P_expected_log_bf": 1.3228661490086318
+    },
+    "real_danger_D_over_P": [
+      0.8809256818840875,
+      0.8157275412340723,
+      0.9354666909873072
+    ]
+  },
+  "recovery": {
+    "D_to_P_confusion_rate": 0.0,
+    "P_to_D_confusion_rate": 0.0,
+    "accuracy": 0.9533333333333334,
+    "candidate_95_coverage": 0.9966666666666667,
+    "confidence_ece": 0.019491053502579875,
+    "confusion_matrix": [
+      [
+        88,
+        12,
+        0
+      ],
+      [
+        2,
+        98,
+        0
+      ],
+      [
+        0,
+        0,
+        100
+      ]
+    ],
+    "diagonal_rates": [
+      0.88,
+      0.98,
+      1.0
+    ],
+    "false_P_high_control_rate": 0.02,
+    "false_P_no_event_rate": 0.0,
+    "multiclass_brier": 0.022815678083483077,
+    "row_parameter_mean_absolute_error": 0.03865665516406738,
+    "world_count": 300
+  },
+  "robustness": {
+    "all_signs_survive": true,
+    "predictive_neighborhoods": [
+      {
+        "D_over_P": 0.8575937058780005,
+        "P_over_T": 1.226409101784529,
+        "joint_predictive_scale": 0.9,
+        "no_event_log_bf": 0.0
+      },
+      {
+        "D_over_P": 1.0390397481303002,
+        "P_over_T": 1.4674637424336787,
+        "joint_predictive_scale": 1.0,
+        "no_event_log_bf": 0.0
+      },
+      {
+        "D_over_P": 1.2314993575604434,
+        "P_over_T": 1.7157038394317519,
+        "joint_predictive_scale": 1.1,
+        "no_event_log_bf": 0.0
+      }
+    ],
+    "prior_neighborhoods": [
+      {
+        "P_prior_multiplier": 0.8,
+        "P_probability": 0.9999999999717578,
+        "schedule_invariance_error": 0.0
+      },
+      {
+        "P_prior_multiplier": 1.0,
+        "P_probability": 0.9999999999774063,
+        "schedule_invariance_error": 0.0
+      },
+      {
+        "P_prior_multiplier": 1.2,
+        "P_probability": 0.999999999981172,
+        "schedule_invariance_error": 0.0
+      }
+    ],
+    "schedule_invariance_survives": true
+  },
+  "sealed_challenge_run": false,
+  "semantic": {
+    "analytic_per_slice_log_bf_bound": 3.801426508560692,
+    "candidate_normalization_maximum_error": 2.220446049250313e-16,
+    "collapsed_D_vs_P_expected_log_bf": 1.0390397481303002,
+    "constitution": {
+      "V2.0": {
+        "observation": "D",
+        "passed": true,
+        "results": {
+          "1_candidates_normalized": {
+            "maximum_error": 1.5543122344752192e-15,
+            "passed": true
+          },
+          "2_prior_complexity_once": {
+            "passed": true,
+            "structural_prior_factor_count": 1
+          },
+          "3_masked_increment_zero": {
+            "incremental_log_bf": -1.5543122344752203e-15,
+            "passed": true
+          },
+          "4_absent_increment_zero": {
+            "incremental_log_bf": -1.5543122344752203e-15,
+            "passed": true
+          },
+          "5_identical_predictions_zero": {
+            "incremental_log_bf": 0.0,
+            "passed": true
+          },
+          "6_prequential_recombination": {
+            "absolute_error": 0.0,
+            "passed": true,
+            "posterior_log_odds": 0.7269140430307628,
+            "published_contributions": [
+              0.7269140430307628
+            ],
+            "recombined_log_odds": 0.7269140430307628
+          },
+          "7_partition_included": {
+            "candidate_row_sums": [
+              1.0,
+              0.9999999999999984
+            ],
+            "passed": true
+          },
+          "8_no_evidence_dynamics": {
+            "declared_dynamics": "static",
+            "passed": true,
+            "predicted_final": [
+              0.5,
+              0.5
+            ]
+          },
+          "9_independent_implementation": {
+            "maximum_error": 1.3877787807814457e-17,
+            "passed": true
+          }
+        },
+        "structure": "H"
+      },
+      "V2.1": {
+        "observation": null,
+        "passed": true,
+        "results": {
+          "1_candidates_normalized": {
+            "maximum_cpt_error": 0.0,
+            "passed": true,
+            "structural_comparisons": 0
+          },
+          "2_prior_complexity_once": {
+            "passed": true,
+            "structural_comparisons": 0
+          },
+          "3_masked_increment_zero": {
+            "incremental_log_bf": 0.0,
+            "not_applicable": true,
+            "passed": true
+          },
+          "4_absent_increment_zero": {
+            "incremental_log_bf": 0.0,
+            "not_applicable": true,
+            "passed": true
+          },
+          "5_identical_predictions_zero": {
+            "incremental_log_bf": 0.0,
+            "not_applicable": true,
+            "passed": true
+          },
+          "6_prequential_recombination": {
+            "passed": true,
+            "structural_comparisons": 0
+          },
+          "7_partition_included": {
+            "maximum_cpt_error": 0.0,
+            "passed": true
+          },
+          "8_no_evidence_dynamics": {
+            "declared_dynamics": "no structural hypothesis",
+            "passed": true
+          },
+          "9_independent_implementation": {
+            "passed": true,
+            "structural_comparisons": 0
+          }
+        },
+        "structure": null
+      },
+      "V2.2.1": {
+        "observation": "K",
+        "passed": true,
+        "results": {
+          "1_candidates_normalized": {
+            "maximum_error": 6.961098364399732e-14,
+            "passed": true
+          },
+          "2_prior_complexity_once": {
+            "passed": true,
+            "structural_prior_factor_count": 1
+          },
+          "3_masked_increment_zero": {
+            "incremental_log_bf": -6.961098364399974e-14,
+            "passed": true
+          },
+          "4_absent_increment_zero": {
+            "incremental_log_bf": -6.961098364399974e-14,
+            "passed": true
+          },
+          "5_identical_predictions_zero": {
+            "incremental_log_bf": 0.0,
+            "passed": true
+          },
+          "6_prequential_recombination": {
+            "absolute_error": 8.881784197001252e-16,
+            "passed": true,
+            "posterior_log_odds": -5.980461694034714,
+            "published_contributions": [
+              -5.5749965859265505
+            ],
+            "recombined_log_odds": -5.980461694034715
+          },
+          "7_partition_included": {
+            "candidate_row_sums": [
+              1.0,
+              0.9999999999999304
+            ],
+            "passed": true
+          },
+          "8_no_evidence_dynamics": {
+            "declared_dynamics": "static",
+            "passed": true,
+            "predicted_final": [
+              0.6,
+              0.4
+            ]
+          },
+          "9_independent_implementation": {
+            "maximum_error": 6.938893903907228e-18,
+            "passed": true
+          }
+        },
+        "structure": "Z"
+      },
+      "passed": true
+    },
+    "context_pathway_effect": 0.7987934300136836,
+    "control_pathway_effect": 0.459444224440859,
+    "decomposition_maximum_error": 8.881784197001252e-16,
+    "high_control_P_vs_T_expected_log_bf": 1.0080195179928197,
+    "independent_implementation_maximum_error": 0.0,
+    "integrated_D_vs_P_expected_log_bf": 1.8378331781439838,
+    "low_control_P_vs_T_expected_log_bf": 1.4674637424336787,
+    "maximum_enumerated_log_bf": 3.801426508560692,
+    "precision_pathway_effect": 0.8827656981210906,
+    "zero_row_maximum_absolute_expected_log_bf": 0.0
+  },
+  "stage": "V2.3.2-formation",
+  "stationary_prior_arithmetic": {
+    "formula": "0.02 / (0.02 + 0.005) = 0.80",
+    "no_event_from_0.30": {
+      "16": 0.46653991578758736,
+      "64": 0.7010842589312288,
+      "80": 0.7340310973065487
+    },
+    "replacement": "static H_formation; no transition or recovery hazard",
+    "retired_formation_hazard": 0.02,
+    "retired_recovery_hazard": 0.005,
+    "stationary_persistent_probability": 0.8
+  },
+  "verdict": "PASS"
+}

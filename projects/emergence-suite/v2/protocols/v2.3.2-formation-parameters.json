@@ -1,0 +1,29 @@
+{
+  "version": "V2.3.2-formation-1",
+  "candidate_labels": ["T", "D", "P"],
+  "candidate_prior": [0.5, 0.25, 0.25],
+  "precision_scale": {"ordinary": 0.6, "overwhelm": 1.0},
+  "self_probability": {"T": 0.2, "D": 0.2, "P": 0.8},
+  "outcome_probability": {
+    "T": {"low_control": 0.35, "high_control": 0.15},
+    "D_apparent": {"low_control": 0.4, "high_control": 0.2},
+    "D_real": {"low_control": 0.85, "high_control": 0.65},
+    "P": {"low_control": 0.75, "high_control": 0.25}
+  },
+  "localization_probability": {"T": 0.65, "D": 0.85, "P": 0.25},
+  "configural_log_coupling": {"T": 0.0, "D": 0.15, "P": 0.5},
+  "recovery_seed_block": [750000, 750299],
+  "open_seed_block": [751000, 751299],
+  "robustness_seed_block": [752000, 752031],
+  "sequence_length": 24,
+  "rationales": {
+    "candidate_prior": "T receives the finite-comparison simplicity prior; D and P split the persistent prior so persistent external danger is not credited as identity formation.",
+    "precision_scale": "Overwhelm sharpens the same normalized configural observation; ordinary evidence remains informative rather than being displaced by an accumulator.",
+    "self_probability": "Only P recruits the identity-root observation, while T and D make the same non-self prediction.",
+    "outcome_probability": "T predicts transience, D predicts externally accurate danger, and P predicts adverse outcomes especially under low control; all entries remain bounded away from zero.",
+    "localization_probability": "Integrated contextual localization favors externally/time-located T or D over identity-level P; collapsed broadcast masks this channel.",
+    "configural_log_coupling": "A modest normalized S-by-Y interaction supplies a real observed configural likelihood, strongest for P and never an evidence increment.",
+    "seed_blocks": "Fresh deterministic development blocks are disjoint, below 800000, and fixed before schedule runs.",
+    "sequence_length": "Twenty-four observed event slices give all three finite candidates repeated normalized predictions without a clock-dependent structure transition."
+  }
+}

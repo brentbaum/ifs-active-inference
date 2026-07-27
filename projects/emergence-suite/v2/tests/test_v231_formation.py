@@ -1,15 +1,15 @@
 import ast
 import inspect
+import json
 import unittest
+from pathlib import Path
 
 from ref.audit import audit_one_posterior
 from ref.v231 import (
     analytic_step_bound,
-    generalization_assay,
     infer_slice,
     lesion_assays,
     original_open_assays,
-    recovery_assay,
     semantic_proofs,
 )
 
@@ -18,8 +18,15 @@ class BoundedFormationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.semantic = semantic_proofs()
-        cls.recovery = recovery_assay()
         cls.opened = original_open_assays()
+        cls.retired_ledger = json.loads(
+            (
+                Path(__file__).resolve().parents[1]
+                / "results"
+                / "V2.3.1r"
+                / "stage-report.json"
+            ).read_text(encoding="utf-8")
+        )
 
     def test_exact_comparison_and_analytic_step_bound(self):
         self.assertLess(
@@ -45,17 +52,17 @@ class BoundedFormationTests(unittest.TestCase):
         }
         self.assertNotIn("formed", assigned_names)
 
-    def test_recovery(self):
-        self.assertGreaterEqual(self.recovery["structure_accuracy"], 0.85)
-        self.assertGreaterEqual(
-            self.recovery["mean_true_structure_probability"], 0.75
+    def test_retired_recovery_ledger_remains_rescinded(self):
+        recovery = self.retired_ledger["recovery"]
+        self.assertAlmostEqual(
+            recovery["structure_ece"],
+            0.10579451215553712,
+            places=14,
         )
-        self.assertLessEqual(self.recovery["structure_brier"], 0.20)
-        self.assertLessEqual(self.recovery["structure_ece"], 0.10)
-        self.assertGreaterEqual(
-            self.recovery["controllability_accuracy"], 0.75
+        self.assertGreater(recovery["structure_ece"], 0.10)
+        self.assertFalse(
+            self.retired_ledger["gates"]["gate_2_recovery"]
         )
-        self.assertGreaterEqual(self.recovery["broadcast_accuracy"], 0.75)
 
     def test_original_open_gates_and_continuity(self):
         self.assertGreaterEqual(
@@ -108,15 +115,24 @@ class BoundedFormationTests(unittest.TestCase):
             self.opened["worlds"]["acute"][0]["states"][-1]
         )
 
-    def test_varied_schedule_generalization_smoke(self):
-        varied = generalization_assay(
-            diagnosis_world_count=128, paired_world_count=16
+    def test_retired_generalization_ledger_remains_rescinded(self):
+        varied = self.retired_ledger["generalization_assay"]
+        self.assertAlmostEqual(
+            varied["surface_incremental_cv_r2"],
+            0.6173327730910273,
+            places=14,
         )
-        self.assertLessEqual(varied["surface_incremental_cv_r2"], 0.05)
-        self.assertGreaterEqual(
-            varied["low_minus_high_control_95_interval"][0], 0.20
+        self.assertGreater(varied["surface_incremental_cv_r2"], 0.05)
+        self.assertAlmostEqual(
+            varied["low_minus_high_control_95_interval"][0],
+            0.07275975652956246,
+            places=14,
         )
-        self.assertEqual(varied["step_injection"]["exceedances"], 0)
+        self.assertFalse(
+            self.retired_ledger["gates"][
+                "gate_3_direct_composition"
+            ]
+        )
 
 
 if __name__ == "__main__":

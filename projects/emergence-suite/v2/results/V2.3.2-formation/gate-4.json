@@ -1,0 +1,59 @@
+{
+  "failures": [],
+  "gate": 4,
+  "name": "five selective lesions",
+  "passed": true,
+  "results": {
+    "inherited_survival": {
+      "V2.0": {
+        "gate_1_semantic": true,
+        "gate_2_recovery": true,
+        "gate_3_comparison": true,
+        "gate_4_batch_mutation": true,
+        "gate_5_one_posterior": true
+      },
+      "V2.1": {
+        "gate_1_semantic": true,
+        "gate_2_recovery": true,
+        "gate_3_composition": true,
+        "gate_4_selective_lesion": true,
+        "gate_5_cumulative_regression": true
+      },
+      "V2.2.1": {
+        "gate_1_structure_semantics": true,
+        "gate_2_recovery": true,
+        "gate_3_precision_root_transfer": true,
+        "gate_4_selective_lesions": true,
+        "gate_5_cumulative_regression": true
+      }
+    },
+    "lesions": {
+      "context_route": {
+        "intact": 0.7987934300136836,
+        "lesioned": 0.0,
+        "survivor": 1.4674637424336787
+      },
+      "control_inference": {
+        "intact": 0.4594442244408583,
+        "lesioned": 0.0,
+        "survivor": 1.8378331781439838
+      },
+      "event_precision": {
+        "intact": 1.0877641349974094,
+        "lesioned": 0.0,
+        "survivor": 0.7124267852145827
+      },
+      "root_coupling": {
+        "intact": 0.9871404112216945,
+        "lesioned": 0.0,
+        "survivor": 0.646333077336721
+      },
+      "structure_comparison": {
+        "intact": 1.8001909202119921,
+        "lesioned": 0.0,
+        "survivor": 1.0
+      }
+    }
+  },
+  "stage": "V2.3.2-formation"
+}
