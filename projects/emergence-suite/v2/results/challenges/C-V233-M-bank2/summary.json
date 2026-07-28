@@ -1,0 +1,118 @@
+{
+  "adjudication_sha256": "4145d7ca859f09631eb5f663e8cf4ef13dd65deb223dbf70b5d042e08264cf0c",
+  "candidate_count": 5504,
+  "challenge": "C-V233-M-bank2",
+  "challenge_spec_sha256": "4596ab4218758aa02fc425e5a6d57508125de6a4ea538fac238f0a20fa7109ff",
+  "classification": "sampling_adequacy_requalification",
+  "compatibility_attestation_sha256": "5e971f85ce50781d15988236972f5626763d5ee98ae0adad7298506ac8ab729d",
+  "criteria": {
+    "1_scientific_sampling_adequacy": {
+      "eligibility": {
+        "moderate": {
+          "eligible_count": 141,
+          "fill": {
+            "position": 1361,
+            "seed": 821361
+          },
+          "rate_95_wilson": [
+            0.025617732558139535,
+            0.02176296707795145,
+            0.03013424071393567
+          ],
+          "retained_count": 40
+        },
+        "strong": {
+          "eligible_count": 293,
+          "fill": {
+            "position": 696,
+            "seed": 820696
+          },
+          "rate_95_wilson": [
+            0.053234011627906974,
+            0.04760844067985015,
+            0.05948280174077428
+          ],
+          "retained_count": 40
+        },
+        "very_strong": {
+          "eligible_count": 517,
+          "fill": {
+            "position": 418,
+            "seed": 820418
+          },
+          "rate_95_wilson": [
+            0.09393168604651163,
+            0.08650507430074822,
+            0.10192474546748911
+          ],
+          "retained_count": 40
+        }
+      },
+      "posterior_assignment_used": false,
+      "retained_state_count": 120,
+      "trajectory_continuation_used": false,
+      "verdict": "PASS"
+    },
+    "2_semantic_integrity": {
+      "constructor_source_audit": {
+        "contains_band_classifier": false,
+        "contains_band_thresholds": false,
+        "contains_maintenance_trajectory": false,
+        "passed": true,
+        "posterior_source_is_frozen_update": true
+      },
+      "maximum_provenance_error": 0.0,
+      "one_posterior_audit_count": 120,
+      "one_posterior_failure_seeds": [],
+      "provenance_audit_count": 120,
+      "provenance_failure_seeds": [],
+      "verdict": "PASS"
+    },
+    "3_process_custody": {
+      "all_quota_fill_position": 1361,
+      "candidates_processed_after_all_quotas_filled": 4143,
+      "early_stop_used": false,
+      "full_block_consumed": true,
+      "gap_free_seed_order": true,
+      "ledger_row_count": 5504,
+      "maintenance_seed_opened": false,
+      "rehash_failure_seeds": [],
+      "rehash_pass_count": 5504,
+      "released_block_authorization_logged_every_row": true,
+      "verdict": "PASS"
+    },
+    "4_distributional_census": {
+      "artifact": "census.json",
+      "criterial": false,
+      "verdict": "DESCRIPTIVE_ONLY"
+    }
+  },
+  "failure_interpretation": null,
+  "identity": {
+    "authorized_scientific_files": {
+      "ref/rng.py": "1ef100d4d3fcd5bf01b772c8901b67cc8bb4e177550e8f4375508e047017fe71",
+      "ref/v233.py": "c290d460473ee37b461f57e745ae7907c12a616e25ff78e6f1ed6dae9ef29f03"
+    },
+    "base_freeze_commit": "3e9bad2",
+    "base_manifest_file_count": 25,
+    "base_manifest_sha256": "19be309cb002d0f23e3ba3ca22c7245328a55482903c723656967e6a0ef86b3e",
+    "mismatches": [],
+    "passed": true,
+    "repair_addendum_sha256": "275398e76fc013a0e8715fea6bd67d9542cf4e79f716a8465fcca6ca6e6ad2c3",
+    "repair_commit": "39236e7"
+  },
+  "interpretation_lock": "The 800-seed natural-yield finding stands. Bank2 tests only whether the prespecified rate-powered fresh block can assemble the unchanged equal-stratum stress bank.",
+  "maintenance_seed_block_status": "CLOSED_NOT_ACCESSED",
+  "sampling_plan_sha256": "1305d13bf1940665c42e06bb9cf84f255c916eb83b28bb69de1e76c50016a00f",
+  "seed_block_used": [
+    820001,
+    825504
+  ],
+  "verdict": "PASS",
+  "verdict_classes": {
+    "distributional_census": "DESCRIPTIVE_ONLY",
+    "process_custody": "PASS",
+    "scientific_sampling_adequacy": "PASS",
+    "semantic_integrity": "PASS"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "candidate_count": 5504,
+  "challenge": "C-V233-M-bank2",
+  "challenge_runner_sha256": "38d454495ef374bea555cf3588dd6be4c70962218be41756c175568760ee79db",
+  "challenge_spec_sha256": "4596ab4218758aa02fc425e5a6d57508125de6a4ea538fac238f0a20fa7109ff",
+  "classification": "sampling_adequacy_requalification",
+  "criterion_verdicts": {
+    "distributional_census": "DESCRIPTIVE_ONLY",
+    "process_custody": "PASS",
+    "scientific_sampling_adequacy": "PASS",
+    "semantic_integrity": "PASS"
+  },
+  "frozen_manifest_modified": false,
+  "identity": {
+    "authorized_scientific_files": {
+      "ref/rng.py": "1ef100d4d3fcd5bf01b772c8901b67cc8bb4e177550e8f4375508e047017fe71",
+      "ref/v233.py": "c290d460473ee37b461f57e745ae7907c12a616e25ff78e6f1ed6dae9ef29f03"
+    },
+    "base_freeze_commit": "3e9bad2",
+    "base_manifest_file_count": 25,
+    "base_manifest_sha256": "19be309cb002d0f23e3ba3ca22c7245328a55482903c723656967e6a0ef86b3e",
+    "mismatches": [],
+    "passed": true,
+    "repair_addendum_sha256": "275398e76fc013a0e8715fea6bd67d9542cf4e79f716a8465fcca6ca6e6ad2c3",
+    "repair_commit": "39236e7"
+  },
+  "maintenance_challenge_run": false,
+  "maintenance_seed_block_status": "CLOSED_NOT_ACCESSED",
+  "prior_bank_verdicts_preserved": [
+    "C-V233-M-bank FAIL_UNEXECUTABLE",
+    "C-V233-M-bank (repaired instrument) FAIL"
+  ],
+  "result_hashes": {
+    "results/challenges/C-V233-M-bank2/census.json": "ce98a3bc09485d20c721a2376f8dfc8357e7d7566a428b84784085cfd49d0fa9",
+    "results/challenges/C-V233-M-bank2/per_seed.csv": "3620747d32b4775c38b2bd4d7e61d21166f7c78a087a23d307fff3a90aa0f80b",
+    "results/challenges/C-V233-M-bank2/provenance-audit.json": "8059d24e2d50bfd79e310e68cdba0a5b5671d557e8df8bc694bb54e9a53685b0",
+    "results/challenges/C-V233-M-bank2/report.md": "211f0191ebcf261182b38b5903f2195cc23c40c2447c5275763109429b491a61",
+    "results/challenges/C-V233-M-bank2/retained_states.json": "78641431288b39d4f9b68bead2d92d4fda7b80bf6637976871ccee5f59e3ed61",
+    "results/challenges/C-V233-M-bank2/summary.json": "ea7ce7c2f1f160d40f1ea754df87bd80834acbd6dcd084070759def1f433a377",
+    "results/milestone-4-v2.3.3-gate6-bank2-update.md": "d8587374dfc28072adcb49e22578a39a5f12a6d154c7f0b44371784880f4d75f"
+  },
+  "seed_block_used": [
+    820001,
+    825504
+  ],
+  "stage": "V2.3.3",
+  "verdict": "PASS"
+}
