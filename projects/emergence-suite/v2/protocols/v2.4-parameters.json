@@ -1,0 +1,251 @@
+{
+  "version": "V2.4-redescription-1",
+  "status": "frozen_before_implementation_or_generation",
+  "numerical_tolerance": 1e-10,
+  "candidate_families": [
+    "global_downweight",
+    "cue_local_relearning",
+    "context_split",
+    "continuous_drift",
+    "change_point"
+  ],
+  "candidate_prior": {
+    "global_downweight": 0.2,
+    "cue_local_relearning": 0.2,
+    "context_split": 0.2,
+    "continuous_drift": 0.2,
+    "change_point": 0.2
+  },
+  "observation_interface": {
+    "cue_count_primary": 3,
+    "cue_count_support": [2, 3, 4],
+    "predictive_probability_bounds": [0.1, 0.9],
+    "elemental_predictive_state_grid": [0.1, 0.3, 0.5, 0.7, 0.9],
+    "free_cue_prediction_prior": {
+      "support": [0.1, 0.3, 0.5, 0.7, 0.9],
+      "mass": [0.2, 0.2, 0.2, 0.2, 0.2]
+    },
+    "cue_outcome_support": [0, 1, "missing"],
+    "context_marker_support": [
+      "then_marker",
+      "now_marker",
+      "ambiguous",
+      "missing"
+    ],
+    "root_observation_support": [
+      "root_negative",
+      "root_positive",
+      "missing"
+    ],
+    "root_observation_cpt_nonmissing": {
+      "root_negative_state": [0.85, 0.15],
+      "root_positive_state": [0.15, 0.85]
+    },
+    "context_marker_cpt_nonmissing": {
+      "then": [0.8, 0.05, 0.15],
+      "now": [0.05, 0.8, 0.15],
+      "none": [0.15, 0.15, 0.7]
+    },
+    "baseline_cue_predictions": [0.8, 0.75, 0.7],
+    "corrective_cue_predictions": [0.2, 0.25, 0.3],
+    "missingness_probability_primary": 0.15
+  },
+  "family_processes": {
+    "global_downweight": {
+      "state_grid": [0.0, 0.25, 0.5, 0.75, 1.0],
+      "initial_distribution": [0.05, 0.15, 0.3, 0.3, 0.2],
+      "transition_matrix": [
+        [0.5, 0.4, 0.1, 0.0, 0.0],
+        [0.15, 0.5, 0.3, 0.05, 0.0],
+        [0.05, 0.2, 0.5, 0.2, 0.05],
+        [0.0, 0.05, 0.3, 0.5, 0.15],
+        [0.0, 0.0, 0.1, 0.4, 0.5]
+      ],
+      "context_marker_coupled_to_meaning": false
+    },
+    "cue_local_relearning": {
+      "state_grid": [0.1, 0.3, 0.5, 0.7, 0.9],
+      "initial_distribution_by_cue": {
+        "cue_1": [0.0, 0.0, 0.05, 0.25, 0.7],
+        "cue_2": [0.0, 0.0, 0.1, 0.4, 0.5],
+        "cue_3": [0.0, 0.05, 0.15, 0.5, 0.3]
+      },
+      "per_cue_transition_matrix": [
+        [0.5, 0.4, 0.1, 0.0, 0.0],
+        [0.15, 0.5, 0.3, 0.05, 0.0],
+        [0.05, 0.2, 0.5, 0.2, 0.05],
+        [0.0, 0.05, 0.3, 0.5, 0.15],
+        [0.0, 0.0, 0.1, 0.4, 0.5]
+      ],
+      "context_marker_coupled_to_meaning": false
+    },
+    "context_split": {
+      "states": ["then", "now"],
+      "initial_distribution": [0.5, 0.5],
+      "transition_dirichlet_prior": {
+        "then_row_then_now": [8.0, 2.0],
+        "now_row_then_now": [2.0, 8.0]
+      },
+      "context_marker_coupled_to_meaning": true,
+      "retain_both_context_tables": true
+    },
+    "continuous_drift": {
+      "state_grid": [0.1, 0.3, 0.5, 0.7, 0.9],
+      "initial_distribution": [0.05, 0.15, 0.3, 0.3, 0.2],
+      "transition_templates": {
+        "slow": [
+          [0.9, 0.1, 0.0, 0.0, 0.0],
+          [0.1, 0.8, 0.1, 0.0, 0.0],
+          [0.0, 0.1, 0.8, 0.1, 0.0],
+          [0.0, 0.0, 0.1, 0.8, 0.1],
+          [0.0, 0.0, 0.0, 0.1, 0.9]
+        ],
+        "medium": [
+          [0.8, 0.2, 0.0, 0.0, 0.0],
+          [0.2, 0.6, 0.2, 0.0, 0.0],
+          [0.0, 0.2, 0.6, 0.2, 0.0],
+          [0.0, 0.0, 0.2, 0.6, 0.2],
+          [0.0, 0.0, 0.0, 0.2, 0.8]
+        ],
+        "fast": [
+          [0.7, 0.3, 0.0, 0.0, 0.0],
+          [0.3, 0.4, 0.3, 0.0, 0.0],
+          [0.0, 0.3, 0.4, 0.3, 0.0],
+          [0.0, 0.0, 0.3, 0.4, 0.3],
+          [0.0, 0.0, 0.0, 0.3, 0.7]
+        ]
+      },
+      "template_prior": [0.25, 0.5, 0.25],
+      "context_marker_coupled_to_meaning": false
+    },
+    "change_point": {
+      "states": ["before", "after"],
+      "initial_distribution": [1.0, 0.0],
+      "hazard_beta_prior": [1.0, 9.0],
+      "after_is_absorbing": true,
+      "no_change_path_included": true,
+      "phase_to_temporal_descriptor": {
+        "before": "then",
+        "after": "now"
+      },
+      "context_marker_coupled_to_phase": true
+    }
+  },
+  "finite_information": {
+    "B_max": 6.704414354964107,
+    "derivation": "log((0.9/0.1)*(0.8/0.05)*(0.85/0.15))",
+    "implied_binary_probability_change_bound": 0.9323540767750395
+  },
+  "candidate_common_nuisance_context": {
+    "states": ["then", "now", "none"],
+    "initial_distribution": [0.25, 0.25, 0.5],
+    "transition_matrix": [
+      [0.8, 0.1, 0.1],
+      [0.1, 0.8, 0.1],
+      [0.1, 0.1, 0.8]
+    ]
+  },
+  "analysis": {
+    "train_validation_test_fractions": [0.5, 0.25, 0.25],
+    "split_rounding_rule": "train=floor(T/2); validation=floor((T-train)/2); heldout=remainder",
+    "bootstrap_replicates": 10000,
+    "confidence_level": 0.95,
+    "exact_identity_tolerance": 1e-10,
+    "recovery_diagonal_minimum": 0.6,
+    "macro_recovery_minimum": 0.6,
+    "false_context_split_maximum": 0.1,
+    "multiclass_brier_maximum": 0.15,
+    "confidence_ece_maximum": 0.08,
+    "posterior_set_coverage_minimum": 0.9,
+    "parameter_grid_mae_maximum": 0.15,
+    "complexity_match_nats_per_observation": 0.05,
+    "heldout_margin_nats_per_observation": 0.01,
+    "probability_contrast_sesoi": 0.05,
+    "probability_rope": 0.01
+  },
+  "development_seed_blocks": {
+    "five_family_recovery": [770000, 770499],
+    "drift_and_change_point_controls": [771000, 771239],
+    "heldout_matched_complexity": [771300, 771699],
+    "misspecification": [771700, 771939],
+    "v21_v221_composition": [772000, 772239],
+    "formed_bank_bridge_streams": [772300, 772419],
+    "robustness": [773000, 773499]
+  },
+  "formed_bank_bridge": {
+    "source_stage": "V2.3.3",
+    "qualified_bank_commit": "2638fa9",
+    "serialized_states": "results/challenges/C-V233-M-bank2/retained_states.json",
+    "expected_state_count": 120,
+    "expected_strata": {
+      "moderate": 40,
+      "strong": 40,
+      "very_strong": 40
+    },
+    "initialization": "canonical_bytewise_clone",
+    "primary_weighting": "equal_by_stratum",
+    "natural_constructor_weighting": "descriptive_only"
+  },
+  "sequence_design": {
+    "lengths": [16, 32, 64],
+    "primary_length": 32,
+    "context_return_probability": 0.2,
+    "marker_ambiguity_probability": 0.15,
+    "root_evidence_reliability": 0.85,
+    "broad_precision_regime": "integrated_calibrated",
+    "shuffled_control": "within_cue_block_permutation_preserving_outcome_and_marker_marginals"
+  },
+  "prior_predictive_design": {
+    "candidate_count": 5,
+    "candidate_chance_rate": 0.2,
+    "diagnosticity_grid": [0.65, 0.7, 0.75, 0.8, 0.85, 0.9],
+    "diagonal_range": [0.72, 0.92],
+    "diagonal_5_95_range": [0.73, 0.91],
+    "particular_wrong_family_range": [0.02, 0.07],
+    "particular_wrong_family_5_95_range": [0.0225, 0.0675],
+    "smallest_table_supported_kl_nats": 0.020135513550688863
+  },
+  "robustness_sweeps": {
+    "candidate_prior_multiplier": [0.8, 1.0, 1.2],
+    "length": [16, 32, 64],
+    "cue_count": [2, 3, 4],
+    "outcome_diagnosticity_multiplier": [0.9, 1.0, 1.1],
+    "marker_reliability_multiplier": [0.9, 1.0, 1.1],
+    "missingness_probability": [0.0, 0.15, 0.3],
+    "context_transition_persistence_multiplier": [0.8, 1.0, 1.2],
+    "drift_step_multiplier": [0.5, 1.0, 1.5],
+    "change_point_hazard_multiplier": [0.5, 1.0, 2.0],
+    "global_transition_multiplier": [0.8, 1.0, 1.2],
+    "cue_local_heterogeneity_multiplier": [0.8, 1.0, 1.2],
+    "precision_multiplier": [0.8, 1.0, 1.2],
+    "cue_root_strength_multiplier": [0.8, 1.0, 1.2]
+  },
+  "rationales": {
+    "numerical_tolerance": "The suite-wide exact-enumeration tolerance is retained for every semantic identity and clone audit.",
+    "candidate_prior": "A uniform five-family prior makes recovery and false-selection rates interpretable against an exact 0.20 chance baseline without favoring context split.",
+    "predictive_grid": "Five interior elemental Bernoulli probabilities plus finitely derived global blends keep every likelihood finite while spanning down-weighted, ambiguous, and strongly directional predictions.",
+    "free_cue_prediction_prior": "A common uniform grid prior gives every free cue table the same elemental capacity; candidate-specific sharing and path structure receive their own explicit complexity charge.",
+    "cue_count": "Three primary cues identify cue-local versus shared change; two and four cues test structural robustness without making exact inference needlessly large.",
+    "marker_cpt": "Reliability 0.80 with 0.15 ambiguity makes context observable but never supplied as a label or deterministic fact.",
+    "root_observation_cpt": "Reliability 0.85 retains the inherited nonsaturated root-evidence scale and supplies a finite common-emission bound.",
+    "baseline_and_corrective_predictions": "Opposed nonsaturated cue rates create askable then/now prediction differences while retaining finite Bayes factors.",
+    "missingness": "Fifteen-percent candidate-common missingness exercises exact neutral slices without dominating the informative sequence.",
+    "global_transition": "A finite smooth mean-reverting global scale can express shared down-weighting while remaining distinct from reusable context tables.",
+    "cue_local_transition": "Independent common-grid transitions permit genuine cue-specific reversal while using the same elemental smoothness scale as the other finite processes.",
+    "context_transition_prior": "Dirichlet rows centered at 0.80 persistence permit learned returns and switches while explicitly charging transition uncertainty.",
+    "drift_templates": "Slow, medium, and fast normalized nearest-neighbor kernels span continuous evolution without an abrupt context-indexed jump.",
+    "change_point_prior": "Beta(1,9) assigns finite mass to no or late change while allowing a single learned abrupt onset and charging its timing uncertainty.",
+    "finite_information": "The exact table supremum multiplies the largest supported cue, marker, and root likelihood ratios; all are finite interior probabilities.",
+    "complexity_matching": "A 0.05-nat-per-token validation tolerance compares held-out predictions at similar posterior KL cost without equating raw parameter counts.",
+    "recovery_sesoi": "The 0.60 rate is the rounded 75-percent movement from five-family chance toward the prior-predictive fifth-percentile attainable diagonal.",
+    "false_split_sesoi": "The 0.10 ceiling is halfway from chance toward zero and is conservatively above the prior-predictive 95th-percentile wrong-family rate.",
+    "heldout_sesoi": "The 0.01-nat margin is approximately half the 0.0201-nat KL between the nearest distinct public Bernoulli predictions.",
+    "probability_sesoi": "A 0.05 probability contrast is one quarter of the smallest non-neutral spacing on the public predictive grid.",
+    "seed_blocks": "Disjoint fixed blocks support recovery, composition, bridge, and robustness below the 800000 development ceiling without generating any world before sealing.",
+    "formed_bank_bridge": "The already qualified 40/40/40 bank supplies posterior initial conditions with audited provenance and prevents selecting states on redescription outcomes.",
+    "sequence_length": "Thirty-two primary slices allow transition-family discrimination and held-out scoring; 16 and 64 test sample-size dependence.",
+    "context_return": "A 0.20 return rate makes retained historical predictions empirically queryable and distinguishes reusable context split from an absorbing change point.",
+    "root_evidence": "Reliability 0.85 permits broad-field root revision without posterior saturation or an authored root target.",
+    "bootstrap": "Ten thousand whole-world resamples preserve within-world temporal dependence and paired-arm identity."
+  }
+}

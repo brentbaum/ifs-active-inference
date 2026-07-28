@@ -67,3 +67,10 @@ Added after the bank2 adjudication/attestation/sampling plan, before the retry (
 4596ab4218758aa02fc425e5a6d57508125de6a4ea538fac238f0a20fa7109ff  C-V233-M-bank2-challenge.md
 ```
 Escrow: bank2 candidates 820001:825504 (5,504). Maintenance seal and escrow unchanged. One-retry stop rule in force.
+
+Added after the V2.4 phase-1 public artifacts, before implementation (2026-07-28):
+
+```
+574131ce32bf45a72e3163c91df0e924c84478b39c3c07691dfc216dc1b34665  C-V24-redescription-challenge.md
+```
+Escrow: C-V24 seeds 830001:830600.
