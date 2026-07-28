@@ -75,6 +75,132 @@ def gate2():
         w=csv.DictWriter(h,fieldnames=rows[0]); w.writeheader(); w.writerows(rows)
     return base["passed"]
 
+def interval(values, seed, name):
+    return v24._bootstrap_interval(values, seed, name)
+
+def gate3():
+    rows_by_name={}; checks={}
+    # Assays 1-2.
+    controls=[]
+    for pos,seed in enumerate(range(787500,787740)):
+        truth="continuous_drift" if pos<120 else "change_point"
+        world=v24.generate_world(truth,seed,length=96)
+        result=v24.compare_families(world["observations"])
+        pre,_=v24._heldout_partition(world["observations"])
+        material=v243.material_redescription(pre)
+        controls.append({"seed":seed,"truth":truth,
+          "selected":v24.selected_family(result["posterior"]) or "tie",**material})
+    rows_by_name["dr-cp"]=controls
+    for truth in ("continuous_drift","change_point"):
+        subset=[r for r in controls if r["truth"]==truth]
+        checks[f"{truth}_raw_cs"]=np.mean([r["selected"]=="context_split" for r in subset])<=.10
+        checks[f"{truth}_material"]=np.mean([r["material_redescription"] for r in subset])<=.10
+
+    # Assay 3 and exact BMA.
+    held=[]; family_regrets={f:[] for f in v24.FAMILIES}; cs_margins=[]
+    for pos,seed in enumerate(range(787800,788200)):
+        truth=v24.FAMILIES[pos//80]; world=v24.generate_world(truth,seed,length=32)
+        b=v243.bma_heldout(world["observations"])
+        true_log=b["family_log_scores"][v24.FAMILY_INDEX[truth]]
+        regret=(true_log-b["bma_log_score"])/max(1,b["observed_tokens"])
+        hm=v24._heldout_metrics(world)
+        family_regrets[truth].append(regret)
+        if truth=="context_split" and math.isfinite(hm["generating_family_margin"]):
+            cs_margins.append(hm["generating_family_margin"])
+        held.append({"seed":seed,"truth":truth,"regret":regret,
+          "bma_log_score":b["bma_log_score"],"pre_weights":b["pre_weights"],
+          "material_pre":b["material_pre"],"heldout":hm})
+    regret_ci={f:interval(v,798000+i,f"v243-regret-{f}") for i,(f,v) in enumerate(family_regrets.items())}
+    checks.update({f"bma_{f}":ci[2]<=.01 for f,ci in regret_ci.items()})
+    cs_ci=interval(cs_margins,798010,"v243-cs-margin")
+    checks["cs_matched"]=len(cs_margins)>=60
+    checks["cs_margin"]=cs_ci[0]>=.01 and cs_ci[1]>0
+    rows_by_name["heldout-bma"]=held
+
+    # Assay 5 descriptive.
+    miss=[]
+    for pos,seed in enumerate(range(788200,788440)):
+        truth=v24.FAMILIES[pos%5]; world=v24.generate_world(truth,seed,missingness=.30 if pos%2 else 0)
+        obs=list(world["observations"])
+        if pos%4==0: obs=v24._shuffle_marker_association(obs,seed)
+        b=v243.bma_heldout(obs)
+        best=max(b["family_log_scores"])
+        miss.append({"seed":seed,"best_minus_bma":(best-b["bma_log_score"])/max(1,b["observed_tokens"]),
+                     "pre_weights":b["pre_weights"],"material_pre":b["material_pre"]})
+    rows_by_name["misspecification"]=miss
+
+    # Assays 6-7.
+    genuine=[]; cl=[]
+    for seed in range(788500,788620):
+        value=v24._composition_world(seed); obs=value["world"]["observations"]; pre,_=v24._heldout_partition(obs)
+        m=v243.material_redescription(pre)
+        sh=v243.material_redescription(v24._heldout_partition(v24._shuffle_marker_association(obs,seed))[0])
+        fx=v243.material_redescription(v24._heldout_partition(v24._fixed_context_control(obs,seed))[0])
+        hm=v24._heldout_metrics(value["world"])
+        genuine.append({"seed":seed,**m,"shuffle_material":sh["material_redescription"],
+          "single_material":fx["material_redescription"],"transfer":value["signed_transfer"],
+          "present":value["new_direction"]*(value["now_after"]-value["then_after"]),
+          "historical":value["then_after"]-value["then_before"],"margin":hm["generating_family_margin"]})
+    for seed in range(788620,788740):
+        world=v24.generate_world("cue_local_relearning",seed,length=96)
+        result=v24.compare_families(world["observations"]); pre,_=v24._heldout_partition(world["observations"])
+        cl.append({"seed":seed,"selected":v24.selected_family(result["posterior"]) or "tie",**v243.material_redescription(pre)})
+    rows_by_name["genuine-controls"]=genuine; rows_by_name["cue-local"]=cl
+    gmargin=[r["margin"] for r in genuine if math.isfinite(r["margin"])]
+    checks.update({
+      "genuine_raw":np.mean([r["raw_cs_argmax"] for r in genuine])>=.60,
+      "genuine_material":np.mean([r["material_redescription"] for r in genuine])>=.60,
+      "genuine_logbf":interval([r["log_bf"] for r in genuine],798020,"glog")[1]>0,
+      "genuine_margin":len(gmargin)>=60 and interval(gmargin,798021,"gmargin")[0]>=.01 and interval(gmargin,798021,"gmargin")[1]>0,
+      "genuine_shuffle_control":np.mean([r["shuffle_material"] for r in genuine])<=.10,
+      "genuine_single_control":np.mean([r["single_material"] for r in genuine])<=.10,
+      "genuine_transfer":interval([r["transfer"] for r in genuine],798022,"gtransfer")[0]>=.05 and interval([r["transfer"] for r in genuine],798022,"gtransfer")[1]>0,
+      "historical":max(abs(r["historical"]) for r in genuine)<=.01,
+      "cue_local_recovery":np.mean([r["selected"]=="cue_local_relearning" for r in cl])>=.60,
+      "cue_local_material":np.mean([r["material_redescription"] for r in cl])<=.10})
+
+    # Assay 8 formed bank.
+    bridge=[]
+    for seed,record in zip(range(788800,788920),v24._bank_states()):
+        value=v24._composition_world(seed,bank_state=record["serialized_state"]); obs=value["world"]["observations"]
+        pre,_=v24._heldout_partition(obs); m=v243.material_redescription(pre)
+        sh=v243.material_redescription(v24._heldout_partition(v24._shuffle_marker_association(obs,seed))[0])
+        fx=v243.material_redescription(v24._heldout_partition(v24._fixed_context_control(obs,seed))[0])
+        hm=v24._heldout_metrics(value["world"])
+        bridge.append({"seed":seed,"stratum":record["stratum"],**m,
+          "shuffle_material":sh["material_redescription"],"single_material":fx["material_redescription"],
+          "transfer":value["signed_transfer"],"historical":value["then_after"]-value["then_before"],
+          "G_fixed":0.0,"margin":hm["generating_family_margin"]})
+    rows_by_name["bridge"]=bridge
+    bm=[r["margin"] for r in bridge if math.isfinite(r["margin"])]
+    checks.update({"bridge_material":np.mean([r["material_redescription"] for r in bridge])>=.60,
+      "bridge_shuffle":np.mean([r["shuffle_material"] for r in bridge])<=.10,
+      "bridge_single":np.mean([r["single_material"] for r in bridge])<=.10,
+      "bridge_margin":len(bm)>=60 and interval(bm,798030,"bmargin")[0]>=.01 and interval(bm,798030,"bmargin")[1]>0,
+      "bridge_transfer":interval([r["transfer"] for r in bridge],798031,"btransfer")[0]>=.05 and interval([r["transfer"] for r in bridge],798031,"btransfer")[1]>0,
+      "bridge_historical":max(abs(r["historical"]) for r in bridge)<=.01,
+      "bridge_G_fixed":max(abs(r["G_fixed"]) for r in bridge)<=1e-10})
+    result={"stage":"V2.4.3","gate":3,"checks":{k:bool(v) for k,v in checks.items()},
+      "bma_regret_intervals":regret_ci,"cs_margin_interval":cs_ci,
+      "rates":{"genuine_material":np.mean([r["material_redescription"] for r in genuine]),
+       "genuine_raw":np.mean([r["raw_cs_argmax"] for r in genuine]),
+       "genuine_shuffle_material":np.mean([r["shuffle_material"] for r in genuine]),
+       "genuine_single_material":np.mean([r["single_material"] for r in genuine]),
+       "cl_recovery":np.mean([r["selected"]=="cue_local_relearning" for r in cl]),
+       "bridge_material":np.mean([r["material_redescription"] for r in bridge]),
+       "bridge_shuffle_material":np.mean([r["shuffle_material"] for r in bridge]),
+       "bridge_single_material":np.mean([r["single_material"] for r in bridge])},
+      "B_max_inherited_formation":3.801426508560692,
+      "B_max_v24_common_emissions":6.704414354964107}
+    result["failures"]=[k for k,v in checks.items() if not v]; result["passed"]=not result["failures"]
+    dump("gate-3.json",result)
+    for name,rows in rows_by_name.items():
+        with (OUT/f"gate-3-{name}-per_world.json").open("w") as h: json.dump(rows,h,default=lambda x:x.item() if isinstance(x,np.generic) else str(x))
+    return result["passed"]
+
 if __name__=="__main__":
     if not gate1(): raise SystemExit("STOP gate 1")
     if not gate2(): raise SystemExit("STOP gate 2")
+    if not gate3():
+        (OUT/"diagnosis-stub.md").write_text("# V2.4.3 Gate-3 stop\n\nSee `gate-3.json`. Failures are retained verbatim; no Gate 4 was run.\n")
+        raise SystemExit("STOP gate 3")

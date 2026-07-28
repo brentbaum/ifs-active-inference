@@ -1,0 +1,89 @@
+{
+  "B_max_inherited_formation": 3.801426508560692,
+  "B_max_v24_common_emissions": 6.704414354964107,
+  "bma_regret_intervals": {
+    "change_point": [
+      0.021407435176520696,
+      0.009765882268046956,
+      0.034219512182534155
+    ],
+    "context_split": [
+      0.021535810609786953,
+      0.008945670932949826,
+      0.03615613442036459
+    ],
+    "continuous_drift": [
+      0.014342265097407167,
+      0.0018949290462364219,
+      0.02701322399280524
+    ],
+    "cue_local_relearning": [
+      0.014238682938882979,
+      0.0017353561128000553,
+      0.026990252271566928
+    ],
+    "global_downweight": [
+      0.012194183657928773,
+      0.0030131681065222716,
+      0.020687338402156526
+    ]
+  },
+  "checks": {
+    "bma_change_point": false,
+    "bma_context_split": false,
+    "bma_continuous_drift": false,
+    "bma_cue_local_relearning": false,
+    "bma_global_downweight": false,
+    "bridge_G_fixed": true,
+    "bridge_historical": true,
+    "bridge_margin": true,
+    "bridge_material": true,
+    "bridge_shuffle": false,
+    "bridge_single": true,
+    "bridge_transfer": true,
+    "change_point_material": true,
+    "change_point_raw_cs": true,
+    "continuous_drift_material": true,
+    "continuous_drift_raw_cs": true,
+    "cs_margin": false,
+    "cs_matched": true,
+    "cue_local_material": true,
+    "cue_local_recovery": true,
+    "genuine_logbf": true,
+    "genuine_margin": true,
+    "genuine_material": true,
+    "genuine_raw": true,
+    "genuine_shuffle_control": false,
+    "genuine_single_control": true,
+    "genuine_transfer": true,
+    "historical": true
+  },
+  "cs_margin_interval": [
+    0.034384769126037405,
+    -0.0006815365840524205,
+    0.07080188998822125
+  ],
+  "failures": [
+    "bma_global_downweight",
+    "bma_cue_local_relearning",
+    "bma_context_split",
+    "bma_continuous_drift",
+    "bma_change_point",
+    "cs_margin",
+    "genuine_shuffle_control",
+    "bridge_shuffle"
+  ],
+  "gate": 3,
+  "passed": false,
+  "rates": {
+    "bridge_material": 0.675,
+    "bridge_shuffle_material": 0.4666666666666667,
+    "bridge_single_material": 0.0,
+    "cl_recovery": 0.8166666666666667,
+    "genuine_material": 0.7083333333333334,
+    "genuine_raw": 0.75,
+    "genuine_shuffle_material": 0.45,
+    "genuine_single_material": 0.0
+  },
+  "stage": "V2.4.3"
+}
