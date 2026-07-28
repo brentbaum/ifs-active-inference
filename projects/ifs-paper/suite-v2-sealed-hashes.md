@@ -60,3 +60,10 @@ a27310d7c6a6bc2396bc85ad93a8ace978c546ec6e3f5ecf7cdc249ac70db2b7  C-V233-M-bank-
 8b1847339374314d291ce380e44ca5a483128ef2578635a6d6b1e6a6be658edf  C-V233-M-challenge.md
 ```
 Escrow: bank candidates 815001:815800; maintenance 816001:816900. Bank qualification gates the maintenance seeds. Pre-seal linter applied to both (records inside the sealed files).
+
+Added after the bank2 adjudication/attestation/sampling plan, before the retry (2026-07-28):
+
+```
+4596ab4218758aa02fc425e5a6d57508125de6a4ea538fac238f0a20fa7109ff  C-V233-M-bank2-challenge.md
+```
+Escrow: bank2 candidates 820001:825504 (5,504). Maintenance seal and escrow unchanged. One-retry stop rule in force.

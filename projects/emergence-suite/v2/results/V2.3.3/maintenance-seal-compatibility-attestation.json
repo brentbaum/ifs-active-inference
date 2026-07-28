@@ -1,0 +1,16 @@
+{
+  "attestation": "Evaluator privately audited the still-sealed C-V233-M plaintext against the bank2 retry design (round-2 plan step 2). Fields below are the audit outcome; the plaintext remains sealed.",
+  "date": "2026-07-28",
+  "maintenance_bundle_sha256": "320b45dba8bc726e4aaf6cd037350f373ffcd9250587880128dd717075cf6b80",
+  "maintenance_plaintext_revealed_to_implementer": false,
+  "references_qualified_bank_schema_only": true,
+  "requires_original_three_strata": true,
+  "requires_40_per_stratum": true,
+  "hardcodes_old_bank_candidate_seed_range": false,
+  "hardcodes_old_candidate_count_800": false,
+  "hardcodes_old_fill_positions": false,
+  "hardcodes_old_banked_state_hashes": false,
+  "compatible_with_bank2_candidate_budget_only_change": true,
+  "maintenance_escrow_block": "816001:816900 (unchanged, unopened)",
+  "note": "The maintenance bundle's world seeds are its own escrow block; bank states enter only through the qualified-bank schema. All compatibility conditions hold; the maintenance seal and escrow remain unchanged."
+}
