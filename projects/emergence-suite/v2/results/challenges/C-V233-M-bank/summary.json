@@ -1,0 +1,73 @@
+{
+  "candidate_states_generated": 0,
+  "challenge": "C-V233-M-bank",
+  "challenge_spec_sha256": "a27310d7c6a6bc2396bc85ad93a8ace978c546ec6e3f5ecf7cdc249ac70db2b7",
+  "criteria": {
+    "1_scientific_precondition": {
+      "moderate": {
+        "eligibility_rate_95_interval": null,
+        "eligible_count": null,
+        "fill_position": null
+      },
+      "reason": "The frozen constructor rejected the first released candidate seed before producing q0(P). Rates and fill curves cannot be estimated without changing the frozen instrument.",
+      "strong": {
+        "eligibility_rate_95_interval": null,
+        "eligible_count": null,
+        "fill_position": null
+      },
+      "verdict": "FAIL_UNEXECUTABLE",
+      "very_strong": {
+        "eligibility_rate_95_interval": null,
+        "eligible_count": null,
+        "fill_position": null
+      }
+    },
+    "2_semantic_integrity": {
+      "one_posterior_audits_completed": 0,
+      "provenance_audits_completed": 0,
+      "reason": "No bank state exists to audit.",
+      "verdict": "NOT_RUN"
+    },
+    "3_process_custody": {
+      "eligibility_ledger_rows": 0,
+      "frozen_identity_verified": true,
+      "intended_seed_ledger_rows": 800,
+      "reason": "The frozen bank procedure cannot consume its released Gate-6 seed domain. The intended-seed ledger is complete, but no eligibility decision or state hash can be produced.",
+      "serialize_rehash_audits_completed": 0,
+      "verdict": "FAIL_ARCHITECTURE"
+    },
+    "4_distributional_stress": {
+      "criterial": false,
+      "fill_curves": null,
+      "q0_P_distribution": null,
+      "reason": "No candidate posterior was generated.",
+      "verdict": "UNAVAILABLE_DESCRIPTIVE"
+    }
+  },
+  "failure_class": "ARCHITECTURE_PROSPECTION_FAILURE",
+  "first_seed_attempted": 815001,
+  "frozen_identity": {
+    "commit": "3e9bad2",
+    "manifest_sha256": "19be309cb002d0f23e3ba3ca22c7245328a55482903c723656967e6a0ef86b3e",
+    "mismatches": [],
+    "verified_file_count": 25
+  },
+  "maintenance_seed_block_status": "CLOSED_NOT_ACCESSED",
+  "observed_failure_verbatim": {
+    "exception_type": "ValueError",
+    "message": "development seeds must be in [0, 799999]",
+    "trace_terminal": "ref/rng.py:15 in component_rng -> raise ValueError(\"development seeds must be in [0, 799999]\")"
+  },
+  "precommitted_failure_interpretation": "This is an architecture failure of the bank procedure: the released configuration cannot be expressed through the frozen constructor. No regeneration, seed remapping, RNG monkeypatch, or rule change is permitted.",
+  "seed_block_released": [
+    815001,
+    815800
+  ],
+  "verdict": "FAIL",
+  "verdict_classes": {
+    "distributional_stress": "UNAVAILABLE_DESCRIPTIVE",
+    "process_custody": "FAIL_ARCHITECTURE",
+    "scientific_precondition": "FAIL_UNEXECUTABLE",
+    "semantic_integrity": "NOT_RUN"
+  }
+}

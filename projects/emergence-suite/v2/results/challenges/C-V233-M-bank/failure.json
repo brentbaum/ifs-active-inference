@@ -1,0 +1,15 @@
+{
+  "bypass_attempted": false,
+  "call_path": [
+    "challenges/run_c_v233_m_bank.py:run_bank",
+    "ref/v233.py:construct_bank_state",
+    "ref/rng.py:component_rng"
+  ],
+  "challenge": "C-V233-M-bank",
+  "exception": "ValueError: development seeds must be in [0, 799999]",
+  "failed_before_first_state": true,
+  "frozen_code_changed": false,
+  "official_run_count": 1,
+  "scientific_rerun_attempted": false,
+  "seed": 815001
+}

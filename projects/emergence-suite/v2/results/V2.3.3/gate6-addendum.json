@@ -1,0 +1,35 @@
+{
+  "candidate_states_generated": 0,
+  "challenge": "C-V233-M-bank",
+  "challenge_runner_sha256": "2a0c75709693848612ac11194852e1e4606f6dee7fcd2efc827b65c5c9099f73",
+  "challenge_spec_sha256": "a27310d7c6a6bc2396bc85ad93a8ace978c546ec6e3f5ecf7cdc249ac70db2b7",
+  "criterion_verdicts": {
+    "distributional_stress": "UNAVAILABLE_DESCRIPTIVE",
+    "process_custody": "FAIL_ARCHITECTURE",
+    "scientific_precondition": "FAIL_UNEXECUTABLE",
+    "semantic_integrity": "NOT_RUN"
+  },
+  "failure_class": "ARCHITECTURE_PROSPECTION_FAILURE",
+  "failure_verbatim": "ValueError: development seeds must be in [0, 799999]",
+  "first_seed_attempted": 815001,
+  "freeze_commit": "3e9bad2",
+  "frozen_identity": {
+    "commit": "3e9bad2",
+    "manifest_sha256": "19be309cb002d0f23e3ba3ca22c7245328a55482903c723656967e6a0ef86b3e",
+    "mismatches": [],
+    "verified_file_count": 25
+  },
+  "frozen_manifest_modified": false,
+  "maintenance_challenge_run": false,
+  "maintenance_seed_block_status": "CLOSED_NOT_ACCESSED",
+  "result_hashes": {
+    "results/challenges/C-V233-M-bank/failure.json": "74098dd9ce23e47eb989eda03136a02adfb60fc05e62ef274d9bd6266e1dd0a2",
+    "results/challenges/C-V233-M-bank/per_seed.csv": "1e4448b05f0e248aacff93d7f1a60f7d398268114df5bae8baffc4caf847b21c",
+    "results/challenges/C-V233-M-bank/report.md": "e75d63b9f363830e4b4a3c0bdca3b8f04665960a90c8353bea621003194732f3",
+    "results/challenges/C-V233-M-bank/summary.json": "f9273e6dc9f7982cacb167b4b40df1111e45df5cdd156aafff5555f6f7a4f3f5",
+    "results/milestone-4-v2.3.3-gate6-bank-update.md": "4d53fdef787d37269b627e7d118ac95871f9929cbe6bac6367ce98eae03e9f97"
+  },
+  "sealed_gate_6_bank_run": true,
+  "stage": "V2.3.3",
+  "verdict": "FAIL"
+}
