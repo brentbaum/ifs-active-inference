@@ -1,4 +1,4 @@
-"""Run V2.4 Gates 1–5 in ratchet order and create a freeze candidate."""
+"""Run pilot-amended V2.4.1 Gates 1–5 and create a freeze candidate."""
 
 from __future__ import annotations
 
@@ -46,7 +46,7 @@ from ref.v24 import (
 
 
 ROOT = Path(__file__).resolve().parent
-RESULT_ROOT = ROOT / "results" / "V2.4"
+RESULT_ROOT = ROOT / "results" / "V2.4.1"
 MILESTONE = ROOT / "results" / "milestone-5-v2.4-report.md"
 
 
@@ -109,21 +109,36 @@ def write_gate(
     results: dict[str, Any],
     failures: list[str],
 ) -> None:
+    if gate == 1:
+        scientific_verdict = "NOT_SCORED"
+        semantic_verdict = "PASS" if passed else "FAIL"
+    elif gate == 3:
+        scientific_verdict = "PASS" if passed else "FAIL"
+        semantic_checks = results.get("checks", {})
+        semantic_verdict = (
+            "PASS"
+            if semantic_checks.get(
+                "assay_4_complexity_recombination", False
+            )
+            and semantic_checks.get(
+                "assay_5_misspecification_semantics", False
+            )
+            else "FAIL"
+        )
+    else:
+        scientific_verdict = "PASS" if passed else "FAIL"
+        semantic_verdict = "PASS" if passed else "FAIL"
     write_json(
         RESULT_ROOT / f"gate-{gate}.json",
         {
-            "stage": "V2.4",
+            "stage": "V2.4.1",
             "gate": gate,
             "name": name,
             "passed": passed,
             "failures": failures,
             "verdict_classes": {
-                "scientific_outcomes": (
-                    "PASS" if passed and gate >= 2 else "NOT_SCORED"
-                ),
-                "semantic_integrity": (
-                    "PASS" if passed else "FAIL"
-                ),
+                "scientific_outcomes": scientific_verdict,
+                "semantic_integrity": semantic_verdict,
                 "distributional_stress": (
                     "DESCRIPTIVE_ONLY" if gate in {3, 5} else "NOT_SCORED"
                 ),
@@ -138,11 +153,9 @@ def record_failure(gate: int, failures: list[str]) -> None:
     RESULT_ROOT.mkdir(parents=True, exist_ok=True)
     path = RESULT_ROOT / "development-failures.md"
     existing = path.read_text(encoding="utf-8") if path.exists() else (
-        "# V2.4 development failures\n\n"
-        "One deterministic Gate-2 seed (`770200`) was evaluated as a "
-        "performance smoke after Gate 1 passed and before the official "
-        "full Gate-2 block. Its result caused no code, parameter, threshold, "
-        "or protocol decision and remains in the preregistered block.\n\n"
+        "# V2.4.1 development failures\n\n"
+        "The V2.4 Gate-2 stop remains recorded under `results/V2.4/`. "
+        "V2.4.1 is the adjudicated pilot amendment.\n\n"
     )
     text = existing + (
         f"## Official Gate {gate} stop\n\n"
@@ -257,11 +270,14 @@ def previous_tracked_changes() -> list[str]:
         "projects/emergence-suite/v2/ref/v24.py",
         "projects/emergence-suite/v2/tests/test_v24.py",
         "projects/emergence-suite/v2/run_v24_freeze.py",
+        "projects/emergence-suite/v2/protocols/v2.4-analysis-plan.md",
+        "projects/emergence-suite/v2/protocols/v2.4-parameters.json",
+        "projects/emergence-suite/v2/results/milestone-5-v2.4-report.md",
     }
     return [
         value
         for value in result.stdout.splitlines()
-        if value and value not in allowed and "/V2.4/" not in value
+        if value and value not in allowed and "/V2.4.1/" not in value
         and "milestone-5-v2.4-report.md" not in value
     ]
 
@@ -292,7 +308,7 @@ def main() -> None:
     )
     if not gate_1:
         record_failure(1, failures)
-        raise SystemExit("V2.4 stopped honestly at Gate 1")
+        raise SystemExit("V2.4.1 stopped honestly at Gate 1")
 
     recovery = recovery_assay()
     recovery_rows = recovery.pop("rows")
@@ -312,7 +328,7 @@ def main() -> None:
     )
     if not gate_2:
         record_failure(2, failures)
-        raise SystemExit("V2.4 stopped honestly at Gate 2")
+        raise SystemExit("V2.4.1 stopped honestly at Gate 2")
 
     opened = open_assays()
     open_rows = opened.pop("rows")
@@ -333,7 +349,7 @@ def main() -> None:
     )
     if not gate_3:
         record_failure(3, failures)
-        raise SystemExit("V2.4 stopped honestly at Gate 3")
+        raise SystemExit("V2.4.1 stopped honestly at Gate 3")
 
     lesions = lesion_assays()
     gate_4 = bool(lesions["passed"])
@@ -351,7 +367,7 @@ def main() -> None:
     )
     if not gate_4:
         record_failure(4, failures)
-        raise SystemExit("V2.4 stopped honestly at Gate 4")
+        raise SystemExit("V2.4.1 stopped honestly at Gate 4")
 
     robustness = robustness_assays()
     v20 = run_v20()
@@ -449,9 +465,19 @@ def main() -> None:
     )
     if not gate_5:
         record_failure(5, failures)
-        raise SystemExit("V2.4 stopped honestly at Gate 5")
+        raise SystemExit("V2.4.1 stopped honestly at Gate 5")
 
-    decisions = """# V2.4 decisions
+    decisions = """# V2.4.1 decisions
+
+- Provenance is `pilot-amended`. The committed V2.4 Gate-2 diagnosis at
+  `results/V2.4/gate2-diagnosis.md` showed that 32-slice recovery
+  under-expressed GW/CL/DR temporal differences. The adjudicated amendment
+  changes Gate-2 recovery to 96 slices at unchanged missingness and leaves
+  every load-bearing threshold unchanged.
+- Diagnostic seeds `774000:774524` and `776000:776144` are permanently
+  barred from criterion evaluation. All V2.4.1 protocol populations use
+  fresh disjoint blocks.
+- The failed V2.4 Gate-2 reports remain untouched under `results/V2.4/`.
 
 - The five families replace complete initial/transition/context process
   bundles; no family is an edge toggle.
@@ -472,12 +498,12 @@ def main() -> None:
 """
     (RESULT_ROOT / "decisions.md").write_text(decisions, encoding="utf-8")
     (RESULT_ROOT / "development-failures.md").write_text(
-        "# V2.4 development failures\n\n"
-        "No official Gate 1–5 criterion failed.\n\n"
-        "One deterministic Gate-2 seed (`770200`) was evaluated as a "
-        "performance smoke after Gate 1 passed and before the official "
-        "full Gate-2 block. Its result caused no code, parameter, threshold, "
-        "or protocol decision and remains in the preregistered block.\n",
+        "# V2.4.1 development failures\n\n"
+        "No official V2.4.1 Gate 1–5 criterion failed.\n\n"
+        "The original V2.4 Gate-2 failure and Brier scoring erratum remain "
+        "verbatim under `results/V2.4/`; this ledger does not overwrite "
+        "them. The diagnostic blocks `774000:774524` and "
+        "`776000:776144` were not used for criterion evaluation.\n",
         encoding="utf-8",
     )
     write_json(
@@ -516,8 +542,8 @@ def main() -> None:
         RESULT_ROOT / "contract-conformance-audit.json", contract_audit
     )
     stage_report = {
-        "stage": "V2.4",
-        "version": "V2.4-redescription-1",
+        "stage": "V2.4.1",
+        "version": "V2.4.1-redescription-pilot-amended-1",
         "status": "freeze_candidate",
         "all_gates_1_to_5_passed": True,
         "gate_verdicts": {f"gate_{index}": "PASS" for index in range(1, 6)},
@@ -527,16 +553,24 @@ def main() -> None:
             "distributional_stress": "DESCRIPTIVE_ONLY",
             "process_custody": "PASS",
         },
-        "development_seed_maximum": 773499,
+        "development_seed_maximum": 779812,
         "sealed_gate_6_run": False,
         "elapsed_seconds": time.perf_counter() - started,
     }
     write_json(RESULT_ROOT / "stage-report.json", stage_report)
     MILESTONE.write_text(
-        """# Milestone 5 — V2.4 context-indexed redescription
+        """# Milestone 5 — V2.4.1 context-indexed redescription
 
-V2.4 is a freeze candidate. Gates 1–5 passed prospectively under the frozen
-contract and analysis plan. The exact reference compares global
+V2.4 originally stopped at Gate 2 with the GW/CL/DR recovery failure
+preserved under `results/V2.4/`. The adjudicated diagnosis found that the
+32-slice recovery design under-expressed those families' temporal
+differences. V2.4.1 is therefore labeled **pilot-amended**: its Gate-2
+population uses 96 slices at unchanged missingness, while every
+load-bearing threshold remains unchanged. The diagnosis/calibration seeds
+are permanently excluded from criterion evaluation.
+
+V2.4.1 is a freeze candidate. Gates 1–5 passed under the amended analysis
+plan on fresh disjoint development populations. The exact reference compares global
 down-weighting, cue-local relearning, context split, continuous drift, and
 change point through common normalized observations and fully replaceable
 temporal processes.
@@ -569,18 +603,18 @@ C-V24 remains sealed and unrun. No escrow seed was accessed.
         MILESTONE,
     ]
     manifest = {
-        "stage": "V2.4",
+        "stage": "V2.4.1",
         "status": "freeze_candidate",
         "all_gates_1_to_5_passed": True,
         "sealed_gate_6_run": False,
-        "development_seed_maximum": 773499,
+        "development_seed_maximum": 779812,
         "files": {
             str(path.relative_to(ROOT)): sha256(path)
             for path in manifest_paths
         },
     }
     write_json(RESULT_ROOT / "freeze-manifest.json", manifest)
-    print("V2.4 freeze candidate complete")
+    print("V2.4.1 freeze candidate complete")
 
 
 if __name__ == "__main__":

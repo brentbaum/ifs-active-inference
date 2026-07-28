@@ -1,0 +1,21 @@
+{
+  "all_gates_1_to_5_passed": false,
+  "development_seed_maximum_opened": 779119,
+  "gate_verdicts": {
+    "gate_1": "PASS",
+    "gate_2": "PASS",
+    "gate_3": "FAIL",
+    "gate_4": "NOT_RUN",
+    "gate_5": "NOT_RUN"
+  },
+  "sealed_gate_6_run": false,
+  "stage": "V2.4.1",
+  "status": "failed_gate_3_no_freeze",
+  "strain_version": "V2.4.1-redescription-pilot-amended-1",
+  "verdict_classes": {
+    "distributional_stress": "DESCRIPTIVE_ONLY",
+    "process_custody": "PASS",
+    "scientific_outcomes": "FAIL",
+    "semantic_integrity": "PASS"
+  }
+}

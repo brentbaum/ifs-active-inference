@@ -1,6 +1,6 @@
 {
-  "version": "V2.4-redescription-1",
-  "status": "frozen_before_implementation_or_generation",
+  "version": "V2.4.1-redescription-pilot-amended-1",
+  "status": "pilot_amended_before_v2.4.1_generation",
   "numerical_tolerance": 1e-10,
   "candidate_families": [
     "global_downweight",
@@ -164,13 +164,14 @@
     "probability_rope": 0.01
   },
   "development_seed_blocks": {
-    "five_family_recovery": [770000, 770499],
-    "drift_and_change_point_controls": [771000, 771239],
-    "heldout_matched_complexity": [771300, 771699],
-    "misspecification": [771700, 771939],
-    "v21_v221_composition": [772000, 772239],
-    "formed_bank_bridge_streams": [772300, 772419],
-    "robustness": [773000, 773499]
+    "five_family_recovery": [777000, 777499],
+    "drift_and_change_point_controls": [777500, 777739],
+    "selective_lesions": [777800, 777839],
+    "heldout_matched_complexity": [778000, 778399],
+    "misspecification": [778400, 778639],
+    "v21_v221_composition": [778700, 778939],
+    "formed_bank_bridge_streams": [779000, 779119],
+    "robustness": [779200, 779699]
   },
   "formed_bank_bridge": {
     "source_stage": "V2.3.3",
@@ -189,6 +190,7 @@
   "sequence_design": {
     "lengths": [16, 32, 64],
     "primary_length": 32,
+    "gate_2_recovery_length": 96,
     "context_return_probability": 0.2,
     "marker_ambiguity_probability": 0.15,
     "root_evidence_reliability": 0.85,
@@ -241,9 +243,9 @@
     "false_split_sesoi": "The 0.10 ceiling is halfway from chance toward zero and is conservatively above the prior-predictive 95th-percentile wrong-family rate.",
     "heldout_sesoi": "The 0.01-nat margin is approximately half the 0.0201-nat KL between the nearest distinct public Bernoulli predictions.",
     "probability_sesoi": "A 0.05 probability contrast is one quarter of the smallest non-neutral spacing on the public predictive grid.",
-    "seed_blocks": "Disjoint fixed blocks support recovery, composition, bridge, and robustness below the 800000 development ceiling without generating any world before sealing.",
+    "seed_blocks": "Pilot-amended fresh disjoint blocks support V2.4.1 recovery, composition, bridge, lesions, and robustness below the 800000 development ceiling; diagnosis blocks 774000:774524 and 776000:776144 are permanently barred from criterion evaluation.",
     "formed_bank_bridge": "The already qualified 40/40/40 bank supplies posterior initial conditions with audited provenance and prevents selecting states on redescription outcomes.",
-    "sequence_length": "Thirty-two primary slices allow transition-family discrimination and held-out scoring; 16 and 64 test sample-size dependence.",
+    "sequence_length": "Ninety-six slices are used only for pilot-amended Gate-2 recovery after the adjudicated information-budget diagnosis; the original 32-slice primary protocol remains operative for held-out and composition assays, while 16, 32, and 64 remain robustness cells.",
     "context_return": "A 0.20 return rate makes retained historical predictions empirically queryable and distinguishes reusable context split from an absorbing change point.",
     "root_evidence": "Reliability 0.85 permits broad-field root revision without posterior saturation or an authored root target.",
     "bootstrap": "Ten thousand whole-world resamples preserve within-world temporal dependence and paired-arm identity."

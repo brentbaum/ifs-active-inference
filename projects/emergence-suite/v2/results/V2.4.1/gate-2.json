@@ -1,0 +1,139 @@
+{
+  "failures": [],
+  "gate": 2,
+  "name": "five-family recovery and calibration",
+  "passed": true,
+  "results": {
+    "checks": {
+      "brier": true,
+      "coverage": true,
+      "ece": true,
+      "every_diagonal": true,
+      "false_CS_change_point": true,
+      "false_CS_drift": true,
+      "macro_recovery": true,
+      "parameter_MAE": true,
+      "parameter_coverage": true
+    },
+    "confidence_ece": 0.02788426553936528,
+    "confusion_counts": [
+      [
+        87,
+        8,
+        0,
+        5,
+        0
+      ],
+      [
+        12,
+        82,
+        0,
+        6,
+        0
+      ],
+      [
+        0,
+        0,
+        98,
+        0,
+        2
+      ],
+      [
+        9,
+        8,
+        1,
+        82,
+        0
+      ],
+      [
+        0,
+        0,
+        3,
+        0,
+        97
+      ]
+    ],
+    "confusion_rates": [
+      [
+        0.87,
+        0.08,
+        0.0,
+        0.05,
+        0.0
+      ],
+      [
+        0.12,
+        0.82,
+        0.0,
+        0.06,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.98,
+        0.0,
+        0.02
+      ],
+      [
+        0.09,
+        0.08,
+        0.01,
+        0.82,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.03,
+        0.0,
+        0.97
+      ]
+    ],
+    "diagonal_rates": [
+      0.87,
+      0.82,
+      0.98,
+      0.82,
+      0.97
+    ],
+    "false_CS_rate_change_point": 0.03,
+    "false_CS_rate_drift": 0.01,
+    "high_confidence_wrong": {
+      "at_least_0.90": 2,
+      "at_least_0.95": 2
+    },
+    "history_length": 96,
+    "macro_accuracy": 0.892,
+    "multiclass_brier": 0.030153310803116392,
+    "parameter_95_coverage": 1.0,
+    "parameter_grid_MAE": 0.07222878757479685,
+    "passed": true,
+    "posterior_entropy": {
+      "by_generating_family": {
+        "change_point": 0.11584994026641349,
+        "context_split": 0.03311549258021174,
+        "continuous_drift": 0.2822123052589928,
+        "cue_local_relearning": 0.47132721625145185,
+        "global_downweight": 0.5421071820894491
+      },
+      "mean": 0.2889224272893039
+    },
+    "posterior_set_95_coverage": 0.992,
+    "tie_counts": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "world_count": 500
+  },
+  "stage": "V2.4.1",
+  "verdict_classes": {
+    "distributional_stress": "NOT_SCORED",
+    "process_custody": "PASS",
+    "scientific_outcomes": "PASS",
+    "semantic_integrity": "PASS"
+  }
+}

@@ -1482,7 +1482,13 @@ def recovery_assay() -> dict[str, Any]:
     for position, seed in enumerate(seeds):
         truth_index = min(position // per_family, len(FAMILIES) - 1)
         truth = FAMILIES[truth_index]
-        world = generate_world(truth, seed)
+        world = generate_world(
+            truth,
+            seed,
+            length=int(
+                PARAMETERS["sequence_design"]["gate_2_recovery_length"]
+            ),
+        )
         result = compare_families(world["observations"])
         posterior = np.asarray(result["posterior"], dtype=float)
         selected = selected_family(posterior)
@@ -1554,7 +1560,7 @@ def recovery_assay() -> dict[str, Any]:
     one_hot = np.eye(len(FAMILIES))[truth_array]
     diagonal = np.diag(confusion) / per_family
     accuracy = float(np.trace(confusion) / len(seeds))
-    brier = float(np.mean(np.sum((posterior_array - one_hot) ** 2, axis=1)))
+    brier = float(np.mean((posterior_array - one_hot) ** 2))
     ece = _multiclass_ece(posterior_array, truth_array)
     coverage = float(
         np.mean(
@@ -1569,6 +1575,13 @@ def recovery_assay() -> dict[str, Any]:
     cp_index = FAMILY_INDEX["change_point"]
     false_cs_dr = float(confusion[dr_index, cs_index] / per_family)
     false_cs_cp = float(confusion[cp_index, cs_index] / per_family)
+    entropy = -np.sum(
+        posterior_array * np.log(np.maximum(posterior_array, 1e-300)),
+        axis=1,
+    )
+    selected_indices = np.argmax(posterior_array, axis=1)
+    selected_confidence = np.max(posterior_array, axis=1)
+    wrong = selected_indices != truth_array
     thresholds = PARAMETERS["analysis"]
     checks = {
         "macro_recovery": accuracy
@@ -1589,6 +1602,9 @@ def recovery_assay() -> dict[str, Any]:
     }
     return {
         "world_count": len(seeds),
+        "history_length": int(
+            PARAMETERS["sequence_design"]["gate_2_recovery_length"]
+        ),
         "confusion_counts": confusion.tolist(),
         "confusion_rates": (confusion / per_family).tolist(),
         "tie_counts": tie_counts.tolist(),
@@ -1597,6 +1613,23 @@ def recovery_assay() -> dict[str, Any]:
         "multiclass_brier": brier,
         "confidence_ece": ece,
         "posterior_set_95_coverage": coverage,
+        "posterior_entropy": {
+            "mean": float(np.mean(entropy)),
+            "by_generating_family": {
+                family: float(
+                    np.mean(entropy[truth_array == family_index])
+                )
+                for family_index, family in enumerate(FAMILIES)
+            },
+        },
+        "high_confidence_wrong": {
+            "at_least_0.90": int(
+                np.sum(wrong & (selected_confidence >= 0.90))
+            ),
+            "at_least_0.95": int(
+                np.sum(wrong & (selected_confidence >= 0.95))
+            ),
+        },
         "false_CS_rate_drift": false_cs_dr,
         "false_CS_rate_change_point": false_cs_cp,
         "parameter_grid_MAE": float(np.mean(parameter_errors)),
@@ -1847,7 +1880,7 @@ def open_assays() -> dict[str, Any]:
         family: (
             _bootstrap_interval(
                 values,
-                779000 + index,
+                779800 + index,
                 f"v24-heldout-{family}",
             )
             if values
@@ -1988,12 +2021,12 @@ def open_assays() -> dict[str, Any]:
     )
     transfer_interval = _bootstrap_interval(
         [row["transfer"] for row in composition_rows],
-        779100,
+        779810,
         "v24-composition-transfer",
     )
     present_interval = _bootstrap_interval(
         [row["present_indexing"] for row in composition_rows],
-        779101,
+        779811,
         "v24-composition-present",
     )
 
@@ -2062,7 +2095,7 @@ def open_assays() -> dict[str, Any]:
     )
     bridge_transfer = _bootstrap_interval(
         [row["transfer"] for row in bridge_rows],
-        779102,
+        779812,
         "v24-bridge-transfer",
     )
     bridge_historical = max(
@@ -2191,7 +2224,10 @@ def open_assays() -> dict[str, Any]:
 
 
 def lesion_assays() -> dict[str, Any]:
-    seeds = list(range(774000, 774040))
+    start, end = PARAMETERS["development_seed_blocks"][
+        "selective_lesions"
+    ]
+    seeds = list(range(int(start), int(end) + 1))
     transition_learning = []
     marker_targets = []
     association_targets = []

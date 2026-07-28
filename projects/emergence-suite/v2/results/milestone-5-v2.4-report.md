@@ -1,30 +1,26 @@
-# Milestone 5 — V2.4 context-indexed redescription
+# Milestone 5 — V2.4 / V2.4.1 context-indexed redescription
 
-V2.4 stopped honestly at Gate 2 and is **not** a freeze candidate.
+V2.4's original Gate-2 stop remains committed under `results/V2.4/`. Its
+adjudicated diagnosis found an information-starved 32-slice recovery design,
+not an engine/oracle discrepancy. V2.4.1 was therefore **pilot-amended** to
+use 96 Gate-2 slices at unchanged missingness and unchanged thresholds.
 
-Gate 1 passed all fourteen semantic and constitutional proofs. The five
-families use common normalized observations and replace complete temporal
-process bundles. Missing evidence was structure-neutral to
-`4.44e-16`; every posterior log-odds increment matched its published log BF;
-partition/complexity recombination error was zero; and a separately authored
-path summation matched the candidate scorers to `1.56e-17`.
+V2.4.1 Gate 1 reproduced all fourteen semantic and constitutional passes.
+Amended Gate 2 passed: GW/CL/CS/DR/CP recovery was
+`0.87/0.82/0.98/0.82/0.97`, macro recovery `0.892`, false-CS rates
+`0.01/0.03` for DR/CP, mean-class Brier `0.03015`, ECE `0.02788`,
+posterior-set coverage `0.992`, parameter coverage `1.0`, and parameter MAE
+`0.07223`. Two wrong selections had posterior confidence at least 0.95.
 
-Gate 2 generated 100 worlds from every family. Macro recovery passed at
-`0.682`, but the frozen per-family diagonal `>=0.60` failed for global
-down-weight (`0.56`), cue-local relearning (`0.49`), and continuous drift
-(`0.59`). Their errors were concentrated among those same three smooth/local
-families. Context split recovered at `0.80`, change point at `0.97`, and the
-false-context-split rates passed in both drift (`0.02`) and change-point
-(`0.03`) worlds.
+The stage then stopped honestly at Gate 3 and is **not a freeze candidate**.
+Assays 1, 2, 4, and 5 passed. Assay 3 failed its matched-comparator power gate
+for GW (45/80) and CP (3/80). Assays 6–8 failed composition selectivity or
+effect criteria: shuffled/fixed/single-regime CS rates were too high,
+cue-local control recovery was `0.5833`, the Assay-6 effect intervals crossed
+zero, and formed-bank transfer was significantly opposite the preregistered
+direction. Two held-out obligations and the per-stratum bridge breakdown
+were not emitted and are retained as unscored failures.
 
-The original Gate-2 report also flagged Brier because it summed classwise
-squared errors. Under the inherited suite definition—mean over worlds and
-classes—the same fixed predictions score `0.079161`, passing the `0.15`
-ceiling. The original `0.395806` result and failure flag remain verbatim with
-an explicit erratum. This software-scoring correction does not change the
-recovery failure or authorize a rerun.
-
-Gates 3–5 were not run. The V2.3.3 bank bridge was not opened, C-V24 remained
-sealed, and no escrow seed was accessed. Scientific verdict: **FAIL**;
-semantic integrity: **PASS**; process custody: **PASS**; distributional
-stress: **NOT RUN**.
+Gates 4–5 were not run. C-V24 remained sealed; no escrow seed was accessed.
+Scientific outcomes: **FAIL**; semantic integrity: **PASS**; process custody:
+**PASS**; distributional stress: **DESCRIPTIVE_ONLY**.

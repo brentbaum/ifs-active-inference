@@ -1,0 +1,127 @@
+{
+  "failures": [
+    "assay_3_matched_complexity_heldout",
+    "assay_6_genuine_context_composition",
+    "assay_7_marginal_controls",
+    "assay_8_formed_bank_bridge"
+  ],
+  "gate": 3,
+  "name": "eight open and composition assays",
+  "passed": false,
+  "results": {
+    "checks": {
+      "assay_1_drift_false_split": true,
+      "assay_2_change_point_false_split": true,
+      "assay_3_matched_complexity_heldout": false,
+      "assay_4_complexity_recombination": true,
+      "assay_5_misspecification_semantics": true,
+      "assay_6_genuine_context_composition": false,
+      "assay_7_marginal_controls": false,
+      "assay_8_formed_bank_bridge": false
+    },
+    "complexity_decomposition": {
+      "maximum_recombination_error": 4.263256414560601e-14
+    },
+    "composition": {
+      "cue_local_control_recovery_rate": 0.5833333333333334,
+      "fixed_context_CS_selection_rate": 0.4583333333333333,
+      "genuine_CS_selection_rate": 0.7916666666666666,
+      "inherited_v21_cross_latent": {
+        "delivered_log_odds_effect": 0.9020320974870424,
+        "posterior_y_broad": 0.8438218608948914,
+        "posterior_y_narrow": 0.6867378034432879
+      },
+      "maximum_historical_retention_error": 0.0,
+      "maximum_zero_association_transfer": 0.0,
+      "present_indexing_interval": [
+        0.07499999250635965,
+        -0.0075000002196813536,
+        0.14999999999935237
+      ],
+      "shuffled_CS_selection_rate": 0.55,
+      "transfer_interval": [
+        0.07499999250635965,
+        -0.007500000000218938,
+        0.15749998604027207
+      ]
+    },
+    "false_split_controls": {
+      "change_point_rate": 0.041666666666666664,
+      "drift_rate": 0.025
+    },
+    "formed_bank_bridge": {
+      "all_clone_identities": true,
+      "genuine_CS_selection_rate": 0.8416666666666667,
+      "maximum_historical_retention_error": 0.0,
+      "shuffled_CS_selection_rate": 0.6083333333333333,
+      "single_regime_CS_selection_rate": 0.35833333333333334,
+      "stratum_counts": {
+        "moderate": 40,
+        "strong": 40,
+        "very_strong": 40
+      },
+      "transfer_interval": [
+        -0.1573293241704685,
+        -0.23406187239427523,
+        -0.08121917222453554
+      ],
+      "world_count": 120
+    },
+    "matched_complexity": {
+      "checks": {
+        "change_point": false,
+        "context_split": true,
+        "continuous_drift": true,
+        "cue_local_relearning": true,
+        "global_downweight": false
+      },
+      "margin_intervals": {
+        "change_point": [
+          0.09255439522614613,
+          0.05996043706443466,
+          0.1473632996676102
+        ],
+        "context_split": [
+          0.10986408330993894,
+          0.06766136119212282,
+          0.15388196299418697
+        ],
+        "continuous_drift": [
+          0.054152290428829394,
+          0.02532121443720669,
+          0.08270003950091352
+        ],
+        "cue_local_relearning": [
+          0.023438811899724087,
+          0.005065423981516229,
+          0.04004166094241669
+        ],
+        "global_downweight": [
+          0.1796366746050034,
+          0.10854203079462768,
+          0.25377556585047
+        ]
+      },
+      "matched_counts": {
+        "change_point": 3,
+        "context_split": 60,
+        "continuous_drift": 80,
+        "cue_local_relearning": 80,
+        "global_downweight": 45
+      }
+    },
+    "misspecification": {
+      "maximum_update_identity_error": 8.43769498715119e-15,
+      "mean_posterior_entropy": 0.7443466455064324,
+      "world_count": 240
+    },
+    "passed": false
+  },
+  "stage": "V2.4.1",
+  "verdict_classes": {
+    "distributional_stress": "DESCRIPTIVE_ONLY",
+    "process_custody": "PASS",
+    "scientific_outcomes": "FAIL",
+    "semantic_integrity": "PASS"
+  }
+}
