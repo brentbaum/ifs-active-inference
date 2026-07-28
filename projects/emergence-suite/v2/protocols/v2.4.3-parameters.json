@@ -1,0 +1,49 @@
+{
+  "stage": "V2.4.3",
+  "adjudication": "results/V2.4.2/gate3-adjudication.md (GPT-5.6 Pro round 3, 2026-07-28)",
+  "construct": {
+    "material_redescription_q1_min": 0.80,
+    "material_redescription_bf_min": 4.0,
+    "tie_or_nonfinite_counts_as_failure": true
+  },
+  "population_criteria": {
+    "genuine_then_now_material_rate_min": 0.60,
+    "genuine_then_now_raw_cs_legacy_min": 0.60,
+    "genuine_then_now_mean_log_bf_lower_ci": "> 0",
+    "control_material_rate_max": 0.10,
+    "dr_cp_raw_cs_max": 0.10,
+    "dr_cp_material_rate_max": 0.10
+  },
+  "predictive_adequacy": {
+    "bma_regret_upper_ci_max_nats_per_token": 0.01,
+    "cs_point_margin_min_nats_per_token": 0.01,
+    "cs_point_margin_lower_ci": "> 0",
+    "cs_matched_min": "60/80",
+    "complexity_tolerance_pre_held_out": 0.13
+  },
+  "b_max": {
+    "inherited_formation": 3.801426508560692,
+    "v24_common_emissions": 6.704414354964107
+  },
+  "seed_blocks": {
+    "gate2_recovery": "787000:787499 (100 per family, 96 slices)",
+    "gate3_dr_cp_controls": "787500:787739 (120 DR + 120 CP, 96 slices)",
+    "gate3_exact_family_heldout_bma": "787800:788199 (80 per family, 32 slices)",
+    "gate3_misspecification": "788200:788439 (240 worlds)",
+    "gate3_genuine_then_now_paired": "788500:788619 (120 paired worlds)",
+    "gate3_cue_local_control": "788620:788739 (120 CL worlds, 96 slices)",
+    "gate3_formed_p_bridge": "788800:788919 (120 frozen bank states)",
+    "gate4_lesions": "789000:789239",
+    "gate5_regression_robustness": "789300:790299",
+    "sealed_challenge_escrow": "830001:830600 (C-V24, unopened)",
+    "guard_gaps_intentional": true
+  },
+  "barred_blocks": [
+    "773000:773499",
+    "774000:774524",
+    "776000:776144",
+    "781000:781499",
+    "786000:786359"
+  ],
+  "stop_rule": "No automatic V2.4.4; successor requires a new representational absence. Numeric misses do not justify adjusting 0.80, 4.0, 0.60, 0.10, or 0.01."
+}

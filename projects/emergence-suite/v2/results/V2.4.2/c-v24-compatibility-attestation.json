@@ -1,0 +1,14 @@
+{
+  "attestation": "Evaluator privately audited the still-sealed C-V24 plaintext against the V2.4.3 amendment (round-3 adjudication). Fields below are the audit outcome; the plaintext remains sealed and unrevealed to the implementer.",
+  "date": "2026-07-28",
+  "challenge_sha256": "574131ce32bf45a72e3163c91df0e924c84478b39c3c07691dfc216dc1b34665",
+  "plaintext_revealed_to_implementer": false,
+  "legacy_requested_fields_retained": true,
+  "legacy_raw_family_selection_retained": true,
+  "material_split_fields_available_before_reveal": true,
+  "model_average_fields_available_before_reveal": true,
+  "requires_no_challenge_specific_code": true,
+  "compatible_with_v2_4_3": true,
+  "escrow_block": "830001:830600 (unchanged, unopened)",
+  "note": "The sealed criteria reference only frozen public-plan fields that V2.4.3 retains unchanged (family names and selection counts, matched-complexity held-out margin with the frozen scoring rule, the frozen bridging-assay estimands, Wilson intervals, verdict classes). V2.4.3 adds structural-existence (path-class) and BMA fields without removing or altering any legacy field. Where the sealed criteria use raw-selection endpoints, they will be evaluated exactly as sealed; the immutable challenge verdict is reported first, with material-redescription readouts reported separately."
+}
