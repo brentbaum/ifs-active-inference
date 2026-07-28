@@ -1,6 +1,6 @@
 {
-  "version": "V2.4.1-redescription-pilot-amended-1",
-  "status": "pilot_amended_before_v2.4.1_generation",
+  "version": "V2.4.2-redescription-repaired-pilot-amended-1",
+  "status": "v2.4.2_calibration_frozen_before_criterion",
   "numerical_tolerance": 1e-10,
   "candidate_families": [
     "global_downweight",
@@ -158,20 +158,38 @@
     "confidence_ece_maximum": 0.08,
     "posterior_set_coverage_minimum": 0.9,
     "parameter_grid_mae_maximum": 0.15,
-    "complexity_match_nats_per_observation": 0.05,
+    "complexity_match_nats_per_observation": 0.13,
+    "original_complexity_match_nats_per_observation": 0.05,
     "heldout_margin_nats_per_observation": 0.01,
     "probability_contrast_sesoi": 0.05,
     "probability_rope": 0.01
   },
   "development_seed_blocks": {
-    "five_family_recovery": [777000, 777499],
-    "drift_and_change_point_controls": [777500, 777739],
-    "selective_lesions": [777800, 777839],
-    "heldout_matched_complexity": [778000, 778399],
-    "misspecification": [778400, 778639],
-    "v21_v221_composition": [778700, 778939],
-    "formed_bank_bridge_streams": [779000, 779119],
-    "robustness": [779200, 779699]
+    "matching_feasibility_calibration": [781000, 781499],
+    "five_family_recovery": [782000, 782499],
+    "drift_and_change_point_controls": [782500, 782739],
+    "selective_lesions": [782800, 782839],
+    "heldout_matched_complexity": [783000, 783399],
+    "misspecification": [783400, 783639],
+    "v21_v221_composition": [783700, 783939],
+    "formed_bank_bridge_streams": [784000, 784119],
+    "robustness": [784200, 784699]
+  },
+  "v2.4.2_matching_calibration": {
+    "worlds_per_family": 100,
+    "history_length": 32,
+    "preheldout_fraction": 0.75,
+    "matched_feasibility_target": 0.75,
+    "familywise_quantile": 0.75,
+    "quantile_rule": "nearest_rank",
+    "round_up_grid_nats_per_observation": 0.01,
+    "derived_tolerance_nats_per_observation": 0.13,
+    "criterion_exclusion_blocks": [
+      [774000, 774524],
+      [776000, 776144],
+      [780000, 780129],
+      [781000, 781499]
+    ]
   },
   "formed_bank_bridge": {
     "source_stage": "V2.3.3",
@@ -243,7 +261,7 @@
     "false_split_sesoi": "The 0.10 ceiling is halfway from chance toward zero and is conservatively above the prior-predictive 95th-percentile wrong-family rate.",
     "heldout_sesoi": "The 0.01-nat margin is approximately half the 0.0201-nat KL between the nearest distinct public Bernoulli predictions.",
     "probability_sesoi": "A 0.05 probability contrast is one quarter of the smallest non-neutral spacing on the public predictive grid.",
-    "seed_blocks": "Pilot-amended fresh disjoint blocks support V2.4.1 recovery, composition, bridge, lesions, and robustness below the 800000 development ceiling; diagnosis blocks 774000:774524 and 776000:776144 are permanently barred from criterion evaluation.",
+    "seed_blocks": "Fresh V2.4.2 calibration and criterion blocks are disjoint and below 800000; prior diagnosis blocks 774000:774524, 776000:776144, and 780000:780129 plus calibration 781000:781499 are permanently barred from criterion evaluation.",
     "formed_bank_bridge": "The already qualified 40/40/40 bank supplies posterior initial conditions with audited provenance and prevents selecting states on redescription outcomes.",
     "sequence_length": "Ninety-six slices are used only for pilot-amended Gate-2 recovery after the adjudicated information-budget diagnosis; the original 32-slice primary protocol remains operative for held-out and composition assays, while 16, 32, and 64 remain robustness cells.",
     "context_return": "A 0.20 return rate makes retained historical predictions empirically queryable and distinguishes reusable context split from an absorbing change point.",

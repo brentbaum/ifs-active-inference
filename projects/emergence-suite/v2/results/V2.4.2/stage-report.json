@@ -1,0 +1,27 @@
+{
+  "all_gates_1_to_5_passed": false,
+  "analysis_rng_maximum": 785004,
+  "criterion_world_seed_maximum_opened": 784119,
+  "gate_verdicts": {
+    "gate_1": "PASS",
+    "gate_2": "PASS",
+    "gate_3": "FAIL",
+    "gate_4": "NOT_RUN",
+    "gate_5": "NOT_RUN"
+  },
+  "matching_calibration": {
+    "criterion_use": false,
+    "derived_tolerance": 0.13,
+    "seed_block": [781000, 781499]
+  },
+  "sealed_gate_6_run": false,
+  "stage": "V2.4.2",
+  "status": "failed_gate_3_no_freeze",
+  "strain_version": "V2.4.2-redescription-repaired-pilot-amended-1",
+  "verdict_classes": {
+    "distributional_stress": "DESCRIPTIVE_ONLY",
+    "process_custody": "PASS",
+    "scientific_outcomes": "FAIL",
+    "semantic_integrity": "PASS"
+  }
+}

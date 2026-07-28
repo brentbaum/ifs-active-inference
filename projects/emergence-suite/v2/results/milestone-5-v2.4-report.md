@@ -1,26 +1,32 @@
-# Milestone 5 — V2.4 / V2.4.1 context-indexed redescription
+# Milestone 5 — V2.4 through V2.4.2 context-indexed redescription
 
-V2.4's original Gate-2 stop remains committed under `results/V2.4/`. Its
-adjudicated diagnosis found an information-starved 32-slice recovery design,
-not an engine/oracle discrepancy. V2.4.1 was therefore **pilot-amended** to
-use 96 Gate-2 slices at unchanged missingness and unchanged thresholds.
+The committed V2.4 Gate-2 and V2.4.1 Gate-3 stops remain intact. V2.4.2
+restored the evaluator-adjudicated control and bridge semantics under
+invalidate-and-repeat provenance and pilot-amended only the explicit null
+sufficient statistics and prospectively calibrated matching tolerance.
 
-V2.4.1 Gate 1 reproduced all fourteen semantic and constitutional passes.
-Amended Gate 2 passed: GW/CL/CS/DR/CP recovery was
-`0.87/0.82/0.98/0.82/0.97`, macro recovery `0.892`, false-CS rates
-`0.01/0.03` for DR/CP, mean-class Brier `0.03015`, ECE `0.02788`,
-posterior-set coverage `0.992`, parameter coverage `1.0`, and parameter MAE
-`0.07223`. Two wrong selections had posterior confidence at least 0.95.
+The excluded `781000:781499` calibration block produced familywise
+75th-percentile nearest-complexity gaps of
+`0.06295/0.02453/0.04547/0.02068/0.12082`; the frozen rounding rule yielded
+active tolerance `0.13`. The block was never used for criterion evaluation.
 
-The stage then stopped honestly at Gate 3 and is **not a freeze candidate**.
-Assays 1, 2, 4, and 5 passed. Assay 3 failed its matched-comparator power gate
-for GW (45/80) and CP (3/80). Assays 6–8 failed composition selectivity or
-effect criteria: shuffled/fixed/single-regime CS rates were too high,
-cue-local control recovery was `0.5833`, the Assay-6 effect intervals crossed
-zero, and formed-bank transfer was significantly opposite the preregistered
-direction. Two held-out obligations and the per-stratum bridge breakdown
-were not emitted and are retained as unscored failures.
+V2.4.2 Gate 1 passed all sixteen semantic, constitutional, repaired-null,
+and bridge proofs. Gate 2 passed with GW/CL/CS/DR/CP recovery
+`0.84/0.74/0.96/0.91/1.00`, macro `0.89`, Brier `0.03126`, ECE `0.00764`,
+coverage `0.982`, and false-CS rates zero for DR and CP.
 
-Gates 4–5 were not run. C-V24 remained sealed; no escrow seed was accessed.
-Scientific outcomes: **FAIL**; semantic integrity: **PASS**; process custody:
-**PASS**; distributional stress: **DESCRIPTIVE_ONLY**.
+The stage stopped honestly at Gate 3 and is **not a freeze candidate**.
+Assays 1, 2, 4, 5, and 6 passed. The repaired bridge's genuine arm also
+passed: CS selection `0.8417`, held-out margin
+`0.0712 [0.0374,0.1079]`, signed present-context transfer
+`0.4290 [0.3880,0.4704]`, historical error `1.1e-16`, and G-fixed transfer
+zero.
+
+Three failures remain. Assay 3 now met matching power but GW, CL, and DR did
+not beat their best matched comparator. Assay 7's product-null and
+single-regime CS rates were `0.6333/0.4167`, and cue-local recovery was
+`0.55`. Assay 8's corresponding control rates were `0.6000/0.4333`.
+
+Gates 4–5 were not run. C-V24 remained sealed and no escrow seed was
+accessed. Scientific outcomes: **FAIL**; semantic integrity: **PASS**;
+process custody: **PASS**; distributional stress: **DESCRIPTIVE_ONLY**.

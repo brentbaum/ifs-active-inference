@@ -1,0 +1,37 @@
+{
+  "achieved_feasibility": {
+    "change_point": 0.8,
+    "context_split": 1.0,
+    "continuous_drift": 1.0,
+    "cue_local_relearning": 1.0,
+    "global_downweight": 1.0
+  },
+  "criterion_use": false,
+  "derived_tolerance": 0.13,
+  "familywise_coordinates": {
+    "change_point": 0.12082055190293729,
+    "context_split": 0.045473194623326996,
+    "continuous_drift": 0.02068210027726769,
+    "cue_local_relearning": 0.024533598677412782,
+    "global_downweight": 0.06295219910871969
+  },
+  "familywise_quantile": 0.75,
+  "hashes": {
+    "protocols/v2.4-analysis-plan.md": "5fa3a9bed3b86ac2e68dff2add837f91677d4b9104c2ba283a18a936c377d12a",
+    "protocols/v2.4-parameters.json": "94972204bdb406f3d5ff8a8aa2df3f8577f4a71dc0032a79c75990ada6455fde",
+    "ref/v24.py": "eb37ed0d298dd0691dc361dfbaf03a091162e8d5bcc25d98ba58f3bc5aa23d5f",
+    "results/V2.4.2/matching-calibration-per_world.csv": "86066dd984899e7c5eeda902f1fb4fd1675cd2944ab752864a4a74c90a63b72c"
+  },
+  "nearest_rank_index_zero_based": 74,
+  "preheldout_fraction": 0.75,
+  "provenance": "pilot-amended_excluded_calibration",
+  "quantile_rule": "nearest_rank",
+  "raw_maximum_coordinate": 0.12082055190293729,
+  "round_up_grid": 0.01,
+  "seed_block": [
+    781000,
+    781499
+  ],
+  "status": "frozen_before_v2.4.2_criterion_runs",
+  "worlds_per_family": 100
+}

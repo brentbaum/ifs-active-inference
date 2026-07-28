@@ -1,0 +1,40 @@
+{
+  "stage": "V2.4.2",
+  "status": "failed_gate_3_no_freeze",
+  "provenance": {
+    "repairs": "invalidate-and-repeat",
+    "amendments": "pilot-amended",
+    "sealed_challenge_accessed": false
+  },
+  "terminal_gate": 3,
+  "gate_4_run": false,
+  "gate_5_run": false,
+  "freeze_candidate": false,
+  "sha256": {
+    "contracts/v2.4-redescription-contract.md": "0ed6454d9162802832bd5152286ffba6f5befded022031f4df11b091c7da1d3f",
+    "protocols/v2.4-analysis-plan.md": "5fa3a9bed3b86ac2e68dff2add837f91677d4b9104c2ba283a18a936c377d12a",
+    "protocols/v2.4-public-dummy.json": "3564490a991abbfd6905bf7cab3a6c906ca0d4490c3c94e24bf4667ffde6fae1",
+    "protocols/v2.4-parameters.json": "94972204bdb406f3d5ff8a8aa2df3f8577f4a71dc0032a79c75990ada6455fde",
+    "ref/v24.py": "eb37ed0d298dd0691dc361dfbaf03a091162e8d5bcc25d98ba58f3bc5aa23d5f",
+    "tests/test_v24.py": "c40b0d1949f8113da81a86afc57006b21ddad433fee9b7a5e5904e40ca862a1c",
+    "run_v24_freeze.py": "e262cd32e64cde584fe9bc50a54c5c59585715d61c6ecb85ac1159bbf1e2aec4",
+    "run_v242_calibration.py": "d856404384f17d8726ab4aa3929f357f2d6a100e25adfd70507db22de1f816e3",
+    "results/V2.4.2/decisions.md": "e57d901b1dda6e5922a591321d4ca4e97bcb3dbd2683bcc4c01d11b6adc0c4ef",
+    "results/V2.4.2/development-failures.md": "33465e89110b4ed4df85b84812ca4c275919398084d9baf1649bde1d7ab294a2",
+    "results/V2.4.2/gate-1.json": "5117b37401c72cfc431faeb7e9a94413ef6a975dffa90d3f6262ffbdde1e6b8d",
+    "results/V2.4.2/gate-2-recovery-per_world.csv": "10173dd3c4d5255014ffc3921b197f6c7217059327061eac82c88c26f7651fb8",
+    "results/V2.4.2/gate-2.json": "2bfae737b76da5479b6aef9acd9fb4d1e8cceeae2f3c21431c47c01ca2ce8ada",
+    "results/V2.4.2/gate-3-bridge-per_world.csv": "643c33bba9e15dcdf0a65f96b0aef38d369ed2b4b341d1d107480426bc9b9583",
+    "results/V2.4.2/gate-3-change_point-per_world.csv": "48f6278104933b247ea2a42d4139b7b098716389bfaa2838cfb5c05782d2b6ae",
+    "results/V2.4.2/gate-3-composition-per_world.csv": "cd7af18a6372e1ad34e823faf718c820a56a29912f5097c8920bd6c47c138746",
+    "results/V2.4.2/gate-3-controls-per_world.csv": "e8422823da3b2955daaeb41619d28b7488b71d38e2c778e04df58dac0186bb1b",
+    "results/V2.4.2/gate-3-drift-per_world.csv": "be600bfd9aee15cbba618728bfb207b51cfcc195e466cefd16b21e16dd1336d9",
+    "results/V2.4.2/gate-3-heldout-per_world.csv": "88fc27ae1a9baf2c5045dc6c8527e3469457870a77f42a278b11b47ddc3130d0",
+    "results/V2.4.2/gate-3-misspecification-per_world.csv": "b4004f920661a8ebf5f644397db556f79f19917fa85e0f1847fa88f9be5d39e3",
+    "results/V2.4.2/gate-3.json": "b79cba90e755dbf8b2386bb23824fcf04d25d6b490fb40403573aa8d52c6f26a",
+    "results/V2.4.2/matching-calibration-per_world.csv": "86066dd984899e7c5eeda902f1fb4fd1675cd2944ab752864a4a74c90a63b72c",
+    "results/V2.4.2/matching-calibration.json": "ca0f0ee627ab77fda00ee6689c207dc3bfcc619097ed517431ffabd3155cff06",
+    "results/V2.4.2/stage-report.json": "332fe2d4019e0cee69b01e59e01c08d1589eb15b00848b959469a06c93b53784",
+    "results/milestone-5-v2.4-report.md": "4c3a0ef46b45abdc4266f4e155663bd0142e841415ee7e1e299bf9cd929ee872"
+  }
+}

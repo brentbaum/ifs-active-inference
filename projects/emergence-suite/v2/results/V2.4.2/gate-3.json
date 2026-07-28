@@ -1,0 +1,160 @@
+{
+  "failures": [
+    "assay_3_matched_complexity_heldout",
+    "assay_7_marginal_controls",
+    "assay_8_formed_bank_bridge"
+  ],
+  "gate": 3,
+  "name": "eight open and composition assays",
+  "passed": false,
+  "results": {
+    "checks": {
+      "assay_1_drift_false_split": true,
+      "assay_2_change_point_false_split": true,
+      "assay_3_matched_complexity_heldout": false,
+      "assay_4_complexity_recombination": true,
+      "assay_5_misspecification_semantics": true,
+      "assay_6_genuine_context_composition": true,
+      "assay_7_marginal_controls": false,
+      "assay_8_formed_bank_bridge": false
+    },
+    "complexity_decomposition": {
+      "maximum_recombination_error": 4.263256414560601e-14
+    },
+    "composition": {
+      "cue_local_control_recovery_rate": 0.55,
+      "fixed_context_CS_selection_rate": 0.4166666666666667,
+      "genuine_CS_selection_rate": 0.8833333333333333,
+      "heldout_margin_interval": [
+        0.12050059965781539,
+        0.08874281337784401,
+        0.1522117330214477
+      ],
+      "inherited_v21_cross_latent": {
+        "delivered_log_odds_effect": 0.9020320974870424,
+        "posterior_y_broad": 0.8438218608948914,
+        "posterior_y_narrow": 0.6867378034432879
+      },
+      "matched_heldout_count": 119,
+      "maximum_historical_retention_error": 0.0,
+      "maximum_zero_association_transfer": 0.0,
+      "present_indexing_interval": [
+        0.3897404998571211,
+        0.376490494481106,
+        0.3997366628996313
+      ],
+      "shuffled_CS_selection_rate": 0.6333333333333333,
+      "transfer_interval": [
+        0.3897404998571211,
+        0.37648867706781614,
+        0.39974228384854155
+      ]
+    },
+    "false_split_controls": {
+      "change_point_rate": 0.05,
+      "drift_rate": 0.041666666666666664
+    },
+    "formed_bank_bridge": {
+      "all_clone_identities": true,
+      "genuine_CS_selection_rate": 0.8416666666666667,
+      "heldout_margin_interval": [
+        0.07123645946076411,
+        0.037389104623737866,
+        0.10785912365208873
+      ],
+      "matched_heldout_count": 120,
+      "maximum_G_fixed_transfer": 0.0,
+      "maximum_historical_retention_error": 1.1102230246251565e-16,
+      "mean_single_regime_global_transfer": 0.42899437089184883,
+      "per_stratum": {
+        "moderate": {
+          "genuine_CS_selection_rate": 0.8,
+          "mean_transfer": 0.35626235142631,
+          "shuffled_CS_selection_rate": 0.65,
+          "single_regime_CS_selection_rate": 0.375
+        },
+        "strong": {
+          "genuine_CS_selection_rate": 0.925,
+          "mean_transfer": 0.411978622291172,
+          "shuffled_CS_selection_rate": 0.575,
+          "single_regime_CS_selection_rate": 0.425
+        },
+        "very_strong": {
+          "genuine_CS_selection_rate": 0.8,
+          "mean_transfer": 0.5187421389580646,
+          "shuffled_CS_selection_rate": 0.575,
+          "single_regime_CS_selection_rate": 0.5
+        }
+      },
+      "shuffled_CS_selection_rate": 0.6,
+      "single_regime_CS_selection_rate": 0.43333333333333335,
+      "stratum_counts": {
+        "moderate": 40,
+        "strong": 40,
+        "very_strong": 40
+      },
+      "transfer_interval": [
+        0.42899437089184883,
+        0.38796345796065373,
+        0.47043743839766067
+      ],
+      "world_count": 120
+    },
+    "matched_complexity": {
+      "checks": {
+        "change_point": true,
+        "context_split": true,
+        "continuous_drift": false,
+        "cue_local_relearning": false,
+        "global_downweight": false
+      },
+      "margin_intervals": {
+        "change_point": [
+          0.05552968374008137,
+          0.041106628044777806,
+          0.06975361599405681
+        ],
+        "context_split": [
+          0.0763622400537127,
+          0.035772495906529075,
+          0.1180327061204327
+        ],
+        "continuous_drift": [
+          0.0019151214525702231,
+          -0.026838058264287045,
+          0.03157916295130411
+        ],
+        "cue_local_relearning": [
+          -0.020506784092988485,
+          -0.044817541013639335,
+          0.0018181594421756502
+        ],
+        "global_downweight": [
+          -0.04957408201433087,
+          -0.07315458929531077,
+          -0.027623332431173677
+        ]
+      },
+      "matched_counts": {
+        "change_point": 63,
+        "context_split": 80,
+        "continuous_drift": 80,
+        "cue_local_relearning": 80,
+        "global_downweight": 80
+      }
+    },
+    "misspecification": {
+      "maximum_update_identity_error": 7.993605777301127e-15,
+      "mean_posterior_entropy": 0.8150357340970531,
+      "world_count": 240
+    },
+    "passed": false
+  },
+  "stage": "V2.4.2",
+  "verdict_classes": {
+    "distributional_stress": "DESCRIPTIVE_ONLY",
+    "process_custody": "PASS",
+    "scientific_outcomes": "FAIL",
+    "semantic_integrity": "PASS"
+  }
+}

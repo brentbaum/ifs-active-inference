@@ -19,8 +19,8 @@ class ContextIndexedRedescriptionTests(unittest.TestCase):
     def setUpClass(cls):
         cls.semantic = semantic_proofs()
 
-    def test_all_fourteen_semantic_proofs(self):
-        self.assertEqual(self.semantic["proof_count"], 14)
+    def test_all_sixteen_semantic_proofs(self):
+        self.assertEqual(self.semantic["proof_count"], 16)
         self.assertTrue(self.semantic["passed"])
         self.assertTrue(
             all(

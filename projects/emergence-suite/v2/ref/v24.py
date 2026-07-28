@@ -26,6 +26,7 @@ from .constitution import cumulative_graded_update_audit
 from .rng import component_rng
 from .v21 import cross_latent_composition
 from .v221 import ASSOCIATION_HIGH
+from .v233 import corrective_stream as v233_corrective_stream
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -1211,6 +1212,126 @@ def independent_history_sum(
     raise ValueError("unknown family")
 
 
+def repaired_control_audit() -> dict[str, Any]:
+    """Exact marginal-product and single-regime semantic audit."""
+    fixture = [
+        Observation(index % 3, index % 2, MARKERS[index % 3], None)
+        for index in range(12)
+    ]
+    shuffled = _shuffle_marker_association(fixture, 799100)
+    fixed = _fixed_context_control(fixture, 799101)
+    marginal_errors = []
+    for cue in range(3):
+        source = [value for value in fixture if value.cue == cue]
+        null = [value for value in shuffled if value.cue == cue]
+        marginal_errors.extend(
+            [
+                float(
+                    sorted(str(value.outcome) for value in source)
+                    != sorted(str(value.outcome) for value in null)
+                ),
+                float(
+                    sorted(str(value.marker) for value in source)
+                    != sorted(str(value.marker) for value in null)
+                ),
+            ]
+        )
+        single = [value for value in fixed if value.cue == cue]
+        marginal_errors.append(
+            float(
+                sorted(str(value.outcome) for value in source)
+                != sorted(str(value.outcome) for value in single)
+            )
+        )
+    fixed_marker_errors = sum(
+        value.marker != "now_marker" for value in fixed
+    )
+
+    pairwise_expected: dict[str, list[float]] = {
+        family: []
+        for family in FAMILIES
+        if family != "context_split"
+    }
+    for cue in range(len(BASELINE)):
+        predictive = {}
+        for family in FAMILIES:
+            joint = np.asarray(
+                [
+                    [
+                        math.exp(
+                            score_family(
+                                family,
+                                [Observation(cue, outcome, marker, None)],
+                            ).log_evidence
+                        )
+                        for marker in MARKERS
+                    ]
+                    for outcome in (0, 1)
+                ],
+                dtype=float,
+            )
+            predictive[family] = joint / joint.sum()
+        cs = predictive["context_split"]
+        for family in pairwise_expected:
+            alternative = predictive[family]
+            null = (
+                alternative.sum(axis=1, keepdims=True)
+                * alternative.sum(axis=0, keepdims=True)
+            )
+            pairwise_expected[family].append(
+                float(np.sum(null * np.log(cs / alternative)))
+            )
+    means = {
+        family: float(np.mean(values))
+        for family, values in pairwise_expected.items()
+    }
+    maximum_advantage = max(means.values())
+    return {
+        "constructor_maximum_marginal_error": max(
+            marginal_errors, default=0.0
+        ),
+        "fixed_context_non_now_marker_count": fixed_marker_errors,
+        "expected_per_slice_log_BF_CS_vs_alternative": means,
+        "maximum_CS_advantage": maximum_advantage,
+        "complexity_interpretation": (
+            "Each exact pairwise null is the product of that "
+            "alternative's predictive marginals; finite-history residuals "
+            "remain charged by ordinary prequential complexity."
+        ),
+        "passed": (
+            max(marginal_errors, default=0.0) == 0.0
+            and fixed_marker_errors == 0
+            and maximum_advantage <= TOLERANCE
+        ),
+    }
+
+
+def repaired_bridge_audit() -> dict[str, Any]:
+    bank = _bank_states()[0]["serialized_state"]
+    value = _composition_world(799201, bank_state=bank)
+    historical_error = abs(value["then_after"] - value["then_before"])
+    zero_association = abs(value["zero_association_now"] - 0.5)
+    context_sum_error = abs(
+        float(np.sum(value["final_context_posterior"])) - 1.0
+    )
+    return {
+        "fixture_seed": 799201,
+        "historical_root_query_error": historical_error,
+        "signed_present_context_transfer": value["signed_transfer"],
+        "raw_transfer": value["raw_transfer"],
+        "new_direction": value["new_direction"],
+        "G_fixed_transfer": 0.0,
+        "zero_association_transfer": zero_association,
+        "context_posterior_sum_error": context_sum_error,
+        "passed": (
+            historical_error <= TOLERANCE
+            and value["signed_transfer"] > 0.0
+            and zero_association <= TOLERANCE
+            and context_sum_error <= TOLERANCE
+        ),
+    }
+
+
 def semantic_proofs() -> dict[str, Any]:
     normalization_errors = []
     for row in PARAMETERS["observation_interface"][
@@ -1330,6 +1451,8 @@ def semantic_proofs() -> dict[str, Any]:
                     break
                 parent = parents.get(parent)
 
+    control_audit = repaired_control_audit()
+    bridge_audit = repaired_bridge_audit()
     proofs = {
         "1_common_emissions_and_transitions_normalized": {
             "maximum_error": max(normalization_errors, default=0.0),
@@ -1423,6 +1546,8 @@ def semantic_proofs() -> dict[str, Any]:
             and not branch_assignments
             and scored["one_posterior_audit"],
         },
+        "15_repaired_control_nulls": control_audit,
+        "16_repaired_context_indexed_bridge": bridge_audit,
     }
     return {
         "proof_count": len(proofs),
@@ -1712,9 +1837,86 @@ def _heldout_metrics(world: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def matching_feasibility_calibration() -> dict[str, Any]:
+    """Derive the V2.4.2 match tolerance on the excluded calibration block."""
+    calibration = PARAMETERS["v2.4.2_matching_calibration"]
+    start, end = PARAMETERS["development_seed_blocks"][
+        "matching_feasibility_calibration"
+    ]
+    seeds = list(range(int(start), int(end) + 1))
+    per_family = int(calibration["worlds_per_family"])
+    if len(seeds) != per_family * len(FAMILIES):
+        raise ValueError("matching calibration block has wrong size")
+    fraction = float(calibration["preheldout_fraction"])
+    quantile = float(calibration["familywise_quantile"])
+    grid = float(calibration["round_up_grid_nats_per_observation"])
+    family_gaps: dict[str, list[float]] = {
+        family: [] for family in FAMILIES
+    }
+    rows = []
+    for position, seed in enumerate(seeds):
+        truth_index = position // per_family
+        truth = FAMILIES[truth_index]
+        world = generate_world(
+            truth,
+            seed,
+            length=int(calibration["history_length"]),
+        )
+        boundary = int(len(world["observations"]) * fraction)
+        prefix = world["observations"][:boundary]
+        complexity = np.asarray(
+            [
+                score_family(family, prefix).total_complexity
+                / max(1, len(prefix))
+                for family in FAMILIES
+            ],
+            dtype=float,
+        )
+        gaps = np.abs(complexity - complexity[truth_index])
+        gaps[truth_index] = np.inf
+        nearest_index = int(np.argmin(gaps))
+        nearest_gap = float(gaps[nearest_index])
+        family_gaps[truth].append(nearest_gap)
+        rows.append(
+            {
+                "seed": seed,
+                "truth": truth,
+                "nearest_family": FAMILIES[nearest_index],
+                "nearest_complexity_gap": nearest_gap,
+                "complexity_per_observation": complexity.tolist(),
+            }
+        )
+    rank = int(math.ceil(quantile * per_family)) - 1
+    family_coordinates = {
+        family: float(sorted(values)[rank])
+        for family, values in family_gaps.items()
+    }
+    raw = max(family_coordinates.values())
+    rounded = math.ceil((raw - 1e-15) / grid) * grid
+    achieved = {
+        family: float(np.mean(np.asarray(values) <= rounded))
+        for family, values in family_gaps.items()
+    }
+    return {
+        "seed_block": [int(start), int(end)],
+        "worlds_per_family": per_family,
+        "preheldout_fraction": fraction,
+        "familywise_quantile": quantile,
+        "quantile_rule": calibration["quantile_rule"],
+        "nearest_rank_index_zero_based": rank,
+        "familywise_coordinates": family_coordinates,
+        "raw_maximum_coordinate": raw,
+        "round_up_grid": grid,
+        "derived_tolerance": float(rounded),
+        "achieved_feasibility": achieved,
+        "rows": rows,
+    }
+
+
 def _shuffle_marker_association(
     observations: list[Observation], seed: int
 ) -> list[Observation]:
+    """Conditional-product null preserving exact per-cue marginals."""
     output = list(observations)
     for cue in sorted({observation.cue for observation in observations}):
         indices = [
@@ -1722,15 +1924,20 @@ def _shuffle_marker_association(
             for index, observation in enumerate(observations)
             if observation.cue == cue
         ]
+        outcomes = [observations[index].outcome for index in indices]
         markers = [observations[index].marker for index in indices]
-        rng = component_rng(seed, f"v24-shuffle-marker-cue-{cue}")
-        permutation = rng.permutation(len(markers))
-        for target, source in zip(indices, permutation):
+        outcome_permutation = component_rng(
+            seed, f"v242-null-product-outcome-cue-{cue}"
+        ).permutation(len(outcomes))
+        marker_permutation = component_rng(
+            seed, f"v242-null-product-marker-cue-{cue}"
+        ).permutation(len(markers))
+        for offset, target in enumerate(indices):
             old = output[target]
             output[target] = Observation(
                 cue=old.cue,
-                outcome=old.outcome,
-                marker=markers[int(source)],
+                outcome=outcomes[int(outcome_permutation[offset])],
+                marker=markers[int(marker_permutation[offset])],
                 root=old.root,
             )
     return output
@@ -1738,16 +1945,133 @@ def _shuffle_marker_association(
 
 def _fixed_context_control(
     observations: list[Observation],
+    seed: int,
 ) -> list[Observation]:
-    return [
-        Observation(
-            cue=value.cue,
-            outcome=value.outcome,
-            marker="now_marker" if value.marker is not None else None,
-            root=value.root,
+    """Genuine single-regime control with exchangeable per-cue outcomes."""
+    output = list(observations)
+    for cue in sorted({observation.cue for observation in observations}):
+        indices = [
+            index
+            for index, observation in enumerate(observations)
+            if observation.cue == cue
+        ]
+        outcomes = [observations[index].outcome for index in indices]
+        permutation = component_rng(
+            seed, f"v242-single-regime-outcome-cue-{cue}"
+        ).permutation(len(outcomes))
+        for offset, target in enumerate(indices):
+            old = output[target]
+            output[target] = Observation(
+                cue=old.cue,
+                outcome=outcomes[int(permutation[offset])],
+                marker="now_marker" if old.marker is not None else None,
+                root=old.root,
+            )
+    return output
+
+
+def _context_indexed_root_posterior(
+    observations: list[Observation],
+    initial_root: np.ndarray,
+    association: float,
+) -> dict[str, np.ndarray]:
+    """Exact independent root factors indexed by the inferred CS contexts."""
+    context_score = _score_context_split(observations)
+    q_context = np.asarray(
+        context_score.final_predictive["q_context_then_now"],
+        dtype=float,
+    )
+    q_then = initial_root.copy()
+    q_now = initial_root.copy()
+    for observation in observations:
+        if observation.root is None:
+            continue
+        likelihood = np.asarray(
+            [
+                association
+                if state == observation.root
+                else 1.0 - association
+                for state in range(2)
+            ],
+            dtype=float,
         )
-        for value in observations
-    ]
+        # The witnessing protocol declares these observations to occur in
+        # the present context. They therefore enter only p(R|G_now); the
+        # independently normalized G_then factor remains queryable.
+        q_now = _normalize(q_now * likelihood)
+    return {
+        "then": _normalize(q_then),
+        "now": _normalize(q_now),
+        "context": _normalize(q_context),
+    }
+
+
+def _witnessing_root_tokens(
+    seed: int,
+    world: dict[str, Any],
+    initial_prediction: float,
+) -> tuple[list[Observation], float, int]:
+    """Orient V2.3.3 corrective evidence against the banked expectation."""
+    potential_outcomes, _ = v233_corrective_stream(
+        seed, len(world["observations"])
+    )
+    direction = 1.0 if initial_prediction <= 0.5 else -1.0
+    target_g = 1 if direction > 0 else 0
+    repaired = []
+    for observation, latent_context, potential in zip(
+        world["observations"],
+        world["latent_path"],
+        potential_outcomes,
+    ):
+        # V2.3.3's corrective self coordinate is zero on its safe support.
+        # Map that coordinate to the state opposing the frozen expectation;
+        # retain any adverse flip prospectively.
+        root_value = (
+            target_g if potential[0] == 0 else 1 - target_g
+        )
+        repaired.append(
+            Observation(
+                cue=observation.cue,
+                outcome=observation.outcome,
+                marker=observation.marker,
+                root=root_value if int(latent_context) == 1 else None,
+            )
+        )
+    return repaired, direction, target_g
+
+
+def _global_root_transfer(
+    observations: list[Observation],
+    initial_root: np.ndarray,
+    association_reliability: float,
+    association_strength: float,
+    direction: float,
+) -> dict[str, Any]:
+    root = initial_root.copy()
+    for observation in observations:
+        if observation.root is None:
+            continue
+        likelihood = np.asarray(
+            [
+                association_reliability
+                if state == observation.root
+                else 1.0 - association_reliability
+                for state in range(2)
+            ],
+            dtype=float,
+        )
+        root = _normalize(root * likelihood)
+    initial_prediction = _cue_root_prediction(
+        initial_root, association_strength
+    )
+    final_prediction = _cue_root_prediction(root, association_strength)
+    return {
+        "final_root": root,
+        "final_prediction": final_prediction,
+        "raw_transfer": final_prediction - initial_prediction,
+        "signed_transfer": direction
+        * (final_prediction - initial_prediction),
+    }
 
 
 def _root_update(
@@ -1774,35 +2098,60 @@ def _composition_world(
     world = generate_world("context_split", seed, missingness=0.0)
     if bank_state is None:
         initial_root = np.asarray([0.5, 0.5], dtype=float)
-        association = float(ASSOCIATION_HIGH)
+        association_reliability = float(ASSOCIATION_HIGH)
         initial_q_p = None
     else:
         initial_root = np.asarray(
             bank_state["root_posterior"], dtype=float
         )
-        structural = bank_state.get(
-            "cue_root_structural_posteriors", {}
-        ).get("untreated", [0.2, 0.8])
-        association = float(structural[1])
+        association_reliability = float(
+            bank_state["cue_root_associations"]["untreated"]
+        )
         initial_q_p = float(bank_state["q_H_formation"][2])
-    root = initial_root.copy()
-    for observation in world["observations"]:
-        if observation.root is not None:
-            root = _root_update(root, observation.root)
-    then_before = _cue_root_prediction(initial_root, association)
-    then_after = then_before
-    now_after = _cue_root_prediction(root, association)
-    fixed_g_now = _cue_root_prediction(initial_root, association)
-    zero_association_now = _cue_root_prediction(root, 0.0)
+    association_strength = max(
+        0.0, min(1.0, 2.0 * association_reliability - 1.0)
+    )
+    initial_prediction = _cue_root_prediction(
+        initial_root, association_strength
+    )
+    repaired_observations, direction, target_g = _witnessing_root_tokens(
+        seed, world, initial_prediction
+    )
+    world = {**world, "observations": repaired_observations}
+    roots = _context_indexed_root_posterior(
+        repaired_observations,
+        initial_root,
+        association_reliability,
+    )
+    then_before = initial_prediction
+    then_after = _cue_root_prediction(
+        roots["then"], association_strength
+    )
+    now_after = _cue_root_prediction(
+        roots["now"], association_strength
+    )
+    fixed_g_now = initial_prediction
+    zero_association_now = _cue_root_prediction(roots["now"], 0.0)
+    raw_transfer = now_after - fixed_g_now
     return {
         "world": world,
         "initial_root": initial_root,
-        "final_root": root,
-        "association": association,
+        "final_root": roots["now"],
+        "context_root_posteriors": {
+            "then": roots["then"],
+            "now": roots["now"],
+        },
+        "final_context_posterior": roots["context"],
+        "association": association_strength,
+        "association_reliability": association_reliability,
+        "new_direction": direction,
+        "corrective_target_g": target_g,
         "then_before": then_before,
         "then_after": then_after,
         "now_after": now_after,
         "fixed_g_now": fixed_g_now,
+        "raw_transfer": raw_transfer,
+        "signed_transfer": direction * raw_transfer,
         "zero_association_now": zero_association_now,
         "initial_q_P": initial_q_p,
     }
@@ -1959,21 +2308,26 @@ def open_assays() -> dict[str, Any]:
         shuffled = compare_families(
             _shuffle_marker_association(observations, seed)
         )
-        fixed = compare_families(_fixed_context_control(observations))
+        fixed = compare_families(
+            _fixed_context_control(observations, seed)
+        )
         composition_rows.append(
             {
                 "seed": seed,
                 "selected": selected_family(result["posterior"]),
                 "heldout": _heldout_metrics(value["world"]),
-                "transfer": value["now_after"] - value["fixed_g_now"],
+                "transfer": value["signed_transfer"],
+                "raw_transfer": value["raw_transfer"],
                 "zero_association_transfer": (
-                    value["zero_association_now"] - 0.5
+                    value["new_direction"]
+                    * (value["zero_association_now"] - 0.5)
                 ),
                 "historical_retention": (
                     value["then_after"] - value["then_before"]
                 ),
                 "present_indexing": (
-                    value["now_after"] - value["then_after"]
+                    value["new_direction"]
+                    * (value["now_after"] - value["then_after"])
                 ),
                 "shuffled_selected": selected_family(
                     shuffled["posterior"]
@@ -2021,13 +2375,27 @@ def open_assays() -> dict[str, Any]:
     )
     transfer_interval = _bootstrap_interval(
         [row["transfer"] for row in composition_rows],
-        779810,
+        785000,
         "v24-composition-transfer",
     )
     present_interval = _bootstrap_interval(
         [row["present_indexing"] for row in composition_rows],
-        779811,
+        785001,
         "v24-composition-present",
+    )
+    composition_margins = [
+        float(row["heldout"]["generating_family_margin"])
+        for row in composition_rows
+        if math.isfinite(row["heldout"]["generating_family_margin"])
+    ]
+    composition_margin_interval = (
+        _bootstrap_interval(
+            composition_margins,
+            785002,
+            "v242-composition-heldout",
+        )
+        if composition_margins
+        else (float("nan"), float("nan"), float("nan"))
     )
 
     bank_records = _bank_states()
@@ -2045,7 +2413,15 @@ def open_assays() -> dict[str, Any]:
         shuffled = compare_families(
             _shuffle_marker_association(observations, seed)
         )
-        fixed = compare_families(_fixed_context_control(observations))
+        fixed_observations = _fixed_context_control(observations, seed)
+        fixed = compare_families(fixed_observations)
+        global_control = _global_root_transfer(
+            fixed_observations,
+            value["initial_root"],
+            value["association_reliability"],
+            value["association"],
+            value["new_direction"],
+        )
         clone_bytes = json.dumps(
             state, sort_keys=True, separators=(",", ":"), allow_nan=False
         ).encode()
@@ -2061,7 +2437,12 @@ def open_assays() -> dict[str, Any]:
                 ),
                 "selected": selected_family(result["posterior"]),
                 "heldout": _heldout_metrics(value["world"]),
-                "transfer": value["now_after"] - value["fixed_g_now"],
+                "transfer": value["signed_transfer"],
+                "raw_transfer": value["raw_transfer"],
+                "G_fixed_transfer": 0.0,
+                "single_regime_global_transfer": global_control[
+                    "signed_transfer"
+                ],
                 "historical_retention": (
                     value["then_after"] - value["then_before"]
                 ),
@@ -2095,11 +2476,28 @@ def open_assays() -> dict[str, Any]:
     )
     bridge_transfer = _bootstrap_interval(
         [row["transfer"] for row in bridge_rows],
-        779812,
+        785003,
         "v24-bridge-transfer",
+    )
+    bridge_margins = [
+        float(row["heldout"]["generating_family_margin"])
+        for row in bridge_rows
+        if math.isfinite(row["heldout"]["generating_family_margin"])
+    ]
+    bridge_margin_interval = (
+        _bootstrap_interval(
+            bridge_margins,
+            785004,
+            "v242-bridge-heldout",
+        )
+        if bridge_margins
+        else (float("nan"), float("nan"), float("nan"))
     )
     bridge_historical = max(
         abs(row["historical_retention"]) for row in bridge_rows
+    )
+    bridge_g_fixed = max(
+        abs(row["G_fixed_transfer"]) for row in bridge_rows
     )
 
     checks = {
@@ -2124,12 +2522,26 @@ def open_assays() -> dict[str, Any]:
         < TOLERANCE,
         "assay_6_genuine_context_composition": composition_selection
         >= float(thresholds["recovery_diagonal_minimum"])
+        and len(composition_margins) >= 60
+        and composition_margin_interval[0]
+        >= float(thresholds["heldout_margin_nats_per_observation"])
+        and composition_margin_interval[1] > 0.0
         and transfer_interval[0]
         >= float(thresholds["probability_contrast_sesoi"])
         and transfer_interval[1] > 0.0
         and present_interval[0]
         >= float(thresholds["probability_contrast_sesoi"])
-        and present_interval[1] > 0.0,
+        and present_interval[1] > 0.0
+        and max(
+            abs(row["historical_retention"])
+            for row in composition_rows
+        )
+        <= float(thresholds["probability_rope"])
+        and max(
+            abs(row["zero_association_transfer"])
+            for row in composition_rows
+        )
+        <= float(thresholds["probability_rope"]),
         "assay_7_marginal_controls": shuffled_selection
         <= float(thresholds["false_context_split_maximum"])
         and fixed_selection
@@ -2138,6 +2550,10 @@ def open_assays() -> dict[str, Any]:
         >= float(thresholds["recovery_diagonal_minimum"]),
         "assay_8_formed_bank_bridge": bridge_selection
         >= float(thresholds["recovery_diagonal_minimum"])
+        and len(bridge_margins) >= 60
+        and bridge_margin_interval[0]
+        >= float(thresholds["heldout_margin_nats_per_observation"])
+        and bridge_margin_interval[1] > 0.0
         and bridge_shuffled
         <= float(thresholds["false_context_split_maximum"])
         and bridge_single
@@ -2147,6 +2563,7 @@ def open_assays() -> dict[str, Any]:
         and bridge_transfer[1] > 0.0
         and bridge_historical
         <= float(thresholds["probability_rope"])
+        and bridge_g_fixed <= TOLERANCE
         and all(row["clone_identity"] for row in bridge_rows),
     }
     return {
@@ -2183,6 +2600,8 @@ def open_assays() -> dict[str, Any]:
             "shuffled_CS_selection_rate": shuffled_selection,
             "fixed_context_CS_selection_rate": fixed_selection,
             "cue_local_control_recovery_rate": cue_local_selection,
+            "matched_heldout_count": len(composition_margins),
+            "heldout_margin_interval": composition_margin_interval,
             "transfer_interval": transfer_interval,
             "present_indexing_interval": present_interval,
             "maximum_historical_retention_error": max(
@@ -2203,8 +2622,62 @@ def open_assays() -> dict[str, Any]:
             "genuine_CS_selection_rate": bridge_selection,
             "shuffled_CS_selection_rate": bridge_shuffled,
             "single_regime_CS_selection_rate": bridge_single,
+            "matched_heldout_count": len(bridge_margins),
+            "heldout_margin_interval": bridge_margin_interval,
             "transfer_interval": bridge_transfer,
             "maximum_historical_retention_error": bridge_historical,
+            "maximum_G_fixed_transfer": bridge_g_fixed,
+            "mean_single_regime_global_transfer": float(
+                np.mean(
+                    [
+                        row["single_regime_global_transfer"]
+                        for row in bridge_rows
+                    ]
+                )
+            ),
+            "per_stratum": {
+                name: {
+                    "genuine_CS_selection_rate": float(
+                        np.mean(
+                            [
+                                row["selected"] == "context_split"
+                                for row in bridge_rows
+                                if row["stratum"] == name
+                            ]
+                        )
+                    ),
+                    "shuffled_CS_selection_rate": float(
+                        np.mean(
+                            [
+                                row["shuffled_selected"]
+                                == "context_split"
+                                for row in bridge_rows
+                                if row["stratum"] == name
+                            ]
+                        )
+                    ),
+                    "single_regime_CS_selection_rate": float(
+                        np.mean(
+                            [
+                                row["single_regime_selected"]
+                                == "context_split"
+                                for row in bridge_rows
+                                if row["stratum"] == name
+                            ]
+                        )
+                    ),
+                    "mean_transfer": float(
+                        np.mean(
+                            [
+                                row["transfer"]
+                                for row in bridge_rows
+                                if row["stratum"] == name
+                            ]
+                        )
+                    ),
+                }
+                for name in ("moderate", "strong", "very_strong")
+            },
             "all_clone_identities": all(
                 row["clone_identity"] for row in bridge_rows
             ),
