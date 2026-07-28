@@ -1,0 +1,34 @@
+{
+  "all_gates_1_to_5_passed": false,
+  "brier_scoring_erratum": {
+    "correct_inherited_mean_class_brier": 0.07916116687493775,
+    "original_summed_class_brier_retained": 0.39580583437468875,
+    "original_verbatim_failure_retained": true
+  },
+  "freeze_candidate_created": false,
+  "gate_verdicts": {
+    "gate_1": "PASS",
+    "gate_2": "FAIL",
+    "gate_3": "NOT_RUN",
+    "gate_4": "NOT_RUN",
+    "gate_5": "NOT_RUN",
+    "gate_6": "SEALED_UNOPENED"
+  },
+  "scientific_failure_localization": {
+    "change_point_diagonal": 0.97,
+    "context_split_diagonal": 0.8,
+    "cue_local_relearning_diagonal": 0.49,
+    "frozen_minimum": 0.6,
+    "global_downweight_diagonal": 0.56,
+    "continuous_drift_diagonal": 0.59
+  },
+  "stage": "V2.4",
+  "status": "failed_gate_2_ratchet_stop",
+  "verdict_classes": {
+    "distributional_stress": "NOT_RUN",
+    "process_custody": "PASS",
+    "scientific_outcomes": "FAIL",
+    "semantic_integrity": "PASS"
+  },
+  "version": "V2.4-redescription-1"
+}

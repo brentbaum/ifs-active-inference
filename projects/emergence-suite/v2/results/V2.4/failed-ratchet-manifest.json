@@ -1,0 +1,26 @@
+{
+  "all_gates_1_to_5_passed": false,
+  "development_seed_maximum_opened": 770499,
+  "files": {
+    "contracts/v2.4-redescription-contract.md": "0ed6454d9162802832bd5152286ffba6f5befded022031f4df11b091c7da1d3f",
+    "protocols/v2.4-analysis-plan.md": "ea9e33cb5e8f3a79b4b088a719ecb96f29a1620975eb124f4d15b01906301ae9",
+    "protocols/v2.4-parameters.json": "3a8dd14220bbf5b1a719729d332a5d94caeedb8ea024c788167a89806050b535",
+    "protocols/v2.4-public-dummy.json": "3564490a991abbfd6905bf7cab3a6c906ca0d4490c3c94e24bf4667ffde6fae1",
+    "ref/v24.py": "ccca36b5111319c3f353da05bd7e421019f21d1d1b33cd0b4257a999df12e286",
+    "results/V2.4/contract-conformance-audit.json": "9470eec550876ecf0c0b770f171163fb0a93f1ed1b32e238ad6ae9e19b47666b",
+    "results/V2.4/decisions.md": "d24b5a7ecd1c4ccabd3aa1113b3f2a3539394d4e6b112240cfd71853bcf1236f",
+    "results/V2.4/development-failures.md": "8e7a5fa7d87fef0257371e59d01fffeb407f301fe747290af7dc2a609c3ea89b",
+    "results/V2.4/gate-1.json": "f7ea0f5918873fbd2e754da6fcf9c9f89343932b2c94fad8f3c9e17f4139c4a1",
+    "results/V2.4/gate-2-recovery-per_world.csv": "d7b4c37911eaea3fe0b0f2e0ac0e84d4597e856e8ec497850e3fa7ba8818170a",
+    "results/V2.4/gate-2-scoring-erratum.md": "24f4ca7d020d16c0f1102756f7d25bbf1b4815f7701be51aa6afb35ef4fa7a98",
+    "results/V2.4/gate-2.json": "1fbfab4a02580b014216428d7edb59259a01e907bdabbf6030efa60417541262",
+    "results/V2.4/stage-report.json": "3f7e13663dc420440360fcdedd2473a8fc956b53a6ad239cfba5623fdef9e039",
+    "results/milestone-5-v2.4-report.md": "0bd086c11ff9f24892980d033e573ca2dd2bc90c198eeb8fa4b2b154db81d864",
+    "run_v24_freeze.py": "4cf1efaad7833b4aed3e9449ece59678dd149844ed1386cfc2cfe3854f242808",
+    "tests/test_v24.py": "321ef5f12bec3dd175bcedad207517e0857c32bb5edf71ef45bdf3fb973aae93"
+  },
+  "freeze_candidate_created": false,
+  "sealed_gate_6_run": false,
+  "stage": "V2.4",
+  "status": "failed_gate_2_no_freeze"
+}
