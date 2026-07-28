@@ -1,0 +1,405 @@
+{
+  "name": "v2.3.3-maintenance-public-dummy",
+  "stage": "V2.3.3-maintenance",
+  "version": "V2.3.3-maintenance-1",
+  "synthetic_schema_fixture": true,
+  "scientific_result": false,
+  "bank_admissible": false,
+  "note": "Authored values exercise every public field only; no posterior was generated, assigned to a scientific world, or used for a criterion.",
+  "availability_only_structure": {
+    "potential_outcome": "Y_star",
+    "action": "A",
+    "availability_noise": "Z",
+    "availability": "M",
+    "delivered_observation": "O",
+    "edges": [
+      "H,G,W,C -> Y_star",
+      "do(A),Z -> M",
+      "Y_star,M -> O"
+    ],
+    "forbidden_edges": [
+      "A -> H",
+      "A -> Y_star",
+      "M -> positive_P_evidence",
+      "selected_policy -> root"
+    ],
+    "missing_log_bf": {
+      "P/T": 0.0,
+      "P/D": 0.0,
+      "D/T": 0.0
+    },
+    "excluded_variables": [
+      "efficacy",
+      "prevented_catastrophe",
+      "relief",
+      "counterfactual_attribution"
+    ]
+  },
+  "canonical_serialization": {
+    "format": "canonical_json_utf8",
+    "sort_keys": true,
+    "separators": [",", ":"],
+    "allow_nan": false,
+    "hash": "sha256"
+  },
+  "formed_world_fixtures": [
+    {
+      "stratum": "moderate",
+      "state_sha256": "24f6066917e8701e3bdae164f1bf2c0060d97efceddbaba8f1d4f4c2c372e89c",
+      "serialized_state": {
+        "seed": 799990,
+        "source_stage": "V2.3.2-formation",
+        "array_encoding": {
+          "dtype": "float64",
+          "byte_order": "little",
+          "storage_order": "C",
+          "shape_policy": "derived_from_nested_list",
+          "decimal_round_trip": "IEEE754_exact"
+        },
+        "q_H_formation": [0.2, 0.15, 0.65],
+        "root_posterior": [0.3, 0.7],
+        "cue_posteriors": {
+          "treated": [0.25, 0.75],
+          "untreated": [0.55, 0.45]
+        },
+        "cue_root_structural_posteriors": {
+          "treated": [0.1, 0.9],
+          "untreated": [0.7, 0.3]
+        },
+        "precision_posteriors": {
+          "treated": [2.0, 6.0],
+          "untreated": [4.0, 4.0]
+        },
+        "action_outcome_posteriors": {
+          "engage_available": [3.0, 2.0],
+          "avoid_available": [2.0, 3.0]
+        },
+        "candidate_log_evidence": [
+          -0.916290731874155,
+          -0.5108256237659907,
+          0.9555114450274363
+        ],
+        "developmental_history": {
+          "observations": [[1, 1, 2], [1, 0, 1]],
+          "configurations": [
+            {
+              "event": true,
+              "precision": "overwhelm",
+              "control": "low",
+              "broadcast": "collapsed",
+              "real_danger": false
+            },
+            {
+              "event": true,
+              "precision": "ordinary",
+              "control": "high",
+              "broadcast": "integrated",
+              "real_danger": false
+            }
+          ]
+        },
+        "provenance": {
+          "engine_sha256": "499e0688a114ce86ac67878c8d1e986596e2cd3a54fa1ebe3c9d4b7917a03b0e",
+          "parameter_sha256": "d1e3b7e329682802c72d8a35e2e53a18ae259e34cfb6800b899a794342d50d91",
+          "component_streams": ["world", "developmental_observation"],
+          "fixture_only": true
+        }
+      },
+      "clone_hashes": {
+        "A_response_prevention": "24f6066917e8701e3bdae164f1bf2c0060d97efceddbaba8f1d4f4c2c372e89c",
+        "B_closed_loop_censoring": "24f6066917e8701e3bdae164f1bf2c0060d97efceddbaba8f1d4f4c2c372e89c",
+        "C_yoked_replay": "24f6066917e8701e3bdae164f1bf2c0060d97efceddbaba8f1d4f4c2c372e89c",
+        "D_avoidance_observed_safety": "24f6066917e8701e3bdae164f1bf2c0060d97efceddbaba8f1d4f4c2c372e89c",
+        "E_sham_avoidance": "24f6066917e8701e3bdae164f1bf2c0060d97efceddbaba8f1d4f4c2c372e89c",
+        "F_real_danger_control": "24f6066917e8701e3bdae164f1bf2c0060d97efceddbaba8f1d4f4c2c372e89c"
+      }
+    },
+    {
+      "stratum": "strong",
+      "state_sha256": "6d424cb2198b9081f21f8a86f3ab2c002aae20b7abe3aa1b2d7e9eef0f834f44",
+      "serialized_state": {
+        "seed": 799991,
+        "source_stage": "V2.3.2-formation",
+        "array_encoding": {
+          "dtype": "float64",
+          "byte_order": "little",
+          "storage_order": "C",
+          "shape_policy": "derived_from_nested_list",
+          "decimal_round_trip": "IEEE754_exact"
+        },
+        "q_H_formation": [0.1, 0.1, 0.8],
+        "root_posterior": [0.2, 0.8],
+        "cue_posteriors": {
+          "treated": [0.15, 0.85],
+          "untreated": [0.5, 0.5]
+        },
+        "cue_root_structural_posteriors": {
+          "treated": [0.08, 0.92],
+          "untreated": [0.6, 0.4]
+        },
+        "precision_posteriors": {
+          "treated": [2.0, 8.0],
+          "untreated": [4.0, 5.0]
+        },
+        "action_outcome_posteriors": {
+          "engage_available": [4.0, 2.0],
+          "avoid_available": [2.0, 4.0]
+        },
+        "candidate_log_evidence": [
+          -1.6094379124341003,
+          -0.916290731874155,
+          1.1631508098056809
+        ],
+        "developmental_history": {
+          "observations": [[1, 1, 2], [1, 1, 2], [1, 0, 1]],
+          "configurations": [
+            {
+              "event": true,
+              "precision": "overwhelm",
+              "control": "low",
+              "broadcast": "collapsed",
+              "real_danger": false
+            },
+            {
+              "event": true,
+              "precision": "ordinary",
+              "control": "low",
+              "broadcast": "collapsed",
+              "real_danger": false
+            },
+            {
+              "event": true,
+              "precision": "ordinary",
+              "control": "high",
+              "broadcast": "integrated",
+              "real_danger": false
+            }
+          ]
+        },
+        "provenance": {
+          "engine_sha256": "499e0688a114ce86ac67878c8d1e986596e2cd3a54fa1ebe3c9d4b7917a03b0e",
+          "parameter_sha256": "d1e3b7e329682802c72d8a35e2e53a18ae259e34cfb6800b899a794342d50d91",
+          "component_streams": ["world", "developmental_observation"],
+          "fixture_only": true
+        }
+      },
+      "clone_hashes": {
+        "A_response_prevention": "6d424cb2198b9081f21f8a86f3ab2c002aae20b7abe3aa1b2d7e9eef0f834f44",
+        "B_closed_loop_censoring": "6d424cb2198b9081f21f8a86f3ab2c002aae20b7abe3aa1b2d7e9eef0f834f44",
+        "C_yoked_replay": "6d424cb2198b9081f21f8a86f3ab2c002aae20b7abe3aa1b2d7e9eef0f834f44",
+        "D_avoidance_observed_safety": "6d424cb2198b9081f21f8a86f3ab2c002aae20b7abe3aa1b2d7e9eef0f834f44",
+        "E_sham_avoidance": "6d424cb2198b9081f21f8a86f3ab2c002aae20b7abe3aa1b2d7e9eef0f834f44",
+        "F_real_danger_control": "6d424cb2198b9081f21f8a86f3ab2c002aae20b7abe3aa1b2d7e9eef0f834f44"
+      }
+    },
+    {
+      "stratum": "very_strong",
+      "state_sha256": "9b58bf6ca3c43ae845aec6b11feca1d0360595404aa616e3712de12eabed3ce2",
+      "serialized_state": {
+        "seed": 799992,
+        "source_stage": "V2.3.2-formation",
+        "array_encoding": {
+          "dtype": "float64",
+          "byte_order": "little",
+          "storage_order": "C",
+          "shape_policy": "derived_from_nested_list",
+          "decimal_round_trip": "IEEE754_exact"
+        },
+        "q_H_formation": [0.03, 0.02, 0.95],
+        "root_posterior": [0.1, 0.9],
+        "cue_posteriors": {
+          "treated": [0.05, 0.95],
+          "untreated": [0.4, 0.6]
+        },
+        "cue_root_structural_posteriors": {
+          "treated": [0.03, 0.97],
+          "untreated": [0.45, 0.55]
+        },
+        "precision_posteriors": {
+          "treated": [2.0, 10.0],
+          "untreated": [4.0, 6.0]
+        },
+        "action_outcome_posteriors": {
+          "engage_available": [5.0, 2.0],
+          "avoid_available": [2.0, 5.0]
+        },
+        "candidate_log_evidence": [
+          -2.8134107167600364,
+          -2.5257286443082556,
+          1.33500106673234
+        ],
+        "developmental_history": {
+          "observations": [[1, 1, 2], [1, 1, 2], [1, 1, 2], [1, 0, 1]],
+          "configurations": [
+            {
+              "event": true,
+              "precision": "overwhelm",
+              "control": "low",
+              "broadcast": "collapsed",
+              "real_danger": false
+            },
+            {
+              "event": true,
+              "precision": "ordinary",
+              "control": "low",
+              "broadcast": "collapsed",
+              "real_danger": false
+            },
+            {
+              "event": true,
+              "precision": "ordinary",
+              "control": "low",
+              "broadcast": "integrated",
+              "real_danger": false
+            },
+            {
+              "event": true,
+              "precision": "ordinary",
+              "control": "high",
+              "broadcast": "integrated",
+              "real_danger": false
+            }
+          ]
+        },
+        "provenance": {
+          "engine_sha256": "499e0688a114ce86ac67878c8d1e986596e2cd3a54fa1ebe3c9d4b7917a03b0e",
+          "parameter_sha256": "d1e3b7e329682802c72d8a35e2e53a18ae259e34cfb6800b899a794342d50d91",
+          "component_streams": ["world", "developmental_observation"],
+          "fixture_only": true
+        }
+      },
+      "clone_hashes": {
+        "A_response_prevention": "9b58bf6ca3c43ae845aec6b11feca1d0360595404aa616e3712de12eabed3ce2",
+        "B_closed_loop_censoring": "9b58bf6ca3c43ae845aec6b11feca1d0360595404aa616e3712de12eabed3ce2",
+        "C_yoked_replay": "9b58bf6ca3c43ae845aec6b11feca1d0360595404aa616e3712de12eabed3ce2",
+        "D_avoidance_observed_safety": "9b58bf6ca3c43ae845aec6b11feca1d0360595404aa616e3712de12eabed3ce2",
+        "E_sham_avoidance": "9b58bf6ca3c43ae845aec6b11feca1d0360595404aa616e3712de12eabed3ce2",
+        "F_real_danger_control": "9b58bf6ca3c43ae845aec6b11feca1d0360595404aa616e3712de12eabed3ce2"
+      }
+    }
+  ],
+  "arms": [
+    {
+      "id": "A",
+      "name": "response_prevention",
+      "do_action": "engage",
+      "availability": "full",
+      "potential_outcome_stream": "paired"
+    },
+    {
+      "id": "B",
+      "name": "closed_loop_censoring",
+      "do_action": "endogenous_policy",
+      "availability": "avoidance_contingent",
+      "potential_outcome_stream": "paired"
+    },
+    {
+      "id": "C",
+      "name": "yoked_replay",
+      "do_action": "display_label_only",
+      "availability": "exact_B_mask_replay",
+      "delivered_evidence": "exact_B_stream_replay"
+    },
+    {
+      "id": "D",
+      "name": "avoidance_observed_safety",
+      "do_action": "avoid",
+      "availability": "full",
+      "potential_outcome_stream": "paired"
+    },
+    {
+      "id": "E",
+      "name": "sham_avoidance",
+      "do_action": "sham",
+      "availability": "full",
+      "feedback": "candidate_common",
+      "potential_outcome_stream": "paired"
+    },
+    {
+      "id": "F",
+      "name": "real_danger_control",
+      "do_action": "engage",
+      "availability": "full",
+      "conditions": ["external_danger", "identity_implicating_danger"]
+    }
+  ],
+  "censoring_dose_subprotocol": {
+    "doses": [0.0, 0.25, 0.5, 0.75, 1.0],
+    "paired_uniforms": [0.1, 0.3, 0.6, 0.9],
+    "mask_rule": "M_t=0 iff u_t<c",
+    "nested_masks": true,
+    "mechanistic_identity": "L_final^PX=L_initial^PX+sum_delivered(logBF_t^P/X)"
+  },
+  "example_trace": [
+    {
+      "t": 0,
+      "A": "avoid",
+      "Y_star": "safe",
+      "M": 0,
+      "O": "missing",
+      "pairwise_log_bf": {"P/T": 0.0, "P/D": 0.0, "D/T": 0.0},
+      "delivered": 0,
+      "censored": 1
+    },
+    {
+      "t": 1,
+      "A": "engage",
+      "Y_star": "safe",
+      "M": 1,
+      "O": "safe",
+      "pairwise_log_bf": {
+        "P/T": "negative_frozen_value",
+        "P/D": "negative_frozen_value",
+        "D/T": "published_frozen_value"
+      },
+      "delivered": 1,
+      "censored": 0
+    }
+  ],
+  "requested_readouts": [
+    "L_PT",
+    "L_PD",
+    "delta_L_PT",
+    "delta_L_PD",
+    "M_PT",
+    "M_PD",
+    "delivered_count",
+    "censored_count",
+    "realized_avoidance",
+    "root_revision",
+    "untreated_cue_transfer",
+    "policy_availability_posterior",
+    "per_slice_BF_decomposition"
+  ],
+  "lesions": [
+    "action_mask_contingency",
+    "forced_open_channel",
+    "masked_to_safe_substitution",
+    "candidate_common_outcome",
+    "root_coupling",
+    "global_broadcast",
+    "structure_comparison"
+  ],
+  "invariance_control": {
+    "action_label_permutation": true,
+    "predicted_change": "none"
+  },
+  "reporting_classes": {
+    "scientific": [],
+    "semantic": [],
+    "stress": [],
+    "custody": []
+  },
+  "gate6": {
+    "block_1": {
+      "name": "C-V233-M-bank",
+      "escrow_seeds": null,
+      "status": "sealed_after_public_freeze"
+    },
+    "block_2": {
+      "name": "C-V233-M",
+      "escrow_seeds": null,
+      "release_condition": "block_1_passes"
+    }
+  }
+}

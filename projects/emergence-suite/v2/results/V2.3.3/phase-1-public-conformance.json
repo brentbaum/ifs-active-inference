@@ -1,0 +1,37 @@
+{
+  "artifact_hashes": {
+    "contracts/v2.3.3-maintenance-contract.md": "3b83a136ee9bfc4ab26a31e2c51676ed1d8b7f5790042acb096c64fc48437e66",
+    "protocols/v2.3.3-analysis-plan.md": "0d558212295f99b071895e77722e4b7762cdec2c585177a262430180162dc847",
+    "protocols/v2.3.3-parameters.json": "7edbe5d32c6460101145b0d2d9e780bb817814fcd29c58a8f27c3758f4964348",
+    "protocols/v2.3.3-public-dummy.json": "e2535595bcfec3bbd5ee50c983dda5081de2bafdebbc52f3c66f16888e78df99"
+  },
+  "bank_generated": false,
+  "checks": {
+    "all_development_seeds_below_800000": true,
+    "availability_only_route": true,
+    "do_action_controls_M_only": true,
+    "dummy_is_non_scientific": true,
+    "eight_gate_4_rows": true,
+    "excluded_attribution_variables": true,
+    "five_censoring_doses": true,
+    "four_verdict_classes": true,
+    "gate_2_present": true,
+    "gate_3_present": true,
+    "gate_5_present": true,
+    "missing_BF_zero": true,
+    "six_arms": true,
+    "three_bank_strata": true,
+    "twelve_gate_1_proofs": true,
+    "two_block_gate_6": true
+  },
+  "dummy_hash_verification": {
+    "fixture_count": 3,
+    "mismatches": [],
+    "passed": true
+  },
+  "gate_1_proof_count": 12,
+  "maximum_reserved_development_seed": 763255,
+  "mechanism_implemented": false,
+  "passed": true,
+  "stage": "V2.3.3-phase-1"
+}

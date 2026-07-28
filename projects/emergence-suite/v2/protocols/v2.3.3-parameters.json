@@ -1,0 +1,153 @@
+{
+  "version": "V2.3.3-maintenance-1",
+  "status": "frozen_before_implementation_or_generation",
+  "inherited_formation": {
+    "stage": "V2.3.2-formation",
+    "freeze_commit": "c67e8530cb8aff6743e49708a3544095314a5365",
+    "candidate_labels": ["T", "D", "P"],
+    "candidate_prior": [0.5, 0.25, 0.25],
+    "B_max": 3.801426508560692,
+    "implied_binary_probability_change_bound": 0.7399444612916254
+  },
+  "numerical_tolerance": 1e-10,
+  "formed_world_bank": {
+    "candidate_seed_block": [760000, 761799],
+    "process_order": "ascending_seed_once",
+    "constructor_truth": "P",
+    "developmental_history_length_options": [4, 6, 8, 10, 12, 16, 20, 24],
+    "history_profile_cycle": [
+      {
+        "precision": "ordinary",
+        "control": "high",
+        "broadcast": "integrated",
+        "real_danger": false
+      },
+      {
+        "precision": "ordinary",
+        "control": "low",
+        "broadcast": "integrated",
+        "real_danger": false
+      },
+      {
+        "precision": "overwhelm",
+        "control": "low",
+        "broadcast": "collapsed",
+        "real_danger": false
+      },
+      {
+        "precision": "ordinary",
+        "control": "low",
+        "broadcast": "collapsed",
+        "real_danger": false
+      }
+    ],
+    "initial_strength_strata": {
+      "moderate": {
+        "lower_inclusive": 0.6,
+        "upper_exclusive": 0.75
+      },
+      "strong": {
+        "lower_inclusive": 0.75,
+        "upper_exclusive": 0.9
+      },
+      "very_strong": {
+        "lower_inclusive": 0.9,
+        "upper_inclusive": 0.98
+      }
+    },
+    "minimum_worlds_per_stratum": 40,
+    "primary_worlds_per_stratum": 40,
+    "primary_world_count": 120,
+    "serialization": {
+      "format": "canonical_json_utf8",
+      "sort_keys": true,
+      "separators": [",", ":"],
+      "allow_nan": false,
+      "hash": "sha256"
+    }
+  },
+  "maintenance": {
+    "development_seed_block": [762000, 762359],
+    "robustness_seed_block": [763000, 763255],
+    "duration": 32,
+    "arms": [
+      "A_response_prevention",
+      "B_closed_loop_censoring",
+      "C_yoked_replay",
+      "D_avoidance_observed_safety",
+      "E_sham_avoidance",
+      "F_real_danger_control"
+    ],
+    "censoring_doses": [0.0, 0.25, 0.5, 0.75, 1.0],
+    "closed_loop_censoring_probability": 0.75,
+    "safe_outcome_reliability": 0.85,
+    "external_danger_reliability": 0.85,
+    "identity_implicating_danger_reliability": 0.85,
+    "adverse_outcome_proportion": 0.15,
+    "corrective_configuration": {
+      "event": true,
+      "precision": "ordinary",
+      "control": "high",
+      "broadcast": "integrated",
+      "real_danger": false
+    },
+    "corrective_safe_support": [
+      [0, 0, 0],
+      [0, 0, 1]
+    ],
+    "corrective_safe_support_distribution": "frozen_T_row_renormalized_on_support",
+    "policy": {
+      "actions": ["engage", "avoid", "sham"],
+      "closed_loop_intercept": 0.0,
+      "initial_P_center": 0.75,
+      "P_feedback_gain": 1.5,
+      "action_cost": 0.1,
+      "temperature": 1.0,
+      "closed_loop_probability": "sigmoid((closed_loop_intercept + P_feedback_gain*(q_t(P)-initial_P_center) - action_cost)/temperature)",
+      "availability_beta_prior": [1.0, 1.0]
+    },
+    "sham_feedback": {
+      "candidate_common_probability": 0.5
+    }
+  },
+  "analysis": {
+    "bootstrap_replicates": 10000,
+    "confidence_level": 0.95,
+    "minimum_paired_worlds": 120,
+    "avoidance_rate_open_interval": [0.2, 0.8],
+    "exact_identity_tolerance": 1e-10,
+    "safe_world_false_P_strengthening_tolerance": 0.0
+  },
+  "robustness_sweep_multipliers": {
+    "duration": [0.5, 1.0, 2.0],
+    "safe_outcome_reliability": [0.8, 1.0, 1.2],
+    "censoring_probability": [0.5, 1.0, 1.25],
+    "action_cost": [0.5, 1.0, 2.0],
+    "policy_temperature": [0.5, 1.0, 2.0],
+    "adverse_outcome_proportion": [0.5, 1.0, 1.5],
+    "candidate_prior": [0.8, 1.0, 1.2],
+    "precision": [0.8, 1.0, 1.2],
+    "cue_root_strength": [0.8, 1.0, 1.2]
+  },
+  "rationales": {
+    "inherited_formation": "The accepted frozen V2.3.2 candidate family supplies normalized evidence without relabeling either sealed formation FAIL.",
+    "numerical_tolerance": "The suite-wide exact-enumeration tolerance is retained for identities, clones, and yoked trajectories.",
+    "bank_seed_block": "A fixed 1,800-seed development block permits honest intention-to-simulate qualification across three nonsaturated strength strata without regeneration.",
+    "history_lengths": "A preregistered range of short-to-full frozen developmental histories varies evidence amount without reading maintenance outcomes or assigning posterior strength.",
+    "history_profile_cycle": "The cycle uses only frozen public V2.3.2 theory configurations and varies precision, controllability, and localization before any bank result is viewed.",
+    "strata": "The adopted 0.60-0.75, 0.75-0.90, and 0.90-0.98 ranges cover moderate through very strong formed states while excluding numerical saturation.",
+    "minimum_worlds": "Forty worlds per stratum yields the adopted minimum 120 paired worlds with equal stratum weight.",
+    "serialization": "Canonical JSON bytes and SHA-256 make provenance and bitwise clone custody independently checkable.",
+    "maintenance_seed_blocks": "Fresh disjoint development and robustness blocks are below 800000 and are reserved before implementation.",
+    "duration": "Thirty-two slices permit partial delivery and censoring-dose contrasts without relying on a single acute event.",
+    "censoring_doses": "The adopted five doses identify a graded availability curve including full observation and complete censoring anchors.",
+    "closed_loop_censoring": "A 0.75 avoidance-contingent censoring probability is strong enough to alter delivered counts while retaining observed evidence in the open arm.",
+    "outcome_reliabilities": "Reliability 0.85 makes corrective and danger streams informative but not deterministic, preserving finite likelihood ratios.",
+    "adverse_outcome_proportion": "A 0.15 adverse minority prevents the safe-world assay from becoming a deterministic all-safe script.",
+    "corrective_configuration": "High control, integrated broadcast, ordinary precision, and no real danger define corrective observations in the frozen public formation vocabulary; the two self-absent safe-support cells have negative frozen P/T and P/D log BFs and are sampled from the renormalized T row.",
+    "policy": "A centered finite-temperature logistic rule keeps avoidance stochastic across the allowed initial-strength range; the conjugate availability prior learns observation access, not efficacy or attribution.",
+    "sham_feedback": "Candidate-common feedback exercises the sham channel while guaranteeing zero pairwise BF.",
+    "bootstrap": "Ten thousand whole-world paired resamples resolve stratum-balanced 95% intervals without treating slices as independent worlds.",
+    "robustness": "Symmetric local multipliers cover every adopted sweep dimension without changing the frozen primary analysis."
+  }
+}
