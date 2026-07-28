@@ -52,3 +52,11 @@ Added after the empirical-bound addendum, before the F2 run (2026-07-28):
 1944f31a48576a03cd455b1327099a45c7b6a0e84e804d8e713009950691f491  C-V232-F2-continuity-challenge.md
 ```
 Seeds: 813301:813400 (escrow remainder).
+
+Added after the V2.3.3 phase-1 public artifacts, before implementation (2026-07-28):
+
+```
+a27310d7c6a6bc2396bc85ad93a8ace978c546ec6e3f5ecf7cdc249ac70db2b7  C-V233-M-bank-challenge.md
+8b1847339374314d291ce380e44ca5a483128ef2578635a6d6b1e6a6be658edf  C-V233-M-challenge.md
+```
+Escrow: bank candidates 815001:815800; maintenance 816001:816900. Bank qualification gates the maintenance seeds. Pre-seal linter applied to both (records inside the sealed files).
