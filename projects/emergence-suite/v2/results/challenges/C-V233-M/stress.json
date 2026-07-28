@@ -1,0 +1,158 @@
+{
+  "classification": "distributional_stress_noncriterial",
+  "graded_update_distribution": {
+    "absolute_change": "|q_t(P)-q_(t-1)(P)|",
+    "artifact": "stratified-empirical-update-distribution",
+    "classification": "distributional_stress",
+    "criterial": false,
+    "publisher_source_sha256": "891092d0ddfd70e44d4d284bded8fe39eccbf758514eeab30950ba7f04283345",
+    "scientific_inference_use": "none",
+    "seed_block": [
+      751000,
+      751299
+    ],
+    "stage": "V2.3.2-formation",
+    "strata": {
+      "D-favoring": {
+        "count": 2400,
+        "maximum": 0.6212589521262386,
+        "mean": 0.02428699125849282,
+        "p50": 1.6446248743054025e-05,
+        "p90": 0.06174680760200796,
+        "p99": 0.33849190659376044
+      },
+      "P-favoring": {
+        "count": 2400,
+        "maximum": 0.7123867976129283,
+        "mean": 0.05170334613875198,
+        "p50": 0.0001403731585744583,
+        "p90": 0.22238711590851212,
+        "p99": 0.48326322689377277
+      },
+      "acute": {
+        "count": 1800,
+        "maximum": 0.7123867976129283,
+        "mean": 0.06509190966338319,
+        "p50": 0.00021254030516690433,
+        "p90": 0.2655925797488685,
+        "p99": 0.5288326924972792
+      },
+      "high-control": {
+        "count": 2400,
+        "maximum": 0.6240662870323084,
+        "mean": 0.04537937334044186,
+        "p50": 6.036661166164719e-05,
+        "p90": 0.18762573950414796,
+        "p99": 0.48326322689377277
+      },
+      "low-control": {
+        "count": 4800,
+        "maximum": 0.7123867976129283,
+        "mean": 0.026753220527647753,
+        "p50": 1.7166365929708892e-05,
+        "p90": 0.06501884307373235,
+        "p99": 0.40598584354767747
+      },
+      "no-event": {
+        "count": 300,
+        "maximum": 0.0,
+        "mean": 0.0,
+        "p50": 0.0,
+        "p90": 0.0,
+        "p99": 0.0
+      },
+      "ordinary": {
+        "count": 5400,
+        "maximum": 0.491505873043217,
+        "mean": 0.022251947621422213,
+        "p50": 1.3675740328487212e-05,
+        "p90": 0.057501744154067794,
+        "p99": 0.37418471552667476
+      }
+    },
+    "stratum_definitions": {
+      "D-favoring": "event slices generated under H_formation=D",
+      "P-favoring": "event slices generated under H_formation=P",
+      "acute": "event=true and precision=overwhelm",
+      "high-control": "event=true and control=high",
+      "low-control": "event=true and control=low",
+      "no-event": "event=false, separate one-slice trajectory",
+      "ordinary": "event=true and precision=ordinary"
+    },
+    "warning": "Descriptive only. No pass/fail threshold may be inferred. Any future prospective quantile criterion requires matched strata and populations, world-blocked or conformal thresholds, quantile uncertainty, and no unacknowledged enrichment."
+  },
+  "private_cell_summaries": {
+    "action_cost": {
+      "default": {
+        "count": 60,
+        "mean_M_PD": 6.955903444606204,
+        "mean_M_PT": 7.357254123162079
+      },
+      "elevated": {
+        "count": 60,
+        "mean_M_PD": 7.606327129219383,
+        "mean_M_PT": 8.188831923909799
+      }
+    },
+    "base_censoring": {
+      "0.35": {
+        "count": 60,
+        "mean_M_PD": 5.314885010852711,
+        "mean_M_PT": 5.6042130375437695
+      },
+      "0.65": {
+        "count": 60,
+        "mean_M_PD": 9.247345562972876,
+        "mean_M_PT": 9.94187300952811
+      }
+    },
+    "context_shift": {
+      "False": {
+        "count": 90,
+        "mean_M_PD": 7.378888712027446,
+        "mean_M_PT": 7.830515886675695
+      },
+      "True": {
+        "count": 30,
+        "mean_M_PD": 6.987795011568835,
+        "mean_M_PT": 7.600624434116676
+      }
+    },
+    "labels_permuted": {
+      "False": {
+        "count": 60,
+        "mean_M_PD": 7.606327129219383,
+        "mean_M_PT": 8.188831923909799
+      },
+      "True": {
+        "count": 60,
+        "mean_M_PD": 6.955903444606204,
+        "mean_M_PT": 7.357254123162079
+      }
+    },
+    "safe_reliability": {
+      "degraded": {
+        "count": 60,
+        "mean_M_PD": 7.403849006703022,
+        "mean_M_PT": 7.796187390694921
+      },
+      "high": {
+        "count": 60,
+        "mean_M_PD": 7.158381567122564,
+        "mean_M_PT": 7.749898656376957
+      }
+    },
+    "schedule": {
+      "distributed": {
+        "count": 60,
+        "mean_M_PD": 7.612001311714796,
+        "mean_M_PT": 8.00930102925248
+      },
+      "front_loaded": {
+        "count": 60,
+        "mean_M_PD": 6.95022926211079,
+        "mean_M_PT": 7.536785017819398
+      }
+    }
+  }
+}

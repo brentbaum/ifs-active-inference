@@ -1,0 +1,1248 @@
+{
+  "challenge": "C-V233-M",
+  "challenge_spec_sha256": "8b1847339374314d291ce380e44ca5a483128ef2578635a6d6b1e6a6be658edf",
+  "criteria": {
+    "1_safe_full_observation_erodes_P": {
+      "A_delta_L_PD_95_interval": [
+        -31.5099827884789,
+        -32.141596259304194,
+        -30.876819259272036
+      ],
+      "A_delta_L_PT_95_interval": [
+        -33.6038725527155,
+        -34.03671137839158,
+        -33.18439437622751
+      ],
+      "class": "scientific",
+      "passed": true
+    },
+    "2_censoring_protects": {
+      "M_PD_95_interval": [
+        7.281115286912794,
+        6.6968350317264465,
+        7.879348730022443
+      ],
+      "M_PT_95_interval": [
+        7.773043023535939,
+        7.254798526706748,
+        8.313099568388047
+      ],
+      "class": "scientific",
+      "passed": true,
+      "per_stratum": {
+        "moderate": {
+          "M_PD": [
+            6.849123441561304,
+            5.827473463324042,
+            7.938747819896211
+          ],
+          "M_PT": [
+            7.164843892433998,
+            6.2471374327562,
+            8.130259941275991
+          ]
+        },
+        "strong": {
+          "M_PD": [
+            7.794869703921802,
+            6.859645244610408,
+            8.794704107220834
+          ],
+          "M_PT": [
+            8.224248740806093,
+            7.337894085074765,
+            9.165617995049567
+          ]
+        },
+        "very_strong": {
+          "M_PD": [
+            7.199352715255273,
+            6.108703687804527,
+            8.281389092000785
+          ],
+          "M_PT": [
+            7.930036437367724,
+            6.985973488940979,
+            8.890240477686174
+          ]
+        }
+      }
+    },
+    "3_complete_censoring_neutral": {
+      "class": "scientific_semantic",
+      "maximum_absolute_delta_log_odds": 0.0,
+      "passed": true
+    },
+    "4_closed_loop_yoked_identity": {
+      "class": "semantic",
+      "maximum_error": 0.0,
+      "passed": true
+    },
+    "5_no_action_bonus": {
+      "class": "semantic",
+      "maximum_A_D_E_error": 0.0,
+      "maximum_label_permutation_error": 0.0,
+      "passed": true
+    },
+    "6_dose_response": {
+      "M_PD_isotonic": {
+        "dose_means": [
+          0.0,
+          8.144677723720992,
+          10.921777887844655,
+          15.704547702344238,
+          20.640144895268836,
+          23.573371544894542,
+          31.50998278847889
+        ],
+        "fitted_nondecreasing": true,
+        "isotonic_fitted_means": [
+          0.0,
+          8.144677723720992,
+          10.921777887844655,
+          15.704547702344238,
+          20.640144895268836,
+          23.573371544894542,
+          31.50998278847889
+        ],
+        "p_value": 9.999000099990002e-05,
+        "permutations": 10000,
+        "statistic": 79524.52779692924
+      },
+      "M_PT_isotonic": {
+        "dose_means": [
+          0.0,
+          8.548031533557271,
+          11.628299269283321,
+          16.862414466508163,
+          22.10001138537693,
+          25.21674453815389,
+          33.60387255271551
+        ],
+        "fitted_nondecreasing": true,
+        "isotonic_fitted_means": [
+          0.0,
+          8.548031533557271,
+          11.628299269283321,
+          16.862414466508163,
+          22.10001138537693,
+          25.21674453815389,
+          33.60387255271551
+        ],
+        "p_value": 9.999000099990002e-05,
+        "permutations": 10000,
+        "statistic": 91004.25116777523
+      },
+      "class": "scientific",
+      "doses": [
+        0.0,
+        0.25,
+        0.35,
+        0.5,
+        0.65,
+        0.75,
+        1.0
+      ],
+      "maximum_matched_evidence_schedule_error": 0.0,
+      "maximum_mechanistic_identity_error": 7.105427357601002e-15,
+      "passed": true
+    },
+    "7_D_P_danger_control": {
+      "class": "scientific",
+      "external_D_selection_rate_95_wilson": [
+        0.975,
+        0.9290687625956524,
+        0.9914619799012145
+      ],
+      "generic_P_selection_rate_95_wilson": [
+        0.016666666666666666,
+        0.004582468541151394,
+        0.058737126812913806
+      ],
+      "generic_null_band_maximum": 0.15,
+      "identity_P_selection_rate_95_wilson": [
+        1.0,
+        0.9689797289440706,
+        1.0
+      ],
+      "passed": true
+    },
+    "8_root_transfer_follows_delivered_evidence": {
+      "class": "scientific",
+      "fixed_G_M_PD_95_interval": [
+        7.281115286912794,
+        6.671408311131024,
+        7.882469518011333
+      ],
+      "fixed_G_M_PT_95_interval": [
+        7.773043023535939,
+        7.243328964525588,
+        8.316796918838838
+      ],
+      "fixed_G_maximum_transfer_difference": 0.0,
+      "passed": true,
+      "root_revision_difference_95_interval": [
+        0.004280445240440491,
+        0.0011246648937935965,
+        0.008320302967373634
+      ],
+      "transfer_difference_95_interval": [
+        0.0003331451405865831,
+        7.020554806121307e-05,
+        0.0007039714631644659
+      ]
+    },
+    "9_constitution_identity_custody": {
+      "ITS_ledger_world_count": 120,
+      "challenge_constitution": {
+        "cumulative_constitution": {
+          "constitution_version": "revised-graded-update-1",
+          "effective_from": "V2.3.3",
+          "historical_exclusions": [
+            "V2.3 and V2.3.1 are retired failure ledgers.",
+            "V2.3.2 attribution is shelved for the V2.3.4 side rung."
+          ],
+          "passed": true,
+          "sections": {
+            "A": "update identity and no authored assignment",
+            "B": "finite-information guarantee and tanh(B_max/4)",
+            "C": "evidence-strength homotopy",
+            "D": "composition checks"
+          },
+          "stages": {
+            "V2.0": {
+              "observation": "D",
+              "passed": true,
+              "sections": {
+                "A_update_identity": {
+                  "checked_pairwise_increments": 1,
+                  "maximum_absolute_error": 0.0,
+                  "no_authored_assignment": {
+                    "forbidden_assignment_targets": [],
+                    "functions_checked": [
+                      "candidate_scorer"
+                    ],
+                    "interpretation": "Posterior arrays may be computed only by normalized evidence; the audit forbids authored latent/status/winner assignments.",
+                    "passed": true,
+                    "posterior_assignment_expressions": [
+                      {
+                        "expression": "ExactEngine().infer(model, (structure,), observations)",
+                        "function": "candidate_scorer",
+                        "line": 8
+                      }
+                    ],
+                    "posterior_assignments_inside_if_branches": [],
+                    "winner_selection_calls": []
+                  },
+                  "passed": true,
+                  "trace": [
+                    {
+                      "absolute_error": 0.0,
+                      "observation": 8,
+                      "pair": [
+                        0,
+                        1
+                      ],
+                      "posterior_log_odds_increment": -0.7269140430307628,
+                      "published_log_bf": -0.7269140430307628,
+                      "slice": 0
+                    }
+                  ]
+                },
+                "B_finite_information": {
+                  "B_max": 4.533576532801081,
+                  "all_observed_slices_within_bound": true,
+                  "asymmetric_zero_cells": [],
+                  "implied_binary_probability_change_bound": 0.8121777032746834,
+                  "passed": true,
+                  "support_cells_checked": 11
+                },
+                "C_evidence_strength_homotopy": {
+                  "alpha_grid": [
+                    0.0,
+                    0.01,
+                    0.02,
+                    0.03,
+                    0.04,
+                    0.05,
+                    0.06,
+                    0.07,
+                    0.08,
+                    0.09,
+                    0.1,
+                    0.11,
+                    0.12,
+                    0.13,
+                    0.14,
+                    0.15,
+                    0.16,
+                    0.17,
+                    0.18,
+                    0.19,
+                    0.2,
+                    0.21,
+                    0.22,
+                    0.23,
+                    0.24,
+                    0.25,
+                    0.26,
+                    0.27,
+                    0.28,
+                    0.29,
+                    0.3,
+                    0.31,
+                    0.32,
+                    0.33,
+                    0.34,
+                    0.35000000000000003,
+                    0.36,
+                    0.37,
+                    0.38,
+                    0.39,
+                    0.4,
+                    0.41000000000000003,
+                    0.42,
+                    0.43,
+                    0.44,
+                    0.45,
+                    0.46,
+                    0.47000000000000003,
+                    0.48,
+                    0.49,
+                    0.5,
+                    0.51,
+                    0.52,
+                    0.53,
+                    0.54,
+                    0.55,
+                    0.56,
+                    0.5700000000000001,
+                    0.58,
+                    0.59,
+                    0.6,
+                    0.61,
+                    0.62,
+                    0.63,
+                    0.64,
+                    0.65,
+                    0.66,
+                    0.67,
+                    0.68,
+                    0.6900000000000001,
+                    0.7000000000000001,
+                    0.71,
+                    0.72,
+                    0.73,
+                    0.74,
+                    0.75,
+                    0.76,
+                    0.77,
+                    0.78,
+                    0.79,
+                    0.8,
+                    0.81,
+                    0.8200000000000001,
+                    0.8300000000000001,
+                    0.84,
+                    0.85,
+                    0.86,
+                    0.87,
+                    0.88,
+                    0.89,
+                    0.9,
+                    0.91,
+                    0.92,
+                    0.93,
+                    0.9400000000000001,
+                    0.9500000000000001,
+                    0.96,
+                    0.97,
+                    0.98,
+                    0.99,
+                    1.0
+                  ],
+                  "analytic_form": "q_h(alpha)=prior_h*((1-alpha)m+alpha*p_h)/m",
+                  "common_mixture": "m=sum_h prior(h)*p_h",
+                  "curves_checked": 11,
+                  "definition": "p_h^alpha=(1-alpha)m+alpha*p_h",
+                  "finite_derivative": true,
+                  "maximum_absolute_finite_derivative": 0.4893719806763285,
+                  "maximum_adjacent_grid_change": 0.004893719806763452,
+                  "maximum_exact_vs_analytic_error": 0.0,
+                  "maximum_forward_reverse_error": 0.0,
+                  "monotonicity_failures": [],
+                  "no_discontinuity": true,
+                  "no_hysteresis": true,
+                  "passed": true,
+                  "target_index": 1
+                },
+                "D_composition": {
+                  "legacy_nine_invariants": {
+                    "observation": "D",
+                    "passed": true,
+                    "results": {
+                      "1_candidates_normalized": {
+                        "maximum_error": 1.5543122344752192e-15,
+                        "passed": true
+                      },
+                      "2_prior_complexity_once": {
+                        "passed": true,
+                        "structural_prior_factor_count": 1
+                      },
+                      "3_masked_increment_zero": {
+                        "incremental_log_bf": -1.5543122344752203e-15,
+                        "passed": true
+                      },
+                      "4_absent_increment_zero": {
+                        "incremental_log_bf": -1.5543122344752203e-15,
+                        "passed": true
+                      },
+                      "5_identical_predictions_zero": {
+                        "incremental_log_bf": 0.0,
+                        "passed": true
+                      },
+                      "6_prequential_recombination": {
+                        "absolute_error": 0.0,
+                        "passed": true,
+                        "posterior_log_odds": 0.7269140430307628,
+                        "published_contributions": [
+                          0.7269140430307628
+                        ],
+                        "recombined_log_odds": 0.7269140430307628
+                      },
+                      "7_partition_included": {
+                        "candidate_row_sums": [
+                          1.0,
+                          0.9999999999999984
+                        ],
+                        "passed": true
+                      },
+                      "8_no_evidence_dynamics": {
+                        "declared_dynamics": "static",
+                        "passed": true,
+                        "predicted_final": [
+                          0.5,
+                          0.5
+                        ]
+                      },
+                      "9_independent_implementation": {
+                        "maximum_error": 1.3877787807814457e-17,
+                        "passed": true
+                      }
+                    },
+                    "structure": "H"
+                  },
+                  "passed": true
+                }
+              },
+              "structure": "H"
+            },
+            "V2.1": {
+              "observation": null,
+              "passed": true,
+              "sections": {
+                "A_update_identity": {
+                  "not_applicable": true,
+                  "passed": true,
+                  "reason": "V2.1 has no finite structural comparison."
+                },
+                "B_finite_information": {
+                  "not_applicable": true,
+                  "passed": true,
+                  "reason": "V2.1 has no pairwise structural likelihood table."
+                },
+                "C_evidence_strength_homotopy": {
+                  "not_applicable": true,
+                  "passed": true,
+                  "reason": "V2.1 has no structural posterior q(H)."
+                },
+                "D_composition": {
+                  "legacy_nine_invariants": {
+                    "observation": null,
+                    "passed": true,
+                    "results": {
+                      "1_candidates_normalized": {
+                        "maximum_cpt_error": 0.0,
+                        "passed": true,
+                        "structural_comparisons": 0
+                      },
+                      "2_prior_complexity_once": {
+                        "passed": true,
+                        "structural_comparisons": 0
+                      },
+                      "3_masked_increment_zero": {
+                        "incremental_log_bf": 0.0,
+                        "not_applicable": true,
+                        "passed": true
+                      },
+                      "4_absent_increment_zero": {
+                        "incremental_log_bf": 0.0,
+                        "not_applicable": true,
+                        "passed": true
+                      },
+                      "5_identical_predictions_zero": {
+                        "incremental_log_bf": 0.0,
+                        "not_applicable": true,
+                        "passed": true
+                      },
+                      "6_prequential_recombination": {
+                        "passed": true,
+                        "structural_comparisons": 0
+                      },
+                      "7_partition_included": {
+                        "maximum_cpt_error": 0.0,
+                        "passed": true
+                      },
+                      "8_no_evidence_dynamics": {
+                        "declared_dynamics": "no structural hypothesis",
+                        "passed": true
+                      },
+                      "9_independent_implementation": {
+                        "passed": true,
+                        "structural_comparisons": 0
+                      }
+                    },
+                    "structure": null
+                  },
+                  "passed": true
+                }
+              },
+              "structure": null
+            },
+            "V2.2.1": {
+              "observation": "K",
+              "passed": true,
+              "sections": {
+                "A_update_identity": {
+                  "checked_pairwise_increments": 1,
+                  "maximum_absolute_error": 8.881784197001252e-16,
+                  "no_authored_assignment": {
+                    "forbidden_assignment_targets": [],
+                    "functions_checked": [
+                      "candidate_scorer"
+                    ],
+                    "interpretation": "Posterior arrays may be computed only by normalized evidence; the audit forbids authored latent/status/winner assignments.",
+                    "passed": true,
+                    "posterior_assignment_expressions": [
+                      {
+                        "expression": "ExactEngine().infer(model, (structure,), observations)",
+                        "function": "candidate_scorer",
+                        "line": 8
+                      }
+                    ],
+                    "posterior_assignments_inside_if_branches": [],
+                    "winner_selection_calls": []
+                  },
+                  "passed": true,
+                  "trace": [
+                    {
+                      "absolute_error": 8.881784197001252e-16,
+                      "observation": 90,
+                      "pair": [
+                        0,
+                        1
+                      ],
+                      "posterior_log_odds_increment": 5.57499658592655,
+                      "published_log_bf": 5.5749965859265505,
+                      "slice": 0
+                    }
+                  ]
+                },
+                "B_finite_information": {
+                  "B_max": 121.72197006306659,
+                  "all_observed_slices_within_bound": true,
+                  "asymmetric_zero_cells": [],
+                  "implied_binary_probability_change_bound": 1.0,
+                  "passed": true,
+                  "support_cells_checked": 181
+                },
+                "C_evidence_strength_homotopy": {
+                  "alpha_grid": [
+                    0.0,
+                    0.01,
+                    0.02,
+                    0.03,
+                    0.04,
+                    0.05,
+                    0.06,
+                    0.07,
+                    0.08,
+                    0.09,
+                    0.1,
+                    0.11,
+                    0.12,
+                    0.13,
+                    0.14,
+                    0.15,
+                    0.16,
+                    0.17,
+                    0.18,
+                    0.19,
+                    0.2,
+                    0.21,
+                    0.22,
+                    0.23,
+                    0.24,
+                    0.25,
+                    0.26,
+                    0.27,
+                    0.28,
+                    0.29,
+                    0.3,
+                    0.31,
+                    0.32,
+                    0.33,
+                    0.34,
+                    0.35000000000000003,
+                    0.36,
+                    0.37,
+                    0.38,
+                    0.39,
+                    0.4,
+                    0.41000000000000003,
+                    0.42,
+                    0.43,
+                    0.44,
+                    0.45,
+                    0.46,
+                    0.47000000000000003,
+                    0.48,
+                    0.49,
+                    0.5,
+                    0.51,
+                    0.52,
+                    0.53,
+                    0.54,
+                    0.55,
+                    0.56,
+                    0.5700000000000001,
+                    0.58,
+                    0.59,
+                    0.6,
+                    0.61,
+                    0.62,
+                    0.63,
+                    0.64,
+                    0.65,
+                    0.66,
+                    0.67,
+                    0.68,
+                    0.6900000000000001,
+                    0.7000000000000001,
+                    0.71,
+                    0.72,
+                    0.73,
+                    0.74,
+                    0.75,
+                    0.76,
+                    0.77,
+                    0.78,
+                    0.79,
+                    0.8,
+                    0.81,
+                    0.8200000000000001,
+                    0.8300000000000001,
+                    0.84,
+                    0.85,
+                    0.86,
+                    0.87,
+                    0.88,
+                    0.89,
+                    0.9,
+                    0.91,
+                    0.92,
+                    0.93,
+                    0.9400000000000001,
+                    0.9500000000000001,
+                    0.96,
+                    0.97,
+                    0.98,
+                    0.99,
+                    1.0
+                  ],
+                  "analytic_form": "q_h(alpha)=prior_h*((1-alpha)m+alpha*p_h)/m",
+                  "common_mixture": "m=sum_h prior(h)*p_h",
+                  "curves_checked": 181,
+                  "definition": "p_h^alpha=(1-alpha)m+alpha*p_h",
+                  "finite_derivative": true,
+                  "maximum_absolute_finite_derivative": 0.6000000000000001,
+                  "maximum_adjacent_grid_change": 0.006000000000000227,
+                  "maximum_exact_vs_analytic_error": 0.0,
+                  "maximum_forward_reverse_error": 0.0,
+                  "monotonicity_failures": [],
+                  "no_discontinuity": true,
+                  "no_hysteresis": true,
+                  "passed": true,
+                  "target_index": 1
+                },
+                "D_composition": {
+                  "legacy_nine_invariants": {
+                    "observation": "K",
+                    "passed": true,
+                    "results": {
+                      "1_candidates_normalized": {
+                        "maximum_error": 6.961098364399732e-14,
+                        "passed": true
+                      },
+                      "2_prior_complexity_once": {
+                        "passed": true,
+                        "structural_prior_factor_count": 1
+                      },
+                      "3_masked_increment_zero": {
+                        "incremental_log_bf": -6.961098364399974e-14,
+                        "passed": true
+                      },
+                      "4_absent_increment_zero": {
+                        "incremental_log_bf": -6.961098364399974e-14,
+                        "passed": true
+                      },
+                      "5_identical_predictions_zero": {
+                        "incremental_log_bf": 0.0,
+                        "passed": true
+                      },
+                      "6_prequential_recombination": {
+                        "absolute_error": 8.881784197001252e-16,
+                        "passed": true,
+                        "posterior_log_odds": -5.980461694034714,
+                        "published_contributions": [
+                          -5.5749965859265505
+                        ],
+                        "recombined_log_odds": -5.980461694034715
+                      },
+                      "7_partition_included": {
+                        "candidate_row_sums": [
+                          1.0,
+                          0.9999999999999304
+                        ],
+                        "passed": true
+                      },
+                      "8_no_evidence_dynamics": {
+                        "declared_dynamics": "static",
+                        "passed": true,
+                        "predicted_final": [
+                          0.6,
+                          0.4
+                        ]
+                      },
+                      "9_independent_implementation": {
+                        "maximum_error": 6.938893903907228e-18,
+                        "passed": true
+                      }
+                    },
+                    "structure": "Z"
+                  },
+                  "passed": true
+                }
+              },
+              "structure": "Z"
+            },
+            "V2.3.2-formation": {
+              "passed": true,
+              "sections": {
+                "A_update_identity": {
+                  "candidate_labels": [
+                    "T",
+                    "D",
+                    "P"
+                  ],
+                  "maximum_absolute_identity_error": 8.881784197001252e-16,
+                  "no_authored_assignment": {
+                    "forbidden_assignment_targets": [],
+                    "functions_checked": [
+                      "score_slice",
+                      "score_history"
+                    ],
+                    "interpretation": "Posterior arrays may be computed only by normalized evidence; the audit forbids authored latent/status/winner assignments.",
+                    "passed": true,
+                    "posterior_assignment_expressions": [
+                      {
+                        "expression": "joint / evidence",
+                        "function": "score_slice",
+                        "line": 27
+                      },
+                      {
+                        "expression": "PRIOR.copy() if prior is None else np.asarray(prior).copy()",
+                        "function": "score_history",
+                        "line": 9
+                      },
+                      {
+                        "expression": "score_slice(posterior, observation, configuration, masked=masked, lesions=lesions)",
+                        "function": "score_history",
+                        "line": 18
+                      }
+                    ],
+                    "posterior_assignments_inside_if_branches": [],
+                    "winner_selection_calls": []
+                  },
+                  "pairwise_increments_checked": 480,
+                  "passed": true
+                },
+                "B_finite_information": {
+                  "absolute_error": 0.0,
+                  "asymmetric_zero_cells": [],
+                  "definition": "sup over every pair and common-support observation in every frozen V2.3.2 likelihood table",
+                  "enumerated_B_max": 3.801426508560692,
+                  "every_observed_slice_within_B_max": true,
+                  "implied_binary_probability_change_bound": 0.7399444612916254,
+                  "passed": true,
+                  "published_frozen_B_max": 3.801426508560692,
+                  "support_cells_checked": 480
+                },
+                "C_evidence_strength_homotopy": {
+                  "alpha_grid_count": 101,
+                  "definition": "p_h^alpha=(1-alpha)m+alpha*p_h",
+                  "finite_derivative_everywhere": true,
+                  "frozen_sign_monotonicity_failures": [],
+                  "frozen_sign_predicted_rows_checked": 32,
+                  "maximum_absolute_finite_derivative": 0.6448357957134957,
+                  "maximum_exact_enumeration_vs_analytic_error": 2.220446049250313e-16,
+                  "maximum_forward_reverse_hysteresis_error": 0.0,
+                  "no_discontinuity": true,
+                  "no_hysteresis": true,
+                  "passed": true,
+                  "per_observation_monotonicity_failures": 0,
+                  "q_P_curves_checked": 160,
+                  "table_count": 32
+                },
+                "D_composition": {
+                  "checks": {
+                    "independent_summation": {
+                      "maximum_log_joint_error": 8.881784197001252e-16,
+                      "maximum_posterior_error": 1.1102230246251565e-16
+                    },
+                    "masked_slice_neutrality": {
+                      "maximum_log_bf": 0.0,
+                      "maximum_posterior_error": 0.0
+                    },
+                    "matched_statistic_reorder_invariance": {
+                      "maximum_log_joint_error": 0.0
+                    },
+                    "no_event_neutrality": {
+                      "maximum_log_bf": 0.0,
+                      "maximum_posterior_error": 0.0
+                    },
+                    "prequential_recombination": {
+                      "maximum_pairwise_log_odds_error": 2.220446049250313e-16
+                    }
+                  },
+                  "maximum_error": 8.881784197001252e-16,
+                  "passed": true
+                }
+              },
+              "stage": "V2.3.2-formation"
+            }
+          },
+          "standing_stage_scope": [
+            "V2.0",
+            "V2.1",
+            "V2.2.1",
+            "V2.3.2-formation"
+          ]
+        },
+        "forbidden_path_audit": {
+          "checks": {
+            "no_action_to_H_edge": true,
+            "no_authored_status_assignment": true,
+            "no_mask_to_positive_P_edge": true,
+            "no_selected_policy_to_root_edge": true,
+            "no_winner_call": true
+          },
+          "passed": true
+        },
+        "frozen_B_max": 3.801426508560692,
+        "masked_and_delivered_composition_maximum_error": 7.105427357601002e-15,
+        "matched_evidence_schedule_maximum_error": 0.0,
+        "maximum_slice_log_BF": 2.670557431416735,
+        "maximum_update_identity_error": 9.769962616701378e-15,
+        "one_posterior_audited_trajectory_count": 2160,
+        "passed": true
+      },
+      "class": "semantic_custody",
+      "clone_failure_seeds": [],
+      "exact_failure_count": 0,
+      "frozen_and_bank_identity": {
+        "frozen_plus_repair_identity": {
+          "authorized_scientific_files": {
+            "ref/rng.py": "1ef100d4d3fcd5bf01b772c8901b67cc8bb4e177550e8f4375508e047017fe71",
+            "ref/v233.py": "c290d460473ee37b461f57e745ae7907c12a616e25ff78e6f1ed6dae9ef29f03"
+          },
+          "base_freeze_commit": "3e9bad2",
+          "base_manifest_file_count": 25,
+          "base_manifest_sha256": "19be309cb002d0f23e3ba3ca22c7245328a55482903c723656967e6a0ef86b3e",
+          "mismatches": [],
+          "passed": true,
+          "repair_addendum_sha256": "275398e76fc013a0e8715fea6bd67d9542cf4e79f716a8465fcca6ca6e6ad2c3",
+          "repair_commit": "39236e7"
+        },
+        "passed": true,
+        "qualified_bank_commit": "2638fa9",
+        "qualified_bank_counts": {
+          "moderate": 40,
+          "strong": 40,
+          "very_strong": 40
+        },
+        "qualified_bank_sha256": "78641431288b39d4f9b68bead2d92d4fda7b80bf6637976871ccee5f59e3ed61",
+        "qualified_bank_state_hash_failures": []
+      },
+      "passed": true,
+      "released_seed_block": [
+        816001,
+        816900
+      ],
+      "seed_block_used": [
+        816001,
+        816120
+      ]
+    }
+  },
+  "effect_intervals": {
+    "A_delta_L_PD": [
+      -31.5099827884789,
+      -32.141596259304194,
+      -30.876819259272036
+    ],
+    "A_delta_L_PT": [
+      -33.6038725527155,
+      -34.03671137839158,
+      -33.18439437622751
+    ],
+    "M_PD": [
+      7.281115286912794,
+      6.6968350317264465,
+      7.879348730022443
+    ],
+    "M_PD_per_withheld": [
+      1.0005413013695563,
+      0.9432893310167427,
+      1.0597887498815872
+    ],
+    "M_PT": [
+      7.773043023535939,
+      7.254798526706748,
+      8.313099568388047
+    ],
+    "M_PT_per_withheld": [
+      1.0633426146155305,
+      1.0252113130036866,
+      1.1014116783791716
+    ],
+    "fixed_M_PD": [
+      7.281115286912794,
+      6.671408311131024,
+      7.882469518011333
+    ],
+    "fixed_M_PT": [
+      7.773043023535939,
+      7.243328964525588,
+      8.316796918838838
+    ],
+    "root_revision_difference": [
+      0.004280445240440491,
+      0.0011246648937935965,
+      0.008320302967373634
+    ],
+    "transfer_difference": [
+      0.0003331451405865831,
+      7.020554806121307e-05,
+      0.0007039714631644659
+    ]
+  },
+  "failed_criteria": [],
+  "failure_interpretation": null,
+  "maintenance_seed_block_used": [
+    816001,
+    816120
+  ],
+  "round2_descriptive_additions": {
+    "causal_decomposition": {
+      "availability_identity_maximum_error_PD": 7.105427357601002e-15,
+      "availability_identity_maximum_error_PT": 1.0658141036401503e-14,
+      "classification": "descriptive_causal_decomposition",
+      "closed_yoked_direct_action_maximum_residual_PD": 0.0,
+      "closed_yoked_direct_action_maximum_residual_PT": 0.0,
+      "note": "The availability identity and endogenous policy feedback are two complementary causal results, not additive authored coefficients.",
+      "policy_generated_censoring_world_count": 120,
+      "table": "decomposition.csv"
+    },
+    "natural_constructor_weighting": {
+      "classification": "descriptive_only",
+      "conditioning_population": "bank2 candidates within the formed nonsaturated bands",
+      "criterial": false,
+      "equal_stratum_primary_means": {
+        "A_delta_L_PD": -31.5099827884789,
+        "A_delta_L_PT": -33.6038725527155,
+        "M_PD": 7.281115286912794,
+        "M_PT": 7.773043023535939,
+        "root_revision_difference": 0.004280445240440491,
+        "transfer_difference": 0.0003331451405865831
+      },
+      "per_stratum_means": {
+        "moderate": {
+          "A_delta_L_PD": -31.177843349710372,
+          "A_delta_L_PT": -33.483287634786464,
+          "M_PD": 6.849123441561304,
+          "M_PT": 7.164843892433998,
+          "root_revision_difference": 0.009366672768838367,
+          "transfer_difference": 0.0007995783315369875
+        },
+        "strong": {
+          "A_delta_L_PD": -32.201461273950464,
+          "A_delta_L_PT": -34.041548462682144,
+          "M_PD": 7.794869703921802,
+          "M_PT": 8.224248740806093,
+          "root_revision_difference": 0.0031746515906363043,
+          "transfer_difference": 0.0001182176463924975
+        },
+        "very_strong": {
+          "A_delta_L_PD": -31.150643741775866,
+          "A_delta_L_PT": -33.28678156067789,
+          "M_PD": 7.199352715255273,
+          "M_PT": 7.930036437367724,
+          "root_revision_difference": 0.00030001136184680256,
+          "transfer_difference": 8.163944383026423e-05
+        }
+      },
+      "weighted_means": {
+        "A_delta_L_PD": -31.47842994750239,
+        "A_delta_L_PT": -33.54845775282989,
+        "M_PD": 7.330902820500744,
+        "M_PT": 7.907231028400097,
+        "root_revision_difference": 0.002529947056295945,
+        "transfer_difference": 0.0001993542666666284
+      },
+      "weights": {
+        "moderate": 0.14826498422712933,
+        "strong": 0.30809674027339645,
+        "very_strong": 0.5436382754994742
+      }
+    },
+    "per_withheld_observation": {
+      "M_PD_per_withheld_95_interval": [
+        1.0005413013695563,
+        0.9432893310167427,
+        1.0597887498815872
+      ],
+      "M_PT_per_withheld_95_interval": [
+        1.0633426146155305,
+        1.0252113130036866,
+        1.1014116783791716
+      ],
+      "total_censored": 880,
+      "total_delivered": 2960
+    },
+    "unformed_negative_control": {
+      "criterial": false,
+      "reason": "The qualified input contains only the 120 formed bank states. No unformed serialized state or maintenance trace was requested; no extra constructor or maintenance run was added.",
+      "status": "NOT_COMPUTABLE_FROM_REQUESTED_TRACES"
+    }
+  },
+  "sealed_cell_instantiation": {
+    "action_cost": {
+      "default": 0.1,
+      "elevated": 0.2,
+      "source": "frozen default and public 2.0 robustness multiplier"
+    },
+    "base_closed_loop_censoring": [
+      0.35,
+      0.65
+    ],
+    "context_shift": "integrated to collapsed broadcast at mid-run",
+    "context_shift_fraction": 0.25,
+    "dose_grid": [
+      0.0,
+      0.25,
+      0.35,
+      0.5,
+      0.65,
+      0.75,
+      1.0
+    ],
+    "label_permutation_fraction": 0.5,
+    "mapping_frozen_before_execution": true,
+    "safe_reliability": {
+      "degraded_but_informative": 0.68,
+      "high": 0.85,
+      "source": "frozen default and public 0.8 robustness multiplier"
+    },
+    "schedule": [
+      "front_loaded",
+      "distributed"
+    ],
+    "world_assignment": "qualified bank ordered moderate/strong/very_strong; first 40 states per stratum paired to released seeds 816001:816120"
+  },
+  "stratum_counts": {
+    "moderate": 40,
+    "strong": 40,
+    "very_strong": 40
+  },
+  "stress": {
+    "classification": "distributional_stress_noncriterial",
+    "graded_update_distribution": {
+      "absolute_change": "|q_t(P)-q_(t-1)(P)|",
+      "artifact": "stratified-empirical-update-distribution",
+      "classification": "distributional_stress",
+      "criterial": false,
+      "publisher_source_sha256": "891092d0ddfd70e44d4d284bded8fe39eccbf758514eeab30950ba7f04283345",
+      "scientific_inference_use": "none",
+      "seed_block": [
+        751000,
+        751299
+      ],
+      "stage": "V2.3.2-formation",
+      "strata": {
+        "D-favoring": {
+          "count": 2400,
+          "maximum": 0.6212589521262386,
+          "mean": 0.02428699125849282,
+          "p50": 1.6446248743054025e-05,
+          "p90": 0.06174680760200796,
+          "p99": 0.33849190659376044
+        },
+        "P-favoring": {
+          "count": 2400,
+          "maximum": 0.7123867976129283,
+          "mean": 0.05170334613875198,
+          "p50": 0.0001403731585744583,
+          "p90": 0.22238711590851212,
+          "p99": 0.48326322689377277
+        },
+        "acute": {
+          "count": 1800,
+          "maximum": 0.7123867976129283,
+          "mean": 0.06509190966338319,
+          "p50": 0.00021254030516690433,
+          "p90": 0.2655925797488685,
+          "p99": 0.5288326924972792
+        },
+        "high-control": {
+          "count": 2400,
+          "maximum": 0.6240662870323084,
+          "mean": 0.04537937334044186,
+          "p50": 6.036661166164719e-05,
+          "p90": 0.18762573950414796,
+          "p99": 0.48326322689377277
+        },
+        "low-control": {
+          "count": 4800,
+          "maximum": 0.7123867976129283,
+          "mean": 0.026753220527647753,
+          "p50": 1.7166365929708892e-05,
+          "p90": 0.06501884307373235,
+          "p99": 0.40598584354767747
+        },
+        "no-event": {
+          "count": 300,
+          "maximum": 0.0,
+          "mean": 0.0,
+          "p50": 0.0,
+          "p90": 0.0,
+          "p99": 0.0
+        },
+        "ordinary": {
+          "count": 5400,
+          "maximum": 0.491505873043217,
+          "mean": 0.022251947621422213,
+          "p50": 1.3675740328487212e-05,
+          "p90": 0.057501744154067794,
+          "p99": 0.37418471552667476
+        }
+      },
+      "stratum_definitions": {
+        "D-favoring": "event slices generated under H_formation=D",
+        "P-favoring": "event slices generated under H_formation=P",
+        "acute": "event=true and precision=overwhelm",
+        "high-control": "event=true and control=high",
+        "low-control": "event=true and control=low",
+        "no-event": "event=false, separate one-slice trajectory",
+        "ordinary": "event=true and precision=ordinary"
+      },
+      "warning": "Descriptive only. No pass/fail threshold may be inferred. Any future prospective quantile criterion requires matched strata and populations, world-blocked or conformal thresholds, quantile uncertainty, and no unacknowledged enrichment."
+    },
+    "private_cell_summaries": {
+      "action_cost": {
+        "default": {
+          "count": 60,
+          "mean_M_PD": 6.955903444606204,
+          "mean_M_PT": 7.357254123162079
+        },
+        "elevated": {
+          "count": 60,
+          "mean_M_PD": 7.606327129219383,
+          "mean_M_PT": 8.188831923909799
+        }
+      },
+      "base_censoring": {
+        "0.35": {
+          "count": 60,
+          "mean_M_PD": 5.314885010852711,
+          "mean_M_PT": 5.6042130375437695
+        },
+        "0.65": {
+          "count": 60,
+          "mean_M_PD": 9.247345562972876,
+          "mean_M_PT": 9.94187300952811
+        }
+      },
+      "context_shift": {
+        "False": {
+          "count": 90,
+          "mean_M_PD": 7.378888712027446,
+          "mean_M_PT": 7.830515886675695
+        },
+        "True": {
+          "count": 30,
+          "mean_M_PD": 6.987795011568835,
+          "mean_M_PT": 7.600624434116676
+        }
+      },
+      "labels_permuted": {
+        "False": {
+          "count": 60,
+          "mean_M_PD": 7.606327129219383,
+          "mean_M_PT": 8.188831923909799
+        },
+        "True": {
+          "count": 60,
+          "mean_M_PD": 6.955903444606204,
+          "mean_M_PT": 7.357254123162079
+        }
+      },
+      "safe_reliability": {
+        "degraded": {
+          "count": 60,
+          "mean_M_PD": 7.403849006703022,
+          "mean_M_PT": 7.796187390694921
+        },
+        "high": {
+          "count": 60,
+          "mean_M_PD": 7.158381567122564,
+          "mean_M_PT": 7.749898656376957
+        }
+      },
+      "schedule": {
+        "distributed": {
+          "count": 60,
+          "mean_M_PD": 7.612001311714796,
+          "mean_M_PT": 8.00930102925248
+        },
+        "front_loaded": {
+          "count": 60,
+          "mean_M_PD": 6.95022926211079,
+          "mean_M_PT": 7.536785017819398
+        }
+      }
+    }
+  },
+  "unused_released_seed_block": [
+    816121,
+    816900
+  ],
+  "verdict": "PASS",
+  "verdict_classes": {
+    "distributional_stress": "DESCRIPTIVE_ONLY",
+    "process_custody": "PASS",
+    "scientific": "PASS",
+    "semantic": "PASS"
+  },
+  "world_count": 120
+}

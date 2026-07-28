@@ -1,0 +1,69 @@
+{
+  "challenge": "C-V233-M",
+  "challenge_runner_sha256": "e2579ef67d6af868a5ca8005cc22b26f8bb9742c5c600bd946c8fda9f11ec276",
+  "challenge_spec_sha256": "8b1847339374314d291ce380e44ca5a483128ef2578635a6d6b1e6a6be658edf",
+  "criterion_verdicts": {
+    "1_safe_full_observation_erodes_P": "PASS",
+    "2_censoring_protects": "PASS",
+    "3_complete_censoring_neutral": "PASS",
+    "4_closed_loop_yoked_identity": "PASS",
+    "5_no_action_bonus": "PASS",
+    "6_dose_response": "PASS",
+    "7_D_P_danger_control": "PASS",
+    "8_root_transfer_follows_delivered_evidence": "PASS",
+    "9_constitution_identity_custody": "PASS"
+  },
+  "engine_code_changed": false,
+  "identity": {
+    "frozen_plus_repair_identity": {
+      "authorized_scientific_files": {
+        "ref/rng.py": "1ef100d4d3fcd5bf01b772c8901b67cc8bb4e177550e8f4375508e047017fe71",
+        "ref/v233.py": "c290d460473ee37b461f57e745ae7907c12a616e25ff78e6f1ed6dae9ef29f03"
+      },
+      "base_freeze_commit": "3e9bad2",
+      "base_manifest_file_count": 25,
+      "base_manifest_sha256": "19be309cb002d0f23e3ba3ca22c7245328a55482903c723656967e6a0ef86b3e",
+      "mismatches": [],
+      "passed": true,
+      "repair_addendum_sha256": "275398e76fc013a0e8715fea6bd67d9542cf4e79f716a8465fcca6ca6e6ad2c3",
+      "repair_commit": "39236e7"
+    },
+    "passed": true,
+    "qualified_bank_commit": "2638fa9",
+    "qualified_bank_counts": {
+      "moderate": 40,
+      "strong": 40,
+      "very_strong": 40
+    },
+    "qualified_bank_sha256": "78641431288b39d4f9b68bead2d92d4fda7b80bf6637976871ccee5f59e3ed61",
+    "qualified_bank_state_hash_failures": []
+  },
+  "maintenance_seed_block_released": [
+    816001,
+    816900
+  ],
+  "maintenance_seed_block_used": [
+    816001,
+    816120
+  ],
+  "qualified_bank_commit": "2638fa9",
+  "result_hashes": {
+    "results/challenges/C-V233-M/decomposition.csv": "4112774f08d244bb7bb7e18d34fc68c98449ece6c62190bbe889d27c015f9f57",
+    "results/challenges/C-V233-M/failed-worlds.json": "9f3cd932d8749242f3a608728f578db8317a2081f91cdd9136de757a31ed5e16",
+    "results/challenges/C-V233-M/per_dose.csv": "74d62da8e082d2dc190ac82babf184d95a82acea44a245c6b4c857caa5174fd7",
+    "results/challenges/C-V233-M/per_world.csv": "6995d1c9e26d06fdac5c16d68f82b3b6d8bccd93b4fb49d22789fb11834d7c76",
+    "results/challenges/C-V233-M/report.md": "41d047369051b09d8c95bda6a57b6c72e9aed43262d58feb613da6cf2a943bb9",
+    "results/challenges/C-V233-M/seed_ledger.csv": "d354b498bd0c11985e8237c8363f45479efac280850cdcf7918f47b13f9fed8f",
+    "results/challenges/C-V233-M/stress.json": "b35665047bd93fc94d22c647b3abf94c17ea9972c8a2f692a08204b7c8b5e8e3",
+    "results/challenges/C-V233-M/summary.json": "010c62bd700c545c30af3dc83d995083e5078af174f04753ae8e3ab5918a6c3d",
+    "results/milestone-4-v2.3.3-gate6-maintenance-update.md": "cc68613c19aa83201986bf556906178768c1abc2dafe1a801db347604be91d8b"
+  },
+  "stage": "V2.3.3",
+  "verdict": "PASS",
+  "verdict_classes": {
+    "distributional_stress": "DESCRIPTIVE_ONLY",
+    "process_custody": "PASS",
+    "scientific": "PASS",
+    "semantic": "PASS"
+  }
+}
