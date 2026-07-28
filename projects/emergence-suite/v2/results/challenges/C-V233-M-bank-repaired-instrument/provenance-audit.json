@@ -1,0 +1,2419 @@
+{
+  "challenge": "C-V233-M-bank (repaired instrument)",
+  "constructor_source_audit": {
+    "contains_eligibility_thresholds": false,
+    "contains_formed_assignment": false,
+    "contains_stratum_classifier": false,
+    "passed": true,
+    "posterior_source_expression_present": true
+  },
+  "declared_prior_sources": {
+    "G": [
+      0.5,
+      0.5
+    ],
+    "H_formation": [
+      0.5,
+      0.25,
+      0.25
+    ],
+    "association": "frozen V2.2.1 spike-and-slab prior",
+    "availability_beta": [
+      1.0,
+      1.0
+    ]
+  },
+  "one_posterior_audits": [
+    {
+      "passed": true,
+      "seed": 815121
+    },
+    {
+      "passed": true,
+      "seed": 815435
+    },
+    {
+      "passed": true,
+      "seed": 815440
+    },
+    {
+      "passed": true,
+      "seed": 815298
+    },
+    {
+      "passed": true,
+      "seed": 815672
+    },
+    {
+      "passed": true,
+      "seed": 815208
+    },
+    {
+      "passed": true,
+      "seed": 815417
+    },
+    {
+      "passed": true,
+      "seed": 815554
+    },
+    {
+      "passed": true,
+      "seed": 815632
+    },
+    {
+      "passed": true,
+      "seed": 815392
+    }
+  ],
+  "retained_state_audits": [
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815003
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815008
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815018
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815020
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815025
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815032
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815033
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815044
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815048
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815056
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815058
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815059
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815065
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815072
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815075
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815080
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815104
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815115
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815121
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815123
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815129
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815139
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815144
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815147
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815152
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815156
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815160
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815162
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815168
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815171
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815193
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815194
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815200
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815203
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815208
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815211
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815216
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815229
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815238
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815240
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815241
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815248
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815256
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815261
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815264
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815265
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815272
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815288
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815289
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815296
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815298
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815299
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815306
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815315
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815346
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815352
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815360
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815362
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815368
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815369
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815379
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815385
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815392
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815400
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815402
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815410
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815412
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815417
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815433
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815435
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815440
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815472
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815490
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815501
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815554
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815560
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815608
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815632
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815657
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815672
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815716
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815720
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815721
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815753
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815761
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815776
+    },
+    {
+      "errors": {
+        "avoid_availability_posterior_error": 0.0,
+        "candidate_log_evidence_error": 0.0,
+        "developmental_configuration_error": 0.0,
+        "developmental_observation_error": 0.0,
+        "engage_availability_posterior_error": 0.0,
+        "formation_posterior_error": 0.0,
+        "root_posterior_error": 0.0,
+        "treated_association_readout_error": 0.0,
+        "treated_association_structure_error": 0.0,
+        "treated_cue_posterior_error": 0.0,
+        "treated_precision_posterior_error": 0.0,
+        "untreated_association_readout_error": 0.0,
+        "untreated_association_structure_error": 0.0,
+        "untreated_cue_posterior_error": 0.0,
+        "untreated_precision_posterior_error": 0.0
+      },
+      "maximum_numeric_error": 0.0,
+      "passed": true,
+      "provenance_hash_errors": {
+        "formation_engine": false,
+        "formation_parameters": false,
+        "maintenance_parameters": false
+      },
+      "seed": 815778
+    }
+  ]
+}

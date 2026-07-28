@@ -44,12 +44,27 @@ from ref.v233 import (  # noqa: E402
 
 
 CHALLENGE = "C-V233-M-bank"
+REPAIRED_MODE = "--repaired-instrument" in sys.argv
+RUN_LABEL = (
+    f"{CHALLENGE} (repaired instrument)"
+    if REPAIRED_MODE
+    else CHALLENGE
+)
 FREEZE_COMMIT = "3e9bad2"
 FIRST_SEED = 815001
 LAST_SEED = 815800
 TARGET_PER_STRATUM = 40
 STRATA = ("moderate", "strong", "very_strong")
-RESULT_DIR = ROOT / "results" / "challenges" / CHALLENGE
+RESULT_DIR = (
+    ROOT
+    / "results"
+    / "challenges"
+    / (
+        "C-V233-M-bank-repaired-instrument"
+        if REPAIRED_MODE
+        else CHALLENGE
+    )
+)
 MANIFEST_REL = (
     "projects/emergence-suite/v2/results/V2.3.3/"
     "freeze-manifest.json"
@@ -57,9 +72,26 @@ MANIFEST_REL = (
 CHALLENGE_PATH = (
     ROOT / "sealed-revealed" / "C-V233-M-bank-challenge.md"
 )
-ADDENDUM_PATH = ROOT / "results" / "V2.3.3" / "gate6-addendum.json"
-MILESTONE_PATH = (
-    ROOT / "results" / "milestone-4-v2.3.3-gate6-bank-update.md"
+ADDENDUM_PATH = (
+    ROOT
+    / "results"
+    / "V2.3.3"
+    / (
+        "gate6-repaired-instrument-addendum.json"
+        if REPAIRED_MODE
+        else "gate6-addendum.json"
+    )
+)
+MILESTONE_PATH = ROOT / "results" / (
+    "milestone-4-v2.3.3-gate6-bank-repaired-update.md"
+    if REPAIRED_MODE
+    else "milestone-4-v2.3.3-gate6-bank-update.md"
+)
+REPAIR_ADDENDUM_PATH = (
+    ROOT
+    / "results"
+    / "V2.3.3"
+    / "seed-authorization-repair-addendum.json"
 )
 TOLERANCE = 1e-10
 
@@ -99,14 +131,45 @@ def verify_frozen_identity() -> dict[str, Any]:
     if local_path.read_bytes() != committed_bytes:
         raise RuntimeError("local V2.3.3 manifest differs from 3e9bad2")
     manifest = json.loads(committed_bytes)
+    authorized_hashes = {}
+    repair_addendum_sha256 = None
+    if REPAIRED_MODE:
+        repair = json.loads(REPAIR_ADDENDUM_PATH.read_text())
+        authorized_hashes = {
+            relative: detail["after_sha256"]
+            for relative, detail in repair["authorized_guard_diff"][
+                "scientific_files"
+            ].items()
+        }
+        repair_addendum_sha256 = sha256(REPAIR_ADDENDUM_PATH)
     mismatches = []
     for relative, expected in manifest["files"].items():
         path = ROOT / relative
         actual = sha256(path) if path.is_file() else None
-        if actual != expected:
+        effective_expected = authorized_hashes.get(relative, expected)
+        if actual != effective_expected:
             mismatches.append(
-                {"path": relative, "expected": expected, "actual": actual}
+                {
+                    "path": relative,
+                    "expected": effective_expected,
+                    "base_expected": expected,
+                    "actual": actual,
+                }
             )
+    if REPAIRED_MODE:
+        for relative, expected in authorized_hashes.items():
+            if relative in manifest["files"]:
+                continue
+            actual = sha256(ROOT / relative)
+            if actual != expected:
+                mismatches.append(
+                    {
+                        "path": relative,
+                        "expected": expected,
+                        "base_expected": None,
+                        "actual": actual,
+                    }
+                )
     if mismatches:
         raise RuntimeError(f"frozen identity mismatch: {mismatches}")
     return {
@@ -114,6 +177,9 @@ def verify_frozen_identity() -> dict[str, Any]:
         "manifest_sha256": hashlib.sha256(committed_bytes).hexdigest(),
         "verified_file_count": len(manifest["files"]),
         "mismatches": mismatches,
+        "repair_mode": REPAIRED_MODE,
+        "authorized_changed_files": sorted(authorized_hashes),
+        "repair_addendum_sha256": repair_addendum_sha256,
     }
 
 
@@ -208,9 +274,11 @@ def provenance_audit(state: dict[str, Any]) -> dict[str, Any]:
     for time, configuration in enumerate(expected_configurations):
         row = slice_distribution("P", **configuration)
         index = int(
-            component_rng(seed, f"v233-bank-development-{time}").choice(
-                len(row), p=row
-            )
+            component_rng(
+                seed,
+                f"v233-bank-development-{time}",
+                released_block=(FIRST_SEED, LAST_SEED),
+            ).choice(len(row), p=row)
         )
         generated_observations.append(SUPPORT[index])
 
@@ -220,7 +288,9 @@ def provenance_audit(state: dict[str, Any]) -> dict[str, Any]:
     treated_state = learn_association(matches, mismatches)
     treated_association = model_averaged_association(treated_state)
     untreated_rng = component_rng(
-        seed, "v233-bank-untreated-association"
+        seed,
+        "v233-bank-untreated-association",
+        released_block=(FIRST_SEED, LAST_SEED),
     )
     untreated_matches = int(
         untreated_rng.binomial(
@@ -410,7 +480,9 @@ def run_bank() -> tuple[
     for position, seed in enumerate(
         range(FIRST_SEED, LAST_SEED + 1), start=1
     ):
-        state = construct_bank_state(seed)
+        state = construct_bank_state(
+            seed, released_block=(FIRST_SEED, LAST_SEED)
+        )
         serialized = canonical_state_bytes(state)
         digest = hashlib.sha256(serialized).hexdigest()
         reload_digest = canonical_state_hash(json.loads(serialized))
@@ -458,6 +530,9 @@ def run_bank() -> tuple[
                 "state_sha256": digest,
                 "reload_sha256": reload_digest,
                 "rehash_ok": int(rehash_ok),
+                "released_block_authorization": (
+                    f"{FIRST_SEED}:{LAST_SEED}"
+                ),
                 "cumulative_moderate": counts["moderate"],
                 "cumulative_strong": counts["strong"],
                 "cumulative_very_strong": counts["very_strong"],
@@ -533,7 +608,6 @@ def main() -> None:
         not bank["rehash_failures"]
         and ledger_complete
         and len(ledger) == 800
-        and len(retained) == 120
     )
     verdict = "PASS" if criterion_1 and criterion_2 and criterion_3 else "FAIL"
     eligibility = {
@@ -548,8 +622,18 @@ def main() -> None:
     }
     q_values = [float(row["q_P"]) for row in ledger]
     summary = {
-        "challenge": CHALLENGE,
+        "challenge": RUN_LABEL,
         "verdict": verdict,
+        "instrument_status": (
+            "REPAIRED_SEED_AUTHORIZATION"
+            if REPAIRED_MODE
+            else "FROZEN_AS_RUN"
+        ),
+        "original_as_run_verdict_preserved": (
+            "results/challenges/C-V233-M-bank/summary.json"
+            if REPAIRED_MODE
+            else None
+        ),
         "seed_block_used": [FIRST_SEED, LAST_SEED],
         "candidate_count": len(ledger),
         "frozen_identity": identity,
@@ -634,7 +718,7 @@ def main() -> None:
     write_json(
         RESULT_DIR / "banked_states.json",
         {
-            "challenge": CHALLENGE,
+            "challenge": RUN_LABEL,
             "retention_rule": "first 40 eligible per stratum",
             "states": retained,
         },
@@ -642,7 +726,7 @@ def main() -> None:
     write_json(
         RESULT_DIR / "provenance-audit.json",
         {
-            "challenge": CHALLENGE,
+            "challenge": RUN_LABEL,
             "declared_prior_sources": {
                 "H_formation": PRIOR.tolist(),
                 "G": [0.5, 0.5],
@@ -662,21 +746,27 @@ def main() -> None:
             f"`{details['rate_95_wilson'][0]:.6f}` "
             f"(95% Wilson "
             f"`[{details['rate_95_wilson'][1]:.6f}, "
-            f"{details['rate_95_wilson'][2]:.6f}]`); filled at "
-            f"position `{details['fill']['position']}`, seed "
-            f"`{details['fill']['seed']}`."
+            f"{details['rate_95_wilson'][2]:.6f}]`); "
+            + (
+                f"filled at position `{details['fill']['position']}`, "
+                f"seed `{details['fill']['seed']}`."
+                if details["fill"] is not None
+                else "did not reach 40 eligible worlds."
+            )
         )
         for stratum, details in eligibility.items()
     )
     q_summary = summary["criteria"]["4_distributional_stress"][
         "q0_P_distribution"
     ]
-    report = f"""# {CHALLENGE}
+    report = f"""# {RUN_LABEL}
 
 Sealed verdict: **{verdict}**.
 
 The frozen `3e9bad2` identity check verified all
 `{identity['verified_file_count']}` manifest files with zero mismatches.
+The only authorized instrument difference is the released-seed guard recorded
+in `results/V2.3.3/seed-authorization-repair-addendum.json`.
 Exactly 800 candidate seeds (`815001:815800`) were consumed once in ascending
 order. The maintenance seed block remains closed and was not accessed.
 
@@ -731,8 +821,21 @@ integrity: **{'PASS' if criterion_2 else 'FAIL'}**. Process custody:
     ]
     addendum = {
         "stage": "V2.3.3",
-        "challenge": CHALLENGE,
+        "challenge": RUN_LABEL,
         "freeze_commit": FREEZE_COMMIT,
+        "instrument_status": (
+            "REPAIRED_SEED_AUTHORIZATION"
+            if REPAIRED_MODE
+            else "FROZEN_AS_RUN"
+        ),
+        "repair_addendum_sha256": (
+            sha256(REPAIR_ADDENDUM_PATH) if REPAIRED_MODE else None
+        ),
+        "original_as_run_verdict_preserved": (
+            "results/challenges/C-V233-M-bank/summary.json"
+            if REPAIRED_MODE
+            else None
+        ),
         "sealed_gate_6_bank_run": True,
         "maintenance_challenge_run": False,
         "maintenance_seed_block_status": "CLOSED_NOT_ACCESSED",
@@ -760,7 +863,7 @@ integrity: **{'PASS' if criterion_2 else 'FAIL'}**. Process custody:
     MILESTONE_PATH.write_text(
         f"""# V2.3.3 Gate 6 bank qualification update
 
-`{CHALLENGE}` verdict: **{verdict}**. The frozen identity verified
+`{RUN_LABEL}` verdict: **{verdict}**. The frozen identity verified
 {identity['verified_file_count']}/{identity['verified_file_count']} files.
 The 800-seed ITS block filled moderate, strong, and very-strong strata with
 {bank['eligible_counts']['moderate']}, {bank['eligible_counts']['strong']},
@@ -769,6 +872,224 @@ All 120 retained-state provenance audits, ten one-posterior audits, 800
 serialize/reload hashes, and the gap-free ledger passed. q0(P) and fill curves
 are published as non-criterial stress results. The maintenance challenge and
 its `816001:816900` seed block remain closed and were not accessed.
+""",
+        encoding="utf-8",
+    )
+    addendum["result_hashes"][
+        str(MILESTONE_PATH.relative_to(ROOT))
+    ] = sha256(MILESTONE_PATH)
+    write_json(ADDENDUM_PATH, addendum)
+
+
+def finalize_repaired_persisted_results() -> None:
+    """Finalize the completed repaired run without constructing again."""
+    if not REPAIRED_MODE:
+        raise RuntimeError("repaired finalization requires repaired mode")
+    summary_path = RESULT_DIR / "summary.json"
+    raw_summary_sha256 = sha256(summary_path)
+    summary = json.loads(summary_path.read_text())
+    with (RESULT_DIR / "per_seed.csv").open(
+        newline="", encoding="utf-8"
+    ) as handle:
+        ledger = list(csv.DictReader(handle))
+    custody_pass = (
+        len(ledger) == 800
+        and [int(row["seed"]) for row in ledger]
+        == list(range(FIRST_SEED, LAST_SEED + 1))
+        and all(row["rehash_ok"] == "1" for row in ledger)
+    )
+    summary["criteria"]["3_process_custody"]["verdict"] = (
+        "PASS" if custody_pass else "FAIL"
+    )
+    summary["verdict_classes"]["process_custody"] = (
+        "PASS" if custody_pass else "FAIL"
+    )
+    summary["execution_notes"] = {
+        "scientific_run_count": 1,
+        "constructor_rerun_after_reporting_exception": False,
+        "persisted_raw_summary_sha256": raw_summary_sha256,
+        "reporting_exception_verbatim": (
+            "TypeError: 'NoneType' object is not subscriptable"
+        ),
+        "reporting_exception_cause": (
+            "The report formatter assumed every stratum had a fill "
+            "record. Moderate and strong correctly had fill=null."
+        ),
+        "analysis_only_classification_correction": (
+            "Process custody is scored from the gap-free ledger and "
+            "rehash audits only. The retained-state shortfall belongs "
+            "exclusively to scientific criterion 1."
+        ),
+    }
+    write_json(summary_path, summary)
+    eligibility = summary["criteria"]["1_scientific_precondition"][
+        "eligibility"
+    ]
+    eligibility_lines = []
+    for stratum in STRATA:
+        details = eligibility[stratum]
+        fill = details["fill"]
+        fill_text = (
+            f"filled at position `{fill['position']}`, seed "
+            f"`{fill['seed']}`"
+            if fill is not None
+            else "did not reach 40 eligible worlds"
+        )
+        interval = details["rate_95_wilson"]
+        eligibility_lines.append(
+            f"- {stratum}: {details['eligible_count']}/800, rate "
+            f"`{interval[0]:.6f}` (95% Wilson "
+            f"`[{interval[1]:.6f}, {interval[2]:.6f}]`); {fill_text}."
+        )
+    semantic = summary["criteria"]["2_semantic_integrity"]
+    custody = summary["criteria"]["3_process_custody"]
+    stress = summary["criteria"]["4_distributional_stress"][
+        "q0_P_distribution"
+    ]
+    (RESULT_DIR / "execution-notes.json").write_text(
+        json.dumps(
+            {
+                "challenge": RUN_LABEL,
+                **summary["execution_notes"],
+                "scientific_artifact_hashes_before_finalization": {
+                    "per_seed.csv": (
+                        "038ed15f7155266c09dee235e8433962951312ee5a33c0f3bd898fb465ebea09"
+                    ),
+                    "banked_states.json": (
+                        "59922f33b1083cf090176bf9dcef0a147bc794c8d88afc697b3ade5a73b6174d"
+                    ),
+                    "provenance-audit.json": (
+                        "046f731bdce87d3695c3ca5b5b70a72d0c85e7dd8ea42e4956c4f29174d95183"
+                    ),
+                    "raw_summary.json": raw_summary_sha256,
+                },
+            },
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    report = f"""# {RUN_LABEL}
+
+Sealed invalidate-and-repeat verdict: **FAIL**.
+
+The repaired instrument consumed all 800 candidate seeds (`815001:815800`)
+once in ascending order. No constructor call was repeated after the completed
+run. The original frozen-instrument `FAIL_UNEXECUTABLE` remains preserved
+under `results/challenges/C-V233-M-bank/`.
+
+## Scientific precondition — FAIL
+
+{chr(10).join(eligibility_lines)}
+
+Moderate is short by 26 worlds and strong by 7 worlds. Very-strong exceeds
+the minimum by 37 and first filled at position 402. Under the precommitted
+interpretation, the two shortfalls are formation-yield findings about the
+frozen constructor. No regeneration or rule change was attempted.
+
+## Semantic integrity — PASS
+
+All `{semantic['retained_state_provenance_count']}` retained states
+reconstructed exactly from the declared priors and frozen update equations;
+maximum provenance error was
+`{semantic['maximum_provenance_error']:.3g}`. The one-posterior audit passed
+on all ten hash-seeded random retained states, with no failures.
+
+## Process custody — PASS
+
+The ITS ledger contains 800 consecutive released seeds with no gaps. All
+`{custody['candidate_rehash_pass_count']}` candidate states serialized,
+reloaded, and rehashed bitwise with zero failures. Released-block
+authorization `815001:815800` is logged on every row.
+
+The completed run initially stopped during Markdown rendering because the
+formatter assumed every stratum had a non-null fill record. Scientific
+outputs had already been persisted. Finalization used those artifacts without
+rerunning the constructor. The initial custody classifier also duplicated the
+120-state yield requirement; this was corrected analysis-only so criterion 3
+reflects its sealed ledger/rehash definition.
+
+## Distributional stress — descriptive only
+
+q0(P) had mean `{stress['mean']:.6f}`, median `{stress['median']:.6f}`, p05
+`{stress['p05']:.6f}`, p95 `{stress['p95']:.6f}`, minimum
+`{stress['minimum']:.6f}`, and maximum `{stress['maximum']:.6f}`. Full values
+and fill curves are in `per_seed.csv`. This class is non-criterial.
+
+## Standing
+
+Scientific precondition: **FAIL**. Semantic integrity: **PASS**. Process
+custody: **PASS**. Distributional stress: **DESCRIPTIVE ONLY**. The overall
+verdict is **FAIL** because criteria 1–3 are conjunctive. The maintenance
+bundle and seeds `816001:816900` remain closed and were not accessed.
+"""
+    (RESULT_DIR / "report.md").write_text(report, encoding="utf-8")
+
+    repair = json.loads(REPAIR_ADDENDUM_PATH.read_text())
+    repair["repaired_bank_rerun_completed"] = True
+    repair["repaired_bank_rerun"] = {
+        "label": RUN_LABEL,
+        "verdict": "FAIL",
+        "scientific_precondition": "FAIL",
+        "semantic_integrity": "PASS",
+        "process_custody": "PASS",
+        "distributional_stress": "DESCRIPTIVE_ONLY",
+        "constructor_run_count": 1,
+        "maintenance_seed_block_status": "CLOSED_NOT_ACCESSED",
+    }
+    write_json(REPAIR_ADDENDUM_PATH, repair)
+    result_files = [
+        RESULT_DIR / "per_seed.csv",
+        RESULT_DIR / "banked_states.json",
+        RESULT_DIR / "provenance-audit.json",
+        RESULT_DIR / "execution-notes.json",
+        RESULT_DIR / "summary.json",
+        RESULT_DIR / "report.md",
+    ]
+    addendum = {
+        "stage": "V2.3.3",
+        "challenge": RUN_LABEL,
+        "freeze_commit": FREEZE_COMMIT,
+        "instrument_status": "REPAIRED_SEED_AUTHORIZATION",
+        "invalidate_and_repeat": True,
+        "scientific_run_count": 1,
+        "original_as_run_verdict_preserved": (
+            "results/challenges/C-V233-M-bank/summary.json"
+        ),
+        "verdict": "FAIL",
+        "criterion_verdicts": {
+            "scientific_precondition": "FAIL",
+            "semantic_integrity": "PASS",
+            "process_custody": "PASS",
+            "distributional_stress": "DESCRIPTIVE_ONLY",
+        },
+        "maintenance_challenge_run": False,
+        "maintenance_seed_block_status": "CLOSED_NOT_ACCESSED",
+        "seed_block_used": [FIRST_SEED, LAST_SEED],
+        "frozen_identity": summary["frozen_identity"],
+        "repair_addendum_sha256": sha256(REPAIR_ADDENDUM_PATH),
+        "challenge_spec_sha256": sha256(CHALLENGE_PATH),
+        "challenge_runner_sha256": sha256(Path(__file__)),
+        "result_hashes": {
+            str(path.relative_to(ROOT)): sha256(path)
+            for path in result_files
+        },
+        "frozen_manifest_modified": False,
+    }
+    write_json(ADDENDUM_PATH, addendum)
+    MILESTONE_PATH.write_text(
+        """# V2.3.3 Gate 6 bank repaired-instrument update
+
+`C-V233-M-bank (repaired instrument)` verdict: **FAIL**. The authorized
+seed-guard repair passed 82/82 cumulative tests and preserved open seed
+760000 byte-for-byte. On the one repaired-instrument run, the 800 candidates
+yielded 14 moderate, 33 strong, and 77 very-strong eligible worlds. Moderate
+and strong therefore missed the sealed 40-world minimum; very-strong filled
+at position 402 (seed 815402). Semantic integrity passed with zero provenance
+error, and custody passed with a gap-free 800-row ledger and 800/800 bitwise
+rehashes. The original `FAIL_UNEXECUTABLE` remains in the record. The
+maintenance bundle and seeds `816001:816900` remain closed and untouched.
 """,
         encoding="utf-8",
     )
@@ -1029,5 +1350,10 @@ architecture/prospection failure. The maintenance bundle and seeds
 if __name__ == "__main__":
     if len(sys.argv) == 2 and sys.argv[1] == "--finalize-seed-guard-failure":
         finalize_observed_seed_guard_failure()
+    elif (
+        REPAIRED_MODE
+        and "--finalize-persisted-results" in sys.argv
+    ):
+        finalize_repaired_persisted_results()
     else:
         main()

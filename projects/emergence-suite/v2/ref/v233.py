@@ -210,7 +210,11 @@ def _developmental_configuration(seed: int, time: int) -> dict[str, Any]:
     return {"event": True, **profile}
 
 
-def construct_bank_state(seed: int) -> dict[str, Any]:
+def construct_bank_state(
+    seed: int,
+    *,
+    released_block: tuple[int, int] | None = None,
+) -> dict[str, Any]:
     """Construct one state without applying eligibility or posterior writes."""
     bank = PARAMETERS["formed_world_bank"]
     lengths = bank["developmental_history_length_options"]
@@ -224,7 +228,9 @@ def construct_bank_state(seed: int) -> dict[str, Any]:
         row = slice_distribution("P", **configuration)
         index = int(
             component_rng(
-                seed, f"v233-bank-development-{time}"
+                seed,
+                f"v233-bank-development-{time}",
+                released_block=released_block,
             ).choice(len(row), p=row)
         )
         observations.append(SUPPORT[index])
@@ -235,7 +241,11 @@ def construct_bank_state(seed: int) -> dict[str, Any]:
     mismatches = max(0, len(observations) - matches)
     treated_state = learn_association(matches, mismatches)
     treated_association = model_averaged_association(treated_state)
-    untreated_rng = component_rng(seed, "v233-bank-untreated-association")
+    untreated_rng = component_rng(
+        seed,
+        "v233-bank-untreated-association",
+        released_block=released_block,
+    )
     untreated_matches = int(
         untreated_rng.binomial(max(4, length), ASSOCIATION_HIGH)
     )

@@ -1,0 +1,141 @@
+{
+  "candidate_count": 800,
+  "challenge": "C-V233-M-bank (repaired instrument)",
+  "challenge_spec_sha256": "a27310d7c6a6bc2396bc85ad93a8ace978c546ec6e3f5ecf7cdc249ac70db2b7",
+  "criteria": {
+    "1_scientific_precondition": {
+      "eligibility": {
+        "moderate": {
+          "eligible_count": 14,
+          "fill": null,
+          "rate_95_wilson": [
+            0.0175,
+            0.010452446404837008,
+            0.02915933780737595
+          ]
+        },
+        "strong": {
+          "eligible_count": 33,
+          "fill": null,
+          "rate_95_wilson": [
+            0.04125,
+            0.029520803096554735,
+            0.05736397619329542
+          ]
+        },
+        "very_strong": {
+          "eligible_count": 77,
+          "fill": {
+            "position": 402,
+            "seed": 815402
+          },
+          "rate_95_wilson": [
+            0.09625,
+            0.07769946949995973,
+            0.11865961418020812
+          ]
+        }
+      },
+      "retained_counts": {
+        "moderate": 14,
+        "strong": 33,
+        "very_strong": 40
+      },
+      "verdict": "FAIL"
+    },
+    "2_semantic_integrity": {
+      "constructor_source_audit": {
+        "contains_eligibility_thresholds": false,
+        "contains_formed_assignment": false,
+        "contains_stratum_classifier": false,
+        "passed": true,
+        "posterior_source_expression_present": true
+      },
+      "maximum_provenance_error": 0.0,
+      "one_posterior_failures": [],
+      "one_posterior_sample_method": "ten retained states sampled without replacement by a deterministic PRNG seeded from the revealed challenge SHA-256; custody-only, not scientific",
+      "one_posterior_sample_seeds": [
+        815121,
+        815435,
+        815440,
+        815298,
+        815672,
+        815208,
+        815417,
+        815554,
+        815632,
+        815392
+      ],
+      "provenance_failure_seeds": [],
+      "retained_state_provenance_count": 87,
+      "verdict": "PASS"
+    },
+    "3_process_custody": {
+      "candidate_rehash_failure_seeds": [],
+      "candidate_rehash_pass_count": 800,
+      "ledger_complete_no_gaps": true,
+      "ledger_row_count": 800,
+      "retained_state_count": 87,
+      "verdict": "PASS"
+    },
+    "4_distributional_stress": {
+      "criterial": false,
+      "exclusion_counts": {
+        "above_nonsaturation_range": 626,
+        "below_formed_range": 50,
+        "eligible_after_stratum_quota": 37,
+        "retained_first_eligible": 87
+      },
+      "fill_curve_location": "per_seed.csv cumulative_* columns",
+      "q0_P_distribution": {
+        "count": 800,
+        "maximum": 0.9999999999998855,
+        "mean": 0.9389419681408628,
+        "median": 0.9998105437815212,
+        "minimum": 0.004550045169579602,
+        "p01": 0.04006942948402871,
+        "p05": 0.5304380456160258,
+        "p25": 0.9881077886268699,
+        "p75": 0.9999978016999127,
+        "p95": 0.9999999997396545,
+        "p99": 0.9999999999977953
+      },
+      "verdict": "DESCRIPTIVE_ONLY"
+    }
+  },
+  "execution_notes": {
+    "analysis_only_classification_correction": "Process custody is scored from the gap-free ledger and rehash audits only. The retained-state shortfall belongs exclusively to scientific criterion 1.",
+    "constructor_rerun_after_reporting_exception": false,
+    "persisted_raw_summary_sha256": "1368c6aee8a0b11ba54942bf8fe46b99fd5a9d5174a571d993fca90aaac3f5dc",
+    "reporting_exception_cause": "The report formatter assumed every stratum had a fill record. Moderate and strong correctly had fill=null.",
+    "reporting_exception_verbatim": "TypeError: 'NoneType' object is not subscriptable",
+    "scientific_run_count": 1
+  },
+  "failure_interpretation": "A stratum shortfall is a formation-yield finding and keeps maintenance closed; a provenance or custody failure is an architecture failure. No regeneration or rule change is permitted.",
+  "frozen_identity": {
+    "authorized_changed_files": [
+      "ref/rng.py",
+      "ref/v233.py"
+    ],
+    "commit": "3e9bad2",
+    "manifest_sha256": "19be309cb002d0f23e3ba3ca22c7245328a55482903c723656967e6a0ef86b3e",
+    "mismatches": [],
+    "repair_addendum_sha256": "f0e69b5b11efa2c3d4264b76ec9f6bc30c2234d07589ca2a2aa6aa1fd5dc3a07",
+    "repair_mode": true,
+    "verified_file_count": 25
+  },
+  "instrument_status": "REPAIRED_SEED_AUTHORIZATION",
+  "maintenance_seed_block_status": "CLOSED_NOT_ACCESSED",
+  "original_as_run_verdict_preserved": "results/challenges/C-V233-M-bank/summary.json",
+  "seed_block_used": [
+    815001,
+    815800
+  ],
+  "verdict": "FAIL",
+  "verdict_classes": {
+    "distributional_stress": "DESCRIPTIVE_ONLY",
+    "process_custody": "PASS",
+    "scientific_precondition": "FAIL",
+    "semantic_integrity": "PASS"
+  }
+}

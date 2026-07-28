@@ -1,0 +1,15 @@
+{
+  "analysis_only_classification_correction": "Process custody is scored from the gap-free ledger and rehash audits only. The retained-state shortfall belongs exclusively to scientific criterion 1.",
+  "challenge": "C-V233-M-bank (repaired instrument)",
+  "constructor_rerun_after_reporting_exception": false,
+  "persisted_raw_summary_sha256": "1368c6aee8a0b11ba54942bf8fe46b99fd5a9d5174a571d993fca90aaac3f5dc",
+  "reporting_exception_cause": "The report formatter assumed every stratum had a fill record. Moderate and strong correctly had fill=null.",
+  "reporting_exception_verbatim": "TypeError: 'NoneType' object is not subscriptable",
+  "scientific_artifact_hashes_before_finalization": {
+    "banked_states.json": "59922f33b1083cf090176bf9dcef0a147bc794c8d88afc697b3ade5a73b6174d",
+    "per_seed.csv": "038ed15f7155266c09dee235e8433962951312ee5a33c0f3bd898fb465ebea09",
+    "provenance-audit.json": "046f731bdce87d3695c3ca5b5b70a72d0c85e7dd8ea42e4956c4f29174d95183",
+    "raw_summary.json": "1368c6aee8a0b11ba54942bf8fe46b99fd5a9d5174a571d993fca90aaac3f5dc"
+  },
+  "scientific_run_count": 1
+}

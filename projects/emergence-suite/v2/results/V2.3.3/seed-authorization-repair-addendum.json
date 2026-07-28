@@ -1,0 +1,100 @@
+{
+  "adjudication": {
+    "class": "PURE_SOFTWARE_ERROR",
+    "declared_model_changed": false,
+    "invalidate_and_repeat_authorized": true,
+    "parameters_changed": false,
+    "prospective_status_preserved": true,
+    "protocol_changed": false
+  },
+  "as_run_bank_stop_commit": "c20a441",
+  "as_run_verdict_preserved": {
+    "gate6_addendum_sha256": "2e5a20b522609bfe6103e05894cc576a08e1b22f94f6d3e89f55268f27c28583",
+    "report_sha256": "e75d63b9f363830e4b4a3c0bdca3b8f04665960a90c8353bea621003194732f3",
+    "summary_sha256": "f9273e6dc9f7982cacb167b4b40df1111e45df5cdd156aafff5555f6f7a4f3f5",
+    "verdict": "FAIL"
+  },
+  "authorized_guard_diff": {
+    "all_other_engine_stage_files_changed": false,
+    "runner_and_tests": {
+      "challenges/run_c_v233_m_bank.py": {
+        "after_sha256": "28c8aa3122ffb069d9025975db80c68b528222171e2e6e528cc89adc1f735e8f",
+        "before_sha256": "2a0c75709693848612ac11194852e1e4606f6dee7fcd2efc827b65c5c9099f73",
+        "change": "Supply and ledger the exact released block in construction and provenance replay."
+      },
+      "tests/test_v233_seed_authorization.py": {
+        "after_sha256": "2132a454098d123b13b0b150058dc6958a0684430531f38c031b5e99fc72f663",
+        "before_sha256": null,
+        "change": "Assert the default development guard, narrow released-block validation, and byte-identical open construction."
+      }
+    },
+    "scientific_files": {
+      "ref/rng.py": {
+        "after_sha256": "1ef100d4d3fcd5bf01b772c8901b67cc8bb4e177550e8f4375508e047017fe71",
+        "before_sha256": "aa0636b39fa044dd4af41ac6fa4e56d9fbf83cfddbd1a3ac0edade854d6928a1",
+        "change": "Add an optional explicit released_block authorization. Default calls retain the exact [0,799999] development guard; authorized calls must fall inside the supplied block. Stream hashing and entropy are unchanged."
+      },
+      "ref/v233.py": {
+        "after_sha256": "c290d460473ee37b461f57e745ae7907c12a616e25ff78e6f1ed6dae9ef29f03",
+        "before_sha256": "a1c63c439bd073d8fbe176a900caee4fe1210aafdaeef36b4b22570c767ae2a3",
+        "change": "Accept a keyword-only released_block and pass it only to the constructor's two component RNG paths."
+      }
+    }
+  },
+  "base_freeze_commit": "3e9bad2",
+  "base_manifest_audit": {
+    "authorized_changed_manifest_files": [
+      "ref/v233.py"
+    ],
+    "base_manifest_file_count": 25,
+    "base_manifest_sha256": "19be309cb002d0f23e3ba3ca22c7245328a55482903c723656967e6a0ef86b3e",
+    "unauthorized_mismatches": [],
+    "unchanged_file_count": 24
+  },
+  "defect": {
+    "cause": "The development-only seed ceiling was enforced inside the component stream used by the frozen bank constructor, so the constructor could not consume an evaluator-released escrow block.",
+    "failure_verbatim": "ValueError: development seeds must be in [0, 799999]",
+    "observed_first_seed": 815001
+  },
+  "full_suite": {
+    "command": "python3 -m unittest discover -s tests",
+    "elapsed_seconds": 422.384,
+    "errors": 0,
+    "failures": 0,
+    "passed": true,
+    "tests_run": 82
+  },
+  "guard_tests": {
+    "correct_released_block_accepted": true,
+    "default_development_ceiling_retained": true,
+    "deterministic_stream_identity_retained": true,
+    "focused_tests_passed": 4,
+    "focused_tests_run": 4,
+    "wrong_released_block_rejected": true
+  },
+  "maintenance_seed_block_status": "CLOSED_NOT_ACCESSED",
+  "repair_label": "V2.3.3r-seed-authorization",
+  "repaired_bank_rerun": {
+    "constructor_run_count": 1,
+    "distributional_stress": "DESCRIPTIVE_ONLY",
+    "label": "C-V233-M-bank (repaired instrument)",
+    "maintenance_seed_block_status": "CLOSED_NOT_ACCESSED",
+    "process_custody": "PASS",
+    "scientific_precondition": "FAIL",
+    "semantic_integrity": "PASS",
+    "verdict": "FAIL"
+  },
+  "repaired_bank_rerun_completed": true,
+  "retained_pre_full_suite_execution_notes": [
+    "Two focused unittest commands used nonexistent method selectors and produced loader-only AttributeError results before the exact discovered selector was run. No test body failed.",
+    "The exact focused selector then passed 4/4 tests."
+  ],
+  "scientific_identity_audit": {
+    "byte_identical": true,
+    "frozen_serialized_state_sha256": "62f99bb37fea233d4c77990779c91f4696a99b89f7329cf1a8dab65740bc4122",
+    "open_development_seed": 760000,
+    "repaired_serialized_state_sha256": "62f99bb37fea233d4c77990779c91f4696a99b89f7329cf1a8dab65740bc4122"
+  },
+  "stage": "V2.3.3",
+  "status": "authorized_instrument_repair_addendum"
+}
