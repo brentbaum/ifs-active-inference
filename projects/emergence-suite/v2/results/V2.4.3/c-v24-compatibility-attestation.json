@@ -1,0 +1,14 @@
+{
+  "attestation": "Evaluator privately re-audited the still-sealed C-V24 plaintext against the V2.4.4 amendment (round-4 adjudication). Fields below are the audit outcome; the plaintext remains sealed and unrevealed to the implementer.",
+  "date": "2026-07-28",
+  "challenge_sha256": "574131ce32bf45a72e3163c91df0e924c84478b39c3c07691dfc216dc1b34665",
+  "plaintext_revealed_to_implementer": false,
+  "all_legacy_raw_selection_and_margin_fields_retained": true,
+  "conditional_randomization_fields_are_additive": true,
+  "challenge_criteria_unchanged": true,
+  "challenge_seed_escrow_unchanged": true,
+  "no_challenge_specific_code_required": true,
+  "compatible_with_v2_4_4": true,
+  "escrow_block": "830001:830600 (unchanged, unopened)",
+  "note": "The sealed criteria reference only frozen public-plan fields that V2.4.4 retains unchanged (family names and selection counts, tie-conservative false-split scoring, matched-complexity held-out margin under the frozen pre-held-out-posterior scoring rule, the frozen bridging-assay estimands, Wilson intervals, verdict classes). V2.4.4 adds compound-structure and conditional-randomization fields without removing or altering any legacy field. The sealed criteria are evaluated exactly as sealed; the immutable challenge verdict is reported first, and selective-redescription readouts are reported separately as an additional scientific class that may not rewrite the sealed verdict."
+}

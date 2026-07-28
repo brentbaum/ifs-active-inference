@@ -1,0 +1,65 @@
+{
+  "stage": "V2.4.4",
+  "adjudication": "results/V2.4.3/gate3-adjudication.md (GPT-5.6 Pro round 4, 2026-07-28)",
+  "status": "final open-development successor; no automatic V2.4.5",
+  "selective_redescription": {
+    "material_definition_unchanged": {"q1_min": 0.80, "bf_min": 4.0},
+    "randomizations_per_world": 999,
+    "p_crt_max": 0.05,
+    "null_quantile": "nearest-rank Q_.95",
+    "preserved_by_randomization": ["cue order", "outcome multiset per cue", "marker multiset per cue", "missingness counts", "root tokens", "observation count and budget"]
+  },
+  "population_criteria": {
+    "genuine_raw_cs_min": 0.60,
+    "genuine_material_min": 0.60,
+    "genuine_selective_min": 0.60,
+    "genuine_mean_log_bf_lower_ci": "> 0",
+    "genuine_mean_e_null_lower_ci": "> 0",
+    "shuffled_selective_max": 0.10,
+    "shuffled_raw_material": "descriptive (V2.4.3 rate 0.45-0.467 retained as limitation)",
+    "single_regime_material_max": 0.10,
+    "single_regime_selective_max": 0.10,
+    "nuisance_material_max": 0.10,
+    "nuisance_selective_max": 0.10,
+    "dr_cp_raw_cs_max": 0.10
+  },
+  "predictive_adequacy": {
+    "criterial_slice_length": 96,
+    "split_rule": "48 train / 24 validation / 24 held-out (unchanged 50/25/25)",
+    "worlds_per_family": 500,
+    "bma_regret_upper_ci_max_nats_per_token": 0.01,
+    "bootstrap_replicates": 10000,
+    "no_family_exception": true,
+    "cs_matched_min": "375/500",
+    "cs_point_margin_min_nats_per_token": 0.01,
+    "cs_point_margin_lower_ci": "> 0",
+    "complexity_tolerance_pre_held_out": 0.13,
+    "information_curves_descriptive": [32, 64, 96]
+  },
+  "b_max": {
+    "inherited_formation": 3.801426508560692,
+    "v24_common_emissions": 6.704414354964107
+  },
+  "cs_path_prior_two_context_reported": 0.92741935483871,
+  "seed_blocks": {
+    "gate2_recovery": "790500:790999 (100 per family, 96 slices)",
+    "gate3_dr_cp_controls": "791000:791239",
+    "gate3_bma_and_cs_margin": "791500:793999 (500 per family, 96 slices)",
+    "gate3_misspecification": "794000:794239",
+    "gate3_genuine_then_now_paired": "794300:794419",
+    "gate3_cue_local_control": "794500:794619",
+    "gate3_formed_p_bridge": "794700:794819",
+    "gate4_lesions": "795000:795239",
+    "gate5_regression_robustness": "795500:798499",
+    "sealed_challenge_escrow": "830001:830600 (C-V24, unopened)",
+    "guard_gaps_intentional": true
+  },
+  "barred_blocks": [
+    "773000:773499",
+    "774000:774524",
+    "776000:776144",
+    "781000:781499",
+    "786000:786359"
+  ],
+  "forbidden_changes": "any candidate family; emission/transition probabilities; CS transition prior; family prior; parameter prior; common likelihood interface; path-complexity accounting; thresholds .80/4.0/.60/.10/.01/.13; transfer/retention/indexing/G-fixed criteria; formed-bank states; C-V24 plaintext/hash/seeds/criteria; barred or consumed worlds as criterion data"
+}
