@@ -1,7 +1,8 @@
 {
   "attestation": "Evaluator privately audited the still-sealed C-V233-M plaintext against the bank2 retry design (round-2 plan step 2). Fields below are the audit outcome; the plaintext remains sealed.",
   "date": "2026-07-28",
-  "maintenance_bundle_sha256": "320b45dba8bc726e4aaf6cd037350f373ffcd9250587880128dd717075cf6b80",
+  "maintenance_bundle_sha256": "8b1847339374314d291ce380e44ca5a483128ef2578635a6d6b1e6a6be658edf",
+  "erratum": "Original attestation cited 320b45db... (the hash of the set-aside C-V23c-M bundle) due to a copy error from the hashes ledger; the audit itself was performed on the correct C-V233-M plaintext. Corrected 2026-07-28 before reveal; the reveal hash-check against the 4ef3906 seal record (8b1847...) passes.",
   "maintenance_plaintext_revealed_to_implementer": false,
   "references_qualified_bank_schema_only": true,
   "requires_original_three_strata": true,
