@@ -1,0 +1,79 @@
+{
+  "failures": [],
+  "gate": 4,
+  "name": "eight selective lesions",
+  "passed": true,
+  "results": {
+    "lesions": {
+      "action_label_permutation": {
+        "maximum_scientific_error": 0.0,
+        "passed": true
+      },
+      "action_to_mask_contingency_removed": {
+        "maximum_target_error": 0.0,
+        "passed": true,
+        "safe_erosion_survives": true
+      },
+      "candidate_common_outcome_likelihood": {
+        "maximum_custody_error": 0,
+        "maximum_target_error": 1.7763568394002505e-15,
+        "passed": true
+      },
+      "forced_open_channel": {
+        "maximum_target_error": 0.0,
+        "passed": true,
+        "safe_erosion_survives": true
+      },
+      "global_broadcast_severed": {
+        "M_PD_95_interval": [
+          11.51407332130833,
+          11.049337341146696,
+          11.973366758093789
+        ],
+        "M_PT_95_interval": [
+          11.910138819060842,
+          11.42035484035134,
+          12.393142247330996
+        ],
+        "maximum_localization_log_BF": 0.0,
+        "passed": true
+      },
+      "masked_to_safe_substitution": {
+        "M_PD_95_interval": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "M_PT_95_interval": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "passed": true
+      },
+      "root_coupling_fixed_removed": {
+        "M_PD_95_interval": [
+          14.017556618495357,
+          13.284934440152636,
+          14.746017075194613
+        ],
+        "M_PT_95_interval": [
+          14.450091439817443,
+          13.813080516890277,
+          15.09771768171842
+        ],
+        "maximum_root_or_transfer_contrast": 0.0,
+        "passed": true
+      },
+      "structure_comparison_equalized": {
+        "maximum_custody_error": 0,
+        "maximum_target_error": 1.7763568394002505e-15,
+        "passed": true
+      }
+    },
+    "passed": true,
+    "stage": "V2.3.3",
+    "world_count": 120
+  },
+  "stage": "V2.3.3"
+}

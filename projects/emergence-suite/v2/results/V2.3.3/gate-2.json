@@ -1,0 +1,309 @@
+{
+  "failures": [],
+  "gate": 2,
+  "name": "apparatus validity and bank readiness",
+  "passed": true,
+  "results": {
+    "bank_counts": {
+      "moderate": 40,
+      "strong": 40,
+      "very_strong": 40
+    },
+    "ledger_candidate_count": 1800,
+    "retained_state_hashes": {
+      "760000": "62f99bb37fea233d4c77990779c91f4696a99b89f7329cf1a8dab65740bc4122",
+      "760002": "9bcabe9703c6d06ece3b3fc95f5cccd55e371b43303c239d63e2b426350a0955",
+      "760003": "67dae52649b8ecb93aa1195b04779de10400cd21b5a0ef71a0c03792651ebd9a",
+      "760009": "4f960aee0064af4ae1912eaa1d80ca1251306fe815221c007baab8771da6e067",
+      "760024": "eba9da7c6da7faeb7c492cd18063b5b7ec836b72ed8cf6d1523fd4ce535132bf",
+      "760040": "75e68ac05e35564c1a5c63bbd0cbe7c4901c78168fd1c844f73053a859497c55",
+      "760041": "29231f90fbd02f8fe8203d8ec28f2b81a5b59edf5440480c54c3a7cbb8bb5213",
+      "760042": "58869ad1f448174177a745623613647703d4ff312ecdc4e41452a4c576bc5204",
+      "760048": "9f4e6153a04b453520ff59b62a46e1a783c0de214bfc93713e2cfd9ae8341c5e",
+      "760058": "30958964763104e2dde6214a9a638cbfc7a3e4b8cc17dc03401b47f0e74a48a4",
+      "760062": "189909cf5fba6c257c5f3e4ecad1d5e42ddaf18a378360b6dfa409ea51ff6366",
+      "760072": "c338dbe730ee610718e729cc61cce246100fee0e0c1890c9a5313fd9d98e3fcd",
+      "760080": "0bf5162d1171c7c622ac7cb728303ae6cc0d954470cb8ba4244b21dca3a1ff48",
+      "760088": "c617d6ee5e1b7c3a16507be61cb1449deed3f2d4735762eff77eea912a1573f7",
+      "760096": "79c5147a56ff8d11fae53c4967ce0c839f3cf97dcca7843b1cf4f3e41635d5b4",
+      "760099": "8ccbab905dd7caa2c1513c790e1f175abe7fa70b777c1ed44b38e0ccffe29510",
+      "760104": "13c1cfd2c048afad6853862bdedba0ed427b858011f9c0ccc231602f0f3abccb",
+      "760106": "8607b619236cdfae6f33068ae7ae7949086b93aedb5542edc062bf268930b63d",
+      "760112": "53ac86074ed23254482b797f077d5f0384ed27bdb2cb321f2bf316732c93ac2e",
+      "760113": "b42c51477bcb618b1b08694de6a4c34b1e994c508cf8f8d10ede622d5264da4c",
+      "760121": "6e06e8253b8ef115c23da4202bf66e3f8ca3a0981a52c2bab2b93cbda1c925be",
+      "760122": "ad295c585b2f9a4ad0321f25d78ef0d16f3535bf8a268db3b0a63f40e0a7e02d",
+      "760124": "fc520619ba0aaa2a49a590cda3ec50d5e8ffb98896467443aaf1097aa6853be9",
+      "760128": "8127ff6ac8241bc36a7590a5f389dec9801c5bbfa9b34e818b4d9b5088b17d5c",
+      "760130": "824ef851be0c075a3e92c3f85cd4ceb8d585397d7981d926670f6830f47a5059",
+      "760138": "a2027372a146ecdaa363d17109039fb0c7a638e02fd9640d22d06f182088da39",
+      "760144": "fed90edc3e0f26252cbab6ed4fe9da8e6669c88255b056c4311b761d9d1311ec",
+      "760147": "6d016cce38e6bb1c2a8cc62d04b50c346fcae11a92061cc55807d944380f5719",
+      "760149": "007c564d40b1198ed3fbfa2387cc96614b0e61d4747a89a6d124fefcd473ba7d",
+      "760152": "c186ee9cdcabe786cce7e152776c2b5cd2ca347b9ffe55f91c00693aa5b3d40c",
+      "760154": "c3cba4f1c99690b4c6b5e9efc183b615f400bea70e50c801aa1149e66272327d",
+      "760160": "5d1b683d0e4bcba798dbc95cab3bb3df7204bb977fc9ea6e4677e4ee02a73433",
+      "760163": "5c76752f2c369d4becd6c4f964f2b9baf925e55c4de36e0fc564b88d1ee9c444",
+      "760168": "09ee4ce5d5d8f98c44d8d48ac71663141643b38071d765714f482c852b92bc34",
+      "760169": "f6f0e43195c5e8aa3fdbeea0a04fc017f315ca4be6d854063c93f668ff488d56",
+      "760171": "9fdba7c5c4913b8af112aeead8fd024791f1aaee3e9e838b870f3491ccb02a9e",
+      "760177": "a05ea7004e6bbdbf62e58fec73ba47813324e76354a6a49abae2c6185057611b",
+      "760178": "8fad939012257db30774ef1a8dcca8f705d5eb31520849dba9115bf7039770cd",
+      "760179": "975303407a76cce95c44845949c9d57633abd5b0df416b16f449adc60e0d730c",
+      "760184": "9c72d77488b76a2108b39a74d442d39033d1b238e8827555915a6f84123e07b1",
+      "760185": "f1182bb92bb3c5689ba658ababaa8cf3b147c4943fad7ad25b66fa72e89f23d5",
+      "760186": "359a47d43130732748e96d11a82f8819393850d5dae7308cdddabe309eb36ebe",
+      "760187": "812cd658b1fbbdb2b324c4c298eaf5c6561d713d643a085ed40c8403f74c278f",
+      "760188": "4bc10c6b9cf15a72aa7b25b41a39e553b745ff4c5cd3be4bc7b7f62ed3b90fe1",
+      "760193": "b5d5214b8d7c36aca9c770541755f360dd325fd97cad9fc6deffb51c8077daeb",
+      "760195": "dee0793bb793dc1da2c3053aa646906b4253160df689aad90a7b5c55a76e9feb",
+      "760200": "6ed3f464c4795452df8cbdef3b01b9ba81acf8ecd8e2292c3dae8efc1a880697",
+      "760201": "9d0a13c385edf891ba4fe5e58d8065c8a68ddf9976198f0fdd68e57d2388f89c",
+      "760202": "0b19b55f87406adb8d98b57d74eb3bd86545a9e0a04b0c454e5707421410b043",
+      "760209": "b7451dbd22ae0d5a6d8c22eee87d0e275716ef17bb37346ec1ddbc58583f410e",
+      "760210": "568abb09e66014f799cbe9ebd59dd062b437a984dfdd19e031bed1bfaaf16d8a",
+      "760216": "93eb3ff33e7cd5a8f06bbe357018a5c0ac5f39a08ea346d93679d6e2a1d9a8c6",
+      "760218": "89be45441feb4cbad8f25f9dd055c8ecf795c8e9bac75a083d04fa405b02a3bf",
+      "760232": "34fae16a30c144c7d82e236afa017adade3094d30d6c0e08a7fa2f1b5ffafd5b",
+      "760235": "18bf8444934736fd698dec2e8642eb3b5b5a9551bcf367f27fc322841d2dec9d",
+      "760257": "8d407dad3cc870f4c4972ab25769db4b5218d5e7b4430e9fcbbe9ffb57fd66e5",
+      "760264": "c7c759dc8feed448338c3581df2602b2c731150cab8ebf132cf16d2ce1b6717b",
+      "760266": "507995afacff50d965f1646a5f2c7e491a9017136b09c54be48441b02e340483",
+      "760272": "ea7cc5db5bd2cb9a055e219d5d59bd44806894122a836b38d772c87532cfaa4b",
+      "760281": "1ea29bbd7239b8b5f010e8ce512ac06bc4f5ef29a9c7957dd7387bcf2b5a0aeb",
+      "760291": "7ad9c3028ae8a4afd57b9ed37aadc6726c938232ce25850b2b3706891489598f",
+      "760298": "9d3dba859f2239b56ba755101554bc763c0b203e31ff185330251ef5c572b1aa",
+      "760304": "236b0c6d206207746ed011adb1e2cf205bf8654febca107582fefe90696e99ec",
+      "760305": "cb0b8c0f0ca496c60beaa62fc5385083d80fe2dc714a50aab27ec31c28a497ef",
+      "760328": "072b769c477478f8477a0a38fa711006325f053ea0dbfb3427c5344fb569a8f1",
+      "760330": "0431770a1378cfc1ed17c313c918a610c3a675f96541435ca49cc3215a97f26e",
+      "760336": "44893b0eb4e93955034616eb7b891e5d7ac8eaacca3a8f100f6a343539dc5912",
+      "760346": "3e44540cdecce8d7cfa930581c70a905daf13d99e9af890d843c1ff0cbfd5b93",
+      "760348": "2cf31e6a84d5477bf84219fc34c06d5c7a1f31403e056e8838d62ded0688125b",
+      "760352": "e877c878782b6453e2a8997e1037a5a1ae71966068f5a5b3a1405261090fc943",
+      "760362": "9e2d726faef5ef46a7a4f798847d9f924b957a93413cee784bc2328d8997b652",
+      "760368": "f024c0b870ec97e38de31f469abfc852ff31b89c011bbbdad65ab4f21f6833fb",
+      "760385": "bf07f98dcd1749f0f634fb7dd22cd86645f82f2b2f1c77f53a4746fb6370bb55",
+      "760393": "e7825ed0616f290beed7bc2966f85184e73e63a21026b61148306b7ccc61287d",
+      "760396": "dfa80835745702e721706bcd3f8547ac248c2b85dc3d25791d110756d9e8b0dc",
+      "760425": "90d9fe82e306f916abe63b195653e31eef6ec8b8f0db971527b2d33d18645ab6",
+      "760459": "dac52e2694a634520dfec5474ea5d58ac6d6f1f5b42fda1962a48811a4c8beff",
+      "760465": "77e24ab6f655b0ab8635600d140c696877535b053da0338b71b170532b287e18",
+      "760476": "d3c020fc50c4ebe557cdea190b8285d8b91ece498c9e9b51b9201e6091ea815f",
+      "760480": "59ba7d24f3adab4938e3558337bba23746411e7d6b2c605c17b2faf05a75ac41",
+      "760490": "b4dffbfebf94d5bb6e0cb471f08a91af9a22d2a287e402d38a7662b53d52d778",
+      "760536": "37c9ef154260c2d1c757342f19ea8288a059eff5a92a176250c276c5d810cbe5",
+      "760537": "b54ba4b3c2763414b3fd720656454418d09f4ab7b3c549cec44f07ee44bb0ebb",
+      "760546": "ef83b15f5097daf9b023b6a94cdf6a6f4f0e251b1a9fc8a5dcfa21abc945e929",
+      "760578": "b42917977e6615eefc28eacec2cb4a48df54d14588ba1105388fa4cc36627328",
+      "760588": "128d9dba802c01802b9fda15bac22008fd3dbc38509e7646549e304177c64813",
+      "760600": "9daf2ca0afe8c7f8a654377db4ea179021b5d455f8c45c9ad46d4dd0a67968d3",
+      "760601": "bb790ad1a067cddf560552844e8b5c6d8a1a875b6041320dcdd0f0bdde63fe36",
+      "760616": "6c70bcde0abfe50b2eda0886e9ea345515aea0f2afb6c8fe952699b6c6118240",
+      "760640": "630d435d527d7970bea7b2095d6262253b295252e09e52601a26d2ad0f67d8a9",
+      "760643": "421e591d408ac17f49aff58373f669e0d489f899772c4bf488af41b9696034c0",
+      "760696": "3fa20db55ca6e9f1d1b080aca4b554d8dc7c01b63ba38fddd396b6bae4cac460",
+      "760698": "fd831ad4278bdb83bd1fff9c3146e9b56523ead36f1dedc10dba35e6c0442d9a",
+      "760714": "6ddab905c79cadcdcbddd1f5d79b5e55e181422410480bd21a03021f501699ea",
+      "760721": "7508b2d80ac8bc99695d5c597575e3da51d99e0e8b45f44ea8b4ee24fac40fcd",
+      "760729": "fe14771f2b9c39ab0b08bf18f8027a9a5be7c549896c53cefe886d2b3ba2ef53",
+      "760744": "07d0c1c3814df55e77aeb037a09e278037955bf0b846d408e79dcddab6f59200",
+      "760760": "7b721f2c047d0aa762a8d8e9bfc0308ce27cc3ee643eff76bd2e101dd7b49a78",
+      "760768": "116a882967e06d945059a1ce89fdf53a700f28c94640425289a055fc43aa608b",
+      "760769": "b8e70d4af56e7a9e0df219dab044a022724ad1441e3351c1ef07d5f8531a6ce7",
+      "760773": "2c8cf2385ca61afad5ed19ed7ffd092d2b88c3fcade197d92532aebf8eb405ab",
+      "760784": "19fb15a31a282a029b0c040fea078061c23f02221e12adf6eae66c2c7a855bfe",
+      "760793": "39e7cf985bc2c9b4089086da1a050fcd880780978ac44a7deea411a8fe14bfb7",
+      "760794": "2d886273c0177cae2182f0475ab14ea7b7efd756b07511631c7dad0fcc2533bf",
+      "760800": "f9e26043c03c2c6953319f4845336d40a7004ef855836e1830fba170f4f955d1",
+      "760803": "3e222d30736ccce9b86650674beed044e73d15d780777f03d8212dcba55d65da",
+      "760888": "d91ae830dc44820517ff55c504ad6e6b61a4e03a1ccc004cf52c0f9663a42f75",
+      "760897": "b5057848e2d00387dd3cca6f738b00d178e6ff1e6811f9e4b223ebdae7e7fe13",
+      "760904": "2c27abf33cb7ed4689daabd25b67d2a871bce8731e12c57c8b5b37ada4a6c052",
+      "760953": "1768400a5c0837e2ea511a05b41599300400fa8167e79b8f10555ffc203a9d91",
+      "760995": "7980ab4c77d28605852a016d0158863387f12efee86eb2dc5d4b2fe1c4799253",
+      "761000": "68dc05146d166974c7848692c1e2886874ad9d8e45410d46636b9ec84ffb5c9d",
+      "761114": "de752c2c95d6b31b48a979bcadfab43e252db80459c997665d9101dc9c650d60",
+      "761176": "ddda351379ce57ad176c62f09e8becc062b901c653228a31512fb77f32c26990",
+      "761216": "3d48b16350d7358e00fe9f84ce04fda40eaa1e29045902edcc12772af6b3ff4c",
+      "761304": "7ca5c8b4bf98e2783a78815dcc381dfb2f7e793fee4073df8c40b05d6483116a",
+      "761323": "ae7b2e98331e0b2d98be768b3471102486a44c06e9b86ec7265de054bc7d67af",
+      "761338": "49e3cfb3c75518a334fddf2a4773b45e87f4cf0c9ce1b4747b3bfa8950a13345",
+      "761350": "0714aa54cc1a9bee61d3646ca71db85d2ac56710e87d74c229853dc45cbc6365",
+      "761424": "9b053ebb3256807310ef28a9ddbf63e2ac0945d975912d5f2c9fc11e62e54b95"
+    },
+    "validity": {
+      "avoidance_rate": 0.46770833333333334,
+      "bank_counts": {
+        "moderate": 40,
+        "strong": 40,
+        "very_strong": 40
+      },
+      "calibration_by_dose": {
+        "0.0": {
+          "D_to_P_confusion_rate": 0.0,
+          "P_to_D_confusion_rate": 0.0,
+          "accuracy": 0.9733333333333334,
+          "confidence_ece": 0.02647338576424937,
+          "confusion_matrix": [
+            [
+              93,
+              7,
+              0
+            ],
+            [
+              1,
+              99,
+              0
+            ],
+            [
+              0,
+              0,
+              100
+            ]
+          ],
+          "diagonal_rates": [
+            0.93,
+            0.99,
+            1.0
+          ],
+          "multiclass_brier": 0.01720596039681407
+        },
+        "0.25": {
+          "D_to_P_confusion_rate": 0.0,
+          "P_to_D_confusion_rate": 0.0,
+          "accuracy": 0.9666666666666667,
+          "confidence_ece": 0.027753830161727718,
+          "confusion_matrix": [
+            [
+              91,
+              9,
+              0
+            ],
+            [
+              1,
+              99,
+              0
+            ],
+            [
+              0,
+              0,
+              100
+            ]
+          ],
+          "diagonal_rates": [
+            0.91,
+            0.99,
+            1.0
+          ],
+          "multiclass_brier": 0.02058409862788679
+        },
+        "0.5": {
+          "D_to_P_confusion_rate": 0.0,
+          "P_to_D_confusion_rate": 0.0,
+          "accuracy": 0.9733333333333334,
+          "confidence_ece": 0.02826477576056884,
+          "confusion_matrix": [
+            [
+              93,
+              7,
+              0
+            ],
+            [
+              1,
+              99,
+              0
+            ],
+            [
+              0,
+              0,
+              100
+            ]
+          ],
+          "diagonal_rates": [
+            0.93,
+            0.99,
+            1.0
+          ],
+          "multiclass_brier": 0.019812107952376187
+        },
+        "0.75": {
+          "D_to_P_confusion_rate": 0.0,
+          "P_to_D_confusion_rate": 0.0,
+          "accuracy": 0.9633333333333334,
+          "confidence_ece": 0.019132728996300325,
+          "confusion_matrix": [
+            [
+              90,
+              10,
+              0
+            ],
+            [
+              1,
+              99,
+              0
+            ],
+            [
+              0,
+              0,
+              100
+            ]
+          ],
+          "diagonal_rates": [
+            0.9,
+            0.99,
+            1.0
+          ],
+          "multiclass_brier": 0.02083270127658956
+        },
+        "1.0": {
+          "D_to_P_confusion_rate": 0.0,
+          "P_to_D_confusion_rate": 0.0,
+          "accuracy": 0.96,
+          "confidence_ece": 0.019116099002983687,
+          "confusion_matrix": [
+            [
+              89,
+              11,
+              0
+            ],
+            [
+              1,
+              99,
+              0
+            ],
+            [
+              0,
+              0,
+              100
+            ]
+          ],
+          "diagonal_rates": [
+            0.89,
+            0.99,
+            1.0
+          ],
+          "multiclass_brier": 0.02004780055940325
+        }
+      },
+      "checks": {
+        "bitwise_clone_verification": true,
+        "calibration_across_censoring_levels": true,
+        "canonical_hash_reload": true,
+        "endogenous_avoidance_nondegenerate": true,
+        "exact_trace_count_recovery": true,
+        "no_false_P_strengthening_safe_worlds": true,
+        "no_maintenance_contrast_calibration": true,
+        "per_stratum_minimums": true
+      },
+      "clone_error_count": 0,
+      "hash_error_count": 0,
+      "maximum_count_error": 0,
+      "mean_safe_delta_L_PD": -8.991053672722755,
+      "mean_safe_delta_L_PT": -9.3403070645739,
+      "passed": true,
+      "stage": "V2.3.3"
+    }
+  },
+  "stage": "V2.3.3"
+}

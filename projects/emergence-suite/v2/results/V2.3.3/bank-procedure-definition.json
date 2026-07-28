@@ -1,0 +1,40 @@
+{
+  "constructor": "ref.v233.construct_bank_state",
+  "eligibility": {
+    "moderate": {
+      "lower_inclusive": 0.6,
+      "upper_exclusive": 0.75
+    },
+    "strong": {
+      "lower_inclusive": 0.75,
+      "upper_exclusive": 0.9
+    },
+    "very_strong": {
+      "lower_inclusive": 0.9,
+      "upper_inclusive": 0.98
+    }
+  },
+  "intention_to_simulate_ledger": "every candidate seed, eligibility decision, exclusion, state hash, and retained serialized state",
+  "open_bank_counts": {
+    "moderate": 40,
+    "strong": 40,
+    "very_strong": 40
+  },
+  "open_bank_qualified": true,
+  "parameter_sha256": "7edbe5d32c6460101145b0d2d9e780bb817814fcd29c58a8f27c3758f4964348",
+  "process_order": "ascending seed once",
+  "retention": "first 40 eligible worlds per stratum",
+  "sealed_qualification_population_generated": false,
+  "serialization": {
+    "allow_nan": false,
+    "format": "canonical_json_utf8",
+    "hash": "sha256",
+    "separators": [
+      ",",
+      ":"
+    ],
+    "sort_keys": true
+  },
+  "source_sha256": "a1c63c439bd073d8fbe176a900caee4fe1210aafdaeef36b4b22570c767ae2a3",
+  "status": "code-frozen; open development bank only"
+}

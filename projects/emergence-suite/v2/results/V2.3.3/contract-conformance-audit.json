@@ -1,0 +1,37 @@
+{
+  "availability_only_graph": [
+    "H,G,W,C->Y_star",
+    "do(A),Z->M",
+    "Y_star,M->O",
+    "O->H",
+    "O->G"
+  ],
+  "bank_does_not_assign_posterior": true,
+  "boolean_write_absent": true,
+  "do_action_never_H_evidence": true,
+  "forbidden_paths": {
+    "checks": {
+      "no_action_to_H_edge": true,
+      "no_authored_status_assignment": true,
+      "no_mask_to_positive_P_edge": true,
+      "no_selected_policy_to_root_edge": true,
+      "no_winner_call": true
+    },
+    "passed": true
+  },
+  "forbidden_variables_absent": {
+    "attribution": true,
+    "efficacy": true,
+    "relief": true
+  },
+  "missing_pairwise_BF_exact_zero": true,
+  "one_posterior_audit": true,
+  "passed": true,
+  "sealed_bank_not_generated": true,
+  "verdict_classes_non_substitutable": [
+    "scientific",
+    "semantic",
+    "distributional stress",
+    "process-custody"
+  ]
+}
