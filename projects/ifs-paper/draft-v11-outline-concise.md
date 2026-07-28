@@ -1,12 +1,14 @@
 # Draft v11 — Current Claim Architecture
 
-> **Status (2026-07-23):** `draft-v11-theory.md` is the canonical manuscript. Sections 1–10, Appendix A (claims audit), and Appendix B (full simulation record) are drafted. §9 is a ~1,300-word claim-organized summary with a system paragraph and Figure 1 (mermaid placeholder; vector redraw pending); the record lives in Appendix B. The 2026-07-23 review cycle (IFS consultant + Sol, two rounds) is fully incorporated, ending with the central claim as a sufficiency bet hardened against both bet-consistency reviews. This outline records the argument as it now stands; superseded notes live in Git history.
+> **Status (2026-07-27):** `draft-v11-theory.md` is the canonical manuscript. Sections 1–10, Appendix A (claim ledger), and Appendix B (full simulation record) are drafted. §9 is a ~1,300-word claim-organized summary with a system paragraph and Figure 1 (mermaid placeholder; vector redraw pending); the record lives in Appendix B. The Self-energy / Self-position / care distinction is now integrated through C2 and C3, the former Limits and Next Steps inventory has been replaced by a short Boundary Conditions and Decisive Tests section, and Appendix A no longer doubles as an experiment backlog. This outline records the argument as it now stands; superseded notes live in Git history.
 
 Working title: **Self-Energy, Witnessing, and the Revision of Part Beliefs: An Active Inference Account of Internal Family Systems**
 
 ## Thesis
 
-A part is not a kind of psychological object but a phase of one. A burdened part is frozen identity—a self, a world, a policy, and an ending, coupled and trusted so completely that they function as the architecture of the moment—and the freeze is temporal as well as structural: the inference written under overwhelm never closed. It becomes revisable in Self-led relationship, where the unfinished moment meets the present, because global epistemic depth keeps the activated bundle, present self, body, context, and relationship recursively available together, allowing corrective evidence to reach the identity at the model's root. The claim is a sufficiency bet: everything that makes a burdened part a part in therapy belongs to the phase, and nothing beneath the phase does additional explanatory work for therapeutic change; §10 names the losing conditions.
+~~A part is not a kind of psychological object but a phase of one. A burdened part is frozen identity—a self, a world, a policy, and an ending, coupled and trusted so completely that they function as the architecture of the moment—and the freeze is temporal as well as structural: the inference written under overwhelm never closed. It becomes revisable in Self-led relationship, where the unfinished moment meets the present, because global epistemic depth keeps the activated bundle, present self, body, context, and relationship recursively available together, allowing corrective evidence to reach the identity at the model's root.~~
+
+**A part is not a kind of psychological object but a phase of one. A burdened part is frozen identity—a self, a world, a policy, and an ending, coupled and trusted so completely that they function as the architecture of the moment—and the freeze is temporal as well as structural: the inference written under overwhelm never closed. It becomes revisable in Self-led relationship because Self-energy keeps the activated bundle within a wider calibrated field, a broader Self-position remains the locus of identity and action, and care can reach the encounter. The claim is a sufficiency bet: everything that makes a burdened part a part in therapy belongs to the phase, and nothing beneath the phase does additional explanatory work for therapeutic change; §10 names the losing conditions.**
 
 ## Claim spine
 
@@ -24,9 +26,10 @@ A part is not a kind of psychological object but a phase of one. A burdened part
   - **C1b — Maintenance through sampling.** Once formed, can policies preserve the organization by changing which observations become available? (Effective avoidance protects by censoring; irrelevant or information-preserving safety behavior should not.)
   - **C1c — Maintenance or strengthening through causal attribution.** When safe outcomes occur after protection, does inferred action efficacy preserve or strengthen the threat/identity model? (Mere absence of catastrophe is insufficient; requires the counterfactual-attribution machinery, deferred until C1a/C1b are established.)
 
-### C2 — Regime and Epistemic Depth
+### C2 — Regime, Self-Position, and Epistemic Depth
 
-- Self is reconstructed as two aspects of one organization: an uncaptured inferential regime and the present-moment self-state available within it.
+- ~~Self is reconstructed as two aspects of one organization: an uncaptured inferential regime and the present-moment self-state available within it.~~
+- **Self is reconstructed through three related terms: the capacity for Self is the standing possibility of uncaptured inference; Self-energy is the graded operation of global recursive precision coordination under activation; the Self-position is the broadest currently available and calibrated self-context functioning as the locus of identification, agency, and relationship.**
 - The epistemic core of Self-energy is global epistemic depth: a hyper-model that forecasts precision across the hierarchy, receives error on those forecasts, and rebroadcasts a revised precision field $\Phi_t$.
 - ~~Epistemic depth is not a scalar force that weakens a part. A scalar $E_t$ may summarize confidence, calibration, and representational breadth, but it is a readout of $q(\Phi_t)$ rather than a causal input.~~
 - **Self-energy is expressed as a graded, multidimensional clinical profile spanning part opacity, representational breadth, flexible attention, and revision availability. A scalar $E_t$ may summarize confidence, calibration, and breadth as a measurement index derived from $q(\Phi_t)$.**
@@ -35,12 +38,17 @@ A part is not a kind of psychological object but a phase of one. A burdened part
 - Part dominance and epistemic depth are orthogonal. High threat precision can coexist with high depth when danger is real; low apparent capture can coexist with low depth under distraction, sedation, or dissociation.
 - Context-held activation is the clinically relevant field configuration: the part remains active and represented while bodily, contextual, relational, and policy evidence retain enough precision to matter. Witnessing is this configuration sustained over time.
 - Depth opens a route to revision but does not itself guarantee structural change. Context-indexed representational redescription is a leading candidate for what the system does once that route is open.
+- **A Self-position may be adult-personal or field-like. Scale is not depth: the therapeutically relevant position is the broadest calibrated self-context whose enacted properties answer the part's root expectation.**
+- **Self-led contact has three architectural ingredients: Self-energy, Self-position, and care availability. Self-led compassion is its suffering-specific functional expression: epistemic availability, care valuation, and policy capacity. Compassion is not reducible to epistemic depth.**
+- **The account does not derive love from depth. It proposes that depth makes a broader Self-position available and removes defensive restrictions on care; the origin of care remains open.**
 
 ### C3 — Relational Revision
 
+- **The Self-position bridges C2 to C3. When the part's self-state and a broader self-context are co-instantiated, present identity, agency, temporal location, relationship, and available action can generate prediction error at the identity root.**
 - Informational and relational evidence use the same learning machinery but differ in their usual target and route of access. Cue evidence most directly updates what the situation means; relational evidence most directly updates who the person is in relation to it.
 - ~~Self-led witnessing contradicts *I am alone with this* with *I am not alone with it now*. Dyadic therapy can add second-order social evidence: *this other sees me, believes me, and remains present*.~~
-- **Self-led witnessing contradicts *I am alone with this* with *I am not alone with it now*. Loving contact is a major form of transformative evidence: the client's Self sees, loves, and values the part exactly as it is; dyadic contact can add second-order evidence that another sees it, believes it, and remains present.**
+- ~~**Self-led witnessing contradicts *I am alone with this* with *I am not alone with it now*. Loving contact is a major form of transformative evidence: the client's Self sees, loves, and values the part exactly as it is; dyadic contact can add second-order evidence that another sees it, believes it, and remains present.**~~
+- **Self-led witnessing contradicts *I am alone with this* with *I am not alone with it now*. Dyadic contact can add second-order evidence that another sees the part, believes it, and remains present. Care remains clinically central without being treated as a separately established change mechanism.**
 - Relational content is not uniquely capable of revising the identity root. Once the root is represented and reachable, informational evidence can also revise it. Relationship remains distinctive because it helps keep the route open and directly contradicts expectations formed in isolation.
 - **Relationship makes evidence admissible; attention makes it findable. The therapist guides where inquiry turns while leaving what it discovers open to surprise. IFS is procedure-directive but content-nondirective: questions solicit observations from the client's experience, whereas supplied conclusions introduce content from the guide.**
 - Trust changes at two levels: a part revises what it expects from contact with Self, while the global hyper-model learns a broader precision profile for future activation.
@@ -70,7 +78,9 @@ A part is not a kind of psychological object but a phase of one. A burdened part
 - **Open the claim with the phase declaration ("a part is not a kind of psychological object but a phase of one") and the temporal freeze: the inference written under overwhelm never closed, so IFS's frozen-in-time doctrine and retrieval read as mechanism, not metaphor.**
 - Preview the protective-system corollary, scope the therapeutic comparison to ingredients rather than schools, and frame simulations as construction tests rather than clinical evidence.
 - ~~Position the paper as applying Beautiful Loop Theory's global epistemic-depth construct to local identity models, with relationship as the additional clinical move.~~
-- **Position the paper as applying Beautiful Loop Theory's global epistemic-depth construct to local identity models, with relationship and guided attention as complementary clinical moves. State the central clinical consequence: transformative evidence must be both trusted and found. Loving contact from the client's Self is a major form of such evidence—parts are seen, loved, and valued exactly as they are—while therapist-guided inquiry helps the system find identity-relevant evidence without dictating what it must discover.**
+- ~~**Position the paper as applying Beautiful Loop Theory's global epistemic-depth construct to local identity models, with relationship and guided attention as complementary clinical moves. State the central clinical consequence: transformative evidence must be both trusted and found. Loving contact from the client's Self is a major form of such evidence—parts are seen, loved, and valued exactly as they are—while therapist-guided inquiry helps the system find identity-relevant evidence without dictating what it must discover.**~~
+- **Position the paper as applying Beautiful Loop Theory's global epistemic-depth construct to local identity models, with relationship and guided attention as complementary clinical moves. State the central clinical consequence: transformative evidence must be both trusted and found. Therapist-guided inquiry helps the system find identity-relevant evidence without dictating what it must discover.**
+- **Introduce the C2 distinction compactly: Self-energy names the inferential regime; the Self-position names the broader enacted self-context available within it.**
 
 ### §2. IFS in Its Own Terms
 
@@ -78,7 +88,8 @@ A part is not a kind of psychological object but a phase of one. A burdened part
 - **State the organizing commitment—there are no bad parts (Schwartz, 2021)—as IFS's stance toward even the most costly behavior, and keep the refrain that trust is the medium of the therapy.**
 - Preserve the question *How do you feel toward this part?* as a probe of relationship to activation rather than activation intensity.
 - ~~End with the translation table, now aligned with the global precision-field account.~~
-- **End with the translation table, each entry giving the IFS meaning first and the formal representation second, plus the signpost that the table is a functional reconstruction, not an ontology; §10 holds the departures and the agnosticism, bounded by §1's wager.**
+- ~~**End with the translation table, each entry giving the IFS meaning first and the formal representation second, plus the signpost that the table is a functional reconstruction, not an ontology; §10 holds the departures and the agnosticism, bounded by §1's wager. Distinguish Self, Self-energy, Self-led relationship, and compassion in separate rows.**~~
+- **Keep separate rows for Self, Self-energy, Self-led relationship, compassion, witnessing, and unburdening. Define witnessing as context-held joint representation of the part and root-relevant present evidence; define unburdening as the clinical invitation for revision and selective release to complete, not as the reduction operation itself.**
 
 ### §3. Parts as Frozen Identity
 
@@ -108,9 +119,10 @@ A part is not a kind of psychological object but a phase of one. A burdened part
 - ~~End with the stack of frozen solutions and the need for a regime from which each model can be seen rather than seen through.~~
 - **Present the stack of frozen solutions as one tractable protector–exile pathway rather than the general topology of an internal system; name convergent, divergent, coalitional, polarized, reciprocal, and context-dependent configurations. End with the need for a regime from which each active model can be seen rather than seen through.**
 
-### §6. Self and Self-Energy
+### §6. Self, Self-Energy, and the Self-Position
 
-- Reconstruct Self as uncaptured inference plus the present self-state it makes available.
+- ~~Reconstruct Self as uncaptured inference plus the present self-state it makes available.~~
+- **Separate the standing capacity for uncaptured inference, the graded Self-energy regime under activation, and the Self-position made available within that regime.**
 - Introduce Beautiful Loop Theory's global hyper-model over precision, including the explicit extension of precision to the sensory likelihood.
 - ~~Distinguish global coordination from uniform gain or a single anatomical node.~~
 - ~~Separate depth from calm, threat reduction, local metacognition, and structural revision.~~
@@ -120,6 +132,8 @@ A part is not a kind of psychological object but a phase of one. A burdened part
 - **Describe Self-energy as a graded clinical profile involving part opacity, representational breadth, flexible attention, and revision availability; scalar summaries function only as measurement indices.**
 - **Distinguish the precision profile—what the system trusts—from the sampling policy—where attention turns.**
 - **Introduce representational redescription as a candidate change operation and dyadic regulation as temporary precision-field scaffolding.**
+- **Show adult-personal and field-like Self-positions without ranking them. Calibration, not expansiveness, determines whether either expresses Self-energy. A field-like position may contradict anticipated exhaustibility without implying that the organism is literally inexhaustible.**
+- **Fit the two three-part accounts together: Self-led contact = Self-energy + Self-position + care availability; Self-led compassion = epistemic availability + care valuation + policy capacity. State that the mapping is useful but not one-to-one.**
 
 ### §7. Capture and Context-Held Activation
 
@@ -130,14 +144,17 @@ A part is not a kind of psychological object but a phase of one. A burdened part
 
 ### §8. Relational Revision
 
+- **Use the Self-position as the C2→C3 bridge: Self-energy keeps the route open; the co-instantiated Self-position supplies adult capacity, present time, relationship, and available action as root-relevant evidence.**
+- **Explain why raw discrepancy is insufficient: the Self-position must remain available, apply to this activated experience, and be admitted by protector policy rather than segregated into another context.**
 - ~~Show how Self-led and dyadic relationship deliver evidence against the identity-level expectation of aloneness.~~
-- **Show how loving contact from the client's Self, together with second-order contact from the therapist, can contradict identity-level expectations of abandonment, conditional worth, or aloneness.**
+- ~~**Show how loving contact from the client's Self, together with second-order contact from the therapist, can contradict identity-level expectations of abandonment, conditional worth, or aloneness.**~~
+- **Show how Self-led and dyadic contact can supply root-relevant evidence against identity-level expectations of abandonment, conditional worth, or aloneness without treating love as a separately derived mechanism.**
 - **Separate evidence from search: relationship helps make transformative evidence admissible, while therapist-guided attention helps make relevant evidence findable. The therapist directs the procedure of inquiry, not the conclusion the client must reach.**
 - **Distinguish questions from interpretations mechanically. Inquiry selects where evidence will be sampled while leaving its value open; interpretation supplies the value itself. This creates a testable tradeoff between the immediate speed of accurate conclusions and the calibration and suggestion-resistance of inquiry under uncertainty or context change.**
 - State the corrected claim: relational evidence has privileged access and direct relevance, not unique revising power.
 - ~~Apply the same mechanism to protector trust, across local forecasts and the global precision profile.~~
 - ~~**Give trust the weight IFS gives it: most therapy hours are spent with protectors, and the exposure reading—catastrophe fails to occur—updates only one node of the protector's model. Develop the four evidence routes (outcome, world-state, self-state, relationship policy), refusal as epistemic action, the visible-yet-unwilling case, and the tactics/mandate asymmetry recovered from §5, keeping the two-level local/hyper trust structure.**~~
-- **Give trust the weight IFS gives it (most therapy hours; trust as the medium, echoing §2), then develop protector trust per the G-corollary bullets: three linked questions, hope entering as policy comparison, trust/permission distinction, visible-yet-unwilling, generalization by inferred structure, conditional rupture asymmetry. Exile reciprocal restraint is scoped to Limits.**
+- **Give trust the weight IFS gives it (most therapy hours; trust as the medium, echoing §2), then develop protector trust per the G-corollary bullets: three linked questions, hope entering as policy comparison, trust/permission distinction, visible-yet-unwilling, generalization by inferred structure, conditional rupture asymmetry.** ~~**Exile reciprocal restraint is scoped to Limits.**~~
 - Separate fast regime change from slower structural revision.
 - Develop selective model reduction, role transformation, melting, unburdening, and the generalization gradient.
 - **Read the fuller unburdening sequence through the account: retrieval as context-indexed redescription enacted (the unfinished moment meets the present); the do-over as the completion the moment was denied; invitation of new qualities as what selective reduction predicts; protector check-in as the hope-merchant counterfactual become a verifiable observation.**
@@ -172,13 +189,18 @@ A part is not a kind of psychological object but a phase of one. A burdened part
 - ~~Keep the secondary predictions about protector permission, premature unburdening, and habits versus protectors.~~
 - **Keep the secondary predictions about protector permission, premature unburdening, and habits versus protectors. Add a trust-route dissociation: trust earned through outcome evidence alone should remain specific to the tested contact, whereas trust that revises the protector's own self-state should transfer across the situations and gates that protector guards. Add a guided-inquiry prediction: questions that direct attention while leaving the answer open should improve calibration and reduce suggestion when the guide is uncertain or the context has changed, whereas accurate supplied conclusions may produce faster immediate change. Configural target structure should govern the value of targeted sampling, not by itself determine the inquiry–conclusion tradeoff. ~~Add the wager's empirical face: organization measures should screen off carrier measures—once activation, opacity, precision-field profile, and trust forecasts are conditioned on, part-type or part-identity variables should add no predictive power for outcome.~~ The wager's losing conditions live in §10's boundary paragraph, not in a screening-off prediction: both reviews found the regression-style operationalization unfixable in four sentences (organization-proxy carrier variables; mediation making it untestable), so it was cut. The boundary paragraph instead carries the fix-organization-in-advance constraint, and the hybrid continuity prediction is explicitly labeled as the wager's exposure.**
 - ~~Name the live limits: biological implementation, direct implementation of the Beautiful Loop generative process, derivation of redescription, evidence arriving “at a part,” stacked protection, polarization, self-like parts, accurate protectors, policy authority, and reconsolidation.~~
-- **Name the live limits: biological implementation, direct implementation of the Beautiful Loop generative process, derivation of redescription, evidence arriving “at a part,” stacked protection, polarization, self-like parts, accurate protectors, policy authority, reconsolidation, computational identification of loving contact, coupled therapist–client inference, autonomous acquisition and generalization of inquiry policies, and component-level transfer after guidance is removed.**
+- ~~**Name the live limits: biological implementation, direct implementation of the Beautiful Loop generative process, derivation of redescription, evidence arriving “at a part,” stacked protection, polarization, self-like parts, accurate protectors, policy authority, reconsolidation, computational identification of loving contact, coupled therapist–client inference, autonomous acquisition and generalization of inquiry policies, and component-level transfer after guidance is removed.**~~
+- ~~**Remove the standalone Limits and Next Steps subsection. Simulation boundaries remain where the relevant claims appear and in Appendices A–B; §10 moves directly from discriminating predictions to the wider implication and conclusion.**~~
+- **Replace the old research-backlog section with a short “Boundary Conditions and Decisive Tests” section: what C1–C3/G identify; what would materially narrow or defeat them; questions outside the formalism; and the complementary roles of computational, human-process, and comparative clinical tests. Do not inventory future simulations.**
+- **Keep contemplative stabilization as a secondary implication: constructive or deconstructive practice may make an uncaptured regime more available when a part activates, but durable root revision—not state intensity—is the predicted outcome. Treat intrinsic love as a neighboring nondual proposal, not a conclusion of the formalism.**
 - End on the opening distinction: the distance between *I am afraid* and *a part of me is afraid* is not detachment or less fear, but a beautiful loop held open in relationship.
 
 ### Appendix A. Claims and Simulation Support
 
-- **Audit every load-bearing claim from C1–C3 and G against the §9 record, sorted into supported, partially supported, and untested or failed. Scope: §§3–8 plus §10's simulation-facing formation-substrate comparison; §1's sufficiency wager is noted as clinical-empirical with no test in the record.**
-- **For each claim that is untested, partial, or failed, name the bounded simulation extension that would test it.**
+- ~~**Audit every load-bearing claim from C1–C3 and G against the §9 record, sorted into supported, partially supported, and untested or failed. Scope: §§3–8 plus §10's simulation-facing formation-substrate comparison; §1's sufficiency wager is noted as clinical-empirical with no test in the record.**~~
+- **Use one claim ledger with columns for claim, family, main location, dependencies, computational standing, and licensed wording. Mark unestablished claims as untested, interpretive, architecture-conditional, failed in the present construction, or empirically open. Keep implementation proposals and experiment catalogues out of the manuscript; Appendix B remains the complete simulation record.**
+- ~~**For each claim that is untested, partial, or failed, name the bounded simulation extension that would test it.**~~
+- **For unestablished claims, state only their standing and the wording that standing licenses; keep implementation plans in repository planning documents.**
 - **Keep §9's register: existence proofs, scope conditions, and construction checks—never clinical evidence.**
 
 ### Appendix B. Simulation Record
@@ -198,6 +220,9 @@ A part is not a kind of psychological object but a phase of one. A burdened part
 - **The inquiry–conclusion tradeoff is conditional: accurate conclusions can produce faster immediate change, while inquiry can preserve calibration and reduce suggestion when the guide is uncertain, wrong, or stale.**
 - **Configural describes statistical organization within a bundle. Relational is reserved for interpersonal relationship.**
 - **Informative social evidence should not be equated with loving contact or Self-energy; those constructs require additional theoretical and empirical identification.**
+- **Self-energy names the inferential regime; the Self-position names the broader self-context available within it; care availability determines whether the part's welfare can influence valuation and action.**
+- **Scale of identification is not epistemic depth. Adult-personal and field-like Self-positions are evaluated by calibration and root relevance, not ranked by expansiveness.**
+- **Self-led compassion is the suffering-specific expression of Self-led contact, not a synonym for high epistemic depth.**
 
 ## Remaining manuscript work
 
