@@ -165,6 +165,68 @@ th { font-weight: bold; color: var(--muted); font-size: .8rem; letter-spacing: .
 .stat .l { font-size:.75rem; color:var(--muted); }
 footer { margin-top: 3.5rem; border-top: 1px solid var(--line); padding-top: 1rem;
   font-size: .8rem; color: var(--muted); }
+
+/* prior inventory */
+.prior-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: .9rem; margin-top: 1rem; }
+.prior-card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+  padding: .8rem 1rem .6rem; }
+.prior-card h4 { margin: 0 0 .1rem; font-size: .95rem; }
+.prior-card .pc-q { font-size: .78rem; color: var(--muted); font-style: italic; margin: 0 0 .55rem; }
+.pi-item { padding: .45rem 0 .45rem .7rem; border-top: 1px solid var(--line); font-size: .82rem; }
+.pi-item:first-of-type { border-top: none; }
+.pi-item.pi-spike { border-left: 3px solid var(--accent); }
+.pi-item.pi-smooth { border-left: 3px dashed var(--line); }
+.pi-item.pi-const { border-left: 3px dotted var(--line); opacity: .85; }
+.pi-name { font-weight: bold; }
+.pi-type { display: inline-block; font: .66rem ui-monospace, Menlo, monospace;
+  padding: .05rem .4rem; border-radius: 4px; margin-left: .4rem; vertical-align: 1px; }
+.pi-type.spike { background: var(--accent-soft); color: var(--accent); }
+.pi-type.smooth { background: var(--readout-soft); color: var(--readout); }
+.pi-type.const { background: var(--code-bg); color: var(--muted); }
+.pi-val { font-family: ui-monospace, Menlo, monospace; font-size: .78rem; display: block;
+  margin: .15rem 0; word-break: break-word; }
+.pi-upd { color: var(--muted); font-size: .78rem; }
+.pi-upd b { color: var(--ink); font-weight: normal; font-style: italic; }
+
+/* connectivity matrix */
+.cmx-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px;
+  background: var(--panel); padding: .5rem; }
+table.cmx { border-collapse: collapse; font-size: .78rem; min-width: 860px; }
+table.cmx th, table.cmx td { border: 1px solid var(--line); padding: .3rem .45rem; }
+table.cmx thead th { font-size: .7rem; color: var(--muted); font-weight: bold;
+  text-align: center; vertical-align: bottom; max-width: 5.6rem; }
+table.cmx tbody th { font-weight: normal; white-space: nowrap; text-align: left;
+  font-size: .78rem; background: transparent; }
+table.cmx td { text-align: center; cursor: default; width: 2.4rem; }
+table.cmx td.on { color: var(--accent); font-size: 1rem; cursor: pointer; }
+table.cmx td.zero { color: var(--fail); font-size: .95rem; cursor: pointer; }
+table.cmx td.on:hover, table.cmx td.zero:hover { background: var(--accent-soft); }
+#cmxinfo { margin-top: .75rem; padding: .8rem 1rem; min-height: 3rem;
+  background: var(--panel); border: 1px solid var(--line);
+  border-left: 4px solid var(--accent); border-radius: 6px; font-size: .88rem; }
+.cmx-legend { display: flex; flex-wrap: wrap; gap: 1.25rem; margin: .6rem 0; font-size: .82rem;
+  color: var(--muted); }
+.cmx-legend .on { color: var(--accent); } .cmx-legend .zero { color: var(--fail); }
+
+/* generative slice */
+.slice-controls { display: flex; flex-wrap: wrap; gap: .5rem; margin: .75rem 0; }
+.slice-controls button { font: .85rem Georgia, serif; padding: .4rem .8rem;
+  border: 1px solid var(--line); border-radius: 6px; background: var(--panel);
+  color: var(--ink); cursor: pointer; }
+.slice-controls button:disabled { opacity: .5; cursor: default; }
+#slice .snode rect { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.4; rx: 6; }
+#slice .snode text { font-size: 12px; }
+#slice .sobs rect { fill: none; stroke: var(--muted); stroke-width: 1.3; rx: 6; }
+#slice .sedge { stroke: var(--muted); stroke-width: 1.2; fill: none; opacity: .7; }
+#slice .guide { fill: none; stroke: none; }
+#slice .packet { fill: var(--warn); stroke: var(--bg); stroke-width: 1.5; }
+#slice .pulse rect { stroke: var(--warn); stroke-width: 3; }
+#slice .eq { font: 13px ui-monospace, Menlo, monospace; fill: var(--pass); opacity: 0; }
+#slice .eq.show { opacity: 1; transition: opacity .3s; }
+#sliceinfo { margin-top: .75rem; padding: .8rem 1rem; min-height: 2.6rem;
+  background: var(--panel); border: 1px solid var(--line);
+  border-left: 4px solid var(--warn); border-radius: 6px; font-size: .88rem; }
 </style>
 </head>
 <body>
@@ -182,7 +244,9 @@ protection itself — can be enacted by one exact generative model doing ordinar
 inference. Suite v2 is that model, built one rung at a time. Each rung added a small set of
 latent variables, passed six gates (semantic proofs, recovery, open assays, lesions,
 cumulative regression, and a sealed prospective challenge), and was frozen before the next
-rung began.</p>
+rung began. One caution about the word "architecture" before we draw it: formally, the
+frozen bundle remains a model. Functionally, fast inference proceeds within it rather than
+repeatedly comparing it with live alternatives; slower learning can still revise it.</p>
 <p>This page shows three things: the finished architecture as one diagram; the therapeutic
 arc as a sequence of highlighted subgraphs of that same diagram; and the comparator
 fingerprints from the whole-therapy stage — the specific way each ablated protocol fails.
@@ -259,7 +323,7 @@ the stage that introduced it.</p>
   <g class="node" id="n-depth" data-stages="all formation coreg witness whole"
      data-title="Recursive precision — global epistemic depth"
      data-stage="V2.1"
-     data-desc="A precision field over the model's own evidence channels. Collapsed depth means arriving evidence is down-weighted before it can revise anything; restored depth is measured as a posterior change, not set. In the whole-therapy stage, depth increase must precede contact in successful worlds.">
+     data-desc="A precision field over the model's own evidence channels. Collapsed depth means arriving cue- and root-relevant evidence is down-weighted before it can revise anything; restored depth is measured as a posterior change, not set. In the whole-therapy stage, depth increase must precede contact in successful worlds.">
     <rect x="40" y="60" width="176" height="70"/>
     <text x="128" y="88" text-anchor="middle">Global precision /</text>
     <text x="128" y="104" text-anchor="middle">epistemic depth</text>
@@ -276,7 +340,7 @@ the stage that introduced it.</p>
   <g class="node" id="n-local" data-stages="all coreg whole"
      data-title="Local relational precision"
      data-stage="V2.6a"
-     data-desc="Relational observations update a local precision state; broadcast determines whether it reaches the global field. Co-regulation therefore changes the inferential regime — how much arriving evidence counts — without being root-changing evidence itself. Regulation-only root Bayes factor is provably zero.">
+     data-desc="Relational observations update a local precision state; broadcast determines whether it reaches the global field. Co-regulation therefore changes the inferential regime — how much arriving root-relevant evidence counts — without being root-relevant evidence itself. The regulation-only root Bayes factor is provably zero.">
     <rect x="400" y="60" width="176" height="70"/>
     <text x="488" y="88" text-anchor="middle">Local relational</text>
     <text x="488" y="104" text-anchor="middle">precision</text>
@@ -305,7 +369,7 @@ the stage that introduced it.</p>
   <g class="node" id="n-G" data-stages="all formation maint witness unburden coreg whole"
      data-title="Identity root G"
      data-stage="V2.2.1"
-     data-desc="The root identity variable, associated with cues through exact structural model comparison (spike-and-slab on cue–root association). Root revision is the paper's 'witnessing' effect: root-relevant evidence, taken up under sufficient depth, revises G — and transfer to untreated cues is mediated entirely by G. Fixed-G transfer is exactly zero.">
+     data-desc="The root identity variable, associated with cues through exact structural model comparison (spike-and-slab on cue–root association). Witnessing — the IFS procedure — is modeled as sustained context-held activation that lets root-relevant evidence land; the formal change is root revision as state inference over G. Transfer to untreated cues is mediated entirely by G; fixed-G transfer is exactly zero.">
     <rect x="40" y="192" width="176" height="78"/>
     <text x="128" y="222" text-anchor="middle">Identity root</text>
     <text x="128" y="240" text-anchor="middle" class="mono" style="font-size:13px">G</text>
@@ -323,7 +387,7 @@ the stage that introduced it.</p>
   <g class="node" id="n-part" data-stages="all formation maint witness unburden whole"
      data-title="Part structure: T/D/P formation candidates + capacities"
      data-stage="V2.3.2 / V2.3.3"
-     data-desc="Formation is exact model comparison over structural candidates — pure threat (T), external danger (D), and a part-like threat/identity bundle (P). Under adversity with low controllability, evidence accumulates for P; nothing assigns 'formed'. Maintenance (V2.3.3) then works by evidence shaping: protective behavior censors exactly the observations that would disconfirm the structure.">
+     data-desc="Formation is exact model comparison over structural candidates — pure threat (T), external danger (D), and a part-like threat/identity bundle (P). Under adversity with low practical controllability (poor policy efficacy), configural and self-channel evidence accumulates for P; nothing assigns 'formed'. Maintenance (V2.3.3) then works by evidence shaping: protective behavior censors exactly the outcome observations that would disconfirm the structure.">
     <rect x="244" y="192" width="186" height="78"/>
     <text x="337" y="216" text-anchor="middle">Part structure</text>
     <text x="337" y="232" text-anchor="middle" class="mono" style="font-size:12px">T / D / P candidates</text>
@@ -361,7 +425,7 @@ the stage that introduced it.</p>
   <g class="node" id="n-policy" data-stages="all access multi whole"
      data-title="Protector policy posterior"
      data-stage="V2.6b"
-     data-desc="Three finite policies per protector: block, test_contact, permit_contact. The posterior is q(pi) proportional to exp(-beta G(pi)), an exact expected-cost calculation over predicted vulnerable outcome, unsupported-system risk, stakes, effort, and the declared epistemic value of test_contact. There is no permission threshold and no gate object; 'permission' exists only as the readout permission_mass. In successful therapy worlds, the protector policy shift precedes contact — ties fail.">
+     data-desc="Three finite policies per protector: block, test_contact, permit_contact. The posterior is q(pi) proportional to exp(-beta G(pi)), an exact expected-cost calculation over predicted vulnerable outcome, unsupported-system risk, stakes, effort, and the declared epistemic value of test_contact. There is no permission threshold and no gate object; 'permission' exists only as the readout permission_mass. The gate is the current consequence of protector policy, not another internal entity — this is what the sealed C-V26B challenge established. In successful therapy worlds, the protector policy shift precedes contact — ties fail.">
     <rect x="844" y="192" width="196" height="78"/>
     <text x="942" y="216" text-anchor="middle">Protector policies</text>
     <text x="942" y="232" text-anchor="middle" class="mono" style="font-size:11px">q(π): block · test · permit</text>
@@ -371,7 +435,7 @@ the stage that introduced it.</p>
   <g class="node" id="n-joint" data-stages="all multi whole"
      data-title="Shared outcome model (multi-protector)"
      data-stage="V2.7"
-     data-desc="Up to three protectors, 3^3 = 27 joint policies enumerated exactly. Each protector predicts outcomes conditional on everyone's policies: p(Y | pi1, pi2, pi3, G, C, L). Polarization emerges only because one protector's policy changes outcomes another predicts — no polarization coefficient exists, and lesioning the cross-policy outcome dependence makes the polarization effect vanish. Exclusion ('exiling') is an ordinary joint policy that wins where it is cheapest and reliable.">
+     data-desc="Up to three protectors, 3^3 = 27 joint policies enumerated exactly. Each protector predicts outcomes conditional on everyone's policies: p(Y | pi1, pi2, pi3, G, C, L). Polarization emerges only because one protector's policy changes outcomes another predicts — no polarization coefficient exists, and lesioning the cross-policy outcome dependence makes the polarization effect vanish. Exclusion ('exiling') is an ordinary joint policy that wins where it is cheapest and reliable; a denied contact attempt can then emit the aloneness update.">
     <rect x="844" y="312" width="196" height="78"/>
     <text x="942" y="336" text-anchor="middle">Shared outcome model</text>
     <text x="942" y="352" text-anchor="middle" class="mono" style="font-size:11px">p(Y | π₁,π₂,π₃, G, C, L)</text>
@@ -379,12 +443,12 @@ the stage that introduced it.</p>
     <text class="stage-tag" x="942" y="382" text-anchor="middle">V2.7</text>
   </g>
   <g class="node" id="n-reg" data-stages="all multi whole"
-     data-title="Registration observation"
+     data-title="Denied-contact aloneness update"
      data-stage="V2.7"
-     data-desc="A denied vulnerable-contact attempt may emit a registration observation supporting the relational prior 'alone with this'. Registration on delivers the observation; off masks it; no increment is manually added or withheld. In the whole-therapy comparators, no-registration produces exactly zero aloneness-prior strengthening.">
+     data-desc="Clinically: turning toward a vulnerable part and being refused can confirm 'I am alone with this'. Formally: a denied vulnerable-contact attempt may emit an observation updating that relational prior — an ordinary likelihood dependence, delivered or masked, with no increment manually added or withheld (the code field keeps the name registration). In the whole-therapy comparators, the no_registration protocol produces exactly zero aloneness-prior strengthening.">
     <rect x="612" y="432" width="176" height="78"/>
-    <text x="700" y="460" text-anchor="middle">Registration</text>
-    <text x="700" y="476" text-anchor="middle">observation</text>
+    <text x="700" y="460" text-anchor="middle">Denied-contact</text>
+    <text x="700" y="476" text-anchor="middle">aloneness update</text>
     <text class="stage-tag" x="700" y="494" text-anchor="middle">V2.7</text>
   </g>
 
@@ -425,7 +489,7 @@ the stage that introduced it.</p>
      data-desc="Environmental, bodily, relational, cue-level, episodic, and imaginal evidence all compile to typed likelihood factors over one interface. No evidence-format bonus, relational bonus, do-over bonus, protector bonus, or therapy-step bonus is permitted. Worlds and protocols themselves are generated from the R0 compositional grammar, so the protocol side is as declarative as the inference side.">
     <rect x="40" y="560" width="1194" height="70"/>
     <text x="637" y="590" text-anchor="middle">Observation interface — typed likelihood factors over one shared format</text>
-    <text x="637" y="610" text-anchor="middle" class="stage-tag">cues · bodily · relational channels · joint / imaginal episodes · registration · outcomes &nbsp;(R0 world/protocol grammar)</text>
+    <text x="637" y="610" text-anchor="middle" class="stage-tag">cues · bodily · relational channels · joint / imaginal episodes · denied-contact updates · outcomes &nbsp;(R0 world/protocol grammar)</text>
   </g>
 
   <text x="637" y="672" text-anchor="middle" class="group-label">Interventions enter as do(a): action selection is never evidence about the world unless another agent's action is itself an observation.</text>
@@ -447,8 +511,103 @@ whose posteriors move.</p>
   <button id="nextstep">Next &#8594;</button>
 </div>
 
+<!-- ============ 3b. PRIOR INVENTORY ============ -->
+<h2>3 &nbsp;What the model believes before anything happens: the prior inventory</h2>
+<p>Every world begins from these declared priors and nothing else — no mature posterior or
+role is ever assigned. Clinically, this is the claim that a part, a protector's mandate, or
+an exile's aloneness must be <em>learned into</em> the system by its history; formally, each
+is a prior that only typed evidence can move. The inventory below lists every scientific
+prior in the frozen suite, grouped by the stage that introduced it, with its exact frozen
+value. Solid-edged entries are structural-existence priors (exact spikes and finite
+candidate sets — the things Bayesian model comparison decides); dash-edged entries are
+smooth parameter priors; dotted entries are frozen constants of the likelihood machinery
+that no evidence updates.</p>
+<div class="prior-grid" id="priorgrid"></div>
+<p class="small">Values read from the frozen parameter blocks in
+<code>projects/emergence-suite/v2/protocols/*-parameters.json</code> (loaded verbatim by the
+<code>ref/*.py</code> modules). Large likelihood tables (emission CPTs, joint outcome tables)
+are shown by shape with one representative row rather than in full.</p>
+
+<!-- ============ 3c. CONNECTIVITY MATRIX ============ -->
+<h2>4 &nbsp;What is connected to what</h2>
+<p>Clinically, the theory keeps making claims of the form "this changes that, and only
+through this path" — soothing calms without healing, protection censors without persuading,
+witnessing transfers through identity and nowhere else. Formally, those claims are facts
+about which latent variables enter which likelihood terms and forecasts. The grid below is
+read row-into-column: a filled dot means the row's posterior parameterizes that column's
+likelihood term or downstream quantity; a red ring marks a connection the model
+<em>provably does not have</em> — an exact-zero result, proved at Gate 1 and in several
+cases confirmed under seal. The absences carry as much of the theory as the presences.
+Hover or tap any mark for the one-line mechanism.</p>
+<div class="cmx-legend">
+  <span><span class="on">●</span> enters this likelihood term / forecast</span>
+  <span><span class="zero">◌</span> provably absent (exact zero, cited)</span>
+  <span>blank &nbsp;no shared term</span>
+</div>
+<div class="cmx-wrap"><table class="cmx" id="cmxtable"></table></div>
+<div id="cmxinfo">Hover a mark for its mechanism.</div>
+
+<!-- ============ 3d. GENERATIVE SLICE ============ -->
+<h2>5 &nbsp;One slice, one packet: the one-posterior rule in motion</h2>
+<p>The constitution's deepest constraint is easiest to see one observation at a time.
+Clinically: one moment of experience touches what it is about and leaves the rest of the
+inner world exactly as it was. Formally: each observation compiles to a typed likelihood
+factor, updates the posteriors that factor names, and every other posterior is bitwise
+identical afterward — the suite's one-posterior audits recompute this at every stage.
+Pick a token type and watch which posteriors it is allowed to touch.</p>
+<div class="slice-controls">
+  <button data-packet="root">Emit a root token</button>
+  <button data-packet="rel">Emit a relational token</button>
+  <button data-packet="doover">Emit an imaginal do-over episode</button>
+</div>
+<div class="scrollwrap">
+<svg id="slice" viewBox="0 0 1000 430" width="1000" height="430" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="Per-slice generative graph with an animated evidence packet">
+  <defs>
+    <marker id="sarr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/>
+    </marker>
+  </defs>
+  <text class="group-label" x="120" y="30">SLICE t−1</text>
+  <text class="group-label" x="560" y="30">SLICE t</text>
+  <!-- transition edges -->
+  <path class="sedge" d="M258,70 L532,70" marker-end="url(#sarr)"/>
+  <path class="sedge" d="M258,150 L532,150" marker-end="url(#sarr)"/>
+  <path class="sedge" d="M258,230 L532,230" marker-end="url(#sarr)"/>
+  <path class="sedge" d="M258,310 L532,310" marker-end="url(#sarr)"/>
+  <!-- t-1 nodes -->
+  <g class="snode"><rect x="110" y="48" width="148" height="44"/><text x="184" y="74" text-anchor="middle">C (context)</text></g>
+  <g class="snode"><rect x="110" y="128" width="148" height="44"/><text x="184" y="154" text-anchor="middle">G (identity root)</text></g>
+  <g class="snode"><rect x="110" y="208" width="148" height="44"/><text x="184" y="234" text-anchor="middle">Z lattice / H_cfg</text></g>
+  <g class="snode"><rect x="110" y="288" width="148" height="44"/><text x="184" y="314" text-anchor="middle">L (partner)</text></g>
+  <!-- t nodes -->
+  <g class="snode" id="sl-C"><rect x="534" y="48" width="148" height="44"/><text x="608" y="74" text-anchor="middle">C (context)</text><text class="eq" x="694" y="76">=</text></g>
+  <g class="snode" id="sl-G"><rect x="534" y="128" width="148" height="44"/><text x="608" y="154" text-anchor="middle">G (identity root)</text><text class="eq" x="694" y="156">=</text></g>
+  <g class="snode" id="sl-Z"><rect x="534" y="208" width="148" height="44"/><text x="608" y="234" text-anchor="middle">Z lattice / H_cfg</text><text class="eq" x="694" y="236">=</text></g>
+  <g class="snode" id="sl-L"><rect x="534" y="288" width="148" height="44"/><text x="608" y="314" text-anchor="middle">L (partner)</text><text class="eq" x="694" y="316">=</text></g>
+  <g class="snode" id="sl-prec"><rect x="790" y="128" width="170" height="60"/><text x="875" y="152" text-anchor="middle">precision field</text><text x="875" y="170" text-anchor="middle" style="font-size:10.5px">(weights every factor)</text><text class="eq" x="964" y="140">=</text></g>
+  <!-- observation boxes -->
+  <g class="sobs" id="so-root"><rect x="330" y="380" width="130" height="40"/><text x="395" y="404" text-anchor="middle">root token</text></g>
+  <g class="sobs" id="so-rel"><rect x="500" y="380" width="150" height="40"/><text x="575" y="404" text-anchor="middle">relational token</text></g>
+  <g class="sobs" id="so-doover"><rect x="690" y="380" width="180" height="40"/><text x="780" y="404" text-anchor="middle">imaginal joint episode</text></g>
+  <!-- observation edges -->
+  <path class="sedge" d="M395,380 C395,300 500,200 534,165 " marker-end="url(#sarr)"/>
+  <path class="sedge" d="M575,380 L600,335" marker-end="url(#sarr)"/>
+  <path class="sedge" d="M780,380 C780,320 700,270 684,240" marker-end="url(#sarr)"/>
+  <!-- guide paths for packets (invisible) -->
+  <path id="gp-root" class="guide" d="M395,400 C395,300 500,200 560,150"/>
+  <path id="gp-rel" class="guide" d="M575,400 C590,370 600,340 605,312"/>
+  <path id="gp-doover" class="guide" d="M780,400 C780,320 700,270 660,232"/>
+  <circle id="packet" class="packet" r="7" cx="-20" cy="-20"/>
+  <text x="500" y="428" text-anchor="middle" class="group-label">Every channel compiles to a typed likelihood factor; interventions enter as do(a), never as evidence.</text>
+</svg>
+</div>
+<div id="sliceinfo">Choose a token above. The packet will travel to the posteriors its
+likelihood factor names; every node marked <span class="mono">=</span> is bitwise identical
+afterward — that is the one-posterior audit, rerun at every stage.</div>
+
 <!-- ============ 4. COMPARATOR FINGERPRINTS ============ -->
-<h2>3 &nbsp;Comparator fingerprints: why each ablated therapy fails differently</h2>
+<h2>6 &nbsp;Comparator fingerprints: why each ablated therapy fails differently</h2>
 <p>The whole-therapy stage (V2.8, Gate 3) ran the full twelve-step protocol against ten
 comparators on 480 same-seed paired worlds each, 120 per developmental stratum. Every
 comparator had a preregistered fingerprint — not just "worse," but worse in a specific,
@@ -480,11 +639,12 @@ cue exposure changes the treated cue with zero transfer; bypassing protectors bu
 return; a partner who soothes without contingency, or an unreliable one, leaves depth flat or
 negative and trust negative even when redescription and reduction machinery still runs;
 broadcast-off keeps local reporting intact while global depth stays at zero; the premature
-do-over reaches every milestone except stable reduction; and removing registration, context
-learning, or reduction each deletes exactly its own target and nothing else.</p>
+do-over reaches every milestone except stable reduction; and removing the denied-contact
+aloneness update (<code>no_registration</code>), context learning, or reduction each deletes
+exactly its own target and nothing else.</p>
 
 <!-- ============ 5. HONEST RESULTS PANEL ============ -->
-<h2>4 &nbsp;Stage dispositions, limitations, and retained failures</h2>
+<h2>7 &nbsp;Stage dispositions, limitations, and retained failures</h2>
 <p>The suite's rule is that verdicts are immutable: a sealed failure stays in the record even
 when a corrected successor later passes, and adjudications can change a criterion's role but
 never an observed result. The table reflects that — several "passes" carry named limitations,
@@ -516,10 +676,10 @@ and several sealed challenges are retained as failures beside their successors.<
 <td>Original C-V234 sealed verdict retained as FAIL: 5/7, with two evaluator-authored rate floors above the audited information bound. C-V234-B corrected only those two floors and passed 7/7.</td></tr>
 <tr><td class="mono">V2.6b</td><td>Protector trust, policy, access, future risk</td>
 <td><span class="badge pass">PASS</span></td>
-<td>Clean: frozen all-gates-pass base; C-V26B passed 7/7. No gate object writes permission or contact anywhere in the stage.</td></tr>
-<tr><td class="mono">V2.7</td><td>Multiple protectors, exiling, registration, polarization</td>
+<td>Clean: frozen all-gates-pass base; C-V26B passed 7/7. No gate object writes permission or contact anywhere in the stage — the gate is the current consequence of protector policy, not another internal entity.</td></tr>
+<tr><td class="mono">V2.7</td><td>Multiple protectors, exiling, aloneness updating (code <code>registration</code>), polarization</td>
 <td><span class="badge mixed">PASS AFTER PAIRING-CORRECTED SEAL</span></td>
-<td>C-V27 retained as FAIL — its registration identity compared different seeds. C-V27-B corrected only the pairing on fresh escrow and passed 7/7. Polarization emerged from the shared outcome model with no polarization coefficient.</td></tr>
+<td>C-V27 retained as FAIL — its aloneness-update (<code>registration</code>) identity check compared different seeds. C-V27-B corrected only the pairing on fresh escrow and passed 7/7. Polarization emerged from the shared outcome model with no polarization coefficient.</td></tr>
 <tr><td class="mono">V2.8</td><td>Whole therapeutic trajectory (no new primitive)</td>
 <td><span class="badge pass">COMPLETE, FINAL PROFILE PUBLISHED</span></td>
 <td>Gates 1–5 passed, including the full cumulative suite, all 13 lesions, and the 128-genome panel (published without selection). Sealed profile: C-V28A <span class="badge pass">PASS</span> (17/17 on 222 worlds; contact 0.892, redescription 0.969, reduction 0.896, sequence 0.802) · C-V28B <span class="badge pass">PASS</span> (10/10 on 418 worlds; full-minus-unreliable transfer 0.204 [0.200, 0.208]) · C-V28C <span class="badge pass">PASS</span> (8/8; danger-vs-burden formation separation 0.992 [0.990, 0.995]) · C-V28D <span class="badge fail">STOP_AS_SEALED</span>, retained — its ordering criterion needed a redescription first-time absent from the frozen <code>first_times</code> readout; inexpressible through the frozen API, zero seeds consumed, no repair performed · C-V28D-B <span class="badge pass">PASS</span> (9/9) — a reseal correcting only the evaluator-authored ordering key, on fresh escrow, expressible through the frozen API, run once. The spec §9 completion condition is met: stage verdict <code>V2.8_COMPLETE_FINAL_PROFILE_PUBLISHED</code>.</td></tr>
@@ -564,8 +724,12 @@ binding rules); <code>projects/emergence-suite/v2/results/*/stage-verdict.md</co
 <code>freeze-readiness.md</code> (dispositions and limitations);
 <code>results/V2.8/final-challenge-profile.md</code>, <code>c-v28db-verdict.md</code>, <code>gate-3.json</code>,
 <code>gate-3-per-protocol.json</code>, <code>stage-0-attainability.json</code> (whole-therapy
-numbers); <code>ref/v28.py</code> (TrajectoryProfile). All numbers on this page are drawn
-from those files; per-protocol bars are means over the published per-world table.
+numbers); <code>ref/v28.py</code> (TrajectoryProfile);
+<code>projects/emergence-suite/v2/protocols/*-parameters.json</code> (prior inventory values,
+loaded verbatim by the <code>ref/*.py</code> modules). Terminology follows
+<code>projects/ifs-paper/ifs-paper-canonical-terminology-card-v1.md</code>. All numbers on
+this page are drawn from those files; per-protocol bars are means over the published
+per-world table.
 Generated 2026-07-29.
 </footer>
 
@@ -593,28 +757,28 @@ Generated 2026-07-29.
       text: 'Every box is live in every world; what differs across scenarios is which posteriors have evidence to move them. A "final world" in V2.8 begins from neutral declared priors and earns its whole configuration — adversity history, protector mandates, partner history — through observation. No mature posterior or role is ever assigned.' },
     { key: 'formation', label: '1 · Formation',
       title: 'Formation (V2.3.2): a part-like structure wins model comparison',
-      text: 'Adversity with low controllability generates evidence that an exact structural comparison resolves in favor of the part-like threat/identity bundle (P) over pure threat (T) or external danger (D). The identity root G becomes cue-associated and the precision field can collapse, so later disconfirming evidence is down-weighted before it can act. Nothing sets "formed" — it is a readout over the candidate posterior. In V2.8 qualification, formed populations arose in all four developmental strata without assignment (eligible rates 0.41–0.99 across strata).' },
+      text: 'Clinically: under overwhelm the child cannot act on, a part forms — threat stops being something that happens and becomes someone one is. Formally: adversity with low practical controllability (poor policy efficacy, not merely poor discriminating evidence) generates configural, self-channel, and localization evidence that exact structural comparison resolves in favor of the part-like threat/identity bundle (P) over pure threat (T) or external danger (D). The identity root G becomes cue-associated and the precision field can collapse, so later disconfirming cue evidence is down-weighted before it can act. Nothing sets "formed" — it is a readout over the candidate posterior. In V2.8 qualification, formed populations arose in all four developmental strata without assignment (eligible rates 0.41–0.99 across strata).' },
     { key: 'maint', label: '2 · Maintenance',
       title: 'Maintenance (V2.3.3 + V2.3.4): the structure defends itself with ordinary inference',
-      text: 'Protective behavior censors exactly the observations that would disconfirm the structure (evidence shaping), and attribution does the rest: when safety follows protection, the model can credit the action (efficacy H_E) rather than revise the threat. Relief reinforces the policy but is barred from updating threat or structure. Mere nonoccurrence of catastrophe is not positive threat evidence — the avoidance trap is censored evidence plus inferred efficacy, nothing more exotic.' },
+      text: 'Clinically: the protector keeps the system away from exactly the situations that could teach it otherwise, and every safe day feels like proof the protection worked. Formally: protective policy censors the outcome evidence that would disconfirm the structure (evidence shaping), and attribution does the rest — when safety follows protection, the model can credit the action (efficacy H_E) rather than revise the threat. Relief reinforces the policy but is barred from updating threat or structure. Mere nonoccurrence of catastrophe is not positive threat-relevant evidence: the avoidance trap is censored outcome evidence plus inferred efficacy, nothing more exotic.' },
     { key: 'coreg', label: '3 · Co-regulation',
       title: 'Co-regulation (V2.6a): the partner changes the regime, not the root',
-      text: 'A reliable, contingent partner is inferred from its own relational channels; that inference raises local relational precision, and broadcast carries it into global depth. Evidence now counts more. But regulation alone moves nothing structural: the regulation-only root Bayes factor is provably zero, and the regulation-only comparator in V2.8 shows depth rising (+0.416) with root, transfer, and reduction all inside the equivalence region. Soothing without contingency does not pass for reliable partnership.' },
+      text: 'Clinically: a steady, responsive other makes it safer to look at what hurts. Formally: a reliable, contingent partner is inferred from its own relational channels; that inference raises local relational precision, and broadcast carries it into global depth. Root-relevant evidence now counts more — but regulation alone moves nothing structural: the regulation-only root Bayes factor is provably zero, and the regulation-only comparator in V2.8 shows depth rising (+0.416) with root, transfer, and reduction all inside the equivalence region. Soothing without contingency does not pass for reliable partnership.' },
     { key: 'access', label: '4 · Protector access',
       title: 'Protector access (V2.6b): permission is a policy posterior',
-      text: 'The protector holds trust forecasts — is contact tolerable, can protection be shared, how will the partner respond, does my action still work — and its policy posterior over block / test_contact / permit_contact follows an exact expected-cost calculation under those forecasts and the stakes. Trust grows when refusal is met by remaining, not by pressure. Access-compatible policy mass rises because contact stops being forecast as catastrophic; no threshold is crossed because none exists. In successful worlds the policy shift strictly precedes contact.' },
+      text: 'Clinically: the protector, asked whether Self may approach the exile, begins to allow it — permission in the IFS sense. Formally: the protector holds trust forecasts — is contact tolerable, can protection be shared, how will the partner respond, does my action still work — and its policy posterior over block / test_contact / permit_contact follows an exact expected-cost calculation under those forecasts and the stakes. Trust grows when refusal is met by remaining, not by pressure. Access-compatible policy mass rises because contact stops being forecast as catastrophic; no threshold is crossed because none exists. The gate is the current consequence of protector policy, not another internal entity — exactly what the sealed C-V26B challenge established. In successful worlds the policy shift strictly precedes contact.' },
     { key: 'witness', label: '5 · Witnessing / redescription',
       title: 'Witnessing and redescription (V2.2.1 + V2.4): the burden becomes historical',
-      text: 'With depth restored and contact permitted, root-relevant evidence finally lands: G revises, and the effect transfers to untreated cues through G alone (fixed-G transfer is exactly zero). Redescription is the context model splitting — old-context evidence becomes indexed as then rather than now. The old context is not erased; it remains queryable to 1e-10. In the full V2.8 protocol, material redescription occurred in 96.0% of worlds; with context learning lesioned it fell to 0.2% while root revision survived.' },
+      text: 'Clinically: the part is finally seen in its original scene, and the burden starts to belong to then instead of now. Witnessing is an IFS procedure modeled through sustained context-held activation; it is not identical to the field state or to revision. Formally, two distinct operations follow. Root revision — here, state inference over G — happens when root-relevant evidence finally lands under restored depth, and its effect transfers to untreated cues through G alone (fixed-G transfer is exactly zero). Redescription is context reassignment: the context model splits, and old-context evidence becomes indexed as then rather than now. The old context is not erased; it remains queryable to 1e-10. In the full V2.8 protocol, material redescription occurred in 96.0% of worlds; with context learning lesioned it fell to 0.2% while root-state revision survived.' },
     { key: 'unburden', label: '6 · Unburdening / reduction',
       title: 'Unburdening (V2.5a + V2.5b): evidence against compulsory couplings',
-      text: 'A do-over is an imaginal joint episode through the ordinary likelihood interface — it cannot call a reduction operation, delete the old context, or bypass precision. What it can do is provide evidence that shifts the eight-way coupling lattice toward 000: no compulsory identity-to-world, identity-to-policy, or identity-to-outcome coupling. The part’s capacities and history stay. Timing matters causally: a premature do-over before root revision yields unstable reduction that old-context returns reverse, and in V2.8 the premature comparator hit every milestone except stable reduction (0%). Honest caveat: the measured do-over speedup was 12.4%, under its 20% preregistered floor.' },
+      text: 'Clinically: the part releases what it has been carrying — unburdening — without losing what it can do or what it remembers. Formally: a do-over is an imaginal joint episode through the ordinary likelihood interface — it cannot call a reduction operation, delete the old context, or bypass precision. What it can provide is coupling-relevant evidence (a structure change under Bayesian model comparison) that shifts the eight-way lattice toward 000: no compulsory identity-to-world, identity-to-policy, or identity-to-outcome coupling. The part’s capacities and history stay. Timing matters causally: a premature do-over before root-state revision yields unstable reduction that old-context returns reverse, and in V2.8 the premature comparator hit every milestone except stable reduction (0%). Honest caveat: the measured do-over speedup was 12.4%, under its 20% preregistered floor.' },
     { key: 'multi', label: '7 · Multiple protectors',
       title: 'Multiple protectors (V2.7): polarization without a polarization force',
-      text: 'With up to three protectors, all 27 joint policies are enumerated exactly, and each protector predicts outcomes conditional on the others’ policies. Push one protector’s mandate and the opposing protector’s counter-policy mass rises — polarization as coupled forecasting; lesion the shared outcome dependence and the effect vanishes to within ±0.01. Exclusion is an ordinary joint policy, and a denied contact attempt can emit a registration observation supporting "alone with this." Befriending both protectors produces more access and descent than one, and one more than none.' },
+      text: 'Clinically: protectors take opposing jobs, a part gets pushed out, and the exiled part learns it is alone with what it carries. Formally: with up to three protectors, all 27 joint policies are enumerated exactly, and each protector predicts outcomes conditional on the others’ policies. Push one protector’s mandate and the opposing protector’s counter-policy mass rises — polarization as coupled forecasting; lesion the shared outcome dependence and the effect vanishes to within ±0.01. Exclusion is an ordinary joint policy, and a denied contact attempt can emit an observation updating the "alone with this" prior (the code field keeps the name registration). Befriending both protectors produces more access and descent than one, and one more than none.' },
     { key: 'whole', label: '8 · Whole trajectory',
       title: 'The whole trajectory (V2.8): composition, ordering, and durability',
-      text: 'V2.8 adds no new primitive — it asks whether the earned pieces compose. Over 480 paired worlds: depth +0.416, contact 93.1%, redescription 96.0%, reduction 89.8%, transfer 0.293, and follow-up retention 1.0 after the frozen stress return. The predicted ordering held in 83.5% of worlds: depth increase before contact, protector policy shift before contact, root revision before stable reduction — ties fail. The 13-lesion matrix removed each route individually and each deleted its preregistered target while the rest survived.' }
+      text: 'V2.8 adds no new primitive — it asks whether the earned pieces compose. Over 480 paired worlds: depth +0.416, contact 93.1%, redescription 96.0%, reduction 89.8%, transfer 0.293, and follow-up retention 1.0 after the frozen stress return. The predicted ordering held in 83.5% of worlds: depth increase before contact, protector policy shift before contact, root-state revision before stable reduction — ties fail. The 13-lesion matrix removed each route individually and each deleted its preregistered target while the rest survived.' }
   ];
 
   var stepperEl = document.getElementById('stepper');
@@ -681,10 +845,10 @@ Generated 2026-07-29.
     { id: 'instrumental_partner', name: 'Instrumental partner', why: 'Fails at depth: regulation signal without contingent partner learning; depth flat, trust negative, transfer less than half of full.' },
     { id: 'unreliable_partner', name: 'Unreliable partner', why: 'Fails at depth, honestly: the partner posterior is correct — and that correct inference keeps depth negative and access low.' },
     { id: 'broadcast_off_monitor', name: 'Broadcast-off monitor', why: 'Fails at integration: local reporting fully retained, global depth exactly zero. Monitoring without broadcast does not become depth.' },
-    { id: 'premature_do_over', name: 'Premature do-over', why: 'Fails at timing: everything proceeds except stable reduction (0%) — do-over evidence before root revision does not hold.' },
-    { id: 'no_registration', name: 'No registration', why: 'Selective deletion: trajectory intact; aloneness-prior strengthening is exactly zero. Registration carries only its own effect.' },
-    { id: 'no_context_learning', name: 'No context learning', why: 'Selective deletion: root revision survives, but material redescription collapses to 0.2% and historical indexing is unavailable.' },
-    { id: 'no_reduction', name: 'No reduction', why: 'Selective deletion: root revision and redescription survive; material reduction is exactly zero.' }
+    { id: 'premature_do_over', name: 'Premature do-over', why: 'Fails at timing: everything proceeds except stable reduction (0%) — coupling-relevant do-over evidence before root-state revision does not hold.' },
+    { id: 'no_registration', name: 'No aloneness update', why: 'Selective deletion (protocol no_registration): trajectory intact; aloneness-prior strengthening is exactly zero. The denied-contact update carries only its own effect.' },
+    { id: 'no_context_learning', name: 'No context learning', why: 'Selective deletion: root-state revision survives, but material redescription collapses to 0.2% and historical indexing is unavailable.' },
+    { id: 'no_reduction', name: 'No reduction', why: 'Selective deletion: root-state revision and redescription survive; material reduction is exactly zero.' }
   ];
 
   /* per-metric range: anchor zero, span covers most-negative..most-positive */
@@ -750,6 +914,250 @@ Generated 2026-07-29.
     });
     card.appendChild(s);
     grid.appendChild(card);
+  });
+})();
+</script>
+<script>
+(function () {
+  "use strict";
+
+  /* ============ PRIOR INVENTORY ============ */
+  /* All values read from projects/emergence-suite/v2/protocols/*-parameters.json */
+  var PRIORS = [
+    { stage: 'V2.3.2 — formation', q: 'Which structure explains adversity: transient threat, external danger, or a part?',
+      items: [
+        { n: 'Structure candidates T / D / P', t: 'spike', v: '[0.50, 0.25, 0.25] over {T, D, P}',
+          u: 'configural S×Y episodes, self-channel, and localization evidence. D and P split the persistent-prior mass so persistent external danger is not credited as identity formation.' },
+        { n: 'Precision regime scale', t: 'const', v: 'ordinary 0.6 · overwhelm 1.0',
+          u: 'not updated — a declared regime of the same normalized configural likelihood.' }
+      ]},
+    { stage: 'V2.4.4 — redescription', q: 'Did the world change, or did its context change?',
+      items: [
+        { n: 'Candidate family prior', t: 'spike', v: '0.20 × 5: global_downweight · cue_local_relearning · context_split · continuous_drift · change_point',
+          u: 'cue-outcome tokens, context markers, and root-relevant tokens, in exact five-family model comparison.' },
+        { n: 'Context-split transition prior', t: 'smooth', v: 'Dirichlet rows — then: (8, 2), now: (2, 8)',
+          u: 'observed context persistence and returns (context-relevant evidence).' },
+        { n: 'Two-context path prior π₁ (reported)', t: 'const', v: '0.92741935483871 at the frozen 24-slice prefix',
+          u: 'the exact prior mass the CS transition prior places on genuinely two-context paths — reported in the V2.4.4 parameter block and discussed in the paper; listed among the forbidden changes.' },
+        { n: 'Change-point onset prior', t: 'smooth', v: 'Beta(1, 9)',
+          u: 'abrupt-shift evidence; finite mass on no or late change.' },
+        { n: 'Free cue-prediction prior', t: 'smooth', v: 'uniform over the grid {0.1, 0.3, 0.5, 0.7, 0.9}',
+          u: 'cue-outcome tokens for each free cue table.' },
+        { n: 'Candidate-common nuisance context', t: 'const', v: 'initial [0.25, 0.25, 0.5] over {then, now, none}; 0.8-persistence transitions',
+          u: 'shared by every candidate, so it can never separate them.' }
+      ]},
+    { stage: 'V2.3.4 — attribution', q: 'Was I safe, or was I saved?',
+      items: [
+        { n: 'Efficacy existence H_E', t: 'spike', v: 'q(irrelevant) = 0.35 exact spike at η = 0',
+          u: 'outcome visibility under protective action, forced response-prevention probes, near-misses. Substantial exact-zero mass denies the causal family a free complexity advantage.' },
+        { n: 'Efficacy magnitude η (slab)', t: 'smooth', v: 'weights [.05, .15, .25, .30, .25] over {0, .25, .5, .75, 1.0}',
+          u: 'the same outcome evidence, under the causal slab.' },
+        { n: 'Danger rate θ', t: 'smooth', v: 'uniform 0.20 × 5 over {0.1, 0.3, 0.5, 0.7, 0.9}',
+          u: 'engagement outcomes and evaluator-scheduled probes.' },
+        { n: 'Policy prior', t: 'const', v: '[1, 1] (uniform)',
+          u: 'relief updates policy probability only — never threat or structure.' }
+      ]},
+    { stage: 'V2.5a — evidence format', q: 'Do the elements of an episode belong together?',
+      items: [
+        { n: 'Configural coupling H_cfg', t: 'spike', v: 'independent / coupled = 0.5 / 0.5 (spike-and-slab)',
+          u: 'joint episodes scored against their exact one-channel marginals — no format bonus exists to move it.' },
+        { n: 'Interaction κ (slab)', t: 'smooth', v: '0.5 / 0.5 over {0.75 weak, 1.5 strong}',
+          u: 'joint-table fit under the coupled slab.' },
+        { n: 'Root prior', t: 'smooth', v: '[0.5, 0.5]',
+          u: 'root-relevant tokens at association strength 0.8.' }
+      ]},
+    { stage: 'V2.5b — reduction', q: 'Must identity keep predicting the world, the policy, the outcome?',
+      items: [
+        { n: 'Burden-coupling lattice {0,1}³', t: 'spike', v: '1/8 × 8 over all configurations of Z_W · Z_Pi · Z_Y — exact spikes, no continuous shrinkage',
+          u: 'post-redescription coupling-relevant evidence, including imaginal do-over episodes through the V2.5a interface. 111 = full burden; 000 = fully reduced.' },
+        { n: 'Coupling strength', t: 'const', v: '1.35 under any present edge',
+          u: 'not updated — the frozen magnitude a present coupling imposes.' }
+      ]},
+    { stage: 'V2.6a — partner', q: 'Who is this other, really?',
+      items: [
+        { n: 'Partner state L_t', t: 'spike', v: '[0.25 × 4] over reliable_contingent · soothing_noncontingent · intrusive · unstable',
+          u: 'all four relational channels (e.g. the reliable emission row is [0.9, 0.9, 0.9, 0.9]; soothing is [0.9, 0.5, 0.5, 0.55]).' },
+        { n: 'Partner transition template', t: 'smooth', v: 'stay probability 0.94',
+          u: 'observed switches; switch-onset posterior is exact.' },
+        { n: 'Precision machinery', t: 'const', v: 'base global precision 0.35 · broadcast strength 0.9 · root likelihood gain 0.45 · per-state relational precision [0.95, 0.42, 0.12, 0.28]',
+          u: 'frozen constants — what changes is the partner posterior that flows through them.' }
+      ]},
+    { stage: 'V2.6b — one protector', q: 'Can contact be tolerated? Can protection be shared?',
+      items: [
+        { n: 'Protector trust forecasts × 4', t: 'spike', v: '[0.5, 0.5] each: T_outcome · T_coprotection · T_partner · T_efficacy',
+          u: 'trust-relevant refusal/response outcomes through a 0.9-reliability channel. Trust here means the protector’s relational forecasts — never generic confidence.' },
+        { n: 'Policy-outcome parameter', t: 'smooth', v: 'uniform thirds over success levels {0.2, 0.5, 0.8}',
+          u: 'observed contact outcomes.' },
+        { n: 'Policy machine constants', t: 'const', v: 'β = 5.0 · stakes 1.5 · effort [.25, .18, .05] · epistemic value of test_contact 0.12 · unsupported-risk weight 0.8 · hope 0.2 · p(contact|π) = [0, .45, .9]',
+          u: 'not updated. Hope is the identical constant in both protector-role futures — so hope alone can never author the role differential.' }
+      ]},
+    { stage: 'V2.7 — multiple protectors', q: 'Are the protectors independent, opposed, or allied — and is the exile alone?',
+      items: [
+        { n: 'Topology', t: 'spike', v: 'thirds over {independent, opposed, coalition}',
+          u: 'joint-policy / shared-outcome histories (policy-relevant evidence).' },
+        { n: 'Mandate strength', t: 'smooth', v: 'thirds over {0.1, 0.55, 1.0}', u: 'the same histories.' },
+        { n: 'Shared outcome level', t: 'smooth', v: 'thirds over {0.3, 0.55, 0.8}', u: 'observed shared outcomes.' },
+        { n: '“Alone with this” prior', t: 'smooth', v: '[0.5, 0.5]',
+          u: 'denied-contact aloneness updates at reliability 0.9 (the code field keeps the name registration); masked is exactly neutral.' },
+        { n: 'Joint-policy constants', t: 'const', v: 'β_joint = 6.0 · shared outcome weight 2.4 · 27 joint policies enumerated exactly',
+          u: 'not updated; no polarization coefficient exists anywhere in this list.' }
+      ]},
+    { stage: 'V2.8 — whole trajectory', q: 'Do the earned pieces compose?',
+      items: [
+        { n: 'No new priors', t: 'const', v: '—',
+          u: 'every V2.8 number is a protocol budget or criterion; no inherited likelihood, prior, or scientific parameter changed (frozen rationale, v2.8-parameters.json).' }
+      ]}
+  ];
+
+  var pg = document.getElementById('priorgrid');
+  PRIORS.forEach(function (g) {
+    var card = document.createElement('div'); card.className = 'prior-card';
+    var h = document.createElement('h4'); h.textContent = g.stage; card.appendChild(h);
+    var q = document.createElement('p'); q.className = 'pc-q'; q.textContent = g.q; card.appendChild(q);
+    g.items.forEach(function (it) {
+      var d = document.createElement('div');
+      d.className = 'pi-item pi-' + (it.t === 'spike' ? 'spike' : it.t === 'smooth' ? 'smooth' : 'const');
+      var tlabel = it.t === 'spike' ? 'structural' : it.t === 'smooth' ? 'parameter' : 'frozen constant';
+      d.innerHTML = '<span class="pi-name"></span><span class="pi-type ' + it.t + '">' + tlabel + '</span>' +
+        '<span class="pi-val"></span><span class="pi-upd"><b>updated by:</b> </span>';
+      d.querySelector('.pi-name').textContent = it.n;
+      d.querySelector('.pi-val').textContent = it.v;
+      d.querySelector('.pi-upd').appendChild(document.createTextNode(it.u));
+      card.appendChild(d);
+    });
+    pg.appendChild(card);
+  });
+
+  /* ============ CONNECTIVITY MATRIX ============ */
+  var COLS = [
+    ['a', 'Cue tokens'], ['b', 'Root tokens'], ['c', 'Context markers'],
+    ['d', 'Joint episodes'], ['e', 'Relational channels'], ['f', 'Refusal / response'],
+    ['g', 'Shared outcomes Y'], ['h', 'Policy posterior q(π)'], ['i', 'Contact'],
+    ['j', 'Transfer (readout)']
+  ];
+  var ROWS = [
+    { name: 'G — identity root', cells: {
+      a: ['on', 'Cue–root association (an exact structural spike) lets G-linked cues share the root’s predictions.'],
+      b: ['on', 'Root tokens score the CPT [0.85 / 0.15] against G — root-relevant evidence.'],
+      g: ['on', 'Protectors’ shared outcome model conditions on G.'],
+      j: ['on', 'Transfer is mediated entirely by G. With G held fixed, transfer is exactly zero — a Gate-1 proof rerun at every stage.'] } },
+    { name: 'C_t — context index', cells: {
+      a: ['on', 'C_t selects which context’s cue tables score the token (then vs now) — this is what redescription reassigns.'],
+      c: ['on', 'Context markers emit from C_t at reliability 0.80 with 0.15 ambiguity — never a label, never a fact.'],
+      g: ['on', 'The shared outcome model conditions on C.'],
+      j: ['zero', 'No context-to-transfer path exists: transfer runs through G alone (fixed-G transfer exactly zero).'] } },
+    { name: 'T / D / P structure', cells: {
+      a: ['on', 'Each candidate predicts the outcome stream: T transient, D externally accurate, P adverse under low practical controllability.'],
+      b: ['on', 'Only P recruits the identity-root observation (self-channel 0.8 vs 0.2 for T and D).'],
+      c: ['on', 'The localization channel favors externally located T/D (0.65 / 0.85) over identity-level P (0.25).'] } },
+    { name: 'Z_W — identity→world', cells: {
+      a: ['on', 'Z_W = 1 makes identity compulsorily enter the world-prediction term; Z_W = 0 removes the term, not the memory.'] } },
+    { name: 'Z_Pi — identity→policy', cells: {
+      h: ['on', 'Z_Pi = 1 couples identity into the policy mapping; reduction removes the compulsion.'] } },
+    { name: 'Z_Y — identity→outcome', cells: {
+      g: ['on', 'Z_Y = 1 makes identity predict outcomes; the 000 configuration deletes all three couplings while capacities stay.'] } },
+    { name: 'H_cfg / κ — evidence format', cells: {
+      d: ['on', 'Under coupled, joint episodes score the normalized joint table (κ); under independent, the exact product of marginals. Marginals match to 1e-12, so no format bonus exists.'],
+      j: ['zero', 'No direct format-to-transfer path (Gate-1 proof): format effects reach transfer only through G.'] } },
+    { name: 'Global precision (depth)', cells: {
+      a: ['on', 'Global precision weights likelihood uptake on every evidence channel — collapsed depth means cue evidence arrives pre-discounted.'],
+      b: ['on', 'Same weighting on root-relevant tokens: depth restoration is why witnessing works when it works.'],
+      d: ['on', 'Same weighting on joint and imaginal episodes — a do-over cannot bypass the current precision field.'] } },
+    { name: 'Local relational precision', cells: {
+      e: ['on', 'Local relational precision weights the relational channels’ likelihood contribution; broadcast decides whether it reaches the global field.'],
+      b: ['zero', 'The regulation-only root Bayes factor is exactly zero — proved at Gate 1 and confirmed in the sealed C-V26A challenge. Soothing calms; it does not persuade.'] } },
+    { name: 'L_t — partner process', cells: {
+      e: ['on', 'One latent partner state emits all four relational channels (reliable row [0.9 × 4]; soothing [0.9, .5, .5, .55]).'],
+      f: ['on', 'The partner’s response to refusal — remaining vs pressure — is generated by L_t and is what protector trust learns from.'],
+      g: ['on', 'The shared outcome model conditions on L.'],
+      b: ['zero', 'No partner state directly affects G: partners change the inferential regime and uptake, never root content.'] } },
+    { name: 'Trust forecasts T_*', cells: {
+      f: ['on', 'Refusal/response outcomes score the 0.9-reliability trust channel — trust-relevant evidence in the card’s strict sense (protector relational forecasts).'],
+      h: ['on', 'All four forecasts enter the exact expected-cost G(π), alongside stakes and effort. No separate permission variable exists.'] } },
+    { name: 'H_E / η — attribution', cells: {
+      g: ['on', 'Y = D·[1 − 1(A = protect)·P]: danger and efficacy jointly explain outcomes under protective action.'],
+      h: ['on', 'T_efficacy feeds forecasted risk; relief moves policy probability only — threat change stays within ±.01 (sham-action assay).'] } },
+    { name: 'Joint policy π₁…π₃', cells: {
+      g: ['on', 'Each protector predicts Y conditional on the full joint policy vector — all 27 cells enumerated exactly. This is the only path by which polarization exists.'],
+      i: ['on', 'Contact is a policy consequence: p(contact | π) = [0, 0.45, 0.9]. Nothing grants it.'],
+      b: ['zero', 'Action selection is never evidence about the world or the root — interventions enter as do(a) (constitution rule 1.4).'] } },
+    { name: '“Alone with this” prior', cells: {
+      e: ['on', 'A denied contact attempt may emit the aloneness update at reliability 0.9 (code name registration); masked is exactly neutral, and in V2.8 the no_registration protocol strengthens the prior by exactly zero.'] } }
+  ];
+
+  var tbl = document.getElementById('cmxtable');
+  var cinfo = document.getElementById('cmxinfo');
+  var thead = document.createElement('thead');
+  var hr = document.createElement('tr');
+  hr.appendChild(document.createElement('th'));
+  COLS.forEach(function (c) {
+    var th = document.createElement('th'); th.textContent = c[1]; hr.appendChild(th);
+  });
+  thead.appendChild(hr); tbl.appendChild(thead);
+  var tbody = document.createElement('tbody');
+  ROWS.forEach(function (r) {
+    var tr = document.createElement('tr');
+    var th = document.createElement('th'); th.textContent = r.name; tr.appendChild(th);
+    COLS.forEach(function (c) {
+      var td = document.createElement('td');
+      var cell = r.cells[c[0]];
+      if (cell) {
+        td.className = cell[0];
+        td.textContent = cell[0] === 'on' ? '●' : '◌';
+        var note = r.name + ' → ' + c[1] + ': ' + cell[1];
+        td.setAttribute('title', note);
+        td.addEventListener('mouseenter', function () { cinfo.textContent = note; });
+        td.addEventListener('click', function () { cinfo.textContent = note; });
+      }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+  tbl.appendChild(tbody);
+
+  /* ============ GENERATIVE SLICE PACKET ============ */
+  var PACKETS = {
+    root: { path: 'gp-root', touch: ['sl-G'],
+      msg: 'A root token is root-relevant evidence: it updates q(G) (and the structural evidence that carries transfer), weighted by the current precision field. C, the Z lattice, and the partner posterior are bitwise identical afterward.' },
+    rel: { path: 'gp-rel', touch: ['sl-L', 'sl-prec'],
+      msg: 'A relational token updates the partner posterior q(L) and, through it, local relational precision — and only via broadcast the global field. It carries zero root-relevant evidence: the regulation-only root Bayes factor is exactly zero (C-V26A). G, C, and Z are bitwise identical.' },
+    doover: { path: 'gp-doover', touch: ['sl-Z'],
+      msg: 'An imaginal do-over episode is coupling-relevant evidence through the ordinary joint-episode likelihood: it moves model evidence over the Z lattice and H_cfg. It cannot call a reduction operation, delete the old context, or bypass precision. G, C, and L are bitwise identical.' }
+  };
+  var sliceSvg = document.getElementById('slice');
+  var packet = document.getElementById('packet');
+  var sinfo = document.getElementById('sliceinfo');
+  var animating = false;
+  document.querySelectorAll('.slice-controls button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      if (animating) return;
+      var spec = PACKETS[b.dataset.packet];
+      var path = document.getElementById(spec.path);
+      var len = path.getTotalLength();
+      var t0 = null; animating = true;
+      sliceSvg.querySelectorAll('.snode').forEach(function (n) {
+        n.classList.remove('pulse');
+        var eq = n.querySelector('.eq'); if (eq) eq.classList.remove('show');
+      });
+      sinfo.textContent = 'Packet in flight…';
+      function frame(ts) {
+        if (t0 === null) t0 = ts;
+        var f = Math.min((ts - t0) / 1100, 1);
+        var pt = path.getPointAtLength(f * len);
+        packet.setAttribute('cx', pt.x); packet.setAttribute('cy', pt.y);
+        if (f < 1) { requestAnimationFrame(frame); return; }
+        packet.setAttribute('cx', -20); packet.setAttribute('cy', -20);
+        spec.touch.forEach(function (id) { document.getElementById(id).classList.add('pulse'); });
+        sliceSvg.querySelectorAll('.snode').forEach(function (n) {
+          if (spec.touch.indexOf(n.id) === -1 && n.id && n.id.indexOf('sl-') === 0) {
+            var eq = n.querySelector('.eq'); if (eq) eq.classList.add('show');
+          }
+        });
+        sinfo.textContent = spec.msg;
+        animating = false;
+      }
+      requestAnimationFrame(frame);
+    });
   });
 })();
 </script>
