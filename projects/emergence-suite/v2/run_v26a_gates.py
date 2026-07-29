@@ -83,6 +83,26 @@ def ece(rows: list[dict[str, Any]]) -> float:
     return result
 
 
+def posterior_ece(posteriors: np.ndarray, truths: np.ndarray) -> float:
+    """V2.4.4 ten-bin maximum-confidence ECE convention."""
+    confidence = np.asarray(posteriors, dtype=float).max(axis=1)
+    selected = np.asarray(posteriors, dtype=float).argmax(axis=1)
+    correct = selected == np.asarray(truths, dtype=int)
+    result = 0.0
+    for index in range(10):
+        lower = index / 10.0
+        upper = (index + 1) / 10.0
+        mask = (confidence >= lower) & (
+            confidence <= upper if index == 9 else confidence < upper
+        )
+        if np.any(mask):
+            result += float(mask.mean()) * abs(
+                float(confidence[mask].mean())
+                - float(correct[mask].mean())
+            )
+    return result
+
+
 def run_gate1() -> bool:
     proofs: dict[str, dict[str, Any]] = {}
     source = (ROOT / "ref" / "v26a.py").read_text(encoding="utf-8")
@@ -260,15 +280,17 @@ def run_gate1() -> bool:
 
 def run_gate2() -> bool:
     rows: list[dict[str, Any]] = []
-    for offset, seed in enumerate(range(1_200_000, 1_201_500)):
-        truth = offset % 4
-        switching = ((offset // 4) % 2) == 1
-        family = v26a.PARTNER_STATES[truth]
-        world = v26a.generate_recovery_world(
-            seed, truth_family=family, switching=switching
-        )
+    slice_posteriors: list[np.ndarray] = []
+    slice_truths: list[int] = []
+    for seed in range(1_230_000, 1_231_500):
+        world = v26a.generate_recovery_world(seed)
+        family = world.truth_family
+        truth = v26a.STATE_INDEX[family]
+        switching = world.switching
         result = v26a.score(world.observations)
         q = result.q_partner
+        slice_posteriors.extend(result.smoothed_partner)
+        slice_truths.extend(world.truth_path)
         actual_switch_rate = sum(
             left != right for left, right in zip(world.truth_path, world.truth_path[1:])
         ) / (len(world.truth_path) - 1)
@@ -301,6 +323,8 @@ def run_gate2() -> bool:
                 "selected": int(np.argmax(q)),
                 "q": q,
                 "covered": truth in credible_set(q),
+                "slice_posteriors": result.smoothed_partner,
+                "slice_truths": world.truth_path,
                 "actual_switch_rate": actual_switch_rate,
                 "posterior_switch_rate": result.switch_rate,
                 "switch_rate_error": abs(result.switch_rate - actual_switch_rate),
@@ -318,13 +342,31 @@ def run_gate2() -> bool:
     diagonal = [float(confusion[i, i] / confusion[i].sum()) for i in range(4)]
     q = np.asarray([row["q"] for row in rows])
     one_hot = np.eye(4)[np.asarray([row["truth"] for row in rows])]
+    slice_q = np.asarray(slice_posteriors, dtype=float)
+    slice_truth = np.asarray(slice_truths, dtype=int)
+    slice_one_hot = np.eye(4)[slice_truth]
+    slice_coverage = float(
+        np.mean(
+            [
+                int(truth in credible_set(posterior))
+                for posterior, truth in zip(slice_q, slice_truth)
+            ]
+        )
+    )
     metrics = {
         "confusion_matrix": confusion,
         "diagonal_recovery": dict(zip(v26a.PARTNER_STATES, diagonal)),
         "macro_recovery": float(np.mean(diagonal)),
-        "brier": float(np.mean(np.sum((q - one_hot) ** 2, axis=1))),
-        "ece": ece(rows),
-        "posterior_set_coverage": float(np.mean([row["covered"] for row in rows])),
+        "brier": float(np.mean(np.sum((slice_q - slice_one_hot) ** 2, axis=1))),
+        "ece": posterior_ece(slice_q, slice_truth),
+        "posterior_set_coverage": slice_coverage,
+        "occupancy_label_brier_descriptive": float(
+            np.mean(np.sum((q - one_hot) ** 2, axis=1))
+        ),
+        "occupancy_label_ece_descriptive": ece(rows),
+        "occupancy_label_coverage_descriptive": float(
+            np.mean([row["covered"] for row in rows])
+        ),
         "transition_switch_parameter_mae": float(np.mean([row["switch_rate_error"] for row in rows])),
         "switch_onset_median_absolute_error": float(
             np.median([row["onset_error"] for row in rows if row["switching"]])
@@ -333,6 +375,7 @@ def run_gate2() -> bool:
             np.mean([row["local_precision_calibration_error"] for row in rows])
         ),
         "world_count": len(rows),
+        "calibrated_slice_count": len(slice_truth),
         "stable_count": sum(not row["switching"] for row in rows),
         "switching_count": sum(row["switching"] for row in rows),
     }
@@ -350,24 +393,25 @@ def run_gate2() -> bool:
     payload = {
         "stage": "V2.6a",
         "gate": 2,
-        "seed_block": [1_200_000, 1_201_499],
+        "seed_block": [1_230_000, 1_231_499],
+        "provenance": "gate-2 apparatus repair authorized; original FAIL retained",
         "metrics": metrics,
         "checks": checks,
         "verdict_classes": {"scientific": passed, "semantic": True, "custody": True},
         "passed": passed,
     }
-    dump("gate-2-per_world.json", rows)
-    dump("gate-2.json", payload)
-    report = ["# V2.6a gate 2", "", f"Verdict: **{'PASS' if passed else 'FAIL'}**.", "", "## Metrics", ""]
+    dump("gate-2-repaired-per_world.json", rows)
+    dump("gate-2-repaired.json", payload)
+    report = ["# V2.6a gate 2 — repaired apparatus", "", f"Verdict: **{'PASS' if passed else 'FAIL'}**.", "", "The original Gate-2 FAIL remains immutable. Calibration here is per-slice; occupancy-label calibration is descriptive.", "", "## Metrics", ""]
     report += [f"- `{key}`: {plain(value)}" for key, value in metrics.items()]
     report += ["", "## Criteria", ""] + [
         f"- `{key}`: {'PASS' if value else 'FAIL'}" for key, value in checks.items()
     ]
-    (OUT / "gate-2-report.md").write_text("\n".join(report) + "\n", encoding="utf-8")
+    (OUT / "gate-2-repaired-report.md").write_text("\n".join(report) + "\n", encoding="utf-8")
     if not passed:
         failures = [name for name, value in checks.items() if not value]
-        (OUT / "gate-2-diagnosis-stub.md").write_text(
-            "# V2.6a gate-2 diagnosis stub\n\nHonest stop. Failed criteria retained verbatim:\n\n"
+        (OUT / "gate-2-repaired-diagnosis-stub.md").write_text(
+            "# V2.6a repaired gate-2 diagnosis stub\n\nHonest stop. Failed criteria retained verbatim:\n\n"
             + "\n".join(f"- `{item}`" for item in failures)
             + "\n",
             encoding="utf-8",

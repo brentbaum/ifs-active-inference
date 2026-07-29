@@ -1,0 +1,73 @@
+{
+  "checks": {
+    "brier_at_most_0_15": true,
+    "coverage_at_least_0_90": true,
+    "each_diagonal_at_least_0_75": true,
+    "ece_at_most_0_08": true,
+    "local_precision_error_at_most_0_08": true,
+    "macro_at_least_0_75": true,
+    "onset_median_at_most_3": false,
+    "switch_mae_at_most_0_10": true
+  },
+  "gate": 2,
+  "metrics": {
+    "brier": 0.14823808079259085,
+    "calibrated_slice_count": 72000,
+    "confusion_matrix": [
+      [
+        360,
+        11,
+        8,
+        13
+      ],
+      [
+        16,
+        337,
+        10,
+        27
+      ],
+      [
+        7,
+        6,
+        329,
+        7
+      ],
+      [
+        10,
+        23,
+        15,
+        321
+      ]
+    ],
+    "diagonal_recovery": {
+      "intrusive": 0.9426934097421203,
+      "reliable_contingent": 0.9183673469387755,
+      "soothing_noncontingent": 0.8641025641025641,
+      "unstable": 0.8699186991869918
+    },
+    "ece": 0.0031028041947577687,
+    "local_precision_calibration_error": 0.0381788763970843,
+    "macro_recovery": 0.8987705049926129,
+    "occupancy_label_brier_descriptive": 0.29383972585284995,
+    "occupancy_label_coverage_descriptive": 0.9993333333333333,
+    "occupancy_label_ece_descriptive": 0.27949769284206827,
+    "posterior_set_coverage": 0.9880555555555556,
+    "stable_count": 78,
+    "switch_onset_median_absolute_error": 5.0,
+    "switching_count": 1422,
+    "transition_switch_parameter_mae": 0.017626147746432983,
+    "world_count": 1500
+  },
+  "passed": false,
+  "provenance": "gate-2 apparatus repair authorized; original FAIL retained",
+  "seed_block": [
+    1230000,
+    1231499
+  ],
+  "stage": "V2.6a",
+  "verdict_classes": {
+    "custody": true,
+    "scientific": false,
+    "semantic": true
+  }
+}

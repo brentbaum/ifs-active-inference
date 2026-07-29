@@ -6,6 +6,10 @@
   "preflight_consumed_gate3_seeds": [1202000, 1202002],
   "preflight_seed_hygiene_note": "The first local preflight used 1202000:1202002 before the formal gate run. No gate-3 criterion was evaluated, but these seeds are disclosed as consumed and must be adjudicated or barred before any future gate-3 continuation.",
   "gate_2_consumed": [1200000, 1201499],
+  "gate_2_original_block_status": "closed after retained FAIL",
+  "gate_2_repair_authorization": "results/V2.6a/gate2-repair-authorization.md",
+  "gate_2_repaired_block": [1230000, 1231499],
+  "gate_2_repaired_block_status": "consumed once; repaired Gate-2 FAIL retained",
   "gate_3_consumed": null,
-  "stop_reason": "gate-2 ECE 0.20101343381872663 exceeded 0.08"
+  "stop_reason": "repaired gate-2 switch-onset median absolute error 5.0 exceeded 3 slices"
 }

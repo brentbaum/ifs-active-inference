@@ -298,20 +298,19 @@ def sample_observation(
 def generate_recovery_world(
     seed: int,
     *,
-    truth_family: str,
-    switching: bool,
     length: int | None = None,
     released_block: tuple[int, int] | None = None,
 ) -> PartnerWorld:
-    if truth_family not in STATE_INDEX:
-        raise ValueError("unknown partner family")
+    """Draw a recovery world from the exact frozen scorer process."""
     count = int(PARAMETERS["gate2_length"] if length is None else length)
-    truth = STATE_INDEX[truth_family]
-    path = [truth] * count
-    if switching:
-        onset = (2 * count) // 3
-        alternate = (truth + 1) % 4
-        path[onset:] = [alternate] * (count - onset)
+    path_rng = _rng(seed, "v26a-recovery-partner-path", released_block)
+    path = [int(path_rng.choice(4, p=PRIOR))]
+    for _ in range(1, count):
+        path.append(int(path_rng.choice(4, p=TRANSITION[path[-1]])))
+    counts = np.bincount(path, minlength=4)
+    majority = int(np.flatnonzero(counts == counts.max())[0])
+    truth_family = PARTNER_STATES[majority]
+    switching = any(left != right for left, right in zip(path, path[1:]))
     observations = tuple(
         sample_observation(
             seed,

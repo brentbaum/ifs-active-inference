@@ -1,0 +1,15 @@
+{
+  "authorized_repair": "results/V2.6a/gate2-repair-authorization.md",
+  "emission_table_identity": true,
+  "initial_distribution": [0.25, 0.25, 0.25, 0.25],
+  "public_dummy_seed": 1199910,
+  "public_dummy_length": 12,
+  "regression_test": "tests.test_v26a.V26aTests.test_recovery_generator_is_frozen_scorer_process",
+  "transition_matrix": [
+    [0.94, 0.02, 0.02, 0.02],
+    [0.02, 0.94, 0.02, 0.02],
+    [0.02, 0.02, 0.94, 0.02],
+    [0.02, 0.02, 0.02, 0.94]
+  ],
+  "verdict": "PASS"
+}

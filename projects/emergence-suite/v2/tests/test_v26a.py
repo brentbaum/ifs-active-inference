@@ -101,18 +101,27 @@ class V26aTests(unittest.TestCase):
     def test_released_block_is_threaded(self):
         world = v26a.generate_recovery_world(
             1_200_002,
-            truth_family="unstable",
-            switching=False,
             released_block=(1_200_000, 1_201_499),
         )
         self.assertEqual(world.seed, 1_200_002)
         with self.assertRaises(ValueError):
             v26a.generate_recovery_world(
                 2_030_000,
-                truth_family="unstable",
-                switching=False,
                 released_block=(1_200_000, 1_201_499),
             )
+
+    def test_recovery_generator_is_frozen_scorer_process(self):
+        seed = 1_199_910
+        world = v26a.generate_recovery_world(seed, length=12)
+        rng = v26a._rng(seed, "v26a-recovery-partner-path")
+        expected = [int(rng.choice(4, p=v26a.PRIOR))]
+        for _ in range(1, 12):
+            expected.append(
+                int(rng.choice(4, p=v26a.TRANSITION[expected[-1]]))
+            )
+        self.assertEqual(world.truth_path, tuple(expected))
+        for left, right in zip(world.truth_path, world.truth_path[1:]):
+            self.assertGreater(v26a.TRANSITION[left, right], 0.0)
 
 
 if __name__ == "__main__":
