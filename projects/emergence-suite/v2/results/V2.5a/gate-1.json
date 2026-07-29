@@ -1,0 +1,91 @@
+{
+  "B_max_inherited_formation": 3.801426508560692,
+  "B_max_v24_common_emissions": 6.704414354964107,
+  "expectation_identity_error": 0.0,
+  "expectation_kl_dose": [
+    {
+      "association_strength": 0.0,
+      "expected_delta_i": -6.383782391594652e-17,
+      "joint_sum_error": 0.0,
+      "minimum_probability": 0.075
+    },
+    {
+      "association_strength": 0.25,
+      "expected_delta_i": 0.007466742307628702,
+      "joint_sum_error": 2.220446049250313e-16,
+      "minimum_probability": 0.075
+    },
+    {
+      "association_strength": 0.5,
+      "expected_delta_i": 0.03013731153286544,
+      "joint_sum_error": 0.0,
+      "minimum_probability": 0.075
+    },
+    {
+      "association_strength": 0.75,
+      "expected_delta_i": 0.06888569708110931,
+      "joint_sum_error": 0.0,
+      "minimum_probability": 0.075
+    },
+    {
+      "association_strength": 1.0,
+      "expected_delta_i": 0.12541971560214674,
+      "joint_sum_error": 0.0,
+      "minimum_probability": 0.075
+    }
+  ],
+  "factorization_maximum_errors": {
+    "continuous_drift": 4.440892098500626e-16,
+    "cue_local_relearning": 4.440892098500626e-16,
+    "global_downweight": 4.440892098500626e-16
+  },
+  "finite_information": {
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "B_max_v25a_marginal_accounting": 6.704414354964107,
+    "distinct": false,
+    "implied_binary_probability_change_bound": 0.9323540767750395
+  },
+  "gate": 1,
+  "increment_identity_maximum_error": 8.881784197001252e-16,
+  "independent_oracle": {
+    "censor_oracle": [
+      null,
+      null
+    ],
+    "censor_production": [
+      null,
+      null
+    ],
+    "delta_i_error": 4.440892098500626e-16,
+    "joint_evidence_error": 2.168404344971009e-19,
+    "marginal_evidence_error": 2.710505431213761e-20,
+    "matching_oracle": [
+      2,
+      0.2704380927539544
+    ],
+    "matching_production": [
+      2,
+      0.2704380927539544
+    ]
+  },
+  "one_posterior_audit": true,
+  "passed": true,
+  "proofs": {
+    "10_custody": true,
+    "1_factorization_identity": true,
+    "2_increment_identity": true,
+    "3_expectation_nonnegative_exact_kl": true,
+    "4_zero_increment_calibration": true,
+    "5_matching_oracle_and_censor_boundary": true,
+    "6_presentation_purity": true,
+    "7_constitution_both_accountings": true,
+    "8_one_posterior_derived_candidates": true,
+    "9_dose_direction": true
+  },
+  "purity": {
+    "forbidden_branch_assignments": [],
+    "passed": true,
+    "presentation_terms_analysis_only": true
+  },
+  "stage": "V2.5a"
+}
