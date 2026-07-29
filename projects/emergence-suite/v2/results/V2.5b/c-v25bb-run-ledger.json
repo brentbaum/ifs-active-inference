@@ -1,0 +1,24 @@
+{
+  "challenge": "C-V25B-B",
+  "challenge_sha256": "d781130feb9c675f3e476788a0d103cd99a0e1588b70eff1de9c95fccf602c32",
+  "criteria_evaluated": false,
+  "freeze_identity": {
+    "file_count": 22,
+    "manifest": "results/V2.5b/freeze-manifest.json",
+    "manifest_sha256": "db9f101c07b6d6f9ee67c9577fb861fe9ed54c8f3a9eb08355852f5a6dbdc079",
+    "mismatches": [],
+    "passed": true
+  },
+  "release_ledger_commit": "8d57a8c",
+  "released_block": [
+    2020000,
+    2021999
+  ],
+  "released_block_passed_explicitly": true,
+  "seal_and_reveal_commit": "8d57a8c",
+  "seed_count": 2000,
+  "seed_end": 2021999,
+  "seed_order": "ascending gap-free within cells and globally",
+  "seed_sequence_sha256": "ddf3979b6c7826bff0b16593417f885b57baadb85e90240dc1ea2cc9abcd394c",
+  "seed_start": 2020000
+}
