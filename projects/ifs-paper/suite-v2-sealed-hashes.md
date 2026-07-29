@@ -119,3 +119,9 @@ Escrow: C-V25B-B seeds 2020000:2021999 (unconsumed by the retained C-V25B stop; 
 f90dbb800bf98f58d9ce1b916a5d9d218faee40b7e16f773dfa6fe12ce31b17e  C-V25BC-reduction-challenge.md
 ```
 Escrow: C-V25B-C seeds 2022000:2023999 (fresh; 2020000:2021999 consumed by the retained C-V25B-B FAIL and closed). Pre-seal adds the criterion-direction check (reduction demands only on 000 truth).
+
+## C-V26A seal (2026-07-29)
+```
+cba6d516516401c05f00cc0586e57e750964f3f8128d3b541eb3352823e56621  C-V26A-partner-challenge.md
+```
+Escrow: C-V26A seeds 2030000:2031999, released by this record via the frozen released_block parameter. Full accumulated pre-seal linter applied.
