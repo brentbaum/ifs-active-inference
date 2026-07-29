@@ -143,3 +143,9 @@ Escrow: C-V234-B seeds 2042000:2043999 (fresh; 2040000:2041999 consumed by the r
 c7e00412c7f06cbead6f03152b0be4fc70da013a00fd1de0780b3cb0e62e4abf  C-V26B-protector-challenge.md
 ```
 Escrow: C-V26B seeds 2050000:2052999, released by this record via the frozen released_block parameter. Pilot block 1332000:1332599 BARRED (permission-profile attainability pilot, non-criterion). Full accumulated linter applied.
+
+## C-V27 seal (2026-07-29)
+```
+2b68bd3f39d2add80ac89ce6f54b779af1083b5e0e64dd227383391ff875593f  C-V27-multiprotector-challenge.md
+```
+Escrow: C-V27 seeds 2060000:2064999, released by this record. Pilot blocks 1333000:1334199 BARRED. Full accumulated linter with scenario-profile and recovery-rate pilots.
