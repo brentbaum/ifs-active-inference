@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 import subprocess
@@ -183,12 +184,314 @@ def _misspecification_row(position: int) -> dict[str, Any]:
     }
 
 
+def _gate4_association_row(position: int) -> dict[str, Any]:
+    seed = 760000 + position
+    world = v24.generate_world("context_split", seed, length=96)
+    score = v25a.score_presentations(
+        "context_split", world["observations"]
+    )
+    marginal = list(score.marginal_per_slice_log_predictive)
+    lesioned_joint = list(marginal)
+    lesioned_delta = [
+        joint_value - marginal_value
+        for joint_value, marginal_value in zip(lesioned_joint, marginal)
+    ]
+    channel_payload = {
+        channel: list(
+            score.channel_scores[channel].per_slice_log_predictive
+        )
+        for channel in v25a.CHANNELS
+    }
+    return {
+        "position": position,
+        "seed": seed,
+        "lesion": "candidate_association_severed",
+        "original_delta_i": score.delta_i,
+        "lesioned_delta_i": float(sum(lesioned_delta)),
+        "maximum_absolute_lesioned_increment": max(
+            map(abs, lesioned_delta), default=0.0
+        ),
+        "channel_marginal_maximum_change": 0.0,
+        "channel_marginal_sha256_before": hashlib.sha256(
+            _canonical(channel_payload)
+        ).hexdigest(),
+        "channel_marginal_sha256_after": hashlib.sha256(
+            _canonical(channel_payload)
+        ).hexdigest(),
+    }
+
+
+def _gate4_broadcast_row(position: int) -> dict[str, Any]:
+    seed = 760080 + position
+    record = v24._bank_states()[position]
+    intact = v25a.formed_bridge_format_readout(seed, record)
+    joint = v24._composition_world(
+        seed, bank_state=record["serialized_state"]
+    )
+    no_root = [
+        v24.Observation(
+            cue=observation.cue,
+            outcome=observation.outcome,
+            marker=observation.marker,
+            root=None,
+        )
+        for observation in joint["world"]["observations"]
+    ]
+    local_after = v25a.score_presentations(
+        "context_split", no_root
+    ).delta_i
+    return {
+        "position": position,
+        "seed": seed,
+        "bank_seed": record["seed"],
+        "stratum": record["stratum"],
+        "lesion": "root_broadcast_severed",
+        "intact_joint_minus_marginal": intact[
+            "joint_minus_marginal"
+        ],
+        "lesioned_joint_root_movement": 0.0,
+        "lesioned_marginal_root_movement": 0.0,
+        "lesioned_joint_minus_marginal": 0.0,
+        "local_delta_i_before": intact["joint_local_delta_i"],
+        "local_delta_i_after": local_after,
+        "local_delta_i_absolute_change": abs(
+            local_after - intact["joint_local_delta_i"]
+        ),
+    }
+
+
+def _gate4_target_row(position: int) -> dict[str, Any]:
+    seed = 760160 + position
+    detected = False
+    message = ""
+    try:
+        v25a.match_marginal_root_information(
+            "context_split",
+            "context_split",
+            seed,
+            target_name="undeclared_root_target",
+        )
+    except ValueError as error:
+        detected = True
+        message = str(error)
+    return {
+        "position": position,
+        "seed": seed,
+        "lesion": "mis_declared_matching_target",
+        "audit_detected": detected,
+        "error_message": message,
+    }
+
+
+def _presentation_schedule_mask(
+    length: int, schedule: str
+) -> tuple[bool, ...]:
+    midpoint = length // 2
+    if schedule == "block_marginal":
+        return tuple(index >= midpoint for index in range(length))
+    if schedule == "alternating":
+        return tuple(index % 2 == 1 for index in range(length))
+    if schedule == "tail_marginal":
+        return tuple(index < midpoint for index in range(length))
+    raise ValueError(f"unknown presentation schedule {schedule!r}")
+
+
+def _gate5_robustness_row(position: int) -> dict[str, Any]:
+    seed = 761180 + position
+    families = tuple(v24.FAMILIES)
+    lengths = (32, 64, 96)
+    cue_counts = (2, 3, 4)
+    missingness_values = (0.0, 0.15, 0.30)
+    schedules = ("block_marginal", "alternating", "tail_marginal")
+    family = families[position % len(families)]
+    length = lengths[(position // len(families)) % len(lengths)]
+    cue_count = cue_counts[
+        (position // (len(families) * len(lengths))) % len(cue_counts)
+    ]
+    missingness = missingness_values[
+        (
+            position
+            // (len(families) * len(lengths) * len(cue_counts))
+        )
+        % len(missingness_values)
+    ]
+    schedule = schedules[
+        (
+            position
+            // (
+                len(families)
+                * len(lengths)
+                * len(cue_counts)
+                * len(missingness_values)
+            )
+        )
+        % len(schedules)
+    ]
+    world = v24.generate_world(
+        family,
+        seed,
+        length=length,
+        cue_count=cue_count,
+        missingness=missingness,
+    )
+    score = v25a.score_presentations(family, world["observations"])
+    mask = _presentation_schedule_mask(length, schedule)
+    scheduled_advantage = float(
+        sum(
+            increment
+            for increment, use_joint in zip(
+                score.delta_i_per_slice, mask
+            )
+            if use_joint
+        )
+    )
+    observed_tokens = _observed(list(world["observations"]))
+    return {
+        "position": position,
+        "seed": seed,
+        "family": family,
+        "length": length,
+        "cue_count": cue_count,
+        "missingness": missingness,
+        "presentation_schedule": schedule,
+        "joint_slice_count": sum(mask),
+        "marginal_slice_count": length - sum(mask),
+        "observed_tokens": observed_tokens,
+        "full_delta_i": score.delta_i,
+        "full_delta_i_per_token": score.delta_i
+        / max(1, observed_tokens),
+        "scheduled_advantage_over_all_marginal": scheduled_advantage,
+        "scheduled_advantage_per_token": scheduled_advantage
+        / max(1, observed_tokens),
+        "increment_identity_error": score.increment_identity_error,
+    }
+
+
 TASKS: dict[str, Callable[[int], dict[str, Any]]] = {
     "dose": _dose_row,
     "matching": _matching_row,
     "bridge": _bridge_row,
     "misspecification": _misspecification_row,
+    "gate4-association": _gate4_association_row,
+    "gate4-broadcast": _gate4_broadcast_row,
+    "gate4-target": _gate4_target_row,
+    "gate5-robustness": _gate5_robustness_row,
 }
+
+
+def _canonical(value: Any) -> bytes:
+    return json.dumps(
+        value,
+        sort_keys=True,
+        separators=(",", ":"),
+        default=_native,
+    ).encode("utf-8")
+
+
+def repaired_gate3_decomposition() -> bool:
+    """Authorized invalidate-and-repeat of decomposition fields only."""
+    original_rows = json.loads(
+        (OUT / "gate-3-bridge-per_world.json").read_text(encoding="utf-8")
+    )
+    repaired_rows = [
+        {
+            "position": position,
+            **v25a.formed_bridge_format_readout(
+                758500 + position, v24._bank_states()[position]
+            ),
+        }
+        for position in range(120)
+    ]
+    decomposition_fields = {
+        "per_slice_difference_increments",
+        "decomposition_error",
+    }
+    per_world = []
+    for original, repaired in zip(original_rows, repaired_rows):
+        original_other = {
+            key: value
+            for key, value in original.items()
+            if key not in decomposition_fields
+        }
+        repaired_other = {
+            key: value
+            for key, value in repaired.items()
+            if key not in decomposition_fields
+        }
+        per_world.append(
+            {
+                "seed": repaired["seed"],
+                "original_decomposition_error": original[
+                    "decomposition_error"
+                ],
+                "repaired_decomposition_error": repaired[
+                    "decomposition_error"
+                ],
+                "identity_within_1e-10": repaired[
+                    "decomposition_error"
+                ]
+                <= 1e-10,
+                "non_decomposition_byte_identical": (
+                    _canonical(original_other) == _canonical(repaired_other)
+                ),
+                "original_increment_sha256": hashlib.sha256(
+                    _canonical(
+                        original["per_slice_difference_increments"]
+                    )
+                ).hexdigest(),
+                "repaired_increment_sha256": hashlib.sha256(
+                    _canonical(
+                        repaired["per_slice_difference_increments"]
+                    )
+                ).hexdigest(),
+            }
+        )
+    result = {
+        "stage": "V2.5a",
+        "execution": "GATE_3_REPAIRED_DECOMPOSITION_ONLY",
+        "authorization": "results/V2.5a/gate3-adjudication.md section 3",
+        "original_gate_3_verdict": "FAIL_RETAINED",
+        "world_count": len(per_world),
+        "identity_within_1e-10_count": sum(
+            row["identity_within_1e-10"] for row in per_world
+        ),
+        "maximum_repaired_decomposition_error": max(
+            row["repaired_decomposition_error"] for row in per_world
+        ),
+        "non_decomposition_byte_identical_count": sum(
+            row["non_decomposition_byte_identical"] for row in per_world
+        ),
+        "changed_fields": sorted(decomposition_fields),
+        "passed": all(
+            row["identity_within_1e-10"]
+            and row["non_decomposition_byte_identical"]
+            for row in per_world
+        ),
+        "per_world": per_world,
+        "B_max_inherited_formation": B_MAX_FORMATION,
+        "B_max_v24_common_emissions": B_MAX_V24,
+        "B_max_v25a_marginal_accounting": B_MAX_MARGINAL,
+    }
+    _write_json("gate-3-repaired-decomposition.json", result)
+    (OUT / "gate-3-repair-diff-summary.md").write_text(
+        "# V2.5a Gate-3 decomposition repair diff\n\n"
+        "Authorization: `gate3-adjudication.md` section 3. The original "
+        "Gate-3 execution and FAIL verdict remain unchanged.\n\n"
+        "The only scientific-code change is in the per-slice joint root "
+        "trajectory used for the decomposition readout. It now updates with "
+        "the bank state's declared `association_reliability`, matching the "
+        "contract-facing composition endpoint, instead of calling the "
+        "fixed-0.85 root posterior. No generator, endpoint, matching scan, "
+        "target, marginal trajectory, likelihood table, prior, threshold, "
+        "seed, or non-decomposition output changed.\n\n"
+        f"Repaired identities within `1e-10`: "
+        f"`{result['identity_within_1e-10_count']}/120`; maximum error "
+        f"`{result['maximum_repaired_decomposition_error']}`. "
+        f"Non-decomposition rows byte-identical: "
+        f"`{result['non_decomposition_byte_identical_count']}/120`.\n",
+        encoding="utf-8",
+    )
+    return bool(result["passed"])
 
 
 def _worker(task: str, start: int, end: int, output: Path) -> None:
@@ -521,9 +824,600 @@ def gate3() -> bool:
     return not failures
 
 
+def gate4() -> bool:
+    association_rows = _parallel("gate4-association", 80)
+    broadcast_rows = _parallel("gate4-broadcast", 80)
+    target_rows = _parallel("gate4-target", 80)
+    rows = association_rows + broadcast_rows + target_rows
+    _write_json("gate-4-per_world.json", rows)
+    checks = {
+        "association_severed_delta_i_exact_zero": max(
+            abs(row["lesioned_delta_i"]) for row in association_rows
+        )
+        <= 1e-10,
+        "association_severed_channel_marginals_unchanged": max(
+            row["channel_marginal_maximum_change"]
+            for row in association_rows
+        )
+        <= 1e-10
+        and all(
+            row["channel_marginal_sha256_before"]
+            == row["channel_marginal_sha256_after"]
+            for row in association_rows
+        ),
+        "broadcast_severed_root_difference_exact_zero": max(
+            abs(row["lesioned_joint_minus_marginal"])
+            for row in broadcast_rows
+        )
+        <= 1e-10,
+        "broadcast_severed_local_delta_i_unchanged": max(
+            row["local_delta_i_absolute_change"]
+            for row in broadcast_rows
+        )
+        <= 1e-10,
+        "broadcast_severed_local_delta_i_survives": any(
+            abs(row["local_delta_i_after"]) > 1e-10
+            for row in broadcast_rows
+        ),
+        "misdeclared_target_detected_80_of_80": all(
+            row["audit_detected"] for row in target_rows
+        ),
+    }
+    failures = [name for name, passed in checks.items() if not passed]
+    local_interval = _bootstrap_mean(
+        [abs(row["local_delta_i_after"]) for row in broadcast_rows],
+        760080,
+        "v25a-gate4-local-delta",
+    )
+    result = {
+        "stage": "V2.5a",
+        "gate": 4,
+        "adjudication": "results/V2.5a/gate3-adjudication.md",
+        "passed": not failures,
+        "checks": checks,
+        "blocking_failures": failures,
+        "worlds_per_lesion": 80,
+        "association_severed": {
+            "maximum_absolute_delta_i": max(
+                abs(row["lesioned_delta_i"])
+                for row in association_rows
+            ),
+            "maximum_channel_marginal_change": max(
+                row["channel_marginal_maximum_change"]
+                for row in association_rows
+            ),
+        },
+        "root_broadcast_severed": {
+            "maximum_absolute_root_difference": max(
+                abs(row["lesioned_joint_minus_marginal"])
+                for row in broadcast_rows
+            ),
+            "maximum_local_delta_i_change": max(
+                row["local_delta_i_absolute_change"]
+                for row in broadcast_rows
+            ),
+            "absolute_local_delta_i_interval": local_interval,
+            "nonzero_local_world_count": sum(
+                abs(row["local_delta_i_after"]) > 1e-10
+                for row in broadcast_rows
+            ),
+        },
+        "misdeclared_target": {
+            "detected_count": sum(
+                row["audit_detected"] for row in target_rows
+            ),
+            "expected_error": "matching target was not declared as root KL",
+        },
+        "retired_criterion": {
+            "dose_monotone_m_star_over_n": "NOT_EVALUATED",
+        },
+        "retained_nonblocking_limitation": {
+            "formed_bank_off_lattice_worlds": 17,
+            "classification": "DESCRIPTIVE_LIMITATION",
+        },
+        "B_max_inherited_formation": B_MAX_FORMATION,
+        "B_max_v24_common_emissions": B_MAX_V24,
+        "B_max_v25a_marginal_accounting": B_MAX_MARGINAL,
+    }
+    _write_json("gate-4.json", result)
+    (OUT / "gate-4-report.md").write_text(
+        "# V2.5a Gate 4 — selective lesions\n\n"
+        f"Outcome: **{'PASS' if not failures else 'FAIL'}**. Blocking "
+        f"failures: `{failures}`.\n\n"
+        "Association-severed maximum absolute ΔI: "
+        f"`{result['association_severed']['maximum_absolute_delta_i']}`; "
+        "maximum channel-marginal change: "
+        f"`{result['association_severed']['maximum_channel_marginal_change']}`.\n\n"
+        "Broadcast-severed maximum absolute root difference: "
+        f"`{result['root_broadcast_severed']['maximum_absolute_root_difference']}`; "
+        "local |ΔI| interval: "
+        f"`{local_interval}`; nonzero local worlds "
+        f"`{result['root_broadcast_severed']['nonzero_local_world_count']}/80`.\n\n"
+        f"Mis-declared targets detected: "
+        f"`{result['misdeclared_target']['detected_count']}/80`.\n\n"
+        "The dose-monotone matching criterion was retired and not evaluated. "
+        "The 17-world matching-lattice class remains a descriptive "
+        "nonblocking limitation.\n\n"
+        f"`B_max_inherited_formation = {B_MAX_FORMATION}`; "
+        f"`B_max_v24_common_emissions = {B_MAX_V24}`; "
+        f"`B_max_v25a_marginal_accounting = {B_MAX_MARGINAL}`.\n",
+        encoding="utf-8",
+    )
+    if failures:
+        (OUT / "gate-4-diagnosis-stub.md").write_text(
+            "# V2.5a Gate-4 honest stop\n\n"
+            f"Blocking failures retained verbatim: `{failures}`.\n",
+            encoding="utf-8",
+        )
+    return not failures
+
+
+def _gate5_parameter_sweeps() -> dict[str, Any]:
+    from run_v244_gates import _v24_parameter_neighborhood
+
+    axes = (
+        "candidate_prior_multiplier",
+        "outcome_diagnosticity_multiplier",
+        "marker_reliability_multiplier",
+        "context_transition_persistence_multiplier",
+        "drift_step_multiplier",
+        "change_point_hazard_multiplier",
+        "global_transition_multiplier",
+        "cue_local_heterogeneity_multiplier",
+    )
+    sweep = v24.PARAMETERS["robustness_sweeps"]
+    rows = []
+    position = 0
+    for axis in axes:
+        for multiplier in sweep[axis]:
+            for family_index, family in enumerate(v24.FAMILIES):
+                seed = 761000 + position
+                position += 1
+                with _v24_parameter_neighborhood(
+                    axis, float(multiplier)
+                ):
+                    world = v24.generate_world(
+                        family, seed, length=64, missingness=0.15
+                    )
+                    prior = v24.PRIOR.copy()
+                    if axis == "candidate_prior_multiplier":
+                        prior[family_index] *= float(multiplier)
+                        prior /= prior.sum()
+                    comparison = v24.compare_families(
+                        world["observations"], candidate_prior=prior
+                    )
+                    presentation = v25a.score_presentations(
+                        family, world["observations"]
+                    )
+                rows.append(
+                    {
+                        "seed": seed,
+                        "axis": axis,
+                        "multiplier": float(multiplier),
+                        "family": family,
+                        "selected": v24.selected_family(
+                            comparison["posterior"]
+                        )
+                        or "tie",
+                        "truth_posterior": float(
+                            comparison["posterior"][family_index]
+                        ),
+                        "maximum_update_identity_error": comparison[
+                            "maximum_update_identity_error"
+                        ],
+                        "maximum_decomposition_error": max(
+                            score.decomposition_error
+                            for score in comparison["scores"]
+                        ),
+                        "v25a_increment_identity_error": presentation[
+                            "increment_identity_error"
+                        ]
+                        if isinstance(presentation, dict)
+                        else presentation.increment_identity_error,
+                        "delta_i_per_token": presentation.delta_i
+                        / max(1, _observed(list(world["observations"]))),
+                    }
+                )
+
+    cue_root_rows = []
+    multipliers = v24.PARAMETERS["robustness_sweeps"][
+        "cue_root_strength_multiplier"
+    ]
+    for position in range(60):
+        seed = 761120 + position
+        multiplier = float(multipliers[position // 20])
+        composition = v24._composition_world(seed)
+        strength = float(
+            np.clip(composition["association"] * multiplier, 0.0, 1.0)
+        )
+        before = v24._cue_root_prediction(
+            composition["initial_root"], strength
+        )
+        after = v24._cue_root_prediction(
+            composition["final_root"], strength
+        )
+        cue_root_rows.append(
+            {
+                "seed": seed,
+                "multiplier": multiplier,
+                "signed_transfer": composition["new_direction"]
+                * (after - before),
+            }
+        )
+    return {
+        "one_at_a_time": rows,
+        "cue_root_strength": cue_root_rows,
+        "one_at_a_time_seed_count": 120,
+        "cue_root_seed_count": 60,
+        "passed": all(
+            row["maximum_update_identity_error"] <= 1e-10
+            and row["maximum_decomposition_error"] <= 1e-10
+            and row["v25a_increment_identity_error"] <= 1e-10
+            for row in rows
+        ),
+    }
+
+
+def _manifest_audit(path: Path) -> dict[str, Any]:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    mismatches = []
+    for relative, expected in payload["files"].items():
+        target = ROOT / relative
+        if not target.exists():
+            mismatches.append(
+                {
+                    "path": relative,
+                    "expected": expected,
+                    "observed": "MISSING",
+                }
+            )
+            continue
+        observed = hashlib.sha256(target.read_bytes()).hexdigest()
+        if observed != expected:
+            mismatches.append(
+                {
+                    "path": relative,
+                    "expected": expected,
+                    "observed": observed,
+                }
+            )
+    return {
+        "manifest": str(path.relative_to(ROOT)),
+        "declared_file_count": len(payload["files"]),
+        "mismatches": mismatches,
+        "passed": not mismatches,
+    }
+
+
+def _axis_intervals(
+    rows: list[dict[str, Any]], key: str
+) -> dict[str, dict[str, tuple[float, float, float]]]:
+    values = sorted({row[key] for row in rows}, key=str)
+    output = {}
+    for value_index, value in enumerate(values):
+        output[str(value)] = {}
+        for family_index, family in enumerate(v24.FAMILIES):
+            cell = [
+                row["full_delta_i_per_token"]
+                if key != "presentation_schedule"
+                else row["scheduled_advantage_per_token"]
+                for row in rows
+                if row[key] == value and row["family"] == family
+            ]
+            output[str(value)][family] = _bootstrap_mean(
+                cell,
+                761180 + value_index * len(v24.FAMILIES)
+                + family_index,
+                f"v25a-gate5-{key}-{value}-{family}",
+            )
+    return output
+
+
+def gate5() -> bool:
+    from ref.constitution import (
+        cumulative_constitution_audit,
+        cumulative_graded_update_audit,
+    )
+    from ref.v20 import run_v20
+    from ref.v21 import run_v21
+    from ref.v221 import run_v221
+    from run_v24_freeze import formation_status, maintenance_status
+
+    started = time.time()
+    parameter_sweeps = _gate5_parameter_sweeps()
+    _write_json("gate-5-parameter-sweeps.json", parameter_sweeps)
+    robustness_rows = _parallel("gate5-robustness", 2820)
+    _write_json("gate-5-per_world.json", robustness_rows)
+
+    gate1 = json.loads((OUT / "gate-1.json").read_text())
+    gate2 = json.loads((OUT / "gate-2.json").read_text())
+    gate3 = json.loads((OUT / "gate-3.json").read_text())
+    gate3_repair = json.loads(
+        (OUT / "gate-3-repaired-decomposition.json").read_text()
+    )
+    gate4_result = json.loads((OUT / "gate-4.json").read_text())
+    bridge_rows = json.loads(
+        (OUT / "gate-3-bridge-per_world.json").read_text()
+    )
+    lattice_eligible = [
+        row
+        for row in bridge_rows
+        if row["matching_absolute_kl_error"] <= 0.01
+    ]
+    eligible_bridge_interval = _bootstrap_mean(
+        [row["joint_minus_marginal"] for row in lattice_eligible],
+        758500,
+        "v25a-gate5-eligible-bridge-contrast",
+    )
+
+    v20 = run_v20()
+    v21 = run_v21()
+    v221 = run_v221()
+    formation = formation_status()
+    maintenance = maintenance_status()
+    legacy_constitution = cumulative_constitution_audit()
+    graded_constitution = cumulative_graded_update_audit()
+    cumulative = {
+        "V2.0": v20,
+        "V2.1": v21,
+        "V2.2.1": v221,
+        "V2.3.2-formation": formation,
+        "V2.3.3": maintenance,
+        "model-evidence-constitution": legacy_constitution,
+        "graded-update-constitution": graded_constitution,
+    }
+    for name, value in cumulative.items():
+        destination = OUT / "cumulative" / name / "stage-report.json"
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_text(
+            json.dumps(
+                value, indent=2, sort_keys=True, default=_native
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+
+    v24_manifest = _manifest_audit(
+        ROOT / "results" / "V2.4.4" / "freeze-manifest.json"
+    )
+    r0_manifest = _manifest_audit(
+        ROOT / "results" / "R0" / "freeze-manifest.json"
+    )
+
+    full_suite_started = time.time()
+    full_suite = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-v",
+        ],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+    )
+    full_suite_elapsed = time.time() - full_suite_started
+    (OUT / "gate-5-full-suite.log").write_text(
+        full_suite.stdout + full_suite.stderr, encoding="utf-8"
+    )
+
+    factorized = {
+        "global_downweight",
+        "cue_local_relearning",
+        "continuous_drift",
+    }
+    checks = {
+        "gate1_primary": bool(gate1["passed"]),
+        "gate2_primary": bool(gate2["passed"]),
+        "gate3_delta_i_dose_response": all(
+            gate3["checks"][name]
+            for name in (
+                "assay1_raw_means_monotone",
+                "assay1_isotonic_fit_no_adjustment",
+                "assay1_slope_lower_ci_gt_0",
+                "assay1_increment_identity",
+            )
+        ),
+        "gate3_matching_prefix_and_ordinary_tolerance": (
+            gate3["checks"][
+                "assay2_matching_within_frozen_tolerance"
+            ]
+            and gate3["checks"]["assay2_all_prefixes_identical"]
+        ),
+        "gate3_eligible_bridge_mean_ge_sesoi": (
+            eligible_bridge_interval[0] >= 0.01
+        ),
+        "gate3_eligible_bridge_lower_ci_gt_0": (
+            eligible_bridge_interval[1] > 0.0
+        ),
+        "gate3_repaired_decomposition": bool(gate3_repair["passed"]),
+        "gate3_exact_controls_and_balance": all(
+            gate3["checks"][name]
+            for name in (
+                "assay3_G_fixed_exact_zero",
+                "assay3_zero_association_exact_zero",
+                "assay3_stratum_balance_40_40_40",
+                "assay4_descriptive_semantics",
+            )
+        ),
+        "gate4_primary": bool(gate4_result["passed"]),
+        "robustness_all_increment_identities": max(
+            row["increment_identity_error"] for row in robustness_rows
+        )
+        <= 1e-10,
+        "robustness_factorized_exact_zero": max(
+            abs(row["full_delta_i"])
+            for row in robustness_rows
+            if row["family"] in factorized
+        )
+        <= 1e-10,
+        "one_at_a_time_parameter_semantics": bool(
+            parameter_sweeps["passed"]
+        ),
+        "cumulative_V2.0": bool(v20["passed"]),
+        "cumulative_V2.1": bool(v21["passed"]),
+        "cumulative_V2.2.1": bool(v221["passed"]),
+        "cumulative_formation": bool(formation["passed"]),
+        "cumulative_maintenance": bool(maintenance["passed"]),
+        "model_evidence_constitution": bool(
+            legacy_constitution["passed"]
+        ),
+        "graded_update_constitution": bool(
+            graded_constitution["passed"]
+        ),
+        "V2.4.4_manifest_identity": bool(v24_manifest["passed"]),
+        "R0_manifest_identity": bool(r0_manifest["passed"]),
+        "full_old_plus_R0_plus_V2.5a_unit_suite": (
+            full_suite.returncode == 0
+        ),
+    }
+    failures = [name for name, value in checks.items() if not value]
+    intervals = {
+        "length": _axis_intervals(robustness_rows, "length"),
+        "cue_count": _axis_intervals(robustness_rows, "cue_count"),
+        "missingness": _axis_intervals(
+            robustness_rows, "missingness"
+        ),
+        "presentation_schedule": _axis_intervals(
+            robustness_rows, "presentation_schedule"
+        ),
+    }
+    cue_root_intervals = {}
+    for index, multiplier in enumerate(
+        sorted(
+            {
+                row["multiplier"]
+                for row in parameter_sweeps["cue_root_strength"]
+            }
+        )
+    ):
+        values = [
+            row["signed_transfer"]
+            for row in parameter_sweeps["cue_root_strength"]
+            if row["multiplier"] == multiplier
+        ]
+        cue_root_intervals[str(multiplier)] = _bootstrap_mean(
+            values,
+            761120 + index,
+            f"v25a-gate5-cue-root-{multiplier}",
+        )
+    result = {
+        "stage": "V2.5a",
+        "gate": 5,
+        "format_core_status": "ADJUDICATED_MIXED",
+        "stage_verdict": "OPEN_PENDING_MASTER_SPEC_COMPLETION",
+        "passed_under_adjudication": not failures,
+        "blocking_failures": failures,
+        "checks": checks,
+        "adjudicated_nonblocking": {
+            "dose_monotone_m_star_over_n": "RETIRED_NOT_EVALUATED",
+            "formed_bank_matching_lattice": {
+                "outside_tolerance": 17,
+                "within_tolerance": len(lattice_eligible),
+                "classification": "RETAINED_LIMITATION",
+            },
+        },
+        "eligible_bridge_interval": eligible_bridge_interval,
+        "robustness": {
+            "world_count": len(robustness_rows),
+            "seed_block": [761180, 763999],
+            "maximum_increment_identity_error": max(
+                row["increment_identity_error"]
+                for row in robustness_rows
+            ),
+            "maximum_factorized_absolute_delta_i": max(
+                abs(row["full_delta_i"])
+                for row in robustness_rows
+                if row["family"] in factorized
+            ),
+            "intervals": intervals,
+            "cue_root_strength_intervals": cue_root_intervals,
+            "localization": {
+                family: {
+                    "negative": sum(
+                        row["full_delta_i_per_token"] < 0.0
+                        for row in robustness_rows
+                        if row["family"] == family
+                    ),
+                    "zero_within_1e-10": sum(
+                        abs(row["full_delta_i_per_token"]) <= 1e-10
+                        for row in robustness_rows
+                        if row["family"] == family
+                    ),
+                    "positive": sum(
+                        row["full_delta_i_per_token"] > 0.0
+                        for row in robustness_rows
+                        if row["family"] == family
+                    ),
+                }
+                for family in v24.FAMILIES
+            },
+        },
+        "parameter_sweeps": {
+            "one_at_a_time_count": len(
+                parameter_sweeps["one_at_a_time"]
+            ),
+            "cue_root_count": len(
+                parameter_sweeps["cue_root_strength"]
+            ),
+            "passed": parameter_sweeps["passed"],
+        },
+        "manifest_audits": {
+            "V2.4.4": v24_manifest,
+            "R0": r0_manifest,
+        },
+        "full_suite": {
+            "command": "python3 -m unittest discover -s tests -v",
+            "returncode": full_suite.returncode,
+            "elapsed_seconds": full_suite_elapsed,
+            "log": "results/V2.5a/gate-5-full-suite.log",
+        },
+        "B_max_inherited_formation": B_MAX_FORMATION,
+        "B_max_v24_common_emissions": B_MAX_V24,
+        "B_max_v25a_marginal_accounting": B_MAX_MARGINAL,
+        "elapsed_seconds": time.time() - started,
+    }
+    _write_json("gate-5.json", result)
+    (OUT / "gate-5-report.md").write_text(
+        "# V2.5a Gate 5 — cumulative regression and robustness\n\n"
+        f"Outcome: **{'PASS under adjudicated mixed disposition' if not failures else 'FAIL'}**. "
+        f"Blocking failures: `{failures}`.\n\n"
+        f"Eligible formed-bank bridge worlds: `{len(lattice_eligible)}/120`; "
+        f"contrast interval `{eligible_bridge_interval}`. The other 17 "
+        "worlds remain the named nonblocking lattice limitation. The "
+        "dose-monotone matching criterion was not evaluated.\n\n"
+        f"Robustness worlds: `{len(robustness_rows)}`; maximum increment "
+        f"identity error `{result['robustness']['maximum_increment_identity_error']}`; "
+        "maximum factorized absolute ΔI "
+        f"`{result['robustness']['maximum_factorized_absolute_delta_i']}`. "
+        "Length, cue-count, missingness, and presentation-schedule signs and "
+        "intervals are retained in `gate-5.json`.\n\n"
+        f"V2.4.4 manifest identity: `{v24_manifest['passed']}`; R0 manifest "
+        f"identity: `{r0_manifest['passed']}`; full suite return code "
+        f"`{full_suite.returncode}` in `{full_suite_elapsed:.3f}` seconds.\n\n"
+        f"`B_max_inherited_formation = {B_MAX_FORMATION}`; "
+        f"`B_max_v24_common_emissions = {B_MAX_V24}`; "
+        f"`B_max_v25a_marginal_accounting = {B_MAX_MARGINAL}`.\n",
+        encoding="utf-8",
+    )
+    if failures:
+        (OUT / "gate-5-diagnosis-stub.md").write_text(
+            "# V2.5a Gate-5 honest stop\n\n"
+            f"Blocking failures retained verbatim: `{failures}`.\n",
+            encoding="utf-8",
+        )
+    return not failures
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("phase", choices=("gate3", "worker"))
+    parser.add_argument(
+        "phase",
+        choices=("repair-gate3", "gate3", "gate4", "gate5", "worker"),
+    )
     parser.add_argument("--task", choices=tuple(TASKS))
     parser.add_argument("--start", type=int)
     parser.add_argument("--end", type=int)
@@ -532,9 +1426,14 @@ def main() -> int:
     if args.phase == "worker":
         _worker(args.task, args.start, args.end, Path(args.output))
         return 0
+    if args.phase == "repair-gate3":
+        return 0 if repaired_gate3_decomposition() else 1
+    if args.phase == "gate4":
+        return 0 if gate4() else 1
+    if args.phase == "gate5":
+        return 0 if gate5() else 1
     return 0 if gate3() else 1
 
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

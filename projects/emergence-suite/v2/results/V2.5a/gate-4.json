@@ -1,0 +1,44 @@
+{
+  "B_max_inherited_formation": 3.801426508560692,
+  "B_max_v24_common_emissions": 6.704414354964107,
+  "B_max_v25a_marginal_accounting": 6.704414354964107,
+  "adjudication": "results/V2.5a/gate3-adjudication.md",
+  "association_severed": {
+    "maximum_absolute_delta_i": 0.0,
+    "maximum_channel_marginal_change": 0.0
+  },
+  "blocking_failures": [],
+  "checks": {
+    "association_severed_channel_marginals_unchanged": true,
+    "association_severed_delta_i_exact_zero": true,
+    "broadcast_severed_local_delta_i_survives": true,
+    "broadcast_severed_local_delta_i_unchanged": true,
+    "broadcast_severed_root_difference_exact_zero": true,
+    "misdeclared_target_detected_80_of_80": true
+  },
+  "gate": 4,
+  "misdeclared_target": {
+    "detected_count": 80,
+    "expected_error": "matching target was not declared as root KL"
+  },
+  "passed": true,
+  "retained_nonblocking_limitation": {
+    "classification": "DESCRIPTIVE_LIMITATION",
+    "formed_bank_off_lattice_worlds": 17
+  },
+  "retired_criterion": {
+    "dose_monotone_m_star_over_n": "NOT_EVALUATED"
+  },
+  "root_broadcast_severed": {
+    "absolute_local_delta_i_interval": [
+      2.726133198794985,
+      2.371580360186555,
+      3.0859456956017572
+    ],
+    "maximum_absolute_root_difference": 0.0,
+    "maximum_local_delta_i_change": 2.220446049250313e-15,
+    "nonzero_local_world_count": 80
+  },
+  "stage": "V2.5a",
+  "worlds_per_lesion": 80
+}

@@ -99,6 +99,47 @@ class EvidencePresentationTests(unittest.TestCase):
         self.assertEqual(result["G_fixed_difference"], 0.0)
         self.assertEqual(result["zero_association_difference"], 0.0)
 
+    def test_bridge_trajectory_uses_contract_endpoint_reliability(self):
+        record = v24._bank_states()[0]
+        state = record["serialized_state"]
+        joint = v24._composition_world(755000, bank_state=state)
+        result = v25a.formed_bridge_format_readout(755000, record)
+        reliability = float(joint["association_reliability"])
+        initial = np.asarray(joint["initial_root"], dtype=float)
+        posterior = initial.copy()
+        for observation in joint["world"]["observations"]:
+            if observation.root is None:
+                continue
+            likelihood = np.asarray(
+                [
+                    reliability
+                    if root_state == observation.root
+                    else 1.0 - reliability
+                    for root_state in range(2)
+                ],
+                dtype=float,
+            )
+            posterior = posterior * likelihood
+            posterior = posterior / posterior.sum()
+        direction = float(joint["new_direction"])
+        initial_prediction = v24._cue_root_prediction(
+            initial, float(joint["association"])
+        )
+        endpoint = direction * (
+            v24._cue_root_prediction(
+                posterior, float(joint["association"])
+            )
+            - initial_prediction
+        )
+        self.assertAlmostEqual(
+            endpoint, result["joint_root_movement"], places=14
+        )
+        self.assertAlmostEqual(
+            sum(result["per_slice_difference_increments"]),
+            result["joint_minus_marginal"],
+            places=14,
+        )
+
     def test_marginal_bound_is_not_distinct(self):
         result = v25a.marginal_finite_information_bound()
         self.assertFalse(result["distinct"])

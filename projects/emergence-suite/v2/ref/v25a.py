@@ -282,6 +282,34 @@ def root_posterior(
     return posterior
 
 
+def _root_posterior_at_reliability(
+    observations: Iterable[v24.Observation],
+    prior: Iterable[float],
+    reliability: float,
+) -> np.ndarray:
+    """Root trajectory under the composition endpoint's declared CPT."""
+    root_reliability = float(reliability)
+    if not 0.5 <= root_reliability <= 1.0:
+        raise ValueError("root reliability must lie in [0.5,1]")
+    posterior = v24._normalize(np.asarray(list(prior), dtype=float))
+    for observation in observations:
+        if observation.root is None:
+            continue
+        likelihood = np.asarray(
+            [
+                (
+                    root_reliability
+                    if state == observation.root
+                    else 1.0 - root_reliability
+                )
+                for state in range(2)
+            ],
+            dtype=float,
+        )
+        posterior = v24._normalize(posterior * likelihood)
+    return posterior
+
+
 def categorical_kl(posterior: np.ndarray, prior: np.ndarray) -> float:
     q = v24._normalize(np.asarray(posterior, dtype=float))
     p = v24._normalize(np.asarray(prior, dtype=float))
@@ -431,8 +459,10 @@ def formed_bridge_format_readout(
     joint_movement = float(joint["signed_transfer"])
     joint_trajectory = [0.0]
     for index in range(1, base_length + 1):
-        posterior = root_posterior(
-            base_observations[:index], initial_root
+        posterior = _root_posterior_at_reliability(
+            base_observations[:index],
+            initial_root,
+            reliability=float(joint["association_reliability"]),
         )
         prediction = v24._cue_root_prediction(
             posterior, joint["association"]

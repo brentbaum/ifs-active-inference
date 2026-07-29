@@ -1,0 +1,644 @@
+{
+  "constitution_version": "revised-graded-update-1",
+  "effective_from": "V2.3.3",
+  "historical_exclusions": [
+    "V2.3 and V2.3.1 are retired failure ledgers.",
+    "V2.3.2 attribution is shelved for the V2.3.4 side rung."
+  ],
+  "passed": true,
+  "sections": {
+    "A": "update identity and no authored assignment",
+    "B": "finite-information guarantee and tanh(B_max/4)",
+    "C": "evidence-strength homotopy",
+    "D": "composition checks"
+  },
+  "stages": {
+    "V2.0": {
+      "observation": "D",
+      "passed": true,
+      "sections": {
+        "A_update_identity": {
+          "checked_pairwise_increments": 1,
+          "maximum_absolute_error": 0.0,
+          "no_authored_assignment": {
+            "forbidden_assignment_targets": [],
+            "functions_checked": [
+              "candidate_scorer"
+            ],
+            "interpretation": "Posterior arrays may be computed only by normalized evidence; the audit forbids authored latent/status/winner assignments.",
+            "passed": true,
+            "posterior_assignment_expressions": [
+              {
+                "expression": "ExactEngine().infer(model, (structure,), observations)",
+                "function": "candidate_scorer",
+                "line": 8
+              }
+            ],
+            "posterior_assignments_inside_if_branches": [],
+            "winner_selection_calls": []
+          },
+          "passed": true,
+          "trace": [
+            {
+              "absolute_error": 0.0,
+              "observation": 8,
+              "pair": [
+                0,
+                1
+              ],
+              "posterior_log_odds_increment": -0.7269140430307628,
+              "published_log_bf": -0.7269140430307628,
+              "slice": 0
+            }
+          ]
+        },
+        "B_finite_information": {
+          "B_max": 4.533576532801081,
+          "all_observed_slices_within_bound": true,
+          "asymmetric_zero_cells": [],
+          "implied_binary_probability_change_bound": 0.8121777032746834,
+          "passed": true,
+          "support_cells_checked": 11
+        },
+        "C_evidence_strength_homotopy": {
+          "alpha_grid": [
+            0.0,
+            0.01,
+            0.02,
+            0.03,
+            0.04,
+            0.05,
+            0.06,
+            0.07,
+            0.08,
+            0.09,
+            0.1,
+            0.11,
+            0.12,
+            0.13,
+            0.14,
+            0.15,
+            0.16,
+            0.17,
+            0.18,
+            0.19,
+            0.2,
+            0.21,
+            0.22,
+            0.23,
+            0.24,
+            0.25,
+            0.26,
+            0.27,
+            0.28,
+            0.29,
+            0.3,
+            0.31,
+            0.32,
+            0.33,
+            0.34,
+            0.35000000000000003,
+            0.36,
+            0.37,
+            0.38,
+            0.39,
+            0.4,
+            0.41000000000000003,
+            0.42,
+            0.43,
+            0.44,
+            0.45,
+            0.46,
+            0.47000000000000003,
+            0.48,
+            0.49,
+            0.5,
+            0.51,
+            0.52,
+            0.53,
+            0.54,
+            0.55,
+            0.56,
+            0.5700000000000001,
+            0.58,
+            0.59,
+            0.6,
+            0.61,
+            0.62,
+            0.63,
+            0.64,
+            0.65,
+            0.66,
+            0.67,
+            0.68,
+            0.6900000000000001,
+            0.7000000000000001,
+            0.71,
+            0.72,
+            0.73,
+            0.74,
+            0.75,
+            0.76,
+            0.77,
+            0.78,
+            0.79,
+            0.8,
+            0.81,
+            0.8200000000000001,
+            0.8300000000000001,
+            0.84,
+            0.85,
+            0.86,
+            0.87,
+            0.88,
+            0.89,
+            0.9,
+            0.91,
+            0.92,
+            0.93,
+            0.9400000000000001,
+            0.9500000000000001,
+            0.96,
+            0.97,
+            0.98,
+            0.99,
+            1.0
+          ],
+          "analytic_form": "q_h(alpha)=prior_h*((1-alpha)m+alpha*p_h)/m",
+          "common_mixture": "m=sum_h prior(h)*p_h",
+          "curves_checked": 11,
+          "definition": "p_h^alpha=(1-alpha)m+alpha*p_h",
+          "finite_derivative": true,
+          "maximum_absolute_finite_derivative": 0.4893719806763285,
+          "maximum_adjacent_grid_change": 0.004893719806763452,
+          "maximum_exact_vs_analytic_error": 0.0,
+          "maximum_forward_reverse_error": 0.0,
+          "monotonicity_failures": [],
+          "no_discontinuity": true,
+          "no_hysteresis": true,
+          "passed": true,
+          "target_index": 1
+        },
+        "D_composition": {
+          "legacy_nine_invariants": {
+            "observation": "D",
+            "passed": true,
+            "results": {
+              "1_candidates_normalized": {
+                "maximum_error": 1.5543122344752192e-15,
+                "passed": true
+              },
+              "2_prior_complexity_once": {
+                "passed": true,
+                "structural_prior_factor_count": 1
+              },
+              "3_masked_increment_zero": {
+                "incremental_log_bf": -1.5543122344752203e-15,
+                "passed": true
+              },
+              "4_absent_increment_zero": {
+                "incremental_log_bf": -1.5543122344752203e-15,
+                "passed": true
+              },
+              "5_identical_predictions_zero": {
+                "incremental_log_bf": 0.0,
+                "passed": true
+              },
+              "6_prequential_recombination": {
+                "absolute_error": 0.0,
+                "passed": true,
+                "posterior_log_odds": 0.7269140430307628,
+                "published_contributions": [
+                  0.7269140430307628
+                ],
+                "recombined_log_odds": 0.7269140430307628
+              },
+              "7_partition_included": {
+                "candidate_row_sums": [
+                  1.0,
+                  0.9999999999999984
+                ],
+                "passed": true
+              },
+              "8_no_evidence_dynamics": {
+                "declared_dynamics": "static",
+                "passed": true,
+                "predicted_final": [
+                  0.5,
+                  0.5
+                ]
+              },
+              "9_independent_implementation": {
+                "maximum_error": 1.3877787807814457e-17,
+                "passed": true
+              }
+            },
+            "structure": "H"
+          },
+          "passed": true
+        }
+      },
+      "structure": "H"
+    },
+    "V2.1": {
+      "observation": null,
+      "passed": true,
+      "sections": {
+        "A_update_identity": {
+          "not_applicable": true,
+          "passed": true,
+          "reason": "V2.1 has no finite structural comparison."
+        },
+        "B_finite_information": {
+          "not_applicable": true,
+          "passed": true,
+          "reason": "V2.1 has no pairwise structural likelihood table."
+        },
+        "C_evidence_strength_homotopy": {
+          "not_applicable": true,
+          "passed": true,
+          "reason": "V2.1 has no structural posterior q(H)."
+        },
+        "D_composition": {
+          "legacy_nine_invariants": {
+            "observation": null,
+            "passed": true,
+            "results": {
+              "1_candidates_normalized": {
+                "maximum_cpt_error": 0.0,
+                "passed": true,
+                "structural_comparisons": 0
+              },
+              "2_prior_complexity_once": {
+                "passed": true,
+                "structural_comparisons": 0
+              },
+              "3_masked_increment_zero": {
+                "incremental_log_bf": 0.0,
+                "not_applicable": true,
+                "passed": true
+              },
+              "4_absent_increment_zero": {
+                "incremental_log_bf": 0.0,
+                "not_applicable": true,
+                "passed": true
+              },
+              "5_identical_predictions_zero": {
+                "incremental_log_bf": 0.0,
+                "not_applicable": true,
+                "passed": true
+              },
+              "6_prequential_recombination": {
+                "passed": true,
+                "structural_comparisons": 0
+              },
+              "7_partition_included": {
+                "maximum_cpt_error": 0.0,
+                "passed": true
+              },
+              "8_no_evidence_dynamics": {
+                "declared_dynamics": "no structural hypothesis",
+                "passed": true
+              },
+              "9_independent_implementation": {
+                "passed": true,
+                "structural_comparisons": 0
+              }
+            },
+            "structure": null
+          },
+          "passed": true
+        }
+      },
+      "structure": null
+    },
+    "V2.2.1": {
+      "observation": "K",
+      "passed": true,
+      "sections": {
+        "A_update_identity": {
+          "checked_pairwise_increments": 1,
+          "maximum_absolute_error": 8.881784197001252e-16,
+          "no_authored_assignment": {
+            "forbidden_assignment_targets": [],
+            "functions_checked": [
+              "candidate_scorer"
+            ],
+            "interpretation": "Posterior arrays may be computed only by normalized evidence; the audit forbids authored latent/status/winner assignments.",
+            "passed": true,
+            "posterior_assignment_expressions": [
+              {
+                "expression": "ExactEngine().infer(model, (structure,), observations)",
+                "function": "candidate_scorer",
+                "line": 8
+              }
+            ],
+            "posterior_assignments_inside_if_branches": [],
+            "winner_selection_calls": []
+          },
+          "passed": true,
+          "trace": [
+            {
+              "absolute_error": 8.881784197001252e-16,
+              "observation": 90,
+              "pair": [
+                0,
+                1
+              ],
+              "posterior_log_odds_increment": 5.57499658592655,
+              "published_log_bf": 5.5749965859265505,
+              "slice": 0
+            }
+          ]
+        },
+        "B_finite_information": {
+          "B_max": 121.72197006306659,
+          "all_observed_slices_within_bound": true,
+          "asymmetric_zero_cells": [],
+          "implied_binary_probability_change_bound": 1.0,
+          "passed": true,
+          "support_cells_checked": 181
+        },
+        "C_evidence_strength_homotopy": {
+          "alpha_grid": [
+            0.0,
+            0.01,
+            0.02,
+            0.03,
+            0.04,
+            0.05,
+            0.06,
+            0.07,
+            0.08,
+            0.09,
+            0.1,
+            0.11,
+            0.12,
+            0.13,
+            0.14,
+            0.15,
+            0.16,
+            0.17,
+            0.18,
+            0.19,
+            0.2,
+            0.21,
+            0.22,
+            0.23,
+            0.24,
+            0.25,
+            0.26,
+            0.27,
+            0.28,
+            0.29,
+            0.3,
+            0.31,
+            0.32,
+            0.33,
+            0.34,
+            0.35000000000000003,
+            0.36,
+            0.37,
+            0.38,
+            0.39,
+            0.4,
+            0.41000000000000003,
+            0.42,
+            0.43,
+            0.44,
+            0.45,
+            0.46,
+            0.47000000000000003,
+            0.48,
+            0.49,
+            0.5,
+            0.51,
+            0.52,
+            0.53,
+            0.54,
+            0.55,
+            0.56,
+            0.5700000000000001,
+            0.58,
+            0.59,
+            0.6,
+            0.61,
+            0.62,
+            0.63,
+            0.64,
+            0.65,
+            0.66,
+            0.67,
+            0.68,
+            0.6900000000000001,
+            0.7000000000000001,
+            0.71,
+            0.72,
+            0.73,
+            0.74,
+            0.75,
+            0.76,
+            0.77,
+            0.78,
+            0.79,
+            0.8,
+            0.81,
+            0.8200000000000001,
+            0.8300000000000001,
+            0.84,
+            0.85,
+            0.86,
+            0.87,
+            0.88,
+            0.89,
+            0.9,
+            0.91,
+            0.92,
+            0.93,
+            0.9400000000000001,
+            0.9500000000000001,
+            0.96,
+            0.97,
+            0.98,
+            0.99,
+            1.0
+          ],
+          "analytic_form": "q_h(alpha)=prior_h*((1-alpha)m+alpha*p_h)/m",
+          "common_mixture": "m=sum_h prior(h)*p_h",
+          "curves_checked": 181,
+          "definition": "p_h^alpha=(1-alpha)m+alpha*p_h",
+          "finite_derivative": true,
+          "maximum_absolute_finite_derivative": 0.6000000000000001,
+          "maximum_adjacent_grid_change": 0.006000000000000227,
+          "maximum_exact_vs_analytic_error": 0.0,
+          "maximum_forward_reverse_error": 0.0,
+          "monotonicity_failures": [],
+          "no_discontinuity": true,
+          "no_hysteresis": true,
+          "passed": true,
+          "target_index": 1
+        },
+        "D_composition": {
+          "legacy_nine_invariants": {
+            "observation": "K",
+            "passed": true,
+            "results": {
+              "1_candidates_normalized": {
+                "maximum_error": 6.961098364399732e-14,
+                "passed": true
+              },
+              "2_prior_complexity_once": {
+                "passed": true,
+                "structural_prior_factor_count": 1
+              },
+              "3_masked_increment_zero": {
+                "incremental_log_bf": -6.961098364399974e-14,
+                "passed": true
+              },
+              "4_absent_increment_zero": {
+                "incremental_log_bf": -6.961098364399974e-14,
+                "passed": true
+              },
+              "5_identical_predictions_zero": {
+                "incremental_log_bf": 0.0,
+                "passed": true
+              },
+              "6_prequential_recombination": {
+                "absolute_error": 8.881784197001252e-16,
+                "passed": true,
+                "posterior_log_odds": -5.980461694034714,
+                "published_contributions": [
+                  -5.5749965859265505
+                ],
+                "recombined_log_odds": -5.980461694034715
+              },
+              "7_partition_included": {
+                "candidate_row_sums": [
+                  1.0,
+                  0.9999999999999304
+                ],
+                "passed": true
+              },
+              "8_no_evidence_dynamics": {
+                "declared_dynamics": "static",
+                "passed": true,
+                "predicted_final": [
+                  0.6,
+                  0.4
+                ]
+              },
+              "9_independent_implementation": {
+                "maximum_error": 6.938893903907228e-18,
+                "passed": true
+              }
+            },
+            "structure": "Z"
+          },
+          "passed": true
+        }
+      },
+      "structure": "Z"
+    },
+    "V2.3.2-formation": {
+      "passed": true,
+      "sections": {
+        "A_update_identity": {
+          "candidate_labels": [
+            "T",
+            "D",
+            "P"
+          ],
+          "maximum_absolute_identity_error": 8.881784197001252e-16,
+          "no_authored_assignment": {
+            "forbidden_assignment_targets": [],
+            "functions_checked": [
+              "score_slice",
+              "score_history"
+            ],
+            "interpretation": "Posterior arrays may be computed only by normalized evidence; the audit forbids authored latent/status/winner assignments.",
+            "passed": true,
+            "posterior_assignment_expressions": [
+              {
+                "expression": "joint / evidence",
+                "function": "score_slice",
+                "line": 27
+              },
+              {
+                "expression": "PRIOR.copy() if prior is None else np.asarray(prior).copy()",
+                "function": "score_history",
+                "line": 9
+              },
+              {
+                "expression": "score_slice(posterior, observation, configuration, masked=masked, lesions=lesions)",
+                "function": "score_history",
+                "line": 18
+              }
+            ],
+            "posterior_assignments_inside_if_branches": [],
+            "winner_selection_calls": []
+          },
+          "pairwise_increments_checked": 480,
+          "passed": true
+        },
+        "B_finite_information": {
+          "absolute_error": 0.0,
+          "asymmetric_zero_cells": [],
+          "definition": "sup over every pair and common-support observation in every frozen V2.3.2 likelihood table",
+          "enumerated_B_max": 3.801426508560692,
+          "every_observed_slice_within_B_max": true,
+          "implied_binary_probability_change_bound": 0.7399444612916254,
+          "passed": true,
+          "published_frozen_B_max": 3.801426508560692,
+          "support_cells_checked": 480
+        },
+        "C_evidence_strength_homotopy": {
+          "alpha_grid_count": 101,
+          "definition": "p_h^alpha=(1-alpha)m+alpha*p_h",
+          "finite_derivative_everywhere": true,
+          "frozen_sign_monotonicity_failures": [],
+          "frozen_sign_predicted_rows_checked": 32,
+          "maximum_absolute_finite_derivative": 0.6448357957134957,
+          "maximum_exact_enumeration_vs_analytic_error": 2.220446049250313e-16,
+          "maximum_forward_reverse_hysteresis_error": 0.0,
+          "no_discontinuity": true,
+          "no_hysteresis": true,
+          "passed": true,
+          "per_observation_monotonicity_failures": 0,
+          "q_P_curves_checked": 160,
+          "table_count": 32
+        },
+        "D_composition": {
+          "checks": {
+            "independent_summation": {
+              "maximum_log_joint_error": 8.881784197001252e-16,
+              "maximum_posterior_error": 1.1102230246251565e-16
+            },
+            "masked_slice_neutrality": {
+              "maximum_log_bf": 0.0,
+              "maximum_posterior_error": 0.0
+            },
+            "matched_statistic_reorder_invariance": {
+              "maximum_log_joint_error": 0.0
+            },
+            "no_event_neutrality": {
+              "maximum_log_bf": 0.0,
+              "maximum_posterior_error": 0.0
+            },
+            "prequential_recombination": {
+              "maximum_pairwise_log_odds_error": 2.220446049250313e-16
+            }
+          },
+          "maximum_error": 8.881784197001252e-16,
+          "passed": true
+        }
+      },
+      "stage": "V2.3.2-formation"
+    }
+  },
+  "standing_stage_scope": [
+    "V2.0",
+    "V2.1",
+    "V2.2.1",
+    "V2.3.2-formation"
+  ]
+}

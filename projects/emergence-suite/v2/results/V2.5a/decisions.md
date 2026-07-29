@@ -86,3 +86,65 @@ components. Matching scans the same seed's extended root channel to the
 joint root-KL target. The root-movement difference is decomposed by
 telescoping the joint and matched-marginal prediction trajectories, including
 any marginal extension beyond the joint history.
+
+## Adjudicated repair and Gate-4 execution definitions
+
+The Gate-3 adjudication retires the dose-monotone matching criterion without
+replacement and retains the 17 formed-bank off-lattice worlds as a
+descriptive limitation. Neither is evaluated as a Gate-4 blocker.
+
+The authorized decomposition repair changes only the joint trajectory used
+by the per-slice readout: it uses the same bank-state association reliability
+as the already-frozen composition endpoint. The fixed-0.85 root posterior
+used by the ordinary matching operator is unchanged.
+
+The 240 Gate-4 seeds are assigned prospectively as 80 worlds per lesion:
+
+- `760000:760079`: association severing replaces the candidate's joint
+  presentation by its already-computed product of exact channel marginals.
+  This is the contracted structural severing: ΔI is identically zero while
+  every channel-marginal score is byte-identical.
+- `760080:760159`: root-broadcast severing masks the root channel from both
+  root-movement arms. Both root movements are therefore zero; the local
+  outcome-marker ΔI is recomputed and must remain unchanged.
+- `760160:760239`: the matching operator receives an undeclared target name;
+  its pre-scoring custody guard must reject all 80 calls.
+
+These definitions were written before opening any Gate-4 seed.
+
+## Gate-5 execution definitions
+
+Gate 4 passed before the Gate-5 block was opened. The 3,000 Gate-5 seeds are
+consumed once as follows:
+
+- `761000:761119`: the frozen V2.4 one-at-a-time parameter neighborhoods
+  (8 axes × 3 multipliers × 5 generating/scored families);
+- `761120:761179`: the standing cue-root-strength readout sweep (3
+  multipliers × 20 worlds);
+- `761180:763999`: a deterministic mixed-radix sweep over all five families,
+  lengths `{32,64,96}`, cue counts `{2,3,4}`, missingness
+  `{0,.15,.30}`, and the three required presentation schedules.
+
+The presentation schedules are scoring-only readouts over the already
+computed joint and marginal prequential paths:
+
+- `block_marginal`: first half marginal, second half joint;
+- `alternating`: even-indexed slices marginal, odd-indexed slices joint;
+- `tail_marginal`: first half joint, second half marginal.
+
+For each schedule, the reported advantage over all-marginal accounting is
+the sum of frozen ΔI increments on the slices designated joint. No schedule
+updates either candidate, changes a generator, or feeds back into inference.
+Schedule and robustness cells have no post-hoc scientific threshold; they
+report sign, interval, exact-accounting error, and localization as the plan
+requires.
+
+Standing precision/broadcast, formation-profile, formed-bank, and prior-stage
+robustness results are rerun through their cumulative suites. The V2.4.4 and
+R0 freeze manifests are independently rehashed. Gate-5 primary blockers are
+the unchanged Gates 1–2, the adjudication-valid Gate-3 criteria, the repaired
+decomposition, and Gate 4. The retired dose-matching criterion is not read as
+a criterion; the 17-world off-lattice class is reported verbatim and remains
+nonblocking.
+
+These definitions were written before opening any Gate-5 seed.
