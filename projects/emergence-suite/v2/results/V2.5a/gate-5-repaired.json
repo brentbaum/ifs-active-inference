@@ -1,0 +1,499 @@
+{
+  "B_max_inherited_formation": 3.801426508560692,
+  "B_max_v24_common_emissions": 6.704414354964107,
+  "B_max_v25a_marginal_accounting": 6.704414354964107,
+  "adjudicated_nonblocking": {
+    "dose_monotone_m_star_over_n": "RETIRED_NOT_EVALUATED",
+    "formed_bank_matching_lattice": {
+      "classification": "RETAINED_LIMITATION",
+      "outside_tolerance": 17,
+      "within_tolerance": 103
+    }
+  },
+  "blocking_failures": [],
+  "checks": {
+    "R0_manifest_identity": true,
+    "V2.4.4_manifest_identity": true,
+    "cumulative_V2.0": true,
+    "cumulative_V2.1": true,
+    "cumulative_V2.2.1": true,
+    "cumulative_formation": true,
+    "cumulative_maintenance": true,
+    "full_old_plus_R0_plus_V2.5a_unit_suite": true,
+    "gate1_primary": true,
+    "gate2_primary": true,
+    "gate3_delta_i_dose_response": true,
+    "gate3_eligible_bridge_lower_ci_gt_0": true,
+    "gate3_eligible_bridge_mean_ge_sesoi": true,
+    "gate3_exact_controls_and_balance": true,
+    "gate3_matching_prefix_and_ordinary_tolerance": true,
+    "gate3_repaired_decomposition": true,
+    "gate4_primary": true,
+    "graded_update_constitution": true,
+    "model_evidence_constitution": true,
+    "one_at_a_time_parameter_semantics": true,
+    "robustness_all_increment_identities": true,
+    "robustness_factorized_exact_zero": true
+  },
+  "elapsed_seconds": 629.8877649307251,
+  "eligible_bridge_interval": [
+    0.06313714303388203,
+    0.04462763412351659,
+    0.08427047327564974
+  ],
+  "format_core_status": "ADJUDICATED_MIXED",
+  "full_suite": {
+    "command": "python3 -m unittest discover -s tests -v",
+    "elapsed_seconds": 423.01352310180664,
+    "log": "results/V2.5a/gate-5-full-suite.log",
+    "returncode": 0
+  },
+  "gate": 5,
+  "manifest_audits": {
+    "R0": {
+      "base_manifest_file_count": 27,
+      "custody_files": {
+        "addenda": [
+          {
+            "file": "results/R0/freeze-manifest-shared-helper-addendum.json",
+            "sha256": "c9ee60834647ef323a67f033604bc2b43cdc6a6e7ae1fd7aaaf6d54877f21bf0"
+          }
+        ],
+        "base": {
+          "file": "results/R0/freeze-manifest.json",
+          "sha256": "d8721749f375629cb84a7bc51ed2093ed5f6ccbfb25c3e7a7381b3d8816cbe15"
+        }
+      },
+      "effective_manifest_file_count": 31,
+      "mismatches": [],
+      "overlaid_entries": [
+        "contracts/v2.g0-world-protocol-grammar.md",
+        "protocols/v2.g0-released-blocks.json",
+        "ref/manifest_chain.py",
+        "ref/world_ir.py",
+        "results/R0/escrow-authorization-amendment.md",
+        "run_v2g0_gates.py",
+        "tests/test_manifest_chain.py",
+        "tests/test_v2g0_grammar.py"
+      ],
+      "passed": true
+    },
+    "V2.4.4": {
+      "base_manifest_file_count": 86,
+      "custody_files": {
+        "addenda": [
+          {
+            "file": "results/V2.4.4/freeze-manifest-addendum.json",
+            "sha256": "ffcaacc5449d8f030c6a5f68c46a483ae4b66d97d5e857e0538f98399240c18e"
+          }
+        ],
+        "base": {
+          "file": "results/V2.4.4/freeze-manifest.json",
+          "sha256": "cd79376a252787de1c865bd84aafbe9fb4baac96cd674f5c5391c3b12c429038"
+        }
+      },
+      "effective_manifest_file_count": 87,
+      "mismatches": [],
+      "overlaid_entries": [
+        "results/V2.4.4/freeze-readiness.md",
+        "results/V2.4.4/round7-signoff.json"
+      ],
+      "passed": true
+    }
+  },
+  "parameter_sweeps": {
+    "cue_root_count": 60,
+    "one_at_a_time_count": 120,
+    "passed": true
+  },
+  "passed_under_adjudication": true,
+  "robustness": {
+    "cue_root_strength_intervals": {
+      "0.8": [
+        0.3196086052724322,
+        0.31882758231053365,
+        0.31999987949188735
+      ],
+      "1.0": [
+        0.3999391095691485,
+        0.39982342492877165,
+        0.3999999998954732
+      ],
+      "1.2": [
+        0.4511998996020776,
+        0.39839998992273334,
+        0.4799999898807208
+      ]
+    },
+    "intervals": {
+      "cue_count": {
+        "2": {
+          "change_point": [
+            0.02445455343181026,
+            0.020875712375913985,
+            0.028027083680941214
+          ],
+          "context_split": [
+            0.07799560189657968,
+            0.07115641795276044,
+            0.08485799917906026
+          ],
+          "continuous_drift": [
+            -7.91333432781258e-17,
+            -8.371868655963075e-17,
+            -7.469138390472203e-17
+          ],
+          "cue_local_relearning": [
+            -7.158121541855588e-17,
+            -7.51806478448712e-17,
+            -6.798538721205203e-17
+          ],
+          "global_downweight": [
+            -3.145848116043685e-17,
+            -3.534881651743514e-17,
+            -2.7419394408930493e-17
+          ]
+        },
+        "3": {
+          "change_point": [
+            0.026174188294343426,
+            0.022884954575012235,
+            0.029397537694454003
+          ],
+          "context_split": [
+            0.06682888889673005,
+            0.0604964877635892,
+            0.07311513505266551
+          ],
+          "continuous_drift": [
+            -7.594962924246456e-17,
+            -8.004157477409697e-17,
+            -7.185168987151257e-17
+          ],
+          "cue_local_relearning": [
+            -6.70225552460909e-17,
+            -7.136945317284915e-17,
+            -6.266862984615883e-17
+          ],
+          "global_downweight": [
+            -3.241504939650337e-17,
+            -3.631119926675906e-17,
+            -2.842745115984104e-17
+          ]
+        },
+        "4": {
+          "change_point": [
+            0.0317342351742329,
+            0.028694804663899974,
+            0.03480918062948234
+          ],
+          "context_split": [
+            0.07420233732855185,
+            0.06731931279200519,
+            0.08136073794909285
+          ],
+          "continuous_drift": [
+            -7.981414713671192e-17,
+            -8.45450760684818e-17,
+            -7.52165742978548e-17
+          ],
+          "cue_local_relearning": [
+            -6.605321379747946e-17,
+            -6.975355902353687e-17,
+            -6.232457911564885e-17
+          ],
+          "global_downweight": [
+            -3.182002758833385e-17,
+            -3.63608999144039e-17,
+            -2.7396065137537272e-17
+          ]
+        }
+      },
+      "length": {
+        "32": {
+          "change_point": [
+            0.03946106978550664,
+            0.03536271456683271,
+            0.04339162344988127
+          ],
+          "context_split": [
+            0.07759725940592922,
+            0.06962261598331815,
+            0.08596960572715305
+          ],
+          "continuous_drift": [
+            -1.0341863171447039e-16,
+            -1.075008733027312e-16,
+            -9.939560804645403e-17
+          ],
+          "cue_local_relearning": [
+            -7.337721027093157e-17,
+            -7.768783995658741e-17,
+            -6.897142939568155e-17
+          ],
+          "global_downweight": [
+            -9.107453576006507e-18,
+            -1.3617327957544747e-17,
+            -4.868205410561368e-18
+          ]
+        },
+        "64": {
+          "change_point": [
+            0.025090193640457566,
+            0.022288077418774248,
+            0.027915454504017223
+          ],
+          "context_split": [
+            0.0705655803221751,
+            0.06392122876439288,
+            0.07734501075091445
+          ],
+          "continuous_drift": [
+            -7.577414761809059e-17,
+            -7.919008316592969e-17,
+            -7.248761094499052e-17
+          ],
+          "cue_local_relearning": [
+            -6.581344652546156e-17,
+            -6.961720905804888e-17,
+            -6.197776106376746e-17
+          ],
+          "global_downweight": [
+            -3.860168568100229e-17,
+            -4.165742655966347e-17,
+            -3.5610739426058033e-17
+          ]
+        },
+        "96": {
+          "change_point": [
+            0.017743417045580294,
+            0.015903232099000787,
+            0.019626688624031458
+          ],
+          "context_split": [
+            0.07084494486256689,
+            0.06573980549710266,
+            0.07595136420559304
+          ],
+          "continuous_drift": [
+            -5.568016308137514e-17,
+            -5.845496369472254e-17,
+            -5.303131304854132e-17
+          ],
+          "cue_local_relearning": [
+            -6.550088800121018e-17,
+            -6.909881602221503e-17,
+            -6.186537991074221e-17
+          ],
+          "global_downweight": [
+            -4.798566077858588e-17,
+            -5.075055838532825e-17,
+            -4.52698150157964e-17
+          ]
+        }
+      },
+      "missingness": {
+        "0.0": {
+          "change_point": [
+            0.030721032384455955,
+            0.02716788051103101,
+            0.0343710932917971
+          ],
+          "context_split": [
+            0.08919965505978854,
+            0.08233291229449272,
+            0.09627694994471529
+          ],
+          "continuous_drift": [
+            -9.596355652114378e-17,
+            -1.00369356418111e-16,
+            -9.16249121449838e-17
+          ],
+          "cue_local_relearning": [
+            -9.132538934375254e-17,
+            -9.451351738280304e-17,
+            -8.813741427855356e-17
+          ],
+          "global_downweight": [
+            -4.7611581539948985e-17,
+            -5.2053942187423975e-17,
+            -4.304684181127632e-17
+          ]
+        },
+        "0.15": {
+          "change_point": [
+            0.026422585782132996,
+            0.02342849221734633,
+            0.02946653717419835
+          ],
+          "context_split": [
+            0.07295951426035796,
+            0.065964075753494,
+            0.08003915670365368
+          ],
+          "continuous_drift": [
+            -7.537060724940344e-17,
+            -7.93934056383623e-17,
+            -7.157370791034243e-17
+          ],
+          "cue_local_relearning": [
+            -6.525072459219799e-17,
+            -6.839995169386892e-17,
+            -6.216451681345834e-17
+          ],
+          "global_downweight": [
+            -3.092222320356325e-17,
+            -3.409578178088777e-17,
+            -2.76101786048642e-17
+          ]
+        },
+        "0.3": {
+          "change_point": [
+            0.02511428008153255,
+            0.021908997803305442,
+            0.02829954601698899
+          ],
+          "context_split": [
+            0.05658806721257256,
+            0.05155560509281837,
+            0.061543267431365484
+          ],
+          "continuous_drift": [
+            -6.330083989885251e-17,
+            -6.690475921714152e-17,
+            -5.982645756134391e-17
+          ],
+          "cue_local_relearning": [
+            -4.779099402179985e-17,
+            -5.0555902950112034e-17,
+            -4.5079003446734995e-17
+          ],
+          "global_downweight": [
+            -1.6923297366494552e-17,
+            -2.0222243576311843e-17,
+            -1.3539877909261263e-17
+          ]
+        }
+      },
+      "presentation_schedule": {
+        "alternating": {
+          "change_point": [
+            0.009986711043135999,
+            0.007218961373482301,
+            0.012752767986259496
+          ],
+          "context_split": [
+            0.03735782578256836,
+            0.032623756762116644,
+            0.04219211221364918
+          ],
+          "continuous_drift": [
+            -4.6597179271564414e-17,
+            -4.931004205775565e-17,
+            -4.396761737578616e-17
+          ],
+          "cue_local_relearning": [
+            -5.795201231701843e-17,
+            -6.061838404000548e-17,
+            -5.530310124467326e-17
+          ],
+          "global_downweight": [
+            -4.029993666937453e-17,
+            -4.2708560880129975e-17,
+            -3.795092820843837e-17
+          ]
+        },
+        "block_marginal": {
+          "change_point": [
+            0.006746183545211441,
+            0.004340873378000893,
+            0.009789523828727196
+          ],
+          "context_split": [
+            0.037566763872183766,
+            0.03255418458757305,
+            0.04255567359720687
+          ],
+          "continuous_drift": [
+            -2.9994398727115624e-17,
+            -3.331855771132e-17,
+            -2.672198726266721e-17
+          ],
+          "cue_local_relearning": [
+            -3.8293709231645386e-17,
+            -4.085169954949816e-17,
+            -3.581252543905059e-17
+          ],
+          "global_downweight": [
+            -2.8165594414470133e-17,
+            -3.0874708678950595e-17,
+            -2.5460240125789916e-17
+          ]
+        },
+        "tail_marginal": {
+          "change_point": [
+            0.021779033192435678,
+            0.01897490547158265,
+            0.024526692328424977
+          ],
+          "context_split": [
+            0.03316882897203259,
+            0.028539797345823792,
+            0.03772239845496582
+          ],
+          "continuous_drift": [
+            -4.741716887932426e-17,
+            -4.96229609783074e-17,
+            -4.532396810249485e-17
+          ],
+          "cue_local_relearning": [
+            -2.9134634209065545e-17,
+            -3.1769910981304343e-17,
+            -2.6507713890233637e-17
+          ],
+          "global_downweight": [
+            -6.07823802505183e-18,
+            -8.584707102536764e-18,
+            -3.603837292050977e-18
+          ]
+        }
+      }
+    },
+    "localization": {
+      "change_point": {
+        "negative": 43,
+        "positive": 521,
+        "zero_within_1e-10": 0
+      },
+      "context_split": {
+        "negative": 30,
+        "positive": 534,
+        "zero_within_1e-10": 0
+      },
+      "continuous_drift": {
+        "negative": 564,
+        "positive": 0,
+        "zero_within_1e-10": 564
+      },
+      "cue_local_relearning": {
+        "negative": 562,
+        "positive": 2,
+        "zero_within_1e-10": 564
+      },
+      "global_downweight": {
+        "negative": 471,
+        "positive": 68,
+        "zero_within_1e-10": 564
+      }
+    },
+    "maximum_factorized_absolute_delta_i": 1.354472090042691e-14,
+    "maximum_increment_identity_error": 2.8199664825478976e-14,
+    "seed_block": [
+      761180,
+      763999
+    ],
+    "world_count": 2820
+  },
+  "stage": "V2.5a",
+  "stage_verdict": "OPEN_PENDING_MASTER_SPEC_COMPLETION"
+}

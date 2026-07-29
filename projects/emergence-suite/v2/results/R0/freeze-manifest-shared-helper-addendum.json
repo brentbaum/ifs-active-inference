@@ -1,0 +1,14 @@
+{
+  "addendum_to": "freeze-manifest.json",
+  "note": "Authorized by results/V2.5a/gate5-software-repair-authorization.md: R0's repaired V2.4.4 verifier now delegates to the shared public manifest-chain helper. This effective-chain addendum also records the already-committed 75520bd escrow-authorization amendment that postdates the base freeze. No R0 scientific result, criterion, seed, or frozen parameter changed.",
+  "files": {
+    "contracts/v2.g0-world-protocol-grammar.md": "7e4fad975ce91fae750cce8a041de1affd00856e8bef247a134b6be1ff2c25f1",
+    "protocols/v2.g0-released-blocks.json": "539c510eb20354be0bd7464d1269a783ee49bb9d8e94f54e6341652a26ac531c",
+    "ref/manifest_chain.py": "20c5bd567cdf364282190029fac572fe5e235f4c11f74b30637221094bbd2e8d",
+    "ref/world_ir.py": "3769511d9281486a3c49e1bd385396cd5759d726b264623ef982b49978f85bac",
+    "results/R0/escrow-authorization-amendment.md": "df4a44809b3c39c75b052f44f1d18514025832967493e6cc96d3ac68dbfc8b8c",
+    "run_v2g0_gates.py": "49360a080a214f8b3ee4144530cdc0ec159bece112158b3ba1bc24fbb791391a",
+    "tests/test_manifest_chain.py": "1f0f600c875e0dac95969f583b6f29b8d57915867f3ea9afaaf284909c50621d",
+    "tests/test_v2g0_grammar.py": "5b427fd6566ef51355f49a9a5cd1d70294c069866a4444d967e3a968da034ad6"
+  }
+}

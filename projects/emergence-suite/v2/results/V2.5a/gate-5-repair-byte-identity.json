@@ -1,0 +1,167 @@
+{
+  "artifact_identity": {
+    "results/V2.5a/cumulative/V2.0/stage-report.json": {
+      "bitwise_identical": true,
+      "original_sha256": "872d51a39272d3c4ee72e978f35900bb4e24a192545be40871c13464fcdc716e",
+      "reexecuted_sha256": "872d51a39272d3c4ee72e978f35900bb4e24a192545be40871c13464fcdc716e"
+    },
+    "results/V2.5a/cumulative/V2.1/stage-report.json": {
+      "bitwise_identical": true,
+      "original_sha256": "08599abc9ec421935c8600041ebd45a16cd2a45c2d0bf2f5fb30ca48a807fad3",
+      "reexecuted_sha256": "08599abc9ec421935c8600041ebd45a16cd2a45c2d0bf2f5fb30ca48a807fad3"
+    },
+    "results/V2.5a/cumulative/V2.2.1/stage-report.json": {
+      "bitwise_identical": true,
+      "original_sha256": "324d653c944be4d2908ff65f16a18fa2b467db9a4e46136885db4255943a51a7",
+      "reexecuted_sha256": "324d653c944be4d2908ff65f16a18fa2b467db9a4e46136885db4255943a51a7"
+    },
+    "results/V2.5a/cumulative/V2.3.2-formation/stage-report.json": {
+      "bitwise_identical": true,
+      "original_sha256": "1f1ec2cf4f01a1e4410c8e248ce5c3491898cdd2a7e4a55809d72e9bf1eda63c",
+      "reexecuted_sha256": "1f1ec2cf4f01a1e4410c8e248ce5c3491898cdd2a7e4a55809d72e9bf1eda63c"
+    },
+    "results/V2.5a/cumulative/V2.3.3/stage-report.json": {
+      "bitwise_identical": true,
+      "original_sha256": "30535cea8dc8667bd05f1d2ae0134eb9e0c9be7fab37db054d87876c11c367e2",
+      "reexecuted_sha256": "30535cea8dc8667bd05f1d2ae0134eb9e0c9be7fab37db054d87876c11c367e2"
+    },
+    "results/V2.5a/cumulative/graded-update-constitution/stage-report.json": {
+      "bitwise_identical": true,
+      "original_sha256": "e816d25e1414b5a41d8528e1b33e3881ebc2ca4b3bfe26c4a3e5bd0b3983a5da",
+      "reexecuted_sha256": "e816d25e1414b5a41d8528e1b33e3881ebc2ca4b3bfe26c4a3e5bd0b3983a5da"
+    },
+    "results/V2.5a/cumulative/model-evidence-constitution/stage-report.json": {
+      "bitwise_identical": true,
+      "original_sha256": "5691a273ec8b32aef54dfbeb99dbaf662038fdbbca55ada6f8f741d96055431a",
+      "reexecuted_sha256": "5691a273ec8b32aef54dfbeb99dbaf662038fdbbca55ada6f8f741d96055431a"
+    },
+    "results/V2.5a/gate-5-full-suite.log": {
+      "bitwise_identical": false,
+      "original_sha256": "19179223d7810dbd6c238045d48c18be258c4a473cadfe7d37d223568637d966",
+      "reexecuted_sha256": "d0341080650944da9edcd0e810e4d60c1fce791f28cd9d05aec3a58b8dfbf3a4"
+    },
+    "results/V2.5a/gate-5-parameter-sweeps.json": {
+      "bitwise_identical": true,
+      "original_sha256": "d8db6ad91969da63003ad162a55040d9c25cb57045af00a2ae2c71db62f55754",
+      "reexecuted_sha256": "d8db6ad91969da63003ad162a55040d9c25cb57045af00a2ae2c71db62f55754"
+    },
+    "results/V2.5a/gate-5-per_world.json": {
+      "bitwise_identical": true,
+      "original_sha256": "72398f458f55886211680dd9185fa6f13442ad1b6fe0166a88a7b00b847ee946",
+      "reexecuted_sha256": "72398f458f55886211680dd9185fa6f13442ad1b6fe0166a88a7b00b847ee946"
+    },
+    "results/V2.5a/gate-5-report.md": {
+      "bitwise_identical": false,
+      "original_sha256": "c4dc23ba180a1df946abd43f00cc2619e26c018bf895a53cf3dd50cd4802c37c",
+      "reexecuted_sha256": "151d04812a3d58f5daedf5cd73e897d0d5b9dc8dabb199316c7de978e11feeb1"
+    },
+    "results/V2.5a/gate-5.json": {
+      "bitwise_identical": false,
+      "original_sha256": "1a1b17ebfe931eba738a38717ead6bd6a2f90b33840ca45d42ea788591e0fc2a",
+      "reexecuted_sha256": "592832cb62ba36ab5ff07b187835f5bfe1a523a254fc442913c859be816761fc"
+    }
+  },
+  "authorization": "results/V2.5a/gate5-software-repair-authorization.md",
+  "checks": {
+    "R0_manifest_chain_has_zero_mismatches": true,
+    "V2.4.4_manifest_chain_has_zero_mismatches": true,
+    "all_recorded_nonmanifest_fields_bitwise_identical": true,
+    "deterministic_reexecution_quantities_identical": true,
+    "fresh_full_suite_passes": true,
+    "nonmanifest_gate_checks_bitwise_identical": true,
+    "original_fail_retained": true,
+    "raw_and_cumulative_artifacts_bitwise_identical": true,
+    "repaired_execution_passes": true
+  },
+  "classification": "pure_software_error",
+  "compared_fields": {
+    "B_max_inherited_formation": {
+      "bitwise_identical": true,
+      "original_sha256": "9d8c4072b2274103726003068c8b17b3a113200fe4f9aebddd112318cc8f3302",
+      "repaired_sha256": "9d8c4072b2274103726003068c8b17b3a113200fe4f9aebddd112318cc8f3302"
+    },
+    "B_max_v24_common_emissions": {
+      "bitwise_identical": true,
+      "original_sha256": "8abbc38efc11ad02d809469ce43e9f4c1036a845f1dccc1cb73196a4d9495e48",
+      "repaired_sha256": "8abbc38efc11ad02d809469ce43e9f4c1036a845f1dccc1cb73196a4d9495e48"
+    },
+    "B_max_v25a_marginal_accounting": {
+      "bitwise_identical": true,
+      "original_sha256": "8abbc38efc11ad02d809469ce43e9f4c1036a845f1dccc1cb73196a4d9495e48",
+      "repaired_sha256": "8abbc38efc11ad02d809469ce43e9f4c1036a845f1dccc1cb73196a4d9495e48"
+    },
+    "adjudicated_nonblocking": {
+      "bitwise_identical": true,
+      "original_sha256": "041cc38b95ec3b60733be1bd07c9ee1adfd269f2ce3a854a6ff33585fed508f2",
+      "repaired_sha256": "041cc38b95ec3b60733be1bd07c9ee1adfd269f2ce3a854a6ff33585fed508f2"
+    },
+    "elapsed_seconds": {
+      "bitwise_identical": true,
+      "original_sha256": "df41172c490811168cc3244d403eb7f8d1528ba091d3882132775b9b2e526ca5",
+      "repaired_sha256": "df41172c490811168cc3244d403eb7f8d1528ba091d3882132775b9b2e526ca5"
+    },
+    "eligible_bridge_interval": {
+      "bitwise_identical": true,
+      "original_sha256": "9be20bb032c3ac935b868f536e47d643375f0d9c063864d4749920276531f53e",
+      "repaired_sha256": "9be20bb032c3ac935b868f536e47d643375f0d9c063864d4749920276531f53e"
+    },
+    "format_core_status": {
+      "bitwise_identical": true,
+      "original_sha256": "7cf746f8b7e42a5b80b446fe5a63da543ccdcd51f0899d7ea0948340df4a3a48",
+      "repaired_sha256": "7cf746f8b7e42a5b80b446fe5a63da543ccdcd51f0899d7ea0948340df4a3a48"
+    },
+    "full_suite": {
+      "bitwise_identical": true,
+      "original_sha256": "2eac704ce5bf70d70acde25e7768349224171e15bddbe58abc1c965fc9fb1ab7",
+      "repaired_sha256": "2eac704ce5bf70d70acde25e7768349224171e15bddbe58abc1c965fc9fb1ab7"
+    },
+    "gate": {
+      "bitwise_identical": true,
+      "original_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+      "repaired_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d"
+    },
+    "parameter_sweeps": {
+      "bitwise_identical": true,
+      "original_sha256": "14a998f9af68191ab198fae10a614c6b54f8a9fffa818707ae78ee69b8b24c55",
+      "repaired_sha256": "14a998f9af68191ab198fae10a614c6b54f8a9fffa818707ae78ee69b8b24c55"
+    },
+    "robustness": {
+      "bitwise_identical": true,
+      "original_sha256": "10cd9019d09e4958baedd36d181b1e5e924dd6c1858f4f3b7cad85d0f974fa83",
+      "repaired_sha256": "10cd9019d09e4958baedd36d181b1e5e924dd6c1858f4f3b7cad85d0f974fa83"
+    },
+    "stage": {
+      "bitwise_identical": true,
+      "original_sha256": "fdc811442afed7bee41ac90eb2d3320ece6bb630a93469e4d0a2dd7b87e00ce8",
+      "repaired_sha256": "fdc811442afed7bee41ac90eb2d3320ece6bb630a93469e4d0a2dd7b87e00ce8"
+    },
+    "stage_verdict": {
+      "bitwise_identical": true,
+      "original_sha256": "6b6bdda0d4a5e79ab0951edaba1a43980851ac31f397218ee5b0453984368a26",
+      "repaired_sha256": "6b6bdda0d4a5e79ab0951edaba1a43980851ac31f397218ee5b0453984368a26"
+    }
+  },
+  "compared_nonmanifest_checks": {
+    "bitwise_identical": true,
+    "original_sha256": "d6ad1ff49bb9fcb8748bfa29cf3fe8819113cacea79619229326f9646bb0013f",
+    "repaired_sha256": "d6ad1ff49bb9fcb8748bfa29cf3fe8819113cacea79619229326f9646bb0013f"
+  },
+  "original_record": "results/V2.5a/gate-5.json",
+  "passed": true,
+  "permitted_differences": [
+    "manifest_audits",
+    "checks.V2.4.4_manifest_identity",
+    "checks.R0_manifest_identity",
+    "blocking_failures",
+    "passed_under_adjudication"
+  ],
+  "reexecution_full_suite": {
+    "command": "python3 -m unittest discover -s tests -v",
+    "elapsed_seconds": 431.53243803977966,
+    "original_summary": "Ran 129 tests in 422.837s",
+    "returncode": 0,
+    "summary": "Ran 131 tests in 431.294s"
+  },
+  "repaired_record": "results/V2.5a/gate-5-repaired.json",
+  "stage": "V2.5a"
+}

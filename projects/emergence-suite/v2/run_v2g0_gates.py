@@ -16,7 +16,12 @@ from typing import Any
 
 import numpy as np
 
-from ref import protocol_ir, v2g0_fixtures as fixtures, world_ir
+from ref import (
+    manifest_chain,
+    protocol_ir,
+    v2g0_fixtures as fixtures,
+    world_ir,
+)
 
 
 ROOT = Path(__file__).resolve().parent
@@ -444,46 +449,11 @@ def gate4() -> dict[str, Any]:
 
 
 def _verify_v244_manifest() -> dict[str, Any]:
-    manifest_path = ROOT / "results" / "V2.4.4" / "freeze-manifest.json"
-    addendum_path = (
-        ROOT / "results" / "V2.4.4" / "freeze-manifest-addendum.json"
+    return manifest_chain.verify_manifest_chain(
+        ROOT,
+        "results/V2.4.4/freeze-manifest.json",
+        ("results/V2.4.4/freeze-manifest-addendum.json",),
     )
-    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    addendum = json.loads(addendum_path.read_text(encoding="utf-8"))
-    effective_files = dict(manifest["files"])
-    effective_files.update(addendum["files"])
-    mismatches = []
-    for relative, expected in effective_files.items():
-        path = ROOT / relative
-        observed = (
-            hashlib.sha256(path.read_bytes()).hexdigest()
-            if path.exists()
-            else None
-        )
-        if observed != expected:
-            mismatches.append(
-                {"file": relative, "expected": expected, "observed": observed}
-            )
-    return {
-        "custody_files": {
-            "base": {
-                "file": "results/V2.4.4/freeze-manifest.json",
-                "sha256": hashlib.sha256(manifest_path.read_bytes()).hexdigest(),
-            },
-            "addenda": [
-                {
-                    "file": "results/V2.4.4/freeze-manifest-addendum.json",
-                    "sha256": hashlib.sha256(
-                        addendum_path.read_bytes()
-                    ).hexdigest(),
-                }
-            ],
-        },
-        "base_manifest_file_count": len(manifest["files"]),
-        "effective_manifest_file_count": len(effective_files),
-        "overlaid_entries": sorted(addendum["files"]),
-        "mismatches": mismatches,
-    }
 
 
 def _modified_pre_r0_files() -> list[str]:
