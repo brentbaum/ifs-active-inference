@@ -1,0 +1,28 @@
+{
+  "ascending_gap_free": true,
+  "authorization_commit": "c8c1063",
+  "challenge": "C-V27",
+  "challenge_sha256": "2b68bd3f39d2add80ac89ce6f54b779af1083b5e0e64dd227383391ff875593f",
+  "consumed_once": true,
+  "freeze_identity": {
+    "declared_files": 42,
+    "manifest": "results/V2.7/freeze-manifest.json",
+    "mismatches": [],
+    "passed": true
+  },
+  "full_fast_suite": {
+    "command": "python3 run_tests_parallel.py",
+    "passed": true,
+    "returncode": 0,
+    "stderr": "",
+    "stdout": "PASS tests.test_constitution 0.880s\nPASS tests.test_manifest_chain 0.104s\nPASS tests.test_performance_amendment_1 11.909s\nPASS tests.test_v20_kernel 0.861s\nPASS tests.test_v21_precision 1.823s\nPASS tests.test_v221_association 4.217s\nPASS tests.test_v22_root 3.373s\nPASS tests.test_v231_formation 51.812s\nPASS tests.test_v231r_neutrality 0.591s\nPASS tests.test_v232_attribution 0.113s\nPASS tests.test_v232_formation 0.147s\nPASS tests.test_v233 26.247s\nPASS tests.test_v233_seed_authorization 0.121s\nPASS tests.test_v234 0.119s\nPASS tests.test_v23_formation 21.947s\nPASS tests.test_v24 0.301s\nPASS tests.test_v243 0.147s\nPASS tests.test_v244 0.115s\nPASS tests.test_v25a 0.330s\nPASS tests.test_v25a_completion 0.122s\nPASS tests.test_v25b 0.201s\nPASS tests.test_v26a 0.106s\nPASS tests.test_v26b 0.104s\nPASS tests.test_v27 0.247s\nPASS tests.test_v2g0_grammar 0.219s\nmodules=25 failures=0 elapsed=51.818s\n"
+  },
+  "raw_trace_seal": "results/V2.7/c-v27-raw-traces-seal.json",
+  "raw_traces_sealed_before_criteria": true,
+  "release_id": "C-V27 release record",
+  "released_block": [
+    2060000,
+    2064999
+  ],
+  "seed_count": 5000
+}

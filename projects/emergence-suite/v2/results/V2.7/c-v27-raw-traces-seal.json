@@ -1,0 +1,68 @@
+{
+  "ascending_gap_free": true,
+  "challenge": "C-V27",
+  "challenge_sha256": "2b68bd3f39d2add80ac89ce6f54b779af1083b5e0e64dd227383391ff875593f",
+  "criteria_evaluated_at_seal_time": false,
+  "files": {
+    "results/V2.7/c-v27-cell-1-novel-topology-raw.jsonl": {
+      "first_seed": 2060000,
+      "last_seed": 2060999,
+      "records": 1000,
+      "sha256": "f27c8e83e4b198dad63c1f72900aca8def15675dbb13b646f618e6a8e2b0176c"
+    },
+    "results/V2.7/c-v27-cell-2-mandate-raw.jsonl": {
+      "first_seed": 2061000,
+      "last_seed": 2061799,
+      "records": 800,
+      "sha256": "23673ea0b00ba516debdd272a1fb001465426692eabbc3a3d9883cdba226b5b0"
+    },
+    "results/V2.7/c-v27-cell-3-coalition-raw.jsonl": {
+      "first_seed": 2061800,
+      "last_seed": 2062599,
+      "records": 800,
+      "sha256": "feaef693b6e7678840f44e60e73b39bf66fcbbbebd2f0a3da8ab6021ad943082"
+    },
+    "results/V2.7/c-v27-cell-4-registration-contrast-raw.jsonl": {
+      "first_seed": 2062600,
+      "last_seed": 2063399,
+      "records": 800,
+      "sha256": "3c9f858dbac662339e90f4680bef7da0262dbbba3ca3122656b9cc4331177e49"
+    },
+    "results/V2.7/c-v27-cell-5-befriending-raw.jsonl": {
+      "first_seed": 2063400,
+      "last_seed": 2064199,
+      "records": 800,
+      "sha256": "6dec8b1d58a7343519ac8d2b4ebff59e9646536a8216a53381c4d2936999f482"
+    },
+    "results/V2.7/c-v27-cell-6-exiling-and-descent-raw.jsonl": {
+      "first_seed": 2064200,
+      "last_seed": 2064999,
+      "records": 800,
+      "sha256": "156f677854be6f7b51f4fb81782f6d479f7826727ae8bd2c52d1d622b16e1df6"
+    }
+  },
+  "freeze_identity": {
+    "declared_files": 42,
+    "manifest": "results/V2.7/freeze-manifest.json",
+    "mismatches": [],
+    "passed": true
+  },
+  "released_block": [
+    2060000,
+    2064999
+  ],
+  "schema_validation": {
+    "errors": [],
+    "passed": true,
+    "requested_readouts": [
+      "q_topology",
+      "q_mandate",
+      "exiling_mass",
+      "system_access",
+      "descent",
+      "registration_support",
+      "q_joint_policy"
+    ]
+  },
+  "seed_count": 5000
+}
