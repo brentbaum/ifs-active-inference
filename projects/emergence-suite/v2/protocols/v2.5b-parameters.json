@@ -1,0 +1,69 @@
+{
+  "stage": "V2.5b",
+  "version": "v2.5b.0",
+  "structure_order": ["000", "001", "010", "011", "100", "101", "110", "111"],
+  "structure_prior": [0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125],
+  "coupling_strength": 1.35,
+  "primary_precision": 0.8,
+  "primary_missingness": 0.08,
+  "recovery_lengths": [64, 96],
+  "material_reduction": {
+    "q_000_minimum": 0.8,
+    "bf_000_111_minimum": 4.0,
+    "consecutive_scored_observations": 3,
+    "neutral_survival_required": true
+  },
+  "gate2": {
+    "edge_accuracy_minimum": 0.85,
+    "macro_accuracy_minimum": 0.75,
+    "brier_maximum": 0.15,
+    "ece_maximum": 0.08,
+    "false_complete_reduction_maximum": 0.1,
+    "false_full_burden_maximum": 0.1,
+    "coverage_minimum": 0.9,
+    "old_context_query_error_maximum": 1e-10
+  },
+  "gate3": {
+    "paired_base_states": 500,
+    "do_over_speedup_minimum": 0.2,
+    "material_rate_minimum": 0.6,
+    "false_or_premature_maximum": 0.1,
+    "return_reversal_minimum": 0.6,
+    "history_tolerance": 0.01,
+    "heldout_margin_minimum": 0.01,
+    "v25a_direction_branch": "positive",
+    "v25a_direction_source": "results/V2.5a-completion/c-v25a-summary.json#metrics.cell_4",
+    "v25a_root_resolution": "positive",
+    "v25a_transfer_resolution": "positive"
+  },
+  "gate3_initial_state": {
+    "formed_P_minimum": 0.6,
+    "revised_root_probability": 0.9,
+    "context_split_probability": 0.9,
+    "initial_q_111": 0.82,
+    "current_precision": 0.8,
+    "observed_followup_slices": 30,
+    "joint_do_over_episodes": 5
+  },
+  "ipf_tolerance": 1e-14,
+  "ipf_max_iterations": 10000,
+  "semantic_tolerance": 1e-10,
+  "seed_blocks": {
+    "gate2": [1100000, 1100999],
+    "gate3_initial_states": [1101000, 1101499],
+    "gate3_no_do_over": [1101500, 1101999],
+    "gate3_post_redescription_do_over": [1102000, 1102499],
+    "gate3_premature_do_over": [1102500, 1102999],
+    "gate3_suggestion_only": [1103000, 1103499],
+    "gate3_joint_do_over": [1103500, 1103999],
+    "gate3_marginal_do_over": [1104000, 1104499],
+    "gate3_no_reduction_lesion": [1104500, 1104999],
+    "sealed_escrow_untouched": [2020000, 2021999]
+  },
+  "bounds": {
+    "B_max_inherited_formation": 3.801426508560692,
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "B_max_v25a_marginal_accounting": 6.704414354964107,
+    "B_max_v25a_configural": 6.084736253211209
+  }
+}
