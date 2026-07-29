@@ -4,6 +4,21 @@ Stage status: `FROZEN_ADJUDICATED_MIXED_SELECTIVITY_POWER_AND_NULL_EXCESS_CRITER
 
 This is not a clean all-gates pass. The formal Gate-2 and Gate-3 verdicts remain **FAIL** exactly as recorded. Under the round-6 mixed-verdict authorization, Gates 4 and 5 passed every blocking criterion, so the stage is ready for evaluator custody, attestation renewal, and the conditional C-V24 route. No `all_gates_passed=true` claim is made or permitted.
 
+External sign-off: `round7-signoff.json` (GPT-5.6 Pro round 7, 2026-07-29). Gate 5 first stopped before scientific execution because three candidate families contained hard-coded three-cue shapes despite the public parameter block declaring support for two, three, and four cues. The evaluator classified this as a pure apparatus defect before any Gate-5 world or criterion was scored. The authorized repair generalized cue indexing through the existing frozen three-template mapping, added no likelihood or parameter, and reproduced every previously supported scientific output bit-for-bit. The original unexecutable result is retained; the repaired execution is reported separately and passed every non-adjudicated Gate-5 criterion. Wording per the sign-off: source code did change; no frozen scientific definition, parameter, criterion, or previously executable trajectory changed.
+
+## Formal vs scientific ledger (round-7 sign-off)
+
+| Stage item | Formal record | Scientific disposition |
+|---|---|---|
+| Gate 1 | PASS | PASS |
+| Gate 2 | FAIL | Adjudicated non-blocking selectivity-power limitation |
+| Gate 3 | FAIL | Adjudicated non-blocking selectivity-power and null-excess-criterion limitations |
+| Gate 4 | PASS | PASS |
+| Gate 5, first execution | FAIL_UNEXECUTABLE | Pure software error; no world scored |
+| Gate 5, repaired execution | PASS | Accepted scientific result |
+| Gates 4–5 non-adjudicated criteria | — | All PASS |
+| Gate-6 eligibility | — | Authorized by external adjudication (rounds 5–7) |
+
 ## Gate standing
 
 | Gate | Standing | Custody interpretation |

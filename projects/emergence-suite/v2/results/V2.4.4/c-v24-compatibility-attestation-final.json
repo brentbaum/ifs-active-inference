@@ -1,0 +1,15 @@
+{
+  "attestation": "Evaluator renewed the private C-V24 compatibility audit against the FINAL frozen V2.4.4 manifest (freeze-manifest.json, 86 entries independently rehashed 0 mismatches, plus freeze-manifest-addendum.json). The plaintext remained sealed and unrevealed to the implementer at audit time; this is the last attestation before reveal.",
+  "date": "2026-07-29",
+  "challenge_sha256": "574131ce32bf45a72e3163c91df0e924c84478b39c3c07691dfc216dc1b34665",
+  "manifest_ref": "results/V2.4.4/freeze-manifest.json + freeze-manifest-addendum.json at freeze commit",
+  "plaintext_revealed_to_implementer": false,
+  "all_legacy_raw_selection_and_margin_fields_retained": true,
+  "conditional_randomization_fields_are_additive": true,
+  "challenge_criteria_unchanged": true,
+  "challenge_seed_escrow_unchanged": true,
+  "no_challenge_specific_code_required": true,
+  "compatible_with_frozen_v2_4_4": true,
+  "selectivity_ruling_applied": "Sealed criteria predate the CRT layer and are evaluated exactly as sealed; CRT outputs are an additional non-rewriting class per round-7 sign-off",
+  "escrow_block": "830001:830600 (unopened at attestation time)"
+}
