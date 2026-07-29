@@ -149,3 +149,9 @@ Escrow: C-V26B seeds 2050000:2052999, released by this record via the frozen rel
 2b68bd3f39d2add80ac89ce6f54b779af1083b5e0e64dd227383391ff875593f  C-V27-multiprotector-challenge.md
 ```
 Escrow: C-V27 seeds 2060000:2064999, released by this record. Pilot blocks 1333000:1334199 BARRED. Full accumulated linter with scenario-profile and recovery-rate pilots.
+
+## C-V27-B seal (2026-07-29)
+```
+a6ba705baab940a3d830236fd17e28f6063ed003322f3281d10ca27d3aa3b60e  C-V27B-multiprotector-challenge.md
+```
+Escrow: C-V27-B seeds 2065000:2069599 (fresh; 2060000:2064999 consumed by the retained C-V27 FAIL and closed). Cell 4 corrected to same-seed paired arms; dev-seed identity verified pre-seal.
