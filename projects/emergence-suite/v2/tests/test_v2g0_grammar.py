@@ -237,7 +237,7 @@ class V2G0GrammarSemanticProofs(unittest.TestCase):
         self.assertEqual(value["policies"], fixtures.joint_policy_outcome()["policies"])
         self.assertEqual(len(value["outcomes"]), 3)
 
-    def test_25_negative_custody_fact_uses_positive_check_polarity(self):
+    def test_25_gate_runner_custody_regressions(self):
         import run_v2g0_gates
 
         checks = {
@@ -246,6 +246,18 @@ class V2G0GrammarSemanticProofs(unittest.TestCase):
         }
         self.assertEqual(run_v2g0_gates._verdict(checks), "PASS")
         self.assertNotIn("new_code_required", checks)
+        manifest = run_v2g0_gates._verify_v244_manifest()
+        self.assertEqual(manifest["base_manifest_file_count"], 86)
+        self.assertEqual(manifest["effective_manifest_file_count"], 87)
+        self.assertEqual(manifest["mismatches"], [])
+        self.assertEqual(
+            set(manifest["custody_files"]),
+            {"base", "addenda"},
+        )
+        self.assertIn(
+            "results/V2.4.4/freeze-readiness.md",
+            manifest["overlaid_entries"],
+        )
 
 
 if __name__ == "__main__":

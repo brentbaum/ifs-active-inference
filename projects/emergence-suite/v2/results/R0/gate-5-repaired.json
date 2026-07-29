@@ -1,0 +1,48 @@
+{
+  "checks": {
+    "exact_seed_block": true,
+    "full_old_and_new_unit_suite_passes": true,
+    "no_modified_pre_r0_files": true,
+    "reexecution_suite_matches_original_count_and_status": true,
+    "six_thousand_r0_worlds": true,
+    "v244_freeze_manifest_byte_identical": true
+  },
+  "custody_failures": [],
+  "escrow_accessed": false,
+  "gate": 5,
+  "modified_pre_r0_files": [],
+  "r0_worlds": 6000,
+  "seed_block": [
+    1004000,
+    1009999
+  ],
+  "stage": "V2.G0",
+  "unit_suite": {
+    "command": "/opt/homebrew/opt/python@3.14/bin/python3.14 -m unittest discover -s tests -v",
+    "elapsed_seconds": 422.3179677920416,
+    "returncode": 0,
+    "summary": "Ran 126 tests in 422.145s"
+  },
+  "v244_manifest": {
+    "base_manifest_file_count": 86,
+    "custody_files": {
+      "addenda": [
+        {
+          "file": "results/V2.4.4/freeze-manifest-addendum.json",
+          "sha256": "ffcaacc5449d8f030c6a5f68c46a483ae4b66d97d5e857e0538f98399240c18e"
+        }
+      ],
+      "base": {
+        "file": "results/V2.4.4/freeze-manifest.json",
+        "sha256": "cd79376a252787de1c865bd84aafbe9fb4baac96cd674f5c5391c3b12c429038"
+      }
+    },
+    "effective_manifest_file_count": 87,
+    "mismatches": [],
+    "overlaid_entries": [
+      "results/V2.4.4/freeze-readiness.md",
+      "results/V2.4.4/round7-signoff.json"
+    ]
+  },
+  "verdict": "PASS"
+}
