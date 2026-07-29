@@ -1,0 +1,28 @@
+{
+  "ascending_gap_free": true,
+  "bundle_sha256": "dcfdf3990aa1fd1e6b41265f478825053dc14df016a5fa0f5a7348e7c915ee4f",
+  "challenge": "C-V28D",
+  "identity": {
+    "checked_files": 31,
+    "manifest": "results/V2.8/freeze-manifest.json",
+    "manifest_sha256": "a614f49027f39d2eb98525da8dd13df4e603f1b297d9808e30472b72cd4ff926",
+    "mismatches": [],
+    "passed": true
+  },
+  "release_block": [
+    2130000,
+    2130599
+  ],
+  "seeds_consumed": 0,
+  "validation": {
+    "checks": {
+      "arms_public": true,
+      "redescription_first_time_public": false,
+      "released_block_public": true,
+      "required_common_fields": true,
+      "strata_public": true
+    },
+    "expressible": false,
+    "prospection_failure": "sealed criterion requires redescription-before-reduction from first_times, but the frozen public readout publishes no redescription first time"
+  }
+}
