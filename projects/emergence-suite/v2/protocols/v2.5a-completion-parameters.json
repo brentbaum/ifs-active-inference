@@ -1,0 +1,57 @@
+{
+  "stage": "V2.5a-master-spec-completion",
+  "version": "v2.5a-completion.1",
+  "candidate_prior": {
+    "independent": 0.5,
+    "coupled": 0.5
+  },
+  "kappa_grid": [0.75, 1.5],
+  "kappa_prior": [0.5, 0.5],
+  "interaction_labels": {
+    "weak": 0.75,
+    "strong": 1.5
+  },
+  "root_prior": [0.5, 0.5],
+  "association_strength": 0.8,
+  "primary_missingness": 0.08,
+  "ipf_tolerance": 1e-14,
+  "ipf_max_iterations": 10000,
+  "semantic_tolerance": 1e-10,
+  "marginal_tolerance": 1e-12,
+  "rope": [-0.01, 0.01],
+  "gate2": {
+    "accuracy_minimum": 0.85,
+    "false_coupled_maximum": 0.1,
+    "brier_maximum": 0.15,
+    "ece_maximum": 0.08,
+    "posterior_set_coverage_minimum": 0.9,
+    "interaction_grid_mae_maximum": 0.1,
+    "parameter_coverage_minimum": 0.9,
+    "atomic_budget_error_maximum": 1e-10
+  },
+  "gate3": {
+    "coupled_support_difference_minimum": 0.2,
+    "heldout_advantage_minimum_nats_per_atomic_token": 0.01,
+    "false_coupled_maximum": 0.1,
+    "shuffle_false_coupled_maximum": 0.1
+  },
+  "matching": {
+    "criterion": "nearest_reachable_prefix",
+    "rule": "the selected prefix must attain the minimum absolute target-KL error over every prefix through the declared cap; ties choose the shortest prefix",
+    "reported": ["target_kl", "nearest_kl", "absolute_error", "local_lattice_gap", "censored"],
+    "fixed_tolerance_used": false,
+    "rationale": "prospectively lattice-aware per the committed format-core adjudication"
+  },
+  "seed_blocks": {
+    "gate2": [1020000, 1020799],
+    "gate3": [1021000, 1023999],
+    "gate4": [1024000, 1024999],
+    "gate5": [1025000, 1029999],
+    "sealed_escrow_untouched": [2010000, 2010999]
+  },
+  "finite_information_bounds": {
+    "inherited_formation": 3.801426508560692,
+    "v24_common_emissions": 6.704414354964107,
+    "v25a_marginal_accounting": 6.704414354964107
+  }
+}
