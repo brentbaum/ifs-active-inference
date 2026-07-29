@@ -125,3 +125,9 @@ Escrow: C-V25B-C seeds 2022000:2023999 (fresh; 2020000:2021999 consumed by the r
 cba6d516516401c05f00cc0586e57e750964f3f8128d3b541eb3352823e56621  C-V26A-partner-challenge.md
 ```
 Escrow: C-V26A seeds 2030000:2031999, released by this record via the frozen released_block parameter. Full accumulated pre-seal linter applied.
+
+## C-V234 seal (2026-07-29)
+```
+1d9329bafd15fdc5e2c987bb4fa9105146d8740f05fefdd675f1fab61764cdd7  C-V234-attribution-challenge.md
+```
+Escrow: C-V234 seeds 2040000:2041999, released by this record via the frozen released_block parameter. Full accumulated pre-seal linter applied.
