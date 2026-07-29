@@ -1,0 +1,62 @@
+{
+  "challenge": "C-V2G0",
+  "challenge_file": "sealed-revealed/C-V2G0-apparatus-challenge.md",
+  "challenge_sha256": "c9b2d5c0dd8e1b468fccf99493e0400a43b05672c0ff1f15c3c341e7dbe3b90c",
+  "data_commit": "73cdc0af13116ae30cd90a318db0631eba7f88b1",
+  "escrow_declared": [
+    2000000,
+    2000499
+  ],
+  "escrow_consumed": [],
+  "escrow_consumed_count": 0,
+  "diagnosis_reserved_seeds_consumed": [],
+  "pre_execution_validation": {
+    "released_blocks_file": "protocols/v2.g0-released-blocks.json",
+    "released_blocks_sha256": "64c0da8a9222c05cf7301f4b285558a9bb1df53e761ed5e168983bc4f8b7192f",
+    "frozen_parser_required_version": 1,
+    "committed_record_version": 2,
+    "frozen_parser_required_entry_fields": [
+      "start",
+      "end",
+      "purpose",
+      "release_id",
+      "authorization_commit"
+    ],
+    "committed_entry_fields": [
+      "basis",
+      "block",
+      "challenge",
+      "date",
+      "released_by"
+    ],
+    "public_api_probe": "ref.world_ir._released_blocks()",
+    "exception_type": "ValueError",
+    "exception_message": "invalid V2.G0 released-blocks authorization record",
+    "passed": false
+  },
+  "single_run_status": "NOT_STARTED",
+  "stop_status": "STOP_AS_SEALED_PROSPECTION_FAILURE",
+  "raw_trace_seal": {
+    "status": "NOT_CREATED_NO_EXECUTION",
+    "trace_count": 0,
+    "trace_files": [],
+    "trace_hashes": [],
+    "empty_trace_index_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "criteria_evaluated": false,
+  "source_code_changed": false,
+  "challenge_runner_created": false,
+  "full_unit_suite": {
+    "command": "python3 -m unittest discover -s tests",
+    "tests_run": 131,
+    "passed": 129,
+    "failures": 2,
+    "errors": 0,
+    "elapsed_seconds": 445.764,
+    "failure_tests": [
+      "test_v2g0_grammar.V2G0GrammarSemanticProofs.test_15_sealed_escrow_is_inaccessible",
+      "test_v2g0_grammar.V2G0GrammarSemanticProofs.test_16_diagnosis_seeds_are_inaccessible_to_public_sampler"
+    ],
+    "failure_localization": "Both failures are consequences of the same release-record schema mismatch: validation stops at the version check before the expected escrow/diagnosis-specific refusal."
+  }
+}

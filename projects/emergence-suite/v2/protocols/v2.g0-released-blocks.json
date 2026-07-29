@@ -1,16 +1,13 @@
 {
   "stage": "V2.G0",
-  "version": 2,
+  "version": 1,
   "released_blocks": [
     {
-      "block": [
-        2000000,
-        2000499
-      ],
-      "challenge": "C-V2G0",
-      "released_by": "evaluator",
-      "date": "2026-07-29",
-      "basis": "reveal hash-verified c9b2d5c0dd8e1b468fccf99493e0400a43b05672c0ff1f15c3c341e7dbe3b90c against the committed seal (36729d4); single run only"
+      "start": 2000000,
+      "end": 2000499,
+      "purpose": "sealed",
+      "release_id": "C-V2G0-release-2026-07-29",
+      "authorization_commit": "73cdc0a"
     }
   ]
 }

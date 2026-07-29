@@ -1,0 +1,20 @@
+{
+  "challenge": "C-V2G0",
+  "cell": "B",
+  "seed_block": [
+    2000125,
+    2000249
+  ],
+  "world_spec_hash": "a7425ca2e9a386890266658338590ee9644c765e32a32562c5ce2e779d0c795d",
+  "protocol_spec_hash": "2e95ad633ba9a1a3af346c9db6bf2123695db28e715674d7c48f82133c7420b9",
+  "requested_entry_points": [
+    "compile_world",
+    "sample_world",
+    "run_protocol"
+  ],
+  "status": "NOT_RUN_PROSPECTION_FAILURE",
+  "seeds_consumed": [],
+  "trace_count": 0,
+  "criteria_evaluated": false,
+  "blocking_precondition": "The committed release record cannot be parsed by the frozen seed-authorization API."
+}
