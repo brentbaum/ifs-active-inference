@@ -36,3 +36,19 @@ inherited `0.85` recovery floor. The minimum surviving-edge posterior was
 
 All other seven lesion fingerprints passed. This is outside the adjudicated
 do-over-speedup family and is blocking. Gate 5 was not opened.
+
+The evaluator adjudicated the failed minimum-posterior operationalization as
+an unaudited criterion transplant. The formal Gate-4 FAIL remains retained;
+population survival accuracy at `0.85` is the blocking construct, and the
+per-world minimum is descriptive.
+
+## Gate 5 — adjudicated repetitions
+
+Gate 5 passed every blocking cumulative and robustness criterion. The
+do-over-speedup floor repeated below `0.20` in two of 16 cells:
+
+- `episode_interaction:three_episodes`: mean `0.17245223748120153`;
+- `precision_regimes:moderate`: mean `0.1954694958462501`.
+
+These are retained verbatim under the committed Gate-3 adjudication's sole
+scientific non-blocking limitation family.

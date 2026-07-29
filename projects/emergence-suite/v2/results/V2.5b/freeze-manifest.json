@@ -1,0 +1,32 @@
+{
+  "escrow_accessed": false,
+  "file_count": 22,
+  "files": {
+    "protocols/v2.5b-analysis-plan.md": "f0c3092f711b353432aba5966204fb1a8c16565a9c8b441d30569d3a0d00f67a",
+    "protocols/v2.5b-parameters.json": "bc1421b3ab3c62d8bbad4ddfa22c2c8b2afc2c69fd66223c510cb12a393d7b15",
+    "ref/v25b.py": "7a3e3f36845205c41fda6892aef0efe30499101c23d2e326e488bd4037e7fafb",
+    "ref/v25b_oracle.py": "f3db6d0654af9b47effcac8607ab5f04476d7e9ef76a7ea77ebc53235b0da5c2",
+    "results/V2.5b/development-failures.md": "7305925e0ce8574b204edc020ca9ad4b7e97c1fc6198e9a51158dba0603f20d9",
+    "results/V2.5b/freeze-readiness.md": "5afe09a5326ee45f83065b4ebf58781a9557c8801851f2c31bab2ceabe10f828",
+    "results/V2.5b/full-fast-suite.json": "ba45d3a19e8fe87451ac479c5d110b4174e912299ba20ac35abf5ff6e370008f",
+    "results/V2.5b/gate-1-repaired.json": "b8cc2c38e82823e821cd3ce5c400a9e35485aa60fbe5186f1d53024dcc21784e",
+    "results/V2.5b/gate-1.json": "24f2ff89d40734161ecc50e4a3fab8ef68366b3c37422a5a57935e1b2b7a65f4",
+    "results/V2.5b/gate-2-per_world.json": "0895596887794668b6a2ef24419555be14d7e020cfebb4dff9115d7228f6ef0b",
+    "results/V2.5b/gate-2.json": "64df2aff8a9dac85e8c214957c2367ea8cf24e7e1d829d336f988142f2ea1add",
+    "results/V2.5b/gate-3-per_world.json": "08bf53eb9728b94854f43ea61b736eb651a1ba13722ecb3547edb07f709c0c85",
+    "results/V2.5b/gate-3.json": "d955c0477f99ceefb243039e77b0ff5a311cafbcf8d921643e8b068b31d7bb09",
+    "results/V2.5b/gate-4-per_world.json": "87ca6b7ae034f0921f25fdf9f2137c3e177be4881009e5f5d0e7741b024cc739",
+    "results/V2.5b/gate-4.json": "305d3fd529a51cef82aa6360e5a5b450225c91ca19f93a880b31503ad63e2ab5",
+    "results/V2.5b/gate-5-per_world.json": "11f4559f1a97ca8869d0faafb359af2725c02f5a9b1a688f2f9ff328bab5de4a",
+    "results/V2.5b/gate-5.json": "ee82a30b3d033b9360a7f708e4e768a4f3d61c3f7f8d2dcdf20aeb124af96346",
+    "results/V2.5b/gate1-software-repair-authorization.md": "ad2ed585813cfb0af16f785a5871de248d14278874225aabbf61de3911303a6a",
+    "results/V2.5b/gate3-adjudication.md": "bf8ffd856058ba74ed27d8036e1f18c804d7ba2db729bbc1dbe728c5db26215f",
+    "results/V2.5b/gate4-adjudication.md": "f1a0506804569949849839e7fabf300872d1b1a460e6864775139ffdd40ddf89",
+    "run_v25b_gates.py": "48322be4709e379f4abd38503729ee96ec8bbe11fde15799b27c6ff15078813f",
+    "tests/test_v25b.py": "8bf0e16647eefc14bbff1d138d5ee5c60f4828c9ac6e2b32993cba2b2d502701"
+  },
+  "manifest_version": 1,
+  "sealed_gate_6_run": false,
+  "stage": "V2.5b",
+  "stage_status": "FROZEN_ADJUDICATED_MIXED_DO_OVER_SPEEDUP_LIMITATION"
+}

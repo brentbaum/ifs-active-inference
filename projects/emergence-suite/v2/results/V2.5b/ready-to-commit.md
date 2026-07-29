@@ -43,12 +43,23 @@
 - `results/V2.5b/gate-4-diagnosis-stub.md`
 - `results/V2.5b/ready-to-commit-gate4-stop.md`
 
+## Gate 5 and freeze readiness
+
+- `results/V2.5b/gate4-adjudication.md`
+- `results/V2.5b/gate-5.json`
+- `results/V2.5b/gate-5-report.md`
+- `results/V2.5b/gate-5-per_world.json`
+- `results/V2.5b/freeze-readiness.md`
+- `results/V2.5b/freeze-manifest.json`
+- `results/V2.5b/ready-to-commit-gate5-freeze.md`
+
 ## Shared records
 
 - `results/V2.5b/development-failures.md`
 - `results/V2.5b/full-fast-suite.json`
 - this inventory
 
-Gate 3 continued under the committed mixed-verdict adjudication. Gate 4 then
-failed one blocking lesion-selectivity criterion, so Gate 5 was not opened.
-Escrow `2020000:2021999` was untouched.
+Gate 3 and Gate 4 retain their formal FAIL verdicts under committed
+adjudications. Gate 5 passed every blocking criterion. Freeze status is
+`FROZEN_ADJUDICATED_MIXED_DO_OVER_SPEEDUP_LIMITATION`. Escrow
+`2020000:2021999` was untouched.

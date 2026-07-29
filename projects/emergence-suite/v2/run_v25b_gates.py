@@ -1216,6 +1216,468 @@ def run_gate4() -> bool:
     return report["verdict"] == "PASS"
 
 
+GATE5_DIMENSIONS = (
+    ("initial_coupling_confidence", ("low", "high")),
+    ("root_revision_magnitude", ("moderate", "strong")),
+    ("context_evidence", ("single", "return")),
+    ("do_over_timing", ("early", "late")),
+    ("episode_interaction", ("three_episodes", "seven_episodes")),
+    ("stress_return_timing", ("early", "late")),
+    ("structure_priors", ("uniform", "burdened")),
+    ("precision_regimes", ("moderate", "high")),
+)
+
+
+def _gate5_settings(dimension: str, level: str) -> dict[str, Any]:
+    settings = {
+        "initial_q_111": 0.82,
+        "root_revision": 0.9,
+        "context_regime": "return",
+        "do_over_position": 0,
+        "do_over_count": 5,
+        "stress_return_length": 12,
+        "prior_kind": "burdened",
+        "precision": 0.8,
+    }
+    if dimension == "initial_coupling_confidence":
+        settings["initial_q_111"] = 0.65 if level == "low" else 0.9
+    elif dimension == "root_revision_magnitude":
+        settings["root_revision"] = 0.7 if level == "moderate" else 0.95
+    elif dimension == "context_evidence":
+        settings["context_regime"] = level
+    elif dimension == "do_over_timing":
+        settings["do_over_position"] = 0 if level == "early" else 10
+    elif dimension == "episode_interaction":
+        settings["do_over_count"] = 3 if level == "three_episodes" else 7
+    elif dimension == "stress_return_timing":
+        settings["stress_return_length"] = 5 if level == "early" else 20
+    elif dimension == "structure_priors":
+        settings["prior_kind"] = level
+    elif dimension == "precision_regimes":
+        settings["precision"] = 0.6 if level == "moderate" else 0.9
+    else:
+        raise ValueError("unknown Gate-5 robustness dimension")
+    return settings
+
+
+def _gate5_prior(settings: dict[str, Any]) -> np.ndarray:
+    if settings["prior_kind"] == "uniform":
+        return np.asarray(v25b.PRIOR, dtype=float).copy()
+    q_111 = float(settings["initial_q_111"])
+    prior = np.full(8, (1.0 - q_111) / 7.0, dtype=float)
+    prior[v25b.STRUCTURE_INDEX["111"]] = q_111
+    return prior
+
+
+def gate5_row(position: int) -> dict[str, Any]:
+    seed = 1_106_000 + position
+    dimension_index = position // 1750
+    within_dimension = position % 1750
+    dimension, levels = GATE5_DIMENSIONS[dimension_index]
+    level = levels[within_dimension // 875]
+    settings = _gate5_settings(dimension, level)
+    precision = float(settings["precision"])
+    prior = _gate5_prior(settings)
+    horizon = int(P["gate3_initial_state"]["observed_followup_slices"])
+    observed = v25b.generate_world(
+        seed,
+        truth_structure="000",
+        length=horizon,
+        precision=precision,
+        context_regime=str(settings["context_regime"]),
+    ).episodes
+    control = v25b.generate_world(
+        seed,
+        truth_structure="111",
+        length=horizon,
+        precision=precision,
+        context_regime=str(settings["context_regime"]),
+    ).episodes
+    do_over, do_over_modes = v25b.do_over_episodes(
+        seed,
+        count=int(settings["do_over_count"]),
+        precision=precision,
+        structure="000",
+    )
+    insertion = int(settings["do_over_position"])
+    active_sequence = observed[:insertion] + do_over + observed[insertion:]
+    active_modes = (
+        tuple("joint" for _ in observed[:insertion])
+        + do_over_modes
+        + tuple("joint" for _ in observed[insertion:])
+    )
+    marginal_modes = tuple(
+        "marginal"
+        if insertion <= index < insertion + len(do_over)
+        else "joint"
+        for index in range(len(active_sequence))
+    )
+    baseline = v25b.score(
+        observed, precision=precision, initial_prior=prior
+    )
+    active = v25b.score(
+        active_sequence,
+        precision=precision,
+        initial_prior=prior,
+        presentations=active_modes,
+    )
+    marginal = v25b.score(
+        active_sequence,
+        precision=precision,
+        initial_prior=prior,
+        presentations=marginal_modes,
+    )
+    unchanged = v25b.score(
+        control, precision=precision, initial_prior=prior
+    )
+    baseline_time = _gate3_first_time(baseline)
+    active_time = _gate3_first_time(active, len(do_over))
+    speedup = (
+        float(baseline_time - active_time) / max(float(baseline_time), 1.0)
+    )
+
+    edge = within_dimension % 3
+
+    def remove_edge(structure: str) -> str:
+        bits = list(structure)
+        bits[edge] = "0"
+        return "".join(bits)
+
+    lesion_world = v25b.generate_world(
+        seed,
+        truth_structure="111",
+        length=64,
+        precision=precision,
+        context_regime=str(settings["context_regime"]),
+    ).episodes
+    lesioned = _score_transformed(
+        lesion_world,
+        precision,
+        structure_transform=remove_edge,
+        initial_prior=v25b.PRIOR,
+    )
+    other_edges = [
+        float(value)
+        for index, value in enumerate(lesioned["expected_edges"])
+        if index != edge
+    ]
+    survivor_accuracy = float(
+        np.mean([value >= 0.5 for value in other_edges])
+    )
+
+    premature, premature_modes = v25b.do_over_episodes(
+        seed,
+        count=5,
+        precision=precision,
+        structure="000",
+    )
+    premature_result = v25b.score(
+        premature,
+        precision=precision,
+        initial_prior=prior,
+        presentations=premature_modes,
+    )
+    returned = v25b.generate_world(
+        seed,
+        truth_structure="111",
+        length=int(settings["stress_return_length"]),
+        precision=precision,
+        context_regime="return",
+    ).episodes
+    returned_result = v25b.score(
+        premature + returned,
+        precision=precision,
+        initial_prior=prior,
+        presentations=premature_modes
+        + tuple("joint" for _ in returned),
+    )
+    premature_reversed = (
+        premature_result.material_reduction.material
+        and not returned_result.material_reduction.material
+    )
+    idx0 = v25b.STRUCTURE_INDEX["000"]
+    return {
+        "seed": seed,
+        "dimension": dimension,
+        "level": level,
+        "settings": settings,
+        "material_reduction": active.material_reduction.material,
+        "false_full_burden_reduction": (
+            unchanged.material_reduction.material
+        ),
+        "do_over_speedup": speedup,
+        "q000_joint_minus_marginal": float(
+            active.q_structure[idx0] - marginal.q_structure[idx0]
+        ),
+        "heldout_000_vs_111_margin": _gate3_heldout_margin(
+            observed, precision
+        ),
+        "old_context_query_error": v25b.old_context_query_error(
+            position % 3, "111", precision
+        ),
+        "root_revision_magnitude": float(settings["root_revision"]),
+        "lesion_removed_edge": ("Z_W", "Z_Pi", "Z_Y")[edge],
+        "lesion_removed_edge_prior_error": abs(
+            float(lesioned["expected_edges"][edge]) - 0.5
+        ),
+        "lesion_surviving_edge_accuracy": survivor_accuracy,
+        "lesion_minimum_surviving_edge_posterior": min(other_edges),
+        "premature_material_reduction": (
+            premature_result.material_reduction.material
+        ),
+        "stress_return_reversal": premature_reversed,
+    }
+
+
+def parallel_gate5() -> list[dict[str, Any]]:
+    workers = min(8, max(1, os.cpu_count() or 1))
+    boundaries = np.linspace(0, 14000, workers + 1, dtype=int)
+    jobs = []
+    for worker in range(workers):
+        path = OUT / f".gate5-worker-{worker}.json"
+        command = [
+            sys.executable,
+            str(Path(__file__).resolve()),
+            "worker",
+            "gate5",
+            str(int(boundaries[worker])),
+            str(int(boundaries[worker + 1])),
+            str(path),
+        ]
+        jobs.append((path, subprocess.Popen(command, cwd=ROOT)))
+    for _, process in jobs:
+        if process.wait():
+            raise RuntimeError("Gate-5 worker failed")
+    rows = []
+    for path, _ in jobs:
+        rows.extend(json.loads(path.read_text()))
+        path.unlink()
+    if sorted(int(row["seed"]) for row in rows) != list(
+        range(1_106_000, 1_120_000)
+    ):
+        raise ValueError("Gate-5 seed ledger incomplete")
+    return rows
+
+
+def _gate5_cell_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    material_rate = float(
+        np.mean([row["material_reduction"] for row in rows])
+    )
+    false_rate = float(
+        np.mean([row["false_full_burden_reduction"] for row in rows])
+    )
+    speedup = interval([row["do_over_speedup"] for row in rows])
+    heldout = interval(
+        [row["heldout_000_vs_111_margin"] for row in rows]
+    )
+    joint_marginal = interval(
+        [row["q000_joint_minus_marginal"] for row in rows]
+    )
+    lesion_accuracy = float(
+        np.mean(
+            [
+                row["lesion_surviving_edge_accuracy"] == 1.0
+                for row in rows
+            ]
+        )
+    )
+    premature = [row for row in rows if row["premature_material_reduction"]]
+    reversal_rate = (
+        1.0
+        if not premature
+        else float(np.mean([row["stress_return_reversal"] for row in premature]))
+    )
+    return {
+        "world_count": len(rows),
+        "material_reduction_rate": material_rate,
+        "false_full_burden_reduction_rate": false_rate,
+        "do_over_speedup_adjudicated_nonblocking": speedup,
+        "heldout_000_vs_111_margin": heldout,
+        "joint_minus_marginal_q000": joint_marginal,
+        "maximum_old_context_query_error": max(
+            row["old_context_query_error"] for row in rows
+        ),
+        "maximum_lesion_target_prior_error": max(
+            row["lesion_removed_edge_prior_error"] for row in rows
+        ),
+        "population_complete_surviving_edge_accuracy": lesion_accuracy,
+        "minimum_surviving_edge_posterior_descriptive": min(
+            row["lesion_minimum_surviving_edge_posterior"] for row in rows
+        ),
+        "mean_surviving_edge_minimum_posterior_descriptive": float(
+            np.mean(
+                [
+                    row["lesion_minimum_surviving_edge_posterior"]
+                    for row in rows
+                ]
+            )
+        ),
+        "premature_reduction_world_count": len(premature),
+        "stress_return_reversal_rate": reversal_rate,
+    }
+
+
+def run_gate5() -> bool:
+    rows = parallel_gate5()
+    cell_summaries: dict[str, Any] = {}
+    blocking_checks: dict[str, bool] = {}
+    nonblocking_speedup_repetitions: dict[str, bool] = {}
+    for dimension, levels in GATE5_DIMENSIONS:
+        for level in levels:
+            key = f"{dimension}:{level}"
+            cell = [
+                row
+                for row in rows
+                if row["dimension"] == dimension and row["level"] == level
+            ]
+            summary = _gate5_cell_summary(cell)
+            cell_summaries[key] = summary
+            blocking_checks[f"{key}:material_rate"] = (
+                summary["material_reduction_rate"]
+                >= float(P["gate3"]["material_rate_minimum"])
+            )
+            blocking_checks[f"{key}:false_reduction"] = (
+                summary["false_full_burden_reduction_rate"]
+                <= float(P["gate3"]["false_or_premature_maximum"])
+            )
+            blocking_checks[f"{key}:heldout_margin"] = (
+                summary["heldout_000_vs_111_margin"]["mean"]
+                >= float(P["gate3"]["heldout_margin_minimum"])
+                and summary["heldout_000_vs_111_margin"]["lower_95"] > 0.0
+            )
+            blocking_checks[f"{key}:joint_marginal_direction"] = (
+                summary["joint_minus_marginal_q000"]["lower_95"] > 0.0
+            )
+            blocking_checks[f"{key}:historical_retention"] = (
+                summary["maximum_old_context_query_error"]
+                <= float(P["gate3"]["history_tolerance"])
+            )
+            blocking_checks[f"{key}:lesion_target"] = (
+                summary["maximum_lesion_target_prior_error"] <= 1e-10
+            )
+            blocking_checks[f"{key}:lesion_population_survival"] = (
+                summary["population_complete_surviving_edge_accuracy"] >= 0.85
+            )
+            blocking_checks[f"{key}:stress_return"] = (
+                summary["stress_return_reversal_rate"]
+                >= float(P["gate3"]["return_reversal_minimum"])
+            )
+            speedup = summary["do_over_speedup_adjudicated_nonblocking"]
+            nonblocking_speedup_repetitions[key] = (
+                speedup["mean"]
+                >= float(P["gate3"]["do_over_speedup_minimum"])
+                and speedup["lower_95"] > 0.0
+            )
+
+    inherited = {}
+    for filename in (
+        "gate-1-repaired.json",
+        "gate-2.json",
+        "gate-3.json",
+        "gate-4.json",
+    ):
+        record = json.loads((OUT / filename).read_text(encoding="utf-8"))
+        inherited[filename] = {
+            "formal_verdict": record["verdict"],
+            "sha256": hashlib.sha256(
+                (OUT / filename).read_bytes()
+            ).hexdigest(),
+        }
+    gate4_rows = json.loads(
+        (OUT / "gate-4-per_world.json").read_text(encoding="utf-8")
+    )
+    gate4_population = {}
+    for lesion in GATE4_LESIONS[:3]:
+        cell = [row for row in gate4_rows if row["lesion"] == lesion]
+        gate4_population[lesion] = {
+            "population_complete_surviving_edge_accuracy": float(
+                np.mean(
+                    [
+                        float(row["other_edge_minimum_posterior"]) >= 0.5
+                        for row in cell
+                    ]
+                )
+            ),
+            "minimum_surviving_edge_posterior_descriptive": min(
+                row["other_edge_minimum_posterior"] for row in cell
+            ),
+        }
+        blocking_checks[f"gate4_adjudicated:{lesion}:population_survival"] = (
+            gate4_population[lesion][
+                "population_complete_surviving_edge_accuracy"
+            ]
+            >= 0.85
+        )
+
+    suite = subprocess.run(
+        [sys.executable, "run_tests_parallel.py", "--workers", "8"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    blocking_checks["full_cumulative_unit_suite"] = suite.returncode == 0
+    report = {
+        "stage": "V2.5b",
+        "gate": 5,
+        "verdict": "PASS" if all(blocking_checks.values()) else "FAIL",
+        "stage_progression_status": (
+            "FROZEN_ADJUDICATED_MIXED_DO_OVER_SPEEDUP_LIMITATION"
+            if all(blocking_checks.values())
+            else "STOPPED_GATE_5"
+        ),
+        "seed_block": [1_106_000, 1_119_999],
+        "world_count": len(rows),
+        "robustness_design": {
+            "dimensions": {
+                dimension: list(levels)
+                for dimension, levels in GATE5_DIMENSIONS
+            },
+            "worlds_per_level": 875,
+        },
+        "cell_summaries": cell_summaries,
+        "blocking_checks": blocking_checks,
+        "adjudicated_nonblocking_speedup_repetitions": (
+            nonblocking_speedup_repetitions
+        ),
+        "gate4_adjudicated_population_reanalysis": gate4_population,
+        "inherited_gate_records": inherited,
+        "cumulative_unit_suite": {
+            "command": "python3 run_tests_parallel.py --workers 8",
+            "returncode": suite.returncode,
+            "stdout": suite.stdout,
+            "stderr": suite.stderr,
+        },
+        "bounds": BOUNDS,
+        "escrow_accessed": False,
+    }
+    dump("gate-5-per_world.json", rows)
+    dump("gate-5.json", report)
+    (OUT / "gate-5-report.md").write_text(
+        "# V2.5b Gate 5\n\n"
+        f"**Verdict: {report['verdict']}**\n\n"
+        "The do-over speedup floor and its repetitions are the sole scientific "
+        "non-blocking limitation family. Per-world minimum lesion posteriors "
+        "are descriptive under the Gate-4 adjudication; population survival "
+        "accuracy is blocking.\n\n```json\n"
+        + json.dumps(cell_summaries, indent=2, sort_keys=True)
+        + "\n```\n",
+        encoding="utf-8",
+    )
+    if report["verdict"] == "FAIL":
+        (OUT / "gate-5-diagnosis-stub.md").write_text(
+            "# Gate-5 diagnosis stub\n\nFailed blocking criteria:\n\n"
+            + "\n".join(
+                f"- `{key}`"
+                for key, value in blocking_checks.items()
+                if not value
+            )
+            + "\n\nNo freeze candidate was produced.\n",
+            encoding="utf-8",
+        )
+    return report["verdict"] == "PASS"
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -1226,6 +1688,7 @@ def main() -> None:
             "gate2",
             "gate3",
             "gate4",
+            "gate5",
             "worker",
         ),
     )
@@ -1244,6 +1707,11 @@ def main() -> None:
                 gate3_row(arm, index)
                 for index in range(int(start), int(end))
             ]
+        elif task == "gate5":
+            _, start, end, path = args.worker_args
+            dump_rows = [
+                gate5_row(index) for index in range(int(start), int(end))
+            ]
         else:
             raise ValueError("unknown worker task")
         Path(path).write_text(
@@ -1259,6 +1727,8 @@ def main() -> None:
         ok = run_gate3()
     elif args.phase == "gate4":
         ok = run_gate4()
+    elif args.phase == "gate5":
+        ok = run_gate5()
     else:
         ok = run_gate2()
     raise SystemExit(0 if ok else 2)
