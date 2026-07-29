@@ -77,3 +77,9 @@ Escrow: C-V24 seeds 830001:830600.
 
 ## C-V24 escrow retirement (2026-07-29)
 Block 830001:830600: RETIRED_UNCONSUMED_AFTER_CHALLENGE_REVEAL (round-8 adjudication). Zero seeds consumed by the sealed run; the plaintext is public; the block may not be reassigned. The original C-V24 prospection-failure verdict is the final V2.4 challenge result.
+
+## C-V2G0 seal (2026-07-29)
+```
+c9b2d5c0dd8e1b468fccf99493e0400a43b05672c0ff1f15c3c341e7dbe3b90c  C-V2G0-apparatus-challenge.md
+```
+Escrow: C-V2G0 seeds 2000000:2000499 (Epoch B). Pre-seal linter record committed first at results/R0/c-v2g0-preseal-linter-record.md.
