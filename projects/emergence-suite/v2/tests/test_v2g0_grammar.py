@@ -1,5 +1,9 @@
+import json
 import math
+import tempfile
 import unittest
+from pathlib import Path
+from unittest.mock import patch
 
 from ref import protocol_ir, v2g0_fixtures as fixtures, world_ir
 
@@ -258,6 +262,46 @@ class V2G0GrammarSemanticProofs(unittest.TestCase):
             "results/V2.4.4/freeze-readiness.md",
             manifest["overlaid_entries"],
         )
+
+    def test_26_file_based_seed_release_and_development_identity(self):
+        compiled = world_ir.compile_world(fixtures.world(fixtures.static()))
+        development_before = world_ir.sample_world(compiled, SEED)
+        with tempfile.TemporaryDirectory() as directory:
+            release_path = Path(directory) / "released-blocks.json"
+            release_path.write_text(
+                json.dumps(
+                    {
+                        "stage": "V2.G0",
+                        "version": 1,
+                        "released_blocks": [
+                            {
+                                "start": 3_000_000,
+                                "end": 3_000_499,
+                                "purpose": "sealed",
+                                "release_id": "SYNTHETIC-TEST-BLOCK",
+                                "authorization_commit": "test-fixture",
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            with (
+                patch.object(world_ir, "RELEASED_BLOCKS_PATH", release_path),
+                patch.object(world_ir, "SEALED_ESCROW", (3_000_000, 3_000_499)),
+            ):
+                sealed = world_ir.sample_world(compiled, 3_000_000)
+                self.assertEqual(sealed.component_rng_keys[0][1], 3_000_000)
+                with self.assertRaisesRegex(ValueError, "diagnosis"):
+                    world_ir.sample_world(compiled, 1_010_000)
+                development_with_release = world_ir.sample_world(compiled, SEED)
+        self.assertEqual(development_before, development_with_release)
+
+        with tempfile.TemporaryDirectory() as directory:
+            missing = Path(directory) / "missing-release-record.json"
+            with patch.object(world_ir, "RELEASED_BLOCKS_PATH", missing):
+                development_without_record = world_ir.sample_world(compiled, SEED)
+        self.assertEqual(development_before, development_without_record)
 
 
 if __name__ == "__main__":

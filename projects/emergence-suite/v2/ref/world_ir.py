@@ -12,6 +12,7 @@ import itertools
 import json
 import math
 from dataclasses import dataclass
+from pathlib import Path
 from types import MappingProxyType
 from typing import Any, Iterable, Mapping, Sequence
 
@@ -22,6 +23,11 @@ STAGE_VERSION = "V2.G0"
 DEVELOPMENT_SEEDS = (1_000_000, 1_009_999)
 DIAGNOSIS_SEEDS = (1_010_000, 1_019_999)
 SEALED_ESCROW = (2_000_000, 2_000_499)
+RELEASED_BLOCKS_PATH = (
+    Path(__file__).resolve().parents[1]
+    / "protocols"
+    / "v2.g0-released-blocks.json"
+)
 PROCESS_KINDS = frozenset(
     {
         "static",
@@ -97,15 +103,57 @@ def _rng(key: tuple[str, int, str, int | str]) -> np.random.Generator:
     return np.random.default_rng(int.from_bytes(digest[:16], "big"))
 
 
-def _validate_seed(seed: int) -> None:
-    if not DEVELOPMENT_SEEDS[0] <= seed <= DEVELOPMENT_SEEDS[1]:
-        if DIAGNOSIS_SEEDS[0] <= seed <= DIAGNOSIS_SEEDS[1]:
-            raise ValueError("diagnosis-reserved seed requires a diagnosis runner")
-        if SEALED_ESCROW[0] <= seed <= SEALED_ESCROW[1]:
-            raise ValueError("sealed C-V2G0 escrow is unavailable to public code")
-        raise ValueError(
-            f"V2.G0 public seed must be in {DEVELOPMENT_SEEDS}; got {seed}"
+def _released_blocks(path: Path | None = None) -> tuple[tuple[int, int], ...]:
+    authorization_path = RELEASED_BLOCKS_PATH if path is None else path
+    record = json.loads(authorization_path.read_text(encoding="utf-8"))
+    if record.get("stage") != STAGE_VERSION or record.get("version") != 1:
+        raise ValueError("invalid V2.G0 released-blocks authorization record")
+    raw_blocks = record.get("released_blocks")
+    if not isinstance(raw_blocks, list):
+        raise ValueError("released_blocks must be a list")
+    blocks = []
+    for entry in raw_blocks:
+        if not isinstance(entry, Mapping):
+            raise ValueError("released block entry must be a mapping")
+        start, end = int(entry["start"]), int(entry["end"])
+        purpose = entry.get("purpose")
+        within_diagnosis = (
+            DIAGNOSIS_SEEDS[0] <= start <= end <= DIAGNOSIS_SEEDS[1]
+            and purpose == "diagnosis"
         )
+        within_escrow = (
+            SEALED_ESCROW[0] <= start <= end <= SEALED_ESCROW[1]
+            and purpose == "sealed"
+        )
+        if not (within_diagnosis or within_escrow):
+            raise ValueError(
+                "released block must be contained in the V2.G0 diagnosis "
+                "or sealed range with the matching purpose"
+            )
+        if not entry.get("release_id") or not entry.get("authorization_commit"):
+            raise ValueError(
+                "released block requires release_id and authorization_commit"
+            )
+        blocks.append((start, end))
+    return tuple(blocks)
+
+
+def _validate_seed(seed: int) -> None:
+    if DEVELOPMENT_SEEDS[0] <= seed <= DEVELOPMENT_SEEDS[1]:
+        return
+    if any(start <= seed <= end for start, end in _released_blocks()):
+        return
+    if DIAGNOSIS_SEEDS[0] <= seed <= DIAGNOSIS_SEEDS[1]:
+        raise ValueError(
+            "diagnosis-reserved seed is not in the committed release record"
+        )
+    if SEALED_ESCROW[0] <= seed <= SEALED_ESCROW[1]:
+        raise ValueError(
+            "sealed C-V2G0 escrow is not in the committed release record"
+        )
+    raise ValueError(
+        f"V2.G0 seed must be a development seed or explicitly released; got {seed}"
+    )
 
 
 def _probabilities(
