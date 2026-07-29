@@ -1,0 +1,7 @@
+# V2.5b gate-4 adjudication (evaluator, 2026-07-29)
+
+The frozen gate-4 verdict remains **FAIL** as recorded. The failed check is reclassified as an **unaudited criterion transplant**: the runner operationalized the spec's "each lesion removes only its predicted target" as a per-world MINIMUM posterior >= .85 on surviving edges, inheriting gate-2's population edge-ACCURACY floor into a different, far harsher statistic without the 7-item criterion audit (fails items 3 — no calibrated basis for .85 as a min-posterior bound — and 4 — attainability never evaluated for the lesioned generative process, where removing one edge mechanically reduces evidence flow to the others).
+
+Decisive evaluator computation from the retained per-world file: the spec's construct is met perfectly — population survival accuracy 125/125 (1.00), mean surviving-edge minimum posterior 0.9984, q05 0.9992; exactly one world reaches 0.8154. The remove_Z_Y target removal is exact (1.1e-16 from prior). The other seven lesion fingerprints passed outright.
+
+Disposition: mixed-verdict continuation extends with this named operationalization defect; gate 5 reports BOTH statistics (population survival accuracy, blocking at the gate-2-inherited .85; per-world minimum posterior, descriptive) for every lesion repetition. No number changes; the original operationalization's FAIL stays in the ledger. Freeze status on success gains no new limitation clause (this is an apparatus operationalization note, not a scientific limitation). Disclosed at the next consultation.

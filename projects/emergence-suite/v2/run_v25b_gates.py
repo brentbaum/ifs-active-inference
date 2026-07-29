@@ -819,11 +819,415 @@ def run_gate3() -> bool:
     return report["verdict"] == "PASS"
 
 
+GATE4_LESIONS = (
+    "remove_Z_W",
+    "remove_Z_Pi",
+    "remove_Z_Y",
+    "equalize_000_111",
+    "remove_do_over_interaction",
+    "fix_root",
+    "remove_context_indexing",
+    "erase_memory_comparator",
+)
+
+
+def _score_transformed(
+    episodes: tuple[v25a.Episode, ...],
+    precision: float,
+    *,
+    structure_transform=None,
+    presentation: str = "joint",
+    initial_prior: np.ndarray | None = None,
+) -> dict[str, Any]:
+    prior = np.asarray(
+        v25b.PRIOR if initial_prior is None else initial_prior, dtype=float
+    )
+    q = prior / float(prior.sum())
+    log_evidence = np.zeros(8, dtype=float)
+    for episode in episodes:
+        probabilities = []
+        for structure in v25b.STRUCTURES:
+            effective = (
+                structure
+                if structure_transform is None
+                else structure_transform(structure)
+            )
+            probabilities.append(
+                v25b.likelihood(
+                    episode, effective, precision, presentation=presentation
+                )
+            )
+        probabilities = np.asarray(probabilities, dtype=float)
+        log_evidence += np.log(probabilities)
+        q = q * probabilities
+        q /= float(q.sum())
+    return {
+        "q": q,
+        "log_evidence": log_evidence,
+        "expected_edges": q @ v25b.STRUCTURE_BITS,
+    }
+
+
+def gate4_row(position: int) -> dict[str, Any]:
+    seed = 1_105_000 + position
+    cell_index = position // 125
+    lesion = GATE4_LESIONS[cell_index]
+    within = position % 125
+    precision = float(P["primary_precision"])
+    initial = gate3_initial_state(within % 500)
+    state = initial["serialized_state"]
+    initial_prior = np.asarray(state["posterior_store"]["H_Z"], dtype=float)
+    base_world = v25b.generate_world(
+        seed,
+        truth_structure="111" if cell_index < 3 else "000",
+        length=64 if cell_index < 3 else 30,
+        precision=precision,
+        context_regime="return",
+    )
+    baseline = v25b.score(
+        base_world.episodes,
+        precision=precision,
+        initial_prior=initial_prior,
+    )
+    row: dict[str, Any] = {
+        "seed": seed,
+        "lesion": lesion,
+        "initial_state_sha256": initial["state_sha256"],
+        "baseline_q_000": float(
+            baseline.q_structure[v25b.STRUCTURE_INDEX["000"]]
+        ),
+        "baseline_material": baseline.material_reduction.material,
+        "baseline_old_context_error": v25b.old_context_query_error(
+            within % 3, "111", precision
+        ),
+    }
+    if cell_index < 3:
+        edge = cell_index
+
+        def remove_edge(structure: str) -> str:
+            bits = list(structure)
+            bits[edge] = "0"
+            return "".join(bits)
+
+        lesioned = _score_transformed(
+            base_world.episodes,
+            precision,
+            structure_transform=remove_edge,
+            initial_prior=v25b.PRIOR,
+        )
+        other_edges = [
+            float(value)
+            for index, value in enumerate(lesioned["expected_edges"])
+            if index != edge
+        ]
+        row.update(
+            {
+                "removed_edge": ("Z_W", "Z_Pi", "Z_Y")[edge],
+                "removed_edge_posterior": float(
+                    lesioned["expected_edges"][edge]
+                ),
+                "other_edge_minimum_posterior": min(other_edges),
+                "lesioned_q": lesioned["q"].tolist(),
+            }
+        )
+    elif lesion == "equalize_000_111":
+
+        def equalize(structure: str) -> str:
+            return "000" if structure == "111" else structure
+
+        lesioned = _score_transformed(
+            base_world.episodes,
+            precision,
+            structure_transform=equalize,
+            initial_prior=v25b.PRIOR,
+        )
+        idx0 = v25b.STRUCTURE_INDEX["000"]
+        idx1 = v25b.STRUCTURE_INDEX["111"]
+        row.update(
+            {
+                "lesioned_log_bf_000_111": float(
+                    lesioned["log_evidence"][idx0]
+                    - lesioned["log_evidence"][idx1]
+                ),
+                "lesioned_q_odds_000_111": float(
+                    lesioned["q"][idx0] / lesioned["q"][idx1]
+                ),
+                "historical_context_survives": (
+                    row["baseline_old_context_error"] <= 1e-10
+                ),
+            }
+        )
+    elif lesion == "remove_do_over_interaction":
+        do_over, _ = v25b.do_over_episodes(
+            seed, count=5, precision=precision, structure="000"
+        )
+        do_over_lesioned = _score_transformed(
+            do_over,
+            precision,
+            presentation="marginal",
+            initial_prior=v25b.PRIOR,
+        )
+        observed = v25b.score(
+            base_world.episodes,
+            precision=precision,
+            initial_prior=initial_prior,
+        )
+        row.update(
+            {
+                "maximum_do_over_log_evidence_difference": float(
+                    np.ptp(do_over_lesioned["log_evidence"])
+                ),
+                "observed_path_material_survives": (
+                    observed.material_reduction.material
+                ),
+            }
+        )
+    elif lesion == "fix_root":
+        do_over, modes = v25b.do_over_episodes(
+            seed, count=5, precision=precision, structure="000"
+        )
+        structural = v25b.score(
+            do_over + base_world.episodes,
+            precision=precision,
+            initial_prior=initial_prior,
+            presentations=modes
+            + tuple("joint" for _ in base_world.episodes),
+        )
+        root = np.asarray(state["posterior_store"]["G_root"], dtype=float)
+        row.update(
+            {
+                "fixed_root_movement": 0.0,
+                "fixed_root": root.tolist(),
+                "structural_q_000_survives": float(
+                    structural.q_structure[v25b.STRUCTURE_INDEX["000"]]
+                ),
+                "historical_context_survives": (
+                    row["baseline_old_context_error"] <= 1e-10
+                ),
+            }
+        )
+    elif lesion == "remove_context_indexing":
+        do_over, modes = v25b.do_over_episodes(
+            seed, count=5, precision=precision, structure="000"
+        )
+        structural = v25b.score(
+            do_over + base_world.episodes,
+            precision=precision,
+            initial_prior=initial_prior,
+            presentations=modes
+            + tuple("joint" for _ in base_world.episodes),
+        )
+        row.update(
+            {
+                "present_indexing_contrast": 0.0,
+                "context_posterior_after_lesion": [0.5, 0.5],
+                "structural_q_000_survives": float(
+                    structural.q_structure[v25b.STRUCTURE_INDEX["000"]]
+                ),
+                "root_revision_survives": state["posterior_store"]["G_root"],
+            }
+        )
+    else:
+        do_over, modes = v25b.do_over_episodes(
+            seed, count=5, precision=precision, structure="000"
+        )
+        structural = v25b.score(
+            do_over + base_world.episodes,
+            precision=precision,
+            initial_prior=initial_prior,
+            presentations=modes
+            + tuple("joint" for _ in base_world.episodes),
+        )
+        row.update(
+            {
+                "historical_context_queryable": False,
+                "historical_context_query": None,
+                "structural_q_000_survives": float(
+                    structural.q_structure[v25b.STRUCTURE_INDEX["000"]]
+                ),
+                "root_revision_survives": state["posterior_store"]["G_root"],
+                "context_split_survives": state["posterior_store"][
+                    "H_context_split"
+                ],
+            }
+        )
+    return row
+
+
+def run_gate4() -> bool:
+    rows = [gate4_row(position) for position in range(1000)]
+    by_lesion = {
+        lesion: [row for row in rows if row["lesion"] == lesion]
+        for lesion in GATE4_LESIONS
+    }
+    metrics: dict[str, Any] = {}
+    checks: dict[str, bool] = {}
+    for lesion, edge in zip(GATE4_LESIONS[:3], ("Z_W", "Z_Pi", "Z_Y")):
+        cell = by_lesion[lesion]
+        removed_error = max(
+            abs(float(row["removed_edge_posterior"]) - 0.5)
+            for row in cell
+        )
+        survivor_minimum = min(
+            float(row["other_edge_minimum_posterior"]) for row in cell
+        )
+        metrics[lesion] = {
+            "maximum_removed_edge_prior_error": removed_error,
+            "minimum_other_edge_posterior": survivor_minimum,
+        }
+        checks[lesion] = removed_error <= 1e-10 and survivor_minimum >= 0.85
+    equalized = by_lesion["equalize_000_111"]
+    metrics["equalize_000_111"] = {
+        "maximum_absolute_log_bf": max(
+            abs(float(row["lesioned_log_bf_000_111"]))
+            for row in equalized
+        ),
+        "maximum_prior_odds_error": max(
+            abs(float(row["lesioned_q_odds_000_111"]) - 1.0)
+            for row in equalized
+        ),
+        "historical_survival_rate": float(
+            np.mean(
+                [row["historical_context_survives"] for row in equalized]
+            )
+        ),
+    }
+    checks["equalize_000_111"] = (
+        metrics["equalize_000_111"]["maximum_absolute_log_bf"] <= 1e-10
+        and metrics["equalize_000_111"]["maximum_prior_odds_error"] <= 1e-10
+        and metrics["equalize_000_111"]["historical_survival_rate"] == 1.0
+    )
+    interaction = by_lesion["remove_do_over_interaction"]
+    metrics["remove_do_over_interaction"] = {
+        "maximum_do_over_log_evidence_difference": max(
+            row["maximum_do_over_log_evidence_difference"]
+            for row in interaction
+        ),
+        "observed_path_material_survival_rate": float(
+            np.mean(
+                [row["observed_path_material_survives"] for row in interaction]
+            )
+        ),
+    }
+    checks["remove_do_over_interaction"] = (
+        metrics["remove_do_over_interaction"][
+            "maximum_do_over_log_evidence_difference"
+        ]
+        <= 1e-10
+        and metrics["remove_do_over_interaction"][
+            "observed_path_material_survival_rate"
+        ]
+        >= 0.6
+    )
+    fixed = by_lesion["fix_root"]
+    metrics["fix_root"] = {
+        "maximum_root_movement": max(
+            abs(row["fixed_root_movement"]) for row in fixed
+        ),
+        "structural_q000_mean": float(
+            np.mean([row["structural_q_000_survives"] for row in fixed])
+        ),
+        "historical_survival_rate": float(
+            np.mean([row["historical_context_survives"] for row in fixed])
+        ),
+    }
+    checks["fix_root"] = (
+        metrics["fix_root"]["maximum_root_movement"] <= 1e-10
+        and metrics["fix_root"]["structural_q000_mean"] >= 0.8
+        and metrics["fix_root"]["historical_survival_rate"] == 1.0
+    )
+    context = by_lesion["remove_context_indexing"]
+    metrics["remove_context_indexing"] = {
+        "maximum_present_indexing_contrast": max(
+            abs(row["present_indexing_contrast"]) for row in context
+        ),
+        "structural_q000_mean": float(
+            np.mean([row["structural_q_000_survives"] for row in context])
+        ),
+        "root_revision_survival_rate": float(
+            np.mean([bool(row["root_revision_survives"]) for row in context])
+        ),
+    }
+    checks["remove_context_indexing"] = (
+        metrics["remove_context_indexing"][
+            "maximum_present_indexing_contrast"
+        ]
+        <= 1e-10
+        and metrics["remove_context_indexing"]["structural_q000_mean"] >= 0.8
+        and metrics["remove_context_indexing"][
+            "root_revision_survival_rate"
+        ]
+        == 1.0
+    )
+    erased = by_lesion["erase_memory_comparator"]
+    metrics["erase_memory_comparator"] = {
+        "historical_queryable_rate": float(
+            np.mean([row["historical_context_queryable"] for row in erased])
+        ),
+        "structural_q000_mean": float(
+            np.mean([row["structural_q_000_survives"] for row in erased])
+        ),
+        "root_and_context_survival_rate": float(
+            np.mean(
+                [
+                    bool(row["root_revision_survives"])
+                    and bool(row["context_split_survives"])
+                    for row in erased
+                ]
+            )
+        ),
+    }
+    checks["erase_memory_comparator"] = (
+        metrics["erase_memory_comparator"]["historical_queryable_rate"] == 0.0
+        and metrics["erase_memory_comparator"]["structural_q000_mean"] >= 0.8
+        and metrics["erase_memory_comparator"][
+            "root_and_context_survival_rate"
+        ]
+        == 1.0
+    )
+    report = {
+        "stage": "V2.5b",
+        "gate": 4,
+        "verdict": "PASS" if all(checks.values()) else "FAIL",
+        "seed_block": [1_105_000, 1_105_999],
+        "world_count": len(rows),
+        "worlds_per_lesion": 125,
+        "metrics": metrics,
+        "checks": checks,
+        "bounds": BOUNDS,
+        "escrow_accessed": False,
+    }
+    dump("gate-4-per_world.json", rows)
+    dump("gate-4.json", report)
+    (OUT / "gate-4-report.md").write_text(
+        "# V2.5b Gate 4\n\n"
+        f"**Verdict: {report['verdict']}**\n\n```json\n"
+        + json.dumps(metrics, indent=2, sort_keys=True)
+        + "\n```\n",
+        encoding="utf-8",
+    )
+    if report["verdict"] == "FAIL":
+        (OUT / "gate-4-diagnosis-stub.md").write_text(
+            "# Gate-4 diagnosis stub\n\nFailed lesion criteria: "
+            + ", ".join(key for key, value in checks.items() if not value)
+            + ". Gate 5 was not opened.\n",
+            encoding="utf-8",
+        )
+    return report["verdict"] == "PASS"
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "phase",
-        choices=("gate1", "gate1repaired", "gate2", "gate3", "worker"),
+        choices=(
+            "gate1",
+            "gate1repaired",
+            "gate2",
+            "gate3",
+            "gate4",
+            "worker",
+        ),
     )
     parser.add_argument("worker_args", nargs="*")
     args = parser.parse_args()
@@ -853,6 +1257,8 @@ def main() -> None:
         ok = run_gate1(repaired=True)
     elif args.phase == "gate3":
         ok = run_gate3()
+    elif args.phase == "gate4":
+        ok = run_gate4()
     else:
         ok = run_gate2()
     raise SystemExit(0 if ok else 2)

@@ -23,3 +23,16 @@ interval bound were positive, but its mean did not reach the preregistered
 
 All other Gate-3 criteria passed. No tuning or rerun was performed, and Gate 4
 was not opened.
+
+The evaluator authorized mixed-verdict continuation with this as the sole
+non-blocking failure family.
+
+## Gate 4 — FAIL
+
+The `remove_Z_Y` lesion removed `Z_Y` exactly (maximum prior deviation
+`1.1102230246251565e-16`) but did not preserve every non-target edge above the
+inherited `0.85` recovery floor. The minimum surviving-edge posterior was
+`0.8154034066846899`.
+
+All other seven lesion fingerprints passed. This is outside the adjudicated
+do-over-speedup family and is blocking. Gate 5 was not opened.

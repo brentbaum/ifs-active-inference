@@ -1,0 +1,68 @@
+{
+  "bounds": {
+    "B_max_inherited_formation": 3.801426508560692,
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "B_max_v25a_configural": 6.084736253211209,
+    "B_max_v25a_marginal_accounting": 6.704414354964107,
+    "B_max_v25b": 11.302393144606405,
+    "implied_binary_probability_change_bound": 0.9929979796127031
+  },
+  "checks": {
+    "equalize_000_111": true,
+    "erase_memory_comparator": true,
+    "fix_root": true,
+    "remove_Z_Pi": true,
+    "remove_Z_W": true,
+    "remove_Z_Y": false,
+    "remove_context_indexing": true,
+    "remove_do_over_interaction": true
+  },
+  "escrow_accessed": false,
+  "gate": 4,
+  "metrics": {
+    "equalize_000_111": {
+      "historical_survival_rate": 1.0,
+      "maximum_absolute_log_bf": 0.0,
+      "maximum_prior_odds_error": 0.0
+    },
+    "erase_memory_comparator": {
+      "historical_queryable_rate": 0.0,
+      "root_and_context_survival_rate": 1.0,
+      "structural_q000_mean": 0.947744512338863
+    },
+    "fix_root": {
+      "historical_survival_rate": 1.0,
+      "maximum_root_movement": 0.0,
+      "structural_q000_mean": 0.9364895339410559
+    },
+    "remove_Z_Pi": {
+      "maximum_removed_edge_prior_error": 1.1102230246251565e-16,
+      "minimum_other_edge_posterior": 0.8986017714183581
+    },
+    "remove_Z_W": {
+      "maximum_removed_edge_prior_error": 1.1102230246251565e-16,
+      "minimum_other_edge_posterior": 0.9624014656568372
+    },
+    "remove_Z_Y": {
+      "maximum_removed_edge_prior_error": 1.1102230246251565e-16,
+      "minimum_other_edge_posterior": 0.8154034066846899
+    },
+    "remove_context_indexing": {
+      "maximum_present_indexing_contrast": 0.0,
+      "root_revision_survival_rate": 1.0,
+      "structural_q000_mean": 0.9494971550922755
+    },
+    "remove_do_over_interaction": {
+      "maximum_do_over_log_evidence_difference": 0.0,
+      "observed_path_material_survival_rate": 0.824
+    }
+  },
+  "seed_block": [
+    1105000,
+    1105999
+  ],
+  "stage": "V2.5b",
+  "verdict": "FAIL",
+  "world_count": 1000,
+  "worlds_per_lesion": 125
+}
