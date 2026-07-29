@@ -1,28 +1,62 @@
 {
-  "authorization": "External adjudication (GPT-5.6 Pro round 5, 2026-07-29): adjudicated mixed-verdict continuation of V2.4.4 to gates 3-5. See gate2-adjudication.md.",
-  "gate_2_verdict_unchanged": "FAIL",
+  "authorization": "External adjudication (GPT-5.6 Pro round 6, 2026-07-29): continue V2.4.4 after a retained formal Gate-3 FAIL; mean-null-excess blocking status corrected as an adjudication-authoring defect.",
+  "supersedes": "round-5 authorization of 2026-07-29 (preserved in git history at a4b740b); this document extends its allowed-failure family per gate3-adjudication.md",
+  "formal_gate_2_verdict_unchanged": "FAIL",
+  "formal_gate_3_verdict_unchanged": "FAIL",
   "authorized_continuation": true,
   "successor_authorized": false,
+  "v2_4_5_authorized": false,
   "allowed_failure_family": [
     "gate2_cs_selective_rate_min_0.60",
-    "per_world_genuine_selective_rate_min_0.60",
-    "per_world_bridge_selective_rate_min_0.60",
-    "gate5_repetitions_of_the_same_benchmarks"
+    "gate3_genuine_selective_material_min_0.60",
+    "gate3_bridge_selective_material_min_0.60",
+    "gate3_genuine_mean_E_null_lower_ci_gt_0",
+    "gate3_bridge_mean_E_null_lower_ci_gt_0",
+    "gate5_repetitions_of_the_same_selective_rate_and_E_null_benchmarks"
+  ],
+  "criterion_reclassification": {
+    "genuine_mean_E_null_lower_ci_gt_0": "FAIL_RETAINED_NONBLOCKING_ADJUDICATION_AUTHORING_DEFECT",
+    "bridge_mean_E_null_lower_ci_gt_0": "FAIL_RETAINED_NONBLOCKING_ADJUDICATION_AUTHORING_DEFECT",
+    "E_null_future_role": "MANDATORY_DESCRIPTIVE_SIGNED_NULL_MARGIN",
+    "replacement_population_criterion": null
+  },
+  "reclassification_rationale": [
+    "E_null is a signed distance from each world's observed statistic to that world's conditional-null 95th percentile, not a separately calibrated population-level CRT.",
+    "The Round-5 continuation retained positive mean E_null as blocking after already-consumed diagnosis data showed negative means at every authorized information length and in the same frozen composition design.",
+    "The criterion is mathematically and empirically coupled to the already-adjudicated finite-history selective-rate power limitation."
   ],
   "all_other_criteria_remain_blocking": true,
   "hard_requirements_notably": [
-    "mean_E_null_lower_95_bound_gt_0_in_genuine_and_bridge",
-    "shuffled_selective_max_0.10",
-    "single_regime_material_and_selective_max_0.10",
-    "bma_regret_upper_ci_max_0.01_all_families",
-    "cs_matched_margin_mean_min_0.01_lower_ci_gt_0",
-    "transfer_retention_present_indexing_g_fixed_unchanged"
+    "all semantic and constitutional proofs",
+    "all five BMA regret upper-CI criteria",
+    "CS matched-complexity held-out margin",
+    "raw and material genuine redescription criteria",
+    "shuffled and single-regime selective ceilings",
+    "DR CP and cue-local controls",
+    "historical retention",
+    "present-context indexing",
+    "root-mediated transfer",
+    "zero-association and fixed-G exact controls",
+    "all Gate-4 selective lesions and required survivors",
+    "all Gate-5 cumulative regressions and custody audits"
+  ],
+  "mandatory_reporting": [
+    "all failed selective-rate criteria",
+    "mean and interval of E_null in every population",
+    "complete per-world E_null distribution",
+    "T0 and conditional-null quantiles",
+    "material and selective rates shown separately",
+    "formal Gate-2 and Gate-3 FAIL verdicts"
   ],
   "no_threshold_changed": true,
   "no_information_budget_changed": true,
+  "no_world_count_changed": true,
+  "no_randomization_definition_changed": true,
   "no_model_code_changed": true,
+  "no_replacement_aggregate_created": true,
   "runner_control_flow_change_only": true,
-  "freeze_status_on_success": "FROZEN_ADJUDICATED_MIXED_SELECTIVITY_POWER_LIMITATION",
-  "c_v24_limitation_route": "authorized conditional on all non-adjudicated criteria passing gates 3-5; on any non-adjudicated failure C-V24 is archived unopened",
+  "freeze_status_on_success": "FROZEN_ADJUDICATED_MIXED_SELECTIVITY_POWER_AND_NULL_EXCESS_CRITERION_LIMITATIONS",
+  "all_gates_passed_field_permitted": false,
+  "c_v24_limitation_route": "AUTHORIZED_CONDITIONALLY_ON_ALL_NON_ADJUDICATED_GATE_4_AND_GATE_5_CRITERIA_PASSING",
   "date": "2026-07-29"
 }
