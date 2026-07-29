@@ -1,0 +1,118 @@
+{
+  "B_max_inherited_formation": 3.801426508560692,
+  "B_max_v24_common_emissions": 6.704414354964107,
+  "B_max_v25a_marginal_accounting": 6.704414354964107,
+  "carrying_delta_i_per_token_interval": [
+    0.06272370289643629,
+    0.058370646392175825,
+    0.06708781225268459
+  ],
+  "carrying_distribution": {
+    "maximum": 0.1542005700235511,
+    "mean": 0.06272370289643629,
+    "median": 0.06446213854693558,
+    "minimum": -0.005285563002114374,
+    "q05": 0.011113144385642652,
+    "q95": 0.11186386309371109
+  },
+  "checks": {
+    "both_accounting_identity": true,
+    "carrying_lower_95_ci_gt_0": true,
+    "carrying_mean_delta_i_per_token_ge_sesoi": true,
+    "independent_max_abs_delta_i_le_1e-10": true,
+    "v24_cumulative_unit_regression_green": true,
+    "v24_source_byte_identical": true
+  },
+  "frozen_delta_i_sesoi_nats_per_token": 0.01,
+  "gate": 2,
+  "independent_distribution": {
+    "maximum": -1.850371707708594e-17,
+    "mean": -5.977157251581947e-17,
+    "median": -5.843279076974508e-17,
+    "minimum": -1.1796119636642288e-16,
+    "q05": -9.12233251900337e-17,
+    "q95": -2.7755575615628914e-17
+  },
+  "independent_maximum_absolute_delta_i": 1.1324274851176597e-14,
+  "maximum_increment_identity_error": 2.6645352591003757e-14,
+  "passed": true,
+  "per_channel_log_evidence_ranges": {
+    "association_carrying": {
+      "marker": {
+        "maximum": -43.568007349266466,
+        "mean": -72.8127119205278,
+        "median": -72.94269887740666,
+        "minimum": -95.55986206856498,
+        "q05": -86.98544070649132,
+        "q95": -57.53484152747217
+      },
+      "outcome": {
+        "maximum": -43.63815258492258,
+        "mean": -54.695702171643944,
+        "median": -54.92414585638623,
+        "minimum": -63.235434228605456,
+        "q05": -60.270115212353126,
+        "q95": -48.27152095436464
+      },
+      "root": {
+        "maximum": -47.82715545863623,
+        "mean": -56.85539748542951,
+        "median": -56.83806880591551,
+        "minimum": -63.07639343095502,
+        "q05": -60.33846206774324,
+        "q95": -51.986038541995896
+      }
+    },
+    "independent": {
+      "marker": {
+        "maximum": -62.530977217452,
+        "mean": -80.94178988076764,
+        "median": -81.23481445520372,
+        "minimum": -93.42361324165402,
+        "q05": -89.92792103406725,
+        "q95": -71.97466698835345
+      },
+      "outcome": {
+        "maximum": -49.579875364588915,
+        "mean": -56.1252400027272,
+        "median": -56.18033812977232,
+        "minimum": -61.88175320308869,
+        "q05": -60.390296925836346,
+        "q95": -51.94873151247831
+      },
+      "root": {
+        "maximum": -47.13400827807628,
+        "mean": -56.38059166674595,
+        "median": -56.144921625355565,
+        "minimum": -62.383246250395075,
+        "q05": -60.30380470871524,
+        "q95": -51.986038541995896
+      }
+    }
+  },
+  "seed_block": [
+    756000,
+    756399
+  ],
+  "stage": "V2.5a",
+  "v24_regression": {
+    "frozen_sha256": "5b2dd46d09ccf3380d470de98d9365bb9b3bcfd9fdc612a1e5bf1af5bf6e1e56",
+    "returncode": 0,
+    "source_sha256": "5b2dd46d09ccf3380d470de98d9365bb9b3bcfd9fdc612a1e5bf1af5bf6e1e56",
+    "stderr": "......................\n----------------------------------------------------------------------\nRan 22 tests in 0.960s\n\nOK\n",
+    "stdout": "",
+    "unit_command": [
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "-m",
+      "unittest",
+      "tests.test_constitution",
+      "tests.test_v24",
+      "tests.test_v243",
+      "tests.test_v244"
+    ]
+  },
+  "world_counts": {
+    "association_carrying": 200,
+    "independent": 200
+  }
+}
