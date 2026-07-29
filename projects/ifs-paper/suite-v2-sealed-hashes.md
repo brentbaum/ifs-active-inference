@@ -107,3 +107,9 @@ Escrow: C-V25A seeds 2010000:2010999, released by this record through the amende
 e556e08eb23fe8fef14daad11735fb8066e9ce43e6558ca5520fef4710a65c36  C-V25B-reduction-challenge.md
 ```
 Escrow: C-V25B seeds 2020000:2021999, released by this record through the frozen released_block parameter. Pre-seal: exact-artifact dry-run, arm-vocabulary validation, dev-seed threading check, containment check.
+
+## C-V25B-B seal (2026-07-29)
+```
+d781130feb9c675f3e476788a0d103cd99a0e1588b70eff1de9c95fccf602c32  C-V25BB-reduction-challenge.md
+```
+Escrow: C-V25B-B seeds 2020000:2021999 (unconsumed by the retained C-V25B stop; release record stands). Pre-seal adds score-vocabulary validation against frozen gate3_row fields.
