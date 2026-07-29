@@ -164,3 +164,9 @@ be1cbb5885a94af380e48b9fb3c4e83b043f63d3584f0601e44c21f8e0f60c68  C-V28C-challen
 dcfdf3990aa1fd1e6b41265f478825053dc14df016a5fa0f5a7348e7c915ee4f  C-V28D-challenge.md
 ```
 Escrows: C-V28A 2100000:2100599, C-V28B 2110000:2110599, C-V28C 2120000:2120599, C-V28D 2130000:2130599 — each the declared prefix of its assigned 10000-seed block, released by this record; remainders unconsumed and closed at verdict. Floors from the committed stage-0 attainability pilot and gate-3 profiles (pilot blocks 1680000:1689999 barred). Same-seed pairing throughout. Each bundle verdicts independently; no aggregate pass count required.
+
+## C-V28D-B seal (2026-07-29)
+```
+7d25943eb3d22198fb3380537a619cc5a5daa5aa9a9d759af0d7331026258c17  C-V28DB-challenge.md
+```
+Escrow: C-V28D-B seeds 2130600:2131199 (fresh prefix; the never-opened 2130000:2130599 prefix closed). Ordering criterion corrected to the frozen first_times vocabulary (root < reduction), validated on a dev-seed trajectory pre-seal.
