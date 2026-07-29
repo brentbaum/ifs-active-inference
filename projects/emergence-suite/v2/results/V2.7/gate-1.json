@@ -1,0 +1,149 @@
+{
+  "bounds": {
+    "B_max_v232_formation": 3.801426508560692,
+    "B_max_v234": 11.675460894331877,
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "B_max_v25a_configural": 6.084736253211209,
+    "B_max_v25a_marginal_accounting": 6.704414354964107,
+    "B_max_v25b": 11.302393144606405,
+    "B_max_v26a_relational": 6.9920964274158885,
+    "B_max_v26a_root": 2.9444389791664394,
+    "B_max_v26b_policy_outcome": 1.3862943611198908,
+    "B_max_v26b_trust": 2.1972245773362196,
+    "B_max_v27_registration": 2.1972245773362196,
+    "B_max_v27_shared_outcome": 3.8,
+    "implied_binary_change_bound_v26b": 0.5
+  },
+  "checks": {
+    "01_policy_normalization_1": true,
+    "02_policy_normalization_2": true,
+    "03_policy_normalization_3": true,
+    "04_idle_slot_identity": true,
+    "05_joint_outcome_normalization": true,
+    "06_no_polarization_coefficient": true,
+    "07_cross_policy_causal_path": true,
+    "08_exclusion_ordinary_policy": true,
+    "09_registration_likelihood": true,
+    "10_registration_off_neutrality": true,
+    "11_joint_policy_oracle": true,
+    "12_symmetry_permutation": true,
+    "13_oracle_input_copy": true,
+    "14_structure_oracle_parity": true,
+    "15_no_action_likelihood": true,
+    "16_named_states_pure_readouts": true,
+    "17_one_posterior": true,
+    "18_model_evidence_constitution": true,
+    "19_graded_update_constitution": true,
+    "20_bounds_and_custody": true
+  },
+  "gate": 1,
+  "passed": true,
+  "proof_count": 20,
+  "proofs": {
+    "01_policy_normalization_1": {
+      "error": 1.1102230246251565e-16,
+      "passed": true,
+      "policy_count": 3
+    },
+    "02_policy_normalization_2": {
+      "error": 0.0,
+      "passed": true,
+      "policy_count": 9
+    },
+    "03_policy_normalization_3": {
+      "error": 0.0,
+      "passed": true,
+      "policy_count": 27
+    },
+    "04_idle_slot_identity": {
+      "one_idle_hex": [
+        "0000000000000000",
+        "0000000000000000"
+      ],
+      "passed": true,
+      "two_idle_hex": [
+        "0000000000000000"
+      ]
+    },
+    "05_joint_outcome_normalization": {
+      "maximum_error": 0.0,
+      "passed": true
+    },
+    "06_no_polarization_coefficient": {
+      "forbidden_identifier_present": false,
+      "passed": true
+    },
+    "07_cross_policy_causal_path": {
+      "lesion_effect": 0.0,
+      "mediated_effect": 0.19931265433041964,
+      "passed": true
+    },
+    "08_exclusion_ordinary_policy": {
+      "all_block_index": 0,
+      "passed": true,
+      "policy_count": 27
+    },
+    "09_registration_likelihood": {
+      "passed": true,
+      "posterior": 0.9,
+      "prior": 0.5
+    },
+    "10_registration_off_neutrality": {
+      "error": 0.0,
+      "passed": true
+    },
+    "11_joint_policy_oracle": {
+      "maximum_error": 1.3877787807814457e-16,
+      "passed": true
+    },
+    "12_symmetry_permutation": {
+      "maximum_error": 0.0,
+      "passed": true
+    },
+    "13_oracle_input_copy": {
+      "inputs_unchanged": true,
+      "passed": true
+    },
+    "14_structure_oracle_parity": {
+      "maximum_error": 1.6653345369377348e-16,
+      "passed": true
+    },
+    "15_no_action_likelihood": {
+      "metadata": false,
+      "passed": true
+    },
+    "16_named_states_pure_readouts": {
+      "forbidden_present": [],
+      "passed": true
+    },
+    "17_one_posterior": {
+      "passed": true
+    },
+    "18_model_evidence_constitution": {
+      "passed": true
+    },
+    "19_graded_update_constitution": {
+      "passed": true
+    },
+    "20_bounds_and_custody": {
+      "bounds": {
+        "B_max_v232_formation": 3.801426508560692,
+        "B_max_v234": 11.675460894331877,
+        "B_max_v24_common_emissions": 6.704414354964107,
+        "B_max_v25a_configural": 6.084736253211209,
+        "B_max_v25a_marginal_accounting": 6.704414354964107,
+        "B_max_v25b": 11.302393144606405,
+        "B_max_v26a_relational": 6.9920964274158885,
+        "B_max_v26a_root": 2.9444389791664394,
+        "B_max_v26b_policy_outcome": 1.3862943611198908,
+        "B_max_v26b_trust": 2.1972245773362196,
+        "B_max_v27_registration": 2.1972245773362196,
+        "B_max_v27_shared_outcome": 3.8,
+        "implied_binary_change_bound_v26b": 0.5
+      },
+      "escrow_accessed": false,
+      "passed": true
+    }
+  },
+  "stage": "V2.7"
+}

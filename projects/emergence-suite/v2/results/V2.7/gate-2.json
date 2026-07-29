@@ -1,0 +1,49 @@
+{
+  "bounds": {
+    "B_max_v232_formation": 3.801426508560692,
+    "B_max_v234": 11.675460894331877,
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "B_max_v25a_configural": 6.084736253211209,
+    "B_max_v25a_marginal_accounting": 6.704414354964107,
+    "B_max_v25b": 11.302393144606405,
+    "B_max_v26a_relational": 6.9920964274158885,
+    "B_max_v26a_root": 2.9444389791664394,
+    "B_max_v26b_policy_outcome": 1.3862943611198908,
+    "B_max_v26b_trust": 2.1972245773362196,
+    "B_max_v27_registration": 2.1972245773362196,
+    "B_max_v27_shared_outcome": 3.8,
+    "implied_binary_change_bound_v26b": 0.5
+  },
+  "checks": {
+    "idle_slot_bitwise_identity": true,
+    "joint_outcome_table_MAE": true,
+    "joint_policy_posterior_parity": true,
+    "mandate_recovery": true,
+    "no_false_cross_coupling": true,
+    "parameter_coverage": true,
+    "topology_recovery": true
+  },
+  "gate": 2,
+  "metrics": {
+    "false_cross_coupling_max_effect": 0.18372955672394842,
+    "false_cross_coupling_rate": 0.0027447392497712718,
+    "idle_slot_identity_rate": 1.0,
+    "joint_outcome_table_MAE": 0.006781819700484014,
+    "joint_policy_posterior_parity_max": 5.551115123125783e-16,
+    "mandate_recovery": 0.8972,
+    "parameter_coverage": 0.9902,
+    "topology_recovery": 0.8226822682268227,
+    "world_count": 5000
+  },
+  "passed": true,
+  "protector_count_counts": {
+    "1": 1667,
+    "2": 1667,
+    "3": 1666
+  },
+  "seed_block": [
+    1520000,
+    1524999
+  ],
+  "stage": "V2.7"
+}

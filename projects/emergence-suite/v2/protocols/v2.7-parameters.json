@@ -1,0 +1,51 @@
+{
+  "stage": "V2.7",
+  "semantic_tolerance": 1e-10,
+  "topologies": ["independent", "opposed", "coalition"],
+  "topology_prior": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333],
+  "mandate_support": [0.1, 0.55, 1.0],
+  "mandate_prior": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333],
+  "outcome_level_support": [0.3, 0.55, 0.8],
+  "outcome_level_prior": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333],
+  "registration_prior": [0.5, 0.5],
+  "registration_reliability": 0.9,
+  "joint_policy_inverse_temperature": 6.0,
+  "shared_outcome_weight": 2.4,
+  "recovery_length": 486,
+  "epoch_b_development_block": [1000000, 1899999],
+  "pilot_blocks": {
+    "stage0_gate2": [1510000, 1511499],
+    "gate3": [1511500, 1514499],
+    "gate4": [1514500, 1515499],
+    "gate5": [1515500, 1519999]
+  },
+  "assigned_blocks": {
+    "gate2": [1520000, 1524999],
+    "gate3": [1525000, 1539999],
+    "gate4": [1540000, 1542999],
+    "gate5": [1543000, 1569999]
+  },
+  "escrow_closed": [2060000, 2064999],
+  "thresholds": {
+    "gate2_recovery": 0.8,
+    "gate2_table_mae": 0.1,
+    "gate2_coverage": 0.9,
+    "gate2_false_cross_coupling": 0.1,
+    "polarization_effect": 0.1,
+    "coupling_lesion_abs": 0.01,
+    "exiling_true_rate": 0.8,
+    "exiling_false_rate": 0.2,
+    "alternative_win_rate": 0.6,
+    "registration_effect": 0.05,
+    "befriending_step": 0.05
+  },
+  "rationales": {
+    "topology_prior": "A symmetric exact prior gives the three declared interaction structures equal prior opportunity.",
+    "mandate_support": "Pilot-attainable weak, moderate, and strong finite levels make mandate recovery identifiable without a continuous approximation.",
+    "outcome_level_support": "Three normalized success baselines span adverse, ambiguous, and favorable shared outcomes.",
+    "registration_reliability": "A finite 0.9 channel yields a material relational update while preserving bounded evidence and exact masking neutrality.",
+    "joint_policy_inverse_temperature": "A finite temperature retains positive mass on every ordinary joint policy while allowing reliable cost orderings.",
+    "shared_outcome_weight": "The prior-predictive range includes both negligible and material cross-policy effects without adding a polarization term.",
+    "recovery_length": "Prospective exchangeability-corrected pilots found that 486 observations were needed to place topology recovery stably above .80 and suppress residual false cross-coupling; each three-protector joint policy is exposed eighteen times."
+  }
+}

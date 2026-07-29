@@ -1,0 +1,5 @@
+# V2.7 gate-4 software-repair authorization (evaluator, 2026-07-29)
+
+Classification: pure software error in the reduction-lesion restoration path. The lesion claims to restore the unreduced baseline but substitutes a scalar posterior-mean mandate override where the baseline computes the exact model average over the three mandate candidates; softmax nonlinearity makes these differ (residual 8.4e-5 vs the declared 1e-10 identity). The intact composition, the frozen V2.5b posterior, normalization, registration, and cross-outcome mediation are all unaffected; the other six lesions pass at <= 5.6e-17.
+
+Authorized, narrowly: the reduction-lesion path computes its restoration through the identical exact model-average code path as the unreduced baseline (no scalar collapse). Regression test pinning the restoration identity on public dummies. Original gate-4 FAIL retained; repaired execution recorded separately (gate-4-repaired.json) with byte identity on all non-lesion quantities. Then proceed to gate 5 as instructed. Full fast suite green.

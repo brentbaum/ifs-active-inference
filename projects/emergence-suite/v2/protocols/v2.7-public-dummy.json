@@ -1,0 +1,22 @@
+{
+  "stage": "V2.7",
+  "protector_count": 2,
+  "topology": "opposed",
+  "mandate_index": 1,
+  "outcome_level_index": 1,
+  "observations": [
+    {"joint_policy": ["block", "permit_contact"], "outcome": 1, "registration": 1},
+    {"joint_policy": ["permit_contact", "block"], "outcome": 1, "registration": null},
+    {"joint_policy": ["test_contact", "test_contact"], "outcome": 0, "registration": 0}
+  ],
+  "readouts": [
+    "q_topology",
+    "q_mandate",
+    "q_outcome_level",
+    "q_joint_policy",
+    "exiling_mass",
+    "registration_support",
+    "system_access",
+    "descent"
+  ]
+}

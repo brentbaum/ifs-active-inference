@@ -1,0 +1,196 @@
+{
+  "all_floors_attainable": true,
+  "barred_blocks": [
+    [
+      1510000,
+      1510299
+    ],
+    [
+      1510300,
+      1510599
+    ],
+    [
+      1511500,
+      1511799
+    ],
+    [
+      1511800,
+      1512099
+    ],
+    [
+      1512100,
+      1512399
+    ],
+    [
+      1512400,
+      1512699
+    ],
+    [
+      1512700,
+      1512999
+    ],
+    [
+      1513000,
+      1513299
+    ]
+  ],
+  "gate2": {
+    "checks": {
+      "idle_slot_bitwise_identity": true,
+      "joint_outcome_table_MAE": true,
+      "joint_policy_posterior_parity": true,
+      "mandate_recovery": true,
+      "no_false_cross_coupling": true,
+      "parameter_coverage": true,
+      "topology_recovery": true
+    },
+    "criterion": false,
+    "metrics": {
+      "false_cross_coupling_max_effect": 0.031077551495928946,
+      "false_cross_coupling_rate": 0.0,
+      "idle_slot_identity_rate": 1.0,
+      "joint_outcome_table_MAE": 0.008133144994523478,
+      "joint_policy_posterior_parity_max": 5.551115123125783e-16,
+      "mandate_recovery": 0.88,
+      "parameter_coverage": 0.99,
+      "topology_recovery": 0.81,
+      "world_count": 300
+    },
+    "passed": true,
+    "purpose": "prospective attainability only",
+    "seed_block": [
+      1512700,
+      1512999
+    ]
+  },
+  "gate3": {
+    "checks": {
+      "alternatives": true,
+      "befriending": true,
+      "coalition_mediator": true,
+      "coupling_lesion": true,
+      "exiling": true,
+      "false_exiling": true,
+      "historical_context": true,
+      "partial_partner_support": true,
+      "polarization_reciprocal": true,
+      "reduction_composition": true,
+      "registration": true,
+      "two_to_three_scaling": true
+    },
+    "criterion": false,
+    "metrics": {
+      "befriending": {
+        "access_both_one": {
+          "count": 30,
+          "lower_95": 0.08633651965511152,
+          "mean": 0.09161785615430865,
+          "upper_95": 0.09689919265350577
+        },
+        "access_one_none": {
+          "count": 30,
+          "lower_95": 0.0555314191745105,
+          "mean": 0.05635243924826369,
+          "upper_95": 0.05717345932201688
+        },
+        "descent_both_one": {
+          "count": 30,
+          "lower_95": 0.21117405823205967,
+          "mean": 0.21347938210351067,
+          "upper_95": 0.21578470597496166
+        },
+        "descent_one_none": {
+          "count": 30,
+          "lower_95": 0.13623764651130094,
+          "mean": 0.13877544458223046,
+          "upper_95": 0.14131324265315998
+        }
+      },
+      "coalition_recovery": 1.0,
+      "coupling_lesion": {
+        "p1_to_p2": {
+          "count": 30,
+          "lower_95": 4.000862425299703e-19,
+          "mean": 5.551115123125783e-18,
+          "upper_95": 1.0702144003721596e-17
+        },
+        "p2_to_p1": {
+          "count": 30,
+          "lower_95": -1.5855970420553956e-17,
+          "mean": -6.938893903907228e-18,
+          "upper_95": 1.978182612739501e-18
+        }
+      },
+      "exiling_and_alternatives": {
+        "exiling": {
+          "count": 10,
+          "lower_95": 0.7224598312333834,
+          "rate": 1.0,
+          "upper_95": 1.0
+        },
+        "false_exiling": {
+          "count": 20,
+          "lower_95": -1.3877787807814457e-17,
+          "rate": 0.0,
+          "upper_95": 0.16113012549493322
+        },
+        "permit": {
+          "count": 10,
+          "lower_95": 0.7224598312333834,
+          "rate": 1.0,
+          "upper_95": 1.0
+        },
+        "test": {
+          "count": 10,
+          "lower_95": 0.7224598312333834,
+          "rate": 1.0,
+          "upper_95": 1.0
+        }
+      },
+      "old_context_query_error_max": 0.0,
+      "partial_partner_support": {
+        "intermediate_rate": 1.0,
+        "target": {
+          "count": 30,
+          "lower_95": 0.9756097560975611,
+          "mean": 0.9756097560975612,
+          "upper_95": 0.9756097560975613
+        },
+        "untargeted_max_abs": 0.0
+      },
+      "polarization": {
+        "p1_to_p2": {
+          "count": 30,
+          "lower_95": 0.25961417123130526,
+          "mean": 0.2602263213152288,
+          "upper_95": 0.2608384713991524
+        },
+        "p2_to_p1": {
+          "count": 30,
+          "lower_95": 0.260560415649336,
+          "mean": 0.26113655884112286,
+          "upper_95": 0.2617127020329097
+        }
+      },
+      "reduction_identity_retention": 1.0,
+      "reduction_policy_change_rate": 1.0,
+      "registration": {
+        "off_max_abs": 0.0,
+        "on": {
+          "count": 30,
+          "lower_95": 0.5,
+          "mean": 0.5,
+          "upper_95": 0.5
+        }
+      },
+      "scaling_exact": true
+    },
+    "passed": true,
+    "seed_block": [
+      1513000,
+      1513299
+    ]
+  },
+  "pilot": "attainability",
+  "stage": "V2.7"
+}

@@ -1,0 +1,10 @@
+{
+  "stage": "V2.7",
+  "run_after": "gate-4-stop",
+  "command": "python3 -m unittest discover -s tests",
+  "tests_run": 174,
+  "failures": 0,
+  "errors": 0,
+  "passed": true,
+  "elapsed_seconds": 126.277
+}
