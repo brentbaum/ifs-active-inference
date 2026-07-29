@@ -58,3 +58,31 @@ uses the already-established subprocess-partition orchestration pattern.
 The failure, zero-seed status, and unchanged scientific definitions are
 retained in `development-failures.md`.
 
+## Gate-3 protocol definitions frozen before execution
+
+The six association doses are `{0,.2,.4,.6,.8,1}`. The protocol-level
+presentation operator retains a nested fraction of each cue's original
+markers and permutes the remaining marker multiset within that cue. Outcomes,
+roots, cue order, missingness, and every channel multiset are unchanged.
+Dose one is bitwise identity; dose zero is the complete
+marginal-preserving presentation. No likelihood parameter is interpolated.
+
+The preregistered isotonic test requires the six raw population means to be
+nondecreasing and their equal-weight pool-adjacent-violators fit to require
+no adjustment beyond `1e-12`. The dose slope is the ordinary slope across
+the six means; its 95% interval uses 10,000 whole-world bootstrap replicates
+resampling independently within each frozen dose cell.
+
+Information-matching doses use 50 worlds per level. The association label
+does not enter the frozen root-channel matching likelihood; it tests the
+declared expectation that median `m*/n` is nondecreasing, with equality
+allowed by “monotone.”
+
+For the formed-P seam, joint presentation uses the frozen context-indexed
+root posterior. Marginal presentation factorizes marker context and root
+evidence: its present-root posterior is the exact model average
+`q(now)q(G|R) + q(then)q_0(G)` from the two independently scored marginal
+components. Matching scans the same seed's extended root channel to the
+joint root-KL target. The root-movement difference is decomposed by
+telescoping the joint and matched-marginal prediction trajectories, including
+any marginal extension beyond the joint history.

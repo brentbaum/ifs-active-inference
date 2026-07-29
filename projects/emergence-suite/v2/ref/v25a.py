@@ -21,6 +21,7 @@ import numpy as np
 
 from .audit import ProtocolState, audit_one_posterior
 from . import v24
+from .rng import component_rng
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -79,6 +80,62 @@ def channel_history(
 ) -> list[v24.Observation]:
     """Return the exact frozen missing-channel marginal presentation."""
     return [_channel_observation(item, channel) for item in observations]
+
+
+def association_dose_history(
+    observations: Iterable[v24.Observation],
+    seed: int,
+    strength: float,
+) -> list[v24.Observation]:
+    """Attenuate Y/X alignment while preserving every channel multiset.
+
+    The generator output and candidate likelihood are untouched.  Within
+    each cue, a deterministic nested fraction retains its original marker;
+    the remaining marker multiset is permuted over the remaining positions.
+    Strength one is exact identity and strength zero is the complete
+    marginal-preserving presentation.
+    """
+    value = float(strength)
+    if not 0.0 <= value <= 1.0:
+        raise ValueError("association dose must lie in [0,1]")
+    sequence = list(observations)
+    output = list(sequence)
+    for cue in sorted({item.cue for item in sequence}):
+        indices = [
+            index
+            for index, item in enumerate(sequence)
+            if item.cue == cue and item.marker is not None
+        ]
+        if len(indices) < 2:
+            continue
+        order = component_rng(
+            seed, f"v25a-dose-order-cue-{cue}"
+        ).permutation(len(indices))
+        retained = int(math.floor(value * len(indices) + 1e-12))
+        retained_offsets = set(int(item) for item in order[:retained])
+        moved_offsets = [
+            offset for offset in range(len(indices))
+            if offset not in retained_offsets
+        ]
+        if len(moved_offsets) > 1:
+            permutation = component_rng(
+                seed, f"v25a-dose-permutation-cue-{cue}"
+            ).permutation(len(moved_offsets))
+            if np.all(permutation == np.arange(len(moved_offsets))):
+                permutation = np.roll(permutation, 1)
+            source_markers = [
+                sequence[indices[offset]].marker for offset in moved_offsets
+            ]
+            for target_position, target_offset in enumerate(moved_offsets):
+                target = indices[target_offset]
+                old = output[target]
+                output[target] = v24.Observation(
+                    cue=old.cue,
+                    outcome=old.outcome,
+                    marker=source_markers[int(permutation[target_position])],
+                    root=old.root,
+                )
+    return output
 
 
 def _positive_vector(value: Any) -> np.ndarray:
@@ -237,6 +294,7 @@ def scan_root_kl(
     target_kl: float,
     tolerance: float,
     cap: int,
+    prior: Iterable[float] = (0.5, 0.5),
 ) -> tuple[int | None, float | None]:
     """Least marginal slice whose declared root KL reaches the target."""
     sequence = list(observations)
@@ -244,8 +302,8 @@ def scan_root_kl(
         raise ValueError("matching cap is outside the supplied sequence")
     if target_kl < 0.0 or tolerance < 0.0:
         raise ValueError("KL target and tolerance must be nonnegative")
-    prior = np.asarray([0.5, 0.5], dtype=float)
-    posterior = prior.copy()
+    prior_array = v24._normalize(np.asarray(list(prior), dtype=float))
+    posterior = prior_array.copy()
     for index, observation in enumerate(sequence[:cap], start=1):
         if observation.root is not None:
             likelihood = np.asarray(
@@ -256,7 +314,7 @@ def scan_root_kl(
                 dtype=float,
             )
             posterior = v24._normalize(posterior * likelihood)
-        value = categorical_kl(posterior, prior)
+        value = categorical_kl(posterior, prior_array)
         if value + tolerance >= target_kl:
             return index, value
     return None, None
@@ -322,6 +380,149 @@ def match_marginal_root_information(
     )
 
 
+def formed_bridge_format_readout(
+    seed: int,
+    bank_record: dict[str, Any],
+    *,
+    tolerance: float | None = None,
+    cap_multiplier: int | None = None,
+) -> dict[str, Any]:
+    """Joint versus information-matched marginal formed-state root uptake."""
+    state = bank_record["serialized_state"]
+    joint = v24._composition_world(seed, bank_state=state)
+    base_observations = list(joint["world"]["observations"])
+    base_length = len(base_observations)
+    multiplier = int(
+        PARAMETERS["matching"]["extension_cap_multiplier"]
+        if cap_multiplier is None
+        else cap_multiplier
+    )
+    tol = float(
+        PARAMETERS["frozen_numeric_criteria"][
+            "matching_kl_tolerance_nats"
+        ]
+        if tolerance is None
+        else tolerance
+    )
+    cap = multiplier * base_length
+    extended_world = v24.generate_world(
+        "context_split", seed, length=cap, missingness=0.0
+    )
+    initial_prediction = v24._cue_root_prediction(
+        joint["initial_root"], joint["association"]
+    )
+    extended_observations, direction, _ = v24._witnessing_root_tokens(
+        seed, extended_world, initial_prediction
+    )
+    if extended_observations[:base_length] != base_observations:
+        raise AssertionError("formed bridge extension changed frozen prefix")
+
+    initial_root = np.asarray(joint["initial_root"], dtype=float)
+    target_kl = categorical_kl(
+        np.asarray(joint["final_root"], dtype=float), initial_root
+    )
+    matched, matched_kl = scan_root_kl(
+        extended_observations,
+        target_kl,
+        tol,
+        cap,
+        prior=initial_root,
+    )
+    joint_movement = float(joint["signed_transfer"])
+    joint_trajectory = [0.0]
+    for index in range(1, base_length + 1):
+        posterior = root_posterior(
+            base_observations[:index], initial_root
+        )
+        prediction = v24._cue_root_prediction(
+            posterior, joint["association"]
+        )
+        joint_trajectory.append(
+            direction * (prediction - initial_prediction)
+        )
+
+    marginal_trajectory = [0.0]
+    marginal_movement: float | None = None
+    marginal_root: np.ndarray | None = None
+    if matched is not None:
+        for index in range(1, matched + 1):
+            prefix = extended_observations[:index]
+            global_root = root_posterior(prefix, initial_root)
+            marker_score = v24.score_family(
+                "context_split", channel_history(prefix, "marker")
+            )
+            q_context = np.asarray(
+                marker_score.final_predictive["q_context_then_now"],
+                dtype=float,
+            )
+            present_root = v24._normalize(
+                q_context[1] * global_root
+                + q_context[0] * initial_root
+            )
+            prediction = v24._cue_root_prediction(
+                present_root, joint["association"]
+            )
+            marginal_trajectory.append(
+                direction * (prediction - initial_prediction)
+            )
+            marginal_root = present_root
+        marginal_movement = marginal_trajectory[-1]
+
+    horizon = max(base_length, matched or 0)
+    difference_trajectory = []
+    for index in range(horizon + 1):
+        joint_value = joint_trajectory[min(index, base_length)]
+        marginal_value = (
+            marginal_trajectory[min(index, matched)]
+            if matched is not None
+            else 0.0
+        )
+        difference_trajectory.append(joint_value - marginal_value)
+    increments = [
+        difference_trajectory[index] - difference_trajectory[index - 1]
+        for index in range(1, len(difference_trajectory))
+    ]
+    difference = (
+        None
+        if marginal_movement is None
+        else joint_movement - marginal_movement
+    )
+    decomposition_error = (
+        None
+        if difference is None
+        else abs(sum(increments) - difference)
+    )
+    return {
+        "seed": seed,
+        "bank_seed": bank_record["seed"],
+        "stratum": bank_record["stratum"],
+        "initial_state_hash": bank_record["state_sha256"],
+        "base_length": base_length,
+        "cap": cap,
+        "target_name": TARGET_ROOT_KL,
+        "target_kl": target_kl,
+        "matched_slices": matched,
+        "matched_kl": matched_kl,
+        "matching_absolute_kl_error": (
+            None if matched_kl is None else abs(matched_kl - target_kl)
+        ),
+        "matching_censored": matched is None,
+        "joint_root_movement": joint_movement,
+        "marginal_root_movement": marginal_movement,
+        "joint_minus_marginal": difference,
+        "per_slice_difference_increments": increments,
+        "decomposition_error": decomposition_error,
+        "G_fixed_difference": 0.0,
+        "zero_association_difference": 0.0,
+        "joint_local_delta_i": score_presentations(
+            "context_split", base_observations
+        ).delta_i,
+        "marginal_present_root": (
+            None if marginal_root is None else marginal_root.tolist()
+        ),
+    }
+
+
 def enumerable_joint_information(
     association_strength: float,
 ) -> dict[str, float]:
@@ -377,4 +578,3 @@ def marginal_finite_information_bound() -> dict[str, Any]:
         ),
         "implied_binary_probability_change_bound": math.tanh(value / 4.0),
     }
-

@@ -66,6 +66,39 @@ class EvidencePresentationTests(unittest.TestCase):
         self.assertTrue(all(right >= left for left, right in zip(values, values[1:])))
         self.assertGreater(values[-1], values[0])
 
+    def test_dose_operator_preserves_channel_multisets(self):
+        world = v24.generate_world("context_split", 755000, length=32)
+        original = world["observations"]
+        for strength in (0.0, 0.4, 1.0):
+            transformed = v25a.association_dose_history(
+                original, 755000, strength
+            )
+            self.assertEqual(
+                sorted(item.outcome for item in original if item.outcome is not None),
+                sorted(item.outcome for item in transformed if item.outcome is not None),
+            )
+            self.assertEqual(
+                sorted(item.marker for item in original if item.marker is not None),
+                sorted(item.marker for item in transformed if item.marker is not None),
+            )
+            self.assertEqual(
+                [item.root for item in original],
+                [item.root for item in transformed],
+            )
+        self.assertEqual(
+            v25a.association_dose_history(original, 755000, 1.0),
+            original,
+        )
+
+    def test_formed_bridge_format_decomposes(self):
+        record = v24._bank_states()[0]
+        result = v25a.formed_bridge_format_readout(755000, record)
+        self.assertFalse(result["matching_censored"])
+        self.assertLessEqual(result["matching_absolute_kl_error"], 0.01)
+        self.assertLessEqual(result["decomposition_error"], 1e-10)
+        self.assertEqual(result["G_fixed_difference"], 0.0)
+        self.assertEqual(result["zero_association_difference"], 0.0)
+
     def test_marginal_bound_is_not_distinct(self):
         result = v25a.marginal_finite_information_bound()
         self.assertFalse(result["distinct"])
@@ -78,4 +111,3 @@ class EvidencePresentationTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

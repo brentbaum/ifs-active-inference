@@ -105,19 +105,27 @@ def matching_scan(
     target_kl: float,
     tolerance: float,
     cap: int,
+    prior: Iterable[float] = (0.5, 0.5),
 ) -> tuple[int | None, float | None]:
     values = list(root_values)
     if cap > len(values):
         raise ValueError("oracle cap exceeds supplied roots")
-    posterior = np.asarray([0.5, 0.5], dtype=float)
+    prior_array = np.asarray(list(prior), dtype=float)
+    prior_array /= prior_array.sum()
+    posterior = prior_array.copy()
     for index, value in enumerate(values[:cap], start=1):
         if value is not None:
             posterior *= np.asarray(
                 [_root_likelihood(0, value), _root_likelihood(1, value)]
             )
             posterior /= posterior.sum()
-        observed = _kl_binary(posterior)
+        positive = posterior > 0.0
+        observed = float(
+            np.sum(
+                posterior[positive]
+                * np.log(posterior[positive] / prior_array[positive])
+            )
+        )
         if observed + tolerance >= target_kl:
             return index, observed
     return None, None
-
