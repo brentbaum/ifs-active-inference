@@ -1,5 +1,6 @@
 """V2.4.4 exact batched compound-structure and CRT readouts."""
 from __future__ import annotations
+from functools import lru_cache
 import math
 import numpy as np
 from . import v24
@@ -78,12 +79,33 @@ def _graph(initial, transition, T):
         edges.append(e);levels.append(new);dist=nxt
     return levels,edges
 
+def _graph_parameter_key(family):
+    if family=="context_split":
+        return tuple(float(value) for value in v24._cs_alpha().flat)
+    return tuple(
+        float(value)
+        for value in v24.PARAMETERS["family_processes"]["change_point"][
+            "hazard_beta_prior"
+        ]
+    )
+
+@lru_cache(maxsize=None)
+def _cached_graph(family,T,parameter_key):
+    del parameter_key
+    if family=="context_split":
+        initial=v24._cs_initial();transition=v24._cs_transition
+    else:
+        initial=v24._cp_initial();transition=v24._cp_transition
+    return _graph(initial,transition,T)
+
 def _dynamic(batch_y,batch_m,cues,family):
     B,T=batch_y.shape
     if family=="context_split":
-        initial=v24._cs_initial(); trans=v24._cs_transition
-    else: initial=v24._cp_initial();trans=v24._cp_transition
-    levels,edges=_graph(initial,trans,T)
+        initial=v24._cs_initial()
+    else: initial=v24._cp_initial()
+    levels,edges=_cached_graph(
+        family,T,_graph_parameter_key(family)
+    )
     mass=np.tile(np.asarray([initial[k] for k in levels[0]]),(B,1));log=np.zeros(B)
     for t,keys in enumerate(levels):
         context=np.asarray([k[0] for k in keys])

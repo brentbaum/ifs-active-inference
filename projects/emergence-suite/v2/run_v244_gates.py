@@ -43,19 +43,29 @@ def gate1():
       "pi1_24":PI1_24,"passed":all(x["passed"] for x in proofs.values())}
     dump("gate-1.json",result);return result["passed"]
 
+def _gate2_structural_task(position):
+    seed=790500+position
+    truth=v24.FAMILIES[position//100]
+    world=v24.generate_world(truth,seed,length=96)
+    pre,_=v24._heldout_partition(world["observations"])
+    mat=v243.material_redescription(pre);crt=v244.crt_readout(pre,seed)
+    selective=bool(mat["material_redescription"] and crt["p_CRT"]<=.05)
+    return {"position":position,"seed":seed,"truth":truth,**mat,
+      "T0":crt["T0"],"p_CRT":crt["p_CRT"],"Q95":crt["Q95"],
+      "E_null":crt["E_null"],"selective_material_redescription":selective}
+
 def gate2():
     original=list(v24.PARAMETERS["development_seed_blocks"]["five_family_recovery"])
     v24.PARAMETERS["development_seed_blocks"]["five_family_recovery"]=[790500,790999]
     try:base=v24.recovery_assay()
     finally:v24.PARAMETERS["development_seed_blocks"]["five_family_recovery"]=original
-    rows=[];counts={f:{"material":0,"selective":0} for f in v24.FAMILIES}
-    for pos,seed in enumerate(range(790500,791000)):
-        truth=v24.FAMILIES[pos//100];world=v24.generate_world(truth,seed,length=96);pre,_=v24._heldout_partition(world["observations"])
-        mat=v243.material_redescription(pre);crt=v244.crt_readout(pre,seed)
-        selective=bool(mat["material_redescription"] and crt["p_CRT"]<=.05)
-        counts[truth]["material"]+=int(mat["material_redescription"]);counts[truth]["selective"]+=int(selective)
-        rows.append({"seed":seed,"truth":truth,**mat,"T0":crt["T0"],"p_CRT":crt["p_CRT"],
-          "Q95":crt["Q95"],"E_null":crt["E_null"],"selective_material_redescription":selective})
+    rows=_parallel_v244_tasks("gate2",500)
+    counts={f:{"material":0,"selective":0} for f in v24.FAMILIES}
+    for row in rows:
+        truth=row["truth"]
+        counts[truth]["material"]+=int(row["material_redescription"])
+        counts[truth]["selective"]+=int(row["selective_material_redescription"])
+        row.pop("position")
     rates={f:{k:v/100 for k,v in d.items()} for f,d in counts.items()}
     checks={**base["checks"],"cs_material":rates["context_split"]["material"]>=.60,
       "cs_selective":rates["context_split"]["selective"]>=.60}
@@ -240,47 +250,51 @@ def _family_trajectory(scores):
         trajectory.append(v24._softmax(cumulative).tolist())
     return trajectory
 
+def _misspecification_task(position):
+    seed=794000+position
+    base_family=v24.FAMILIES[position%5]
+    world=v24.generate_world(base_family,seed,missingness=.30 if position%2 else 0.0)
+    observations=list(world["observations"])
+    construction="marker_product" if position%4==0 else "mixed_temporal" if position%4==1 else "missingness_or_base"
+    if position%4==0:
+        observations=v24._shuffle_marker_association(observations,seed)
+    elif position%4==1:
+        half=len(observations)//2
+        observations=list(v24.generate_world("continuous_drift",seed,length=half)["observations"])+list(
+            v24.generate_world("change_point",seed+1,length=len(observations)-half)["observations"])
+    bma=v243.bma_heldout(observations)
+    best=max(bma["family_log_scores"])
+    comparison=v24.compare_families(observations)
+    pre,_=v24._heldout_partition(observations)
+    structural,null=_structural_row(pre,seed)
+    scores=comparison["scores"]
+    row={
+      "position":position,"seed":seed,"construction":construction,
+      "selected":v24.selected_family(comparison["posterior"]) or "tie",
+      "posterior":comparison["posterior"].tolist(),
+      "posterior_entropy":float(-np.sum(comparison["posterior"]*np.log(np.maximum(comparison["posterior"],1e-300)))),
+      "family_posterior_trajectory":_family_trajectory(scores),
+      "best_minus_bma_per_token":(best-bma["bma_log_score"])/max(1,bma["observed_tokens"]),
+      "maximum_update_identity_error":comparison["maximum_update_identity_error"],
+      "maximum_decomposition_error":max(score.decomposition_error for score in scores),
+      "candidate_decompositions":[{
+        "family":score.family,"log_evidence":score.log_evidence,
+        "expected_log_likelihood":score.expected_log_likelihood,
+        "parameter_complexity":score.parameter_complexity,
+        "latent_path_complexity":score.latent_path_complexity,
+        "total_complexity":score.total_complexity,
+        "decomposition_error":score.decomposition_error,
+      } for score in scores],
+      "structural_pre":structural,
+    }
+    return {"position":position,"row":row,"null":null.tolist()}
+
 def _misspecification_block():
+    values=_parallel_v244_tasks("misspecification",240)
     rows=[];nulls=[]
-    for position,seed in enumerate(range(794000,794240)):
-        base_family=v24.FAMILIES[position%5]
-        world=v24.generate_world(base_family,seed,missingness=.30 if position%2 else 0.0)
-        observations=list(world["observations"])
-        construction="marker_product" if position%4==0 else "mixed_temporal" if position%4==1 else "missingness_or_base"
-        if position%4==0:
-            observations=v24._shuffle_marker_association(observations,seed)
-        elif position%4==1:
-            half=len(observations)//2
-            observations=list(v24.generate_world("continuous_drift",seed,length=half)["observations"])+list(
-                v24.generate_world("change_point",seed+1,length=len(observations)-half)["observations"])
-        bma=v243.bma_heldout(observations)
-        best=max(bma["family_log_scores"])
-        comparison=v24.compare_families(observations)
-        pre,_=v24._heldout_partition(observations)
-        structural,null=_structural_row(pre,seed)
-        scores=comparison["scores"]
-        rows.append({
-          "seed":seed,"construction":construction,
-          "selected":v24.selected_family(comparison["posterior"]) or "tie",
-          "posterior":comparison["posterior"].tolist(),
-          "posterior_entropy":float(-np.sum(comparison["posterior"]*np.log(np.maximum(comparison["posterior"],1e-300)))),
-          "family_posterior_trajectory":_family_trajectory(scores),
-          "best_minus_bma_per_token":(best-bma["bma_log_score"])/max(1,bma["observed_tokens"]),
-          "maximum_update_identity_error":comparison["maximum_update_identity_error"],
-          "maximum_decomposition_error":max(score.decomposition_error for score in scores),
-          "candidate_decompositions":[{
-            "family":score.family,"log_evidence":score.log_evidence,
-            "expected_log_likelihood":score.expected_log_likelihood,
-            "parameter_complexity":score.parameter_complexity,
-            "latent_path_complexity":score.latent_path_complexity,
-            "total_complexity":score.total_complexity,
-            "decomposition_error":score.decomposition_error,
-          } for score in scores],
-          "structural_pre":structural,
-        })
-        nulls.append(null)
-        if (position+1)%10==0:
-            print(f"gate3 misspecification CRT {position+1}/240",flush=True)
+    for value in values:
+        row=value["row"];row.pop("position")
+        rows.append(row);nulls.append(np.asarray(value["null"],dtype=float))
     path=OUT/"gate-3-misspecification-per_world.json"
     path.write_text(json.dumps(rows,indent=2,sort_keys=True,default=lambda z:z.item() if isinstance(z,np.generic) else str(z))+"\n")
     np.savez_compressed(OUT/"gate-3-misspecification-crt-nulls.npz",null=np.asarray(nulls,dtype=float))
@@ -300,90 +314,87 @@ def _update_misspecification_summary(rows):
     }
     dump("gate-3.json",result)
 
+def _gate4_task(position):
+    seed=795000+position
+    prior_transition=v24._cs_alpha()/v24._cs_alpha().sum(axis=1,keepdims=True)
+    composition=v24._composition_world(seed)
+    observations=composition["world"]["observations"]
+    pre,_=v24._heldout_partition(observations)
+    intact,intact_null=_structural_row(pre,seed)
+    marker_observations=v24._shuffle_marker_association(observations,seed)
+    marker_pre,_=v24._heldout_partition(marker_observations)
+    marker,marker_null=_structural_row(marker_pre,seed)
+    intact_score=v24.score_family("context_split",pre)
+    posterior_transition=np.asarray(intact_score.parameter_posterior["transition_mean"])
+    transition_recovery=float(np.max(np.abs(posterior_transition-prior_transition)))
+    equalized=v24.compare_families(pre,equalize_families=True)
+    equalized_family_bf=float(np.ptp(equalized["log_evidence"]))
+    intact_log_evidence=np.asarray(v24.compare_families(pre)["log_evidence"],dtype=float)
+    row={
+      "position":position,"seed":seed,
+      "intact":{
+        **intact,
+        "root_transfer":composition["signed_transfer"],
+        "present_indexing":composition["new_direction"]*(composition["now_after"]-composition["then_after"]),
+        "root_uptake":composition["signed_transfer"],
+        "historical_retention":composition["then_after"]-composition["then_before"],
+        "family_log_evidence":intact_log_evidence.tolist(),
+      },
+      "context_transition_learning":{
+        "intact_transition_recovery":transition_recovery,
+        "lesioned_transition_recovery":0.0,
+        "intact_return_context_advantage":transition_recovery,
+        "lesioned_return_context_advantage":0.0,
+        "fixed_prior_transition":prior_transition.tolist(),
+        "prior_rows_normalized_error":float(np.max(np.abs(prior_transition.sum(axis=1)-1.0))),
+        "non_cs_log_evidence_survivor_error":0.0,
+        "common_emission_survivor":True,
+      },
+      "marker_meaning_coupling":{
+        "raw_material_redescription":marker["material_redescription"],
+        "selective_material_redescription":marker["selective_material_redescription"],
+        "T0":marker["T0"],"p_CRT":marker["p_CRT"],"Q95":marker["Q95"],"E_null":marker["E_null"],
+        "lesioned_present_indexing":0.0,
+        "root_uptake_survivor":composition["signed_transfer"],
+        "cue_local_likelihood_survivor_error":0.0,
+        "marginal_product_constructor":True,
+      },
+      "cue_root_association":{
+        "intact_transfer":composition["signed_transfer"],
+        "lesioned_transfer":0.0,
+        "temporal_family_evidence_survivor_error":0.0,
+        "historical_query_survivor_error":abs(composition["then_after"]-composition["then_before"]),
+        "root_posterior_survives":True,
+        "selective_redescription_survivor":intact["selective_material_redescription"],
+      },
+      "global_broadcast":{
+        "intact_root_uptake":composition["signed_transfer"],
+        "lesioned_root_uptake":0.0,
+        "lesioned_transfer":0.0,
+        "temporal_family_evidence_survivor_error":0.0,
+        "path_evidence_survivor_error":0.0,
+        "historical_query_survivor_error":abs(composition["then_after"]-composition["then_before"]),
+        "local_cue_learning_survives":True,
+      },
+      "transition_family_comparison":{
+        "intact_family_log_bf_range":float(np.ptp(intact_log_evidence)),
+        "lesioned_family_log_bf_range":equalized_family_bf,
+        "lesioned_compound_structural_log_bf":0.0,
+        "common_likelihood_survives":True,
+        "root_inference_survives":True,
+      },
+    }
+    return {"position":position,"row":row,
+      "intact_null":intact_null.tolist(),"marker_null":marker_null.tolist()}
+
 def gate4():
     started=time.time()
+    values=_parallel_v244_tasks("gate4",240)
     rows=[];intact_nulls=[];marker_nulls=[]
-    prior_transition=v24._cs_alpha()/v24._cs_alpha().sum(axis=1,keepdims=True)
-    for position,seed in enumerate(range(795000,795240)):
-        composition=v24._composition_world(seed)
-        observations=composition["world"]["observations"]
-        pre,_=v24._heldout_partition(observations)
-        intact,intact_null=_structural_row(pre,seed)
-
-        # marker_meaning_coupling: the frozen marginal-product lesion makes
-        # the context marker independent of the cue-prediction context.
-        marker_observations=v24._shuffle_marker_association(observations,seed)
-        marker_pre,_=v24._heldout_partition(marker_observations)
-        marker,marker_null=_structural_row(marker_pre,seed)
-
-        intact_score=v24.score_family("context_split",pre)
-        posterior_transition=np.asarray(intact_score.parameter_posterior["transition_mean"])
-        transition_recovery=float(np.max(np.abs(posterior_transition-prior_transition)))
-
-        equalized=v24.compare_families(pre,equalize_families=True)
-        equalized_family_bf=float(np.ptp(equalized["log_evidence"]))
-        intact_log_evidence=np.asarray(v24.compare_families(pre)["log_evidence"],dtype=float)
-
-        # The contract-defined lesions below sever only their named route.
-        # Direct temporal observations and historical queries are identical
-        # survivors and are not rescored under an altered scientific model.
-        rows.append({
-          "seed":seed,
-          "intact":{
-            **intact,
-            "root_transfer":composition["signed_transfer"],
-            "present_indexing":composition["new_direction"]*(composition["now_after"]-composition["then_after"]),
-            "root_uptake":composition["signed_transfer"],
-            "historical_retention":composition["then_after"]-composition["then_before"],
-            "family_log_evidence":intact_log_evidence.tolist(),
-          },
-          "context_transition_learning":{
-            "intact_transition_recovery":transition_recovery,
-            "lesioned_transition_recovery":0.0,
-            "intact_return_context_advantage":transition_recovery,
-            "lesioned_return_context_advantage":0.0,
-            "fixed_prior_transition":prior_transition.tolist(),
-            "prior_rows_normalized_error":float(np.max(np.abs(prior_transition.sum(axis=1)-1.0))),
-            "non_cs_log_evidence_survivor_error":0.0,
-            "common_emission_survivor":True,
-          },
-          "marker_meaning_coupling":{
-            "raw_material_redescription":marker["material_redescription"],
-            "selective_material_redescription":marker["selective_material_redescription"],
-            "T0":marker["T0"],"p_CRT":marker["p_CRT"],"Q95":marker["Q95"],"E_null":marker["E_null"],
-            "lesioned_present_indexing":0.0,
-            "root_uptake_survivor":composition["signed_transfer"],
-            "cue_local_likelihood_survivor_error":0.0,
-            "marginal_product_constructor":True,
-          },
-          "cue_root_association":{
-            "intact_transfer":composition["signed_transfer"],
-            "lesioned_transfer":0.0,
-            "temporal_family_evidence_survivor_error":0.0,
-            "historical_query_survivor_error":abs(composition["then_after"]-composition["then_before"]),
-            "root_posterior_survives":True,
-            "selective_redescription_survivor":intact["selective_material_redescription"],
-          },
-          "global_broadcast":{
-            "intact_root_uptake":composition["signed_transfer"],
-            "lesioned_root_uptake":0.0,
-            "lesioned_transfer":0.0,
-            "temporal_family_evidence_survivor_error":0.0,
-            "path_evidence_survivor_error":0.0,
-            "historical_query_survivor_error":abs(composition["then_after"]-composition["then_before"]),
-            "local_cue_learning_survives":True,
-          },
-          "transition_family_comparison":{
-            "intact_family_log_bf_range":float(np.ptp(intact_log_evidence)),
-            "lesioned_family_log_bf_range":equalized_family_bf,
-            "lesioned_compound_structural_log_bf":0.0,
-            "common_likelihood_survives":True,
-            "root_inference_survives":True,
-          },
-        })
-        intact_nulls.append(intact_null);marker_nulls.append(marker_null)
-        if (position+1)%10==0:
-            print(f"gate4 paired lesions {position+1}/240",flush=True)
+    for value in values:
+        row=value["row"];row.pop("position");rows.append(row)
+        intact_nulls.append(np.asarray(value["intact_null"],dtype=float))
+        marker_nulls.append(np.asarray(value["marker_null"],dtype=float))
 
     (OUT/"gate-4-per_world.json").write_text(
       json.dumps(rows,indent=2,sort_keys=True,default=lambda value:value.item() if isinstance(value,np.generic) else str(value))+"\n")
@@ -518,6 +529,58 @@ def _gate5_control_task(position):
         output.append({"position":position,"population":population,"arm":arm,"seed":seed,**metadata,**row})
         nulls.append(null.tolist())
     return output,nulls
+
+def _performance_task(task,position):
+    if task=="gate2":
+        return _gate2_structural_task(position)
+    if task=="misspecification":
+        return _misspecification_task(position)
+    if task=="gate4":
+        return _gate4_task(position)
+    raise ValueError(f"unknown parallel performance task {task!r}")
+
+def _performance_worker(task,start_position,end_position,worker):
+    output=[
+        _performance_task(task,position)
+        for position in range(start_position,end_position)
+    ]
+    dump(f".perf-{task}-worker-{worker}.json",output)
+
+def _parallel_v244_tasks(task,count):
+    workers=min(8,max(1,os.cpu_count() or 1))
+    boundaries=np.linspace(0,count,workers+1,dtype=int)
+    processes=[]
+    for worker in range(workers):
+        path=OUT/f".perf-{task}-worker-{worker}.json"
+        if path.exists():path.unlink()
+        command=[
+            sys.executable,str(Path(__file__).resolve()),"perf-worker",
+            task,str(int(boundaries[worker])),
+            str(int(boundaries[worker+1])),str(worker),
+        ]
+        processes.append((
+            worker,path,
+            subprocess.Popen(command,cwd=Path(__file__).resolve().parent),
+        ))
+    remaining={worker:process for worker,_,process in processes}
+    while remaining:
+        time.sleep(.05)
+        for worker,process in list(remaining.items()):
+            status=process.poll()
+            if status is None:continue
+            if status:
+                raise RuntimeError(
+                    f"{task} worker {worker} exited {status}"
+                )
+            del remaining[worker]
+    merged=[]
+    for worker,path,_ in processes:
+        merged.extend(json.loads(path.read_text()))
+        path.unlink()
+    merged.sort(key=lambda value:value["position"])
+    if [value["position"] for value in merged]!=list(range(count)):
+        raise ValueError(f"{task} worker positions incomplete")
+    return merged
 
 def _gate5_crt_worker(start_position,end_position,worker):
     rows=[];nulls=[]
@@ -1128,7 +1191,8 @@ def gate3():
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument("gate",choices=("all","gate1","gate2","gate3","gate4","gate5",
-      "bma-worker","gate3-misspec","gate5-bma-worker","gate5-crt-worker"),nargs="?",default="all")
+      "bma-worker","gate3-misspec","gate5-bma-worker","gate5-crt-worker",
+      "perf-worker"),nargs="?",default="all")
     parser.add_argument("worker_args",nargs="*")
     args=parser.parse_args()
     if args.gate=="bma-worker":
@@ -1142,6 +1206,12 @@ def main():
     if args.gate=="gate5-crt-worker":
         if len(args.worker_args)!=3:raise SystemExit("gate5-crt-worker requires start end worker")
         _gate5_crt_worker(*(int(value) for value in args.worker_args));raise SystemExit(0)
+    if args.gate=="perf-worker":
+        if len(args.worker_args)!=4:
+            raise SystemExit("perf-worker requires task start end worker")
+        task,start,end,worker=args.worker_args
+        _performance_worker(task,int(start),int(end),int(worker))
+        raise SystemExit(0)
     if args.gate=="gate3-misspec":
         rows=_misspecification_block()
         _update_misspecification_summary(rows)

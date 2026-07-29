@@ -1,0 +1,17 @@
+{
+  "authorized_item": 4,
+  "implementation_probed": "cached (source, destination, probability) arrays with ordered numpy.add.at accumulation",
+  "bit_equality": {
+    "two_crt_worlds": true,
+    "replicates_per_world": 999,
+    "mandatory_complete_fixture": true
+  },
+  "timing_seconds": {
+    "cached_scalar_edges": 2.0444018749985844,
+    "ordered_numpy_add_at": 2.8160132919438183
+  },
+  "relative_speed": 0.7259915572299691,
+  "decision": "DROPPED",
+  "reason": "The candidate was bit-identical but was a performance regression on the authorized machine; the original scalar accumulation remains active.",
+  "alternative_accumulation_order_attempted": false
+}

@@ -1,0 +1,53 @@
+{
+  "authorization": "protocols/performance-amendment-1-authorization.md",
+  "bit_equality": {
+    "file": "results/perf-amendment-1/bit-equality-verification.json",
+    "mismatch_count": 0,
+    "passed": true
+  },
+  "focused_tests": {
+    "command": "python3 -m unittest tests.test_performance_amendment_1 tests.test_v24 tests.test_v25a",
+    "tests_run": 20,
+    "failures": 0,
+    "elapsed_seconds": 10.668,
+    "passed": true
+  },
+  "parallel_full_suite": {
+    "command": "python3 run_tests_parallel.py --workers 8",
+    "module_count": 19,
+    "elapsed_seconds": 51.569,
+    "failed_modules": [
+      "tests.test_v2g0_grammar"
+    ],
+    "failures": [
+      {
+        "test": "test_15_sealed_escrow_is_inaccessible",
+        "message": "AssertionError: ValueError not raised",
+        "classification": "pre_existing_stale_pre_release_custody_assertion"
+      },
+      {
+        "test": "test_25_gate_runner_custody_regressions",
+        "message": "V2.4.4 frozen manifest reports authorized changes to ref/v24.py, ref/v244.py, and run_v244_gates.py",
+        "classification": "performance_amendment_requires_custody_addendum_authorization"
+      }
+    ],
+    "passed": false
+  },
+  "serial_full_suite": {
+    "command": "python3 -m unittest discover -s tests",
+    "tests_run": 135,
+    "elapsed_seconds": 119.161,
+    "failures": 2,
+    "errors": 0,
+    "passed_tests": 133,
+    "failure_tests": [
+      "test_v2g0_grammar.V2G0GrammarSemanticProofs.test_15_sealed_escrow_is_inaccessible",
+      "test_v2g0_grammar.V2G0GrammarSemanticProofs.test_25_gate_runner_custody_regressions"
+    ],
+    "passed": false
+  },
+  "mandatory_full_suite_green": false,
+  "scope_response": "No existing test, frozen manifest, R0 source, release record, or result artifact was changed to mask either custody failure.",
+  "scientific_test_failures": 0,
+  "new_performance_test_failures": 0
+}

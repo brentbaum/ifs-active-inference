@@ -1,0 +1,33 @@
+{
+  "authorization": "protocols/performance-amendment-1-authorization.md",
+  "classification": "apparatus_performance_amendment",
+  "scientific_definitions_changed": false,
+  "published_fixture_bits_changed": false,
+  "r0_dynamic_programming_touched": false,
+  "items": {
+    "1_oracle_audit_vectorization": "IMPLEMENTED",
+    "2_world_loop_parallelism": "IMPLEMENTED_V244; V25A_ALREADY_PARALLEL",
+    "3_crt_graph_memoization": "IMPLEMENTED",
+    "4_crt_edge_vectorization": "DROPPED_PERFORMANCE_REGRESSION_AFTER_BIT_EQUAL_PROBE",
+    "5_cs_lattice_scalarization": "IMPLEMENTED",
+    "6_test_suite_parallelization": "IMPLEMENTED"
+  },
+  "source_sha256": {
+    "ref/oracle.py": "bcbbe3113e4910e05339cf51bfbe9e7dd01344bda3217abab62f093c6e372251",
+    "ref/v24.py": "9efb9654308ca3f558b9b098cea733265ea263819278c36320413d30638633a8",
+    "ref/v244.py": "47904a93e237fc1fd27c0f6fb504dcbc49df01c3d125d1af88d1bbbf0334bcf2",
+    "run_tests_parallel.py": "dcb453c4b2d354804d19d8440724b6a55a0d23ecfdf2050611df35fca9f08da4",
+    "run_v244_gates.py": "34dddca5e3a61996ffe9a0a7a0a031e46a6bf38db51c0a3b10c054ab8c05cbeb",
+    "tests/test_performance_amendment_1.py": "07b99ecadd733531cacfda37dd6bc5d212d4b5b111edf0c3fbcb228ad6f93524"
+  },
+  "verification": {
+    "bit_equality_fixture": "PASS_ZERO_MISMATCHES",
+    "focused_tests": "PASS_20_OF_20",
+    "scientific_tests": "PASS",
+    "serial_full_suite": "FAIL_2_CUSTODY_ASSERTIONS",
+    "parallel_full_suite": "FAIL_SAME_CUSTODY_MODULE",
+    "mandatory_full_suite_green": false
+  },
+  "merge_readiness": "BLOCKED_PENDING_CUSTODY_ADJUDICATION_OR_ADDENDUM",
+  "original_results_regenerated": false
+}

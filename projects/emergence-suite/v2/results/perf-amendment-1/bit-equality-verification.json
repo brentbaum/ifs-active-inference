@@ -1,0 +1,24 @@
+{
+  "comparison": "IEEE-754 bit equality for every published float; exact equality for all other values and classifications",
+  "fixtures": {
+    "crt_replicates_per_world": 999,
+    "crt_seeds": [
+      790700,
+      790701
+    ],
+    "identity_lengths": [
+      32,
+      64,
+      96
+    ],
+    "identity_seed": 790700,
+    "v25a_seed": 755000
+  },
+  "mismatch_count": 0,
+  "mismatches": [],
+  "passed": true,
+  "post_capture_elapsed_seconds": 10.911782333045267,
+  "post_fixture_sha256": "196c69897fbaad686b0b1ea7c99295e0329233dd0d21a26dd4e1b76a441f8fcc",
+  "pre_bit_ledger_sha256": "5df494804a513833253af3771ef71dc410791abaf27769ff827b003c915cb47b",
+  "pre_fixture_sha256": "3e2bb77bd9e3e4c1d2b8967d6bd043b5b46624365e16d9584cba33ea6cea169d"
+}

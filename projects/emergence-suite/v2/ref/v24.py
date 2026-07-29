@@ -466,6 +466,36 @@ def _cs_transition(
     posterior: dict[tuple[Any, ...], float]
 ) -> dict[tuple[Any, ...], float]:
     alpha = _cs_alpha()
+    alpha_rows = (
+        (float(alpha[0, 0]), float(alpha[0, 1])),
+        (float(alpha[1, 0]), float(alpha[1, 1])),
+    )
+    output: dict[tuple[Any, ...], float] = {}
+    for state, mass in posterior.items():
+        context, n00, n01, n10, n11 = state
+        counts = ((n00, n01), (n10, n11))[context]
+        value_0 = alpha_rows[context][0] + counts[0]
+        value_1 = alpha_rows[context][1] + counts[1]
+        total = value_0 + value_1
+        if not math.isfinite(total) or total <= 0:
+            raise ValueError("cannot normalize a nonpositive distribution")
+        row = (value_0 / total, value_1 / total)
+        for next_context in range(2):
+            new_counts = [n00, n01, n10, n11]
+            new_counts[context * 2 + next_context] += 1
+            key = (next_context, *new_counts)
+            output[key] = (
+                output.get(key, 0.0) + mass * row[next_context]
+            )
+    total = sum(output.values())
+    return {key: value / total for key, value in output.items()}
+
+
+def _cs_transition_numpy_reference(
+    posterior: dict[tuple[Any, ...], float]
+) -> dict[tuple[Any, ...], float]:
+    """Retained pre-amendment operation path for bit-identity tests."""
+    alpha = _cs_alpha()
     output: dict[tuple[Any, ...], float] = {}
     for state, mass in posterior.items():
         context, n00, n01, n10, n11 = state
