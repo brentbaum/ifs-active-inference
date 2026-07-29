@@ -1,0 +1,54 @@
+{
+  "all_raw_hashes": {
+    "results/V2.5b/c-v25bc-cell-1.json": "d0d41b2edee090cfe70cd2b1eb97179a56c5e68b677896992b3c5e6cf39d4e8e",
+    "results/V2.5b/c-v25bc-cell-2.json": "70a5e38c9c75850710de9596a992c875f3c8e367b3a5c12cfe9e87d9bd5ef431",
+    "results/V2.5b/c-v25bc-cell-3.json": "175d2c8bf46252c763702ba209f68e23a31b965aef3182e09153d863abd8cdd4",
+    "results/V2.5b/c-v25bc-cell-4.json": "cf7d64e852c1ad18e67a03577798c44f5cf6855fb2fe2b8d03ff496e8d9986fe",
+    "results/V2.5b/c-v25bc-cell-5.json": "9c79e9b5e39b7df4ab5f2436362962808ba7b4000e99d0d560ec701af909d355",
+    "results/V2.5b/c-v25bc-run-ledger.json": "96962e67775d2984daed1c6b820b43f02af8d0adf36be5e2ce9ffd81d74d07b0"
+  },
+  "cell_files": {
+    "cell_1_correct_timing": {
+      "file": "results/V2.5b/c-v25bc-cell-1.json",
+      "seed_end": 2022399,
+      "seed_start": 2022000,
+      "sha256": "d0d41b2edee090cfe70cd2b1eb97179a56c5e68b677896992b3c5e6cf39d4e8e",
+      "world_count": 400
+    },
+    "cell_2_premature": {
+      "file": "results/V2.5b/c-v25bc-cell-2.json",
+      "seed_end": 2022799,
+      "seed_start": 2022400,
+      "sha256": "70a5e38c9c75850710de9596a992c875f3c8e367b3a5c12cfe9e87d9bd5ef431",
+      "world_count": 400
+    },
+    "cell_3_old_context_return": {
+      "file": "results/V2.5b/c-v25bc-cell-3.json",
+      "seed_end": 2023199,
+      "seed_start": 2022800,
+      "sha256": "175d2c8bf46252c763702ba209f68e23a31b965aef3182e09153d863abd8cdd4",
+      "world_count": 400
+    },
+    "cell_4_partial_truth": {
+      "file": "results/V2.5b/c-v25bc-cell-4.json",
+      "seed_end": 2023599,
+      "seed_start": 2023200,
+      "sha256": "cf7d64e852c1ad18e67a03577798c44f5cf6855fb2fe2b8d03ff496e8d9986fe",
+      "world_count": 400
+    },
+    "cell_5_no_erasure": {
+      "file": "results/V2.5b/c-v25bc-cell-5.json",
+      "seed_end": 2023999,
+      "seed_start": 2023600,
+      "sha256": "9c79e9b5e39b7df4ab5f2436362962808ba7b4000e99d0d560ec701af909d355",
+      "world_count": 400
+    }
+  },
+  "challenge": "C-V25B-C",
+  "criteria_evaluated": false,
+  "ledger": {
+    "file": "results/V2.5b/c-v25bc-run-ledger.json",
+    "sha256": "96962e67775d2984daed1c6b820b43f02af8d0adf36be5e2ce9ffd81d74d07b0"
+  },
+  "phase": "RAW_TRACES_SEALED_BEFORE_CRITERIA"
+}
