@@ -89,3 +89,9 @@ Escrow: C-V2G0 seeds 2000000:2000499 (Epoch B). Pre-seal linter record committed
 cbf0736763f54ac155328145a74fbe17f1401b563c4a05eaf181332634085129  C-V2G0B-apparatus-challenge.md
 ```
 Escrow: C-V2G0-B seeds 2001000:2001499 (fresh). Block 2000000:2000499 RETIRED_UNCONSUMED after the two sealed stops (both verdicts retained). Linter amendment: dry-runs now execute on the exact sealed artifact after its declared parse instruction (ast.literal_eval round-trip verified before sealing).
+
+## C-V2G0-C seal (2026-07-29)
+```
+6ab872b9aef3e8001e26dcbefb4c62e09fe37a76e997c144d7ab454259f10777  C-V2G0C-apparatus-challenge.md
+```
+Escrow: C-V2G0-C seeds 2000000:2000499 — retirement of this block is REVERSED by this record (zero seeds ever consumed; apparatus criteria not gameable by plaintext knowledge; the frozen SEALED_ESCROW range admits only this block). The 2001000:2001499 release is withdrawn. Pre-seal checks now include: exact-artifact dry-run after the declared parse instruction; release-record validation through the frozen parser; escrow-containment check against SEALED_ESCROW.
