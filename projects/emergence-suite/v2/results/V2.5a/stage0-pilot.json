@@ -1,0 +1,79 @@
+{
+  "B_max_inherited_formation": 3.801426508560692,
+  "B_max_v24_common_emissions": 6.704414354964107,
+  "B_max_v25a_marginal_accounting": 6.704414354964107,
+  "all_extension_prefixes_identical": true,
+  "attainable_ranges": {
+    "absolute_independent_delta_i": {
+      "maximum": 9.992007221626409e-15,
+      "mean": 5.686562332130052e-15,
+      "median": 5.995204332975845e-15,
+      "minimum": 1.7763568394002505e-15,
+      "q05": 2.220446049250313e-15,
+      "q95": 8.43769498715119e-15
+    },
+    "carrying_delta_i_per_token": {
+      "maximum": 0.14714249396219364,
+      "mean": 0.06240828127319835,
+      "median": 0.061157646816388606,
+      "minimum": -0.0006885799153107725,
+      "q05": 0.022193786004870927,
+      "q95": 0.10828034252354783
+    },
+    "independent_delta_i_per_token": {
+      "maximum": -1.850371707708594e-17,
+      "mean": -5.941230150629461e-17,
+      "median": -6.245004513516506e-17,
+      "minimum": -1.0408340855860843e-16,
+      "q05": -8.789265611615822e-17,
+      "q95": -2.337311630789803e-17
+    },
+    "matching_absolute_kl_error_uncensored": {
+      "maximum": 0.007691801712895963,
+      "mean": 0.007691801712895963,
+      "median": 0.007691801712895963,
+      "minimum": 0.007691801712895963,
+      "q05": 0.007691801712895963,
+      "q95": 0.007691801712895963
+    },
+    "matching_ratio_uncensored": {
+      "maximum": 0.28125,
+      "mean": 0.07192708333333334,
+      "median": 0.0625,
+      "minimum": 0.041666666666666664,
+      "q05": 0.041666666666666664,
+      "q95": 0.13541666666666666
+    },
+    "root_movement_proxy_from_kl": {
+      "maximum": 0.5887050112577373,
+      "mean": 0.5887050112577372,
+      "median": 0.5887050112577373,
+      "minimum": 0.5887050112577373,
+      "q05": 0.5887050112577373,
+      "q95": 0.5887050112577373
+    },
+    "target_root_kl": {
+      "maximum": 0.6931471805599453,
+      "mean": 0.6931471805599452,
+      "median": 0.6931471805599453,
+      "minimum": 0.6931471805599453,
+      "q05": 0.6931471805599453,
+      "q95": 0.6931471805599453
+    }
+  },
+  "cells": {
+    "association_carrying": 100,
+    "independent": 100
+  },
+  "criterion_evaluated": false,
+  "matching_censored_count": 0,
+  "maximum_increment_identity_error": 2.7533531010703882e-14,
+  "phase": "stage_0_attainability_pilot",
+  "reporting_only": "Attainable ranges only. No threshold was applied and no criterion pass/fail was computed.",
+  "seed_block": [
+    755000,
+    755199
+  ],
+  "stage": "V2.5a",
+  "world_count": 200
+}

@@ -8,15 +8,33 @@
     "decomposition_tolerance": 1e-10
   },
   "criterion_freeze_procedure": {
-    "status": "SESOI_SLOTS_PENDING_PILOT",
+    "status": "NUMERIC_SESOIS_FROZEN",
     "pilot_block": "755000:755199 (barred after use)",
     "pilot_may_inspect": "attainable ranges only; never criterion pass/fail",
     "default_candidates": {
       "delta_i_sesoi_nats_per_token": 0.01,
       "matching_kl_tolerance_nats": 0.01,
-      "bridge_root_movement_sesoi": "set from pilot"
+      "bridge_root_movement_sesoi": 0.01
     },
-    "freeze_rule": "numeric values committed here before any assay block opens; a blocking criterion may not contradict pilot attainability data"
+    "freeze_rule": "numeric values committed here before any assay block opens; a blocking criterion may not contradict pilot attainability data",
+    "pilot_result_hashes": {
+      "results/V2.5a/stage0-pilot.json": "6d54e625cddc8f859e8691231c723bc8abddaa145bcf3a381595368456b0878a",
+      "results/V2.5a/stage0-pilot-per_world.json": "edf23b738835e4ad5ab8cba322ea282f1a70c173c08caff6cf05e9e352597032",
+      "results/V2.5a/stage0-pilot-report.md": "57184cf90ac54b8b4671d39587aaa57155a97e56309547d6df0211eb9fad5aca"
+    },
+    "pilot_attainability_basis": {
+      "carrying_delta_i_per_token_mean": 0.06240828127319835,
+      "carrying_delta_i_per_token_q05": 0.022193786004870927,
+      "matching_absolute_kl_error_maximum": 0.007691801712895963,
+      "root_movement_proxy_minimum": 0.5887050112577373,
+      "criterion_evaluated": false
+    }
+  },
+  "frozen_numeric_criteria": {
+    "delta_i_sesoi_nats_per_token": 0.01,
+    "matching_kl_tolerance_nats": 0.01,
+    "bridge_root_movement_sesoi": 0.01,
+    "provenance": "stage-0 attainable-range pilot; defaults retained because each was attainable; frozen before Gate 1 and before opening 756000:756399"
   },
   "matching": {
     "extension_cap_multiplier": 8,
