@@ -95,3 +95,9 @@ Escrow: C-V2G0-B seeds 2001000:2001499 (fresh). Block 2000000:2000499 RETIRED_UN
 6ab872b9aef3e8001e26dcbefb4c62e09fe37a76e997c144d7ab454259f10777  C-V2G0C-apparatus-challenge.md
 ```
 Escrow: C-V2G0-C seeds 2000000:2000499 — retirement of this block is REVERSED by this record (zero seeds ever consumed; apparatus criteria not gameable by plaintext knowledge; the frozen SEALED_ESCROW range admits only this block). The 2001000:2001499 release is withdrawn. Pre-seal checks now include: exact-artifact dry-run after the declared parse instruction; release-record validation through the frozen parser; escrow-containment check against SEALED_ESCROW.
+
+## C-V25A seal (2026-07-29)
+```
+2aa8fec708d5446ceef83a590946791c8398a54d40539532e863ae7691a57a15  C-V25A-configural-challenge.md
+```
+Escrow: C-V25A seeds 2010000:2010999, released by this record through the amended released_block parameter (authorization: escrow-threading amendment + this ledger entry). EVALUATOR DISCLOSURE: one pre-seal threading check constructed (never scored) a world from escrow seed 2010000 before the correct dev-seed method was adopted; recorded here for custody completeness; the block assignment predates the event (committed seed map).
