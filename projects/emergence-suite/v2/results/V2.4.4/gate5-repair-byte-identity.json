@@ -1,0 +1,27 @@
+{
+  "comparison": "IEEE-754 byte identity for every float; exact identity for material and selective classifications",
+  "fields": [
+    "family weights",
+    "family log scores",
+    "BMA score",
+    "generator-family regret",
+    "held-out family scores",
+    "pre-held-out complexities",
+    "matched held-out margin",
+    "material-redescription classification",
+    "selective-material-redescription classification",
+    "T0",
+    "p_CRT"
+  ],
+  "lengths": [
+    32,
+    64,
+    96
+  ],
+  "mismatches": [],
+  "passed": true,
+  "post_repair_sha256": "45a61a9c383f6c1ef0b0e1cbf3a4bd6b3e698558087b1f5da7f3f290c5cfb25e",
+  "pre_repair_sha256": "45a61a9c383f6c1ef0b0e1cbf3a4bd6b3e698558087b1f5da7f3f290c5cfb25e",
+  "reference_commit": "e60a0c8",
+  "seed": 790700
+}

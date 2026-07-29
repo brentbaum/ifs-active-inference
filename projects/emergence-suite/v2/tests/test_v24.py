@@ -8,6 +8,7 @@ from ref.v24 import (
     FAMILIES,
     Observation,
     compare_families,
+    generate_world,
     independent_history_sum,
     score_family,
     semantic_proofs,
@@ -78,6 +79,32 @@ class ContextIndexedRedescriptionTests(unittest.TestCase):
         ]
         result = compare_families(observations)
         self.assertLess(result["maximum_update_identity_error"], 1e-10)
+
+    def test_all_families_execute_at_supported_nonprimary_cue_counts(self):
+        for cue_count in (2, 4):
+            for offset, family in enumerate(FAMILIES):
+                world = generate_world(
+                    family,
+                    799300 + 10 * cue_count + offset,
+                    length=16,
+                    cue_count=cue_count,
+                )
+                self.assertEqual(
+                    {observation.cue for observation in world["observations"]},
+                    set(range(cue_count)),
+                )
+                result = compare_families(world["observations"])
+                self.assertLess(
+                    result["maximum_update_identity_error"],
+                    1e-10,
+                )
+                self.assertLess(
+                    max(
+                        score.decomposition_error
+                        for score in result["scores"]
+                    ),
+                    1e-10,
+                )
 
 
 if __name__ == "__main__":

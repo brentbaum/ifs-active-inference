@@ -230,13 +230,18 @@ def _transition_distribution(
     return _normalize(np.asarray(distribution, dtype=float) @ transition)
 
 
+def _cue_template_index(cue: int) -> int:
+    """Map a supported cue ID onto the frozen cue-meaning templates."""
+    return int(cue) % len(BASELINE)
+
+
 def _gw_probability(cue: int, scale_index: int) -> float:
     scale = float(
         PARAMETERS["family_processes"]["global_downweight"]["state_grid"][
             scale_index
         ]
     )
-    baseline = float(BASELINE[cue % len(BASELINE)])
+    baseline = float(BASELINE[_cue_template_index(cue)])
     return 0.5 + scale * (baseline - 0.5)
 
 
@@ -271,7 +276,7 @@ def _score_factorized_family(
         raise ValueError("not a factorized family")
 
     for time, observation in enumerate(observations):
-        cue = observation.cue % len(BASELINE)
+        cue = _cue_template_index(observation.cue)
         if family == "global_downweight":
             outcome_likelihood = np.asarray(
                 [
@@ -485,7 +490,7 @@ def _score_context_split(observations: list[Observation]) -> FamilyScore:
     alpha = _cs_alpha()
 
     for time, observation in enumerate(observations):
-        cue = observation.cue % len(BASELINE)
+        cue = _cue_template_index(observation.cue)
         likelihoods = {}
         for state in distribution:
             context = int(state[0])
@@ -588,7 +593,7 @@ def _score_change_point(observations: list[Observation]) -> FamilyScore:
     )
 
     for time, observation in enumerate(observations):
-        cue = observation.cue % len(BASELINE)
+        cue = _cue_template_index(observation.cue)
         likelihoods = {}
         for state in distribution:
             phase = int(state[0])
@@ -854,7 +859,7 @@ def generate_world(
                 component_rng(seed, f"v24-cl-initial-{cue}"),
                 process["initial_distribution_by_cue"][f"cue_{cue + 1}"],
             )
-            for cue in range(cues)
+            for cue in range(len(BASELINE))
         ]
         nuisance = _sample_categorical(
             component_rng(seed, "v24-cl-nuisance-initial"),
@@ -869,7 +874,11 @@ def generate_world(
                     time,
                     family,
                     cue,
-                    float(ELEMENTAL_GRID[states[cue]]),
+                    float(
+                        ELEMENTAL_GRID[
+                            states[_cue_template_index(cue)]
+                        ]
+                    ),
                     ("then", "now", "none")[nuisance],
                     root_state,
                     missing,
@@ -900,10 +909,11 @@ def generate_world(
         truth_parameters["transition_matrix"] = transition.tolist()
         for time in range(duration):
             cue = (time + cue_offset) % cues
+            template = _cue_template_index(cue)
             probability = (
-                float(BASELINE[cue])
+                float(BASELINE[template])
                 if context == 0
-                else float(CORRECTIVE[cue])
+                else float(CORRECTIVE[template])
             )
             observations.append(
                 _emit_observation(
@@ -974,10 +984,11 @@ def generate_world(
         truth_parameters["hazard"] = hazard
         for time in range(duration):
             cue = (time + cue_offset) % cues
+            template = _cue_template_index(cue)
             probability = (
-                float(BASELINE[cue])
+                float(BASELINE[template])
                 if phase == 0
-                else float(CORRECTIVE[cue])
+                else float(CORRECTIVE[template])
             )
             observations.append(
                 _emit_observation(
@@ -1064,7 +1075,7 @@ def independent_history_sum(
                         j_path[time]
                     ]
                 for time, observation in enumerate(obs):
-                    cue = observation.cue % 3
+                    cue = _cue_template_index(observation.cue)
                     scale = process["state_grid"][u_path[time]]
                     probability = 0.5 + scale * (
                         BASELINE[cue] - 0.5
@@ -1081,19 +1092,21 @@ def independent_history_sum(
         transition = process["per_cue_transition_matrix"]
         total = 0.0
         for flat_path in itertools.product(
-            range(5), repeat=len(obs) * 3
+            range(5), repeat=len(obs) * len(BASELINE)
         ):
             cue_states = [
-                flat_path[time * 3 : time * 3 + 3]
+                flat_path[
+                    time * len(BASELINE) : (time + 1) * len(BASELINE)
+                ]
                 for time in range(len(obs))
             ]
             cue_mass = 1.0
-            for cue in range(3):
+            for cue in range(len(BASELINE)):
                 cue_mass *= process["initial_distribution_by_cue"][
                     f"cue_{cue + 1}"
                 ][cue_states[0][cue]]
             for time in range(1, len(obs)):
-                for cue in range(3):
+                for cue in range(len(BASELINE)):
                     cue_mass *= transition[cue_states[time - 1][cue]][
                         cue_states[time][cue]
                     ]
@@ -1106,7 +1119,7 @@ def independent_history_sum(
                         j_path[time]
                     ]
                 for time, observation in enumerate(obs):
-                    cue = observation.cue % 3
+                    cue = _cue_template_index(observation.cue)
                     mass *= _independent_emission(
                         float(ELEMENTAL_GRID[cue_states[time][cue]]),
                         nuisance_names[j_path[time]],
@@ -1160,7 +1173,7 @@ def independent_history_sum(
             mass = path_probability
             for time, observation in enumerate(obs):
                 phase = 0 if time <= switch_time else 1
-                cue = observation.cue % 3
+                cue = _cue_template_index(observation.cue)
                 mass *= _independent_emission(
                     float(BASELINE[cue] if phase == 0 else CORRECTIVE[cue]),
                     "then" if phase == 0 else "now",
@@ -1175,7 +1188,7 @@ def independent_history_sum(
         )
         no_change_mass = no_change_probability
         for observation in obs:
-            cue = observation.cue % 3
+            cue = _cue_template_index(observation.cue)
             no_change_mass *= _independent_emission(
                 float(BASELINE[cue]), "then", observation
             )
@@ -1197,7 +1210,7 @@ def independent_history_sum(
             mass = transition_mass
             for time, observation in enumerate(obs):
                 context = path[time]
-                cue = observation.cue % 3
+                cue = _cue_template_index(observation.cue)
                 mass *= _independent_emission(
                     float(
                         BASELINE[cue]
