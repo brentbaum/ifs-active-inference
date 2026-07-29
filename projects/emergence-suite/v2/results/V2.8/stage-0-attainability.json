@@ -1,0 +1,201 @@
+{
+  "barred_blocks": {
+    "development": [
+      1680000,
+      1681999
+    ],
+    "genomes": [
+      1686000,
+      1689999
+    ],
+    "lesions": [
+      1684000,
+      1685999
+    ],
+    "therapy": [
+      1682000,
+      1683999
+    ]
+  },
+  "bounds": {
+    "B_max_v232_formation": 3.801426508560692,
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "B_max_v25a_configural": 6.084736253211209,
+    "B_max_v25a_marginal_accounting": 6.704414354964107,
+    "B_max_v25b": 11.302393144606405,
+    "B_max_v26a_relational": 6.9920964274158885,
+    "B_max_v26a_root": 2.9444389791664394,
+    "B_max_v27_registration": 2.1972245773362196,
+    "B_max_v27_shared_outcome": 3.8,
+    "implied_relational_binary_change_bound": 0.9411502391813408,
+    "implied_root_binary_change_bound": 0.6267890062732583
+  },
+  "comparator_attainability": {
+    "broadcast_off_monitor": {
+      "access_mean": 0.296007535191231,
+      "contact_rate": 0.9,
+      "depth_mean": 0.0,
+      "redescription_rate": 0.95,
+      "reduction_rate": 0.95,
+      "rupture_mean": 0.7039924648087691,
+      "transfer_mean": 0.1338749999999999,
+      "trust_mean": 0.4715447154471545
+    },
+    "bypass_protectors": {
+      "access_mean": 0.08103708514102922,
+      "contact_rate": 1.0,
+      "depth_mean": 0.42163782064340954,
+      "redescription_rate": 0.95,
+      "reduction_rate": 0.0,
+      "rupture_mean": 0.9189629148589707,
+      "transfer_mean": 0.29515146639610407,
+      "trust_mean": 0.0
+    },
+    "cue_exposure": {
+      "access_mean": 0.08103708514102922,
+      "contact_rate": 0.25,
+      "depth_mean": 0.42163782064340954,
+      "redescription_rate": 0.0,
+      "reduction_rate": 0.0,
+      "rupture_mean": 0.9189629148589707,
+      "transfer_mean": 0.0,
+      "trust_mean": -0.4878048780487806
+    },
+    "full": {
+      "access_mean": 0.296007535191231,
+      "contact_rate": 0.9,
+      "depth_mean": 0.42163782064340954,
+      "redescription_rate": 0.95,
+      "reduction_rate": 0.95,
+      "rupture_mean": 0.7039924648087691,
+      "transfer_mean": 0.29515146639610407,
+      "trust_mean": 0.4715447154471545
+    },
+    "instrumental_partner": {
+      "access_mean": 0.08103708514102922,
+      "contact_rate": 0.25,
+      "depth_mean": -0.022470090394897328,
+      "redescription_rate": 0.95,
+      "reduction_rate": 0.95,
+      "rupture_mean": 0.9189629148589707,
+      "transfer_mean": 0.12528019042395178,
+      "trust_mean": -0.4878048780487806
+    },
+    "no_context_learning": {
+      "access_mean": 0.296007535191231,
+      "contact_rate": 0.9,
+      "depth_mean": 0.42163782064340954,
+      "redescription_rate": 0.0,
+      "reduction_rate": 0.95,
+      "rupture_mean": 0.7039924648087691,
+      "transfer_mean": 0.29515146639610407,
+      "trust_mean": 0.4715447154471545
+    },
+    "no_reduction": {
+      "access_mean": 0.296007535191231,
+      "contact_rate": 0.9,
+      "depth_mean": 0.42163782064340954,
+      "redescription_rate": 0.95,
+      "reduction_rate": 0.0,
+      "rupture_mean": 0.7039924648087691,
+      "transfer_mean": 0.29515146639610407,
+      "trust_mean": 0.4715447154471545
+    },
+    "no_registration": {
+      "access_mean": 0.296007535191231,
+      "contact_rate": 0.9,
+      "depth_mean": 0.42163782064340954,
+      "redescription_rate": 0.95,
+      "reduction_rate": 0.95,
+      "rupture_mean": 0.7039924648087691,
+      "transfer_mean": 0.29515146639610407,
+      "trust_mean": 0.4715447154471545
+    },
+    "premature_do_over": {
+      "access_mean": 0.296007535191231,
+      "contact_rate": 0.9,
+      "depth_mean": 0.42163782064340954,
+      "redescription_rate": 0.95,
+      "reduction_rate": 0.0,
+      "rupture_mean": 0.7039924648087691,
+      "transfer_mean": 0.29515146639610407,
+      "trust_mean": 0.4715447154471545
+    },
+    "regulation_only": {
+      "access_mean": 0.08103708514102922,
+      "contact_rate": 0.25,
+      "depth_mean": 0.42163782064340954,
+      "redescription_rate": 0.0,
+      "reduction_rate": 0.0,
+      "rupture_mean": 0.9189629148589707,
+      "transfer_mean": 0.0,
+      "trust_mean": -0.4878048780487806
+    },
+    "unreliable_partner": {
+      "access_mean": 0.08103708514102922,
+      "contact_rate": 0.25,
+      "depth_mean": -0.10589620096115426,
+      "redescription_rate": 0.95,
+      "reduction_rate": 0.95,
+      "rupture_mean": 0.9189629148589707,
+      "transfer_mean": 0.0933697031323585,
+      "trust_mean": -0.4878048780487806
+    }
+  },
+  "full": {
+    "contact_rate": 0.9,
+    "depth": [
+      0.42163782064340954,
+      0.3902575337252284,
+      0.44231028470868955
+    ],
+    "redescription_rate": 0.95,
+    "reduction_rate": 0.95,
+    "sequence_rate": 0.85,
+    "transfer": [
+      0.29515146639610407,
+      0.28310284941556085,
+      0.302928993313852
+    ]
+  },
+  "no_context_material_rate": 0.0,
+  "qualification": {
+    "acute_one": {
+      "eligible_rate": 0.41,
+      "mean_candidate_posterior": [
+        7.164582734870901e-08,
+        9.288571510293082e-09,
+        0.9999999190656008
+      ],
+      "n": 100
+    },
+    "chronic_multiple": {
+      "eligible_rate": 0.78,
+      "mean_candidate_posterior": [
+        4.749014358073015e-06,
+        1.5228052688414744e-08,
+        0.9999952357575895
+      ],
+      "n": 100
+    },
+    "chronic_one": {
+      "eligible_rate": 0.74,
+      "mean_candidate_posterior": [
+        3.254359545782104e-06,
+        3.869784405733042e-08,
+        0.9999967069426106
+      ],
+      "n": 100
+    },
+    "real_danger_adaptive": {
+      "eligible_rate": 0.99,
+      "mean_candidate_posterior": [
+        0.030544899202772226,
+        0.9693934411515792,
+        6.16596456485628e-05
+      ],
+      "n": 100
+    }
+  },
+  "status": "descriptive_attainability_only"
+}

@@ -1,0 +1,141 @@
+{
+  "checks": {
+    "action_to_availability_survivor": true,
+    "action_to_availability_target_disappears": true,
+    "attribution_survivor": true,
+    "attribution_target_disappears": true,
+    "context_model_survivor": true,
+    "context_model_target_disappears": true,
+    "cross_protector_coupling_survivor": true,
+    "cross_protector_coupling_target_disappears": true,
+    "cue_root_association_survivor": true,
+    "cue_root_association_target_disappears": true,
+    "episode_interaction_survivor": true,
+    "episode_interaction_target_disappears": true,
+    "formation_coupling_survivor": true,
+    "formation_coupling_target_disappears": true,
+    "local_to_global_broadcast_survivor": true,
+    "local_to_global_broadcast_target_disappears": true,
+    "partner_to_protector_trust_survivor": true,
+    "partner_to_protector_trust_target_disappears": true,
+    "partner_to_relational_precision_survivor": true,
+    "partner_to_relational_precision_target_disappears": true,
+    "policy_to_contact_survivor": true,
+    "policy_to_contact_target_disappears": true,
+    "reduction_survivor": true,
+    "reduction_target_disappears": true,
+    "registration_survivor": true,
+    "registration_target_disappears": true
+  },
+  "gate": 4,
+  "preregistered_mapping": {
+    "action_to_availability": "closed-loop delivery gap",
+    "attribution": "contact forecast through inferred efficacy",
+    "context_model": "material redescription",
+    "cross_protector_coupling": "polarization",
+    "cue_root_association": "root movement",
+    "episode_interaction": "material reduction",
+    "formation_coupling": "formation forecast coupling",
+    "local_to_global_broadcast": "global transfer",
+    "partner_to_protector_trust": "protector trust",
+    "partner_to_relational_precision": "global relational precision",
+    "policy_to_contact": "contact probability",
+    "reduction": "material reduction",
+    "registration": "registration posterior"
+  },
+  "stage": "V2.8",
+  "summaries": {
+    "action_to_availability": {
+      "maximum_survivor_error": 0.0,
+      "mean_absolute_disappearance": 4.75,
+      "mean_target_cut": 0.0,
+      "mean_target_intact": 4.75,
+      "n": 120
+    },
+    "attribution": {
+      "maximum_survivor_error": 0.0,
+      "mean_absolute_disappearance": 0.05153506611534649,
+      "mean_target_cut": 0.0,
+      "mean_target_intact": 0.05153506611534649,
+      "n": 120
+    },
+    "context_model": {
+      "maximum_survivor_error": 0.0,
+      "mean_absolute_disappearance": 0.95,
+      "mean_target_cut": 0.0,
+      "mean_target_intact": 0.95,
+      "n": 120
+    },
+    "cross_protector_coupling": {
+      "maximum_survivor_error": 2.220446049250313e-16,
+      "mean_absolute_disappearance": 0.2596001651068512,
+      "mean_target_cut": 1.4456028966473393e-17,
+      "mean_target_intact": 0.2596001651068512,
+      "n": 120
+    },
+    "cue_root_association": {
+      "maximum_survivor_error": 0.0,
+      "mean_absolute_disappearance": 0.34765792678246155,
+      "mean_target_cut": 0.0,
+      "mean_target_intact": 0.34765792678246155,
+      "n": 120
+    },
+    "episode_interaction": {
+      "maximum_survivor_error": 0.0,
+      "mean_absolute_disappearance": 0.9166666666666666,
+      "mean_target_cut": 0.0,
+      "mean_target_intact": 0.9166666666666666,
+      "n": 120
+    },
+    "formation_coupling": {
+      "maximum_survivor_error": 0.0,
+      "mean_absolute_disappearance": 0.20333650222322633,
+      "mean_target_cut": 0.0,
+      "mean_target_intact": -0.03649035131647531,
+      "n": 120
+    },
+    "local_to_global_broadcast": {
+      "maximum_survivor_error": 0.0,
+      "mean_absolute_disappearance": 0.16028460137095732,
+      "mean_target_cut": 0.133875,
+      "mean_target_intact": 0.2941596013709573,
+      "n": 120
+    },
+    "partner_to_protector_trust": {
+      "maximum_survivor_error": 0.0,
+      "mean_absolute_disappearance": 0.16260162601626071,
+      "mean_target_cut": 0.8252032520325201,
+      "mean_target_intact": 0.9878048780487808,
+      "n": 120
+    },
+    "partner_to_relational_precision": {
+      "maximum_survivor_error": 0.0,
+      "mean_absolute_disappearance": 0.41243593447343746,
+      "mean_target_cut": 0.3499999999999999,
+      "mean_target_intact": 0.7624359344734374,
+      "n": 120
+    },
+    "policy_to_contact": {
+      "maximum_survivor_error": 0.0,
+      "mean_absolute_disappearance": 0.13896690934600678,
+      "mean_target_cut": 0.0,
+      "mean_target_intact": 0.13896690934600678,
+      "n": 120
+    },
+    "reduction": {
+      "maximum_survivor_error": 0.0,
+      "mean_absolute_disappearance": 0.925,
+      "mean_target_cut": 0.0,
+      "mean_target_intact": 0.925,
+      "n": 120
+    },
+    "registration": {
+      "maximum_survivor_error": 0.0,
+      "mean_absolute_disappearance": 0.5,
+      "mean_target_cut": 0.0,
+      "mean_target_intact": 0.5,
+      "n": 120
+    }
+  },
+  "verdict": "PASS"
+}

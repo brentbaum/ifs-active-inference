@@ -1,0 +1,108 @@
+{
+  "bounds": {
+    "B_max_v232_formation": 3.801426508560692,
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "B_max_v25a_configural": 6.084736253211209,
+    "B_max_v25a_marginal_accounting": 6.704414354964107,
+    "B_max_v25b": 11.302393144606405,
+    "B_max_v26a_relational": 6.9920964274158885,
+    "B_max_v26a_root": 2.9444389791664394,
+    "B_max_v27_registration": 2.1972245773362196,
+    "B_max_v27_shared_outcome": 3.8,
+    "implied_relational_binary_change_bound": 0.9411502391813408,
+    "implied_root_binary_change_bound": 0.6267890062732583
+  },
+  "checks": {
+    "broadcast_depth_difference_min_0.05": true,
+    "broadcast_local_reporting_retained": true,
+    "broadcast_transfer_difference_min_0.05": true,
+    "bypass_rupture_difference_min_0.10": true,
+    "bypass_trust_zero": true,
+    "cue_reduction_max_0.10": true,
+    "cue_treated_change": true,
+    "cue_untreated_transfer_max_0.01": true,
+    "full_access_contact_rate_min_0.60": true,
+    "full_depth_lower_ci_gt_0": true,
+    "full_depth_mean_min_0.05": true,
+    "full_followup_retention_min_0.70": true,
+    "full_historical_retention_tolerance": true,
+    "full_material_redescription_min_0.60": true,
+    "full_material_reduction_min_0.60": true,
+    "full_sequence_rate_min_0.80": true,
+    "full_transfer_lower_ci_gt_0": true,
+    "full_transfer_mean_min_0.05": true,
+    "instrumental_access_difference_min_0.05": true,
+    "instrumental_trust_difference_min_0.05": true,
+    "no_context_index_unavailable": true,
+    "no_context_material_max_0.10": true,
+    "no_context_root_survives": true,
+    "no_reduction_exact_zero": true,
+    "no_reduction_redescription_survives": true,
+    "no_reduction_root_survives": true,
+    "no_registration_exact_zero": true,
+    "premature_do_over_fingerprint": true,
+    "regulation_depth_rises": true,
+    "regulation_reduction_rope": true,
+    "regulation_root_rope": true,
+    "regulation_transfer_rope": true,
+    "unreliable_access_difference_min_0.10": true,
+    "unreliable_partner_correct": true
+  },
+  "gate": 3,
+  "metrics": {
+    "broadcast_depth_difference": [
+      0.4157243983667463,
+      0.40856031122092623,
+      0.422376564408378
+    ],
+    "broadcast_transfer_difference": [
+      0.15901458237528046,
+      0.15628514901216742,
+      0.1615462247375406
+    ],
+    "bypass_rupture_difference": [
+      0.20902073166028376,
+      0.20303973949879595,
+      0.21457499617103992
+    ],
+    "depth_interval": [
+      0.4157243983667463,
+      0.4085311696533284,
+      0.42221821405264315
+    ],
+    "full_contact_rate": 0.93125,
+    "full_followup_retention": 1.0,
+    "full_redescription_rate": 0.9604166666666667,
+    "full_reduction_rate": 0.8979166666666667,
+    "full_sequence_rate": 0.8354166666666667,
+    "instrumental_access_difference": [
+      0.20902073166028376,
+      0.20336999225600838,
+      0.21464071628196396
+    ],
+    "instrumental_trust_difference": [
+      0.9322493224932251,
+      0.9220867208672089,
+      0.9417344173441736
+    ],
+    "transfer_interval": [
+      0.29288958237528046,
+      0.29014810450934,
+      0.29539803666666925
+    ],
+    "unreliable_access_difference": [
+      0.20902073166028376,
+      0.20317265701222875,
+      0.21464863932255657
+    ]
+  },
+  "paired_worlds": 480,
+  "stage": "V2.8",
+  "stratum_counts": {
+    "acute_one": 120,
+    "chronic_multiple": 120,
+    "chronic_one": 120,
+    "real_danger_adaptive": 120
+  },
+  "verdict": "PASS"
+}

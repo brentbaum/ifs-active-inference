@@ -1,0 +1,56 @@
+{
+  "stage": "V2.8",
+  "status": "composition_only",
+  "semantic_tolerance": 1e-10,
+  "developmental_strata": [
+    "acute_one",
+    "chronic_one",
+    "chronic_multiple",
+    "real_danger_adaptive"
+  ],
+  "developmental_lengths": {
+    "acute_one": 18,
+    "chronic_one": 30,
+    "chronic_multiple": 30,
+    "real_danger_adaptive": 30
+  },
+  "therapy_steps": 12,
+  "redescription_slices": 96,
+  "reduction_followup_slices": 30,
+  "do_over_episodes": 5,
+  "pilot_blocks": {
+    "development": [1680000, 1681999],
+    "therapy": [1682000, 1683999],
+    "lesions": [1684000, 1685999],
+    "genomes": [1686000, 1689999]
+  },
+  "gate_blocks": {
+    "gate2": [1700000, 1749999],
+    "gate3": [1750000, 1799999],
+    "gate4": [1800000, 1819999],
+    "gate5": [1820000, 1879999]
+  },
+  "escrow_closed": [
+    [2100000, 2109999],
+    [2110000, 2119999],
+    [2120000, 2129999],
+    [2130000, 2139999]
+  ],
+  "criteria": {
+    "depth_effect": 0.05,
+    "access_contact_rate": 0.60,
+    "untreated_transfer": 0.05,
+    "material_redescription_rate": 0.60,
+    "material_reduction_rate": 0.60,
+    "historical_retention_tolerance": 0.01,
+    "followup_retention_fraction": 0.70,
+    "sequence_rate": 0.80
+  },
+  "rationales": {
+    "developmental_lengths": "The histories reuse frozen V2.3.2 normalized slices and span acute versus accumulated evidence without adding a persistence equation.",
+    "redescription_slices": "Ninety-six is the frozen V2.4 primary information budget; the attainability pilot showed that a 32-slice composition did not reliably resolve the exact structural alternatives.",
+    "do_over_episodes": "Five is the frozen V2.5b joint do-over dose.",
+    "reduction_followup_slices": "Thirty is the frozen V2.5b observed follow-up horizon.",
+    "no_new_parameters": "All remaining numbers are protocol budgets or criteria copied from Section 9; no inherited likelihood, prior, or scientific parameter is changed."
+  }
+}
