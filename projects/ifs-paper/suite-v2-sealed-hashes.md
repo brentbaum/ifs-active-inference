@@ -83,3 +83,9 @@ Block 830001:830600: RETIRED_UNCONSUMED_AFTER_CHALLENGE_REVEAL (round-8 adjudica
 c9b2d5c0dd8e1b468fccf99493e0400a43b05672c0ff1f15c3c341e7dbe3b90c  C-V2G0-apparatus-challenge.md
 ```
 Escrow: C-V2G0 seeds 2000000:2000499 (Epoch B). Pre-seal linter record committed first at results/R0/c-v2g0-preseal-linter-record.md.
+
+## C-V2G0-B seal (2026-07-29)
+```
+cbf0736763f54ac155328145a74fbe17f1401b563c4a05eaf181332634085129  C-V2G0B-apparatus-challenge.md
+```
+Escrow: C-V2G0-B seeds 2001000:2001499 (fresh). Block 2000000:2000499 RETIRED_UNCONSUMED after the two sealed stops (both verdicts retained). Linter amendment: dry-runs now execute on the exact sealed artifact after its declared parse instruction (ast.literal_eval round-trip verified before sealing).
