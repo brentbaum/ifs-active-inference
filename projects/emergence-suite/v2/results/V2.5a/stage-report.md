@@ -1,7 +1,8 @@
-# V2.5a status through Gate 2
+# V2.5a format-core status through Gate 3
 
-Outcome: **Stage 0 complete; Gate 1 PASS; Gate 2 PASS.** Work stops here as
-requested. No Gate-3, Gate-4, Gate-5, or sealed-challenge block was opened.
+Outcome: **Stage 0 complete; Gate 1 PASS; Gate 2 PASS; Gate 3 FAIL.** The
+format-core ratchet stops at Gate 3. No Gate-4, Gate-5, master-spec
+completion, or sealed-challenge block was opened.
 
 ## Stage 0
 
@@ -51,3 +52,24 @@ The full suite passed `101/101` in `442.173` seconds.
 - `B_max_v24_common_emissions = 6.704414354964107`;
 - `B_max_v25a_marginal_accounting = 6.704414354964107` (not distinct).
 
+## Gate 3 honest stop
+
+All four committed Epoch-A Gate-3 blocks were consumed once. Assay 1 passed:
+the six raw ΔI/token means were monotone from `-0.05333` to `0.06817`, and
+the slope was `0.12353`, 95% CI `[0.11399, 0.13292]`.
+
+Gate 3 failed three blocking requirements:
+
+1. information-matching median `m*/n` was not nondecreasing across dose:
+   `[0.0625, 0.0625, 0.0625, 0.0625, 0.0520833, 0.0520833]`;
+2. only `103/120` formed-P bridge worlds were within the frozen `0.01` KL
+   tolerance, so the nominal bridge contrast is not an information-matched
+   result;
+3. the bridge per-slice decomposition failed to recombine in 64/120 worlds,
+   with maximum error `0.2470998783239713`.
+
+The nominal, unqualified bridge contrast was `0.06111`, 95% CI
+`[0.04403, 0.08099]`, and exact G-fixed/zero-association controls passed, but
+these do not override the matching and decomposition failures.
+
+The post-stop full suite passed `103/103` in `417.148` seconds.

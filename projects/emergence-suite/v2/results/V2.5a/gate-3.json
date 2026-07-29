@@ -1,0 +1,109 @@
+{
+  "B_max_inherited_formation": 3.801426508560692,
+  "B_max_v24_common_emissions": 6.704414354964107,
+  "B_max_v25a_marginal_accounting": 6.704414354964107,
+  "assay1_dose_response": {
+    "doses": [
+      0.0,
+      0.2,
+      0.4,
+      0.6000000000000001,
+      0.8,
+      1.0
+    ],
+    "isotonic_fit": [
+      -0.053326561819605364,
+      -0.027250406847702142,
+      -0.004152812013420743,
+      0.02425118093583654,
+      0.049006156179246474,
+      0.068174070671589
+    ],
+    "mean_delta_i_per_token": [
+      -0.053326561819605364,
+      -0.027250406847702142,
+      -0.004152812013420743,
+      0.02425118093583654,
+      0.049006156179246474,
+      0.068174070671589
+    ],
+    "slope_interval": [
+      0.12352526349801067,
+      0.1139912237400776,
+      0.13291585307978382
+    ],
+    "worlds_per_level": 100
+  },
+  "assay2_information_matching": {
+    "censoring_rate_wilson": [
+      0.0,
+      0.0,
+      0.012643429997735661
+    ],
+    "maximum_uncensored_absolute_kl_error": 0.007691801712895963,
+    "median_m_star_over_n_by_dose": [
+      0.0625,
+      0.0625,
+      0.0625,
+      0.0625,
+      0.052083333333333336,
+      0.052083333333333336
+    ],
+    "uncensored_count": 300,
+    "world_count": 300
+  },
+  "assay3_formed_p_bridge": {
+    "frozen_sesoi": 0.01,
+    "joint_minus_matched_marginal_interval": [
+      0.06110931706890421,
+      0.0440254665602233,
+      0.08099266920399958
+    ],
+    "maximum_decomposition_error": 0.2470998783239713,
+    "matching_absolute_kl_error_distribution": {
+      "maximum": 1.2075223097091734,
+      "median": 0.005347834072338131,
+      "q95": 0.19950524242254006
+    },
+    "matching_within_frozen_tolerance_count": 103,
+    "stratum_counts": {
+      "moderate": 40,
+      "strong": 40,
+      "very_strong": 40
+    },
+    "uncensored_count": 120,
+    "world_count": 120
+  },
+  "assay4_misspecification": {
+    "censored_within_observed_history": 0,
+    "classification": "DESCRIPTIVE_ONLY",
+    "mean_posterior_entropy": 0.36884967431397475,
+    "world_count": 240
+  },
+  "blocking_failures": [
+    "assay2_median_ratio_monotone",
+    "assay3_information_matching_within_tolerance",
+    "assay3_exact_per_slice_decomposition"
+  ],
+  "checks": {
+    "assay1_increment_identity": true,
+    "assay1_isotonic_fit_no_adjustment": true,
+    "assay1_raw_means_monotone": true,
+    "assay1_slope_lower_ci_gt_0": true,
+    "assay2_all_prefixes_identical": true,
+    "assay2_matching_within_frozen_tolerance": true,
+    "assay2_median_ratio_monotone": false,
+    "assay3_G_fixed_exact_zero": true,
+    "assay3_all_120_information_matched": true,
+    "assay3_exact_per_slice_decomposition": false,
+    "assay3_information_matching_within_tolerance": false,
+    "assay3_joint_minus_marginal_lower_ci_gt_0": true,
+    "assay3_joint_minus_marginal_mean_ge_sesoi": true,
+    "assay3_stratum_balance_40_40_40": true,
+    "assay3_zero_association_exact_zero": true,
+    "assay4_descriptive_semantics": true
+  },
+  "gate": 3,
+  "passed": false,
+  "stage": "V2.5a"
+}

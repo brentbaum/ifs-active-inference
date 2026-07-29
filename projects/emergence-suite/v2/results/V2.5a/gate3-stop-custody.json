@@ -1,0 +1,41 @@
+{
+  "stage": "V2.5a",
+  "status": "HONEST_STOP_GATE_3",
+  "gate_verdicts": {
+    "gate_1": "PASS",
+    "gate_2": "PASS",
+    "gate_3": "FAIL",
+    "gate_4": "NOT_OPENED",
+    "gate_5": "NOT_OPENED"
+  },
+  "gate_3_seed_usage": {
+    "757000:757599": "dose response, 600 worlds",
+    "758000:758299": "information matching, 300 worlds",
+    "758500:758619": "formed-P bridge, 120 worlds",
+    "759000:759239": "misspecification stress, 240 worlds"
+  },
+  "unopened_blocks": [
+    "760000:760239",
+    "761000:763999",
+    "835001:835600"
+  ],
+  "master_spec_completion_started": false,
+  "c_v25a_seal_started": false,
+  "files": {
+    "ref/v25a.py": "a6babff7a13f0fa5d25627825d33081c7f066c80fea5fc7fd9b01828b9531872",
+    "ref/v25a_oracle.py": "44d9202cf05f7a9496966da97aeec71f2a898d1555017e2165a86a33938c6ee8",
+    "run_v25a_gates3_5.py": "03716fb1e7fc60b0772b55de55463c4a394180070602b7cdd36c2eb635db9014",
+    "results/V2.5a/gate-3.json": "06a3b41994262c3f5080f8fea0c423005df8545106eea0f19c4bec34d38c1c92",
+    "results/V2.5a/gate-3-dose-per_world.json": "23d9e32e2d4d55181fa0288fb671b02c77c378d1a5d5a2dcb028e5aec6e0f4c5",
+    "results/V2.5a/gate-3-matching-per_world.json": "4167f7898c3ff5923c50d814c6effc2ea50688680e0ec576d46b96e2e72a14ba",
+    "results/V2.5a/gate-3-bridge-per_world.json": "7aa861c5da0d0640ad77f4a5adc2f58c2ceb656e35cbd5f97e14021ef5e6cdab",
+    "results/V2.5a/gate-3-misspecification-per_world.json": "d3f28578e1d06b0da2100d9d8385a6f32372d1fb1d766d5e2c52bc726fdb99d9",
+    "results/V2.5a/gate-3-report.md": "9a5ee112876669fae47912bdf10aa25a417cc286648124bfaf4f0bf9dbe40f0a",
+    "results/V2.5a/gate-3-diagnosis-stub.md": "f6830860434290705e51471c124b16527049153335e7233a19890d044505bc83"
+  },
+  "constants": {
+    "B_max_inherited_formation": 3.801426508560692,
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "B_max_v25a_marginal_accounting": 6.704414354964107
+  }
+}
