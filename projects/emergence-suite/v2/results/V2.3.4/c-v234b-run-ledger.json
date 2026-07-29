@@ -1,0 +1,21 @@
+{
+  "ascending_gap_free": true,
+  "challenge": "C-V234-B",
+  "criteria_evaluated_after_raw_seal": true,
+  "criteria_evaluated_at_ledger_write": false,
+  "immutable_verdict": "PASS",
+  "literal_parser": "ast.literal_eval",
+  "one_run": true,
+  "raw_trace_seal": "results/V2.3.4/c-v234b-raw-trace-seal.json",
+  "raw_trace_seal_sha256": "5eff1434235539b5a82d3b0139b1e9337239c01880a88092fb58dd372f91bc5a",
+  "release": {
+    "authorization": "revealed sealed challenge and user release",
+    "block": [
+      2042000,
+      2043999
+    ],
+    "source": "projects/ifs-paper/suite-v2-sealed-hashes.md"
+  },
+  "seeds_consumed_once": 2000,
+  "summary_sha256": "d322b7347bb8344ff6646153f7a215789cff27b975c37a37ac9636f06f1467fd"
+}

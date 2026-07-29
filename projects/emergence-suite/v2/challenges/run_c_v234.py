@@ -29,8 +29,25 @@ from run_v234_gates import known_config_prior  # noqa: E402
 CHALLENGE = ROOT / "sealed-revealed" / "C-V234-attribution-challenge.md"
 SEAL_LEDGER = REPO_ROOT / "projects" / "ifs-paper" / "suite-v2-sealed-hashes.md"
 OUT = ROOT / "results" / "V2.3.4"
+CHALLENGE_ID = "C-V234"
+FILE_STEM = "c-v234"
 RELEASED_BLOCK = (2_040_000, 2_041_999)
 VERIFIED_SEAL = "1d9329bafd15fdc5e2c987bb4fa9105146d8740f05fefdd675f1fab61764cdd7"
+RELEASE_PHRASE = (
+    "Escrow: C-V234 seeds 2040000:2041999, released by this record "
+    "via the frozen released_block parameter."
+)
+CELL2_NO_FALSE_FLOOR = 0.90
+CELL3_EXISTENCE_FLOOR = 0.60
+STAGE_PASS_TEXT = (
+    "V2.3.4 entered Gate 6 with the clean `FROZEN_ALL_GATES_PASS` "
+    "base: Gates 1–5 passed without an adjudicated limitation. "
+    "C-V234 then passed all seven sealed criteria. The single stage "
+    "disposition therefore licenses the counterfactual-attribution "
+    "claim: the construction distinguishes low danger from danger "
+    "successfully prevented by action, while action remains an "
+    "intervention and relief remains policy-only."
+)
 CELL_FILES = {
     "cell_1_effective_action": "c-v234-cell-1.json",
     "cell_2_sham_action": "c-v234-cell-2.json",
@@ -140,14 +157,11 @@ def validate_bundle(bundle: dict[str, Any]) -> dict[str, Any]:
     if challenge_hash != VERIFIED_SEAL:
         errors.append("challenge hash differs from verified seal")
     ledger_text = SEAL_LEDGER.read_text(encoding="utf-8")
-    release_phrase = (
-        "Escrow: C-V234 seeds 2040000:2041999, released by this record "
-        "via the frozen released_block parameter."
-    )
+    release_phrase = RELEASE_PHRASE
     if release_phrase not in ledger_text:
-        errors.append("C-V234 release ledger phrase absent")
+        errors.append(f"{CHALLENGE_ID} release ledger phrase absent")
     return {
-        "challenge": "C-V234",
+        "challenge": CHALLENGE_ID,
         "challenge_sha256": challenge_hash,
         "verified_seal_sha256": VERIFIED_SEAL,
         "literal_parser": "ast.literal_eval",
@@ -328,7 +342,7 @@ def generate_and_seal() -> None:
     validation = validate_bundle(bundle)
     if not validation["expressible"]:
         dump(
-            OUT / "c-v234-stop-as-sealed.json",
+            OUT / f"{FILE_STEM}-stop-as-sealed.json",
             {
                 "immutable_verdict": "STOP_AS_SEALED",
                 "validation": validation,
@@ -336,7 +350,7 @@ def generate_and_seal() -> None:
             },
         )
         raise SystemExit(2)
-    seal_path = OUT / "c-v234-raw-trace-seal.json"
+    seal_path = OUT / f"{FILE_STEM}-raw-trace-seal.json"
     if seal_path.exists():
         raise RuntimeError("raw trace seal exists; one-run budget is spent")
     hashes: dict[str, str] = {}
@@ -372,7 +386,7 @@ def generate_and_seal() -> None:
         counts[cell_name] = len(rows)
     gap_free = consumed == list(range(RELEASED_BLOCK[0], RELEASED_BLOCK[1] + 1))
     seal = {
-        "challenge": "C-V234",
+        "challenge": CHALLENGE_ID,
         "phase": "raw_traces_sealed_before_criteria",
         "validation": validation,
         "cell_hashes": hashes,
@@ -385,9 +399,9 @@ def generate_and_seal() -> None:
     }
     dump(seal_path, seal)
     dump(
-        OUT / "c-v234-run-ledger.json",
+        OUT / f"{FILE_STEM}-run-ledger.json",
         {
-            "challenge": "C-V234",
+            "challenge": CHALLENGE_ID,
             "release": {
                 "block": list(RELEASED_BLOCK),
                 "source": str(SEAL_LEDGER.relative_to(REPO_ROOT)),
@@ -438,8 +452,8 @@ def independent_difference_interval(
 
 
 def evaluate() -> bool:
-    seal_path = OUT / "c-v234-raw-trace-seal.json"
-    summary_path = OUT / "c-v234-summary.json"
+    seal_path = OUT / f"{FILE_STEM}-raw-trace-seal.json"
+    summary_path = OUT / f"{FILE_STEM}-summary.json"
     if not seal_path.exists():
         raise RuntimeError("raw traces must be sealed before criteria")
     if summary_path.exists():
@@ -597,7 +611,10 @@ def evaluate() -> bool:
             "known_irrelevant_action_free_identity_error_max": (
                 sham_action_identity
             ),
-            "passed": cell2_no_false >= 0.90 and sham_action_identity <= TOL,
+            "passed": (
+                cell2_no_false >= CELL2_NO_FALSE_FLOOR
+                and sham_action_identity <= TOL
+            ),
         },
         "3_partial_efficacy": {
             "cell_1_eta_mean": interval(eta1),
@@ -609,7 +626,7 @@ def evaluate() -> bool:
             "passed": (
                 full_above_partial["lower_95"] > 0.0
                 and partial_above_sham["lower_95"] > 0.0
-                and cell3_existence >= 0.60
+                and cell3_existence >= CELL3_EXISTENCE_FLOOR
             ),
         },
         "4_context_switch": {
@@ -660,7 +677,7 @@ def evaluate() -> bool:
     }
     passed = all(result["passed"] for result in criteria.values())
     summary = {
-        "challenge": "C-V234",
+        "challenge": CHALLENGE_ID,
         "immutable_sealed_verdict": "PASS" if passed else "FAIL",
         "pass_rule": "all seven sealed criteria",
         "criteria": criteria,
@@ -694,7 +711,7 @@ def evaluate() -> bool:
         "passed": passed,
     }
     dump(summary_path, summary)
-    ledger_path = OUT / "c-v234-run-ledger.json"
+    ledger_path = OUT / f"{FILE_STEM}-run-ledger.json"
     ledger = json.loads(ledger_path.read_text(encoding="utf-8"))
     ledger["criteria_evaluated_after_raw_seal"] = True
     ledger["immutable_verdict"] = summary["immutable_sealed_verdict"]
@@ -704,9 +721,9 @@ def evaluate() -> bool:
 
 
 def write_verdict(passed: bool) -> None:
-    summary = json.loads((OUT / "c-v234-summary.json").read_text())
+    summary = json.loads((OUT / f"{FILE_STEM}-summary.json").read_text())
     lines = [
-        "# C-V234 sealed verdict",
+        f"# {CHALLENGE_ID} sealed verdict",
         "",
         f"Immutable sealed verdict: **{summary['immutable_sealed_verdict']}**.",
         "",
@@ -733,20 +750,14 @@ def write_verdict(passed: bool) -> None:
         "The base stage entered Gate 6 with a clean all-gates-1–5 freeze.",
         "Escrow was consumed once, ascending and gap-free, after evaluator release.",
     ]
-    (OUT / "c-v234-verdict.md").write_text(
+    (OUT / f"{FILE_STEM}-verdict.md").write_text(
         "\n".join(lines) + "\n", encoding="utf-8"
     )
     if passed:
         (OUT / "stage-verdict.md").write_text(
             "# V2.3.4 stage verdict\n\n"
             "Final disposition: **PASS**.\n\n"
-            "V2.3.4 entered Gate 6 with the clean `FROZEN_ALL_GATES_PASS` "
-            "base: Gates 1–5 passed without an adjudicated limitation. "
-            "C-V234 then passed all seven sealed criteria. The single stage "
-            "disposition therefore licenses the counterfactual-attribution "
-            "claim: the construction distinguishes low danger from danger "
-            "successfully prevented by action, while action remains an "
-            "intervention and relief remains policy-only.\n",
+            f"{STAGE_PASS_TEXT}\n",
             encoding="utf-8",
         )
 
@@ -760,7 +771,7 @@ def run_suite_and_ready() -> None:
         check=False,
     )
     dump(
-        OUT / "c-v234-full-fast-suite.json",
+        OUT / f"{FILE_STEM}-full-fast-suite.json",
         {
             "command": "python3 run_tests_parallel.py",
             "returncode": suite.returncode,
@@ -772,17 +783,19 @@ def run_suite_and_ready() -> None:
     files = [
         f"results/V2.3.4/{filename}" for filename in CELL_FILES.values()
     ] + [
-        "results/V2.3.4/c-v234-raw-trace-seal.json",
-        "results/V2.3.4/c-v234-run-ledger.json",
-        "results/V2.3.4/c-v234-summary.json",
-        "results/V2.3.4/c-v234-verdict.md",
-        "results/V2.3.4/c-v234-full-fast-suite.json",
-        "challenges/run_c_v234.py",
+        f"results/V2.3.4/{FILE_STEM}-raw-trace-seal.json",
+        f"results/V2.3.4/{FILE_STEM}-run-ledger.json",
+        f"results/V2.3.4/{FILE_STEM}-summary.json",
+        f"results/V2.3.4/{FILE_STEM}-verdict.md",
+        f"results/V2.3.4/{FILE_STEM}-full-fast-suite.json",
+        f"challenges/run_{FILE_STEM.replace('-', '_')}.py",
     ]
     if (OUT / "stage-verdict.md").exists():
         files.append("results/V2.3.4/stage-verdict.md")
-    (OUT / "ready-to-commit-c-v234.md").write_text(
-        "# Ready to commit: C-V234\n\n"
+    if FILE_STEM != "c-v234":
+        files.append("challenges/run_c_v234.py")
+    (OUT / f"ready-to-commit-{FILE_STEM}.md").write_text(
+        f"# Ready to commit: {CHALLENGE_ID}\n\n"
         + "\n".join(f"- `{item}`" for item in files)
         + "\n",
         encoding="utf-8",
