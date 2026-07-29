@@ -1,0 +1,22 @@
+{
+  "audit_kind": "runner-cache identity against frozen public helpers",
+  "criterion_data_used": false,
+  "retained_public_seed": 790700,
+  "lengths": [
+    32,
+    64,
+    96
+  ],
+  "maximum_errors": {
+    "bma_log_score": 0.0,
+    "family_log_scores": 0.0,
+    "generating_family_regret": 0.0,
+    "heldout_log_scores": 0.0,
+    "matched_margin": 0.0,
+    "preheldout_complexity": 0.0,
+    "preheldout_family_weights": 0.0
+  },
+  "material_classification_identical_all_lengths": true,
+  "scientific_code_changed": false,
+  "passed": true
+}
