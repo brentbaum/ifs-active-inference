@@ -1,0 +1,37 @@
+{
+  "challenge": "C-V28B",
+  "checks": {
+    "full_depth_min_0.30": true,
+    "full_reduction_min_0.70": true,
+    "full_sequence_min_0.70": true,
+    "full_trust_positive": true,
+    "historical_error_max_1e-10": true,
+    "qualifying_population": true,
+    "transfer_gap_lower_ci_gt_0.10": true,
+    "unreliable_depth_max_0": true,
+    "unreliable_sequence_max_0.10": true,
+    "unreliable_trust_negative": true
+  },
+  "custody_passed": true,
+  "immutable_verdict": "PASS",
+  "metrics": {
+    "full_depth": 0.420484376679919,
+    "full_minus_unreliable_transfer": {
+      "lower_95": 0.20007642110150023,
+      "mean": 0.20410013294775717,
+      "n": 418,
+      "upper_95": 0.2077359253998469
+    },
+    "full_reduction": 0.9066985645933014,
+    "full_sequence": 0.9019138755980861,
+    "full_trust": 0.3236472556113121,
+    "maximum_historical_error": 0.0,
+    "qualifying_count": 418,
+    "qualifying_rate": 0.6966666666666667,
+    "unreliable_depth": -0.11311074213774679,
+    "unreliable_sequence": 0.0,
+    "unreliable_trust": -0.48780487804878064
+  },
+  "scientific_passed": true,
+  "semantic_passed": true
+}
