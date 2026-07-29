@@ -1,11 +1,7 @@
-# V2.7 development-failures ledger
+# V2.7 development failures
 
-- Stage-0 pilot 1: the slot-oriented opposed parameterization failed the
-  permutation proof. It was retired before assigned seeds; topology was made
-  exchangeable and mandate direction was returned to the targeted V2.6b
-  protector policy.
-- Stage-0 pilot 2: topology recovery was `0.79` at 324 slices. Before assigned
-  seeds, the recovery history was prospectively set to 486 slices. The fresh
-  pilot reached topology `0.81`, mandate `0.88`, and passed every floor.
-- Gate 4: **FAIL**. The reduction lesion residual was
-  `8.425920094643456e-05 > 1e-10`. Preserved verbatim; Gate 5 was not opened.
+- The first prospective pilot at 81 slices found mandate recovery below .80. Before assigned seeds, the weak/strong support was separated to 0.10/1.00.
+- A slot-oriented opposed parameterization failed permutation symmetry and was replaced prospectively by an exchangeable topology plus targeted local mandate intervention.
+- The exchangeability-corrected 324-slice pilot produced topology recovery 0.79; a fresh 486-slice pilot produced topology 0.81 and mandate 0.88 before Gate 2 opened.
+- Original Gate 4: **FAIL**, reduction-lesion restoration residual `8.425920094643456e-05 > 1e-10`. Retained verbatim.
+- Authorized repaired-instrument Gate 4: **PASS**, residual `0.0`; 2,572/2,572 non-reduction worlds byte-identical.

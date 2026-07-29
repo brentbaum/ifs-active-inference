@@ -1,0 +1,190 @@
+{
+  "bounds": {
+    "B_max_v232_formation": 3.801426508560692,
+    "B_max_v234": 11.675460894331877,
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "B_max_v25a_configural": 6.084736253211209,
+    "B_max_v25a_marginal_accounting": 6.704414354964107,
+    "B_max_v25b": 11.302393144606405,
+    "B_max_v26a_relational": 6.9920964274158885,
+    "B_max_v26a_root": 2.9444389791664394,
+    "B_max_v26b_policy_outcome": 1.3862943611198908,
+    "B_max_v26b_trust": 2.1972245773362196,
+    "B_max_v27_registration": 2.1972245773362196,
+    "B_max_v27_shared_outcome": 3.8,
+    "implied_binary_change_bound_v26b": 0.5
+  },
+  "checks": {
+    "all_finite": true,
+    "all_robustness_dimensions_present": true,
+    "full_fast_unit_suite": true,
+    "manifest_chain_composition": true,
+    "policy_normalization": true,
+    "standing_constitutions": true,
+    "structure_normalization": true
+  },
+  "gate": 5,
+  "metrics": {
+    "manifest_chain": {
+      "base_manifest_file_count": 32,
+      "custody_files": {
+        "addenda": [],
+        "base": {
+          "file": "results/V2.6b/freeze-manifest.json",
+          "sha256": "d6ccaa976e3892fb728010d366544b76c2069c16790aa02e19b1222e17bcb051"
+        }
+      },
+      "effective_manifest_file_count": 32,
+      "mismatches": [],
+      "overlaid_entries": [],
+      "passed": true
+    },
+    "maximum_policy_normalization_error": 4.440892098500626e-16,
+    "maximum_structure_normalization_error": 3.3306690738754696e-16,
+    "robustness": {
+      "context": {
+        "access": {
+          "count": 3000,
+          "lower_95": 0.4417593005861483,
+          "mean": 0.4421026132479351,
+          "upper_95": 0.44244592590972187
+        },
+        "count": 3000,
+        "registration_support": {
+          "count": 3000,
+          "lower_95": 0.0,
+          "mean": 0.0,
+          "upper_95": 0.0
+        }
+      },
+      "mandate": {
+        "access": {
+          "count": 3000,
+          "lower_95": 0.44192911398370527,
+          "mean": 0.44226782325728203,
+          "upper_95": 0.4426065325308588
+        },
+        "count": 3000,
+        "registration_support": {
+          "count": 3000,
+          "lower_95": 0.0,
+          "mean": 0.0,
+          "upper_95": 0.0
+        }
+      },
+      "outcome_noise": {
+        "access": {
+          "count": 3000,
+          "lower_95": 0.44166747270911744,
+          "mean": 0.44200575435690265,
+          "upper_95": 0.44234403600468786
+        },
+        "count": 3000,
+        "registration_support": {
+          "count": 3000,
+          "lower_95": 0.0,
+          "mean": 0.0,
+          "upper_95": 0.0
+        }
+      },
+      "partner_support": {
+        "access": {
+          "count": 3000,
+          "lower_95": 0.3408970351341885,
+          "mean": 0.3435603672268309,
+          "upper_95": 0.34622369931947333
+        },
+        "count": 3000,
+        "registration_support": {
+          "count": 3000,
+          "lower_95": 0.0,
+          "mean": 0.0,
+          "upper_95": 0.0
+        }
+      },
+      "policy_cost": {
+        "access": {
+          "count": 3000,
+          "lower_95": 0.44170869057079853,
+          "mean": 0.4420512151105145,
+          "upper_95": 0.44239373965023043
+        },
+        "count": 3000,
+        "registration_support": {
+          "count": 3000,
+          "lower_95": 0.0,
+          "mean": 0.0,
+          "upper_95": 0.0
+        }
+      },
+      "protector_count": {
+        "access": {
+          "count": 3000,
+          "lower_95": 0.4417673935877037,
+          "mean": 0.44211045239066393,
+          "upper_95": 0.44245351119362414
+        },
+        "count": 3000,
+        "registration_support": {
+          "count": 3000,
+          "lower_95": 0.0,
+          "mean": 0.0,
+          "upper_95": 0.0
+        }
+      },
+      "registration_reliability": {
+        "access": {
+          "count": 3000,
+          "lower_95": 0.35963510467433635,
+          "mean": 0.3624238055892334,
+          "upper_95": 0.3652125065041305
+        },
+        "count": 3000,
+        "registration_support": {
+          "count": 3000,
+          "lower_95": 0.49999866407850746,
+          "mean": 0.49999872843909543,
+          "upper_95": 0.4999987927996834
+        }
+      },
+      "stakes": {
+        "access": {
+          "count": 3000,
+          "lower_95": 0.44184870458858816,
+          "mean": 0.4421902392876056,
+          "upper_95": 0.442531773986623
+        },
+        "count": 3000,
+        "registration_support": {
+          "count": 3000,
+          "lower_95": 0.0,
+          "mean": 0.0,
+          "upper_95": 0.0
+        }
+      },
+      "topology": {
+        "access": {
+          "count": 3000,
+          "lower_95": 0.3586877288714282,
+          "mean": 0.36313035272533634,
+          "upper_95": 0.3675729765792445
+        },
+        "count": 3000,
+        "registration_support": {
+          "count": 3000,
+          "lower_95": 0.0,
+          "mean": 0.0,
+          "upper_95": 0.0
+        }
+      }
+    },
+    "unit_suite_stderr": "",
+    "unit_suite_stdout": "PASS tests.test_constitution 0.922s\nPASS tests.test_manifest_chain 0.114s\nPASS tests.test_performance_amendment_1 11.939s\nPASS tests.test_v20_kernel 0.867s\nPASS tests.test_v21_precision 1.749s\nPASS tests.test_v221_association 4.289s\nPASS tests.test_v22_root 3.349s\nPASS tests.test_v231_formation 51.180s\nPASS tests.test_v231r_neutrality 0.603s\nPASS tests.test_v232_attribution 0.133s\nPASS tests.test_v232_formation 0.140s\nPASS tests.test_v233 25.909s\nPASS tests.test_v233_seed_authorization 0.116s\nPASS tests.test_v234 0.116s\nPASS tests.test_v23_formation 22.057s\nPASS tests.test_v24 0.252s\nPASS tests.test_v243 0.105s\nPASS tests.test_v244 0.096s\nPASS tests.test_v25a 0.311s\nPASS tests.test_v25a_completion 0.110s\nPASS tests.test_v25b 0.199s\nPASS tests.test_v26a 0.097s\nPASS tests.test_v26b 0.105s\nPASS tests.test_v27 0.240s\nPASS tests.test_v2g0_grammar 0.194s\nmodules=25 failures=0 elapsed=51.186s\n"
+  },
+  "passed": true,
+  "seed_block": [
+    1543000,
+    1569999
+  ],
+  "stage": "V2.7"
+}

@@ -462,14 +462,20 @@ def score_world_with_reduction(
     lesions: Sequence[str] = (),
 ) -> MultiProtectorScore:
     """Compose the frozen reduction posterior into future mandate forecasts."""
+    if "reduction" in set(lesions):
+        # The lesion restores the unreduced instrument through the identical
+        # exact model-average path. It must not substitute a scalar posterior
+        # mean for the candidate-wise mandate mixture.
+        return score_world(
+            world,
+            lesions=tuple(item for item in lesions if item != "reduction"),
+        )
     baseline, _ = structure_posterior(world.observations, world.protector_count)
     mean_mandate = float(baseline.sum(axis=(0, 2)) @ MANDATE_SUPPORT)
     q_reduced = float(
         reduction_score.q_structure[v25b.STRUCTURE_INDEX["000"]]
     )
     effective = mean_mandate * (1.0 - 0.75 * q_reduced)
-    if "reduction" in set(lesions):
-        effective = mean_mandate
     return score_world(
         world,
         lesions=lesions,

@@ -4,6 +4,7 @@ import numpy as np
 
 from ref import v27, v27_oracle
 from ref import v221
+from ref import v25b
 
 
 class V27Tests(unittest.TestCase):
@@ -81,6 +82,38 @@ class V27Tests(unittest.TestCase):
                 association, lesions=("cue_root_association",)
             ),
             0.0,
+        )
+
+    def test_reduction_lesion_restores_exact_model_average(self):
+        seed = 1_519_980
+        world = v27.generate_control_world(
+            seed, scenario="polarization", protector_count=2
+        )
+        reduction_world = v25b.generate_world(
+            seed,
+            truth_structure="000",
+            length=16,
+            precision=0.9,
+        )
+        reduction = v25b.score(
+            reduction_world.episodes,
+            precision=reduction_world.precision,
+        )
+        baseline = v27.score_world(world)
+        restored = v27.score_world_with_reduction(
+            world, reduction, lesions=("reduction",)
+        )
+        self.assertEqual(
+            baseline.q_joint_policy.tobytes(),
+            restored.q_joint_policy.tobytes(),
+        )
+        self.assertEqual(
+            baseline.expected_cost.tobytes(),
+            restored.expected_cost.tobytes(),
+        )
+        self.assertEqual(
+            baseline.q_structure.tobytes(),
+            restored.q_structure.tobytes(),
         )
 
 

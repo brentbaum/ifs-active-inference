@@ -921,6 +921,90 @@ def run_gate4() -> bool:
     return payload["passed"]
 
 
+def run_gate4_repaired() -> bool:
+    items = [
+        (seed, (seed - 1_540_000) % 7)
+        for seed in range(1_540_000, 1_543_000)
+    ]
+    rows = map_rows(gate4_row, items)
+    original_rows = json.loads((OUT / "gate-4-per_world.json").read_text())
+    original_by_seed = {int(row["seed"]): row for row in original_rows}
+    non_lesion_identity = {}
+    for row in rows:
+        if row["lesion"] == "reduction":
+            continue
+        original = original_by_seed[row["seed"]]
+        non_lesion_identity[str(row["seed"])] = (
+            json.dumps(plain(row), sort_keys=True, separators=(",", ":"))
+            == json.dumps(original, sort_keys=True, separators=(",", ":"))
+        )
+    lesion_metrics = {
+        lesion: {
+            "target_residual_max": max(
+                row["target_residual"]
+                for row in rows
+                if row["lesion"] == lesion
+            ),
+            "unrelated_error_max": max(
+                row["unrelated_normalization_error"]
+                for row in rows
+                if row["lesion"] == lesion
+            ),
+        }
+        for lesion in sorted({row["lesion"] for row in rows})
+    }
+    checks = {
+        lesion: (
+            value["target_residual_max"] <= TOL
+            and value["unrelated_error_max"] <= TOL
+        )
+        for lesion, value in lesion_metrics.items()
+    }
+    checks["non_reduction_byte_identity"] = all(
+        non_lesion_identity.values()
+    )
+    payload = {
+        "stage": "V2.7",
+        "gate": 4,
+        "execution": "repaired instrument",
+        "authorization": "gate4-software-repair-authorization.md",
+        "original_verdict_retained": "FAIL",
+        "seed_block": [1_540_000, 1_542_999],
+        "metrics": lesion_metrics,
+        "non_reduction_byte_identity": {
+            "compared_worlds": len(non_lesion_identity),
+            "identical_worlds": sum(non_lesion_identity.values()),
+            "all_identical": all(non_lesion_identity.values()),
+        },
+        "checks": checks,
+        "passed": all(checks.values()),
+        "bounds": BOUNDS,
+    }
+    dump("gate-4-repaired-per_world.json", rows)
+    dump("gate-4-repaired.json", payload)
+    original_report = (OUT / "gate-4-report.md").read_text()
+    write_report(4, payload)
+    # Preserve the original report and give the repaired execution its own.
+    (OUT / "gate-4-report.md").replace(OUT / "gate-4-repaired-report.md")
+    (OUT / "gate-4-report.md").write_text(original_report)
+    ready(4, [
+        "ref/v27.py",
+        "tests/test_v27.py",
+        "results/V2.7/gate-4.json",
+        "results/V2.7/gate-4-diagnosis-stub.md",
+        "results/V2.7/gate-4-repaired-per_world.json",
+        "results/V2.7/gate-4-repaired.json",
+        "results/V2.7/gate-4-repaired-report.md",
+    ])
+    if not payload["passed"]:
+        (OUT / "gate-4-repaired-diagnosis-stub.md").write_text(
+            "# V2.7 repaired Gate 4 diagnosis stub\n\n"
+            "The authorized repaired-instrument execution has a new blocking "
+            "failure. Gate 5 was not opened.\n"
+        )
+    return payload["passed"]
+
+
 def gate5_row(seed: int) -> dict[str, Any]:
     dimensions = (
         "topology", "mandate", "policy_cost", "partner_support", "stakes",
@@ -964,22 +1048,14 @@ def run_gate5() -> bool:
         for dimension in dimensions
     }
     suite = subprocess.run(
-        [os.environ.get("PYTHON", "python3"), "-m", "unittest", "discover", "-s", "tests"],
+        [os.environ.get("PYTHON", "python3"), "run_tests_parallel.py"],
         cwd=ROOT,
         capture_output=True,
         text=True,
     )
-    chain_checks = {}
-    for stage in ("V2.0", "V2.1", "V2.2.1", "V2.3.2-formation", "V2.3.3", "V2.4.4", "V2.5a-completion", "V2.5b", "V2.6a", "V2.6b"):
-        directory = ROOT / "results" / stage
-        manifests = sorted(directory.glob("*manifest*.json"))
-        if manifests:
-            try:
-                chain_checks[stage] = bool(verify_manifest_chain(manifests[0]))
-            except Exception:
-                # Some historical manifests predate the shared verifier; the full
-                # suite pins their succession and remains the blocking audit.
-                chain_checks[stage] = True
+    inherited_chain = verify_manifest_chain(
+        ROOT, "results/V2.6b/freeze-manifest.json"
+    )
     cumulative = constitution.cumulative_constitution_audit()
     checks = {
         "policy_normalization": max(row["policy_normalization_error"] for row in rows) <= TOL,
@@ -987,7 +1063,7 @@ def run_gate5() -> bool:
         "all_finite": all(row["finite"] for row in rows),
         "all_robustness_dimensions_present": len(dimensions) == 9,
         "standing_constitutions": cumulative["passed"],
-        "manifest_chain_composition": all(chain_checks.values()),
+        "manifest_chain_composition": bool(inherited_chain["passed"]),
         "full_fast_unit_suite": suite.returncode == 0,
     }
     payload = {
@@ -1000,7 +1076,7 @@ def run_gate5() -> bool:
             "maximum_structure_normalization_error": max(row["structure_normalization_error"] for row in rows),
             "unit_suite_stdout": suite.stdout,
             "unit_suite_stderr": suite.stderr,
-            "manifest_chain": chain_checks,
+            "manifest_chain": inherited_chain,
         },
         "checks": checks,
         "passed": all(checks.values()),
@@ -1028,29 +1104,37 @@ def freeze() -> None:
         "# V2.7 decisions\n\n"
         "- The preregistered finite topology family is independent/opposed/coalition.\n"
         "- One-protector worlds identify mandate and outcome level but do not pretend to identify cross-protector topology.\n"
-        "- The prospective pilot raised recovery length to 324 before any assigned block was opened; no criterion population informed this choice.\n"
+        "- Prospective pilots set recovery length to 486 before any assigned block was opened; no criterion population informed this choice.\n"
         "- Cross-protector coupling is confined to the shared outcome loss and likelihood. No polarization coefficient exists.\n"
         "- Exiling is the all-block Cartesian policy. Registration-off is a masked likelihood observation.\n"
+        "- The original Gate-4 reduction-lesion FAIL is retained. Under evaluator authorization, the repaired lesion restores the unreduced baseline through the identical exact model-average path; all non-reduction worlds remained byte-identical.\n"
     )
     (OUT / "development-failures.md").write_text(
         "# V2.7 development failures\n\n"
-        "The first prospective pilot at 81 slices found mandate recovery below .80. "
-        "Before any assigned block was opened, the frozen recovery history was expanded "
-        "to 324 and the weak/strong support separated to 0.10/1.00. No gate failure was discarded.\n"
+        "- The first prospective pilot at 81 slices found mandate recovery below .80. Before assigned seeds, the weak/strong support was separated to 0.10/1.00.\n"
+        "- A slot-oriented opposed parameterization failed permutation symmetry and was replaced prospectively by an exchangeable topology plus targeted local mandate intervention.\n"
+        "- The exchangeability-corrected 324-slice pilot produced topology recovery 0.79; a fresh 486-slice pilot produced topology 0.81 and mandate 0.88 before Gate 2 opened.\n"
+        "- Original Gate 4: **FAIL**, reduction-lesion restoration residual `8.425920094643456e-05 > 1e-10`. Retained verbatim.\n"
+        "- Authorized repaired-instrument Gate 4: **PASS**, residual `0.0`; 2,572/2,572 non-reduction worlds byte-identical.\n"
     )
     (OUT / "stage-completion-report.md").write_text(
         "# V2.7 stage completion report\n\n"
         "Gates 1–5 pass on the declared open populations. Exact joint policy enumeration "
         "covers 1–3 protectors (3/9/27 policies); polarization is carried only by the "
         "normalized shared-outcome model; exiling is ordinary policy mass; registration "
-        "is an observation with exact masking neutrality. Escrow remains untouched.\n\n"
+        "is an observation with exact masking neutrality. The original Gate-4 reduction "
+        "lesion FAIL remains in the record; the evaluator-authorized pure-software repair "
+        "restored the identical exact model-average baseline and the repaired execution "
+        "passed with non-lesion byte identity. Escrow remains untouched.\n\n"
         "Verdict classes: scientific PASS; semantic PASS; distributional-stress PASS "
         "on the declared sweep; process custody PASS.\n"
     )
     (OUT / "freeze-readiness.md").write_text(
         "# V2.7 freeze readiness\n\n"
-        "Status: **FROZEN_ALL_GATES_PASS**.\n\n"
-        "All public gates pass, the cumulative suite is green, all named finite-information "
+        "Status: **FROZEN_ALL_GATES_PASS_REPAIRED_INSTRUMENT**.\n\n"
+        "All public gates pass after the authorized Gate-4 restoration-path repair. "
+        "The original FAIL is preserved, the repaired execution and byte-identity record "
+        "are frozen, the cumulative fast suite is green, all named finite-information "
         "bounds are reported, and escrow `2060000:2064999` was not accessed. Stop before C-V27.\n"
     )
     relative_files = [
@@ -1074,7 +1158,7 @@ def freeze() -> None:
     dump("freeze-manifest.json", {
         "manifest_version": 1,
         "stage": "V2.7",
-        "stage_status": "FROZEN_ALL_GATES_PASS",
+        "stage_status": "FROZEN_ALL_GATES_PASS_REPAIRED_INSTRUMENT",
         "all_gates_passed": True,
         "sealed_gate_6_run": False,
         "escrow_accessed": False,
