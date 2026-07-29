@@ -1,0 +1,81 @@
+{
+  "checks": {
+    "all_finite": true,
+    "coregulation_direction": true,
+    "efficacy_direction": true,
+    "partner_reliability_direction": true,
+    "policy_costs_direction": true,
+    "refusal_diagnosticity_direction": true,
+    "root_evidence_direction": true,
+    "stakes_direction": true,
+    "temperature_direction": true,
+    "trust_prior_direction": true
+  },
+  "criterion": false,
+  "metrics": {
+    "scenario_effects": {
+      "coregulation": {
+        "count": 111,
+        "lower_95": 0.20714369299523652,
+        "mean": 0.2113886988984233,
+        "upper_95": 0.21563370480161007
+      },
+      "efficacy": {
+        "count": 111,
+        "lower_95": 0.1298310792165131,
+        "mean": 0.13697567580410908,
+        "upper_95": 0.14412027239170505
+      },
+      "partner_reliability": {
+        "count": 111,
+        "lower_95": 0.23694022826139774,
+        "mean": 0.24361581020511447,
+        "upper_95": 0.25029139214883117
+      },
+      "policy_costs": {
+        "count": 111,
+        "lower_95": 0.3476059449042471,
+        "mean": 0.3498636364920055,
+        "upper_95": 0.35212132807976393
+      },
+      "refusal_diagnosticity": {
+        "count": 111,
+        "lower_95": 0.8941387559808615,
+        "mean": 0.8941387559808615,
+        "upper_95": 0.8941387559808615
+      },
+      "root_evidence": {
+        "count": 111,
+        "lower_95": 0.49998257995966905,
+        "mean": 0.49998257995966905,
+        "upper_95": 0.49998257995966905
+      },
+      "stakes": {
+        "count": 111,
+        "lower_95": 0.5997981325942764,
+        "mean": 0.6033808069095775,
+        "upper_95": 0.6069634812248786
+      },
+      "temperature": {
+        "count": 111,
+        "lower_95": 0.5278817048033463,
+        "mean": 0.5375237957302506,
+        "upper_95": 0.5471658866571548
+      },
+      "trust_prior": {
+        "count": 111,
+        "lower_95": 0.08444786980368779,
+        "mean": 0.0873026891878529,
+        "upper_95": 0.09015750857201801
+      }
+    },
+    "world_count": 999
+  },
+  "passed": true,
+  "public_seed_block": [
+    1399000,
+    1399998
+  ],
+  "purpose": "prospective Gate-5 qualitative robustness attainability",
+  "suspected_unattainable_floor": []
+}

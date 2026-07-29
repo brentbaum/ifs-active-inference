@@ -1,0 +1,69 @@
+{
+  "checks": {
+    "attribution_efficacy": true,
+    "coprotection": true,
+    "epistemic_test_policy": true,
+    "global_broadcast": true,
+    "partner_to_trust": true,
+    "policy_to_contact": true,
+    "stakes": true
+  },
+  "criterion": false,
+  "metrics": {
+    "effects": {
+      "broadcast_root_uptake_effect": {
+        "count": 1000,
+        "lower_95": 0.20382216803786465,
+        "mean": 0.20382216803786465,
+        "upper_95": 0.20382216803786465
+      },
+      "coprotection_target_effect": {
+        "count": 1000,
+        "lower_95": 0.22941386989168686,
+        "mean": 0.2317691494573552,
+        "upper_95": 0.23412442902302352
+      },
+      "efficacy_target_effect": {
+        "count": 1000,
+        "lower_95": 0.048561540518590386,
+        "mean": 0.05159621589211514,
+        "upper_95": 0.05463089126563989
+      },
+      "partner_to_trust_effect": {
+        "count": 1000,
+        "lower_95": 0.48780487804878064,
+        "mean": 0.48780487804878064,
+        "upper_95": 0.48780487804878064
+      },
+      "stakes_baseline_effect": {
+        "count": 1000,
+        "lower_95": 0.6049118740643458,
+        "mean": 0.6060413698507701,
+        "upper_95": 0.6071708656371944
+      },
+      "test_policy_target_effect": {
+        "count": 1000,
+        "lower_95": 0.09153425186354441,
+        "mean": 0.0921436686061512,
+        "upper_95": 0.09275308534875798
+      }
+    },
+    "survival_maxima": {
+      "broadcast_partner_survival_error": 0.0,
+      "contact_lesion_max": 0.0,
+      "contact_policy_survival_error": 0.0,
+      "coprotection_trust_survival_error": 0.0,
+      "efficacy_posterior_survival_error": 0.0,
+      "partner_to_trust_survival_error": 0.0,
+      "stakes_lesion_effect": 0.0,
+      "test_policy_trust_survival_error": 0.0
+    }
+  },
+  "passed": true,
+  "public_seed_block": [
+    1398000,
+    1398999
+  ],
+  "purpose": "prospective Gate-4 target-effect attainability",
+  "suspected_unattainable_floor": []
+}

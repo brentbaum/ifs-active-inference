@@ -1,0 +1,57 @@
+{
+  "stage": "V2.6b",
+  "development_only": true,
+  "escrow_accessed": false,
+  "escrow_block_untouched": [2050000, 2052999],
+  "blocks": [
+    {
+      "purpose": "gate-1 public semantic fixtures",
+      "range": [1389900, 1389901],
+      "criterion": false
+    },
+    {
+      "purpose": "gate-2 recovery/calibration attainability",
+      "range": [1390000, 1390999],
+      "criterion": false,
+      "barred": true
+    },
+    {
+      "purpose": "gate-3 all-floor attainability",
+      "range": [1391000, 1397999],
+      "criterion": false,
+      "barred": true
+    },
+    {
+      "purpose": "gate-4 lesion-effect attainability",
+      "range": [1398000, 1398999],
+      "criterion": false,
+      "barred": true
+    },
+    {
+      "purpose": "gate-5 robustness attainability",
+      "range": [1399000, 1399998],
+      "criterion": false,
+      "barred": true
+    },
+    {
+      "purpose": "gate 2 recovery and calibration",
+      "range": [1400000, 1402999],
+      "criterion": true
+    },
+    {
+      "purpose": "gate 3 protector battery",
+      "range": [1403000, 1409999],
+      "criterion": true
+    },
+    {
+      "purpose": "gate 4 lesions",
+      "range": [1410000, 1411999],
+      "criterion": true
+    },
+    {
+      "purpose": "gate 5 cumulative robustness",
+      "range": [1412000, 1429999],
+      "criterion": true
+    }
+  ]
+}

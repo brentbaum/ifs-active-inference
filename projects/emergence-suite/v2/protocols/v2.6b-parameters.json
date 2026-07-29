@@ -1,0 +1,36 @@
+{
+  "stage": "V2.6b",
+  "semantic_tolerance": 1e-10,
+  "trust_prior": [0.5, 0.5],
+  "trust_observation_reliability": 0.9,
+  "policy_outcome_support": [0.2, 0.5, 0.8],
+  "policy_outcome_prior": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333],
+  "policies": ["block", "test_contact", "permit_contact"],
+  "contact_probability_by_policy": [0.0, 0.45, 0.9],
+  "policy_effort": [0.25, 0.18, 0.05],
+  "inverse_temperature": 5.0,
+  "epistemic_value_test": 0.12,
+  "unsupported_risk_weight": 0.8,
+  "default_stakes": 1.5,
+  "hope_value": 0.2,
+  "gate2_length": 48,
+  "epoch_b_development_block": [1000000, 1899999],
+  "pilot_blocks": {
+    "gate2": [1390000, 1390999],
+    "gate3": [1391000, 1397999],
+    "gate4": [1398000, 1398999],
+    "gate5": [1399000, 1399999]
+  },
+  "rationales": {
+    "trust_prior": "Symmetric exact priors expose ambiguity and make each binary forecast recoverable without label favoritism.",
+    "trust_observation_reliability": "A 0.9 normalized binary channel makes two diagnostic responses informative while retaining finite evidence.",
+    "policy_outcome_support": "Three exact success levels span poor, uncertain, and competent outcomes with tractable recovery.",
+    "inverse_temperature": "A finite temperature keeps every policy posterior strictly positive while allowing stakes and trust to visibly reweight policy.",
+    "contact_probability_by_policy": "Block has no contact consequence, testing has partial contact, and permitting has high contact; none is an evidence likelihood.",
+    "policy_effort": "Dimensionless effort costs prevent any policy from dominating independently of forecasts.",
+    "epistemic_value_test": "The declared finite value makes testing useful under uncertainty without acting as an access bonus.",
+    "unsupported_risk_weight": "Unsupported-system risk remains material beside vulnerable-outcome risk.",
+    "default_stakes": "A moderate baseline leaves prior-predictive room for both higher and lower stakes contrasts.",
+    "hope_value": "The identical constant in both protector-role futures proves that hope cannot author the role differential."
+  }
+}

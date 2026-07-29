@@ -1,0 +1,31 @@
+{
+  "stage": "V2.6b",
+  "trust_observations": [
+    {
+      "refusal": true,
+      "partner_response": 1,
+      "outcome": 1,
+      "coprotection": 1,
+      "policy_outcome": 1,
+      "response_reliability": 0.9
+    },
+    {
+      "refusal": true,
+      "partner_response": null,
+      "outcome": null,
+      "coprotection": null,
+      "policy_outcome": null,
+      "response_reliability": 0.9
+    }
+  ],
+  "public_readouts": [
+    "q_trust",
+    "q_policy_outcome",
+    "q_policy",
+    "permission_mass",
+    "contact_probability",
+    "role_absence_risk_differential",
+    "root_movement"
+  ],
+  "forbidden_mutable_fields": ["permission", "access", "gate", "protector_role"]
+}

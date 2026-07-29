@@ -1,0 +1,81 @@
+{
+  "bounds": {
+    "B_max_v232_formation": 3.801426508560692,
+    "B_max_v234": 11.675460894331877,
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "B_max_v25a_configural": 6.084736253211209,
+    "B_max_v25a_marginal_accounting": 6.704414354964107,
+    "B_max_v25b": 11.302393144606405,
+    "B_max_v26a_relational": 6.9920964274158885,
+    "B_max_v26a_root": 2.9444389791664394,
+    "B_max_v26b_policy_outcome": 1.3862943611198908,
+    "B_max_v26b_trust": 2.1972245773362196,
+    "implied_binary_change_bound_v26b": 0.5
+  },
+  "checks": {
+    "attribution_efficacy": true,
+    "coprotection": true,
+    "epistemic_test_policy": true,
+    "global_broadcast": true,
+    "partner_to_trust": true,
+    "policy_to_contact": true,
+    "stakes": true
+  },
+  "gate": 4,
+  "metrics": {
+    "effects": {
+      "broadcast_root_uptake_effect": {
+        "count": 2000,
+        "lower_95": 0.20382216803786465,
+        "mean": 0.20382216803786465,
+        "upper_95": 0.20382216803786465
+      },
+      "coprotection_target_effect": {
+        "count": 2000,
+        "lower_95": 0.23048653426175017,
+        "mean": 0.2321200235246223,
+        "upper_95": 0.23375351278749443
+      },
+      "efficacy_target_effect": {
+        "count": 2000,
+        "lower_95": 0.04912140533906674,
+        "mean": 0.05122792163006414,
+        "upper_95": 0.053334437921061545
+      },
+      "partner_to_trust_effect": {
+        "count": 2000,
+        "lower_95": 0.48780487804878064,
+        "mean": 0.48780487804878064,
+        "upper_95": 0.48780487804878064
+      },
+      "stakes_baseline_effect": {
+        "count": 2000,
+        "lower_95": 0.6054900646540077,
+        "mean": 0.6062878515364265,
+        "upper_95": 0.6070856384188453
+      },
+      "test_policy_target_effect": {
+        "count": 2000,
+        "lower_95": 0.09168700654988551,
+        "mean": 0.092109907874183,
+        "upper_95": 0.09253280919848048
+      }
+    },
+    "survival_maxima": {
+      "broadcast_partner_survival_error": 0.0,
+      "contact_lesion_max": 0.0,
+      "contact_policy_survival_error": 0.0,
+      "coprotection_trust_survival_error": 0.0,
+      "efficacy_posterior_survival_error": 0.0,
+      "partner_to_trust_survival_error": 0.0,
+      "stakes_lesion_effect": 0.0,
+      "test_policy_trust_survival_error": 0.0
+    }
+  },
+  "passed": true,
+  "seed_block": [
+    1410000,
+    1411999
+  ],
+  "stage": "V2.6b"
+}

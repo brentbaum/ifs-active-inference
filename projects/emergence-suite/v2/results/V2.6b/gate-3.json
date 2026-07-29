@@ -1,0 +1,99 @@
+{
+  "bounds": {
+    "B_max_v232_formation": 3.801426508560692,
+    "B_max_v234": 11.675460894331877,
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "B_max_v25a_configural": 6.084736253211209,
+    "B_max_v25a_marginal_accounting": 6.704414354964107,
+    "B_max_v25b": 11.302393144606405,
+    "B_max_v26a_relational": 6.9920964274158885,
+    "B_max_v26a_root": 2.9444389791664394,
+    "B_max_v26b_policy_outcome": 1.3862943611198908,
+    "B_max_v26b_trust": 2.1972245773362196,
+    "implied_binary_change_bound_v26b": 0.5
+  },
+  "checks": {
+    "10_rupture_diagnosticity": true,
+    "11_reliable_partner": true,
+    "12_controls_low": true,
+    "13_policy_precedes_root": true,
+    "1_ambiguous_within_chance": true,
+    "2_two_responses_identify": true,
+    "3_remaining_not_pressure": true,
+    "4_stakes_effect": true,
+    "5_transfer_latent_cause": true,
+    "6_hope_identical": true,
+    "7_role_sign": true,
+    "8_crossover": true,
+    "9_hope_only": true
+  },
+  "gate": 3,
+  "metrics": {
+    "ambiguous_chance_deviation_max": 0.0,
+    "competence_crossover_error_max": 0.0,
+    "complete_risk_identity_error_max": 1.1102230246251565e-16,
+    "decoupled_permission": {
+      "count": 538,
+      "lower_95": 0.004187777230957954,
+      "mean": 0.004369905356437529,
+      "upper_95": 0.004552033481917104
+    },
+    "diagnostic_partner_posterior": {
+      "count": 539,
+      "lower_95": 0.9878048780487806,
+      "mean": 0.9878048780487806,
+      "upper_95": 0.9878048780487806
+    },
+    "diagnostic_rupture_selectivity_rate": 1.0,
+    "hope_identity_error_max": 0.0,
+    "hope_only_differential_max": 5.551115123125783e-17,
+    "latent_cause_transfer_rate": 1.0,
+    "matched_trust_error_max": 0.0,
+    "no_dyad_permission": {
+      "count": 538,
+      "lower_95": 0.005350961878883813,
+      "mean": 0.005478975714253226,
+      "upper_95": 0.005606989549622638
+    },
+    "policy_precedes_root_rate": 1.0,
+    "pressure_trust_growth": {
+      "count": 539,
+      "lower_95": -0.48780487804878053,
+      "mean": -0.48780487804878053,
+      "upper_95": -0.48780487804878053
+    },
+    "reliable_partner_contact_difference": {
+      "count": 538,
+      "lower_95": 0.126528160700577,
+      "mean": 0.12817432453526045,
+      "upper_95": 0.1298204883699439
+    },
+    "reliable_partner_permission_difference": {
+      "count": 538,
+      "lower_95": 0.24854378952679754,
+      "mean": 0.2513648193315104,
+      "upper_95": 0.2541858491362233
+    },
+    "remaining_trust_growth": {
+      "count": 539,
+      "lower_95": 0.48780487804878053,
+      "mean": 0.48780487804878053,
+      "upper_95": 0.48780487804878053
+    },
+    "role_absence_sign_match_rate": 1.0,
+    "stakes_permission_difference": {
+      "count": 539,
+      "lower_95": 0.6047450493086588,
+      "mean": 0.6062307442843229,
+      "upper_95": 0.607716439259987
+    },
+    "successful_descent_worlds": 538,
+    "world_count": 7000
+  },
+  "passed": true,
+  "seed_block": [
+    1403000,
+    1409999
+  ],
+  "stage": "V2.6b"
+}

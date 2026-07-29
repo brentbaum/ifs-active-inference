@@ -1,0 +1,120 @@
+{
+  "bounds": {
+    "B_max_v232_formation": 3.801426508560692,
+    "B_max_v234": 11.675460894331877,
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "B_max_v25a_configural": 6.084736253211209,
+    "B_max_v25a_marginal_accounting": 6.704414354964107,
+    "B_max_v25b": 11.302393144606405,
+    "B_max_v26a_relational": 6.9920964274158885,
+    "B_max_v26a_root": 2.9444389791664394,
+    "B_max_v26b_policy_outcome": 1.3862943611198908,
+    "B_max_v26b_trust": 2.1972245773362196,
+    "implied_binary_change_bound_v26b": 0.5
+  },
+  "checks": {
+    "all_finite": true,
+    "coregulation_direction": true,
+    "efficacy_direction": true,
+    "escrow_untouched": true,
+    "full_cumulative_suite": true,
+    "manifest_chain": true,
+    "partner_reliability_direction": true,
+    "permanent_constitutions": true,
+    "policy_costs_direction": true,
+    "refusal_diagnosticity_direction": true,
+    "root_evidence_direction": true,
+    "stakes_direction": true,
+    "standing_gates_1_4": true,
+    "temperature_direction": true,
+    "trust_prior_direction": true
+  },
+  "custody": {
+    "escrow_accessed": false,
+    "escrow_block": [
+      2050000,
+      2052999
+    ],
+    "passed": true
+  },
+  "gate": 5,
+  "manifest_chain": {
+    "base_manifest_file_count": 31,
+    "custody_files": {
+      "addenda": [],
+      "base": {
+        "file": "results/V2.3.4/freeze-manifest.json",
+        "sha256": "c4f27d14be5edbcfcf9cbfc3522001544d5daec002cb53c4a34ad71d527ce70a"
+      }
+    },
+    "effective_manifest_file_count": 31,
+    "mismatches": [],
+    "overlaid_entries": [],
+    "passed": true
+  },
+  "metrics": {
+    "scenario_effects": {
+      "coregulation": {
+        "count": 2000,
+        "lower_95": 0.20935697211013568,
+        "mean": 0.21048338964141722,
+        "upper_95": 0.21160980717269876
+      },
+      "efficacy": {
+        "count": 2000,
+        "lower_95": 0.13584201118805075,
+        "mean": 0.13763788414878667,
+        "upper_95": 0.13943375710952258
+      },
+      "partner_reliability": {
+        "count": 2000,
+        "lower_95": 0.24892459678734216,
+        "mean": 0.2503421984091576,
+        "upper_95": 0.25175980003097304
+      },
+      "policy_costs": {
+        "count": 2000,
+        "lower_95": 0.3504681564631747,
+        "mean": 0.3508631947007258,
+        "upper_95": 0.3512582329382769
+      },
+      "refusal_diagnosticity": {
+        "count": 2000,
+        "lower_95": 0.8941387559808615,
+        "mean": 0.8941387559808615,
+        "upper_95": 0.8941387559808615
+      },
+      "root_evidence": {
+        "count": 2000,
+        "lower_95": 0.49998257995966894,
+        "mean": 0.49998257995966894,
+        "upper_95": 0.49998257995966894
+      },
+      "stakes": {
+        "count": 2000,
+        "lower_95": 0.6058316574999713,
+        "mean": 0.6066032511976648,
+        "upper_95": 0.6073748448953583
+      },
+      "temperature": {
+        "count": 2000,
+        "lower_95": 0.5348622747534787,
+        "mean": 0.5372677725766629,
+        "upper_95": 0.5396732703998471
+      },
+      "trust_prior": {
+        "count": 2000,
+        "lower_95": 0.08683154965378027,
+        "mean": 0.08748898182020137,
+        "upper_95": 0.08814641398662247
+      }
+    },
+    "world_count": 18000
+  },
+  "passed": true,
+  "seed_block": [
+    1412000,
+    1429999
+  ],
+  "stage": "V2.6b"
+}

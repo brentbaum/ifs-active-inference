@@ -1,0 +1,87 @@
+{
+  "checks": {
+    "10_rupture_diagnosticity": true,
+    "11_reliable_partner": true,
+    "12_controls_low": true,
+    "13_policy_precedes_root": true,
+    "1_ambiguous_within_chance": true,
+    "2_two_responses_identify": true,
+    "3_remaining_not_pressure": true,
+    "4_stakes_effect": true,
+    "5_transfer_latent_cause": true,
+    "6_hope_identical": true,
+    "7_role_sign": true,
+    "8_crossover": true,
+    "9_hope_only": true
+  },
+  "criterion": false,
+  "metrics": {
+    "ambiguous_chance_deviation_max": 0.0,
+    "competence_crossover_error_max": 0.0,
+    "complete_risk_identity_error_max": 1.1102230246251565e-16,
+    "decoupled_permission": {
+      "count": 538,
+      "lower_95": 0.004081753336780015,
+      "mean": 0.0042617352991259055,
+      "upper_95": 0.004441717261471796
+    },
+    "diagnostic_partner_posterior": {
+      "count": 539,
+      "lower_95": 0.9878048780487806,
+      "mean": 0.9878048780487806,
+      "upper_95": 0.9878048780487806
+    },
+    "diagnostic_rupture_selectivity_rate": 1.0,
+    "hope_identity_error_max": 0.0,
+    "hope_only_differential_max": 1.1102230246251565e-16,
+    "latent_cause_transfer_rate": 1.0,
+    "matched_trust_error_max": 0.0,
+    "no_dyad_permission": {
+      "count": 538,
+      "lower_95": 0.005271341544320052,
+      "mean": 0.00539888690898883,
+      "upper_95": 0.005526432273657607
+    },
+    "policy_precedes_root_rate": 1.0,
+    "pressure_trust_growth": {
+      "count": 539,
+      "lower_95": -0.48780487804878053,
+      "mean": -0.48780487804878053,
+      "upper_95": -0.48780487804878053
+    },
+    "reliable_partner_contact_difference": {
+      "count": 538,
+      "lower_95": 0.12495584943953102,
+      "mean": 0.12659926790596307,
+      "upper_95": 0.12824268637239514
+    },
+    "reliable_partner_permission_difference": {
+      "count": 538,
+      "lower_95": 0.2458275712427443,
+      "mean": 0.24866301646514033,
+      "upper_95": 0.25149846168753637
+    },
+    "remaining_trust_growth": {
+      "count": 539,
+      "lower_95": 0.48780487804878053,
+      "mean": 0.48780487804878053,
+      "upper_95": 0.48780487804878053
+    },
+    "role_absence_sign_match_rate": 1.0,
+    "stakes_permission_difference": {
+      "count": 539,
+      "lower_95": 0.6066687059422073,
+      "mean": 0.6080748903729096,
+      "upper_95": 0.6094810748036119
+    },
+    "successful_descent_worlds": 538,
+    "world_count": 7000
+  },
+  "passed": true,
+  "public_seed_block": [
+    1391000,
+    1397999
+  ],
+  "purpose": "prospective attainability for every Gate-3 rate/effect floor",
+  "suspected_unattainable_floor": []
+}

@@ -1,0 +1,33 @@
+{
+  "checks": {
+    "brier": true,
+    "coverage": true,
+    "each_trust_accuracy": true,
+    "ece": true,
+    "partner_state_accuracy": true,
+    "policy_outcome_parameter_MAE": true,
+    "policy_posterior_parity": true
+  },
+  "criterion": false,
+  "metrics": {
+    "brier": 3.4388001356615062e-46,
+    "coverage": 0.999,
+    "ece": 0.0,
+    "partner_state_accuracy": 0.893,
+    "policy_outcome_parameter_MAE": 0.008697614373254678,
+    "policy_posterior_parity_max": 0.0,
+    "trust_accuracy": {
+      "T_coprotection": 1.0,
+      "T_outcome": 1.0,
+      "T_partner": 1.0
+    },
+    "world_count": 1000
+  },
+  "passed": true,
+  "public_seed_block": [
+    1390000,
+    1390999
+  ],
+  "purpose": "prospective attainability before Gate 2",
+  "suspected_unattainable_floor": []
+}
