@@ -1,0 +1,64 @@
+{
+  "adjudicated_nonblocking_family": {
+    "switch_onset_floor": "not a Gate-4 lesion criterion; retained from Gate 2"
+  },
+  "bounds": {
+    "B_max_v232_formation": 3.801426508560692,
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "B_max_v25a_configural": 6.084736253211209,
+    "B_max_v25a_marginal_accounting": 6.704414354964107,
+    "B_max_v25b": 11.302393144606405,
+    "B_max_v26a_relational": 6.9920964274158885,
+    "B_max_v26a_root": 2.9444389791664394,
+    "implied_relational_binary_change_bound": 0.9411502391813408,
+    "implied_root_binary_change_bound": 0.6267890062732583
+  },
+  "checks": {
+    "broadcast_local_paths_survive": true,
+    "broadcast_target_removed": true,
+    "partner_to_precision_inference_survives": true,
+    "partner_to_precision_target_removed": true,
+    "root_evidence_partner_paths_survive": true,
+    "root_evidence_target_removed": true,
+    "shared_partner_atomic_paths_survive": true,
+    "shared_partner_target_removed": true,
+    "transition_learning_target_removed": true,
+    "transition_stable_inference_survives": true
+  },
+  "custody": {
+    "escrow_accessed": false,
+    "passed": true
+  },
+  "gate": 4,
+  "metrics": {
+    "broadcast_depth_from_base_max": 0.0,
+    "broadcast_local_precision_max_error": 0.0,
+    "broadcast_q_max_error": 0.0,
+    "partner_precision_depth_from_base_max": 0.0,
+    "partner_precision_q_max_error": 0.0,
+    "root_lesion_global_max_error": 0.0,
+    "root_lesion_q_max_error": 0.0,
+    "root_lesion_root_movement_max": 0.0,
+    "root_lesion_transfer_max": 0.0,
+    "shared_atomic_likelihood_max_error": 0.0,
+    "shared_latent_reliable_posterior_effect": {
+      "lower_95": 0.24369212609525642,
+      "mean": 0.24652951329909023,
+      "upper_95": 0.24936690050292404
+    },
+    "transition_lesion_switch_rate_max": 8.953411488912552e-17,
+    "transition_stable_recovery_rate": 1.0,
+    "world_count": 1000
+  },
+  "passed": true,
+  "seed_block": [
+    1206000,
+    1206999
+  ],
+  "stage": "V2.6a",
+  "verdict_classes": {
+    "custody": true,
+    "scientific": true,
+    "semantic": true
+  }
+}

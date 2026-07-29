@@ -23,3 +23,12 @@ treated as reversible. Formal gate-1 fixtures were moved to the unassigned
 public development range `1199900:1199902`. Any future continuation to gate 3
 requires evaluator adjudication of the three consumed seeds or a replacement
 block.
+
+## Repaired Gate-2 onset floor
+
+The repaired run passed recovery, Brier, ECE, coverage, switch-rate, and
+local-precision criteria but obtained switch-onset median absolute error
+`5.0` against the unchanged `<=3` floor. The evaluator classified this as an
+unaudited attainability floor and authorized mixed-verdict continuation. Gate
+5 reports the repetitions verbatim: `switch_low=1.0`,
+`context_return=1.0`, and `switch_high=12.0`.

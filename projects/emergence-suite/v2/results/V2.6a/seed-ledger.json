@@ -10,6 +10,9 @@
   "gate_2_repair_authorization": "results/V2.6a/gate2-repair-authorization.md",
   "gate_2_repaired_block": [1230000, 1231499],
   "gate_2_repaired_block_status": "consumed once; repaired Gate-2 FAIL retained",
-  "gate_3_consumed": null,
-  "stop_reason": "repaired gate-2 switch-onset median absolute error 5.0 exceeded 3 slices"
+  "gate_3_consumed": [1202000, 1205999],
+  "gate_4_consumed": [1206000, 1206999],
+  "gate_5_consumed": [1207000, 1219999],
+  "gate_2_adjudication": "mixed-verdict continuation; onset-floor family non-blocking",
+  "stage_stop": "freeze candidate complete; C-V26A remains evaluator-only"
 }

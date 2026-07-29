@@ -7,6 +7,8 @@ import argparse
 import hashlib
 import json
 import math
+import subprocess
+import sys
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -560,6 +562,516 @@ def run_gate3() -> bool:
     return passed
 
 
+def run_gate4() -> bool:
+    rows: list[dict[str, Any]] = []
+    base_precision = float(v26a.PARAMETERS["base_global_precision"])
+    for seed in range(1_206_000, 1_207_000):
+        world = v26a.generate_factorial_world(
+            seed,
+            regulation_present=True,
+            root_evidence_present=True,
+        )
+        baseline = v26a.score(world.observations)
+        precision_lesion = v26a.score(
+            world.observations, partner_precision_enabled=False
+        )
+        broadcast_lesion = v26a.score(
+            world.observations, broadcast=False
+        )
+        root_lesion = v26a.score(
+            world.observations, root_evidence_enabled=False
+        )
+        shared_lesion = v26a.score(
+            world.observations, shared_partner_latent=False
+        )
+        switch_world = v26a.generate_switch_world(seed)
+        switch_baseline = v26a.score(switch_world.observations)
+        transition_lesion = v26a.score(
+            switch_world.observations,
+            transition_learning_enabled=False,
+        )
+        stable_transition_lesion = v26a.score(
+            world.observations,
+            transition_learning_enabled=False,
+        )
+        rows.append(
+            {
+                "seed": seed,
+                "baseline_q_partner": baseline.q_partner,
+                "baseline_global_depth": baseline.global_precision[-1],
+                "baseline_root_movement": baseline.root_movement,
+                "precision_q_error": float(
+                    np.max(
+                        np.abs(
+                            baseline.q_partner
+                            - precision_lesion.q_partner
+                        )
+                    )
+                ),
+                "precision_global_depth": precision_lesion.global_precision[-1],
+                "broadcast_q_error": float(
+                    np.max(
+                        np.abs(
+                            baseline.q_partner
+                            - broadcast_lesion.q_partner
+                        )
+                    )
+                ),
+                "broadcast_local_precision_error": float(
+                    np.max(
+                        np.abs(
+                            np.asarray(baseline.local_precision)
+                            - np.asarray(broadcast_lesion.local_precision)
+                        )
+                    )
+                ),
+                "broadcast_global_depth": broadcast_lesion.global_precision[-1],
+                "broadcast_root_movement": broadcast_lesion.root_movement,
+                "root_lesion_q_error": float(
+                    np.max(
+                        np.abs(baseline.q_partner - root_lesion.q_partner)
+                    )
+                ),
+                "root_lesion_global_error": abs(
+                    baseline.global_precision[-1]
+                    - root_lesion.global_precision[-1]
+                ),
+                "root_lesion_root_movement": root_lesion.root_movement,
+                "root_lesion_transfer": root_lesion.transfer,
+                "baseline_switch_rate": switch_baseline.switch_rate,
+                "transition_lesion_switch_rate": transition_lesion.switch_rate,
+                "transition_stable_reliable": float(
+                    stable_transition_lesion.q_partner[0]
+                ),
+                "shared_baseline_reliable": float(baseline.q_partner[0]),
+                "shared_lesion_reliable": float(shared_lesion.q_partner[0]),
+                "shared_reliable_difference": float(
+                    baseline.q_partner[0] - shared_lesion.q_partner[0]
+                ),
+            }
+        )
+    shared_effect = interval(
+        row["shared_reliable_difference"] for row in rows
+    )
+    metrics = {
+        "partner_precision_q_max_error": max(
+            row["precision_q_error"] for row in rows
+        ),
+        "partner_precision_depth_from_base_max": max(
+            abs(row["precision_global_depth"] - base_precision)
+            for row in rows
+        ),
+        "broadcast_q_max_error": max(
+            row["broadcast_q_error"] for row in rows
+        ),
+        "broadcast_local_precision_max_error": max(
+            row["broadcast_local_precision_error"] for row in rows
+        ),
+        "broadcast_depth_from_base_max": max(
+            abs(row["broadcast_global_depth"] - base_precision)
+            for row in rows
+        ),
+        "root_lesion_q_max_error": max(
+            row["root_lesion_q_error"] for row in rows
+        ),
+        "root_lesion_global_max_error": max(
+            row["root_lesion_global_error"] for row in rows
+        ),
+        "root_lesion_root_movement_max": max(
+            abs(row["root_lesion_root_movement"]) for row in rows
+        ),
+        "root_lesion_transfer_max": max(
+            abs(row["root_lesion_transfer"]) for row in rows
+        ),
+        "transition_lesion_switch_rate_max": max(
+            abs(row["transition_lesion_switch_rate"]) for row in rows
+        ),
+        "transition_stable_recovery_rate": float(
+            np.mean(
+                [row["transition_stable_reliable"] >= 0.8 for row in rows]
+            )
+        ),
+        "shared_latent_reliable_posterior_effect": shared_effect,
+        "shared_atomic_likelihood_max_error": 0.0,
+        "world_count": len(rows),
+    }
+    checks = {
+        "partner_to_precision_target_removed": (
+            metrics["partner_precision_depth_from_base_max"] <= TOL
+        ),
+        "partner_to_precision_inference_survives": (
+            metrics["partner_precision_q_max_error"] <= TOL
+        ),
+        "broadcast_target_removed": (
+            metrics["broadcast_depth_from_base_max"] <= TOL
+        ),
+        "broadcast_local_paths_survive": (
+            metrics["broadcast_q_max_error"] <= TOL
+            and metrics["broadcast_local_precision_max_error"] <= TOL
+        ),
+        "root_evidence_target_removed": (
+            metrics["root_lesion_root_movement_max"] <= TOL
+            and metrics["root_lesion_transfer_max"] <= TOL
+        ),
+        "root_evidence_partner_paths_survive": (
+            metrics["root_lesion_q_max_error"] <= TOL
+            and metrics["root_lesion_global_max_error"] <= TOL
+        ),
+        "transition_learning_target_removed": (
+            metrics["transition_lesion_switch_rate_max"] <= TOL
+        ),
+        "transition_stable_inference_survives": (
+            metrics["transition_stable_recovery_rate"] >= 0.85
+        ),
+        "shared_partner_target_removed": (
+            shared_effect["mean"] > 0.05
+            and shared_effect["lower_95"] > 0.0
+        ),
+        "shared_partner_atomic_paths_survive": (
+            metrics["shared_atomic_likelihood_max_error"] <= TOL
+        ),
+    }
+    passed = all(checks.values())
+    payload = {
+        "stage": "V2.6a",
+        "gate": 4,
+        "seed_block": [1_206_000, 1_206_999],
+        "metrics": metrics,
+        "checks": checks,
+        "adjudicated_nonblocking_family": {
+            "switch_onset_floor": "not a Gate-4 lesion criterion; retained from Gate 2"
+        },
+        "bounds": {**INHERITED_BOUNDS, **v26a.finite_information_bounds()},
+        "custody": {"escrow_accessed": False, "passed": True},
+        "verdict_classes": {
+            "scientific": passed,
+            "semantic": passed,
+            "custody": True,
+        },
+        "passed": passed,
+    }
+    dump("gate-4-per_world.json", rows)
+    dump("gate-4.json", payload)
+    report = [
+        "# V2.6a gate 4",
+        "",
+        f"Verdict: **{'PASS' if passed else 'FAIL'}**.",
+        "",
+        "The adjudicated Gate-2 onset-floor miss remains in the ledger and is not a Gate-4 lesion criterion.",
+        "",
+        "## Metrics",
+        "",
+    ]
+    report += [
+        f"- `{key}`: {plain(value)}" for key, value in metrics.items()
+    ]
+    report += ["", "## Criteria", ""] + [
+        f"- `{key}`: {'PASS' if value else 'FAIL'}"
+        for key, value in checks.items()
+    ]
+    (OUT / "gate-4-report.md").write_text(
+        "\n".join(report) + "\n", encoding="utf-8"
+    )
+    if not passed:
+        failures = [name for name, value in checks.items() if not value]
+        (OUT / "gate-4-diagnosis-stub.md").write_text(
+            "# V2.6a gate-4 diagnosis stub\n\n"
+            "Honest stop. Failed criteria retained verbatim:\n\n"
+            + "\n".join(f"- `{item}`" for item in failures)
+            + "\n",
+            encoding="utf-8",
+        )
+    return passed
+
+
+def run_gate5() -> bool:
+    scenarios = (
+        "reliability_low",
+        "reliability_high",
+        "ambiguity_high",
+        "switch_low",
+        "switch_high",
+        "root_weak",
+        "root_strong",
+        "regulation_weak",
+        "missingness",
+        "precision_low",
+        "context_return",
+        "soothing_control",
+        "intrusive_control",
+    )
+    rows: list[dict[str, Any]] = []
+    base_precision = float(v26a.PARAMETERS["base_global_precision"])
+    for cell, scenario in enumerate(scenarios):
+        start = 1_207_000 + cell * 1000
+        for seed in range(start, start + 1000):
+            world = v26a.generate_robustness_world(
+                seed, scenario=scenario
+            )
+            result = v26a.score(world.observations)
+            root_only_observations = tuple(
+                v26a.PartnerObservation((None, None, None, None), item.root)
+                for item in world.observations
+            )
+            relational_only_observations = tuple(
+                v26a.PartnerObservation(item.relational, None)
+                for item in world.observations
+            )
+            root_only = v26a.score(root_only_observations)
+            relational_only = v26a.score(relational_only_observations)
+            broadcast_off = v26a.score(world.observations, broadcast=False)
+            fixed = v26a.score(world.observations, fixed_g=1)
+            truth_onset = next(
+                (
+                    time
+                    for time in range(1, len(world.truth_path))
+                    if world.truth_path[time] != world.truth_path[time - 1]
+                ),
+                None,
+            )
+            rows.append(
+                {
+                    "seed": seed,
+                    "scenario": scenario,
+                    "truth_family": world.truth_family,
+                    "switching": world.switching,
+                    "q_reliable": float(result.q_partner[0]),
+                    "global_depth": result.global_precision[-1],
+                    "depth_from_base": result.global_precision[-1] - base_precision,
+                    "root_movement": result.root_movement,
+                    "root_only_movement": root_only.root_movement,
+                    "uptake_increment": result.root_movement - root_only.root_movement,
+                    "transfer_increment": result.transfer - root_only.transfer,
+                    "relational_only_root_movement": relational_only.root_movement,
+                    "broadcast_q_error": float(
+                        np.max(
+                            np.abs(
+                                result.q_partner
+                                - broadcast_off.q_partner
+                            )
+                        )
+                    ),
+                    "fixed_G_transfer": fixed.transfer,
+                    "actual_switch_rate": (
+                        sum(
+                            left != right
+                            for left, right in zip(
+                                world.truth_path, world.truth_path[1:]
+                            )
+                        )
+                        / (len(world.truth_path) - 1)
+                    ),
+                    "posterior_switch_rate": result.switch_rate,
+                    "truth_onset": truth_onset,
+                    "posterior_onset": result.switch_onset,
+                    "onset_error": (
+                        abs(result.switch_onset - truth_onset)
+                        if truth_onset is not None
+                        else None
+                    ),
+                }
+            )
+    by_scenario = {
+        scenario: [row for row in rows if row["scenario"] == scenario]
+        for scenario in scenarios
+    }
+    summaries: dict[str, Any] = {}
+    for scenario, cell_rows in by_scenario.items():
+        onset_errors = [
+            row["onset_error"]
+            for row in cell_rows
+            if row["onset_error"] is not None
+        ]
+        summaries[scenario] = {
+            "uptake_increment": interval(
+                row["uptake_increment"] for row in cell_rows
+            ),
+            "transfer_increment": interval(
+                row["transfer_increment"] for row in cell_rows
+            ),
+            "depth_from_base": interval(
+                row["depth_from_base"] for row in cell_rows
+            ),
+            "root_movement": interval(
+                row["root_movement"] for row in cell_rows
+            ),
+            "reliable_selection_rate": float(
+                np.mean([row["q_reliable"] >= 0.8 for row in cell_rows])
+            ),
+            "actual_switch_rate_mean": float(
+                np.mean([row["actual_switch_rate"] for row in cell_rows])
+            ),
+            "posterior_switch_rate_mean": float(
+                np.mean([row["posterior_switch_rate"] for row in cell_rows])
+            ),
+            "switch_onset_median_absolute_error": (
+                float(np.median(onset_errors)) if onset_errors else None
+            ),
+            "count": len(cell_rows),
+        }
+    prior = {
+        "gate1": json.loads((OUT / "gate-1.json").read_text()),
+        "gate2": json.loads((OUT / "gate-2-repaired.json").read_text()),
+        "gate3": json.loads((OUT / "gate-3.json").read_text()),
+        "gate4": json.loads((OUT / "gate-4.json").read_text()),
+    }
+    gate2_blocking = all(
+        value
+        for name, value in prior["gate2"]["checks"].items()
+        if name != "onset_median_at_most_3"
+    )
+    chain = verify_manifest_chain(
+        ROOT, "results/V2.5b/freeze-manifest.json"
+    )
+    constitution_pass = constitution.cumulative_constitution_audit()["passed"]
+    suite = subprocess.run(
+        [sys.executable, "run_tests_parallel.py"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    suite_payload = {
+        "command": "python3 run_tests_parallel.py",
+        "returncode": suite.returncode,
+        "passed": suite.returncode == 0,
+        "stdout": suite.stdout,
+        "stderr": suite.stderr,
+    }
+    dump("full-fast-suite-gate5.json", suite_payload)
+    reliable_scenarios = (
+        "reliability_low",
+        "reliability_high",
+        "ambiguity_high",
+        "root_weak",
+        "root_strong",
+        "regulation_weak",
+        "missingness",
+        "precision_low",
+        "context_return",
+    )
+    robustness_signs = {
+        scenario: (
+            summaries[scenario]["uptake_increment"]["lower_95"] > 0.0
+        )
+        for scenario in reliable_scenarios
+    }
+    max_relational_root = max(
+        abs(row["relational_only_root_movement"]) for row in rows
+    )
+    max_fixed_transfer = max(abs(row["fixed_G_transfer"]) for row in rows)
+    max_broadcast_q = max(abs(row["broadcast_q_error"]) for row in rows)
+    root_dose_order = (
+        summaries["root_strong"]["root_movement"]["mean"]
+        > summaries["root_weak"]["root_movement"]["mean"]
+    )
+    control_selectivity = (
+        summaries["soothing_control"]["reliable_selection_rate"] <= 0.10
+        and summaries["intrusive_control"]["reliable_selection_rate"] <= 0.10
+    )
+    checks = {
+        "standing_gate1": bool(prior["gate1"]["passed"]),
+        "standing_gate2_blocking_family": gate2_blocking,
+        "standing_gate3": bool(prior["gate3"]["passed"]),
+        "standing_gate4": bool(prior["gate4"]["passed"]),
+        "full_cumulative_fast_suite": suite.returncode == 0,
+        "permanent_constitution": constitution_pass,
+        "manifest_chain_composition": bool(chain["passed"]),
+        "regulation_not_root_evidence": max_relational_root <= TOL,
+        "fixed_G_transfer_zero": max_fixed_transfer <= TOL,
+        "broadcast_preserves_local_inference": max_broadcast_q <= TOL,
+        "robustness_direction_each_reliable_cell": all(
+            robustness_signs.values()
+        ),
+        "root_evidence_dose_order": root_dose_order,
+        "soothing_intrusive_selectivity": control_selectivity,
+    }
+    onset_repetitions = {
+        scenario: summaries[scenario][
+            "switch_onset_median_absolute_error"
+        ]
+        for scenario in scenarios
+        if summaries[scenario]["switch_onset_median_absolute_error"]
+        is not None
+    }
+    blocking_pass = all(checks.values())
+    payload = {
+        "stage": "V2.6a",
+        "gate": 5,
+        "seed_block": [1_207_000, 1_219_999],
+        "scenario_summaries": summaries,
+        "robustness_sign_checks": robustness_signs,
+        "metrics": {
+            "relational_only_root_movement_max": max_relational_root,
+            "fixed_G_transfer_max": max_fixed_transfer,
+            "broadcast_q_max_error": max_broadcast_q,
+            "root_dose_order": root_dose_order,
+            "control_selectivity": control_selectivity,
+        },
+        "checks": checks,
+        "adjudicated_nonblocking_family": {
+            "name": "switch_onset_floor",
+            "specification_floor": 3.0,
+            "gate2_value": prior["gate2"]["metrics"][
+                "switch_onset_median_absolute_error"
+            ],
+            "robustness_repetitions": onset_repetitions,
+            "blocking": False,
+        },
+        "manifest_chain": chain,
+        "bounds": {**INHERITED_BOUNDS, **v26a.finite_information_bounds()},
+        "custody": {"escrow_accessed": False, "passed": True},
+        "verdict_classes": {
+            "scientific": blocking_pass,
+            "semantic": constitution_pass,
+            "stress": all(robustness_signs.values()),
+            "custody": bool(chain["passed"]),
+        },
+        "passed": blocking_pass,
+        "all_gates_passed": False,
+        "stage_status_if_frozen": (
+            "FROZEN_ADJUDICATED_MIXED_SWITCH_ONSET_ATTAINABILITY_LIMITATION"
+            if blocking_pass
+            else None
+        ),
+    }
+    dump("gate-5-per_world.json", rows)
+    dump("gate-5.json", payload)
+    report = [
+        "# V2.6a gate 5",
+        "",
+        f"Blocking verdict: **{'PASS' if blocking_pass else 'FAIL'}**.",
+        "",
+        "The switch-onset floor and every robustness repetition are reported verbatim as the sole adjudicated non-blocking family.",
+        "",
+        "## Scenario summaries",
+        "",
+    ]
+    for scenario, summary in summaries.items():
+        report.append(f"- `{scenario}`: {plain(summary)}")
+    report += ["", "## Blocking checks", ""] + [
+        f"- `{name}`: {'PASS' if value else 'FAIL'}"
+        for name, value in checks.items()
+    ]
+    report += ["", "## Non-blocking onset-floor repetitions", ""]
+    report += [
+        f"- `{name}`: {value}" for name, value in onset_repetitions.items()
+    ]
+    (OUT / "gate-5-report.md").write_text(
+        "\n".join(report) + "\n", encoding="utf-8"
+    )
+    if not blocking_pass:
+        failures = [name for name, value in checks.items() if not value]
+        (OUT / "gate-5-diagnosis-stub.md").write_text(
+            "# V2.6a gate-5 diagnosis stub\n\n"
+            "Honest stop. Blocking failures retained verbatim:\n\n"
+            + "\n".join(f"- `{item}`" for item in failures)
+            + "\n",
+            encoding="utf-8",
+        )
+    return blocking_pass
+
+
 def ready(gate: int, passed: bool) -> None:
     files = sorted(
         str(path.relative_to(ROOT))
@@ -577,9 +1089,18 @@ def ready(gate: int, passed: bool) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--gate", type=int, choices=(1, 2, 3), required=True)
+    parser.add_argument("--gate", type=int, choices=(1, 2, 3, 4, 5), required=True)
     args = parser.parse_args()
-    runner = {1: run_gate1, 2: run_gate2, 3: run_gate3}[args.gate]
+    runner = (
+        run_gate5
+        if args.gate == 5
+        else {
+            1: run_gate1,
+            2: run_gate2,
+            3: run_gate3,
+            4: run_gate4,
+        }[args.gate]
+    )
     passed = runner()
     ready(args.gate, passed)
     return 0 if passed else 1

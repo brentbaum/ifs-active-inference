@@ -174,6 +174,58 @@ def hmm_inference(
     return tuple(filtered), smoothed, tuple(pairwise), log_evidence
 
 
+def independent_channel_inference(
+    observations: Sequence[PartnerObservation],
+    *,
+    transition: np.ndarray,
+) -> tuple[
+    tuple[np.ndarray, ...],
+    tuple[np.ndarray, ...],
+    tuple[np.ndarray, ...],
+    float,
+]:
+    """Lesion path: infer each channel separately, without a shared latent."""
+    channel_results = []
+    for axis in range(4):
+        isolated = tuple(
+            PartnerObservation(
+                tuple(
+                    value if index == axis else None
+                    for index, value in enumerate(item.relational)
+                ),
+                None,
+            )
+            for item in observations
+        )
+        channel_results.append(
+            hmm_inference(isolated, transition=transition)
+        )
+    filtered = tuple(
+        _normalize(
+            np.mean(
+                [result[0][time] for result in channel_results], axis=0
+            )
+        )
+        for time in range(len(observations))
+    )
+    smoothed = tuple(
+        _normalize(
+            np.mean(
+                [result[1][time] for result in channel_results], axis=0
+            )
+        )
+        for time in range(len(observations))
+    )
+    pairwise = tuple(
+        np.mean(
+            [result[2][time] for result in channel_results], axis=0
+        )
+        for time in range(max(len(observations) - 1, 0))
+    )
+    log_evidence = float(sum(result[3] for result in channel_results))
+    return filtered, smoothed, pairwise, log_evidence
+
+
 def root_probability(observed: int, root_state: int, precision: float) -> float:
     correct = 0.5 + float(PARAMETERS["root_likelihood_gain"]) * float(precision)
     return correct if int(observed) == int(root_state) else 1.0 - correct
@@ -184,11 +236,30 @@ def score(
     *,
     broadcast: bool = True,
     fixed_g: int | None = None,
+    partner_precision_enabled: bool = True,
+    root_evidence_enabled: bool = True,
+    transition_learning_enabled: bool = True,
+    shared_partner_latent: bool = True,
 ) -> PartnerScore:
     sequence = tuple(observations)
-    filtered, smoothed, pairwise, log_evidence = hmm_inference(sequence)
+    inference_transition = (
+        TRANSITION if transition_learning_enabled else np.eye(4, dtype=float)
+    )
+    if shared_partner_latent:
+        filtered, smoothed, pairwise, log_evidence = hmm_inference(
+            sequence, transition=inference_transition
+        )
+    else:
+        filtered, smoothed, pairwise, log_evidence = (
+            independent_channel_inference(
+                sequence, transition=inference_transition
+            )
+        )
     prior_local = float(PRIOR @ LOCAL_PRECISION)
-    local = tuple(float(q @ LOCAL_PRECISION) for q in filtered)
+    local = tuple(
+        float(q @ LOCAL_PRECISION) if partner_precision_enabled else prior_local
+        for q in filtered
+    )
     base = float(PARAMETERS["base_global_precision"])
     gain = float(PARAMETERS["broadcast_strength"])
     global_precision = tuple(
@@ -200,7 +271,7 @@ def score(
     q_root = ROOT_PRIOR.copy()
     root_bfs: list[float] = []
     for observation, precision in zip(sequence, global_precision):
-        if observation.root is None:
+        if observation.root is None or not root_evidence_enabled:
             root_bfs.append(0.0)
             continue
         likelihoods = np.asarray(
@@ -225,7 +296,13 @@ def score(
         onset = int(np.argmax(switch_probabilities)) + 1
     else:
         onset = None
-    forecast = float((filtered[-1] @ TRANSITION @ LOCAL_PRECISION) if filtered else prior_local)
+    forecast = float(
+        (
+            filtered[-1] @ inference_transition @ LOCAL_PRECISION
+            if filtered
+            else prior_local
+        )
+    )
     movement = float(q_root[1] - ROOT_PRIOR[1])
     transfer = 0.0 if fixed_g is not None else float(PARAMETERS["transfer_strength"]) * movement
     evidence_weights = np.exp(
@@ -245,7 +322,15 @@ def score(
             for name, value in zip(PARTNER_STATES, evidence_weights)
         },
         metadata=MappingProxyType(
-            {"stage": "V2.6a", "broadcast": bool(broadcast), "fixed_g": fixed_g is not None}
+            {
+                "stage": "V2.6a",
+                "broadcast": bool(broadcast),
+                "fixed_g": fixed_g is not None,
+                "partner_precision_enabled": bool(partner_precision_enabled),
+                "root_evidence_enabled": bool(root_evidence_enabled),
+                "transition_learning_enabled": bool(transition_learning_enabled),
+                "shared_partner_latent": bool(shared_partner_latent),
+            }
         ),
     )
     audit_one_posterior(state)
@@ -284,15 +369,101 @@ def sample_observation(
     missingness: float = 0.0,
     namespace: str,
     released_block: tuple[int, int] | None = None,
+    success_probabilities: Sequence[float] | None = None,
 ) -> PartnerObservation:
     rng = _rng(seed, f"v26a-{namespace}-{time}", released_block)
+    probabilities = (
+        EMISSIONS[state_index]
+        if success_probabilities is None
+        else np.asarray(success_probabilities, dtype=float)
+    )
     values: list[int | None] = [
-        int(rng.random() < probability) for probability in EMISSIONS[state_index]
+        int(rng.random() < probability) for probability in probabilities
     ]
     for axis in range(4):
         if rng.random() < missingness:
             values[axis] = None
     return PartnerObservation(tuple(values), root)
+
+
+def generate_robustness_world(
+    seed: int,
+    *,
+    scenario: str,
+    length: int | None = None,
+    released_block: tuple[int, int] | None = None,
+) -> PartnerWorld:
+    """Declared Gate-5 misspecification and composition sweep constructor."""
+    count = int(PARAMETERS["gate3_length"] if length is None else length)
+    reliable = STATE_INDEX["reliable_contingent"]
+    family_state = {
+        "soothing_control": STATE_INDEX["soothing_noncontingent"],
+        "intrusive_control": STATE_INDEX["intrusive"],
+    }.get(scenario, reliable)
+    path = [family_state] * count
+    if scenario in {"switch_low", "switch_high"}:
+        stay = 0.98 if scenario == "switch_low" else 0.75
+        transition = np.full((4, 4), (1.0 - stay) / 3.0)
+        np.fill_diagonal(transition, stay)
+        rng = _rng(seed, f"v26a-robustness-{scenario}-path", released_block)
+        path = [int(rng.choice(4, p=PRIOR))]
+        for _ in range(1, count):
+            path.append(int(rng.choice(4, p=transition[path[-1]])))
+    elif scenario == "context_return":
+        first = count // 3
+        second = (2 * count) // 3
+        path = (
+            [reliable] * first
+            + [STATE_INDEX["intrusive"]] * (second - first)
+            + [reliable] * (count - second)
+        )
+    observations: list[PartnerObservation] = []
+    for time, state in enumerate(path):
+        probabilities = EMISSIONS[state].copy()
+        if scenario == "reliability_high" and state == reliable:
+            probabilities = np.asarray([0.95, 0.95, 0.95, 0.95])
+        elif scenario == "reliability_low" and state == reliable:
+            probabilities = np.asarray([0.75, 0.75, 0.75, 0.75])
+        elif scenario == "ambiguity_high":
+            probabilities = 0.5 + 0.45 * (probabilities - 0.5)
+        elif scenario == "precision_low":
+            probabilities = 0.5 + 0.65 * (probabilities - 0.5)
+        root_count = {
+            "root_weak": 1,
+            "root_strong": 4,
+        }.get(scenario, 1)
+        root = 1 if time >= count - root_count else None
+        missingness = 0.35 if scenario == "missingness" else 0.0
+        observation = sample_observation(
+            seed,
+            time,
+            state_index=state,
+            root=root,
+            missingness=missingness,
+            namespace=f"robustness-{scenario}",
+            released_block=released_block,
+            success_probabilities=probabilities,
+        )
+        if scenario == "regulation_weak":
+            observation = PartnerObservation(
+                (
+                    observation.relational[0],
+                    observation.relational[1],
+                    None,
+                    None,
+                ),
+                observation.root,
+            )
+        observations.append(observation)
+    counts = np.bincount(path, minlength=4)
+    majority = int(np.flatnonzero(counts == counts.max())[0])
+    return PartnerWorld(
+        seed=seed,
+        truth_family=PARTNER_STATES[majority],
+        truth_path=tuple(path),
+        observations=tuple(observations),
+        switching=any(left != right for left, right in zip(path, path[1:])),
+    )
 
 
 def generate_recovery_world(

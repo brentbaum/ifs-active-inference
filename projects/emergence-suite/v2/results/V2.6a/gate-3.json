@@ -1,0 +1,97 @@
+{
+  "bounds": {
+    "B_max_v232_formation": 3.801426508560692,
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "B_max_v25a_configural": 6.084736253211209,
+    "B_max_v25a_marginal_accounting": 6.704414354964107,
+    "B_max_v25b": 11.302393144606405,
+    "B_max_v26a_relational": 6.9920964274158885,
+    "B_max_v26a_root": 2.9444389791664394,
+    "implied_relational_binary_change_bound": 0.9411502391813408,
+    "implied_root_binary_change_bound": 0.6267890062732583
+  },
+  "checks": {
+    "1_regulation_only_depth": true,
+    "2_regulation_only_root_revision": true,
+    "2_regulation_only_transfer": true,
+    "3_root_uptake_increment": true,
+    "3_transfer_increment": true,
+    "4_broadcast_local_preserved": true,
+    "4_broadcast_removes_depth": true,
+    "4_broadcast_removes_uptake": true,
+    "5_soothing_not_reliable": true,
+    "6_intrusive_not_reliable": true,
+    "7_switch_learned": true,
+    "8_fixed_G_transfer_zero": true
+  },
+  "custody": {
+    "escrow_accessed": false,
+    "passed": true
+  },
+  "gate": 3,
+  "metrics": {
+    "broadcast_off_depth_increment": {
+      "lower_95": 0.0,
+      "mean": 0.0,
+      "upper_95": 0.0
+    },
+    "broadcast_off_local_partner_max_error": 0.0,
+    "broadcast_off_root_uptake_increment": {
+      "lower_95": 0.0,
+      "mean": 0.0,
+      "upper_95": 0.0
+    },
+    "cell_counts": {
+      "reg_0_root_0": 1000,
+      "reg_0_root_1": 1000,
+      "reg_1_root_0": 1000,
+      "reg_1_root_1": 1000
+    },
+    "fixed_G_transfer_max_absolute": 0.0,
+    "future_precision_forecast_decrease": {
+      "lower_95": 0.6990445428801384,
+      "mean": 0.7044853743075514,
+      "upper_95": 0.7099262057349645
+    },
+    "intrusive_false_reliable_rate": 0.0,
+    "regulation_only_global_depth_effect": {
+      "lower_95": 0.412819397304387,
+      "mean": 0.41738937659215797,
+      "upper_95": 0.42195935587992894
+    },
+    "regulation_only_root_revision": {
+      "lower_95": 0.0,
+      "mean": 0.0,
+      "upper_95": 0.0
+    },
+    "regulation_only_transfer": {
+      "lower_95": 0.0,
+      "mean": 0.0,
+      "upper_95": 0.0
+    },
+    "regulation_plus_root_transfer_increment": {
+      "lower_95": 0.15822056461221515,
+      "mean": 0.15996174100165722,
+      "upper_95": 0.1617029173910993
+    },
+    "regulation_plus_root_uptake_increment": {
+      "lower_95": 0.1861418407202531,
+      "mean": 0.18819028353136144,
+      "upper_95": 0.19023872634246977
+    },
+    "soothing_false_reliable_rate": 0.0,
+    "soothing_mean_arousal": 0.9306823323389333,
+    "switch_onset_median_absolute_error": 0.0
+  },
+  "passed": true,
+  "seed_block": [
+    1202000,
+    1205999
+  ],
+  "stage": "V2.6a",
+  "verdict_classes": {
+    "custody": true,
+    "scientific": true,
+    "semantic": true
+  }
+}

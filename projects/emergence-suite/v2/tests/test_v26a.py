@@ -123,6 +123,41 @@ class V26aTests(unittest.TestCase):
         for left, right in zip(world.truth_path, world.truth_path[1:]):
             self.assertGreater(v26a.TRANSITION[left, right], 0.0)
 
+    def test_declared_lesions_preserve_unrelated_paths(self):
+        world = v26a.generate_factorial_world(
+            1_199_920,
+            regulation_present=True,
+            root_evidence_present=True,
+        )
+        baseline = v26a.score(world.observations)
+        precision = v26a.score(
+            world.observations, partner_precision_enabled=False
+        )
+        no_root = v26a.score(
+            world.observations, root_evidence_enabled=False
+        )
+        self.assertLessEqual(
+            float(np.max(np.abs(baseline.q_partner - precision.q_partner))),
+            v26a.TOLERANCE,
+        )
+        self.assertLessEqual(
+            float(np.max(np.abs(baseline.q_partner - no_root.q_partner))),
+            v26a.TOLERANCE,
+        )
+        self.assertLessEqual(abs(no_root.root_movement), v26a.TOLERANCE)
+
+    def test_robustness_generation_threads_released_block(self):
+        world = v26a.generate_robustness_world(
+            1_199_930, scenario="context_return"
+        )
+        self.assertEqual(len(world.observations), 32)
+        with self.assertRaises(ValueError):
+            v26a.generate_robustness_world(
+                2_030_000,
+                scenario="baseline",
+                released_block=(1_207_000, 1_219_999),
+            )
+
 
 if __name__ == "__main__":
     unittest.main()
