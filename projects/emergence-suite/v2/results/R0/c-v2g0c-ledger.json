@@ -1,0 +1,108 @@
+{
+  "challenge": "C-V2G0-C",
+  "challenge_file": "sealed-revealed/C-V2G0C-apparatus-challenge.md",
+  "challenge_sha256": "6ab872b9aef3e8001e26dcbefb4c62e09fe37a76e997c144d7ab454259f10777",
+  "seal_and_release_commit": "35e23e0",
+  "released_blocks_file": "protocols/v2.g0-released-blocks.json",
+  "released_blocks_sha256": "1faecb7671b91a6192f773e30a67a81b777d03558ba7d60595da2cf0e90a8fb1",
+  "prior_stop_verdicts": [
+    {
+      "file": "results/R0/c-v2g0-verdict.md",
+      "sha256": "fdcb9bb1950224fcc73a585abe27a5519d16617823d8ed02b3e371ce9869e050"
+    },
+    {
+      "file": "results/R0/c-v2g0-run2-verdict.md",
+      "sha256": "f965a5f086737a15b6f56794cd04321d39d87ea95f07ef044e5cd1fd3087669d"
+    },
+    {
+      "file": "results/R0/c-v2g0b-verdict.md",
+      "sha256": "8a94f35b6f1701a122ef88b4146631cb4ae8e43462acbc9adf20a1b8bddb0670"
+    }
+  ],
+  "parse_validation": {
+    "parser": "ast.literal_eval",
+    "source": "exact single bracketed Python literal line",
+    "other_transformations": [],
+    "literal_character_count": 4483,
+    "passed": true
+  },
+  "released_blocks_parser_result": [
+    [
+      2000000,
+      2000499
+    ]
+  ],
+  "execution": {
+    "status": "COMPLETE",
+    "cell_order": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "seed_blocks": {
+      "A": [
+        2000000,
+        2000124
+      ],
+      "B": [
+        2000125,
+        2000249
+      ],
+      "C": [
+        2000250,
+        2000374
+      ],
+      "D": [
+        2000375,
+        2000499
+      ]
+    },
+    "consumed_seed_count": 500,
+    "first_seed": 2000000,
+    "last_seed": 2000499,
+    "ascending_gap_free": true,
+    "diagnosis_reserved_seeds_consumed": [],
+    "source_code_changed": false,
+    "challenge_runner_created": false
+  },
+  "raw_trace_seal": {
+    "file": "results/R0/c-v2g0c-raw-trace-seal.json",
+    "sha256": "2d046ef8a4c5fa7100c89e7b10546d71cc72168266a4fa6c95104e2a5bcfd6e3",
+    "sealed_before_criteria": true,
+    "record_count": 500,
+    "raw_files": {
+      "results/R0/c-v2g0c-raw/cell-a.ndjson": "b052957ea6a163d31a6064b8d5e5cc034dae8e0669dba8c07860c18a160fc21a",
+      "results/R0/c-v2g0c-raw/cell-b.ndjson": "c3f610c6d90a6f35eade1548002f5975a88680ec8c090f76ece1eb94801a6b5c",
+      "results/R0/c-v2g0c-raw/cell-c.ndjson": "9feb7a5738a302135aa8b46f5b010745615285aafcf155b2c3db51ab124dc9b1",
+      "results/R0/c-v2g0c-raw/cell-d.ndjson": "58c77fa24b10de58a47e810de8cc8dd256545fda31b43ef6e21912344d254508"
+    }
+  },
+  "evaluation": {
+    "file": "results/R0/c-v2g0c-evaluation.json",
+    "sha256": "31a41cac8b40ce64d883cf2ba66e2c1cd5c0e8f43196c03753427cefbc804523",
+    "immutable_verdict": "PASS",
+    "criteria": {
+      "criterion_1_compile_sample_complete": true,
+      "criterion_2_exact_probability_and_normalizers": true,
+      "criterion_3_schema_and_trace_custody": true,
+      "criterion_4_escrow_custody": true
+    },
+    "maximum_independent_log_prob_discrepancy": 3.552713678800501e-15,
+    "maximum_trace_score_discrepancy": 3.552713678800501e-15,
+    "maximum_normalizer_discrepancy": 1.3322676295501878e-15
+  },
+  "full_unit_suite": {
+    "command": "python3 -m unittest discover -s tests",
+    "tests_run": 131,
+    "passed": 130,
+    "failures": 1,
+    "errors": 0,
+    "elapsed_seconds": 434.092,
+    "failure_tests": [
+      "test_v2g0_grammar.V2G0GrammarSemanticProofs.test_15_sealed_escrow_is_inaccessible"
+    ],
+    "failure_message": "AssertionError: ValueError not raised",
+    "failure_localization": "The historical pre-release test requires the real sealed escrow to remain inaccessible. The evaluator data record now intentionally authorizes that exact range; no source or test changed."
+  }
+}

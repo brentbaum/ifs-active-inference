@@ -1,10 +1,10 @@
 # R0 / V2.G0 stage report
 
 **Stage type:** apparatus only  
-**Status:** `COMPLETE_GATES_1_TO_5_WITH_TWO_AUTHORIZED_SOFTWARE_REPAIRS`  
+**Status:** `COMPLETE_GATES_1_TO_6_SEALED_APPARATUS_PASS`
 **Date:** 2026-07-29  
 **Clinical or psychological claim:** none  
-**Sealed challenge:** not run; C-V2G0 remains evaluator custody
+**Sealed challenge:** C-V2G0-C PASS; R0 exit condition met
 
 ## Outcome
 
@@ -33,12 +33,50 @@ No inherited V2.0–V2.4.4 or V2.5a-in-flight file was changed.
 | 3 — composition battery | `1001000:1002999` | Original `FAIL` retained: satisfied negative custody fact was encoded with negative polarity in an all-positive check mapping | **PASS AFTER AUTHORIZED PURE-SOFTWARE REPAIR**; all recorded non-verdict fields byte-identical |
 | 4 — selective mutations | `1003000:1003999` | 500 process mutations and 500 scope mutations; zero failures; unrelated traces/RNG keys and inherited posterior bitwise identical | **PASS** |
 | 5 — cumulative regression | `1004000:1009999` | Original `FAIL` retained: verifier omitted the committed V2.4.4 manifest addendum | **PASS AFTER AUTHORIZED PURE-SOFTWARE REPAIR**; all recorded non-manifest fields byte-identical |
-| 6 — C-V2G0 | `2000000:2000499` | Not opened or run | **UNRUN — EVALUATOR CUSTODY** |
+| 6 — C-V2G0-C | `2000000:2000499` | 500 worlds, raw traces sealed before criteria; four prior-artifact seal outcomes retained | **PASS — ALL FOUR SEALED CRITERIA; R0 EXIT MET** |
 
 Both original failures, diagnosis stubs, evaluator authorizations, repaired
 records, byte-identity audits, and diff summaries remain in the freeze record.
 Neither repair changed a world, scientific result, inherited file, gate
 criterion, RNG key, schema, normalizer, bridge, or seed.
+
+## Gate-6 four-seal history
+
+The apparatus challenge required four sealing events. Every outcome is
+retained:
+
+1. C-V2G0 first sealing stopped before execution because the release record
+   used a schema the frozen parser could not read.
+2. C-V2G0 second attempt stopped before execution because JSON stringified
+   numeric change-point keys and the exact document could not compile.
+3. C-V2G0-B stopped before execution because its fresh escrow block lay
+   outside the frozen `SEALED_ESCROW` range.
+4. C-V2G0-C used the exact sealed Python literal, a parser-valid contained
+   release, and the original unconsumed escrow. It passed all four criteria.
+
+The first three verdicts are immutable `STOP_AS_SEALED_PROSPECTION_FAILURE`
+records and consumed zero seeds. C-V2G0-C alone consumed the escrow, exactly
+once in ascending gap-free order.
+
+Gate-6 results:
+
+- 500/500 world and protocol runs completed;
+- maximum independent log-probability discrepancy:
+  `3.552713678800501e-15`;
+- Cell-A restriction normalizer: production/oracle `0.6 / 0.6`;
+- Cell-B restriction normalizer: production/oracle
+  `0.7726410158022948 / 0.7726410158022935`;
+- one output-schema hash per cell and all required trace custody fields;
+- no diagnosis-reserved seed touched.
+
+The raw trace seal was written before criterion evaluation and hashes all four
+cell files plus every per-seed record. Its SHA-256 is
+`2d046ef8a4c5fa7100c89e7b10546d71cc72168266a4fa6c95104e2a5bcfd6e3`.
+
+The post-run full suite passed 130/131 tests. The sole failure is the
+historical pre-release assertion that the real escrow must remain
+inaccessible; the evaluator data record now intentionally releases it. No
+source or test changed, and the failure does not rewrite the sealed PASS.
 
 ## Gate-5 cumulative verification
 
@@ -97,12 +135,12 @@ evidence, margin, transfer, model choice, or other scientific score.
 
 - Development blocks `1000000:1009999` were used only by their declared gates.
 - Diagnosis block `1010000:1019999` was not accessed.
-- C-V2G0 escrow `2000000:2000499` was not accessed.
+- C-V2G0-C escrow `2000000:2000499` was consumed exactly once, ascending and
+  gap-free, after a data-only release and raw-first trace seal.
 - Component RNG keys contain stage version, seed, component namespace, and
   time/event index.
 - Seed rejection is absent; restricted finite paths are sampled directly from
   their exactly normalized conditional support.
 
-R0 Gates 1–5 are complete. Progression to a future seal remains an evaluator
-action under the permanent pre-seal custody procedure.
-
+R0 Gates 1–6 are complete. The sealed apparatus challenge passed and the R0
+exit condition is met.
