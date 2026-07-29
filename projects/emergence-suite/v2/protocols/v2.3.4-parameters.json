@@ -1,0 +1,25 @@
+{
+  "stage": "V2.3.4",
+  "semantic_tolerance": 1e-10,
+  "theta_support": [0.1, 0.3, 0.5, 0.7, 0.9],
+  "theta_prior": [0.2, 0.2, 0.2, 0.2, 0.2],
+  "eta_support": [0.0, 0.25, 0.5, 0.75, 1.0],
+  "eta_slab_base_weights": [0.05, 0.15, 0.25, 0.3, 0.25],
+  "irrelevant_spike_prior": 0.35,
+  "outcome_reliability": 0.98,
+  "danger_diagnostic_reliability": 0.9,
+  "efficacy_diagnostic_reliability": 0.9,
+  "policy_prior": [1.0, 1.0],
+  "gate2_length": 96,
+  "gate2_probe_frequency": 0.25,
+  "epoch_b_development_block": [1000000, 1899999],
+  "rationales": {
+    "theta_support": "Five dimensionless danger rates span low through persistent danger while keeping exact enumeration auditable.",
+    "eta_support": "The exact zero plus four causal slab points resolves irrelevant, partial, and full protection without epsilon approximations.",
+    "irrelevant_spike_prior": "Substantial exact-zero mass prevents the larger causal family from receiving a free complexity advantage.",
+    "outcome_reliability": "Near-deterministic outcomes retain strictly positive likelihoods and a finite information bound.",
+    "danger_diagnostic_reliability": "Evaluator-scheduled probes carry enough prior-predictive information for the declared danger-rate recovery target.",
+    "efficacy_diagnostic_reliability": "Occasional prevention observations identify context efficacy without creating an action-selection likelihood.",
+    "gate2_probe_frequency": "Twenty-five percent forced engagement exceeds the specified twenty-percent minimum and is fixed before recovery runs."
+  }
+}

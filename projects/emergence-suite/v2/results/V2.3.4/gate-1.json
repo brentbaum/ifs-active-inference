@@ -1,0 +1,95 @@
+{
+  "attainability_audit_before_gate2": {
+    "criterion_status": "public-dummy descriptive only",
+    "floor_screen": {
+      "H_E_accuracy": true,
+      "context_eta_accuracy": true,
+      "danger_MAE": true,
+      "eta_MAE": true,
+      "probe_correlation_reduction": true
+    },
+    "metrics": {
+      "H_E_accuracy": 0.995,
+      "context_eta_accuracy": 0.89,
+      "danger_MAE": 0.007732976180177327,
+      "eta_MAE": 0.03774022175673383,
+      "identifiable_worlds": 200,
+      "probe_median_absolute_correlation_reduction": 0.6748286924293272,
+      "public_seed_block": [
+        1299000,
+        1299399
+      ]
+    },
+    "suspected_unattainable_floor": []
+  },
+  "bounds": {
+    "B_max_v232_formation": 3.801426508560692,
+    "B_max_v234": 11.675460894331877,
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "B_max_v25a_configural": 6.084736253211209,
+    "B_max_v25a_marginal_accounting": 6.704414354964107,
+    "B_max_v25b": 11.302393144606405,
+    "B_max_v26a_relational": 6.9920964274158885,
+    "B_max_v26a_root": 2.9444389791664394,
+    "implied_binary_change_bound": 0.9941860465116279
+  },
+  "custody": {
+    "escrow_accessed": false,
+    "passed": true
+  },
+  "gate": 1,
+  "passed": true,
+  "proof_count": 10,
+  "proofs": {
+    "01_masked_BF_one": {
+      "maximum_error": 1.1102230246251565e-16,
+      "passed": true
+    },
+    "02_eta_zero_equals_irrelevant": {
+      "maximum_error": 0.0,
+      "passed": true
+    },
+    "03_full_efficacy_safety_not_danger_evidence": {
+      "likelihood_range_over_theta": 0.0,
+      "passed": true
+    },
+    "04_engagement_safety_disconfirms_danger": {
+      "after": 0.3464,
+      "before": 0.5,
+      "passed": true
+    },
+    "05_action_no_direct_update": {
+      "action_selection_likelihood": false,
+      "maximum_error": 1.1102230246251565e-16,
+      "passed": true
+    },
+    "06_relief_policy_only": {
+      "passed": true,
+      "policy_probability": 0.6666666666666666,
+      "scientific_posterior_error": 1.734723475976807e-18
+    },
+    "07_exact_spike": {
+      "eta_value": 0.0,
+      "passed": true,
+      "spike_mass": 0.35
+    },
+    "08_pure_avoidance_confounding": {
+      "passed": true,
+      "theta_eta_correlation": [
+        0.0010844320569899006,
+        0.024565440127948143
+      ]
+    },
+    "09_forced_probe_reduces_confounding": {
+      "absolute_correlation_reduction": 0.0010175302845428485,
+      "passed": true
+    },
+    "10_independent_enumeration": {
+      "maximum_error": 0.0,
+      "oracle_evidence": 0.186587969924812,
+      "passed": true,
+      "prior_input_unchanged": true
+    }
+  },
+  "stage": "V2.3.4"
+}

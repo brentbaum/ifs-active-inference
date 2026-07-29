@@ -1,0 +1,53 @@
+{
+  "stage": "V2.3.4",
+  "development_only": true,
+  "escrow_accessed": false,
+  "escrow_block_untouched": [2040000, 2041999],
+  "blocks": [
+    {
+      "purpose": "gate-2 prospective information-bound screen",
+      "range": [1299000, 1299399],
+      "criterion": false
+    },
+    {
+      "purpose": "gate-3 prospective attainability checks",
+      "range": [1299501, 1299511],
+      "criterion": false
+    },
+    {
+      "purpose": "gate-3 expanded context-classification screen",
+      "range": [1299600, 1299799],
+      "criterion": false
+    },
+    {
+      "purpose": "gate-4 prospective lesion attainability checks",
+      "range": [1299800, 1299899],
+      "criterion": false
+    },
+    {
+      "purpose": "gate-5 prospective robustness-direction screen",
+      "range": [1299900, 1299999],
+      "criterion": false
+    },
+    {
+      "purpose": "gate 2 recovery",
+      "range": [1300000, 1302999],
+      "criterion": true
+    },
+    {
+      "purpose": "gate 3 open assays",
+      "range": [1303000, 1307999],
+      "criterion": true
+    },
+    {
+      "purpose": "gate 4 lesions",
+      "range": [1308000, 1308999],
+      "criterion": true
+    },
+    {
+      "purpose": "gate 5 cumulative regression and robustness",
+      "range": [1309000, 1319999],
+      "criterion": true
+    }
+  ]
+}

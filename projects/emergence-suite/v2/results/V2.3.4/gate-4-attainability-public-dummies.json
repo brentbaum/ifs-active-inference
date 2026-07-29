@@ -1,0 +1,32 @@
+{
+  "criterion_status": "public-dummy descriptive only",
+  "metrics": {
+    "action_irrelevant_effect": {
+      "lower_95": 0.39992096720466663,
+      "mean": 0.39992096720466663,
+      "upper_95": 0.39992096720466663
+    },
+    "context_specificity_effect": {
+      "lower_95": 0.7248168531198219,
+      "mean": 0.7493301932800998,
+      "upper_95": 0.7738435334403776
+    },
+    "visible_correction": {
+      "lower_95": 0.2926721774041876,
+      "mean": 0.30457505719704697,
+      "upper_95": 0.31647793698990634
+    }
+  },
+  "public_seed_block": [
+    1299800,
+    1299899
+  ],
+  "screen": {
+    "action_irrelevant_effect_positive": true,
+    "broadcast_update_removed": true,
+    "context_specificity_removed": true,
+    "formation_exact": true,
+    "visible_correction_positive": true
+  },
+  "suspected_unattainable_floor": []
+}

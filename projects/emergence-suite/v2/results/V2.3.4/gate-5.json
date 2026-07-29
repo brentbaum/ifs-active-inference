@@ -1,0 +1,341 @@
+{
+  "bounds": {
+    "B_max_v232_formation": 3.801426508560692,
+    "B_max_v234": 11.675460894331877,
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "B_max_v25a_configural": 6.084736253211209,
+    "B_max_v25a_marginal_accounting": 6.704414354964107,
+    "B_max_v25b": 11.302393144606405,
+    "B_max_v26a_relational": 6.9920964274158885,
+    "B_max_v26a_root": 2.9444389791664394,
+    "implied_binary_change_bound": 0.9941860465116279
+  },
+  "checks": {
+    "action_cost_no_scientific_likelihood": true,
+    "context_change_classification": true,
+    "full_cumulative_suite": true,
+    "manifest_chain": true,
+    "masking_truth_error_cost": true,
+    "partial_efficacy_recovery": true,
+    "permanent_constitution": true,
+    "precision_nonnegative_rate": true,
+    "precision_truth_error_cost": true,
+    "probe_frequency_direction": true,
+    "relief_no_scientific_likelihood": true,
+    "spike_prior_zero_recovery": true,
+    "standing_gates_1_4": true,
+    "threat_prior_high_recovery": true,
+    "threat_prior_low_recovery": true
+  },
+  "custody": {
+    "escrow_accessed": false,
+    "passed": true
+  },
+  "gate": 5,
+  "manifest_chain": {
+    "base_manifest_file_count": 35,
+    "custody_files": {
+      "addenda": [],
+      "base": {
+        "file": "results/V2.6a/freeze-manifest.json",
+        "sha256": "713662bbdf729d0ad62b8236c4015ef50d72acbc12f2a9c57f8ffc81d3a555a8"
+      }
+    },
+    "effective_manifest_file_count": 35,
+    "mismatches": [],
+    "overlaid_entries": [],
+    "passed": true
+  },
+  "metrics": {
+    "action_cost_scientific_error": 5.204170427930421e-17,
+    "context_accuracy": 0.793,
+    "masking_truth_error_cost": {
+      "lower_95": 0.06285824533727742,
+      "mean": 0.0671406841709339,
+      "upper_95": 0.07142312300459037
+    },
+    "precision_nonnegative_rate": 0.875,
+    "precision_truth_error_cost": {
+      "lower_95": 0.03073514562099742,
+      "mean": 0.03360272835354796,
+      "upper_95": 0.0364703110860985
+    },
+    "probe_correlation_reduction": {
+      "lower_95": 0.3887496957698975,
+      "mean": 0.3938122313146288,
+      "upper_95": 0.3988747668593601
+    }
+  },
+  "passed": true,
+  "scenario_summaries": {
+    "action_cost": {
+      "count": 1000,
+      "eta_error": {
+        "lower_95": 0.4154135338345864,
+        "mean": 0.4154135338345864,
+        "upper_95": 0.4154135338345864
+      },
+      "masked_action_scientific_error_max": 5.204170427930421e-17,
+      "policy_probability": {
+        "lower_95": 0.9705882352941175,
+        "mean": 0.9705882352941175,
+        "upper_95": 0.9705882352941175
+      },
+      "q_causal": {
+        "lower_95": 0.6500000000000002,
+        "mean": 0.6500000000000002,
+        "upper_95": 0.6500000000000002
+      },
+      "threat_error": {
+        "lower_95": 0.0,
+        "mean": 0.0,
+        "upper_95": 0.0
+      }
+    },
+    "context_change": {
+      "count": 1000,
+      "eta_error": {
+        "lower_95": 0.09307289708881478,
+        "mean": 0.09622099022321211,
+        "upper_95": 0.09936908335760944
+      },
+      "masked_action_scientific_error_max": 3.9898639947466563e-17,
+      "policy_probability": {
+        "lower_95": 0.5004556755104922,
+        "mean": 0.5057058823529411,
+        "upper_95": 0.51095608919539
+      },
+      "q_causal": {
+        "lower_95": 0.999999897567049,
+        "mean": 0.9999999480945965,
+        "upper_95": 0.999999998622144
+      },
+      "threat_error": {
+        "lower_95": 0.06378861007867521,
+        "mean": 0.06725581525724908,
+        "upper_95": 0.07072302043582294
+      }
+    },
+    "efficacy_partial": {
+      "count": 1000,
+      "eta_error": {
+        "lower_95": 0.06443611570230993,
+        "mean": 0.06731972937483863,
+        "upper_95": 0.07020334304736732
+      },
+      "masked_action_scientific_error_max": 1.196959198423997e-16,
+      "policy_probability": {
+        "lower_95": 0.5002556074055042,
+        "mean": 0.5033673469387755,
+        "upper_95": 0.5064790864720468
+      },
+      "q_causal": {
+        "lower_95": 0.9999996546237261,
+        "mean": 0.9999998732594838,
+        "upper_95": 1.0000000918952414
+      },
+      "threat_error": {
+        "lower_95": 0.01302779703305318,
+        "mean": 0.01519927367973838,
+        "upper_95": 0.017370750326423576
+      }
+    },
+    "efficacy_prior": {
+      "count": 1000,
+      "eta_error": {
+        "lower_95": 0.005654327708542768,
+        "mean": 0.0066823494906541716,
+        "upper_95": 0.0077103712727655755
+      },
+      "masked_action_scientific_error_max": 6.852157730108388e-17,
+      "policy_probability": {
+        "lower_95": 0.49495945682878056,
+        "mean": 0.49805102040816324,
+        "upper_95": 0.5011425839875459
+      },
+      "q_causal": {
+        "lower_95": 1.0,
+        "mean": 1.0,
+        "upper_95": 1.0
+      },
+      "threat_error": {
+        "lower_95": 0.01894597845069794,
+        "mean": 0.021608135564846545,
+        "upper_95": 0.02427029267899515
+      }
+    },
+    "masking": {
+      "count": 1000,
+      "eta_error": {
+        "lower_95": 0.14561679996127783,
+        "mean": 0.15115016232778883,
+        "upper_95": 0.15668352469429983
+      },
+      "masked_action_scientific_error_max": 1.5959455978986625e-16,
+      "policy_probability": {
+        "lower_95": 0.4981914058905941,
+        "mean": 0.5013469387755103,
+        "upper_95": 0.5045024716604265
+      },
+      "q_causal": {
+        "lower_95": 0.8260209806256607,
+        "mean": 0.8328889013115373,
+        "upper_95": 0.8397568219974139
+      },
+      "threat_error": {
+        "lower_95": 0.16466268118122293,
+        "mean": 0.16813242073693763,
+        "upper_95": 0.17160216029265232
+      }
+    },
+    "precision_low": {
+      "count": 1000,
+      "eta_error": {
+        "lower_95": 0.11085129418292682,
+        "mean": 0.11473559623399456,
+        "upper_95": 0.1186198982850623
+      },
+      "masked_action_scientific_error_max": 1.196959198423997e-16,
+      "policy_probability": {
+        "lower_95": 0.49490953116984804,
+        "mean": 0.497969387755102,
+        "upper_95": 0.501029244340356
+      },
+      "q_causal": {
+        "lower_95": 0.9943880724147218,
+        "mean": 0.9963863807424812,
+        "upper_95": 0.9983846890702406
+      },
+      "threat_error": {
+        "lower_95": 0.04757344862598619,
+        "mean": 0.051011802741274107,
+        "upper_95": 0.05445015685656202
+      }
+    },
+    "probe_low": {
+      "count": 1000,
+      "eta_error": {
+        "lower_95": 0.06522783008924714,
+        "mean": 0.0683191283622706,
+        "upper_95": 0.07141042663529405
+      },
+      "masked_action_scientific_error_max": 1.2663481374630692e-16,
+      "policy_probability": {
+        "lower_95": 0.4941269881847737,
+        "mean": 0.4972448979591837,
+        "upper_95": 0.5003628077335937
+      },
+      "q_causal": {
+        "lower_95": 0.9999999999985539,
+        "mean": 0.9999999999991938,
+        "upper_95": 0.9999999999998336
+      },
+      "threat_error": {
+        "lower_95": 0.0059095781722459904,
+        "mean": 0.007474696840106377,
+        "upper_95": 0.009039815507966764
+      }
+    },
+    "relief_high": {
+      "count": 1000,
+      "eta_error": {
+        "lower_95": 0.4154135338345863,
+        "mean": 0.4154135338345863,
+        "upper_95": 0.4154135338345863
+      },
+      "masked_action_scientific_error_max": 1.5959455978986625e-16,
+      "policy_probability": {
+        "lower_95": 0.9387471811635502,
+        "mean": 0.9401122448979593,
+        "upper_95": 0.9414773086323684
+      },
+      "q_causal": {
+        "lower_95": 0.6499999999999998,
+        "mean": 0.6499999999999998,
+        "upper_95": 0.6499999999999998
+      },
+      "threat_error": {
+        "lower_95": 2.220446049250313e-16,
+        "mean": 2.220446049250313e-16,
+        "upper_95": 2.220446049250313e-16
+      }
+    },
+    "spike_high": {
+      "count": 1000,
+      "eta_error": {
+        "lower_95": 0.00016948289393873943,
+        "mean": 0.0007863208363212757,
+        "upper_95": 0.0014031587787038118
+      },
+      "masked_action_scientific_error_max": 6.245004513516506e-17,
+      "policy_probability": {
+        "lower_95": 0.4975574652905268,
+        "mean": 0.5006836734693878,
+        "upper_95": 0.5038098816482488
+      },
+      "q_causal": {
+        "lower_95": 0.001565040710122514,
+        "mean": 0.004014268443426942,
+        "upper_95": 0.006463496176731371
+      },
+      "threat_error": {
+        "lower_95": 0.014021755473098436,
+        "mean": 0.01640664668551602,
+        "upper_95": 0.018791537897933603
+      }
+    },
+    "threat_high": {
+      "count": 1000,
+      "eta_error": {
+        "lower_95": 0.002197370200174658,
+        "mean": 0.0029461931358253824,
+        "upper_95": 0.003695016071476107
+      },
+      "masked_action_scientific_error_max": 8.326672684688674e-17,
+      "policy_probability": {
+        "lower_95": 0.4969252228935654,
+        "mean": 0.5,
+        "upper_95": 0.5030747771064346
+      },
+      "q_causal": {
+        "lower_95": 1.0,
+        "mean": 1.0,
+        "upper_95": 1.0
+      },
+      "threat_error": {
+        "lower_95": 0.004679445351542998,
+        "mean": 0.006049257169262971,
+        "upper_95": 0.007419068986982945
+      }
+    },
+    "threat_low": {
+      "count": 1000,
+      "eta_error": {
+        "lower_95": 0.058011383211347974,
+        "mean": 0.06095410179066299,
+        "upper_95": 0.063896820369978
+      },
+      "masked_action_scientific_error_max": 2.2898349882893854e-16,
+      "policy_probability": {
+        "lower_95": 0.4989366579487047,
+        "mean": 0.5019489795918367,
+        "upper_95": 0.5049613012349687
+      },
+      "q_causal": {
+        "lower_95": 0.9999999999996935,
+        "mean": 0.9999999999998941,
+        "upper_95": 1.0000000000000948
+      },
+      "threat_error": {
+        "lower_95": 0.003647303181815064,
+        "mean": 0.004904480514901737,
+        "upper_95": 0.00616165784798841
+      }
+    }
+  },
+  "seed_block": [
+    1309000,
+    1319999
+  ],
+  "stage": "V2.3.4"
+}

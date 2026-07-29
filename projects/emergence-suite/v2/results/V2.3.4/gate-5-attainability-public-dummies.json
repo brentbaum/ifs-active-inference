@@ -1,0 +1,234 @@
+{
+  "criterion_status": "public-dummy descriptive only",
+  "interpretation": "Masking and precision are evaluated by excess absolute error relative to the generating danger truth; this avoids a prior-relative update-magnitude saturation artifact.",
+  "masking_truth_error_cost": {
+    "mean": 0.06263533899713353,
+    "positive_rate": 0.88,
+    "q05": -0.05709213467590566,
+    "q50": 0.06258079308154918,
+    "q95": 0.16323101212423474
+  },
+  "precision_truth_error_cost": {
+    "mean": 0.0380579974194182,
+    "nonnegative_rate": 0.91,
+    "q05": -0.0006112175382820272,
+    "q50": 0.015341001360918483,
+    "q95": 0.14265679162631476
+  },
+  "public_dummy_seed_block": [
+    1299900,
+    1299999
+  ],
+  "purpose": "Prospective information-attainability screen completed before opening the assigned Gate-5 block.",
+  "representative_rows": [
+    {
+      "correlation": [
+        -0.000156596575318597,
+        0.0002898316219811524
+      ],
+      "eta_mean": [
+        0.9557856012027725,
+        0.9786465594441837
+      ],
+      "masked_action_scientific_error": 2.2898349882893854e-16,
+      "one_posterior": true,
+      "policy_probability": 0.47959183673469385,
+      "q_causal": 1.0,
+      "scenario": "threat_low",
+      "seed": 1299900,
+      "threat": 0.10000088119203687,
+      "truth_eta": [
+        1.0,
+        1.0
+      ],
+      "truth_theta": 0.1
+    },
+    {
+      "correlation": [
+        0.00017894975839797303,
+        0.0002717320525840519
+      ],
+      "eta_mean": [
+        0.9999588602914918,
+        0.9999762962562853
+      ],
+      "masked_action_scientific_error": 8.326672684688674e-17,
+      "one_posterior": true,
+      "policy_probability": 0.5102040816326531,
+      "q_causal": 1.0,
+      "scenario": "threat_high",
+      "seed": 1299901,
+      "threat": 0.8997368449786093,
+      "truth_eta": [
+        1.0,
+        1.0
+      ],
+      "truth_theta": 0.9
+    },
+    {
+      "correlation": [
+        0.0031637825731951224,
+        0.00777402098673054
+      ],
+      "eta_mean": [
+        0.9985465052021064,
+        0.9962738531809404
+      ],
+      "masked_action_scientific_error": 6.852157730108388e-17,
+      "one_posterior": true,
+      "policy_probability": 0.4897959183673469,
+      "q_causal": 1.0,
+      "scenario": "efficacy_prior",
+      "seed": 1299902,
+      "threat": 0.7009822191572518,
+      "truth_eta": [
+        1.0,
+        1.0
+      ],
+      "truth_theta": 0.7
+    },
+    {
+      "correlation": [
+        0.000648954649745735,
+        0.0009001432547720584
+      ],
+      "eta_mean": [
+        3.205576467987419e-06,
+        1.777848793934499e-06
+      ],
+      "masked_action_scientific_error": 6.245004513516506e-17,
+      "one_posterior": true,
+      "policy_probability": 0.5204081632653061,
+      "q_causal": 1.981538632813658e-05,
+      "scenario": "spike_high",
+      "seed": 1299903,
+      "threat": 0.5169756966305561,
+      "truth_eta": [
+        0.0,
+        0.0
+      ],
+      "truth_theta": 0.5
+    },
+    {
+      "correlation": [
+        1.119237343482004e-16,
+        9.593462944131462e-17
+      ],
+      "eta_mean": [
+        0.4154135338345864,
+        0.41541353383458646
+      ],
+      "masked_action_scientific_error": 5.204170427930421e-17,
+      "one_posterior": true,
+      "policy_probability": 0.9705882352941176,
+      "q_causal": 0.6499999999999999,
+      "scenario": "action_cost",
+      "seed": 1299904,
+      "threat": 0.5,
+      "truth_eta": [
+        0.0,
+        0.0
+      ],
+      "truth_theta": 0.5
+    },
+    {
+      "correlation": [
+        0.0135090271452222,
+        0.009916291636604953
+      ],
+      "eta_mean": [
+        0.5194646934817463,
+        0.49997064000706204
+      ],
+      "masked_action_scientific_error": 1.196959198423997e-16,
+      "one_posterior": true,
+      "policy_probability": 0.47959183673469385,
+      "q_causal": 1.0,
+      "scenario": "efficacy_partial",
+      "seed": 1299905,
+      "threat": 0.7000603552515788,
+      "truth_eta": [
+        0.5,
+        0.5
+      ],
+      "truth_theta": 0.7
+    },
+    {
+      "correlation": [
+        0.005385959315093555,
+        0.00013567840270604705
+      ],
+      "eta_mean": [
+        0.9161168124473775,
+        0.9299963929017883
+      ],
+      "masked_action_scientific_error": 1.2663481374630692e-16,
+      "one_posterior": true,
+      "policy_probability": 0.5204081632653061,
+      "probe_correlation_reduction": 0.3780911444427072,
+      "q_causal": 0.9999999999999999,
+      "scenario": "probe_low",
+      "seed": 1299906,
+      "threat": 0.10006801845131937,
+      "truth_eta": [
+        1.0,
+        1.0
+      ],
+      "truth_theta": 0.1
+    },
+    {
+      "context_accuracy": 1.0,
+      "correlation": [
+        0.024057804424697966,
+        0.012528171237593944
+      ],
+      "eta_mean": [
+        0.9888126988272588,
+        0.09988830102507715
+      ],
+      "masked_action_scientific_error": 3.9898639947466563e-17,
+      "one_posterior": true,
+      "policy_probability": 0.5294117647058824,
+      "q_causal": 0.9999999999974383,
+      "scenario": "context_change",
+      "seed": 1299907,
+      "threat": 0.6124098719115294,
+      "truth_eta": [
+        1.0,
+        0.0
+      ],
+      "truth_theta": 0.7
+    },
+    {
+      "correlation": [
+        3.5176030795148695e-16,
+        3.597548604049298e-16
+      ],
+      "eta_mean": [
+        0.4154135338345863,
+        0.4154135338345863
+      ],
+      "masked_action_scientific_error": 1.5959455978986625e-16,
+      "one_posterior": true,
+      "policy_probability": 0.9489795918367347,
+      "q_causal": 0.6499999999999997,
+      "scenario": "relief_high",
+      "seed": 1299908,
+      "threat": 0.5000000000000002,
+      "truth_eta": [
+        0.0,
+        0.0
+      ],
+      "truth_theta": 0.5
+    }
+  ],
+  "screen": {
+    "context_accuracy": true,
+    "masking_mean_truth_error_cost_positive": true,
+    "masking_positive_rate_at_least_0_80": true,
+    "precision_mean_truth_error_cost_positive": true,
+    "precision_nonnegative_rate_at_least_0_85": true,
+    "probe_reduction": true
+  },
+  "suspected_unattainable_floor": []
+}

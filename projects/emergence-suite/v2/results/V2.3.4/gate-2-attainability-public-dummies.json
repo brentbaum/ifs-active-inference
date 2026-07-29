@@ -1,0 +1,23 @@
+{
+  "criterion_status": "public-dummy descriptive only",
+  "floor_screen": {
+    "H_E_accuracy": true,
+    "context_eta_accuracy": true,
+    "danger_MAE": true,
+    "eta_MAE": true,
+    "probe_correlation_reduction": true
+  },
+  "metrics": {
+    "H_E_accuracy": 0.995,
+    "context_eta_accuracy": 0.89,
+    "danger_MAE": 0.007732976180177327,
+    "eta_MAE": 0.03774022175673383,
+    "identifiable_worlds": 200,
+    "probe_median_absolute_correlation_reduction": 0.6748286924293272,
+    "public_seed_block": [
+      1299000,
+      1299399
+    ]
+  },
+  "suspected_unattainable_floor": []
+}

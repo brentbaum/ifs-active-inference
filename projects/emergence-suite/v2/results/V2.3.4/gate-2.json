@@ -1,0 +1,50 @@
+{
+  "bounds": {
+    "B_max_v232_formation": 3.801426508560692,
+    "B_max_v234": 11.675460894331877,
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "B_max_v25a_configural": 6.084736253211209,
+    "B_max_v25a_marginal_accounting": 6.704414354964107,
+    "B_max_v25b": 11.302393144606405,
+    "B_max_v26a_relational": 6.9920964274158885,
+    "B_max_v26a_root": 2.9444389791664394,
+    "implied_binary_change_bound": 0.9941860465116279
+  },
+  "checks": {
+    "H_E_accuracy_at_least_0_85": true,
+    "brier_at_most_0_15": true,
+    "context_efficacy_at_least_0_75": true,
+    "coverage_at_least_0_90": true,
+    "danger_MAE_at_most_0_05": true,
+    "ece_at_most_0_08": true,
+    "eta_MAE_at_most_0_10": true,
+    "exact_zero_accuracy_at_least_0_85": true,
+    "probes_reduce_correlation_at_least_0_15": true,
+    "pure_false_certainty_at_most_0_05": true,
+    "pure_joint_coverage_at_least_0_90": true,
+    "pure_positive_correlation": true
+  },
+  "gate": 2,
+  "metrics": {
+    "H_E_accuracy": 0.992,
+    "brier": 0.0070246215160336975,
+    "context_efficacy_classification": 0.875,
+    "danger_rate_MAE": 0.010905439248869376,
+    "ece": 0.0034947997089640496,
+    "eta_MAE": 0.04178098999515974,
+    "exact_zero_accuracy": 0.9923664122137404,
+    "identifiable_world_count": 1500,
+    "parameter_coverage": 0.9733333333333334,
+    "probe_median_absolute_correlation_reduction": 0.6809363724487543,
+    "pure_avoidance_world_count": 1500,
+    "pure_false_certainty_rate": 0.011333333333333334,
+    "pure_joint_coverage": 0.9586666666666667,
+    "pure_median_theta_eta_correlation": 0.7435119202590341
+  },
+  "passed": true,
+  "seed_block": [
+    1300000,
+    1302999
+  ],
+  "stage": "V2.3.4"
+}

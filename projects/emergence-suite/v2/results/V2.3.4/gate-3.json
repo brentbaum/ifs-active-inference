@@ -1,0 +1,78 @@
+{
+  "bounds": {
+    "B_max_v232_formation": 3.801426508560692,
+    "B_max_v234": 11.675460894331877,
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "B_max_v25a_configural": 6.084736253211209,
+    "B_max_v25a_marginal_accounting": 6.704414354964107,
+    "B_max_v25b": 11.302393144606405,
+    "B_max_v26a_relational": 6.9920964274158885,
+    "B_max_v26a_root": 2.9444389791664394,
+    "implied_binary_change_bound": 0.9941860465116279
+  },
+  "checks": {
+    "10_diagnostic_required": true,
+    "11_maintenance_decomposition": true,
+    "1_irrelevant_identical": true,
+    "2_full_preserves_threat": true,
+    "3_partial_more_corrective": true,
+    "4_masked_neutral": true,
+    "5_relief_policy": true,
+    "5_relief_threat_neutral": true,
+    "6_adaptive_recovered": true,
+    "7_context_classification": true,
+    "8_probes_reduce_confounding": true,
+    "9_safety_not_strengthen": true
+  },
+  "gate": 3,
+  "metrics": {
+    "adaptive_recovery_rate": 0.9622222222222222,
+    "context_efficacy_macro_accuracy": 0.8055555555555556,
+    "diagnostic_strengthening": {
+      "lower_95": 0.1279999999999999,
+      "mean": 0.1279999999999999,
+      "upper_95": 0.1279999999999999
+    },
+    "forced_probe_correlation_reduction": {
+      "lower_95": 0.3876820643065389,
+      "mean": 0.3951727965680631,
+      "upper_95": 0.4026635288295873
+    },
+    "forced_probe_threat_revision": {
+      "lower_95": 0.2083534058942171,
+      "mean": 0.21551627718899685,
+      "upper_95": 0.2226791484837766
+    },
+    "full_protection_threat_preservation": {
+      "lower_95": 0.39992096720466663,
+      "mean": 0.39992096720466663,
+      "upper_95": 0.39992096720466663
+    },
+    "irrelevant_vs_engage_identity_max": 0.0,
+    "maintenance_decomposition_error_max": 0.0,
+    "masked_posterior_error_max": 5.377642775528102e-17,
+    "partial_minus_full_corrective_learning": {
+      "lower_95": 0.39377215730761844,
+      "mean": 0.39377215730761844,
+      "upper_95": 0.39377215730761844
+    },
+    "relief_sham_policy_change": {
+      "lower_95": 0.4705882352941177,
+      "mean": 0.4705882352941177,
+      "upper_95": 0.4705882352941177
+    },
+    "relief_sham_threat_change": {
+      "lower_95": 0.0,
+      "mean": 0.0,
+      "upper_95": 0.0
+    },
+    "safety_only_strengthening_max": 0.0,
+    "world_count": 5000
+  },
+  "passed": true,
+  "seed_block": [
+    1303000,
+    1307999
+  ],
+  "stage": "V2.3.4"
+}

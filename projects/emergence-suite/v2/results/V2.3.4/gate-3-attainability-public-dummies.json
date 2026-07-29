@@ -1,0 +1,91 @@
+{
+  "context_population_accuracy_200_worlds": 0.795,
+  "criterion_status": "public-dummy descriptive only",
+  "public_dummy_seed_blocks": [
+    [
+      1299501,
+      1299511
+    ],
+    [
+      1299600,
+      1299799
+    ]
+  ],
+  "rows": [
+    {
+      "assay": 1,
+      "scientific_identity_error": 0.0,
+      "seed": 1299501
+    },
+    {
+      "assay": 2,
+      "seed": 1299502,
+      "threat_preservation": 0.3999209672046667
+    },
+    {
+      "assay": 3,
+      "partial_minus_full_corrective_learning": 0.39377215730761844,
+      "seed": 1299503
+    },
+    {
+      "assay": 4,
+      "posterior_error": 5.377642775528102e-17,
+      "seed": 1299504
+    },
+    {
+      "assay": 5,
+      "policy_change": 0.47058823529411764,
+      "seed": 1299505,
+      "threat_change": 0.0
+    },
+    {
+      "adaptive_recovered": true,
+      "assay": 6,
+      "danger_recovered": 0.8962314683998001,
+      "efficacy_recovered": 0.9207854245548733,
+      "seed": 1299506
+    },
+    {
+      "assay": 7,
+      "context_accuracy": 0.5,
+      "seed": 1299507
+    },
+    {
+      "assay": 8,
+      "correlation_reduction": 0.33057663876760457,
+      "seed": 1299508,
+      "threat_revision": 0.2723709795363472
+    },
+    {
+      "assay": 9,
+      "maximum_safety_only_strengthening": 0.0,
+      "seed": 1299509
+    },
+    {
+      "assay": 10,
+      "diagnostic_strengthening": 0.1279999999999999,
+      "safety_only_change": 0.0,
+      "seed": 1299510
+    },
+    {
+      "assay": 11,
+      "attribution_evidence": -0.17634483411038235,
+      "decomposition_error": 0.0,
+      "omitted_evidence": 0.0,
+      "seed": 1299511,
+      "total_change": -0.17634483411038235
+    }
+  ],
+  "screen": {
+    "assay_10_diagnostic": true,
+    "assay_11_decomposition": true,
+    "assay_1_identity": true,
+    "assay_2_floor": true,
+    "assay_3_floor": true,
+    "assay_5_policy": true,
+    "assay_6_adaptive": true,
+    "assay_7_context": true,
+    "assay_8_correlation": true
+  },
+  "suspected_unattainable_floor": []
+}

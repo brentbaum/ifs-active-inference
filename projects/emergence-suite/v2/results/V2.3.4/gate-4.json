@@ -1,0 +1,60 @@
+{
+  "bounds": {
+    "B_max_v232_formation": 3.801426508560692,
+    "B_max_v234": 11.675460894331877,
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "B_max_v25a_configural": 6.084736253211209,
+    "B_max_v25a_marginal_accounting": 6.704414354964107,
+    "B_max_v25b": 11.302393144606405,
+    "B_max_v26a_relational": 6.9920964274158885,
+    "B_max_v26a_root": 2.9444389791664394,
+    "implied_binary_change_bound": 0.9941860465116279
+  },
+  "checks": {
+    "action_irrelevant_target": true,
+    "broadcast_action_semantics_survive": true,
+    "broadcast_removed": true,
+    "context_specificity_removed": true,
+    "efficacy_existence_removed": true,
+    "efficacy_existence_threat_survives": true,
+    "formation_coupling_removed": true,
+    "formation_threat_survives": true,
+    "outcomes_visible_target": true,
+    "relief_removed_target": true,
+    "relief_scientific_survives": true
+  },
+  "gate": 4,
+  "metrics": {
+    "action_irrelevant_effect": {
+      "lower_95": 0.3999209672046667,
+      "mean": 0.3999209672046667,
+      "upper_95": 0.3999209672046667
+    },
+    "action_irrelevant_identity_max": 0.0,
+    "broadcast_action_semantic_error_max": 1.1102230246251565e-16,
+    "broadcast_threat_update_max": 0.0,
+    "context_specificity_effect": {
+      "lower_95": 0.7536669121775997,
+      "mean": 0.7605885529048447,
+      "upper_95": 0.7675101936320897
+    },
+    "efficacy_existence_causal_min": 0.9999999999999994,
+    "efficacy_existence_threat_survival_max": 1.2212453270876722e-15,
+    "forced_visibility_correction": {
+      "lower_95": 0.2988740798963246,
+      "mean": 0.3024464376538824,
+      "upper_95": 0.3060187954114402
+    },
+    "formation_removed_error_max": 0.0,
+    "formation_threat_survival_max": 0.0,
+    "relief_removed_policy_error_max": 0.0,
+    "relief_scientific_survival_max": 0.0,
+    "world_count": 1000
+  },
+  "passed": true,
+  "seed_block": [
+    1308000,
+    1308999
+  ],
+  "stage": "V2.3.4"
+}
