@@ -1,0 +1,41 @@
+{
+  "bounds": {
+    "B_max_inherited_formation": 3.801426508560692,
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "B_max_v25a_configural": 6.084736253211209,
+    "B_max_v25a_marginal_accounting": 6.704414354964107,
+    "B_max_v25b": 11.302393144606405,
+    "implied_binary_probability_change_bound": 0.9929979796127031
+  },
+  "escrow_accessed": false,
+  "gate": 1,
+  "numbers": {
+    "independent_oracle_error": 0.0,
+    "material_odds_identity_error": 2.6645352591003757e-15,
+    "maximum_marginal_error": 9.992007221626409e-15,
+    "maximum_normalization_error": 2.220446049250313e-16,
+    "maximum_recombination_error": 2.6645352591003757e-15
+  },
+  "proofs": {
+    "10_three_slice_stability_is_readout": true,
+    "11_neutral_survival_is_readout": true,
+    "12_no_erasure_of_historical_context": true,
+    "13_imaginal_observed_same_likelihood_api": true,
+    "14_missing_imaginal_evidence_neutral": true,
+    "15_timing_labels_absent_from_inference": true,
+    "16_stability_readout_pure": true,
+    "17_independent_structural_oracle": true,
+    "18_permanent_constitutions": true,
+    "1_all_eight_structures_normalize": true,
+    "2_candidate_common_atomic_marginals": true,
+    "3_prior_charged_once": true,
+    "4_coupling_spikes_exact": true,
+    "5_candidate_evidence_recombines": true,
+    "6_material_reduction_odds_identity": true,
+    "7_unique_000_argmax_is_readout": true,
+    "8_q000_threshold_is_readout": true,
+    "9_bf_threshold_is_readout": true
+  },
+  "stage": "V2.5b",
+  "verdict": "PASS"
+}

@@ -1,0 +1,70 @@
+{
+  "arm_counts": {
+    "joint_do_over": 500,
+    "marginal_do_over": 500,
+    "no_do_over": 500,
+    "no_reduction_lesion": 500,
+    "post_redescription_do_over": 500,
+    "premature_do_over": 500,
+    "suggestion_only": 500
+  },
+  "arm_world_count": 3500,
+  "bounds": {
+    "B_max_inherited_formation": 3.801426508560692,
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "B_max_v25a_configural": 6.084736253211209,
+    "B_max_v25a_marginal_accounting": 6.704414354964107,
+    "B_max_v25b": 11.302393144606405,
+    "implied_binary_probability_change_bound": 0.9929979796127031
+  },
+  "checks": {
+    "bitwise_cloned_initial_states": true,
+    "do_over_speedup": false,
+    "false_full_burden_reduction": true,
+    "heldout_reduced_vs_full_margin": true,
+    "historical_context_retention": true,
+    "joint_vs_marginal_positive_branch": true,
+    "no_reduction_lesion": true,
+    "old_context_return_reversal": true,
+    "post_redescription_material_rate": true,
+    "premature_stable_reduction": true
+  },
+  "escrow_accessed": false,
+  "gate": 3,
+  "initial_state_count": 500,
+  "metrics": {
+    "C_V25A_cell4_licensed_direction": "positive",
+    "C_V25A_root_resolution": "positive",
+    "C_V25A_transfer_resolution": "positive",
+    "clone_hash_mismatch_count": 0,
+    "do_over_speedup": {
+      "lower_95": 0.04146295367760523,
+      "mean": 0.12402008153052833,
+      "upper_95": 0.20657720938345142
+    },
+    "false_material_reduction_full_burden_rate": 0.0,
+    "heldout_000_vs_111_margin": {
+      "lower_95": 1.0696619551839976,
+      "mean": 1.1204881719706892,
+      "upper_95": 1.1713143887573807
+    },
+    "joint_minus_marginal_q000_effect": {
+      "lower_95": 0.0034739930465096658,
+      "mean": 0.023495181706887712,
+      "upper_95": 0.04351637036726576
+    },
+    "maximum_historical_context_query_error": 0.0,
+    "no_reduction_lesion_material_rate": 0.0,
+    "no_reduction_lesion_root_and_redescription_survive": true,
+    "old_context_return_reversal_rate": 1.0,
+    "post_redescription_material_reduction_rate": 0.892,
+    "premature_reduction_world_count": 17,
+    "premature_stable_reduction_rate": 0.034
+  },
+  "seed_block": [
+    1101000,
+    1104999
+  ],
+  "stage": "V2.5b",
+  "verdict": "FAIL"
+}

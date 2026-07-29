@@ -78,7 +78,7 @@ def score(
     precision: float,
     coupling_strength: float,
 ) -> tuple[np.ndarray, np.ndarray]:
-    masses = np.asarray(prior, dtype=float)
+    masses = np.array(prior, dtype=float, copy=True)
     log_evidence = np.zeros(8, dtype=float)
     for episode in episodes:
         likelihoods = []

@@ -42,6 +42,26 @@ class V25bTests(unittest.TestCase):
             1e-10,
         )
 
+    def test_independent_oracle_leaves_inputs_bitwise_unchanged(self):
+        fixture = (
+            v25a.Episode(0, 0, (1, 0, 1, 0, 1)),
+            v25a.Episode(1, 1, (0, 1, 0, 1, 0)),
+        )
+        prior = np.asarray(
+            [0.04, 0.08, 0.12, 0.16, 0.16, 0.12, 0.08, 0.24],
+            dtype=float,
+        )
+        prior_before = prior.copy()
+        fixture_before = tuple(fixture)
+        v25b_oracle.score(
+            fixture,
+            prior,
+            0.8,
+            float(v25b.PARAMETERS["coupling_strength"]),
+        )
+        self.assertTrue(np.array_equal(prior, prior_before))
+        self.assertEqual(fixture, fixture_before)
+
     def test_missing_episode_is_candidate_common(self):
         missing = v25a.Episode(0, 0, (None,) * 5)
         result = v25b.score([missing], precision=0.8)

@@ -91,7 +91,7 @@ def ece(probabilities: np.ndarray, truths: np.ndarray) -> float:
     return result
 
 
-def run_gate1() -> bool:
+def run_gate1(*, repaired: bool = False) -> bool:
     normalization_errors = []
     marginal_errors = []
     for structure in v25b.STRUCTURES:
@@ -242,9 +242,10 @@ def run_gate1() -> bool:
         "bounds": BOUNDS,
         "escrow_accessed": False,
     }
-    dump("gate-1.json", report)
-    (OUT / "gate-1-report.md").write_text(
-        "# V2.5b Gate 1\n\n"
+    stem = "gate-1-repaired" if repaired else "gate-1"
+    dump(f"{stem}.json", report)
+    (OUT / f"{stem}-report.md").write_text(
+        f"# V2.5b Gate 1{' (repaired)' if repaired else ''}\n\n"
         f"**Verdict: {report['verdict']}**\n\n"
         + "\n".join(
             f"- {name}: `{'PASS' if passed else 'FAIL'}`"
@@ -254,7 +255,7 @@ def run_gate1() -> bool:
         encoding="utf-8",
     )
     if report["verdict"] == "FAIL":
-        (OUT / "gate-1-diagnosis-stub.md").write_text(
+        (OUT / f"{stem}-diagnosis-stub.md").write_text(
             "# Gate-1 diagnosis stub\n\nFailed proofs: "
             + ", ".join(key for key, value in proofs.items() if not value)
             + ". Gate 2 was not opened.\n",
@@ -430,22 +431,430 @@ def run_gate2() -> bool:
     return report["verdict"] == "PASS"
 
 
+GATE3_ARMS = (
+    "no_do_over",
+    "post_redescription_do_over",
+    "premature_do_over",
+    "suggestion_only",
+    "joint_do_over",
+    "marginal_do_over",
+    "no_reduction_lesion",
+)
+GATE3_STARTS = {
+    name: int(P["seed_blocks"][f"gate3_{name}"][0])
+    for name in GATE3_ARMS
+}
+
+
+def gate3_initial_state(position: int) -> dict[str, Any]:
+    seed = int(P["seed_blocks"]["gate3_initial_states"][0]) + position
+    q_111 = float(P["gate3_initial_state"]["initial_q_111"])
+    q_structure = np.full(8, (1.0 - q_111) / 7.0, dtype=float)
+    q_structure[v25b.STRUCTURE_INDEX["111"]] = q_111
+    state = {
+        "seed": seed,
+        "posterior_store": {
+            "H_formation": [0.04, 0.04, 0.92],
+            "G_root": [
+                1.0
+                - float(P["gate3_initial_state"]["revised_root_probability"]),
+                float(P["gate3_initial_state"]["revised_root_probability"]),
+            ],
+            "H_context_split": [
+                1.0
+                - float(P["gate3_initial_state"]["context_split_probability"]),
+                float(P["gate3_initial_state"]["context_split_probability"]),
+            ],
+            "H_Z": q_structure.tolist(),
+        },
+        "historical_context": {
+            "then_root": [0.9, 0.1],
+            "now_root": [0.1, 0.9],
+            "queryable": True,
+        },
+        "current_precision": float(
+            P["gate3_initial_state"]["current_precision"]
+        ),
+    }
+    encoded = json.dumps(
+        state, sort_keys=True, separators=(",", ":"), allow_nan=False
+    ).encode("utf-8")
+    return {
+        "seed": seed,
+        "serialized_state": state,
+        "state_sha256": hashlib.sha256(encoded).hexdigest(),
+    }
+
+
+def _gate3_first_time(result: v25b.ReductionScore, offset: int = 0) -> int:
+    horizon = int(P["gate3_initial_state"]["observed_followup_slices"])
+    if result.material_reduction.first_time is None:
+        return horizon + 1
+    return max(0, int(result.material_reduction.first_time) - offset)
+
+
+def _gate3_heldout_margin(
+    episodes: tuple[v25a.Episode, ...], precision: float
+) -> float:
+    heldout = episodes[-10:]
+    return float(
+        np.mean(
+            [
+                math.log(v25b.likelihood(episode, "000", precision))
+                - math.log(v25b.likelihood(episode, "111", precision))
+                for episode in heldout
+            ]
+        )
+    )
+
+
+def gate3_row(arm: str, position: int) -> dict[str, Any]:
+    if arm not in GATE3_ARMS:
+        raise ValueError("unknown Gate-3 arm")
+    initial = gate3_initial_state(position)
+    state = initial["serialized_state"]
+    seed = GATE3_STARTS[arm] + position
+    precision = float(state["current_precision"])
+    initial_prior = np.asarray(state["posterior_store"]["H_Z"], dtype=float)
+    horizon = int(P["gate3_initial_state"]["observed_followup_slices"])
+    do_over_count = int(
+        P["gate3_initial_state"]["joint_do_over_episodes"]
+    )
+    observed_truth = "111" if arm == "suggestion_only" else "000"
+    observed = v25b.generate_world(
+        seed,
+        truth_structure=observed_truth,
+        length=horizon,
+        precision=precision,
+        context_regime="return",
+    ).episodes
+    prefix: tuple[v25a.Episode, ...] = ()
+    prefix_modes: tuple[str, ...] = ()
+    if arm in (
+        "post_redescription_do_over",
+        "joint_do_over",
+        "marginal_do_over",
+        "no_reduction_lesion",
+    ):
+        prefix, _ = v25b.do_over_episodes(
+            seed,
+            count=do_over_count,
+            precision=precision,
+            structure="000",
+        )
+        prefix_modes = tuple(
+            "marginal"
+            if arm in ("marginal_do_over", "no_reduction_lesion")
+            else "joint"
+            for _ in prefix
+        )
+    elif arm == "premature_do_over":
+        prefix, prefix_modes = v25b.do_over_episodes(
+            seed,
+            count=do_over_count,
+            precision=precision,
+            structure="000",
+        )
+        # A premature episode is followed by the old, still-current context.
+        observed = v25b.generate_world(
+            seed,
+            truth_structure="111",
+            length=horizon,
+            precision=precision,
+            context_regime="return",
+        ).episodes
+    elif arm == "suggestion_only":
+        prefix = v25b.suggestion_only_episodes(do_over_count)
+        prefix_modes = tuple("joint" for _ in prefix)
+
+    sequence = prefix + observed
+    modes = prefix_modes + tuple("joint" for _ in observed)
+    if arm == "no_reduction_lesion":
+        modes = tuple("marginal" for _ in sequence)
+    result = v25b.score(
+        sequence,
+        precision=precision,
+        initial_prior=initial_prior,
+        presentations=modes,
+    )
+    prefix_result = v25b.score(
+        prefix,
+        precision=precision,
+        initial_prior=initial_prior,
+        presentations=prefix_modes,
+    )
+    returned_to_nonreduced = (
+        prefix_result.material_reduction.material
+        and not result.material_reduction.material
+    )
+    root_before = tuple(state["posterior_store"]["G_root"])
+    context_before = tuple(state["posterior_store"]["H_context_split"])
+    return {
+        "position": position,
+        "arm": arm,
+        "seed": seed,
+        "initial_state_seed": initial["seed"],
+        "initial_state_sha256": initial["state_sha256"],
+        "formed_P": float(state["posterior_store"]["H_formation"][2]),
+        "revised_root": list(root_before),
+        "context_split": list(context_before),
+        "endpoint_q_structure": result.q_structure.tolist(),
+        "q_000": float(
+            result.q_structure[v25b.STRUCTURE_INDEX["000"]]
+        ),
+        "selected_structure": v25b.STRUCTURES[
+            int(np.argmax(result.q_structure))
+        ],
+        "material_reduction": result.material_reduction.material,
+        "first_time_followup": _gate3_first_time(
+            result, len(prefix)
+        ),
+        "premature_material_reduction": (
+            prefix_result.material_reduction.material
+        ),
+        "returned_to_nonreduced": returned_to_nonreduced,
+        "heldout_000_vs_111_margin": _gate3_heldout_margin(
+            observed, precision
+        ),
+        "old_context_query_error": v25b.old_context_query_error(
+            position % 3, "111", precision
+        ),
+        "root_revision_unchanged": tuple(
+            state["posterior_store"]["G_root"]
+        )
+        == root_before,
+        "redescription_unchanged": tuple(
+            state["posterior_store"]["H_context_split"]
+        )
+        == context_before,
+    }
+
+
+def parallel_gate3() -> list[dict[str, Any]]:
+    workers = min(8, max(1, os.cpu_count() or 1))
+    jobs = []
+    for arm in GATE3_ARMS:
+        boundaries = np.linspace(0, 500, workers + 1, dtype=int)
+        for worker in range(workers):
+            path = OUT / f".gate3-{arm}-worker-{worker}.json"
+            command = [
+                sys.executable,
+                str(Path(__file__).resolve()),
+                "worker",
+                "gate3",
+                arm,
+                str(int(boundaries[worker])),
+                str(int(boundaries[worker + 1])),
+                str(path),
+            ]
+            jobs.append((path, subprocess.Popen(command, cwd=ROOT)))
+    for _, process in jobs:
+        if process.wait():
+            raise RuntimeError("Gate-3 worker failed")
+    rows = []
+    for path, _ in jobs:
+        rows.extend(json.loads(path.read_text()))
+        path.unlink()
+    expected = sorted(
+        (GATE3_STARTS[arm] + position, arm)
+        for arm in GATE3_ARMS
+        for position in range(500)
+    )
+    observed = sorted((int(row["seed"]), row["arm"]) for row in rows)
+    if observed != expected:
+        raise ValueError("Gate-3 seed ledger incomplete")
+    return rows
+
+
+def run_gate3() -> bool:
+    rows = parallel_gate3()
+    by_arm = {
+        arm: sorted(
+            (row for row in rows if row["arm"] == arm),
+            key=lambda row: row["position"],
+        )
+        for arm in GATE3_ARMS
+    }
+    clone_errors = 0
+    for position in range(500):
+        hashes = {
+            by_arm[arm][position]["initial_state_sha256"]
+            for arm in GATE3_ARMS
+        }
+        clone_errors += int(len(hashes) != 1)
+    no_over = by_arm["no_do_over"]
+    post = by_arm["post_redescription_do_over"]
+    speedups = [
+        (float(base["first_time_followup"]) - float(active["first_time_followup"]))
+        / max(float(base["first_time_followup"]), 1.0)
+        for base, active in zip(no_over, post)
+    ]
+    speedup_interval = interval(speedups)
+    post_material_rate = float(
+        np.mean([row["material_reduction"] for row in post])
+    )
+    suggestion = by_arm["suggestion_only"]
+    false_rate = float(
+        np.mean([row["material_reduction"] for row in suggestion])
+    )
+    premature = by_arm["premature_do_over"]
+    premature_rate = float(
+        np.mean([row["premature_material_reduction"] for row in premature])
+    )
+    premature_reductions = [
+        row for row in premature if row["premature_material_reduction"]
+    ]
+    reversal_rate = (
+        1.0
+        if not premature_reductions
+        else float(
+            np.mean(
+                [row["returned_to_nonreduced"] for row in premature_reductions]
+            )
+        )
+    )
+    lesion = by_arm["no_reduction_lesion"]
+    lesion_material_rate = float(
+        np.mean([row["material_reduction"] for row in lesion])
+    )
+    lesion_survival = all(
+        row["root_revision_unchanged"] and row["redescription_unchanged"]
+        for row in lesion
+    )
+    retention_error = max(row["old_context_query_error"] for row in rows)
+    heldout_interval = interval(
+        [row["heldout_000_vs_111_margin"] for row in post]
+    )
+    joint_minus_marginal = [
+        float(joint["q_000"]) - float(marginal["q_000"])
+        for joint, marginal in zip(
+            by_arm["joint_do_over"], by_arm["marginal_do_over"]
+        )
+    ]
+    direction_interval = interval(joint_minus_marginal)
+    t = P["gate3"]
+    checks = {
+        "bitwise_cloned_initial_states": clone_errors == 0,
+        "do_over_speedup": (
+            speedup_interval["mean"] >= t["do_over_speedup_minimum"]
+            and speedup_interval["lower_95"] > 0.0
+        ),
+        "post_redescription_material_rate": (
+            post_material_rate >= t["material_rate_minimum"]
+        ),
+        "false_full_burden_reduction": (
+            false_rate <= t["false_or_premature_maximum"]
+        ),
+        "premature_stable_reduction": (
+            premature_rate <= t["false_or_premature_maximum"]
+        ),
+        "old_context_return_reversal": (
+            reversal_rate >= t["return_reversal_minimum"]
+        ),
+        "no_reduction_lesion": (
+            lesion_material_rate == 0.0 and lesion_survival
+        ),
+        "historical_context_retention": (
+            retention_error <= t["history_tolerance"]
+        ),
+        "heldout_reduced_vs_full_margin": (
+            heldout_interval["mean"] >= t["heldout_margin_minimum"]
+            and heldout_interval["lower_95"] > 0.0
+        ),
+        "joint_vs_marginal_positive_branch": (
+            P["gate3"]["v25a_direction_branch"] == "positive"
+            and direction_interval["lower_95"] > 0.0
+        ),
+    }
+    metrics = {
+        "C_V25A_cell4_licensed_direction": P["gate3"][
+            "v25a_direction_branch"
+        ],
+        "C_V25A_root_resolution": P["gate3"]["v25a_root_resolution"],
+        "C_V25A_transfer_resolution": P["gate3"][
+            "v25a_transfer_resolution"
+        ],
+        "clone_hash_mismatch_count": clone_errors,
+        "do_over_speedup": speedup_interval,
+        "post_redescription_material_reduction_rate": post_material_rate,
+        "false_material_reduction_full_burden_rate": false_rate,
+        "premature_stable_reduction_rate": premature_rate,
+        "premature_reduction_world_count": len(premature_reductions),
+        "old_context_return_reversal_rate": reversal_rate,
+        "no_reduction_lesion_material_rate": lesion_material_rate,
+        "no_reduction_lesion_root_and_redescription_survive": lesion_survival,
+        "maximum_historical_context_query_error": retention_error,
+        "heldout_000_vs_111_margin": heldout_interval,
+        "joint_minus_marginal_q000_effect": direction_interval,
+    }
+    report = {
+        "stage": "V2.5b",
+        "gate": 3,
+        "verdict": "PASS" if all(checks.values()) else "FAIL",
+        "seed_block": [1_101_000, 1_104_999],
+        "initial_state_count": 500,
+        "arm_world_count": len(rows),
+        "arm_counts": {arm: len(by_arm[arm]) for arm in GATE3_ARMS},
+        "metrics": metrics,
+        "checks": checks,
+        "bounds": BOUNDS,
+        "escrow_accessed": False,
+    }
+    dump("gate-3-per_world.json", rows)
+    dump("gate-3.json", report)
+    (OUT / "gate-3-report.md").write_text(
+        "# V2.5b Gate 3\n\n"
+        f"**Verdict: {report['verdict']}**\n\n```json\n"
+        + json.dumps(metrics, indent=2, sort_keys=True)
+        + "\n```\n",
+        encoding="utf-8",
+    )
+    if report["verdict"] == "FAIL":
+        (OUT / "gate-3-diagnosis-stub.md").write_text(
+            "# Gate-3 diagnosis stub\n\nFailed criteria: "
+            + ", ".join(key for key, value in checks.items() if not value)
+            + ". Gate 4 was not opened.\n",
+            encoding="utf-8",
+        )
+    return report["verdict"] == "PASS"
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("phase", choices=("gate1", "gate2", "worker"))
+    parser.add_argument(
+        "phase",
+        choices=("gate1", "gate1repaired", "gate2", "gate3", "worker"),
+    )
     parser.add_argument("worker_args", nargs="*")
     args = parser.parse_args()
     if args.phase == "worker":
-        task, start, end, path = args.worker_args
-        if task != "gate2":
+        task = args.worker_args[0]
+        if task == "gate2":
+            _, start, end, path = args.worker_args
+            dump_rows = [
+                gate2_row(index) for index in range(int(start), int(end))
+            ]
+        elif task == "gate3":
+            _, arm, start, end, path = args.worker_args
+            dump_rows = [
+                gate3_row(arm, index)
+                for index in range(int(start), int(end))
+            ]
+        else:
             raise ValueError("unknown worker task")
-        dump_rows = [gate2_row(index) for index in range(int(start), int(end))]
         Path(path).write_text(
             json.dumps(dump_rows, sort_keys=True, allow_nan=False),
             encoding="utf-8",
         )
         raise SystemExit(0)
-    ok = run_gate1() if args.phase == "gate1" else run_gate2()
+    if args.phase == "gate1":
+        ok = run_gate1()
+    elif args.phase == "gate1repaired":
+        ok = run_gate1(repaired=True)
+    elif args.phase == "gate3":
+        ok = run_gate3()
+    else:
+        ok = run_gate2()
     raise SystemExit(0 if ok else 2)
 
 
