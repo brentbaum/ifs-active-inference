@@ -1,0 +1,51 @@
+{
+  "ascending_gap_free": true,
+  "cell_hashes": {
+    "c-v26a-cell-1.json": "c0b0a35e570ad49942ecd9d147a066add3865c7a2da5d03118fd65d58f064e03",
+    "c-v26a-cell-2.json": "9c81c598cb619c7abfc05782a2dfbc3947be029306889e4eddb19082924d7c0f",
+    "c-v26a-cell-3.json": "23463ffc87361eb24ac18b63f0b2b49791954346f44380031aa482f1ed10ef36",
+    "c-v26a-cell-4.json": "28d031abadc92808ff784ff18bc3264bc1dbd665935905d57b52ded20ee98646"
+  },
+  "challenge": "C-V26A",
+  "consumed_seed_count": 2000,
+  "consumed_seed_end": 2031999,
+  "consumed_seed_start": 2030000,
+  "criteria_evaluated": false,
+  "phase": "raw_traces_sealed_before_criteria",
+  "record_counts": {
+    "cell_1_stable_reliable": 500,
+    "cell_2_soothing_noncontingent": 500,
+    "cell_3_switching": 500,
+    "cell_4_factorial": 500
+  },
+  "validation": {
+    "cell_order": [
+      "cell_1_stable_reliable",
+      "cell_2_soothing_noncontingent",
+      "cell_3_switching",
+      "cell_4_factorial"
+    ],
+    "challenge": "C-V26A",
+    "challenge_sha256": "cba6d516516401c05f00cc0586e57e750964f3f8128d3b541eb3352823e56621",
+    "errors": [],
+    "expressible": true,
+    "freeze_identity": {
+      "file_count": 35,
+      "manifest": "results/V2.6a/freeze-manifest.json",
+      "manifest_sha256": "713662bbdf729d0ad62b8236c4015ef50d72acbc12f2a9c57f8ffc81d3a555a8",
+      "mismatches": [],
+      "passed": true
+    },
+    "literal_parser": "ast.literal_eval",
+    "parse_instruction": "Cells declare a generator name from {generate_control_world, generate_factorial_world} plus its exact kwargs; scoring uses the frozen PartnerScore/gate readout fields named per criterion; ast.literal_eval on the exact bracketed text only.",
+    "release_ledger": {
+      "file": "projects/ifs-paper/suite-v2-sealed-hashes.md",
+      "release_phrase_found": true,
+      "sha256": "900a9e9ed6013e3344456498d8194a82b526541d928c392b26d0833367b7da5b"
+    },
+    "seed_count": 2000,
+    "seed_end": 2031999,
+    "seed_start": 2030000,
+    "verified_seal_sha256": "cba6d516516401c05f00cc0586e57e750964f3f8128d3b541eb3352823e56621"
+  }
+}
