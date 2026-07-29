@@ -1,0 +1,32 @@
+{
+  "challenge": "C-V28C",
+  "checks": {
+    "burden_q_P_min_0.95": true,
+    "burden_qualifying_population": true,
+    "danger_policy_shift_min_0.15": true,
+    "danger_q_D_min_0.90": true,
+    "danger_qualifying_population": true,
+    "historical_error_max_1e-10": true,
+    "historical_index_available": true,
+    "paired_separation_lower_ci_gt_0.80": true
+  },
+  "custody_passed": true,
+  "immutable_verdict": "PASS",
+  "metrics": {
+    "burden_mean_q_P": 0.9999878406307353,
+    "burden_qualifying_count": 410,
+    "danger_mean_policy_shift": 0.2415809501764087,
+    "danger_mean_q_D": 0.987855303410558,
+    "danger_qualifying_count": 577,
+    "maximum_historical_error": 0.0,
+    "paired_qualifying_count": 389,
+    "paired_truth_contrast_separation": {
+      "lower_95": 0.9898236116689691,
+      "mean": 0.9922720911749676,
+      "n": 389,
+      "upper_95": 0.9944541382885137
+    }
+  },
+  "scientific_passed": true,
+  "semantic_passed": true
+}

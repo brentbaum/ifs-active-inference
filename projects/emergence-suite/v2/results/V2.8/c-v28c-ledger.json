@@ -1,0 +1,32 @@
+{
+  "ascending_gap_free": true,
+  "bundle_sha256": "be1cbb5885a94af380e48b9fb3c4e83b043f63d3584f0601e44c21f8e0f60c68",
+  "challenge": "C-V28C",
+  "identity": {
+    "checked_files": 31,
+    "manifest": "results/V2.8/freeze-manifest.json",
+    "manifest_sha256": "a614f49027f39d2eb98525da8dd13df4e603f1b297d9808e30472b72cd4ff926",
+    "mismatches": [],
+    "passed": true
+  },
+  "literal_parser": "ast.literal_eval",
+  "raw_trace_seal_sha256": "401a5c289a27c6b706fc19d9843e8f500218801f7149ab659a6f40587650b0ec",
+  "raw_trace_sha256": "2e173f66d7e7e7d29a8946bc0d4154569a0557ad9583fc231043d482e874f5a1",
+  "release_block": [
+    2120000,
+    2120599
+  ],
+  "release_consumed_in_full": true,
+  "same_seed_arms": true,
+  "seeds_consumed": 600,
+  "validation": {
+    "checks": {
+      "arms_public": true,
+      "released_block_public": true,
+      "required_common_fields": true,
+      "strata_public": true
+    },
+    "expressible": true,
+    "prospection_failure": null
+  }
+}
