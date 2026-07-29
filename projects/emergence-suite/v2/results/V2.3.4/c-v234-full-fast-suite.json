@@ -1,0 +1,7 @@
+{
+  "command": "python3 run_tests_parallel.py",
+  "passed": true,
+  "returncode": 0,
+  "stderr": "",
+  "stdout": "PASS tests.test_constitution 0.970s\nPASS tests.test_manifest_chain 0.111s\nPASS tests.test_performance_amendment_1 11.975s\nPASS tests.test_v20_kernel 0.950s\nPASS tests.test_v21_precision 1.826s\nPASS tests.test_v221_association 4.424s\nPASS tests.test_v22_root 3.536s\nPASS tests.test_v231_formation 51.966s\nPASS tests.test_v231r_neutrality 0.667s\nPASS tests.test_v232_attribution 0.124s\nPASS tests.test_v232_formation 0.166s\nPASS tests.test_v233 26.620s\nPASS tests.test_v233_seed_authorization 0.153s\nPASS tests.test_v234 0.107s\nPASS tests.test_v23_formation 22.752s\nPASS tests.test_v24 0.267s\nPASS tests.test_v243 0.121s\nPASS tests.test_v244 0.105s\nPASS tests.test_v25a 0.311s\nPASS tests.test_v25a_completion 0.104s\nPASS tests.test_v25b 0.201s\nPASS tests.test_v26a 0.105s\nPASS tests.test_v2g0_grammar 0.236s\nmodules=23 failures=0 elapsed=51.972s\n"
+}

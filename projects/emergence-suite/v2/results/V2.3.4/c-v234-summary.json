@@ -1,0 +1,122 @@
+{
+  "bounds": {
+    "B_max_v232_formation": 3.801426508560692,
+    "B_max_v234": 11.675460894331877,
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "B_max_v25a_configural": 6.084736253211209,
+    "B_max_v25a_marginal_accounting": 6.704414354964107,
+    "B_max_v25b": 11.302393144606405,
+    "B_max_v26a_relational": 6.9920964274158885,
+    "B_max_v26a_root": 2.9444389791664394,
+    "implied_binary_change_bound": 0.9941860465116279
+  },
+  "challenge": "C-V234",
+  "criteria": {
+    "1_effective_action": {
+      "danger_vs_low_danger": {
+        "count": 333,
+        "lower_95": 0.15459811722376265,
+        "mean": 0.1603424419718195,
+        "upper_95": 0.16608676671987632
+      },
+      "efficacy_existence_unique_rate": 1.0,
+      "passed": true,
+      "prevented_outcome_recombination_error_max": 0.0
+    },
+    "2_sham_action": {
+      "known_irrelevant_action_free_identity_error_max": 0.0,
+      "no_false_attribution_rate": 0.8498498498498499,
+      "passed": false
+    },
+    "3_partial_efficacy": {
+      "cell_1_eta_mean": {
+        "count": 333,
+        "lower_95": 0.7377502059041943,
+        "mean": 0.748211546412962,
+        "upper_95": 0.7586728869217296
+      },
+      "cell_2_eta_mean": {
+        "count": 333,
+        "lower_95": 0.13756981912372035,
+        "mean": 0.14757734695325403,
+        "upper_95": 0.1575848747827877
+      },
+      "cell_3_eta_mean": {
+        "count": 333,
+        "lower_95": 0.2632272916540757,
+        "mean": 0.27422575043553193,
+        "upper_95": 0.28522420921698816
+      },
+      "efficacy_existence_recovery_rate": 0.5495495495495496,
+      "full_above_partial": {
+        "left_count": 333,
+        "lower_95": 0.45880667410533954,
+        "mean_difference": 0.47398579597743,
+        "right_count": 333,
+        "upper_95": 0.4891649178495205
+      },
+      "partial_above_sham": {
+        "left_count": 333,
+        "lower_95": 0.11177840991044732,
+        "mean_difference": 0.1266484034822779,
+        "right_count": 333,
+        "upper_95": 0.14151839705410849
+      },
+      "passed": false
+    },
+    "4_context_switch": {
+      "passed": true,
+      "pre_minus_post_context_efficacy": {
+        "count": 333,
+        "lower_95": 0.7585588362836347,
+        "mean": 0.769598230071003,
+        "upper_95": 0.7806376238583713
+      },
+      "pre_switch_attribution_query_error_max": 0.0
+    },
+    "5_forced_probe": {
+      "joint_theta_eta_entropy_reduction": {
+        "count": 333,
+        "lower_95": 1.7489127186699243,
+        "mean": 1.7806427154256648,
+        "upper_95": 1.8123727121814053
+      },
+      "passed": true
+    },
+    "6_relief_only": {
+      "danger_movement_max": 0.0,
+      "efficacy_existence_movement_max": 1.1102230246251565e-16,
+      "efficacy_magnitude_movement_max": 5.551115123125783e-17,
+      "passed": true,
+      "scientific_posterior_movement_max": 5.204170427930421e-17
+    },
+    "7_semantic_custody": {
+      "ascending_gap_free": true,
+      "freeze_identity": {
+        "file_count": 31,
+        "manifest": "results/V2.3.4/freeze-manifest.json",
+        "manifest_sha256": "c4f27d14be5edbcfcf9cbfc3522001544d5daec002cb53c4a34ad71d527ce70a",
+        "mismatches": [],
+        "passed": true
+      },
+      "one_posterior_all_worlds": true,
+      "passed": true,
+      "permanent_constitution": true,
+      "raw_hashes_match_seal": true,
+      "release_ledger": {
+        "file": "projects/ifs-paper/suite-v2-sealed-hashes.md",
+        "release_phrase_found": true,
+        "sha256": "1b2dbddaa1f72ae467c84097176b6b4c4a46fd5fe1f2ed89abae0825a1bf1a3d"
+      },
+      "seed_count": 2000
+    }
+  },
+  "immutable_sealed_verdict": "FAIL",
+  "pass_rule": "all seven sealed criteria",
+  "passed": false,
+  "verdict_classes": {
+    "custody": true,
+    "scientific": false,
+    "semantic": true
+  }
+}

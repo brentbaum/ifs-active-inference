@@ -1,0 +1,57 @@
+{
+  "ascending_gap_free": true,
+  "cell_hashes": {
+    "c-v234-cell-1.json": "7f97b82631ea39f650d8d186bad8c451deabf853e9bd698027baa695ef8aa94e",
+    "c-v234-cell-2.json": "9de681ca2cf13bcbaf922ed69cf6d078913b43e59753ed154deb9196a1184642",
+    "c-v234-cell-3.json": "66c3820c7728c6e86126f9d894997ad00ca17e5e2f38f584e2bf87c7209b08ab",
+    "c-v234-cell-4.json": "ccc29cb528e00cf5ca2a108b53561809602de502cfeaa32b85ff06c0481d1f53",
+    "c-v234-cell-5.json": "5d6fae999d92b1335a8ff290d28efd75ed3e2553e52f8101f0b9e11da6f4cf1c",
+    "c-v234-cell-6.json": "e100149d73f64282c13b1d0a7901906eaa6d99f6a08b0d9e5555ec0a445e263a"
+  },
+  "challenge": "C-V234",
+  "consumed_seed_count": 2000,
+  "consumed_seed_end": 2041999,
+  "consumed_seed_start": 2040000,
+  "criteria_evaluated": false,
+  "phase": "raw_traces_sealed_before_criteria",
+  "record_counts": {
+    "cell_1_effective_action": 333,
+    "cell_2_sham_action": 333,
+    "cell_3_partial": 333,
+    "cell_4_context_switch": 333,
+    "cell_5_forced_probe": 333,
+    "cell_6_relief_only": 335
+  },
+  "validation": {
+    "cell_order": [
+      "cell_1_effective_action",
+      "cell_2_sham_action",
+      "cell_3_partial",
+      "cell_4_context_switch",
+      "cell_5_forced_probe",
+      "cell_6_relief_only"
+    ],
+    "challenge": "C-V234",
+    "challenge_sha256": "1d9329bafd15fdc5e2c987bb4fa9105146d8740f05fefdd675f1fab61764cdd7",
+    "errors": [],
+    "expressible": true,
+    "freeze_identity": {
+      "file_count": 31,
+      "manifest": "results/V2.3.4/freeze-manifest.json",
+      "manifest_sha256": "c4f27d14be5edbcfcf9cbfc3522001544d5daec002cb53c4a34ad71d527ce70a",
+      "mismatches": [],
+      "passed": true
+    },
+    "literal_parser": "ast.literal_eval",
+    "parse_instruction": "Cells declare generate_controlled_world or generate_world kwargs; scoring names frozen attribution readouts (danger posterior, efficacy-existence posterior, efficacy magnitude, prevented-outcome posterior, relief accounting); ast.literal_eval on the exact bracketed text only.",
+    "release_ledger": {
+      "file": "projects/ifs-paper/suite-v2-sealed-hashes.md",
+      "release_phrase_found": true,
+      "sha256": "1b2dbddaa1f72ae467c84097176b6b4c4a46fd5fe1f2ed89abae0825a1bf1a3d"
+    },
+    "seed_count": 2000,
+    "seed_end": 2041999,
+    "seed_start": 2040000,
+    "verified_seal_sha256": "1d9329bafd15fdc5e2c987bb4fa9105146d8740f05fefdd675f1fab61764cdd7"
+  }
+}
