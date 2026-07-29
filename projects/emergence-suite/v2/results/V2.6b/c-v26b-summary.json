@@ -1,0 +1,155 @@
+{
+  "bounds": {
+    "B_max_v232_formation": 3.801426508560692,
+    "B_max_v234": 11.675460894331877,
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "B_max_v25a_configural": 6.084736253211209,
+    "B_max_v25a_marginal_accounting": 6.704414354964107,
+    "B_max_v25b": 11.302393144606405,
+    "B_max_v26a_relational": 6.9920964274158885,
+    "B_max_v26a_root": 2.9444389791664394,
+    "B_max_v26b_policy_outcome": 1.3862943611198908,
+    "B_max_v26b_trust": 2.1972245773362196,
+    "implied_binary_change_bound_v26b": 0.5
+  },
+  "challenge": "C-V26B",
+  "criteria": {
+    "1_ambiguous_partner": {
+      "passed": true,
+      "permission_mass": {
+        "count": 500,
+        "lower_95": 0.009027060162442068,
+        "mean": 0.00922139125602104,
+        "upper_95": 0.009415722349600012
+      }
+    },
+    "2_refusal_remaining": {
+      "passed": true,
+      "remaining_minus_pressure": {
+        "count": 500,
+        "lower_95": 0.25769174251628835,
+        "mean": 0.2613183252765406,
+        "upper_95": 0.2649449080367928
+      },
+      "remaining_permission_mass": {
+        "count": 500,
+        "lower_95": 0.27348707083254103,
+        "mean": 0.27706015890760854,
+        "upper_95": 0.28063324698267605
+      }
+    },
+    "3_refusal_pressure": {
+      "passed": true,
+      "pressure_permission_mass": {
+        "count": 500,
+        "lower_95": 0.015332375946107603,
+        "mean": 0.015741833631068007,
+        "upper_95": 0.01615129131602841
+      },
+      "q_policy_normalization_error_max": 1.1102230246251565e-16
+    },
+    "4_stakes_contrast": {
+      "low_minus_high_permission": {
+        "count": 250,
+        "lower_95": 0.6045469940675804,
+        "mean": 0.6090726346059889,
+        "upper_95": 0.6135982751443975
+      },
+      "pair_counts": {
+        "high_stakes": 250,
+        "low_stakes": 250
+      },
+      "passed": true
+    },
+    "5_role_future_crossover": {
+      "expected_role_sign": "negative",
+      "high_rupture_role_differential": {
+        "count": 250,
+        "lower_95": -0.3143172139797157,
+        "mean": -0.30165139106972183,
+        "upper_95": -0.288985568159728
+      },
+      "low_minus_high_rupture_permission": {
+        "count": 250,
+        "lower_95": 0.25685889653636057,
+        "mean": 0.26233289503383855,
+        "upper_95": 0.26780689353131654
+      },
+      "low_rupture_role_differential": {
+        "count": 250,
+        "lower_95": -0.3073746817302121,
+        "mean": -0.2959274137999929,
+        "upper_95": -0.28448014586977366
+      },
+      "pair_counts": {
+        "high_rupture": 250,
+        "low_rupture": 250
+      },
+      "passed": true,
+      "pooled_role_differential": {
+        "count": 500,
+        "lower_95": -0.30732068538393875,
+        "mean": -0.29878940243485735,
+        "upper_95": -0.29025811948577596
+      },
+      "role_direction_consistent": true
+    },
+    "6_descent": {
+      "contact_probability": {
+        "count": 500,
+        "lower_95": 0.20179617879542766,
+        "mean": 0.20460731354678482,
+        "upper_95": 0.207418448298142
+      },
+      "descent_minus_ambiguous": {
+        "count": 500,
+        "lower_95": 0.37205817256634505,
+        "mean": 0.37661416457435914,
+        "upper_95": 0.38117015658237324
+      },
+      "passed": true,
+      "permission_mass": {
+        "count": 500,
+        "lower_95": 0.3812991542218217,
+        "mean": 0.38583555583038026,
+        "upper_95": 0.3903719574389388
+      }
+    },
+    "7_semantic_custody": {
+      "ascending_gap_free": true,
+      "forbidden_scientific_fields": [
+        "access",
+        "gate",
+        "permission",
+        "protector_role"
+      ],
+      "freeze_identity": {
+        "file_count": 32,
+        "manifest": "results/V2.6b/freeze-manifest.json",
+        "manifest_sha256": "d6ccaa976e3892fb728010d366544b76c2069c16790aa02e19b1222e17bcb051",
+        "mismatches": [],
+        "passed": true
+      },
+      "no_gate_object": true,
+      "one_posterior_all_worlds": true,
+      "passed": true,
+      "permanent_constitution": true,
+      "permission_and_contact_are_score_readouts": true,
+      "raw_hashes_match_seal": true,
+      "release_ledger": {
+        "file": "projects/ifs-paper/suite-v2-sealed-hashes.md",
+        "release_phrase_found": true,
+        "sha256": "c524e42334f838bc8cc374b402743a4fcd506c2eb6b7c84fd721376c2066561c"
+      },
+      "seed_count": 3000
+    }
+  },
+  "immutable_sealed_verdict": "PASS",
+  "pass_rule": "all seven sealed criteria",
+  "passed": true,
+  "verdict_classes": {
+    "custody": true,
+    "scientific": true,
+    "semantic": true
+  }
+}

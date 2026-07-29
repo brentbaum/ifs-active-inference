@@ -1,0 +1,58 @@
+{
+  "ascending_gap_free": true,
+  "cell_hashes": {
+    "c-v26b-cell-1.json": "e899a45a027ffe6b41905cedceb49a1e3f041a6457c5618b335b9a8047721806",
+    "c-v26b-cell-2.json": "b7dbdb8db947ccc8bc70b31250471783aea076f9a7c7d4d2214206f7057a3c49",
+    "c-v26b-cell-3.json": "2926333e2dce2351fbe970b439daf7f3855eddb26dfefc65cc19a2ef1ba3e264",
+    "c-v26b-cell-4.json": "280e7e74dd6185fa54637e11f14203f058c07173c3e376bfbe521e69365ba28f",
+    "c-v26b-cell-5.json": "3ff49d69641032c0322be1116fec1e3bd884e0856a4821c484996422b4bc0fbe",
+    "c-v26b-cell-6.json": "41b462dc3ccb78efbf5ba96b08284070b55491af112c2a44d6cc66bab60ac8bc"
+  },
+  "challenge": "C-V26B",
+  "consumed_seed_count": 3000,
+  "consumed_seed_end": 2052999,
+  "consumed_seed_start": 2050000,
+  "criteria_evaluated": false,
+  "phase": "raw_traces_sealed_before_criteria",
+  "record_counts": {
+    "cell_1_ambiguous_partner": 500,
+    "cell_2_refusal_remaining": 500,
+    "cell_3_refusal_pressure": 500,
+    "cell_4_stakes_contrast": 500,
+    "cell_5_role_future_crossover": 500,
+    "cell_6_descent": 500
+  },
+  "validation": {
+    "cell_order": [
+      "cell_1_ambiguous_partner",
+      "cell_2_refusal_remaining",
+      "cell_3_refusal_pressure",
+      "cell_4_stakes_contrast",
+      "cell_5_role_future_crossover",
+      "cell_6_descent"
+    ],
+    "challenge": "C-V26B",
+    "challenge_sha256": "c7e00412c7f06cbead6f03152b0be4fc70da013a00fd1de0780b3cb0e62e4abf",
+    "errors": [],
+    "expressible": true,
+    "freeze_identity": {
+      "file_count": 32,
+      "manifest": "results/V2.6b/freeze-manifest.json",
+      "manifest_sha256": "d6ccaa976e3892fb728010d366544b76c2069c16790aa02e19b1222e17bcb051",
+      "mismatches": [],
+      "passed": true
+    },
+    "literal_parser": "ast.literal_eval",
+    "pair_assignment": "seed index mod 2 selects the pair row (250 worlds each)",
+    "parse_instruction": "Cells declare generate_control_world scenario kwargs; scoring uses frozen ProtectorScore fields (permission_mass, contact_probability, q_policy, q_trust, role_absence_risk_differential, root_movement \u2014 pure readouts); ast.literal_eval on the exact bracketed text only.",
+    "release_ledger": {
+      "file": "projects/ifs-paper/suite-v2-sealed-hashes.md",
+      "release_phrase_found": true,
+      "sha256": "c524e42334f838bc8cc374b402743a4fcd506c2eb6b7c84fd721376c2066561c"
+    },
+    "seed_count": 3000,
+    "seed_end": 2052999,
+    "seed_start": 2050000,
+    "verified_seal_sha256": "c7e00412c7f06cbead6f03152b0be4fc70da013a00fd1de0780b3cb0e62e4abf"
+  }
+}
