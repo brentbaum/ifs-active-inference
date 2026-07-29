@@ -11,8 +11,8 @@ import json
 import math
 import subprocess
 import sys
+import time
 import textwrap
-from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 from typing import Any
 
@@ -118,14 +118,82 @@ def _world_row(seed: int, cell: str, full: bool = False) -> dict[str, Any]:
 
 
 def _parallel_rows(specification: list[tuple[int, str]], full: bool) -> list[dict]:
-    with ProcessPoolExecutor(max_workers=8) as executor:
-        futures = [
-            executor.submit(_world_row, seed, cell, full)
-            for seed, cell in specification
+    if not specification:
+        return []
+    seeds = [seed for seed, _ in specification]
+    if seeds != list(range(seeds[0], seeds[0] + len(seeds))):
+        raise ValueError("parallel row specification must be contiguous")
+    carrying_count = sum(
+        cell == "association_carrying" for _, cell in specification
+    )
+    if any(
+        cell
+        != ("association_carrying" if index < carrying_count else "independent")
+        for index, (_, cell) in enumerate(specification)
+    ):
+        raise ValueError("parallel row cells must be carrying then independent")
+    workers = 8
+    boundaries = np.linspace(0, len(specification), workers + 1, dtype=int)
+    processes = []
+    prefix = f".v25a-rows-{seeds[0]}"
+    for worker in range(workers):
+        output = OUT / f"{prefix}-{worker}.json"
+        if output.exists():
+            output.unlink()
+        command = [
+            sys.executable,
+            str(Path(__file__).resolve()),
+            "rows-worker",
+            "--start-position",
+            str(int(boundaries[worker])),
+            "--end-position",
+            str(int(boundaries[worker + 1])),
+            "--seed-base",
+            str(seeds[0]),
+            "--carrying-count",
+            str(carrying_count),
+            "--worker-output",
+            str(output),
         ]
-        rows = [future.result() for future in futures]
+        if full:
+            command.append("--full")
+        processes.append(
+            (worker, output, subprocess.Popen(command, cwd=ROOT))
+        )
+    remaining = {worker: process for worker, _, process in processes}
+    while remaining:
+        time.sleep(2)
+        for worker, process in list(remaining.items()):
+            status = process.poll()
+            if status is None:
+                continue
+            if status:
+                raise RuntimeError(f"row worker {worker} exited {status}")
+            del remaining[worker]
+    rows = []
+    for worker, output, _ in processes:
+        rows.extend(json.loads(output.read_text()))
+        output.unlink()
     rows.sort(key=lambda row: row["seed"])
+    if [row["seed"] for row in rows] != seeds:
+        raise ValueError("parallel row result ledger is incomplete")
     return rows
+
+
+def _run_rows_worker(args: argparse.Namespace) -> None:
+    rows = []
+    for position in range(args.start_position, args.end_position):
+        seed = args.seed_base + position
+        cell = (
+            "association_carrying"
+            if position < args.carrying_count
+            else "independent"
+        )
+        rows.append(_world_row(seed, cell, args.full))
+    Path(args.worker_output).write_text(
+        json.dumps(rows, sort_keys=True, default=_json_default) + "\n",
+        encoding="utf-8",
+    )
 
 
 def _range(values: list[float]) -> dict[str, float]:
@@ -583,8 +651,19 @@ def run_gate2() -> bool:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("phase", choices=("pilot", "gate1", "gate2"))
+    parser.add_argument(
+        "phase", choices=("pilot", "gate1", "gate2", "rows-worker")
+    )
+    parser.add_argument("--start-position", type=int)
+    parser.add_argument("--end-position", type=int)
+    parser.add_argument("--seed-base", type=int)
+    parser.add_argument("--carrying-count", type=int)
+    parser.add_argument("--worker-output")
+    parser.add_argument("--full", action="store_true")
     args = parser.parse_args()
+    if args.phase == "rows-worker":
+        _run_rows_worker(args)
+        return 0
     if args.phase == "pilot":
         run_pilot()
         return 0
@@ -595,4 +674,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
