@@ -1,0 +1,59 @@
+{
+  "stage": "V2.5a",
+  "authored_by": "evaluator (Fable), 2026-07-29, per round-8 'proceed to V2.5a'; user-directed self-authoring",
+  "runs_on": "frozen V2.4.4 stage; scoring-side machinery only (presentation operator, derived candidates, matching operator)",
+  "identities": {
+    "factorization_tolerance": 1e-10,
+    "increment_identity_tolerance": 1e-10,
+    "decomposition_tolerance": 1e-10
+  },
+  "criterion_freeze_procedure": {
+    "status": "SESOI_SLOTS_PENDING_PILOT",
+    "pilot_block": "755000:755199 (barred after use)",
+    "pilot_may_inspect": "attainable ranges only; never criterion pass/fail",
+    "default_candidates": {
+      "delta_i_sesoi_nats_per_token": 0.01,
+      "matching_kl_tolerance_nats": 0.01,
+      "bridge_root_movement_sesoi": "set from pilot"
+    },
+    "freeze_rule": "numeric values committed here before any assay block opens; a blocking criterion may not contradict pilot attainability data"
+  },
+  "matching": {
+    "extension_cap_multiplier": 8,
+    "scan": "per-slice",
+    "censoring": "reported with Wilson interval, never imputed",
+    "target": "root posterior prior-to-posterior KL, declared before scoring"
+  },
+  "seed_blocks": {
+    "stage0_pilot": "755000:755199",
+    "gate2_format_calibration": "756000:756399",
+    "gate3_dose_response": "757000:757599",
+    "gate3_matching": "758000:758299",
+    "gate3_formed_p_bridge": "758500:758619",
+    "gate3_misspecification": "759000:759239",
+    "gate4_lesions": "760000:760239",
+    "gate5_regression_robustness": "761000:763999",
+    "sealed_challenge_escrow": "835001:835600",
+    "guard_gaps_intentional": true
+  },
+  "barred_blocks_standing": [
+    "742000:742959", "743000:743255", "744000:746303", "747000:747255",
+    "750000:750299", "751000:751299", "770000:772419",
+    "773000:773499", "774000:774524", "776000:776144", "777000:777499",
+    "780000:780129", "781000:781499", "786000:786359",
+    "787000:798499", "830001:830600 (retired)"
+  ],
+  "b_max": {
+    "inherited_formation": 3.801426508560692,
+    "v24_common_emissions": 6.704414354964107,
+    "v25a_marginal_accounting": "derived and published at gate 1 if distinct"
+  },
+  "permanent_rules_in_force": [
+    "structural-existence propositions inside nested families",
+    "conditional-null calibration over raw ceilings where selectivity is claimed (not claimed in V2.5a)",
+    "adjudication-criterion audit (7 items) before any new blocking criterion",
+    "distinguish structural recovery / conditional selectivity / finite-history power",
+    "four-layer pre-seal linter with dry-run traceability",
+    "declarative world grammar required before V2.8"
+  ]
+}
