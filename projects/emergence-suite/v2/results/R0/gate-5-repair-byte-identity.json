@@ -1,0 +1,69 @@
+{
+  "checks": {
+    "all_recorded_nonmanifest_fields_bitwise_identical": true,
+    "fresh_suite_count_and_status_match": true,
+    "manifest_chain_has_zero_mismatches": true,
+    "nonmanifest_gate_checks_bitwise_identical": true,
+    "original_verdict_retained_fail": true,
+    "repaired_verdict_pass": true
+  },
+  "classification": "pure_software_error",
+  "compared_fields": {
+    "custody_failures": {
+      "bitwise_identical": true,
+      "original_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "repaired_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "escrow_accessed": {
+      "bitwise_identical": true,
+      "original_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "repaired_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+    },
+    "gate": {
+      "bitwise_identical": true,
+      "original_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+      "repaired_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d"
+    },
+    "modified_pre_r0_files": {
+      "bitwise_identical": true,
+      "original_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "repaired_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "r0_worlds": {
+      "bitwise_identical": true,
+      "original_sha256": "8d284220975da66c6cba4a32aaedfa0b897187d86ed9f7a2419c9bd10a103505",
+      "repaired_sha256": "8d284220975da66c6cba4a32aaedfa0b897187d86ed9f7a2419c9bd10a103505"
+    },
+    "seed_block": {
+      "bitwise_identical": true,
+      "original_sha256": "c778fa382d54141075f8045b5181e5b3dc9200533edeb001fcb31e0a5dbb4622",
+      "repaired_sha256": "c778fa382d54141075f8045b5181e5b3dc9200533edeb001fcb31e0a5dbb4622"
+    },
+    "stage": {
+      "bitwise_identical": true,
+      "original_sha256": "dbf5ee0f25b331d154367f7cdbdc5535e4b173085aeb06ddb82e8445870c811e",
+      "repaired_sha256": "dbf5ee0f25b331d154367f7cdbdc5535e4b173085aeb06ddb82e8445870c811e"
+    },
+    "unit_suite": {
+      "bitwise_identical": true,
+      "original_sha256": "93198ed460dd5a0d0d27d5839128d7677dd9122fd467a2238bc217e4669b252e",
+      "repaired_sha256": "93198ed460dd5a0d0d27d5839128d7677dd9122fd467a2238bc217e4669b252e"
+    }
+  },
+  "original_record": "results/R0/gate-5.json",
+  "permitted_differences": [
+    "v244_manifest",
+    "checks.v244_freeze_manifest_byte_identical",
+    "checks.reexecution_suite_matches_original_count_and_status",
+    "verdict"
+  ],
+  "reexecution_unit_suite": {
+    "command": "/opt/homebrew/opt/python@3.14/bin/python3.14 -m unittest discover -s tests -v",
+    "elapsed_seconds": 418.00646679196507,
+    "returncode": 0,
+    "summary": "Ran 126 tests in 417.841s"
+  },
+  "repaired_record": "results/R0/gate-5-repaired.json",
+  "stage": "V2.G0",
+  "verdict": "PASS"
+}

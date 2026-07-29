@@ -1,0 +1,21 @@
+{
+  "checks": {
+    "exact_seed_block": true,
+    "inherited_scientific_posterior_bitwise_identical": true,
+    "one_process_or_scope_at_a_time": true,
+    "unrelated_processes_bitwise_identical": true
+  },
+  "escrow_accessed": false,
+  "failures": [],
+  "gate": 4,
+  "mutation_counts": {
+    "process": 500,
+    "scope": 500
+  },
+  "seed_block": [
+    1003000,
+    1003999
+  ],
+  "stage": "V2.G0",
+  "verdict": "PASS"
+}

@@ -1,0 +1,43 @@
+{
+  "stage": "V2.G0",
+  "apparatus_only": true,
+  "constructor_module": "ref.v2g0_fixtures",
+  "cells": [
+    {
+      "name": "subset_drift",
+      "composition": "subset assignment",
+      "world_processes": ["ordered_drift"],
+      "requested_fields": ["process_scopes", "truth_trace", "exact_world_log_probability"]
+    },
+    {
+      "name": "constrained_change_point",
+      "composition": "exact onset support restriction",
+      "world_processes": ["change_point"],
+      "requested_fields": ["truth_trace.change.onset", "restriction_normalizers"]
+    },
+    {
+      "name": "recurrence_guaranteed_context_split",
+      "composition": "exact recurrence support restriction",
+      "world_processes": ["recurrent_context"],
+      "requested_fields": ["truth_trace.context", "restriction_normalizers"]
+    },
+    {
+      "name": "mixed_subset_drift_plus_recurrent_split",
+      "composition": "disjoint product",
+      "world_processes": ["ordered_drift", "recurrent_context"],
+      "requested_fields": ["process_scopes", "truth_trace", "observation_trace"]
+    },
+    {
+      "name": "family_parameterized_bridge",
+      "composition": "generic bridge",
+      "world_processes": ["ordered_drift"],
+      "requested_fields": ["initial_state", "world_spec_hash", "protocol_spec_hash"]
+    },
+    {
+      "name": "partner_switch_plus_action_contingent_availability",
+      "composition": "disjoint product plus do(action)",
+      "world_processes": ["partner_process", "action_contingent"],
+      "requested_fields": ["truth_trace", "observation_trace", "interventions"]
+    }
+  ]
+}
