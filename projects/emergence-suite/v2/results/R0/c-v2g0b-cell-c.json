@@ -1,0 +1,23 @@
+{
+  "challenge": "C-V2G0-B",
+  "cell": "C",
+  "seed_block": [
+    2001250,
+    2001374
+  ],
+  "world_spec_hash": "bdb5ea5ba9b2f1ee6ea7fd8c9eae7c6c35c100b68c6e11582ebac9a67071dc94",
+  "protocol_spec_hash": "0793d738339a8cc9f11fd8a93969c2e98d9360dbded41d25a78a7d99bfaccb46",
+  "requested_entry_points": [
+    "compile_world",
+    "sample_world",
+    "run_protocol"
+  ],
+  "literal_parse_status": "PASS",
+  "release_validation_status": "FAIL",
+  "compile_status": "NOT_ATTEMPTED_AFTER_SEALED_STOP",
+  "status": "NOT_RUN_PROSPECTION_FAILURE",
+  "seeds_consumed": [],
+  "trace_count": 0,
+  "criteria_evaluated": false,
+  "blocking_precondition": "The fresh escrow block is outside the frozen public seed guard's SEALED_ESCROW range."
+}

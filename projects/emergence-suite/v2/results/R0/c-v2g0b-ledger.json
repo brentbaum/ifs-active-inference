@@ -1,0 +1,82 @@
+{
+  "challenge": "C-V2G0-B",
+  "challenge_file": "sealed-revealed/C-V2G0B-apparatus-challenge.md",
+  "challenge_sha256": "cbf0736763f54ac155328145a74fbe17f1401b563c4a05eaf181332634085129",
+  "release_data_commit": "cb59886",
+  "released_blocks_file": "protocols/v2.g0-released-blocks.json",
+  "released_blocks_sha256": "9f3186361df76f308869a034e81d6cd7a1b3bfdf722ca416eebffe64f55a7204",
+  "prior_verdicts": [
+    {
+      "file": "results/R0/c-v2g0-verdict.md",
+      "sha256": "fdcb9bb1950224fcc73a585abe27a5519d16617823d8ed02b3e371ce9869e050"
+    },
+    {
+      "file": "results/R0/c-v2g0-run2-verdict.md",
+      "sha256": "f965a5f086737a15b6f56794cd04321d39d87ea95f07ef044e5cd1fd3087669d"
+    }
+  ],
+  "parse_validation": {
+    "parser": "ast.literal_eval",
+    "source": "exact single bracketed Python literal line",
+    "other_transformations": [],
+    "literal_character_count": 4483,
+    "top_level_keys": [
+      "parse_instruction",
+      "cell_a",
+      "cell_b",
+      "cell_c",
+      "cell_d"
+    ],
+    "passed": true
+  },
+  "escrow_declared": [
+    2001000,
+    2001499
+  ],
+  "pre_execution_validation": {
+    "status": "FAIL",
+    "entry_point": "ref.world_ir._released_blocks",
+    "exception_type": "ValueError",
+    "exception_message": "released block must be contained in the V2.G0 diagnosis or sealed range with the matching purpose",
+    "frozen_sealed_escrow_range": [
+      2000000,
+      2000499
+    ],
+    "new_record_block": [
+      2001000,
+      2001499
+    ],
+    "record_schema_version": 1,
+    "record_entry_shape_valid": true,
+    "record_range_valid_under_frozen_api": false
+  },
+  "escrow_consumed": [],
+  "escrow_consumed_count": 0,
+  "diagnosis_reserved_seeds_consumed": [],
+  "single_run_status": "NOT_STARTED",
+  "stop_status": "STOP_AS_SEALED_PROSPECTION_FAILURE",
+  "raw_trace_seal": {
+    "status": "NOT_CREATED_NO_EXECUTION",
+    "trace_count": 0,
+    "trace_files": [],
+    "trace_hashes": [],
+    "empty_trace_index_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "criteria_evaluated": false,
+  "source_code_changed": false,
+  "challenge_runner_created": false,
+  "stage_report_updated": false,
+  "full_unit_suite": {
+    "command": "python3 -m unittest discover -s tests",
+    "tests_run": 131,
+    "passed": 130,
+    "failures": 1,
+    "errors": 0,
+    "elapsed_seconds": 430.403,
+    "failure_tests": [
+      "test_v2g0_grammar.V2G0GrammarSemanticProofs.test_15_sealed_escrow_is_inaccessible"
+    ],
+    "failure_message": "AssertionError: \"escrow\" does not match \"released block must be contained in the V2.G0 diagnosis or sealed range with the matching purpose\"",
+    "failure_localization": "The aggregate release record is rejected because C-V2G0-B lies outside the frozen SEALED_ESCROW range; the test therefore sees the range-validation error before its expected escrow-specific refusal."
+  }
+}
