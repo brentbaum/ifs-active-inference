@@ -1,0 +1,50 @@
+{
+  "challenge": "C-V25A",
+  "challenge_sha256": "2aa8fec708d5446ceef83a590946791c8398a54d40539532e863ae7691a57a15",
+  "criteria_evaluated": false,
+  "freeze_identity": {
+    "base_manifest_file_count": 67,
+    "custody_files": {
+      "addenda": [
+        {
+          "file": "results/V2.5a-completion/freeze-manifest-addendum-escrow-threading.json",
+          "sha256": "170f70d0a2de7bc8a2f698bf688499f3fe4eae5a30b352ebdba807e27166d7fa"
+        }
+      ],
+      "base": {
+        "file": "results/V2.5a-completion/freeze-manifest.json",
+        "sha256": "0cbac093da474c9c6bb1d3657481b70fd774af4fdbd8fcd76d593b77b043bae8"
+      }
+    },
+    "effective_manifest_file_count": 71,
+    "mismatches": [],
+    "overlaid_entries": [
+      "ref/v25a_completion.py",
+      "results/V2.5a-completion/escrow-threading-amendment-authorization.md",
+      "results/V2.5a-completion/escrow-threading-byte-identity.json",
+      "results/V2.5a-completion/escrow-threading-diff-summary.md",
+      "results/V2.5a-completion/escrow-threading-full-suite.json",
+      "results/V2.5a-completion/ready-to-commit.md",
+      "tests/test_v25a_completion.py"
+    ],
+    "passed": true
+  },
+  "preseal_disclosure": {
+    "disclosed": true,
+    "event": "evaluator constructed but did not score one world",
+    "ledger_commit": "95f7b5e",
+    "seed": 2010000
+  },
+  "released_block": [
+    2010000,
+    2010999
+  ],
+  "released_block_passed_explicitly": true,
+  "seal_and_reveal_commit": "95f7b5e",
+  "seed_count": 1000,
+  "seed_end": 2010999,
+  "seed_order": "ascending gap-free within cells and globally",
+  "seed_sequence_sha256": "386a5762cd5b725c81213e6c78a970414fd1f5fd4e53a29ca28553b57d986010",
+  "seed_start": 2010000,
+  "verified_plaintext_hash_prefix": "2aa8fec7"
+}

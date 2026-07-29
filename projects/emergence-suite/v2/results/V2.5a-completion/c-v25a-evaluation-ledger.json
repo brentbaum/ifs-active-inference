@@ -1,0 +1,28 @@
+{
+  "challenge": "C-V25A",
+  "immutable_sealed_verdict": "PASS",
+  "criteria_passed": 6,
+  "criteria_total": 6,
+  "worlds_regenerated_during_evaluation": 0,
+  "raw_trace_seal": {
+    "file": "results/V2.5a-completion/c-v25a-raw-trace-seal.json",
+    "sha256": "0fa4696169eedf57db7203c19a550173607bc6ee7bb88e819cb58d727d3d643c"
+  },
+  "summary": {
+    "file": "results/V2.5a-completion/c-v25a-summary.json",
+    "sha256": "0bfe9388b304d6275fb45c09e7328fc89a13ea5a2df0ee2b13ae8db8bb40911f"
+  },
+  "verdict": {
+    "file": "results/V2.5a-completion/c-v25a-verdict.md",
+    "sha256": "b8eab369ac5199435011eb45ef62936f7aec8cff61c9bf54081528e3221ff5b4"
+  },
+  "stage_verdict": {
+    "file": "results/V2.5a-completion/stage-verdict.md",
+    "sha256": "06b5302b589dad2b84e870d687d3087a7a1852fa4b38098849f0d27313b5f54a"
+  },
+  "runner": {
+    "file": "challenges/run_c_v25a.py",
+    "sha256": "95b51e475dc8c381e61f569fca91570eb72678c7c66394196bca3dac8aaebbd2"
+  },
+  "preseal_seed_2010000_construction_disclosed": true
+}

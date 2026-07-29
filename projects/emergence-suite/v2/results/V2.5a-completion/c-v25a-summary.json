@@ -1,0 +1,96 @@
+{
+  "bounds": {
+    "B_max_inherited_formation": 3.801426508560692,
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "B_max_v25a_configural": 6.084736253211209,
+    "B_max_v25a_marginal_accounting": 6.704414354964107,
+    "implied_binary_probability_change_bound": 0.9089037815687636
+  },
+  "bundle_parse_instruction": "Cells are generate_world keyword tuples plus per-cell scoring declarations; parse with ast.literal_eval on the exact bracketed text. No other transformation.",
+  "challenge_sha256": "2aa8fec708d5446ceef83a590946791c8398a54d40539532e863ae7691a57a15",
+  "criteria": {
+    "1_cell_1_structural_and_predictive": true,
+    "2_cell_2_false_positive_control": true,
+    "3_cell_3_context_composition": true,
+    "4_cell_4_root_transfer_resolution": true,
+    "5_both_accounting_constitution": true,
+    "6_escrow_custody": true
+  },
+  "immutable_sealed_verdict": "PASS",
+  "metrics": {
+    "cell_1": {
+      "coupled_support_difference": {
+        "lower_95": 0.48799207382928184,
+        "mean": 0.49318291391529395,
+        "upper_95": 0.49837375400130607
+      },
+      "heldout_advantage": {
+        "lower_95": 0.04481863894205367,
+        "mean": 0.04841928866835715,
+        "upper_95": 0.05201993839466063
+      },
+      "maximum_matching_identity_error": 0,
+      "unique_coupled_argmax_rate": 0.996
+    },
+    "cell_2": {
+      "false_coupled_rate": 0.048,
+      "maximum_matching_identity_error": 0,
+      "unique_coupled_argmax_rate": 0.048
+    },
+    "cell_3": {
+      "coupled_support_difference": {
+        "lower_95": 0.41587458026641,
+        "mean": 0.43817794079824013,
+        "upper_95": 0.46048130133007026
+      },
+      "maximum_context_mediation_error": 0.0,
+      "maximum_historical_context_query_error": 0.0
+    },
+    "cell_4": {
+      "maximum_fixed_G_transfer": 0.0,
+      "root_effect": {
+        "lower_95": 0.49992503534094446,
+        "mean": 0.49994980866732525,
+        "resolution": "positive",
+        "rope": [
+          -0.01,
+          0.01
+        ],
+        "upper_95": 0.49997458199370604
+      },
+      "transfer_effect": {
+        "lower_95": 0.39994002827275554,
+        "mean": 0.3999598469338602,
+        "resolution": "positive",
+        "rope": [
+          -0.01,
+          0.01
+        ],
+        "upper_95": 0.3999796655949649
+      }
+    },
+    "semantic_maximum_error": 3.552713678800501e-14
+  },
+  "raw_trace_seal_sha256": "0fa4696169eedf57db7203c19a550173607bc6ee7bb88e819cb58d727d3d643c",
+  "verdict_classes": {
+    "custody": {
+      "criterion": 6,
+      "disclosure_interpretation": "Evaluator constructed but did not score one world before seal; disclosed in the committed ledger, with the block assignment predating the event.",
+      "passed": true,
+      "preseal_seed_2010000_construction_disclosed": true
+    },
+    "scientific": {
+      "criteria": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passed": true
+    },
+    "semantic": {
+      "criterion": 5,
+      "passed": true
+    }
+  }
+}
