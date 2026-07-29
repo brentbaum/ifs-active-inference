@@ -113,3 +113,9 @@ Escrow: C-V25B seeds 2020000:2021999, released by this record through the frozen
 d781130feb9c675f3e476788a0d103cd99a0e1588b70eff1de9c95fccf602c32  C-V25BB-reduction-challenge.md
 ```
 Escrow: C-V25B-B seeds 2020000:2021999 (unconsumed by the retained C-V25B stop; release record stands). Pre-seal adds score-vocabulary validation against frozen gate3_row fields.
+
+## C-V25B-C seal (2026-07-29)
+```
+f90dbb800bf98f58d9ce1b916a5d9d218faee40b7e16f773dfa6fe12ce31b17e  C-V25BC-reduction-challenge.md
+```
+Escrow: C-V25B-C seeds 2022000:2023999 (fresh; 2020000:2021999 consumed by the retained C-V25B-B FAIL and closed). Pre-seal adds the criterion-direction check (reduction demands only on 000 truth).
