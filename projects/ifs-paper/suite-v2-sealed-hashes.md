@@ -155,3 +155,12 @@ Escrow: C-V27 seeds 2060000:2064999, released by this record. Pilot blocks 13330
 a6ba705baab940a3d830236fd17e28f6063ed003322f3281d10ca27d3aa3b60e  C-V27B-multiprotector-challenge.md
 ```
 Escrow: C-V27-B seeds 2065000:2069599 (fresh; 2060000:2064999 consumed by the retained C-V27 FAIL and closed). Cell 4 corrected to same-seed paired arms; dev-seed identity verified pre-seal.
+
+## C-V28A-D seals (2026-07-29)
+```
+d784f47ec8a0c5b2a2017198542891f519edc0a2e87b8410bdb1ccabd0bc5c5e  C-V28A-challenge.md
+c59b907bc9ede68ce489a0b4cc6ad12184e25d2952420879542a214c3004d133  C-V28B-challenge.md
+be1cbb5885a94af380e48b9fb3c4e83b043f63d3584f0601e44c21f8e0f60c68  C-V28C-challenge.md
+dcfdf3990aa1fd1e6b41265f478825053dc14df016a5fa0f5a7348e7c915ee4f  C-V28D-challenge.md
+```
+Escrows: C-V28A 2100000:2100599, C-V28B 2110000:2110599, C-V28C 2120000:2120599, C-V28D 2130000:2130599 — each the declared prefix of its assigned 10000-seed block, released by this record; remainders unconsumed and closed at verdict. Floors from the committed stage-0 attainability pilot and gate-3 profiles (pilot blocks 1680000:1689999 barred). Same-seed pairing throughout. Each bundle verdicts independently; no aggregate pass count required.
