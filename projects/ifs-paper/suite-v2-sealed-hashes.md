@@ -101,3 +101,9 @@ Escrow: C-V2G0-C seeds 2000000:2000499 — retirement of this block is REVERSED 
 2aa8fec708d5446ceef83a590946791c8398a54d40539532e863ae7691a57a15  C-V25A-configural-challenge.md
 ```
 Escrow: C-V25A seeds 2010000:2010999, released by this record through the amended released_block parameter (authorization: escrow-threading amendment + this ledger entry). EVALUATOR DISCLOSURE: one pre-seal threading check constructed (never scored) a world from escrow seed 2010000 before the correct dev-seed method was adopted; recorded here for custody completeness; the block assignment predates the event (committed seed map).
+
+## C-V25B seal (2026-07-29)
+```
+e556e08eb23fe8fef14daad11735fb8066e9ce43e6558ca5520fef4710a65c36  C-V25B-reduction-challenge.md
+```
+Escrow: C-V25B seeds 2020000:2021999, released by this record through the frozen released_block parameter. Pre-seal: exact-artifact dry-run, arm-vocabulary validation, dev-seed threading check, containment check.
