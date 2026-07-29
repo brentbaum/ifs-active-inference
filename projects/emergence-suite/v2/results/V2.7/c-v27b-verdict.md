@@ -1,0 +1,26 @@
+# C-V27-B immutable sealed verdict
+
+Immutable verdict: **PASS**.
+
+Raw traces were sealed and hashed before criterion evaluation.
+
+## Sealed criteria
+
+- `criterion_1_topology`: **PASS** — `{"normalization_max_error": 4.440892098500626e-16, "topology_recovery": 0.804}`
+- `criterion_2_mandate`: **PASS** — `{"mandate_recovery": 0.9075}`
+- `criterion_3_coalition`: **PASS** — `{"access_minus_exiling_arm": {"left_count": 800, "lower_95": 0.186716637946019, "mean": 0.1904345792593374, "right_count": 400, "upper_95": 0.1941525205726558}, "exiling_mass": {"count": 800, "lower_95": 0.4651657195901593, "mean": 0.4734629602768791, "upper_95": 0.48176020096359895}}`
+- `criterion_4_registration`: **PASS** — `{"matched_access_max_error": 0.0, "matched_descent_max_error": 0.0, "support_on_minus_off": {"count": 400, "lower_95": 0.5, "mean": 0.5, "upper_95": 0.5}}`
+- `criterion_5_befriending`: **PASS** — `{"access_both_minus_none": {"count": 400, "lower_95": 0.07068141907514545, "mean": 0.0721949262812522, "upper_95": 0.07370843348735893}, "exiling_both": {"count": 400, "lower_95": 2.576701756773165e-06, "mean": 2.7480440702761926e-06, "upper_95": 2.91938638377922e-06}, "exiling_none": {"count": 400, "lower_95": 0.001452036970860296, "mean": 0.0015720348217054042, "upper_95": 0.0016920326725505122}}`
+- `criterion_6_exiling_descent`: **PASS** — `{"exiling_arm_access": {"count": 400, "lower_95": 3.80679329574975e-08, "mean": 3.9782666436866076e-08, "upper_95": 4.1497399916234655e-08}, "exiling_arm_mass": {"count": 400, "lower_95": 0.9999997233510006, "mean": 0.99999973478253, "upper_95": 0.9999997462140594}, "permit_arm_access": {"count": 400, "lower_95": 0.8999851870335501, "mean": 0.8999852917595124, "upper_95": 0.8999853964854746}, "permit_arm_descent": {"count": 400, "lower_95": 0.8149396859075063, "mean": 0.8149397807372257, "upper_95": 0.8149398755669451}, "permit_minus_exiling_access": {"count": 400, "lower_95": 0.899985147103961, "mean": 0.8999852519768459, "upper_95": 0.8999853568497307}}`
+- `criterion_7_semantic_custody`: **PASS** — `{"ascending_gap_free_unique_seeds": true, "cell_4_same_seed_pairs": 400, "challenge_hash_verified": true, "constitution_passed": true, "forbidden_source": {"exile_force": false, "gate_object": false, "polarization_coefficient": false}, "freeze_identity_passed": true, "one_posterior_audited_protocol_arms": 5000, "protocol_arm_count": 5000, "released_by": "suite-v2-sealed-hashes.md C-V27-B record, commit 1abfae2", "scientific_state_violations": [], "unique_seed_count": 4600}`
+
+## Verdict classes
+
+- Scientific: **PASS**.
+- Semantic: **PASS**.
+- Distributional stress: reported per cell without pooling.
+- Process custody: **PASS**.
+
+Full fast suite: **PASS**.
+
+Named bounds: `{"B_max_v232_formation": 3.801426508560692, "B_max_v24_common_emissions": 6.704414354964107, "B_max_v27_registration": 2.1972245773362196, "B_max_v27_shared_outcome": 3.8}`.

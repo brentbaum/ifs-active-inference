@@ -1,0 +1,78 @@
+{
+  "ascending_gap_free_unique_seeds": true,
+  "cell_4_same_seed_two_arm_design": true,
+  "challenge": "C-V27-B",
+  "challenge_sha256": "a6ba705baab940a3d830236fd17e28f6063ed003322f3281d10ca27d3aa3b60e",
+  "criteria_evaluated_at_seal_time": false,
+  "files": {
+    "results/V2.7/c-v27b-cell-1-novel-topology-raw.jsonl": {
+      "first_seed": 2065000,
+      "last_seed": 2065999,
+      "protocol_arm_records": 1000,
+      "sha256": "a9287946c9d16eaa37d6a605a133384e429df1389e2aa513a9b7ba3893ae47f5",
+      "unique_seeds": 1000
+    },
+    "results/V2.7/c-v27b-cell-2-mandate-raw.jsonl": {
+      "first_seed": 2066000,
+      "last_seed": 2066799,
+      "protocol_arm_records": 800,
+      "sha256": "dd3493501635d926ca45fe93b26e00b8faffe98598be1b8b0dd46decbd29dd24",
+      "unique_seeds": 800
+    },
+    "results/V2.7/c-v27b-cell-3-coalition-raw.jsonl": {
+      "first_seed": 2066800,
+      "last_seed": 2067599,
+      "protocol_arm_records": 800,
+      "sha256": "b91b6d60490636297039edf51e616e3b63e108978713a41a5d7f80cf215d5a64",
+      "unique_seeds": 800
+    },
+    "results/V2.7/c-v27b-cell-4-registration-contrast-raw.jsonl": {
+      "first_seed": 2067600,
+      "last_seed": 2067999,
+      "protocol_arm_records": 800,
+      "sha256": "2538ed1ccdee2e053da059838a1ac5aabae0e06d00da321ae67315c549997b65",
+      "unique_seeds": 400
+    },
+    "results/V2.7/c-v27b-cell-5-befriending-raw.jsonl": {
+      "first_seed": 2068000,
+      "last_seed": 2068799,
+      "protocol_arm_records": 800,
+      "sha256": "ddfdf6fcf442d7ab9321c94914fffd3e2cc27bee45dfb35fa44b20908f151b6f",
+      "unique_seeds": 800
+    },
+    "results/V2.7/c-v27b-cell-6-exiling-and-descent-raw.jsonl": {
+      "first_seed": 2068800,
+      "last_seed": 2069599,
+      "protocol_arm_records": 800,
+      "sha256": "359da7c24998bd257516ea1cf38136f698076c9e66136c8a9a51fe91b14c0671",
+      "unique_seeds": 800
+    }
+  },
+  "freeze_identity": {
+    "declared_files": 42,
+    "manifest": "results/V2.7/freeze-manifest.json",
+    "mismatches": [],
+    "passed": true
+  },
+  "protocol_arm_count": 5000,
+  "released_block": [
+    2065000,
+    2069599
+  ],
+  "schema_validation": {
+    "errors": [],
+    "passed": true,
+    "protocol_arm_count": 5000,
+    "requested_readouts": [
+      "q_topology",
+      "q_mandate",
+      "exiling_mass",
+      "system_access",
+      "descent",
+      "registration_support",
+      "q_joint_policy"
+    ],
+    "unique_seed_count": 4600
+  },
+  "unique_seed_count": 4600
+}

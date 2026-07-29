@@ -1,0 +1,21 @@
+# C-V27-B ready-to-commit list
+
+- `challenges/run_c_v27b.py`
+- `results/V2.7/c-v27b-raw-traces-seal.json`
+- `results/V2.7/c-v27b-run-ledger.json`
+- `results/V2.7/c-v27b-summary.json`
+- `results/V2.7/c-v27b-verdict.md`
+- `results/V2.7/c-v27b-cell-1-novel-topology.json`
+- `results/V2.7/c-v27b-cell-2-mandate.json`
+- `results/V2.7/c-v27b-cell-3-coalition.json`
+- `results/V2.7/c-v27b-cell-4-registration-contrast.json`
+- `results/V2.7/c-v27b-cell-5-befriending.json`
+- `results/V2.7/c-v27b-cell-6-exiling-and-descent.json`
+- `results/V2.7/c-v27b-cell-1-novel-topology-raw.jsonl`
+- `results/V2.7/c-v27b-cell-2-mandate-raw.jsonl`
+- `results/V2.7/c-v27b-cell-3-coalition-raw.jsonl`
+- `results/V2.7/c-v27b-cell-4-registration-contrast-raw.jsonl`
+- `results/V2.7/c-v27b-cell-5-befriending-raw.jsonl`
+- `results/V2.7/c-v27b-cell-6-exiling-and-descent-raw.jsonl`
+- `results/V2.7/stage-verdict.md`
+- `results/V2.7/ready-to-commit-c-v27b.md`
