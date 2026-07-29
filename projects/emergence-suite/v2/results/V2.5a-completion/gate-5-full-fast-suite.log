@@ -1,0 +1,59 @@
+PASS tests.test_constitution 0.857s
+PASS tests.test_manifest_chain 0.096s
+PASS tests.test_performance_amendment_1 12.626s
+PASS tests.test_v20_kernel 0.840s
+PASS tests.test_v21_precision 1.690s
+PASS tests.test_v221_association 4.416s
+PASS tests.test_v22_root 3.571s
+PASS tests.test_v231_formation 52.577s
+PASS tests.test_v231r_neutrality 0.581s
+PASS tests.test_v232_attribution 0.111s
+PASS tests.test_v232_formation 0.140s
+PASS tests.test_v233 26.806s
+PASS tests.test_v233_seed_authorization 0.109s
+PASS tests.test_v23_formation 22.877s
+PASS tests.test_v24 0.242s
+PASS tests.test_v243 0.129s
+PASS tests.test_v244 0.116s
+PASS tests.test_v25a 0.335s
+PASS tests.test_v25a_completion 0.192s
+FAIL tests.test_v2g0_grammar 0.455s
+..............F.........F.
+======================================================================
+FAIL: test_15_sealed_escrow_is_inaccessible (tests.test_v2g0_grammar.V2G0GrammarSemanticProofs.test_15_sealed_escrow_is_inaccessible)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/brentbaum/dev/research/ifs-active-inference/projects/emergence-suite/v2/tests/test_v2g0_grammar.py", line 163, in test_15_sealed_escrow_is_inaccessible
+    with self.assertRaisesRegex(ValueError, "escrow"):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_25_gate_runner_custody_regressions (tests.test_v2g0_grammar.V2G0GrammarSemanticProofs.test_25_gate_runner_custody_regressions)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/brentbaum/dev/research/ifs-active-inference/projects/emergence-suite/v2/tests/test_v2g0_grammar.py", line 256, in test_25_gate_runner_custody_regressions
+    self.assertEqual(manifest["mismatches"], [])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [{'file': 'ref/v24.py', 'expected': '5b2dd[513 chars]eb'}] != []
+
+First list contains 3 additional elements.
+First extra element 0:
+{'file': 'ref/v24.py', 'expected': '5b2dd46d09ccf3380d470de98d9365bb9b3bcfd9fdc612a1e5bf1af5bf6e1e56', 'observed': '9efb9654308ca3f558b9b098cea733265ea263819278c36320413d30638633a8'}
+
++ []
+- [{'expected': '5b2dd46d09ccf3380d470de98d9365bb9b3bcfd9fdc612a1e5bf1af5bf6e1e56',
+-   'file': 'ref/v24.py',
+-   'observed': '9efb9654308ca3f558b9b098cea733265ea263819278c36320413d30638633a8'},
+-  {'expected': '4f45ec454f51ddb286ea89255f4703ec132c2bc033fa58071188fd0feca4c929',
+-   'file': 'ref/v244.py',
+-   'observed': '47904a93e237fc1fd27c0f6fb504dcbc49df01c3d125d1af88d1bbbf0334bcf2'},
+-  {'expected': 'fc74af04879512fd8b2dff0db168bc470a33ddd926d0cb30f5b0492e86ba31a0',
+-   'file': 'run_v244_gates.py',
+-   'observed': '34dddca5e3a61996ffe9a0a7a0a031e46a6bf38db51c0a3b10c054ab8c05cbeb'}]
+
+----------------------------------------------------------------------
+Ran 26 tests in 0.186s
+
+FAILED (failures=2)
+modules=20 failures=1 elapsed=52.585s

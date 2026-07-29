@@ -1,0 +1,48 @@
+{
+  "bounds": [
+    3.801426508560692,
+    6.704414354964107,
+    6.704414354964107
+  ],
+  "checks": {
+    "equalize_structural_candidates": true,
+    "fix_G": true,
+    "remove_context_indexing": true,
+    "remove_interaction": true,
+    "sever_global_broadcast": true,
+    "shuffle_episode_membership": true
+  },
+  "gate": 4,
+  "lesion_world_counts": {
+    "equalize_structural_candidates": 166,
+    "fix_G": 167,
+    "remove_context_indexing": 166,
+    "remove_interaction": 167,
+    "sever_global_broadcast": 167,
+    "shuffle_episode_membership": 167
+  },
+  "metrics": {
+    "broadcast_maximum_local_support_change": 0.0,
+    "broadcast_maximum_transfer": 0.0,
+    "context_coordinate_removal_rate": 1.0,
+    "context_indexing_evidence": {
+      "lower_95": 18.708409414978632,
+      "mean": 19.713509201113286,
+      "upper_95": 20.71860898724794
+    },
+    "equalized_maximum_log_bf": 0.0,
+    "equalized_maximum_posterior_error": 0.0,
+    "fix_G_maximum_family_evidence_change": 0.0,
+    "fix_G_maximum_transfer": 0.0,
+    "remove_interaction_maximum_atomic_budget_change": 0.0,
+    "remove_interaction_maximum_structural_error": 4.996003610813204e-16,
+    "shuffle_false_coupled": 0.0,
+    "shuffle_multiset_identity_rate": 1.0
+  },
+  "seed_block": [
+    1024000,
+    1024999
+  ],
+  "stage": "V2.5a master-spec completion",
+  "verdict": "PASS"
+}

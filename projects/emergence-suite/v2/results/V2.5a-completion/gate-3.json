@@ -1,0 +1,100 @@
+{
+  "bounds": [
+    3.801426508560692,
+    6.704414354964107,
+    6.704414354964107
+  ],
+  "checks": {
+    "1_coupled_support": true,
+    "2_independent_false_selection": true,
+    "2_independent_log_bf": true,
+    "2_marginal_no_unique_coupled": true,
+    "3_heldout_prediction": true,
+    "4_shuffled_false_selection": true,
+    "5_root_effect_resolved": true,
+    "5_transfer_effect_resolved": true,
+    "6_interaction_lesion": true,
+    "7_context_composition": true,
+    "atomic_budget_identity": true,
+    "lattice_aware_matching": true
+  },
+  "gate": 3,
+  "matching_audit_worlds": 200,
+  "matching_rule": {
+    "criterion": "nearest_reachable_prefix",
+    "fixed_tolerance_used": false,
+    "rationale": "prospectively lattice-aware per the committed format-core adjudication",
+    "reported": [
+      "target_kl",
+      "nearest_kl",
+      "absolute_error",
+      "local_lattice_gap",
+      "censored"
+    ],
+    "rule": "the selected prefix must attain the minimum absolute target-KL error over every prefix through the declared cap; ties choose the shortest prefix"
+  },
+  "metrics": {
+    "context_fixed_G_maximum_transfer": 0.0,
+    "context_mediation_maximum_error": 0.0,
+    "coupled_support_difference": {
+      "lower_95": 0.4871795515894843,
+      "mean": 0.49389301824309506,
+      "upper_95": 0.5006064848967058
+    },
+    "heldout_advantage_nats_per_atomic_token": {
+      "lower_95": 0.04991536227109486,
+      "mean": 0.052929606290173646,
+      "upper_95": 0.05594385030925243
+    },
+    "independent_false_coupled": 0.005,
+    "independent_log_bf": {
+      "lower_95": 12.951701976286564,
+      "mean": 13.318455773836996,
+      "upper_95": 13.685209571387428
+    },
+    "interaction_lesion_maximum_checkpoint_difference": 0.0,
+    "interaction_lesion_maximum_scientific_difference": 0.0,
+    "marginal_unique_coupled_rate": 0.0,
+    "matching_censoring_rate": 0.0,
+    "matching_maximum_absolute_error": 0.0,
+    "matching_oracle_identity_rate": 1.0,
+    "maximum_atomic_budget_error": 0.0,
+    "root_format_effect": {
+      "lower_95": 0.49389089227946376,
+      "mean": 0.49717487970725527,
+      "resolution": "positive",
+      "rope": [
+        -0.01,
+        0.01
+      ],
+      "upper_95": 0.5004588671350468
+    },
+    "shuffled_false_coupled": 0.0025,
+    "transfer_format_effect": {
+      "lower_95": 0.39511271382357105,
+      "mean": 0.39773990376580426,
+      "resolution": "positive",
+      "rope": [
+        -0.01,
+        0.01
+      ],
+      "upper_95": 0.40036709370803747
+    }
+  },
+  "principal_cell_worlds": 400,
+  "rope_rule": {
+    "equivalent": "full 95% interval inside [-0.01,+0.01]",
+    "indeterminate": "otherwise",
+    "positive": "lower 95% interval > +0.01",
+    "resolved": [
+      "positive",
+      "equivalent"
+    ]
+  },
+  "seed_block": [
+    1021000,
+    1023999
+  ],
+  "stage": "V2.5a master-spec completion",
+  "verdict": "PASS"
+}

@@ -442,25 +442,29 @@ def untreated_transfer(result: ConfiguralScore, *, association: float | None = N
 def shuffled_episodes(
     episodes: Sequence[Episode], seed: int
 ) -> tuple[Episode, ...]:
-    """Destroy episode membership while preserving every channel multiset."""
+    """Destroy episode membership within frozen cue/context coordinates.
+
+    Conditioning the permutation on the coordinates used by the marginal
+    tables preserves the exact atomic null.  A global permutation would mix
+    distinct cue/context marginals and manufacture a new dependence.
+    """
     sequence = tuple(episodes)
-    columns = [
-        [episode.values[axis] for episode in sequence]
-        for axis in range(len(CHANNELS))
-    ]
-    shuffled = []
-    for axis, column in enumerate(columns):
-        order = _development_rng(
-            seed, f"v25a-completion-shuffle-{axis}"
-        ).permutation(len(column))
-        shuffled.append([column[int(index)] for index in order])
+    output = [list(episode.values) for episode in sequence]
+    groups: dict[tuple[int, int], list[int]] = {}
+    for index, episode in enumerate(sequence):
+        groups.setdefault((episode.cue, episode.context), []).append(index)
+    for (cue, context), indices in sorted(groups.items()):
+        for axis in range(len(CHANNELS)):
+            values = [sequence[index].values[axis] for index in indices]
+            order = _development_rng(
+                seed,
+                f"v25a-completion-shuffle-{cue}-{context}-{axis}",
+            ).permutation(len(indices))
+            for target, source in zip(indices, order):
+                output[target][axis] = values[int(source)]
     return tuple(
-        Episode(
-            episode.cue,
-            episode.context,
-            tuple(shuffled[axis][time] for axis in range(len(CHANNELS))),
-        )
-        for time, episode in enumerate(sequence)
+        Episode(episode.cue, episode.context, tuple(values))
+        for episode, values in zip(sequence, output)
     )
 
 

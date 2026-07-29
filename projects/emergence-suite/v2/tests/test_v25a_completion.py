@@ -35,6 +35,25 @@ class V25aCompletionTests(unittest.TestCase):
         self.assertAlmostEqual(result.joint_log_evidence, 0.0, places=14)
         self.assertAlmostEqual(result.q_structure[0], 0.5, places=14)
 
+    def test_neutrality_uses_declared_tolerance_not_bit_identity(self):
+        world = completion.generate_world(
+            1000000,
+            truth_structure="coupled",
+            interaction="strong",
+            context_regime="return",
+            length=32,
+        )
+        marginal = completion.score(world.episodes, presentation="marginal")
+        error = float(
+            np.max(
+                np.abs(
+                    marginal.q_structure - completion.STRUCTURE_PRIOR
+                )
+            )
+        )
+        self.assertGreater(error, 0.0)
+        self.assertLessEqual(error, completion.TOLERANCE)
+
     def test_atomic_budget_is_identical(self):
         world = completion.generate_world(
             1000000,

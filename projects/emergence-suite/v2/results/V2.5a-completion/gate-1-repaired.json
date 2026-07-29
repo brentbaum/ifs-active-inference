@@ -1,0 +1,64 @@
+{
+  "bounds": {
+    "B_max_inherited_formation": 3.801426508560692,
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "B_max_v25a_marginal_accounting": 6.704414354964107
+  },
+  "custody": {
+    "dummy_seed": 1000100,
+    "epoch_b_development_only": [
+      1000000,
+      1899999
+    ],
+    "escrow_untouched": [
+      2010000,
+      2010999
+    ]
+  },
+  "execution": "repaired",
+  "gate": 1,
+  "matching_criterion": {
+    "criterion": "nearest_reachable_prefix",
+    "fixed_tolerance_used": false,
+    "rationale": "prospectively lattice-aware per the committed format-core adjudication",
+    "reported": [
+      "target_kl",
+      "nearest_kl",
+      "absolute_error",
+      "local_lattice_gap",
+      "censored"
+    ],
+    "rule": "the selected prefix must attain the minimum absolute target-KL error over every prefix through the declared cap; ties choose the shortest prefix"
+  },
+  "numbers": {
+    "B_max_v25a_configural": 6.084736253211209,
+    "implied_binary_probability_change_bound": 0.9089037815687636,
+    "independent_oracle_maximum_error": 3.552713678800501e-15,
+    "maximum_kappa_zero_product_error": 0.0,
+    "maximum_marginal_error": 8.93729534823251e-15,
+    "maximum_normalization_error": 2.220446049250313e-16,
+    "partition_recombination_error": 1.7763568394002505e-15,
+    "posterior_odds_identity_error": 8.881784197001252e-16,
+    "root_lesion_error": 0.0
+  },
+  "proofs": {
+    "10_H_cfg_posterior_odds_identity": true,
+    "11_independent_oracle_parity": true,
+    "12_root_update_identity_under_interaction_lesion": true,
+    "13_no_direct_format_to_transfer": true,
+    "14_coordinate_transport_to_heldout": true,
+    "15_one_posterior_constitution": true,
+    "16_permanent_evidence_constitutions": true,
+    "1_joint_table_normalizes": true,
+    "2_declared_marginals_reproduced": true,
+    "3_kappa_zero_equals_product": true,
+    "4_exact_interaction_spike_mass": true,
+    "5_atomic_evidence_budgets_identical": true,
+    "6_missing_tokens_neutral": true,
+    "7_no_direct_format_to_G": true,
+    "8_no_direct_format_to_H_cfg": true,
+    "9_no_direct_format_to_policy": true
+  },
+  "stage": "V2.5a master-spec completion",
+  "verdict": "PASS"
+}
