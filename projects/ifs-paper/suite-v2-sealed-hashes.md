@@ -74,3 +74,6 @@ Added after the V2.4 phase-1 public artifacts, before implementation (2026-07-28
 574131ce32bf45a72e3163c91df0e924c84478b39c3c07691dfc216dc1b34665  C-V24-redescription-challenge.md
 ```
 Escrow: C-V24 seeds 830001:830600.
+
+## C-V24 escrow retirement (2026-07-29)
+Block 830001:830600: RETIRED_UNCONSUMED_AFTER_CHALLENGE_REVEAL (round-8 adjudication). Zero seeds consumed by the sealed run; the plaintext is public; the block may not be reassigned. The original C-V24 prospection-failure verdict is the final V2.4 challenge result.
