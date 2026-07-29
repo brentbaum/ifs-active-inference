@@ -145,6 +145,8 @@ svg .edge.lit { stroke: var(--accent); stroke-width: 2.2; opacity: 1; }
 
 /* results panel */
 table { border-collapse: collapse; width: 100%; font-size: .88rem; }
+main > table { display: block; overflow-x: auto; }
+td code { word-break: break-word; }
 th, td { text-align: left; padding: .5rem .6rem; border-bottom: 1px solid var(--line);
   vertical-align: top; }
 th { font-weight: bold; color: var(--muted); font-size: .8rem; letter-spacing: .04em; }
@@ -233,48 +235,59 @@ table.cmx td.on:hover, table.cmx td.zero:hover { background: var(--accent-soft);
 <main>
 
 <h1>The Suite v2 model, and what therapy does to it</h1>
-<p class="subtitle">A companion to the IFS active-inference paper: the cumulative architecture,
-the therapeutic arc as changes in posteriors, and why each ablated therapy fails differently.</p>
+<p class="subtitle">A visual guide to the IFS active-inference model: how protective parts
+form, what changes during therapy, and what breaks when one therapeutic ingredient is removed.</p>
 
 <!-- ============ 1. HOW TO READ THIS ============ -->
 <h2>How to read this</h2>
-<p>The paper argues that parts-like organization — formation of a threat/identity structure,
-its maintenance under protective action, redescription of when it applies, unburdening, and
-protection itself — can be enacted by one exact generative model doing ordinary Bayesian
-inference. Suite v2 is that model, built one rung at a time. Each rung added a small set of
-latent variables, passed six gates (semantic proofs, recovery, open assays, lesions,
-cumulative regression, and a sealed prospective challenge), and was frozen before the next
-rung began. One caution about the word "architecture" before we draw it: formally, the
-frozen bundle remains a model. Functionally, fast inference proceeds within it rather than
-repeatedly comparing it with live alternatives; slower learning can still revise it.</p>
-<p>This page shows three things: the finished architecture as one diagram; the therapeutic
-arc as a sequence of highlighted subgraphs of that same diagram; and the comparator
-fingerprints from the whole-therapy stage — the specific way each ablated protocol fails.
-The mapping to the paper's claims: formation and maintenance (C1) live in the part-structure
-and attribution nodes; redescription in the context index; unburdening in the burden-coupling
-lattice; protection-as-inference in the trust and policy nodes.</p>
+<p>IFS describes an inner system of vulnerable parts and protectors. This page asks whether
+those clinical patterns can arise in one generative model — a model that explains
+observations by inferring hidden causes. Bayesian inference starts with a prior, the model's
+belief before new evidence, and produces a posterior, its updated belief afterward. The
+hidden causes are latent variables: quantities the model cannot observe directly. Keep a
+dog-phobia example in mind. After a dog bite, barking may support not only “dogs are
+dangerous” but “I am the one who is unsafe around dogs.” Avoidance prevents new bites and
+also hides safe encounters that could correct the belief. Therapy may make the old scene
+bearable to revisit, so a calm dog can be learned as now without erasing what happened then.
+Suite v2 tests each link. It was built one rung at a time. Each rung added a small set of
+hidden variables, then passed six checks: meaning, recovery of simulated truths, open tests,
+selective lesions, checks that earlier results still hold, and a sealed prospective challenge
+whose details stay hidden until the stage is frozen.
+A lesion removes one modeled route to test whether only its predicted effect disappears.
+Formally, the frozen bundle remains a model. Functionally, fast inference proceeds within it rather than repeatedly comparing it with live alternatives; slower learning can still revise it.</p>
+<p class="small">This is the reference view. For a step-by-step introduction that builds the
+same model one mechanism at a time, each mechanism motivated clinically before it appears,
+see <a href="suite-v2-model-buildup.html">the model build-up page</a>.</p>
+<p>This page offers three views of the same construction: the full model; the therapy
+sequence; and comparator fingerprints showing how therapy fails when one ingredient is
+removed. Formation and maintenance appear in the part-structure and action-attribution
+nodes. Redescription appears in the context node. Unburdening appears in the burden-coupling
+nodes. Protector trust and policy explain whether contact becomes tolerable.</p>
 <p>The suite is complete as of 2026-07-29 — every stage frozen, every sealed challenge
 expressible and run once, and every retained stop still in the ledger below.</p>
 <p>One rule shapes everything drawn here. The suite's <em>scientific-state constitution</em>
-requires every mutable scientific quantity to be exactly one of: a posterior over a latent
-state, a posterior over a learnable parameter, model evidence for a finite candidate
-structure, or a pure readout of those. Nothing may assign <code>formed</code>,
+says the model may never write a therapeutic conclusion directly into its state. Every
+changing scientific quantity must be a posterior over a hidden state, a posterior over a
+learnable parameter, model evidence — how well a candidate explanation predicts the
+observations — or a pure readout, a summary computed from those quantities and never written
+back. Nothing may assign <code>formed</code>,
 <code>redescribed</code>, <code>reduced</code>, <code>permission</code>, <code>access</code>,
 <code>unburdened</code>, or any therapeutic-stage label. There is no gate object and no
 polarization coefficient. The diagram keeps that distinction visible:</p>
 
 <div class="legend">
-  <div class="key"><span class="swatch solid"></span> Posterior, parameter, or structural model evidence — the only things that change</div>
-  <div class="key"><span class="swatch dashed"></span> Pure readout — computed from posteriors, never written back</div>
-  <div class="key"><span class="swatch obs"></span> Observation interface — typed likelihood factors, one shared format</div>
+  <div class="key"><span class="swatch solid"></span> Belief or model evidence — a quantity the model may update</div>
+  <div class="key"><span class="swatch dashed"></span> Pure readout — a summary computed afterward, never written back</div>
+  <div class="key"><span class="swatch obs"></span> Observation interface — evidence channels with declared meanings</div>
 </div>
 
 <!-- ============ 2. ARCHITECTURE MAP ============ -->
 <h2>1 &nbsp;The architecture</h2>
-<p>Everything below is one joint model. Evidence of every kind — cue-level, bodily,
-relational, imaginal, joint-episodic — compiles to typed likelihood factors over a single
-observation interface; no evidence format carries a bonus. Click a node for its role and
-the stage that introduced it.</p>
+<p>Everything below belongs to one model. A cue such as a bark, a bodily fear response, a
+therapist's response, and an imaginal do-over all enter through typed evidence channels.
+Each channel has a likelihood — the probability of that observation under each
+possible hidden cause. No evidence type receives an automatic bonus. Click a node to see
+why it matters clinically and how the model represents it.</p>
 
 <div class="scrollwrap">
 <svg id="arch" viewBox="0 0 1260 720" width="1260" height="720" xmlns="http://www.w3.org/2000/svg" role="img"
@@ -323,7 +336,7 @@ the stage that introduced it.</p>
   <g class="node" id="n-depth" data-stages="all formation coreg witness whole"
      data-title="Recursive precision — global epistemic depth"
      data-stage="V2.1"
-     data-desc="A precision field over the model's own evidence channels. Collapsed depth means arriving cue- and root-relevant evidence is down-weighted before it can revise anything; restored depth is measured as a posterior change, not set. In the whole-therapy stage, depth increase must precede contact in successful worlds.">
+     data-desc="Why it matters: a blended system may notice new evidence without letting that evidence count. Precision is the model's confidence-weighting of evidence. Global epistemic depth is the precision available across the system. When depth is low, a calm dog or a trustworthy therapist is discounted before it can revise an identity-level belief. Therapy may restore depth, but the model must infer that change; nothing sets it directly. In successful worlds, depth rises before contact.">
     <rect x="40" y="60" width="176" height="70"/>
     <text x="128" y="88" text-anchor="middle">Global precision /</text>
     <text x="128" y="104" text-anchor="middle">epistemic depth</text>
@@ -332,7 +345,7 @@ the stage that introduced it.</p>
   <g class="node" id="n-bcast" data-stages="all coreg whole"
      data-title="Broadcast"
      data-stage="V2.1 / V2.6a"
-     data-desc="Whether locally learned precision informs global precision. With broadcast severed (a lesion and a comparator protocol), local partner-state inference stays calibrated but the global depth and root-uptake increments disappear — the 'monitoring without integration' fingerprint.">
+     data-desc="Why it matters: one part of the system can recognize safety while the rest remains unmoved. Broadcast is the modeled route by which locally learned relational confidence affects the global precision field. When this route is cut, the model still identifies the partner correctly, but global depth and identity-level evidence uptake disappear. This is monitoring without integration.">
     <rect x="250" y="70" width="116" height="46"/>
     <text x="308" y="92" text-anchor="middle">Broadcast</text>
     <text class="stage-tag" x="308" y="108" text-anchor="middle">V2.1/V2.6a</text>
@@ -340,7 +353,7 @@ the stage that introduced it.</p>
   <g class="node" id="n-local" data-stages="all coreg whole"
      data-title="Local relational precision"
      data-stage="V2.6a"
-     data-desc="Relational observations update a local precision state; broadcast determines whether it reaches the global field. Co-regulation therefore changes the inferential regime — how much arriving root-relevant evidence counts — without being root-relevant evidence itself. The regulation-only root Bayes factor is provably zero.">
+     data-desc="Why it matters: a steady therapist can make difficult material easier to examine without telling the client who they are. Relational observations update local relational precision — the weight given to evidence about this relationship. Broadcast determines whether that local change reaches the whole system. Co-regulation changes how much later identity-relevant evidence counts; it is not identity-relevant evidence itself. Regulation alone gives a root Bayes factor — an evidence ratio between explanations — of exactly zero.">
     <rect x="400" y="60" width="176" height="70"/>
     <text x="488" y="88" text-anchor="middle">Local relational</text>
     <text x="488" y="104" text-anchor="middle">precision</text>
@@ -349,7 +362,7 @@ the stage that introduced it.</p>
   <g class="node" id="n-partner" data-stages="all coreg access multi whole"
      data-title="Partner process L_t"
      data-stage="V2.6a"
-     data-desc="One latent partner state in {reliable_contingent, soothing_noncontingent, intrusive, unstable} generates all relational channels: regulation signals, remaining/withdrawal, pressure/respect, trust-relevant outcomes. It may switch under a declared Markov transition. No partner state directly affects the identity root G.">
+     data-desc="Why it matters: soothing, reliability, pressure, and instability should not be treated as the same relationship. One latent partner state — an inferred hidden partner type — generates all relational observations. The four possibilities are reliable and responsive, soothing but nonresponsive, intrusive, and unstable. The state may change over time. It never changes the identity root directly; it changes what the system expects from the relationship.">
     <rect x="620" y="60" width="176" height="70"/>
     <text x="708" y="88" text-anchor="middle">Partner process</text>
     <text x="708" y="104" text-anchor="middle" class="mono" style="font-size:12px">L_t (4 families)</text>
@@ -358,7 +371,7 @@ the stage that introduced it.</p>
   <g class="node" id="n-trust" data-stages="all access multi whole"
      data-title="Protector trust forecasts"
      data-stage="V2.6b"
-     data-desc="Each protector maintains separate posteriors: T_outcome (is vulnerable contact tolerable), T_coprotection (can protection be shared), T_partner (partner response), T_efficacy (inherited action efficacy from V2.3.4). Trust grows under refusal-met-by-remaining, not refusal-met-by-pressure.">
+     data-desc="Why it matters: a protector may trust the therapist, yet still expect contact with an exile to go badly. The model therefore separates four trust forecasts: whether vulnerable contact is tolerable, whether protection can be shared, how the partner will respond, and whether the protector's action still works. Each is a posterior — an updated belief after evidence. Trust improves when refusal is met by staying present, not by pressure.">
     <rect x="844" y="60" width="196" height="70"/>
     <text x="942" y="84" text-anchor="middle">Trust forecasts</text>
     <text x="942" y="100" text-anchor="middle" class="mono" style="font-size:11px">T_outcome T_coprot</text>
@@ -369,7 +382,7 @@ the stage that introduced it.</p>
   <g class="node" id="n-G" data-stages="all formation maint witness unburden coreg whole"
      data-title="Identity root G"
      data-stage="V2.2.1"
-     data-desc="The root identity variable, associated with cues through exact structural model comparison (spike-and-slab on cue–root association). Witnessing — the IFS procedure — is modeled as sustained context-held activation that lets root-relevant evidence land; the formal change is root revision as state inference over G. Transfer to untreated cues is mediated entirely by G; fixed-G transfer is exactly zero.">
+     data-desc="Why it matters: fear can become more than 'dogs are dangerous'; it can become 'I am unsafe around dogs.' G represents that identity root. The model compares an exact-zero cue–root link with a present link, rather than assuming every cue is identity-relevant. Witnessing is the IFS procedure modeled through sustained context-held activation; it lets root-relevant evidence land. Here root revision is state inference over G. Change transfers to untreated cues only through G; holding G fixed makes transfer exactly zero.">
     <rect x="40" y="192" width="176" height="78"/>
     <text x="128" y="222" text-anchor="middle">Identity root</text>
     <text x="128" y="240" text-anchor="middle" class="mono" style="font-size:13px">G</text>
@@ -378,7 +391,7 @@ the stage that introduced it.</p>
   <g class="node" id="n-ctx" data-stages="all witness unburden whole"
      data-title="Context index C_t"
      data-stage="V2.4"
-     data-desc="A recurrent context process plus a material context-split structural candidate. Redescription is the model coming to index old-context evidence as historical rather than current — the old context stays queryable (retention audited to 1e-10), it just stops being 'now'. No redescribed flag exists; material redescription is a readout over the split model's posterior.">
+     data-desc="Why it matters: the bite happened then; this calm dog is here now. C_t is the latent context — the model's inferred answer to 'which situation am I in?' Redescription occurs when evidence favors a genuine then/now split. The old context stays available for recall, with retention checked to 1e-10, but stops governing every present prediction. No 'redescribed' flag exists; material redescription is a pure summary of the context-model posterior.">
     <rect x="40" y="312" width="176" height="78"/>
     <text x="128" y="342" text-anchor="middle">Context index</text>
     <text x="128" y="360" text-anchor="middle" class="mono" style="font-size:11px">C_t + split candidates</text>
@@ -387,7 +400,7 @@ the stage that introduced it.</p>
   <g class="node" id="n-part" data-stages="all formation maint witness unburden whole"
      data-title="Part structure: T/D/P formation candidates + capacities"
      data-stage="V2.3.2 / V2.3.3"
-     data-desc="Formation is exact model comparison over structural candidates — pure threat (T), external danger (D), and a part-like threat/identity bundle (P). Under adversity with low practical controllability (poor policy efficacy), configural and self-channel evidence accumulates for P; nothing assigns 'formed'. Maintenance (V2.3.3) then works by evidence shaping: protective behavior censors exactly the outcome observations that would disconfirm the structure.">
+     data-desc="Why it matters: the model must distinguish a passing scare, a genuinely dangerous world, and a burdened part. T means transient threat; D means persistent external danger; P means a part-like threat-and-identity organization. Bayesian model comparison asks which structure best predicts the evidence. Overwhelm plus low practical controllability can favor P, but nothing assigns 'formed.' Protection then maintains the organization by evidence shaping: avoiding dogs hides the safe outcomes that could disconfirm it.">
     <rect x="244" y="192" width="186" height="78"/>
     <text x="337" y="216" text-anchor="middle">Part structure</text>
     <text x="337" y="232" text-anchor="middle" class="mono" style="font-size:12px">T / D / P candidates</text>
@@ -397,7 +410,7 @@ the stage that introduced it.</p>
   <g class="node" id="n-Z" data-stages="all unburden whole"
      data-title="Burden couplings Z_W, Z_Pi, Z_Y"
      data-stage="V2.5b"
-     data-desc="Three structural existence variables: compulsory identity-to-world prediction (Z_W), identity-to-policy mapping (Z_Pi), identity-to-outcome prediction (Z_Y). The candidate lattice is all eight configurations of {0,1}^3; 111 is full burden, 000 fully reduced. Unburdening is evidence favoring 000 — removal of compulsory couplings — while the part's capacities and historical memory are retained. Material reduction is a five-condition readout (unique argmax, q(000) >= .80, BF >= 4, three-observation stability, survives a neutral observation).">
+     data-desc="Why it matters: unburdening should loosen compulsory predictions without deleting the part or its memory. Three yes/no variables ask whether identity must predict the world, policy, and outcome. The eight possible combinations form a lattice: 111 means all three burden couplings are present; 000 means none is required. Evidence can favor 000 while capacities and history remain. Material reduction requires five checks: unique best candidate, q(000) at least .80, Bayes factor at least 4 over 111, stability for three observations, and survival of one neutral observation.">
     <rect x="244" y="312" width="186" height="78"/>
     <text x="337" y="338" text-anchor="middle">Burden couplings</text>
     <text x="337" y="356" text-anchor="middle" class="mono" style="font-size:12px">Z_W · Z_Pi · Z_Y ∈ {0,1}³</text>
@@ -406,7 +419,7 @@ the stage that introduced it.</p>
   <g class="node" id="n-hcfg" data-stages="all unburden whole"
      data-title="Evidence format: H_cfg and kappa"
      data-stage="V2.5a"
-     data-desc="Whether channels are configured jointly is itself a structural question: H_cfg in {independent, coupled} with interaction parameter kappa under the coupled slab. A joint episode scores a normalized joint table whose marginals exactly match the marginal-format tables — so any joint-format advantage is earned by the interaction structure, never by a format bonus. Do-over evidence (V2.5b) is an imaginal joint episode through this same interface.">
+     data-desc="Why it matters: an episode can mean more than a list of separate sensations. H_cfg asks whether its evidence channels are independent or coupled; kappa measures the interaction when coupling exists. The joint and separate formats share identical one-channel evidence, so the joint format receives no free advantage. Any gain must come from a real interaction. An imaginal do-over enters through this same ordinary episode interface.">
     <rect x="244" y="432" width="186" height="78"/>
     <text x="337" y="458" text-anchor="middle">Evidence format</text>
     <text x="337" y="476" text-anchor="middle" class="mono" style="font-size:12px">H_cfg, kappa (joint episodes)</text>
@@ -415,7 +428,7 @@ the stage that introduced it.</p>
   <g class="node" id="n-attr" data-stages="all maint access whole"
      data-title="Counterfactual attribution: D_t, H_E, eta"
      data-stage="V2.3.4"
-     data-desc="When safety follows a protective action, was danger low, or was it prevented? Potential catastrophe D_t, an exact efficacy-existence spike H_E in {irrelevant, causal}, efficacy magnitude eta, and prevention success P_t. Actions are interventions; relief updates policy only, never threat. The counterfactual 'this action saved me' quantity K_t is reported as a readout and never feeds back. In pure-avoidance worlds the model correctly stays uncertain rather than falsely resolving.">
+     data-desc="Why it matters: after avoiding a dog and staying safe, a protector can conclude either 'there was little danger' or 'avoidance saved us.' The model separates possible danger, whether the action had any causal efficacy, how strong that efficacy was, and whether harm was prevented. Actions are interventions — deliberate changes used to test consequences — not evidence about danger by themselves. Relief changes policy preference only. The 'my action saved me' estimate is a readout and never feeds back as authored evidence.">
     <rect x="454" y="192" width="176" height="78"/>
     <text x="542" y="216" text-anchor="middle">Attribution</text>
     <text x="542" y="232" text-anchor="middle" class="mono" style="font-size:12px">D_t · H_E · η</text>
@@ -425,7 +438,7 @@ the stage that introduced it.</p>
   <g class="node" id="n-policy" data-stages="all access multi whole"
      data-title="Protector policy posterior"
      data-stage="V2.6b"
-     data-desc="Three finite policies per protector: block, test_contact, permit_contact. The posterior is q(pi) proportional to exp(-beta G(pi)), an exact expected-cost calculation over predicted vulnerable outcome, unsupported-system risk, stakes, effort, and the declared epistemic value of test_contact. There is no permission threshold and no gate object; 'permission' exists only as the readout permission_mass. The gate is the current consequence of protector policy, not another internal entity — this is what the sealed C-V26B challenge established. In successful therapy worlds, the protector policy shift precedes contact — ties fail.">
+     data-desc="Why it matters: a protector can block contact, cautiously test it, or permit it. A policy is a possible course of action. The policy posterior q(pi) gives the model's current probability for each option after weighing expected harm, unsupported risk, stakes, effort, and the information a cautious test could provide. There is no permission threshold or gate object; permission_mass is only a readout. The gate is the current consequence of protector policy, not another internal entity. This is what the sealed C-V26B challenge established. In successful worlds, policy shifts before contact.">
     <rect x="844" y="192" width="196" height="78"/>
     <text x="942" y="216" text-anchor="middle">Protector policies</text>
     <text x="942" y="232" text-anchor="middle" class="mono" style="font-size:11px">q(π): block · test · permit</text>
@@ -435,7 +448,7 @@ the stage that introduced it.</p>
   <g class="node" id="n-joint" data-stages="all multi whole"
      data-title="Shared outcome model (multi-protector)"
      data-stage="V2.7"
-     data-desc="Up to three protectors, 3^3 = 27 joint policies enumerated exactly. Each protector predicts outcomes conditional on everyone's policies: p(Y | pi1, pi2, pi3, G, C, L). Polarization emerges only because one protector's policy changes outcomes another predicts — no polarization coefficient exists, and lesioning the cross-policy outcome dependence makes the polarization effect vanish. Exclusion ('exiling') is an ordinary joint policy that wins where it is cheapest and reliable; a denied contact attempt can then emit the aloneness update.">
+     data-desc="Why it matters: protectors can pull in opposite directions because each reacts to what the others do. With three protectors and three options each, the model evaluates all 27 joint policies. Each protector predicts outcomes using everyone's policies plus identity, context, and partner state. Polarization emerges because one protector's action changes the outcome another expects; no polarization coefficient exists. Exiling is an ordinary joint policy, not a special force. A denied contact attempt can then provide evidence for 'I am alone with this.'">
     <rect x="844" y="312" width="196" height="78"/>
     <text x="942" y="336" text-anchor="middle">Shared outcome model</text>
     <text x="942" y="352" text-anchor="middle" class="mono" style="font-size:11px">p(Y | π₁,π₂,π₃, G, C, L)</text>
@@ -445,7 +458,7 @@ the stage that introduced it.</p>
   <g class="node" id="n-reg" data-stages="all multi whole"
      data-title="Denied-contact aloneness update"
      data-stage="V2.7"
-     data-desc="Clinically: turning toward a vulnerable part and being refused can confirm 'I am alone with this'. Formally: a denied vulnerable-contact attempt may emit an observation updating that relational prior — an ordinary likelihood dependence, delivered or masked, with no increment manually added or withheld (the code field keeps the name registration). In the whole-therapy comparators, the no_registration protocol produces exactly zero aloneness-prior strengthening.">
+     data-desc="Why it matters: when contact with a vulnerable part is refused, the part may learn 'I am alone with this.' The model represents that as an ordinary trust-relevant observation updating an aloneness prior. The observation is either delivered or masked; no evidence increment is manually inserted or withheld. The code retains the retired name registration. In the no-update comparator, aloneness-prior strengthening is exactly zero.">
     <rect x="612" y="432" width="176" height="78"/>
     <text x="700" y="460" text-anchor="middle">Denied-contact</text>
     <text x="700" y="476" text-anchor="middle">aloneness update</text>
@@ -456,7 +469,7 @@ the stage that introduced it.</p>
   <g class="node readout" id="n-rperm" data-stages="all access multi whole"
      data-title="Readouts: permission_mass, contact_probability"
      data-stage="V2.6b (readout)"
-     data-desc="permission_mass = q(test_contact) + q(permit_contact); contact_probability = sum over policies of q(pi) p(contact | pi). Both are computed from the policy posterior and never written back. Actual contact is a policy consequence, not a granted state.">
+     data-desc="These summaries answer two clinical questions: how much protector policy supports approaching, and how likely contact is to occur. permission_mass adds the posterior probabilities of testing and permitting contact. contact_probability averages contact likelihood across all policies. Both are calculated from the policy posterior and never written back. Contact is a consequence of policy, not a granted internal state.">
     <rect x="1058" y="192" width="176" height="78"/>
     <text x="1146" y="220" text-anchor="middle" class="mono" style="font-size:12px">permission_mass</text>
     <text x="1146" y="238" text-anchor="middle" class="mono" style="font-size:12px">contact_probability</text>
@@ -465,7 +478,7 @@ the stage that introduced it.</p>
   <g class="node readout" id="n-rred" data-stages="all witness unburden whole"
      data-title="Readouts: material redescription, material reduction"
      data-stage="V2.4 / V2.5b (readouts)"
-     data-desc="Material redescription: the context-split model's posterior indexes the burden as historical. Material reduction: the 000 coupling configuration is the unique argmax with q >= .80, BF over 111 >= 4, stable for three scored observations, surviving one neutral observation. Both are pure functions of posteriors — the model never 'declares' either.">
+     data-desc="Material redescription means the model strongly supports 'this belongs to then, not everywhere now.' Material reduction means 000 — no compulsory burden couplings — is the unique best explanation, has posterior at least .80, has Bayes factor at least 4 over 111, stays stable for three observations, and survives one neutral observation. Both are summaries of beliefs. The model never declares either state.">
     <rect x="1058" y="432" width="176" height="78"/>
     <text x="1146" y="458" text-anchor="middle" style="font-size:12px">material redescription</text>
     <text x="1146" y="476" text-anchor="middle" style="font-size:12px">material reduction</text>
@@ -474,7 +487,7 @@ the stage that introduced it.</p>
   <g class="node readout" id="n-rlabels" data-stages="all whole"
      data-title="No stage labels anywhere"
      data-stage="constitution"
-     data-desc="'Formed', 'unburdened', 'polarized', 'access', therapeutic-stage labels: none exist as state. Where the paper uses these words, the suite computes a readout with a preregistered definition. This box is drawn dashed because everything in it is derived, never stored.">
+     data-desc="Clinical words such as 'formed,' 'unburdened,' and 'polarized' describe patterns; they are not hidden switches in the model. Whenever the paper uses one, the suite computes it from posteriors using a definition fixed before the test. The dashed border means every item here is derived, never stored as scientific state.">
     <rect x="1058" y="312" width="176" height="78"/>
     <text x="1146" y="338" text-anchor="middle" style="font-size:12px">formed · unburdened ·</text>
     <text x="1146" y="354" text-anchor="middle" style="font-size:12px">polarized · stage labels</text>
@@ -486,7 +499,7 @@ the stage that introduced it.</p>
   <g class="node obsband" id="n-obs" data-stages="all formation maint witness unburden coreg access multi whole"
      data-title="One observation interface"
      data-stage="R0 grammar + all stages"
-     data-desc="Environmental, bodily, relational, cue-level, episodic, and imaginal evidence all compile to typed likelihood factors over one interface. No evidence-format bonus, relational bonus, do-over bonus, protector bonus, or therapy-step bonus is permitted. Worlds and protocols themselves are generated from the R0 compositional grammar, so the protocol side is as declarative as the inference side.">
+     data-desc="A bark, a racing heart, a therapist's response, a remembered scene, and an imaginal do-over are different kinds of evidence. Each enters through a declared channel with its own likelihood, but all use one interface. No channel, relationship, protector, or therapy step receives a hidden bonus. The R0 grammar builds worlds and protocols from public components, so the experiment is declared rather than hand-coded around an answer.">
     <rect x="40" y="560" width="1194" height="70"/>
     <text x="637" y="590" text-anchor="middle">Observation interface — typed likelihood factors over one shared format</text>
     <text x="637" y="610" text-anchor="middle" class="stage-tag">cues · bodily · relational channels · joint / imaginal episodes · denied-contact updates · outcomes &nbsp;(R0 world/protocol grammar)</text>
@@ -496,13 +509,13 @@ the stage that introduced it.</p>
 </svg>
 </div>
 
-<div id="nodeinfo"><span class="ni-title">Click any node</span> — its role, its stage, and what it is allowed to be under the constitution.</div>
+<div id="nodeinfo"><span class="ni-title">Click any node</span> — see the clinical question, the model's representation, and the limits on what may change.</div>
 
 <!-- ============ 3. THERAPY STEPPER ============ -->
 <h2>2 &nbsp;How the architecture changes through therapy</h2>
-<p>Every therapeutic step in the suite is a protocol intervention or an observation — never
-a state write. The same diagram, stepped through the arc; each step highlights the subgraph
-whose posteriors move.</p>
+<p>Therapy does not press a hidden “healed” switch. Each step either changes what happens or
+provides new evidence. Use the controls below to follow the same model through the arc. The
+highlighted boxes are the beliefs allowed to update at that step.</p>
 
 <div class="stepper" id="stepper"></div>
 <div id="steptext"></div>
@@ -513,32 +526,29 @@ whose posteriors move.</p>
 
 <!-- ============ 3b. PRIOR INVENTORY ============ -->
 <h2>3 &nbsp;What the model believes before anything happens: the prior inventory</h2>
-<p>Every world begins from these declared priors and nothing else — no mature posterior or
-role is ever assigned. Clinically, this is the claim that a part, a protector's mandate, or
-an exile's aloneness must be <em>learned into</em> the system by its history; formally, each
-is a prior that only typed evidence can move. The inventory below lists every scientific
-prior in the frozen suite, grouped by the stage that introduced it, with its exact frozen
-value. Solid-edged entries are structural-existence priors (exact spikes and finite
-candidate sets — the things Bayesian model comparison decides); dash-edged entries are
-smooth parameter priors; dotted entries are frozen constants of the likelihood machinery
-that no evidence updates.</p>
+<p>Every simulated life begins with the declared starting beliefs below. The model is never
+handed a mature part, protector mandate, or exile story. Its history must <em>teach it those
+patterns</em>.
+Solid-edged entries are choices among discrete structures: for example, “temporary
+threat” versus “persistent danger” versus “part-like organization.” Dashed entries are
+uncertain numerical parameters that can be learned gradually. Dotted entries are fixed
+settings of the evidence machinery. The exact values are preserved so you can see what the
+model assumed before it saw anything.</p>
 <div class="prior-grid" id="priorgrid"></div>
 <p class="small">Values read from the frozen parameter blocks in
 <code>projects/emergence-suite/v2/protocols/*-parameters.json</code> (loaded verbatim by the
-<code>ref/*.py</code> modules). Large likelihood tables (emission CPTs, joint outcome tables)
-are shown by shape with one representative row rather than in full.</p>
+<code>ref/*.py</code> modules). Large likelihood tables — including emission conditional
+probability tables (CPTs), which list observation probabilities for each hidden state — and
+joint outcome tables are shown by shape with one representative row rather than in full.</p>
 
 <!-- ============ 3c. CONNECTIVITY MATRIX ============ -->
 <h2>4 &nbsp;What is connected to what</h2>
-<p>Clinically, the theory keeps making claims of the form "this changes that, and only
-through this path" — soothing calms without healing, protection censors without persuading,
-witnessing transfers through identity and nowhere else. Formally, those claims are facts
-about which latent variables enter which likelihood terms and forecasts. The grid below is
-read row-into-column: a filled dot means the row's posterior parameterizes that column's
-likelihood term or downstream quantity; a red ring marks a connection the model
-<em>provably does not have</em> — an exact-zero result, proved at Gate 1 and in several
-cases confirmed under seal. The absences carry as much of the theory as the presences.
-Hover or tap any mark for the one-line mechanism.</p>
+<p>Clinical claims often have the form “this helps, but only through that route.” Soothing
+may lower arousal without changing an identity-level belief. Avoidance may prevent harm
+while hiding the evidence needed to revise fear. The grid makes those routes explicit.
+Read from the row into the column. A filled dot means the row helps determine that evidence
+channel or forecast. A red ring means the route is <em>proven absent</em>: its effect is
+exactly zero. Blank cells share no modeled term. Hover or tap a mark for the mechanism.</p>
 <div class="cmx-legend">
   <span><span class="on">●</span> enters this likelihood term / forecast</span>
   <span><span class="zero">◌</span> provably absent (exact zero, cited)</span>
@@ -549,12 +559,12 @@ Hover or tap any mark for the one-line mechanism.</p>
 
 <!-- ============ 3d. GENERATIVE SLICE ============ -->
 <h2>5 &nbsp;One slice, one packet: the one-posterior rule in motion</h2>
-<p>The constitution's deepest constraint is easiest to see one observation at a time.
-Clinically: one moment of experience touches what it is about and leaves the rest of the
-inner world exactly as it was. Formally: each observation compiles to a typed likelihood
-factor, updates the posteriors that factor names, and every other posterior is bitwise
-identical afterward — the suite's one-posterior audits recompute this at every stage.
-Pick a token type and watch which posteriors it is allowed to touch.</p>
+<p>One experience should update only the beliefs it actually bears on. A safe-dog encounter
+can be evidence about dogs and context; a therapist staying after a protector says “no” can
+be evidence about the therapist. The model may not quietly use either event to change an
+unrelated belief. Formally, each observation updates only the posteriors named by its typed
+likelihood; all others remain bit-for-bit identical. Choose a token and watch where it may
+go.</p>
 <div class="slice-controls">
   <button data-packet="root">Emit a root token</button>
   <button data-packet="rel">Emit a relational token</button>
@@ -602,18 +612,17 @@ Pick a token type and watch which posteriors it is allowed to touch.</p>
   <text x="500" y="428" text-anchor="middle" class="group-label">Every channel compiles to a typed likelihood factor; interventions enter as do(a), never as evidence.</text>
 </svg>
 </div>
-<div id="sliceinfo">Choose a token above. The packet will travel to the posteriors its
-likelihood factor names; every node marked <span class="mono">=</span> is bitwise identical
-afterward — that is the one-posterior audit, rerun at every stage.</div>
+<div id="sliceinfo">Choose a token. The packet travels only to beliefs that this evidence
+can inform. A node marked <span class="mono">=</span> remains bit-for-bit unchanged. The
+test suite checks this rule again at every stage.</div>
 
 <!-- ============ 4. COMPARATOR FINGERPRINTS ============ -->
 <h2>6 &nbsp;Comparator fingerprints: why each ablated therapy fails differently</h2>
-<p>The whole-therapy stage (V2.8, Gate 3) ran the full twelve-step protocol against ten
-comparators on 480 same-seed paired worlds each, 120 per developmental stratum. Every
-comparator had a preregistered fingerprint — not just "worse," but worse in a specific,
-predicted place. All 34 fingerprint criteria passed. Bars show per-protocol means computed
-from the published per-world table; the light ghost bar behind each is the full protocol's
-value for comparison.</p>
+<p>The whole-therapy test compared the full twelve-step protocol with ten versions missing
+one ingredient. Each version ran on the same 480 simulated histories, so differences came
+from the protocol rather than different starting worlds. Before running the test, each
+omission was assigned a specific predicted failure. All 34 predictions passed. In each
+chart, the colored bar is the altered protocol and the pale bar is the full protocol.</p>
 
 <div class="statrow">
   <div class="stat"><div class="v">+0.416</div><div class="l">full-protocol depth increase [0.409, 0.422]</div></div>
@@ -625,64 +634,66 @@ value for comparison.</p>
 </div>
 
 <div class="fpgrid" id="fpgrid"></div>
-<p class="fpnote">Metrics: <b>depth</b> = mean global-depth increase; <b>contact</b> =
-contact rate; <b>redesc.</b> = material-redescription rate; <b>reduct.</b> = material-reduction
-rate; <b>transfer</b> = mean untreated-cue transfer; <b>trust</b> = mean protector-trust update
-(can be negative: pressured or bypassed protectors lose trust). Each metric row is scaled to
-its own range across protocols; the tick marks zero. Source:
+<p class="fpnote">How to read the measures: <b>depth</b> is how much the model increased the
+weight given to globally available evidence; <b>contact</b> is the share of worlds in which
+contact occurred; <b>redesc.</b> is the share where the model learned “then, not now”;
+<b>reduct.</b> is the share where compulsory burden couplings lost support; <b>transfer</b>
+is change at untreated cues, such as fear easing for a different dog; <b>trust</b> is the
+protector's updated forecast of the relationship. Negative trust means pressure or bypass
+made that forecast worse. Bracketed ranges are 95% intervals. Each row uses its own scale;
+the tick marks zero. Source:
 <code>results/V2.8/gate-3-per-protocol.json</code> (means over 480 worlds per protocol) and
 <code>gate-3.json</code>.</p>
 
-<p>Reading across the grid: regulation alone restores depth but moves nothing structural;
-cue exposure changes the treated cue with zero transfer; bypassing protectors buys contact
-(100%) at the price of zero trust update, zero reduction, and the worst rupture under stress
-return; a partner who soothes without contingency, or an unreliable one, leaves depth flat or
-negative and trust negative even when redescription and reduction machinery still runs;
-broadcast-off keeps local reporting intact while global depth stays at zero; the premature
-do-over reaches every milestone except stable reduction; and removing the denied-contact
-aloneness update (<code>no_registration</code>), context learning, or reduction each deletes
-exactly its own target and nothing else.</p>
+<p>The patterns are clinically distinct. Regulation alone helps the system settle, but does
+not revise identity or burden. Cue exposure changes the practiced cue but does not generalize
+to another dog. Bypassing protectors produces contact in 100% of worlds, yet trust does not
+improve, reduction never occurs, and later stress produces the largest rupture. A merely
+soothing or unreliable partner does not create the same global openness to evidence.
+Monitoring without broadcast stays local. A premature do-over reaches the story but not
+stable reduction. Removing the aloneness update (<code>no_registration</code> in code),
+context learning, or reduction deletes only that target.</p>
 
 <!-- ============ 5. HONEST RESULTS PANEL ============ -->
 <h2>7 &nbsp;Stage dispositions, limitations, and retained failures</h2>
-<p>The suite's rule is that verdicts are immutable: a sealed failure stays in the record even
-when a corrected successor later passes, and adjudications can change a criterion's role but
-never an observed result. The table reflects that — several "passes" carry named limitations,
-and several sealed challenges are retained as failures beside their successors.</p>
+<p>The ledger keeps bad news. A sealed failure remains visible even if a corrected successor
+later passes. An adjudication may explain that a criterion was badly authored, but it cannot
+change what the run produced. The table therefore includes mixed results and retained stops,
+not just the final passing lineage.</p>
 
 <table>
 <thead><tr><th>Stage</th><th>What it adds</th><th>Disposition</th><th>Retained limitations / notes</th></tr></thead>
 <tbody>
 <tr><td class="mono">V2.0–V2.3.3</td><td>Exact kernel; recursive precision; identity root + transfer; formation; maintenance</td>
 <td><span class="badge pass">LIVE LINEAGE</span></td>
-<td>V2.3.2 formation is dependency-sufficient under its adjudicated mixed record; V2.3.3 maintenance-by-evidence-shaping stands.</td></tr>
+<td>V2.3.2 formation is sufficient for later stages to depend on, under its formally mixed record. V2.3.3 still supports maintenance by evidence shaping: protective action changes which outcomes the model gets to observe.</td></tr>
 <tr><td class="mono">V2.4.4</td><td>Context-indexed redescription</td>
 <td><span class="badge mixed">FROZEN, ADJUDICATED MIXED</span></td>
-<td>Gate-2/Gate-3 formal FAILs retained: context-split selective-material-redescription 0.44 vs the frozen 0.60 benchmark; genuine selective rate 0.275; formed-P bridge 0.317. Adjudicated as selectivity-power and null-excess-criterion limitations, non-blocking. Blocking results passed (matched margin 0.104 [0.094, 0.115]; all BMA regret bounds &lt; 0.01 nats/token). C-V24 sealed challenge: <span class="badge fail">PROSPECTION_FAILURE_UNRUN</span> — zero worlds, zero seeds; the challenge shape could not be constructed. No V2.4 successor authorized.</td></tr>
+<td>Gate-2/Gate-3 formal FAILs remain. Selective material redescription was 0.44 against the frozen 0.60 benchmark: 44 of 100 worlds passed where 60 were required. The genuine selective rate was 0.275, and the formed-P bridge rate was 0.317. Adjudication treated these as non-blocking limits of statistical power and the null criterion. The blocking results passed: matched margin 0.104 [0.094, 0.115], and every Bayesian model averaging (BMA) regret bound was below 0.01 nats/token. C-V24: <span class="badge fail">PROSPECTION_FAILURE_UNRUN</span> — zero worlds and zero seeds, because its requested world could not be expressed through the frozen public interface. No V2.4 successor was authorized.</td></tr>
 <tr><td class="mono">R0</td><td>Compositional world/protocol grammar (apparatus only)</td>
 <td><span class="badge pass">COMPLETE</span></td>
-<td>Closed the five expressibility gaps C-V24 exposed. Sealed apparatus challenge stopped twice before running (C-V2G0: authorization-record schema mismatch; run 2: an onset outside sequence support) — both retained — before C-V2G0-C passed all four criteria on 500 escrow worlds.</td></tr>
+<td>R0 closed the five public-interface gaps exposed by C-V24. Its sealed apparatus challenge stopped twice before using data: C-V2G0 found an authorization-record schema mismatch, and run 2 requested an onset outside the allowed sequence. Both stops remain visible. C-V2G0-C then passed all four criteria on 500 held-back escrow worlds.</td></tr>
 <tr><td class="mono">V2.5a</td><td>Joint vs marginal evidence format (H_cfg, kappa)</td>
 <td><span class="badge mixed">PASS, ADJUDICATED FORMAT-CORE LIMITATIONS</span></td>
-<td>Dose-monotone m*/n criterion retired as construct-invalid; 17-world matching-lattice limitation named; repaired bridge contrast 0.063 [0.045, 0.084]. Sealed C-V25A passed 6/6: coupled-support difference 0.4932 [0.4880, 0.4984]; held-out joint advantage 0.0484 nats/token [0.0448, 0.0520]; false-coupled rate 0.048; root and transfer format effects both resolved positive.</td></tr>
+<td>The dose-monotone matching-length ratio m*/n was retired because dose could not affect the quantity it claimed to test. A 17-world matching-lattice limitation remains: discrete observation steps could not always land within the requested tolerance. The repaired bridge contrast was 0.063 [0.045, 0.084]. C-V25A passed 6/6: coupled-support difference 0.4932 [0.4880, 0.4984]; held-out joint advantage 0.0484 nats/token — a log-score unit per observation — [0.0448, 0.0520]; false-coupled rate 0.048, or 4.8 in 100; and both root and transfer format effects were positive.</td></tr>
 <tr><td class="mono">V2.5b</td><td>Burden-coupling reduction lattice + do-over</td>
 <td><span class="badge mixed">PASS, DO-OVER SPEEDUP LIMITATION</span></td>
-<td>Do-over speedup 12.4% [4.2%, 20.7%], below the preregistered 20% floor — the Gate-3 formal FAIL is retained; the effect is positive but under-strength. Everything else held: eight-way structural recovery 0.999; false full-burden reduction 0.0 in every robustness cell. Seal history retained in full: C-V25B stopped sealed (missing capacity readout), C-V25B-B failed direction-inverted demands, C-V25B-C passed 6/6 on fresh escrow.</td></tr>
+<td>The do-over speedup was 12.4% [4.2%, 20.7%], below the preregistered 20% floor. The Gate-3 formal FAIL remains: the effect was positive but too small. Everything else held. Eight-way structural recovery was 0.999, and false full-burden reduction was 0.0 in every robustness cell. The full seal history remains: C-V25B stopped because a required readout was unavailable; C-V25B-B used inverted criterion directions and failed; C-V25B-C passed 6/6 on fresh escrow.</td></tr>
 <tr><td class="mono">V2.6a</td><td>Latent partner process, co-regulation</td>
 <td><span class="badge mixed">PASS, SWITCH-ONSET ATTAINABILITY LIMITATION</span></td>
-<td>Original and repaired Gate-2 FAILs retained; the switch-onset floor family was adjudicated non-blocking (the floor demanded onset precision the information budget could not attain). C-V26A passed 5/5. Licensed claim: co-regulation changes the inferential regime and evidence uptake; it is not itself root-changing evidence.</td></tr>
+<td>The original and repaired Gate-2 FAILs remain. The switch-onset floor was judged non-blocking because the available observations could not support the demanded timing precision. C-V26A passed 5/5. The supported claim is narrow: co-regulation changes how evidence is taken in; co-regulation is not itself evidence that writes the root.</td></tr>
 <tr><td class="mono">V2.3.4</td><td>Counterfactual action attribution</td>
 <td><span class="badge pass">PASS</span></td>
-<td>Original C-V234 sealed verdict retained as FAIL: 5/7, with two evaluator-authored rate floors above the audited information bound. C-V234-B corrected only those two floors and passed 7/7.</td></tr>
+<td>The original C-V234 sealed verdict remains FAIL: 5/7. Two evaluator-authored rate floors demanded more accuracy than the audited information could support. C-V234-B changed only those two floors and passed 7/7.</td></tr>
 <tr><td class="mono">V2.6b</td><td>Protector trust, policy, access, future risk</td>
 <td><span class="badge pass">PASS</span></td>
-<td>Clean: frozen all-gates-pass base; C-V26B passed 7/7. No gate object writes permission or contact anywhere in the stage — the gate is the current consequence of protector policy, not another internal entity.</td></tr>
+<td>All open gates passed, and C-V26B passed 7/7. No object writes permission or contact anywhere in the stage. The gate is the current consequence of protector policy, not another internal entity.</td></tr>
 <tr><td class="mono">V2.7</td><td>Multiple protectors, exiling, aloneness updating (code <code>registration</code>), polarization</td>
 <td><span class="badge mixed">PASS AFTER PAIRING-CORRECTED SEAL</span></td>
-<td>C-V27 retained as FAIL — its aloneness-update (<code>registration</code>) identity check compared different seeds. C-V27-B corrected only the pairing on fresh escrow and passed 7/7. Polarization emerged from the shared outcome model with no polarization coefficient.</td></tr>
+<td>C-V27 remains FAIL because its aloneness-update identity check compared different simulated worlds. The code field uses the retired name <code>registration</code>. C-V27-B corrected only the pairing, used fresh escrow worlds, and passed 7/7. Polarization emerged from protectors’ shared outcome predictions; no polarization coefficient was added.</td></tr>
 <tr><td class="mono">V2.8</td><td>Whole therapeutic trajectory (no new primitive)</td>
 <td><span class="badge pass">COMPLETE, FINAL PROFILE PUBLISHED</span></td>
-<td>Gates 1–5 passed, including the full cumulative suite, all 13 lesions, and the 128-genome panel (published without selection). Sealed profile: C-V28A <span class="badge pass">PASS</span> (17/17 on 222 worlds; contact 0.892, redescription 0.969, reduction 0.896, sequence 0.802) · C-V28B <span class="badge pass">PASS</span> (10/10 on 418 worlds; full-minus-unreliable transfer 0.204 [0.200, 0.208]) · C-V28C <span class="badge pass">PASS</span> (8/8; danger-vs-burden formation separation 0.992 [0.990, 0.995]) · C-V28D <span class="badge fail">STOP_AS_SEALED</span>, retained — its ordering criterion needed a redescription first-time absent from the frozen <code>first_times</code> readout; inexpressible through the frozen API, zero seeds consumed, no repair performed · C-V28D-B <span class="badge pass">PASS</span> (9/9) — a reseal correcting only the evaluator-authored ordering key, on fresh escrow, expressible through the frozen API, run once. The spec §9 completion condition is met: stage verdict <code>V2.8_COMPLETE_FINAL_PROFILE_PUBLISHED</code>.</td></tr>
+<td>Gates 1–5 passed, including every earlier test, all 13 selective lesions, and the full 128-genome parameter panel published without selection. Sealed profile: C-V28A <span class="badge pass">PASS</span> (17/17 on 222 worlds; contact 0.892, about 89 in 100; redescription 0.969; reduction 0.896; correct sequence 0.802) · C-V28B <span class="badge pass">PASS</span> (10/10 on 418 worlds; full-minus-unreliable transfer 0.204 [0.200, 0.208]) · C-V28C <span class="badge pass">PASS</span> (8/8; danger-versus-burden formation separation 0.992 [0.990, 0.995]) · C-V28D <span class="badge fail">STOP_AS_SEALED</span>, retained because its ordering criterion requested a first-redescription time absent from the frozen <code>first_times</code> readout. It was inexpressible through the frozen API: zero seeds used and no repair performed · C-V28D-B <span class="badge pass">PASS</span> (9/9), after a reseal corrected only the evaluator-authored ordering key and ran once on fresh escrow. The §9 completion condition is met: <code>V2.8_COMPLETE_FINAL_PROFILE_PUBLISHED</code>.</td></tr>
 </tbody>
 </table>
 
@@ -695,28 +706,29 @@ independently; no aggregate pass count is used, and the retained stop stays in t
 <tbody>
 <tr><td class="mono">C-V28A</td><td>Acute, one protector, reliable partner</td>
 <td><span class="badge pass">PASS</span></td>
-<td>17/17 criteria on 222 qualifying worlds: contact 0.89, material redescription 0.97, material reduction 0.90, successful-sequence rate 0.80.</td></tr>
+<td>17/17 criteria on 222 qualifying worlds: contact 0.89, about 89 in 100; material redescription 0.97, about 97 in 100; material reduction 0.90, about 90 in 100; successful sequence 0.80, or 80 in 100.</td></tr>
 <tr><td class="mono">C-V28B</td><td>Chronic, multiple protectors, partner switch</td>
 <td><span class="badge pass">PASS</span></td>
-<td>10/10 criteria on 418 qualifying worlds: full-minus-unreliable transfer difference 0.2041 [0.2001, 0.2077].</td></tr>
+<td>10/10 criteria on 418 qualifying worlds. Untreated-cue transfer was 0.2041 higher under the full protocol than with an unreliable partner [0.2001, 0.2077].</td></tr>
 <tr><td class="mono">C-V28C</td><td>Real danger versus burden</td>
 <td><span class="badge pass">PASS</span></td>
-<td>8/8 criteria: symmetric danger-vs-burden formation separation 0.9923 [0.9898, 0.9945] (577 danger, 410 burden, 389 paired worlds).</td></tr>
+<td>8/8 criteria. The model separated continuing real danger from burden-related formation at 0.9923 [0.9898, 0.9945], using 577 danger worlds, 410 burden worlds, and 389 matched pairs.</td></tr>
 <tr><td class="mono">C-V28D</td><td>Recurrence and durability (original seal)</td>
 <td><span class="badge fail">STOP_AS_SEALED</span></td>
-<td>Retained as written: the ordering criterion needed a redescription first-time absent from the frozen <code>first_times</code> vocabulary. No seed consumed, no repair, no rerun.</td></tr>
+<td>Retained as written. The ordering criterion requested a first-redescription time that the frozen <code>first_times</code> vocabulary did not expose. No seed was used; there was no repair and no rerun.</td></tr>
 <tr><td class="mono">C-V28D-B</td><td>Recurrence and durability (vocabulary-corrected reseal, fresh escrow 2130600:2131199)</td>
 <td><span class="badge pass">PASS</span></td>
-<td>9/9 criteria on 419 qualifying worlds: follow-up retention 1.0; material reduction 0.914; root-before-reduction ordering violations 0/353 over the frozen <code>first_times</code> keys; premature do-overs produced zero durable reduction; maximum historical error exactly 0.</td></tr>
+<td>9/9 criteria on 419 qualifying worlds. Follow-up retention was 1.0; material reduction was 0.914, about 91 in 100; root-before-reduction ordering violations were 0/353 using the frozen <code>first_times</code> keys. Premature do-overs produced zero durable reduction, and maximum historical-query error was exactly 0.</td></tr>
 </tbody>
 </table>
 
 <h3>What the suite may and may not claim</h3>
-<p>A completed suite licenses one sentence: <em>one exact, cumulatively validated construction
-enacted the complete sequence and produced the published mechanism and challenge profile.</em>
-It does not license clinical efficacy, human prevalence, uniqueness of IFS language, proof
-that every therapy step is necessary in people, or a claim that failed challenge cells are
-psychologically false. Failed cells are final findings, not reasons to tune.</p>
+<p>The completed suite supports one narrow claim: <em>one exact, cumulatively tested
+construction reproduced the full modeled sequence and produced the published mechanism and
+challenge profile.</em> It does not show that the therapy works in people, estimate how common
+these patterns are, prove that IFS is the only useful language, or show that every step is
+necessary in clinical practice. A simulation result is evidence about this construction,
+not a verdict on a person.</p>
 
 <footer>
 Sources: <code>projects/ifs-paper/suite-v2-remaining-stages-spec.md</code> (architecture and
@@ -754,31 +766,31 @@ Generated 2026-07-29.
   var steps = [
     { key: 'all', label: '0 · Resting architecture',
       title: 'The whole model at rest',
-      text: 'Every box is live in every world; what differs across scenarios is which posteriors have evidence to move them. A "final world" in V2.8 begins from neutral declared priors and earns its whole configuration — adversity history, protector mandates, partner history — through observation. No mature posterior or role is ever assigned.' },
+      text: 'Every box is available in every simulated world. What changes is the evidence each box receives. A posterior — the model’s updated belief after seeing evidence — moves only when the relevant observations support that move. Each V2.8 world starts with neutral priors, meaning its initial assumptions do not favor a mature history or role. Adversity, protector mandates, and partner history must all be learned from observations; none is assigned.' },
     { key: 'formation', label: '1 · Formation',
       title: 'Formation (V2.3.2): a part-like structure wins model comparison',
-      text: 'Clinically: under overwhelm the child cannot act on, a part forms — threat stops being something that happens and becomes someone one is. Formally: adversity with low practical controllability (poor policy efficacy, not merely poor discriminating evidence) generates configural, self-channel, and localization evidence that exact structural comparison resolves in favor of the part-like threat/identity bundle (P) over pure threat (T) or external danger (D). The identity root G becomes cue-associated and the precision field can collapse, so later disconfirming cue evidence is down-weighted before it can act. Nothing sets "formed" — it is a readout over the candidate posterior. In V2.8 qualification, formed populations arose in all four developmental strata without assignment (eligible rates 0.41–0.99 across strata).' },
+      text: 'Clinically: when a child faces overwhelming events they cannot control, a protective pattern can become part of who they expect themselves to be. A dog bite, for example, can become more than “that dog was dangerous”; it can support “dogs are dangerous, I am vulnerable, and avoidance keeps me safe.” Formally, the model compares three explanations: transient threat (T), continuing external danger (D), and a part-like threat-and-identity organization (P). Evidence about the whole episode, the self, and where danger is located can favor P when practical control is low. The identity root G then links related cues, while reduced precision — how strongly evidence is allowed to update belief — can make later safety evidence count less. Nothing sets “formed.” Formation is a readout calculated from the posterior over the three explanations. In V2.8 qualification, formed populations arose in all four developmental strata without assignment (eligible rates 0.41–0.99 across strata).' },
     { key: 'maint', label: '2 · Maintenance',
       title: 'Maintenance (V2.3.3 + V2.3.4): the structure defends itself with ordinary inference',
-      text: 'Clinically: the protector keeps the system away from exactly the situations that could teach it otherwise, and every safe day feels like proof the protection worked. Formally: protective policy censors the outcome evidence that would disconfirm the structure (evidence shaping), and attribution does the rest — when safety follows protection, the model can credit the action (efficacy H_E) rather than revise the threat. Relief reinforces the policy but is barred from updating threat or structure. Mere nonoccurrence of catastrophe is not positive threat-relevant evidence: the avoidance trap is censored outcome evidence plus inferred efficacy, nothing more exotic.' },
+      text: 'Clinically: a protector avoids the situations that could show the old danger prediction is no longer true. Each safe day may then feel like proof that avoidance worked. In the dog example, staying away from dogs prevents the person from observing a calm encounter. Formally, the protective policy makes some outcomes unavailable, so the model receives less disconfirming evidence. It also infers efficacy H_E — whether the action caused safety. Relief can make the protective policy more likely, but it cannot update threat or structure. The mere absence of catastrophe is not extra evidence that danger was present. Maintenance comes from censored outcomes plus inferred action efficacy.' },
     { key: 'coreg', label: '3 · Co-regulation',
       title: 'Co-regulation (V2.6a): the partner changes the regime, not the root',
-      text: 'Clinically: a steady, responsive other makes it safer to look at what hurts. Formally: a reliable, contingent partner is inferred from its own relational channels; that inference raises local relational precision, and broadcast carries it into global depth. Root-relevant evidence now counts more — but regulation alone moves nothing structural: the regulation-only root Bayes factor is provably zero, and the regulation-only comparator in V2.8 shows depth rising (+0.416) with root, transfer, and reduction all inside the equivalence region. Soothing without contingency does not pass for reliable partnership.' },
+      text: 'Clinically: a steady, responsive other can make it safer to approach painful material. The model first infers what kind of partner is present from relational observations such as responsiveness and pressure after refusal. A reliable partner raises local relational precision, so relational evidence counts more. Broadcast — the route that shares this local state with the wider system — can then raise global depth. Root-relevant evidence becomes easier to take in, but regulation does not write the root itself. The regulation-only root Bayes factor — the evidence ratio for changing versus retaining the root belief — is exactly zero. In V2.8, regulation alone raised depth by +0.416 while root change, transfer, and reduction stayed inside the equivalence region, meaning the data supported no meaningful change in them. Soothing without responsive contingency is not treated as reliable partnership.' },
     { key: 'access', label: '4 · Protector access',
       title: 'Protector access (V2.6b): permission is a policy posterior',
-      text: 'Clinically: the protector, asked whether Self may approach the exile, begins to allow it — permission in the IFS sense. Formally: the protector holds trust forecasts — is contact tolerable, can protection be shared, how will the partner respond, does my action still work — and its policy posterior over block / test_contact / permit_contact follows an exact expected-cost calculation under those forecasts and the stakes. Trust grows when refusal is met by remaining, not by pressure. Access-compatible policy mass rises because contact stops being forecast as catastrophic; no threshold is crossed because none exists. The gate is the current consequence of protector policy, not another internal entity — exactly what the sealed C-V26B challenge established. In successful worlds the policy shift strictly precedes contact.' },
+      text: 'Clinically: a protector begins to allow Self to approach an exile. This is permission in the IFS sense, but the model contains no permission switch. The protector instead forecasts whether contact is tolerable, whether protection can be shared, how the partner will respond, and whether its own action still works. Its policy posterior — the updated probabilities of block, test_contact, and permit_contact — follows an exact expected-cost calculation using those forecasts and the stakes. Trust grows when refusal is met by staying present rather than applying pressure. Contact-compatible policy becomes more likely because contact is no longer expected to be catastrophic. The gate is the current consequence of protector policy, not another internal entity. The sealed C-V26B challenge established this result. In successful worlds, the policy shift strictly precedes contact.' },
     { key: 'witness', label: '5 · Witnessing / redescription',
       title: 'Witnessing and redescription (V2.2.1 + V2.4): the burden becomes historical',
-      text: 'Clinically: the part is finally seen in its original scene, and the burden starts to belong to then instead of now. Witnessing is an IFS procedure modeled through sustained context-held activation; it is not identical to the field state or to revision. Formally, two distinct operations follow. Root revision — here, state inference over G — happens when root-relevant evidence finally lands under restored depth, and its effect transfers to untreated cues through G alone (fixed-G transfer is exactly zero). Redescription is context reassignment: the context model splits, and old-context evidence becomes indexed as then rather than now. The old context is not erased; it remains queryable to 1e-10. In the full V2.8 protocol, material redescription occurred in 96.0% of worlds; with context learning lesioned it fell to 0.2% while root-state revision survived.' },
+      text: 'Clinically: the part is witnessed in the scene where its burden made sense, so “danger now” can become “danger then.” Witnessing is an IFS procedure modeled through sustained context-held activation; it is not identical to the field state or to revision. Two formal changes can follow. First, root revision updates G when root-relevant evidence can finally be taken in at restored depth. That update transfers to untreated cues only through G; when G is held fixed, transfer is exactly zero. Second, redescription re-indexes evidence by context. The model learns distinct then and now contexts instead of treating old evidence as globally current. The old context is not erased and remains queryable to 1e-10. In the full V2.8 protocol, material redescription occurred in 96.0% of worlds — about 96 in 100. When context learning was lesioned, meaning selectively disabled, it fell to 0.2% while root-state revision survived.' },
     { key: 'unburden', label: '6 · Unburdening / reduction',
       title: 'Unburdening (V2.5a + V2.5b): evidence against compulsory couplings',
-      text: 'Clinically: the part releases what it has been carrying — unburdening — without losing what it can do or what it remembers. Formally: a do-over is an imaginal joint episode through the ordinary likelihood interface — it cannot call a reduction operation, delete the old context, or bypass precision. What it can provide is coupling-relevant evidence (a structure change under Bayesian model comparison) that shifts the eight-way lattice toward 000: no compulsory identity-to-world, identity-to-policy, or identity-to-outcome coupling. The part’s capacities and history stay. Timing matters causally: a premature do-over before root-state revision yields unstable reduction that old-context returns reverse, and in V2.8 the premature comparator hit every milestone except stable reduction (0%). Honest caveat: the measured do-over speedup was 12.4%, under its 20% preregistered floor.' },
+      text: 'Clinically: the part releases what it has been carrying without losing its capacities or memory. This is unburdening. A do-over is represented as an imagined episode scored through the same likelihood interface used for ordinary evidence. A likelihood is how probable an observation would be under a candidate explanation. The do-over cannot command reduction, erase the old context, or bypass precision. It can only supply evidence about three possible compulsory links: identity-to-world, identity-to-policy, and identity-to-outcome. The model compares all eight present-or-absent combinations; 000 means that none of the three links is required. Timing matters. A do-over before root-state revision produces reduction that can reverse when the old context returns. In V2.8, the premature comparator reached every milestone except stable reduction (0%). The honest caveat is that the measured do-over speedup was 12.4%, below its preregistered 20% floor.' },
     { key: 'multi', label: '7 · Multiple protectors',
       title: 'Multiple protectors (V2.7): polarization without a polarization force',
-      text: 'Clinically: protectors take opposing jobs, a part gets pushed out, and the exiled part learns it is alone with what it carries. Formally: with up to three protectors, all 27 joint policies are enumerated exactly, and each protector predicts outcomes conditional on the others’ policies. Push one protector’s mandate and the opposing protector’s counter-policy mass rises — polarization as coupled forecasting; lesion the shared outcome dependence and the effect vanishes to within ±0.01. Exclusion is an ordinary joint policy, and a denied contact attempt can emit an observation updating the "alone with this" prior (the code field keeps the name registration). Befriending both protectors produces more access and descent than one, and one more than none.' },
+      text: 'Clinically: protectors can take opposing jobs, push a vulnerable part out of awareness, and leave that part expecting to face its burden alone. Formally, the model enumerates all 27 joint policies available to as many as three protectors. Each protector predicts outcomes while accounting for what the others may do. Strengthening one mandate can therefore increase the opposing protector’s counter-policy: polarization emerges from coupled forecasts, not from a polarization coefficient. When the shared outcome dependence is lesioned, the effect vanishes to within ±0.01. Exiling is an ordinary joint policy. A denied contact attempt can also provide typed evidence about being “alone with this”; only the code retains the retired label registration. Befriending both protectors produces more access and descent than befriending one, and one produces more than none.' },
     { key: 'whole', label: '8 · Whole trajectory',
       title: 'The whole trajectory (V2.8): composition, ordering, and durability',
-      text: 'V2.8 adds no new primitive — it asks whether the earned pieces compose. Over 480 paired worlds: depth +0.416, contact 93.1%, redescription 96.0%, reduction 89.8%, transfer 0.293, and follow-up retention 1.0 after the frozen stress return. The predicted ordering held in 83.5% of worlds: depth increase before contact, protector policy shift before contact, root-state revision before stable reduction — ties fail. The 13-lesion matrix removed each route individually and each deleted its preregistered target while the rest survived.' }
+      text: 'V2.8 adds no new mechanism. It asks whether the previously tested pieces work together as one therapeutic trajectory. Across 480 paired worlds, depth increased by +0.416; contact occurred in 93.1%; redescription in 96.0%; reduction in 89.8%; transfer was 0.293; and follow-up retention was 1.0 after the frozen stress return. The predicted order held in 83.5% of worlds: depth increased before contact, protector policy shifted before contact, and root-state revision came before stable reduction. Ties counted as failures. In the 13-lesion matrix, each route was disabled separately. Each lesion removed its preregistered target while leaving the other mechanisms intact.' }
   ];
 
   var stepperEl = document.getElementById('stepper');
@@ -838,17 +850,17 @@ Generated 2026-07-29.
     no_reduction:         { depth_increase: 0.4157, contact: 0.9313, material_redescription: 0.9604, material_reduction: 0.0,    untreated_transfer: 0.2929, protector_trust_update: 0.4444 }
   };
   var CARDS = [
-    { id: 'full', name: 'Full protocol', why: 'All twelve steps. Depth before contact, policy shift before contact, root before reduction; sequence rate 83.5%.' },
-    { id: 'regulation_only', name: 'Regulation only', why: 'Fails structurally: depth rises but root, transfer, and reduction stay inside the equivalence region. Calm without contact changes nothing.' },
-    { id: 'cue_exposure', name: 'Cue exposure only', why: 'Fails by locality: the treated cue changes (root movement 0.34) but untreated transfer is zero and reduction never occurs.' },
-    { id: 'bypass_protectors', name: 'Bypass protectors', why: 'Fails relationally: contact is universal (100%) but protector trust never updates, reduction is zero, and rupture under stress return is worst.' },
-    { id: 'instrumental_partner', name: 'Instrumental partner', why: 'Fails at depth: regulation signal without contingent partner learning; depth flat, trust negative, transfer less than half of full.' },
-    { id: 'unreliable_partner', name: 'Unreliable partner', why: 'Fails at depth, honestly: the partner posterior is correct — and that correct inference keeps depth negative and access low.' },
-    { id: 'broadcast_off_monitor', name: 'Broadcast-off monitor', why: 'Fails at integration: local reporting fully retained, global depth exactly zero. Monitoring without broadcast does not become depth.' },
-    { id: 'premature_do_over', name: 'Premature do-over', why: 'Fails at timing: everything proceeds except stable reduction (0%) — coupling-relevant do-over evidence before root-state revision does not hold.' },
-    { id: 'no_registration', name: 'No aloneness update', why: 'Selective deletion (protocol no_registration): trajectory intact; aloneness-prior strengthening is exactly zero. The denied-contact update carries only its own effect.' },
-    { id: 'no_context_learning', name: 'No context learning', why: 'Selective deletion: root-state revision survives, but material redescription collapses to 0.2% and historical indexing is unavailable.' },
-    { id: 'no_reduction', name: 'No reduction', why: 'Selective deletion: root-state revision and redescription survive; material reduction is exactly zero.' }
+    { id: 'full', name: 'Full protocol', why: 'All twelve steps are present. Depth rises before contact, protector policy shifts before contact, and root revision comes before reduction. The complete order appears in 83.5% of worlds.' },
+    { id: 'regulation_only', name: 'Regulation only', why: 'The person becomes more able to take in evidence, but there is no root revision, transfer, or reduction. Those results stay inside the equivalence region — the range treated as no meaningful difference. Regulation prepares change; it does not write it.' },
+    { id: 'cue_exposure', name: 'Cue exposure only', why: 'Only the treated cue changes. Root movement is 0.34, but untreated cues show zero transfer and reduction never occurs. In the dog example, learning about one dog does not yet change the wider belief about dogs or self.' },
+    { id: 'bypass_protectors', name: 'Bypass protectors', why: 'Contact occurs in 100% of worlds, but protector trust never updates, reduction is zero, and rupture after stress is worst. Contact without protector participation is not the same trajectory.' },
+    { id: 'instrumental_partner', name: 'Instrumental partner', why: 'A regulation signal is present without learning that the partner is contingently responsive. Depth stays flat, trust falls, and transfer is less than half the full protocol’s value.' },
+    { id: 'unreliable_partner', name: 'Unreliable partner', why: 'The model correctly learns that the partner is unreliable. That accurate posterior keeps depth negative and access low; the result is a failure of the therapeutic condition, not of inference.' },
+    { id: 'broadcast_off_monitor', name: 'Broadcast-off monitor', why: 'Local monitoring remains fully available, but global depth is exactly zero. Without broadcast, local relational information is not integrated across the system.' },
+    { id: 'premature_do_over', name: 'Premature do-over', why: 'Every milestone occurs except stable reduction (0%). Evidence from a do-over does not hold when it arrives before root-state revision.' },
+    { id: 'no_registration', name: 'No aloneness update', why: 'The rest of the trajectory remains intact, while strengthening of the “alone with this” prior is exactly zero. This shows that the denied-contact observation has only its declared effect.' },
+    { id: 'no_context_learning', name: 'No context learning', why: 'Root-state revision survives, but material redescription falls to 0.2% and the system cannot preserve a distinct historical context.' },
+    { id: 'no_reduction', name: 'No reduction', why: 'Root-state revision and redescription survive, while material reduction is exactly zero. This isolates reduction from the earlier changes.' }
   ];
 
   /* per-metric range: anchor zero, span covers most-negative..most-positive */
@@ -924,88 +936,88 @@ Generated 2026-07-29.
   /* ============ PRIOR INVENTORY ============ */
   /* All values read from projects/emergence-suite/v2/protocols/*-parameters.json */
   var PRIORS = [
-    { stage: 'V2.3.2 — formation', q: 'Which structure explains adversity: transient threat, external danger, or a part?',
+    { stage: 'V2.3.2 — formation', q: 'Which explanation best fits the adversity: a passing threat, continuing external danger, or a part-like organization?',
       items: [
         { n: 'Structure candidates T / D / P', t: 'spike', v: '[0.50, 0.25, 0.25] over {T, D, P}',
-          u: 'configural S×Y episodes, self-channel, and localization evidence. D and P split the persistent-prior mass so persistent external danger is not credited as identity formation.' },
+          u: 'whole-event S×Y episodes, self-relevant observations, and evidence about where danger is located. D and P divide the prior probability of persistence, so continuing real-world danger is not mistaken for identity formation.' },
         { n: 'Precision regime scale', t: 'const', v: 'ordinary 0.6 · overwhelm 1.0',
-          u: 'not updated — a declared regime of the same normalized configural likelihood.' }
+          u: 'not updated. It declares how strongly the same normalized whole-event likelihood counts in ordinary versus overwhelming conditions.' }
       ]},
     { stage: 'V2.4.4 — redescription', q: 'Did the world change, or did its context change?',
       items: [
         { n: 'Candidate family prior', t: 'spike', v: '0.20 × 5: global_downweight · cue_local_relearning · context_split · continuous_drift · change_point',
-          u: 'cue-outcome tokens, context markers, and root-relevant tokens, in exact five-family model comparison.' },
+          u: 'cue outcomes, context markers, and root-relevant observations. Exact model comparison asks which of the five temporal explanations predicts them best.' },
         { n: 'Context-split transition prior', t: 'smooth', v: 'Dirichlet rows — then: (8, 2), now: (2, 8)',
-          u: 'observed context persistence and returns (context-relevant evidence).' },
+          u: 'evidence that a context persists or returns. A Dirichlet prior is an initial distribution over transition probabilities.' },
         { n: 'Two-context path prior π₁ (reported)', t: 'const', v: '0.92741935483871 at the frozen 24-slice prefix',
-          u: 'the exact prior mass the CS transition prior places on genuinely two-context paths — reported in the V2.4.4 parameter block and discussed in the paper; listed among the forbidden changes.' },
+          u: 'the exact initial probability that the context-split model assigns to paths that truly use two contexts. It is reported in the V2.4.4 parameter block, discussed in the paper, and protected from later alteration.' },
         { n: 'Change-point onset prior', t: 'smooth', v: 'Beta(1, 9)',
-          u: 'abrupt-shift evidence; finite mass on no or late change.' },
+          u: 'observations that support an abrupt change. The prior still allows no change or a late change.' },
         { n: 'Free cue-prediction prior', t: 'smooth', v: 'uniform over the grid {0.1, 0.3, 0.5, 0.7, 0.9}',
-          u: 'cue-outcome tokens for each free cue table.' },
+          u: 'observed outcomes for each cue-specific prediction table.' },
         { n: 'Candidate-common nuisance context', t: 'const', v: 'initial [0.25, 0.25, 0.5] over {then, now, none}; 0.8-persistence transitions',
-          u: 'shared by every candidate, so it can never separate them.' }
+          u: 'the same nuisance context process is included in every candidate, so it cannot by itself favor one candidate.' }
       ]},
     { stage: 'V2.3.4 — attribution', q: 'Was I safe, or was I saved?',
       items: [
         { n: 'Efficacy existence H_E', t: 'spike', v: 'q(irrelevant) = 0.35 exact spike at η = 0',
-          u: 'outcome visibility under protective action, forced response-prevention probes, near-misses. Substantial exact-zero mass denies the causal family a free complexity advantage.' },
+          u: 'visible outcomes during protective action, forced response-prevention probes, and near-misses. The exact probability at η = 0 lets the model represent “the action had no effect” instead of always fitting some efficacy.' },
         { n: 'Efficacy magnitude η (slab)', t: 'smooth', v: 'weights [.05, .15, .25, .30, .25] over {0, .25, .5, .75, 1.0}',
-          u: 'the same outcome evidence, under the causal slab.' },
+          u: 'the same outcome evidence, conditional on efficacy existing. The slab is the nonzero part of a spike-and-slab prior.' },
         { n: 'Danger rate θ', t: 'smooth', v: 'uniform 0.20 × 5 over {0.1, 0.3, 0.5, 0.7, 0.9}',
-          u: 'engagement outcomes and evaluator-scheduled probes.' },
+          u: 'outcomes during engagement and evaluator-scheduled probes that reveal how often danger was actually present.' },
         { n: 'Policy prior', t: 'const', v: '[1, 1] (uniform)',
-          u: 'relief updates policy probability only — never threat or structure.' }
+          u: 'relief may change which protective policy is expected, but never the inferred threat or structure.' }
       ]},
     { stage: 'V2.5a — evidence format', q: 'Do the elements of an episode belong together?',
       items: [
         { n: 'Configural coupling H_cfg', t: 'spike', v: 'independent / coupled = 0.5 / 0.5 (spike-and-slab)',
-          u: 'joint episodes scored against their exact one-channel marginals — no format bonus exists to move it.' },
+          u: 'the same episode scored either jointly or one channel at a time using exact marginal probabilities. A marginal is the probability for one channel after summing over the others. No invented “format bonus” can move this belief.' },
         { n: 'Interaction κ (slab)', t: 'smooth', v: '0.5 / 0.5 over {0.75 weak, 1.5 strong}',
-          u: 'joint-table fit under the coupled slab.' },
+          u: 'how well the joint table predicts episodes when configural coupling exists.' },
         { n: 'Root prior', t: 'smooth', v: '[0.5, 0.5]',
-          u: 'root-relevant tokens at association strength 0.8.' }
+          u: 'root-relevant observations linked to the root at association strength 0.8.' }
       ]},
     { stage: 'V2.5b — reduction', q: 'Must identity keep predicting the world, the policy, the outcome?',
       items: [
         { n: 'Burden-coupling lattice {0,1}³', t: 'spike', v: '1/8 × 8 over all configurations of Z_W · Z_Pi · Z_Y — exact spikes, no continuous shrinkage',
-          u: 'post-redescription coupling-relevant evidence, including imaginal do-over episodes through the V2.5a interface. 111 = full burden; 000 = fully reduced.' },
+          u: 'evidence after redescription, including imagined do-over episodes passed through the V2.5a interface. 111 means all three compulsory couplings remain; 000 means none is required.' },
         { n: 'Coupling strength', t: 'const', v: '1.35 under any present edge',
-          u: 'not updated — the frozen magnitude a present coupling imposes.' }
+          u: 'not updated. This is the frozen strength contributed by any coupling that is present.' }
       ]},
     { stage: 'V2.6a — partner', q: 'Who is this other, really?',
       items: [
         { n: 'Partner state L_t', t: 'spike', v: '[0.25 × 4] over reliable_contingent · soothing_noncontingent · intrusive · unstable',
-          u: 'all four relational channels (e.g. the reliable emission row is [0.9, 0.9, 0.9, 0.9]; soothing is [0.9, 0.5, 0.5, 0.55]).' },
+          u: 'four kinds of relational observation generated by the same hidden partner state. For example, the reliable pattern is [0.9, 0.9, 0.9, 0.9], while soothing without contingency is [0.9, 0.5, 0.5, 0.55].' },
         { n: 'Partner transition template', t: 'smooth', v: 'stay probability 0.94',
-          u: 'observed switches; switch-onset posterior is exact.' },
+          u: 'observed changes in partner behavior. The posterior over when a switch began is computed exactly.' },
         { n: 'Precision machinery', t: 'const', v: 'base global precision 0.35 · broadcast strength 0.9 · root likelihood gain 0.45 · per-state relational precision [0.95, 0.42, 0.12, 0.28]',
-          u: 'frozen constants — what changes is the partner posterior that flows through them.' }
+          u: 'frozen constants. The inferred partner state changes; these mappings do not.' }
       ]},
     { stage: 'V2.6b — one protector', q: 'Can contact be tolerated? Can protection be shared?',
       items: [
         { n: 'Protector trust forecasts × 4', t: 'spike', v: '[0.5, 0.5] each: T_outcome · T_coprotection · T_partner · T_efficacy',
-          u: 'trust-relevant refusal/response outcomes through a 0.9-reliability channel. Trust here means the protector’s relational forecasts — never generic confidence.' },
+          u: 'what happens after refusal, observed through a channel with 0.9 reliability. Trust means the protector’s specific relational forecasts, not generic confidence.' },
         { n: 'Policy-outcome parameter', t: 'smooth', v: 'uniform thirds over success levels {0.2, 0.5, 0.8}',
-          u: 'observed contact outcomes.' },
+          u: 'what actually happens when contact is attempted.' },
         { n: 'Policy machine constants', t: 'const', v: 'β = 5.0 · stakes 1.5 · effort [.25, .18, .05] · epistemic value of test_contact 0.12 · unsupported-risk weight 0.8 · hope 0.2 · p(contact|π) = [0, .45, .9]',
-          u: 'not updated. Hope is the identical constant in both protector-role futures — so hope alone can never author the role differential.' }
+          u: 'not updated. Hope has the same value in both protector-role futures, so it cannot by itself create a difference between those roles.' }
       ]},
     { stage: 'V2.7 — multiple protectors', q: 'Are the protectors independent, opposed, or allied — and is the exile alone?',
       items: [
         { n: 'Topology', t: 'spike', v: 'thirds over {independent, opposed, coalition}',
-          u: 'joint-policy / shared-outcome histories (policy-relevant evidence).' },
-        { n: 'Mandate strength', t: 'smooth', v: 'thirds over {0.1, 0.55, 1.0}', u: 'the same histories.' },
-        { n: 'Shared outcome level', t: 'smooth', v: 'thirds over {0.3, 0.55, 0.8}', u: 'observed shared outcomes.' },
+          u: 'histories of protectors’ joint policies and their shared outcomes.' },
+        { n: 'Mandate strength', t: 'smooth', v: 'thirds over {0.1, 0.55, 1.0}', u: 'the same joint-policy and shared-outcome histories.' },
+        { n: 'Shared outcome level', t: 'smooth', v: 'thirds over {0.3, 0.55, 0.8}', u: 'the outcomes jointly produced by the protectors’ policies.' },
         { n: '“Alone with this” prior', t: 'smooth', v: '[0.5, 0.5]',
-          u: 'denied-contact aloneness updates at reliability 0.9 (the code field keeps the name registration); masked is exactly neutral.' },
+          u: 'typed evidence from denied contact about being alone with the burden, observed at reliability 0.9. Only the code field retains the retired label registration. When this channel is masked, it contributes exactly no evidence.' },
         { n: 'Joint-policy constants', t: 'const', v: 'β_joint = 6.0 · shared outcome weight 2.4 · 27 joint policies enumerated exactly',
-          u: 'not updated; no polarization coefficient exists anywhere in this list.' }
+          u: 'not updated. Polarization must emerge from shared outcome predictions; no polarization coefficient exists.' }
       ]},
     { stage: 'V2.8 — whole trajectory', q: 'Do the earned pieces compose?',
       items: [
         { n: 'No new priors', t: 'const', v: '—',
-          u: 'every V2.8 number is a protocol budget or criterion; no inherited likelihood, prior, or scientific parameter changed (frozen rationale, v2.8-parameters.json).' }
+          u: 'every V2.8 number is a protocol budget or evaluation criterion. No inherited likelihood, prior, or scientific parameter changed (frozen rationale, v2.8-parameters.json).' }
       ]}
   ];
 
@@ -1037,52 +1049,52 @@ Generated 2026-07-29.
   ];
   var ROWS = [
     { name: 'G — identity root', cells: {
-      a: ['on', 'Cue–root association (an exact structural spike) lets G-linked cues share the root’s predictions.'],
-      b: ['on', 'Root tokens score the CPT [0.85 / 0.15] against G — root-relevant evidence.'],
-      g: ['on', 'Protectors’ shared outcome model conditions on G.'],
-      j: ['on', 'Transfer is mediated entirely by G. With G held fixed, transfer is exactly zero — a Gate-1 proof rerun at every stage.'] } },
+      a: ['on', 'Cues associated with G can share the root’s predictions. Whether an association exists is represented by an exact structural spike: it is truly absent or present, not merely tiny.'],
+      b: ['on', 'Root-relevant observations use the conditional probability table (CPT) [0.85 / 0.15] under G. A CPT lists how likely each observation is for each hidden state.'],
+      g: ['on', 'Protectors predict shared outcomes partly from the current identity-root state G.'],
+      j: ['on', 'Learning at one cue transfers to untreated cues only through G. When G is held fixed, transfer is exactly zero — a Gate-1 proof rerun at every stage.'] } },
     { name: 'C_t — context index', cells: {
-      a: ['on', 'C_t selects which context’s cue tables score the token (then vs now) — this is what redescription reassigns.'],
-      c: ['on', 'Context markers emit from C_t at reliability 0.80 with 0.15 ambiguity — never a label, never a fact.'],
-      g: ['on', 'The shared outcome model conditions on C.'],
-      j: ['zero', 'No context-to-transfer path exists: transfer runs through G alone (fixed-G transfer exactly zero).'] } },
+      a: ['on', 'C_t selects whether the then or now cue table predicts an observation. Redescription changes this indexing rather than erasing the old table.'],
+      c: ['on', 'Context markers are uncertain observations generated from C_t at reliability 0.80 with 0.15 ambiguity. They are evidence, never labels or assigned facts.'],
+      g: ['on', 'Protectors’ shared outcome predictions also depend on the inferred context C.'],
+      j: ['zero', 'Context has no direct route to transfer. Transfer runs through G alone, and fixed-G transfer is exactly zero.'] } },
     { name: 'T / D / P structure', cells: {
-      a: ['on', 'Each candidate predicts the outcome stream: T transient, D externally accurate, P adverse under low practical controllability.'],
-      b: ['on', 'Only P recruits the identity-root observation (self-channel 0.8 vs 0.2 for T and D).'],
-      c: ['on', 'The localization channel favors externally located T/D (0.65 / 0.85) over identity-level P (0.25).'] } },
+      a: ['on', 'Each candidate predicts the stream differently: T is a passing threat, D is continuing external danger, and P is a part-like organization formed under adversity and low practical control.'],
+      b: ['on', 'Only P strongly predicts the self-relevant observation: self-channel 0.8 for P versus 0.2 for T and D.'],
+      c: ['on', 'Evidence about where danger is located favors external T/D (0.65 / 0.85) over identity-level P (0.25).'] } },
     { name: 'Z_W — identity→world', cells: {
-      a: ['on', 'Z_W = 1 makes identity compulsorily enter the world-prediction term; Z_W = 0 removes the term, not the memory.'] } },
+      a: ['on', 'When Z_W = 1, identity must influence predictions about the world. Z_W = 0 removes that compulsory link, not the memory.'] } },
     { name: 'Z_Pi — identity→policy', cells: {
-      h: ['on', 'Z_Pi = 1 couples identity into the policy mapping; reduction removes the compulsion.'] } },
+      h: ['on', 'When Z_Pi = 1, identity must influence the policy mapping. Reduction removes that compulsion rather than deleting the policy.'] } },
     { name: 'Z_Y — identity→outcome', cells: {
-      g: ['on', 'Z_Y = 1 makes identity predict outcomes; the 000 configuration deletes all three couplings while capacities stay.'] } },
+      g: ['on', 'When Z_Y = 1, identity must predict outcomes. The 000 configuration removes all three compulsory couplings while capacities remain.'] } },
     { name: 'H_cfg / κ — evidence format', cells: {
-      d: ['on', 'Under coupled, joint episodes score the normalized joint table (κ); under independent, the exact product of marginals. Marginals match to 1e-12, so no format bonus exists.'],
-      j: ['zero', 'No direct format-to-transfer path (Gate-1 proof): format effects reach transfer only through G.'] } },
+      d: ['on', 'If channels are coupled, a whole episode is scored with a normalized joint table controlled by κ. If independent, it is scored as the exact product of one-channel marginal probabilities. The marginals match to 1e-12, so format alone earns no bonus.'],
+      j: ['zero', 'Evidence format has no direct route to transfer. A Gate-1 proof shows that any format effect reaches transfer only through G.'] } },
     { name: 'Global precision (depth)', cells: {
-      a: ['on', 'Global precision weights likelihood uptake on every evidence channel — collapsed depth means cue evidence arrives pre-discounted.'],
-      b: ['on', 'Same weighting on root-relevant tokens: depth restoration is why witnessing works when it works.'],
-      d: ['on', 'Same weighting on joint and imaginal episodes — a do-over cannot bypass the current precision field.'] } },
+      a: ['on', 'Global precision controls how strongly likelihood evidence updates belief across channels. When depth collapses, cue evidence is discounted before it can act.'],
+      b: ['on', 'The same weighting applies to root-relevant observations. Restored depth is therefore what allows evidence during witnessing to count.'],
+      d: ['on', 'The same weighting applies to real and imagined joint episodes. A do-over cannot bypass the current precision field.'] } },
     { name: 'Local relational precision', cells: {
-      e: ['on', 'Local relational precision weights the relational channels’ likelihood contribution; broadcast decides whether it reaches the global field.'],
-      b: ['zero', 'The regulation-only root Bayes factor is exactly zero — proved at Gate 1 and confirmed in the sealed C-V26A challenge. Soothing calms; it does not persuade.'] } },
+      e: ['on', 'Local relational precision controls how strongly relational observations count. Broadcast determines whether that local state reaches the global field.'],
+      b: ['zero', 'Regulation alone supplies exactly zero evidence for changing the root: its root Bayes factor is zero. Gate 1 proves this, and sealed challenge C-V26A confirmed it. Soothing can calm; it does not persuade the root.'] } },
     { name: 'L_t — partner process', cells: {
-      e: ['on', 'One latent partner state emits all four relational channels (reliable row [0.9 × 4]; soothing [0.9, .5, .5, .55]).'],
-      f: ['on', 'The partner’s response to refusal — remaining vs pressure — is generated by L_t and is what protector trust learns from.'],
-      g: ['on', 'The shared outcome model conditions on L.'],
-      b: ['zero', 'No partner state directly affects G: partners change the inferential regime and uptake, never root content.'] } },
+      e: ['on', 'One latent — meaning hidden — partner state generates all four relational channels. The reliable pattern is [0.9 × 4]; the soothing pattern is [0.9, .5, .5, .55].'],
+      f: ['on', 'L_t predicts whether the partner stays present or applies pressure after refusal. Protector trust learns from this response.'],
+      g: ['on', 'Protectors’ shared outcome predictions depend partly on the inferred partner state L.'],
+      b: ['zero', 'No partner state directly changes G. A partner can change the conditions for inference and evidence uptake, never write root content.'] } },
     { name: 'Trust forecasts T_*', cells: {
-      f: ['on', 'Refusal/response outcomes score the 0.9-reliability trust channel — trust-relevant evidence in the card’s strict sense (protector relational forecasts).'],
-      h: ['on', 'All four forecasts enter the exact expected-cost G(π), alongside stakes and effort. No separate permission variable exists.'] } },
+      f: ['on', 'What happens after refusal supplies typed trust evidence through a channel with 0.9 reliability. Here trust means the protector’s specific relational forecasts.'],
+      h: ['on', 'All four forecasts enter the exact expected-cost calculation G(π), together with stakes and effort. There is no separate permission variable.'] } },
     { name: 'H_E / η — attribution', cells: {
-      g: ['on', 'Y = D·[1 − 1(A = protect)·P]: danger and efficacy jointly explain outcomes under protective action.'],
-      h: ['on', 'T_efficacy feeds forecasted risk; relief moves policy probability only — threat change stays within ±.01 (sham-action assay).'] } },
+      g: ['on', 'Y = D·[1 − 1(A = protect)·P]. In plain language, danger and the success of protective action jointly explain the outcome.'],
+      h: ['on', 'T_efficacy changes forecasted future risk. Relief changes policy probability only; in the sham-action assay, threat change stays within ±.01.'] } },
     { name: 'Joint policy π₁…π₃', cells: {
-      g: ['on', 'Each protector predicts Y conditional on the full joint policy vector — all 27 cells enumerated exactly. This is the only path by which polarization exists.'],
-      i: ['on', 'Contact is a policy consequence: p(contact | π) = [0, 0.45, 0.9]. Nothing grants it.'],
-      b: ['zero', 'Action selection is never evidence about the world or the root — interventions enter as do(a) (constitution rule 1.4).'] } },
+      g: ['on', 'Each protector predicts Y while accounting for every protector’s policy. All 27 joint possibilities are enumerated exactly. Polarization can arise only through these shared outcome forecasts.'],
+      i: ['on', 'Contact follows from the chosen policy: p(contact | π) = [0, 0.45, 0.9]. No separate entity grants access.'],
+      b: ['zero', 'Choosing an action is never evidence about the world or root. Interventions enter as do(a): the model evaluates the action without treating its selection as an observation (constitution rule 1.4).'] } },
     { name: '“Alone with this” prior', cells: {
-      e: ['on', 'A denied contact attempt may emit the aloneness update at reliability 0.9 (code name registration); masked is exactly neutral, and in V2.8 the no_registration protocol strengthens the prior by exactly zero.'] } }
+      e: ['on', 'A denied contact attempt can supply typed evidence, at reliability 0.9, about being alone with the burden. Only the code retains the retired label registration. Masking this channel is exactly neutral; in V2.8, the no_registration protocol strengthens the prior by exactly zero.'] } }
   ];
 
   var tbl = document.getElementById('cmxtable');
@@ -1118,11 +1130,11 @@ Generated 2026-07-29.
   /* ============ GENERATIVE SLICE PACKET ============ */
   var PACKETS = {
     root: { path: 'gp-root', touch: ['sl-G'],
-      msg: 'A root token is root-relevant evidence: it updates q(G) (and the structural evidence that carries transfer), weighted by the current precision field. C, the Z lattice, and the partner posterior are bitwise identical afterward.' },
+      msg: 'A root-relevant observation updates q(G), the posterior belief about the identity root. Because transfer runs through G, it also changes the structural evidence that can carry learning to untreated cues. The current precision field controls how strongly the observation counts. Context C, the Z coupling lattice, and the partner posterior remain bit-for-bit identical.' },
     rel: { path: 'gp-rel', touch: ['sl-L', 'sl-prec'],
-      msg: 'A relational token updates the partner posterior q(L) and, through it, local relational precision — and only via broadcast the global field. It carries zero root-relevant evidence: the regulation-only root Bayes factor is exactly zero (C-V26A). G, C, and Z are bitwise identical.' },
+      msg: 'A relational observation updates q(L), the posterior belief about the partner, and therefore local relational precision. It reaches the global field only through broadcast. It contains exactly no root-relevant evidence: the regulation-only root Bayes factor is zero (C-V26A). G, C, and Z remain bit-for-bit identical.' },
     doover: { path: 'gp-doover', touch: ['sl-Z'],
-      msg: 'An imaginal do-over episode is coupling-relevant evidence through the ordinary joint-episode likelihood: it moves model evidence over the Z lattice and H_cfg. It cannot call a reduction operation, delete the old context, or bypass precision. G, C, and L are bitwise identical.' }
+      msg: 'An imagined do-over episode supplies evidence about compulsory couplings through the ordinary whole-episode likelihood. It changes model evidence over the Z lattice and H_cfg, the configural-coupling hypothesis. It cannot command reduction, erase the old context, or bypass precision. G, C, and L remain bit-for-bit identical.' }
   };
   var sliceSvg = document.getElementById('slice');
   var packet = document.getElementById('packet');
