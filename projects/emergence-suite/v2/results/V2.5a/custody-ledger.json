@@ -1,0 +1,46 @@
+{
+  "stage": "V2.5a",
+  "status": "STAGE_0_GATE_1_GATE_2_COMPLETE",
+  "seed_usage": {
+    "755000:755199": {
+      "purpose": "stage-0 attainable-range pilot",
+      "worlds": 200,
+      "criterion_evaluated": false,
+      "barred_after_use": true
+    },
+    "756000:756399": {
+      "purpose": "Gate-2 format calibration",
+      "worlds": 400,
+      "criterion_evaluated": true,
+      "barred_after_use": true
+    }
+  },
+  "unopened_blocks": [
+    "757000:757599",
+    "758000:758299",
+    "758500:758619",
+    "759000:759239",
+    "760000:760239",
+    "761000:763999",
+    "835001:835600"
+  ],
+  "barred_blocks_respected": true,
+  "generator_likelihood_prior_threshold_changes": 0,
+  "files": {
+    "ref/v25a.py": "5a3d6541b1ff2db3380023d7549221ffd10e7380ddde14db07745d3348b12c22",
+    "ref/v25a_oracle.py": "d13f85c45afff801076311268f6c3b47756ae6745a6b6f8fe1a4a3aeb59a8d31",
+    "run_v25a_stage0_gate2.py": "e2880c69ef1de22742333237da2ba4ff774fe6f26b8f2ce7d400c777fbdbe173",
+    "tests/test_v25a.py": "867c8479164bb8811b89fad698cfdd5c73708edb7543d8576812c930da6d92d4",
+    "protocols/v2.5a-parameters.json": "a5b4389508727228a4a8df559ec36fc267e9d1f63de97109d2965f58c2ad41b3",
+    "results/V2.5a/stage0-pilot.json": "6d54e625cddc8f859e8691231c723bc8abddaa145bcf3a381595368456b0878a",
+    "results/V2.5a/gate-1.json": "139152832394f56931c336a68ae3ced9c0cb513974b74c142d3d11ddb047d9ba",
+    "results/V2.5a/gate-2.json": "7268f3312dc5c9e392985c4f0ac4df9e6a7eb89ad7b2c7719db46ad4585f4b05",
+    "results/V2.5a/gate-2-per_world.json": "9d2fea6d1a1c8dfe3854ee65a87a54a91d6c8ff24984803e9cc6b2a538251fbb",
+    "results/V2.5a/gate-2-per_slice.npz": "070a2183e03c10c769e036a742938611b7f7f54e713a0e20a54967bbfc97d3e8"
+  },
+  "constants": {
+    "B_max_inherited_formation": 3.801426508560692,
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "B_max_v25a_marginal_accounting": 6.704414354964107
+  }
+}
