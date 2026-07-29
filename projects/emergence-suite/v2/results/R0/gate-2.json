@@ -1,0 +1,36 @@
+{
+  "checks": {
+    "exact_schema_recovery": true,
+    "exact_seed_block": true,
+    "family_accuracy_at_least_0_95": true,
+    "max_log_probability_discrepancy_at_most_1e_10": true,
+    "one_thousand_worlds": true,
+    "scope_accuracy_at_least_0_95": true,
+    "zero_out_of_support": true
+  },
+  "escrow_accessed": false,
+  "families": [
+    "iid",
+    "markov",
+    "ordered_drift",
+    "change_point",
+    "recurrent_context",
+    "action_contingent",
+    "masked_observation",
+    "joint_episode",
+    "partner_process",
+    "mixture"
+  ],
+  "family_accuracy": 1.0,
+  "gate": 2,
+  "maximum_log_probability_discrepancy": 5.329070518200751e-15,
+  "out_of_support_worlds": 0,
+  "scope_accuracy": 1.0,
+  "seed_block": [
+    1000000,
+    1000999
+  ],
+  "stage": "V2.G0",
+  "verdict": "PASS",
+  "worlds": 1000
+}
