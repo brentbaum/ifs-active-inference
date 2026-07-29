@@ -1,0 +1,9 @@
+{
+  "addendum_to": "format-core-freeze-manifest.json",
+  "classification": "authorized custody succession",
+  "authorizing_commits": ["56ee77f", "f599f7c"],
+  "files": {
+    "run_v2g0_gates.py": "2a12791de678ac2580d8163c46cb1b536e1eac36a298a47b1402eff857cfecf5"
+  },
+  "note": "Overlays only the authorized manifest-chain custody verifier successor; format-core scientific files and the base manifest are unchanged."
+}

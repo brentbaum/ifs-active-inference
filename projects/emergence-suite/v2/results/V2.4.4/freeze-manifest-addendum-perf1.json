@@ -1,0 +1,12 @@
+{
+  "addendum_to": "freeze-manifest.json",
+  "classification": "authorized custody succession",
+  "authorizing_commits": ["56ee77f", "f599f7c"],
+  "files": {
+    "ref/v24.py": "9efb9654308ca3f558b9b098cea733265ea263819278c36320413d30638633a8",
+    "ref/v244.py": "47904a93e237fc1fd27c0f6fb504dcbc49df01c3d125d1af88d1bbbf0334bcf2",
+    "run_v244_gates.py": "34dddca5e3a61996ffe9a0a7a0a031e46a6bf38db51c0a3b10c054ab8c05cbeb"
+  },
+  "inherited_byte_identity_ledger": "results/perf-amendment-1/bit-equality-verification.json#post_fixture_sha256=196c69897fbaad686b0b1ea7c99295e0329233dd0d21a26dd4e1b76a441f8fcc",
+  "note": "Overlays performance amendment 1 after the existing round-7 addendum; the base freeze and earlier addendum are unchanged."
+}

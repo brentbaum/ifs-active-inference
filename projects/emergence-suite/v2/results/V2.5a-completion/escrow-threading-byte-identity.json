@@ -1,0 +1,28 @@
+{
+  "authorization": "results/V2.5a-completion/escrow-threading-amendment-authorization.md",
+  "comparison": "canonical serialized bytes and exact dataclass equality",
+  "development_block_default": [1000000, 1899999],
+  "fixtures": [
+    {
+      "seed": 1000000,
+      "interaction": "weak",
+      "world_sha256_before_and_after": "e6511aa3b05b48e186c7e42f902af0d2f41c532e2b5151ecf94b48261d3de0f3",
+      "shuffled_sha256_before_and_after": "dfe6238a1f2c1fa1c4b001d1f564b61283b0caaf46fdd57b585a498f69413d66",
+      "default_equals_explicit_development_block": true
+    },
+    {
+      "seed": 1000001,
+      "interaction": "strong",
+      "world_sha256_before_and_after": "9c0cd6b91518fceeb5f2dcd8e58acefd56fb9d13ff06527e53b88c76f4a9bf67",
+      "shuffled_sha256_before_and_after": "826ce37c400965fb5f7f5ee156a993d64e8792760f889d153be335564a9ef022",
+      "default_equals_explicit_development_block": true
+    }
+  ],
+  "nondevelopment_guard": {
+    "probe_seed": 1900000,
+    "default_rejected": true,
+    "explicit_matching_release_accepted": true
+  },
+  "mismatch_count": 0,
+  "passed": true
+}

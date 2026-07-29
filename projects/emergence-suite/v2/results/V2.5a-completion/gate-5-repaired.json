@@ -1,0 +1,242 @@
+{
+  "authorization": "results/V2.5a-completion/gate5-custody-succession-authorization.md",
+  "bounds": {
+    "B_max_inherited_formation": 3.801426508560692,
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "B_max_v25a_configural": 6.084736253211209,
+    "B_max_v25a_marginal_accounting": 6.704414354964107,
+    "implied_binary_probability_change_bound": 0.9089037815687636
+  },
+  "checks": {
+    "all_inherited_manifest_chains_clean": true,
+    "full_fast_unit_suite_green": true,
+    "retained_primary_gates_pass": true,
+    "retained_robustness_exact_identities": true,
+    "world_ledgers_byte_identical": true
+  },
+  "execution": "custody-succession re-verification",
+  "full_fast_suite": {
+    "command": "python3 run_tests_parallel.py --workers 8",
+    "log": "results/V2.5a-completion/gate-5-repaired-full-fast-suite.log",
+    "returncode": 0
+  },
+  "gate": 5,
+  "manifest_audits": {
+    "R0": {
+      "base_manifest_file_count": 27,
+      "custody_files": {
+        "addenda": [
+          {
+            "file": "results/R0/freeze-manifest-shared-helper-addendum.json",
+            "sha256": "c9ee60834647ef323a67f033604bc2b43cdc6a6e7ae1fd7aaaf6d54877f21bf0"
+          },
+          {
+            "file": "results/R0/freeze-manifest-addendum-perf1.json",
+            "sha256": "80b375c22315db5294bf6f5f7adf28594b713388b437cea740c0a8a8ae7499c9"
+          }
+        ],
+        "base": {
+          "file": "results/R0/freeze-manifest.json",
+          "sha256": "d8721749f375629cb84a7bc51ed2093ed5f6ccbfb25c3e7a7381b3d8816cbe15"
+        }
+      },
+      "effective_manifest_file_count": 31,
+      "mismatches": [],
+      "overlaid_entries": [
+        "contracts/v2.g0-world-protocol-grammar.md",
+        "protocols/v2.g0-released-blocks.json",
+        "ref/manifest_chain.py",
+        "ref/world_ir.py",
+        "results/R0/escrow-authorization-amendment.md",
+        "results/R0/stage-report.md",
+        "run_v2g0_gates.py",
+        "tests/test_manifest_chain.py",
+        "tests/test_v2g0_grammar.py"
+      ],
+      "passed": true
+    },
+    "V2.0": {
+      "base_manifest_file_count": 25,
+      "custody_files": {
+        "addenda": [
+          {
+            "file": "results/V2.0/freeze-manifest-addendum-perf1.json",
+            "sha256": "47abe90e2c9ad427a7ef9d335663c4dfa64304d05849671a2560cf5aa5b7d04a"
+          }
+        ],
+        "base": {
+          "file": "results/V2.0/freeze-manifest.json",
+          "sha256": "7cc78a2390b745a4bd51e269cf7d7b2ec95b74bfd8f790b722fe4af30c6958ed"
+        }
+      },
+      "effective_manifest_file_count": 25,
+      "mismatches": [],
+      "overlaid_entries": [
+        "ref/oracle.py",
+        "ref/rng.py",
+        "ref/v20.py"
+      ],
+      "passed": true
+    },
+    "V2.1": {
+      "base_manifest_file_count": 29,
+      "custody_files": {
+        "addenda": [
+          {
+            "file": "results/V2.1/freeze-manifest-addendum-perf1.json",
+            "sha256": "47abe90e2c9ad427a7ef9d335663c4dfa64304d05849671a2560cf5aa5b7d04a"
+          }
+        ],
+        "base": {
+          "file": "results/V2.1/freeze-manifest.json",
+          "sha256": "0bd1cbe426a9a970e0da9bfe328facaa13100fbbe30c3469f6d1b2e14d3b94c4"
+        }
+      },
+      "effective_manifest_file_count": 29,
+      "mismatches": [],
+      "overlaid_entries": [
+        "ref/oracle.py",
+        "ref/rng.py",
+        "ref/v20.py"
+      ],
+      "passed": true
+    },
+    "V2.2.1": {
+      "base_manifest_file_count": 50,
+      "custody_files": {
+        "addenda": [
+          {
+            "file": "results/V2.2.1/freeze-manifest-addendum-perf1.json",
+            "sha256": "47abe90e2c9ad427a7ef9d335663c4dfa64304d05849671a2560cf5aa5b7d04a"
+          }
+        ],
+        "base": {
+          "file": "results/V2.2.1/freeze-manifest.json",
+          "sha256": "7c32072f1108ded6f150036d260b1f88b5e12a7f99dcc7fd526cbb1c4486b990"
+        }
+      },
+      "effective_manifest_file_count": 50,
+      "mismatches": [],
+      "overlaid_entries": [
+        "ref/oracle.py",
+        "ref/rng.py",
+        "ref/v20.py"
+      ],
+      "passed": true
+    },
+    "V2.3.2-formation": {
+      "base_manifest_file_count": 33,
+      "custody_files": {
+        "addenda": [
+          {
+            "file": "results/V2.3.2-formation/freeze-manifest-addendum-perf1.json",
+            "sha256": "140688c7c8112c7cabba2c49b30440e2b7c743da6779be8245909d8d7274b6dc"
+          }
+        ],
+        "base": {
+          "file": "results/V2.3.2-formation/freeze-manifest.json",
+          "sha256": "e412841e02679eee4d831088af4cc240f78a0c122f7a5deb7dce147dc494f7ae"
+        }
+      },
+      "effective_manifest_file_count": 33,
+      "mismatches": [],
+      "overlaid_entries": [
+        "ref/constitution.py",
+        "tests/test_constitution.py"
+      ],
+      "passed": true
+    },
+    "V2.3.3": {
+      "base_manifest_file_count": 25,
+      "custody_files": {
+        "addenda": [
+          {
+            "file": "results/V2.3.3/freeze-manifest-addendum-perf1.json",
+            "sha256": "fcc77d9ab01a68795457ac57626b1eac38d0a5a10910acc0d5b1cc513f69408f"
+          }
+        ],
+        "base": {
+          "file": "results/V2.3.3/freeze-manifest.json",
+          "sha256": "19be309cb002d0f23e3ba3ca22c7245328a55482903c723656967e6a0ef86b3e"
+        }
+      },
+      "effective_manifest_file_count": 25,
+      "mismatches": [],
+      "overlaid_entries": [
+        "ref/v233.py"
+      ],
+      "passed": true
+    },
+    "V2.4.4": {
+      "base_manifest_file_count": 86,
+      "custody_files": {
+        "addenda": [
+          {
+            "file": "results/V2.4.4/freeze-manifest-addendum.json",
+            "sha256": "ffcaacc5449d8f030c6a5f68c46a483ae4b66d97d5e857e0538f98399240c18e"
+          },
+          {
+            "file": "results/V2.4.4/freeze-manifest-addendum-perf1.json",
+            "sha256": "36627a77c0b10ae8d8fc47edf8641b116ba34f09b7743402a87232f69f97ec7e"
+          }
+        ],
+        "base": {
+          "file": "results/V2.4.4/freeze-manifest.json",
+          "sha256": "cd79376a252787de1c865bd84aafbe9fb4baac96cd674f5c5391c3b12c429038"
+        }
+      },
+      "effective_manifest_file_count": 87,
+      "mismatches": [],
+      "overlaid_entries": [
+        "ref/v24.py",
+        "ref/v244.py",
+        "results/V2.4.4/freeze-readiness.md",
+        "results/V2.4.4/round7-signoff.json",
+        "run_v244_gates.py"
+      ],
+      "passed": true
+    },
+    "V2.5a-format-core": {
+      "base_manifest_file_count": 62,
+      "custody_files": {
+        "addenda": [
+          {
+            "file": "results/V2.5a/freeze-manifest-addendum-perf1.json",
+            "sha256": "8069315321ecfc1d83a944c9bcaed4f56b76e590e9acecba775645f662d1581a"
+          }
+        ],
+        "base": {
+          "file": "results/V2.5a/format-core-freeze-manifest.json",
+          "sha256": "cc70a86bcfc194b129c412339754e3c9d20dc073691b10a92a05a941463c41ba"
+        }
+      },
+      "effective_manifest_file_count": 62,
+      "mismatches": [],
+      "overlaid_entries": [
+        "run_v2g0_gates.py"
+      ],
+      "passed": true
+    }
+  },
+  "original_gate5_sha256": "b565e20e933ccf0af22096eaa574c5d5ae7a2023fccd8f8929bbcdacf0559bc6",
+  "per_world_ledger_hashes": {
+    "results/V2.5a-completion/gate-5-atomic_evidence_budget-per_world.json": "73bd8ec5d1c07a2295eac167535833ea9b46f2ceab293df262082e799e990c57",
+    "results/V2.5a-completion/gate-5-context_recurrence-per_world.json": "70b2228b0e0c0c8dab957133752a3bb393b4ad1177317db049874111f0c51454",
+    "results/V2.5a-completion/gate-5-cue_count-per_world.json": "c861fb0ab305af50445e9e4d60e9f7a9ad2b62dbefda1a444ed582dde2fcc979",
+    "results/V2.5a-completion/gate-5-episode_size-per_world.json": "b827145d74b939ff1c740f106e5d0a77d92a4f111a2d686ae9a472d22132cbb8",
+    "results/V2.5a-completion/gate-5-interaction_magnitude-per_world.json": "83ef80fc48078e73c993bc4b503dd1deadcd83a474a816d26a572a7ca84bbf4b",
+    "results/V2.5a-completion/gate-5-missingness-per_world.json": "34fdc13bbe318961643a5f6b3096f19a5d3e800fab7da7211ac18572215186ad",
+    "results/V2.5a-completion/gate-5-precision-per_world.json": "fb3fe1f0ea86b80b8a6867754bd12857e3a630d894ee2073f67fd7222d32c8ad",
+    "results/V2.5a-completion/gate-5-root_association-per_world.json": "5ccd7c43ef9819dc501ba57a8c1cba1dc50c006e7fd3816cb7a215101899ab41"
+  },
+  "retained_seed_block": [
+    1025000,
+    1029999
+  ],
+  "retained_world_count": 5000,
+  "scientific_quantities_byte_identity": true,
+  "scientific_quantities_source": "results/V2.5a-completion/gate-5.json",
+  "stage": "V2.5a master-spec completion",
+  "verdict": "PASS",
+  "worlds_reexecuted": 0
+}

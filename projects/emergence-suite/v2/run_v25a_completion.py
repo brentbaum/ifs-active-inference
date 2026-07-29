@@ -1203,42 +1203,57 @@ def run_gate4() -> bool:
 
 def _manifest_audits() -> dict[str, Any]:
     audits: dict[str, Any] = {}
-    for stage, relative in (
-        ("V2.0", "results/V2.0/freeze-manifest.json"),
-        ("V2.1", "results/V2.1/freeze-manifest.json"),
-        ("V2.2.1", "results/V2.2.1/freeze-manifest.json"),
+    for stage, relative, addenda in (
+        (
+            "V2.0",
+            "results/V2.0/freeze-manifest.json",
+            ("results/V2.0/freeze-manifest-addendum-perf1.json",),
+        ),
+        (
+            "V2.1",
+            "results/V2.1/freeze-manifest.json",
+            ("results/V2.1/freeze-manifest-addendum-perf1.json",),
+        ),
+        (
+            "V2.2.1",
+            "results/V2.2.1/freeze-manifest.json",
+            ("results/V2.2.1/freeze-manifest-addendum-perf1.json",),
+        ),
         (
             "V2.3.2-formation",
             "results/V2.3.2-formation/freeze-manifest.json",
+            (
+                "results/V2.3.2-formation/"
+                "freeze-manifest-addendum-perf1.json",
+            ),
         ),
-        ("V2.3.3", "results/V2.3.3/freeze-manifest.json"),
-        ("V2.5a-format-core", "results/V2.5a/format-core-freeze-manifest.json"),
+        (
+            "V2.3.3",
+            "results/V2.3.3/freeze-manifest.json",
+            ("results/V2.3.3/freeze-manifest-addendum-perf1.json",),
+        ),
+        (
+            "V2.5a-format-core",
+            "results/V2.5a/format-core-freeze-manifest.json",
+            ("results/V2.5a/freeze-manifest-addendum-perf1.json",),
+        ),
     ):
-        payload = json.loads((ROOT / relative).read_text(encoding="utf-8"))
-        files = payload.get("files", payload.get("hashes", {}))
-        mismatches = []
-        for file, expected in files.items():
-            path = ROOT / file
-            observed = sha256(path) if path.exists() else None
-            if observed != expected:
-                mismatches.append(
-                    {"file": file, "expected": expected, "observed": observed}
-                )
-        audits[stage] = {
-            "manifest": relative,
-            "file_count": len(files),
-            "mismatches": mismatches,
-            "passed": not mismatches,
-        }
+        audits[stage] = verify_manifest_chain(ROOT, relative, addenda)
     audits["V2.4.4"] = verify_manifest_chain(
         ROOT,
         "results/V2.4.4/freeze-manifest.json",
-        ("results/V2.4.4/freeze-manifest-addendum.json",),
+        (
+            "results/V2.4.4/freeze-manifest-addendum.json",
+            "results/V2.4.4/freeze-manifest-addendum-perf1.json",
+        ),
     )
     audits["R0"] = verify_manifest_chain(
         ROOT,
         "results/R0/freeze-manifest.json",
-        ("results/R0/freeze-manifest-shared-helper-addendum.json",),
+        (
+            "results/R0/freeze-manifest-shared-helper-addendum.json",
+            "results/R0/freeze-manifest-addendum-perf1.json",
+        ),
     )
     return audits
 
@@ -1397,6 +1412,167 @@ def run_gate5() -> bool:
     return result["verdict"] == "PASS"
 
 
+def _completion_freeze_files() -> list[str]:
+    fixed = [
+        "protocols/v2.5a-analysis-plan.md",
+        "protocols/v2.5a-parameters.json",
+        "protocols/v2.5a-reconciliation-note.md",
+        "protocols/v2.5a-completion-parameters.json",
+        "ref/v25a.py",
+        "ref/v25a_oracle.py",
+        "ref/v25a_completion.py",
+        "ref/v25a_completion_oracle.py",
+        "run_v25a_completion.py",
+        "tests/test_v25a.py",
+        "tests/test_v25a_completion.py",
+        "results/perf-amendment-1/bit-equality-verification.json",
+        "results/V2.5a/format-core-freeze-manifest.json",
+        "results/V2.5a/freeze-manifest-addendum-perf1.json",
+    ]
+    addenda = [
+        "results/V2.0/freeze-manifest-addendum-perf1.json",
+        "results/V2.1/freeze-manifest-addendum-perf1.json",
+        "results/V2.2.1/freeze-manifest-addendum-perf1.json",
+        "results/V2.3.2-formation/freeze-manifest-addendum-perf1.json",
+        "results/V2.3.3/freeze-manifest-addendum-perf1.json",
+        "results/V2.4.4/freeze-manifest-addendum-perf1.json",
+        "results/R0/freeze-manifest-addendum-perf1.json",
+    ]
+    result_files = [
+        str(path.relative_to(ROOT))
+        for path in sorted(OUT.iterdir())
+        if path.is_file() and path.name != "freeze-manifest.json"
+    ]
+    return sorted(set(fixed + addenda + result_files))
+
+
+def run_gate5_custody_repair() -> bool:
+    """Reverify retained Gate-5 results; never call a world constructor."""
+    original_path = OUT / "gate-5.json"
+    original_bytes = original_path.read_bytes()
+    original = json.loads(original_bytes)
+    per_world_paths = sorted(OUT.glob("gate-5-*-per_world.json"))
+    before_hashes = {
+        str(path.relative_to(ROOT)): sha256(path) for path in per_world_paths
+    }
+    manifests = _manifest_audits()
+    suite_log = OUT / "gate-5-repaired-full-fast-suite.log"
+    suite = subprocess.run(
+        [sys.executable, "run_tests_parallel.py", "--workers", "8"],
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+    )
+    suite_log.write_text(suite.stdout, encoding="utf-8")
+    after_hashes = {
+        str(path.relative_to(ROOT)): sha256(path) for path in per_world_paths
+    }
+    world_identity = before_hashes == after_hashes
+    checks = {
+        "retained_primary_gates_pass": bool(
+            original["checks"]["all_completion_primary_gates_pass"]
+        ),
+        "retained_robustness_exact_identities": bool(
+            original["checks"]["all_robustness_exact_identities"]
+        ),
+        "world_ledgers_byte_identical": world_identity,
+        "all_inherited_manifest_chains_clean": all(
+            audit["passed"] for audit in manifests.values()
+        ),
+        "full_fast_unit_suite_green": suite.returncode == 0,
+    }
+    repaired = {
+        "stage": "V2.5a master-spec completion",
+        "gate": 5,
+        "execution": "custody-succession re-verification",
+        "authorization": (
+            "results/V2.5a-completion/"
+            "gate5-custody-succession-authorization.md"
+        ),
+        "worlds_reexecuted": 0,
+        "retained_world_count": original["world_count"],
+        "retained_seed_block": original["seed_block"],
+        "original_gate5_sha256": hashlib.sha256(original_bytes).hexdigest(),
+        "per_world_ledger_hashes": after_hashes,
+        "scientific_quantities_source": "results/V2.5a-completion/gate-5.json",
+        "scientific_quantities_byte_identity": world_identity,
+        "manifest_audits": manifests,
+        "full_fast_suite": {
+            "command": "python3 run_tests_parallel.py --workers 8",
+            "returncode": suite.returncode,
+            "log": (
+                "results/V2.5a-completion/"
+                "gate-5-repaired-full-fast-suite.log"
+            ),
+        },
+        "checks": checks,
+        "bounds": original["bounds"],
+        "verdict": "PASS" if all(checks.values()) else "FAIL",
+    }
+    dump("gate-5-repaired.json", repaired)
+    if repaired["verdict"] != "PASS":
+        (OUT / "gate-5-repaired-diagnosis-stub.md").write_text(
+            "# Gate-5 custody-succession diagnosis stub\n\n"
+            "No worlds were rerun. Failed cumulative checks: "
+            + ", ".join(key for key, passed in checks.items() if not passed)
+            + ". No freeze artifacts were produced.\n",
+            encoding="utf-8",
+        )
+        return False
+
+    readiness = (
+        "# V2.5a freeze readiness\n\n"
+        "**Status:** `FREEZE_READY_ADJUDICATED_MIXED_FORMAT_CORE_"
+        "PLUS_MASTER_COMPLETION_PASS`\n\n"
+        "The evaluator-authored format core retains its adjudicated mixed "
+        "standing: the dose-monotone matching criterion is retired as "
+        "construct-invalid, the 17-world matching-lattice limitation remains "
+        "named, and its repaired bridge contrast remains "
+        "`0.063 [0.045, 0.084]`. The master-spec completion pass adds exact "
+        "spike-and-slab configural coupling and passes Gates 1–5.\n\n"
+        "## Completion gate standing\n\n"
+        "- Gate 1 original: FAIL retained (undeclared bit-identity comparator).\n"
+        "- Gate 1 repaired: PASS, all 16 semantic proofs.\n"
+        "- Gate 2: PASS, 800/800 worlds executed.\n"
+        "- Gate 3: PASS, all seven assays and lattice-aware matching.\n"
+        "- Gate 4: PASS, all six lesions.\n"
+        "- Gate 5 original: FAIL retained (custody succession gap).\n"
+        "- Gate 5 custody re-verification: PASS; zero worlds rerun; all 5,000 "
+        "world ledgers byte-identical.\n\n"
+        "The full fast suite is green. All affected historical manifests are "
+        "composed from unchanged bases plus authorized succession addenda. "
+        "Performance-amendment byte identity is inherited from fixture ledger "
+        "`196c69897fbaad686b0b1ea7c99295e0329233dd0d21a26dd4e1b76a441f8fcc`.\n\n"
+        "Named bounds: "
+        f"`B_max_inherited_formation={B_MAX_FORMATION}`, "
+        f"`B_max_v24_common_emissions={B_MAX_V24}`, "
+        f"`B_max_v25a_marginal_accounting={B_MAX_MARGINAL}`, and "
+        f"`B_max_v25a_configural={c.finite_information_bound()['B_max_v25a_configural']}`.\n\n"
+        "C-V25A remains evaluator custody work. Escrow "
+        "`2010000:2010999` was not accessed.\n"
+    )
+    (OUT / "freeze-readiness.md").write_text(readiness, encoding="utf-8")
+    files = _completion_freeze_files()
+    manifest = {
+        "stage": "V2.5a",
+        "status": (
+            "FREEZE_READY_ADJUDICATED_MIXED_FORMAT_CORE_"
+            "PLUS_MASTER_COMPLETION_PASS"
+        ),
+        "all_master_completion_gates_1_to_5_passed": True,
+        "format_core_disposition": "ADJUDICATED_MIXED",
+        "sealed_challenge_opened": False,
+        "escrow_accessed": False,
+        "worlds_rerun_in_custody_succession": 0,
+        "file_count": len(files),
+        "files": {relative: sha256(ROOT / relative) for relative in files},
+    }
+    dump("freeze-manifest.json", manifest)
+    return True
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -1408,6 +1584,7 @@ def main() -> None:
             "gate3",
             "gate4",
             "gate5",
+            "gate5-custody",
             "worker",
         ),
     )
@@ -1453,8 +1630,10 @@ def main() -> None:
         ok = run_gate3()
     elif args.phase == "gate4":
         ok = run_gate4()
-    else:
+    elif args.phase == "gate5":
         ok = run_gate5()
+    else:
+        ok = run_gate5_custody_repair()
     raise SystemExit(0 if ok else 2)
 
 

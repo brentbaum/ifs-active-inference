@@ -1,0 +1,10 @@
+{
+  "addendum_to": "freeze-manifest.json",
+  "classification": "authorized custody succession",
+  "authorizing_commits": ["2431993", "56ee77f", "f599f7c"],
+  "files": {
+    "ref/constitution.py": "72c5cfb698e566f556377cff1652bb7d98d9a241cfa125bcc7d579e08a78dc99",
+    "tests/test_constitution.py": "4e47fe8762f7f9639699917ef5cb94324cfdf47b434fe6b4915a14e61f5e8845"
+  },
+  "note": "Overlays the authorized permanent graded-update constitution successor; the base freeze is unchanged."
+}

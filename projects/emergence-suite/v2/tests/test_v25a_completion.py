@@ -1,3 +1,5 @@
+import hashlib
+import json
 import unittest
 
 import numpy as np
@@ -7,6 +9,31 @@ from ref import v25a_completion_oracle as oracle
 
 
 class V25aCompletionTests(unittest.TestCase):
+    @staticmethod
+    def _world_sha256(world):
+        payload = {
+            "seed": world.seed,
+            "truth_structure": world.truth_structure,
+            "truth_kappa": world.truth_kappa,
+            "truth_root": world.truth_root,
+            "context_regime": world.context_regime,
+            "episodes": [
+                {
+                    "cue": episode.cue,
+                    "context": episode.context,
+                    "values": episode.values,
+                }
+                for episode in world.episodes
+            ],
+        }
+        encoded = json.dumps(
+            payload,
+            sort_keys=True,
+            separators=(",", ":"),
+            allow_nan=False,
+        ).encode()
+        return hashlib.sha256(encoded).hexdigest()
+
     def test_tables_normalize_and_preserve_marginals(self):
         for cue in range(4):
             for context in (0, 1):
@@ -53,6 +80,80 @@ class V25aCompletionTests(unittest.TestCase):
         )
         self.assertGreater(error, 0.0)
         self.assertLessEqual(error, completion.TOLERANCE)
+
+    def test_released_block_threading_preserves_development_world_bytes(self):
+        fixtures = (
+            (
+                1_000_000,
+                "weak",
+                "e6511aa3b05b48e186c7e42f902af0d2f41c532e2b5151ecf94b48261d3de0f3",
+                "dfe6238a1f2c1fa1c4b001d1f564b61283b0caaf46fdd57b585a498f69413d66",
+            ),
+            (
+                1_000_001,
+                "strong",
+                "9c0cd6b91518fceeb5f2dcd8e58acefd56fb9d13ff06527e53b88c76f4a9bf67",
+                "826ce37c400965fb5f7f5ee156a993d64e8792760f889d153be335564a9ef022",
+            ),
+        )
+        for seed, interaction, expected, expected_shuffle in fixtures:
+            default = completion.generate_world(
+                seed,
+                truth_structure="coupled",
+                interaction=interaction,
+                context_regime="return",
+                length=32,
+            )
+            explicit = completion.generate_world(
+                seed,
+                truth_structure="coupled",
+                interaction=interaction,
+                context_regime="return",
+                length=32,
+                released_block=completion.EPOCH_B_DEVELOPMENT_BLOCK,
+            )
+            self.assertEqual(default, explicit)
+            self.assertEqual(self._world_sha256(default), expected)
+            shuffled_default = completion.shuffled_episodes(
+                default.episodes, seed
+            )
+            shuffled_explicit = completion.shuffled_episodes(
+                default.episodes,
+                seed,
+                released_block=completion.EPOCH_B_DEVELOPMENT_BLOCK,
+            )
+            self.assertEqual(shuffled_default, shuffled_explicit)
+            encoded = json.dumps(
+                [
+                    {
+                        "cue": episode.cue,
+                        "context": episode.context,
+                        "values": episode.values,
+                    }
+                    for episode in shuffled_default
+                ],
+                sort_keys=True,
+                separators=(",", ":"),
+            ).encode()
+            self.assertEqual(
+                hashlib.sha256(encoded).hexdigest(), expected_shuffle
+            )
+
+    def test_nondevelopment_seed_requires_explicit_release(self):
+        arguments = {
+            "truth_structure": "coupled",
+            "interaction": "weak",
+            "context_regime": "return",
+            "length": 4,
+        }
+        with self.assertRaisesRegex(ValueError, "released block"):
+            completion.generate_world(1_900_000, **arguments)
+        released = completion.generate_world(
+            1_900_000,
+            **arguments,
+            released_block=(1_900_000, 1_900_000),
+        )
+        self.assertEqual(released.seed, 1_900_000)
 
     def test_atomic_budget_is_identical(self):
         world = completion.generate_world(

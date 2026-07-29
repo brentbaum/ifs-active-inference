@@ -1,0 +1,25 @@
+{
+  "addendum_to": "freeze-manifest.json",
+  "classification": "authorized pre-seal apparatus amendment",
+  "authorizing_record": {
+    "file": "results/V2.5a-completion/escrow-threading-amendment-authorization.md",
+    "sha256": "626e3a8a32172d985362c53719c6f89820b1d90d50dff5eeab25776e06220d1f"
+  },
+  "default_scientific_behavior_changed": false,
+  "escrow_accessed": false,
+  "development_byte_identity": {
+    "file": "results/V2.5a-completion/escrow-threading-byte-identity.json",
+    "mismatch_count": 0,
+    "passed": true
+  },
+  "files": {
+    "ref/v25a_completion.py": "aba0a00cf75778a9256c44b9aad49bb05a6b4415bd7e572876851badbcc0b5cf",
+    "tests/test_v25a_completion.py": "b1286424bfc5841c3799a5a2f2baaa81272d5cd351dc3cf42e648bc505e84287",
+    "results/V2.5a-completion/escrow-threading-amendment-authorization.md": "626e3a8a32172d985362c53719c6f89820b1d90d50dff5eeab25776e06220d1f",
+    "results/V2.5a-completion/escrow-threading-byte-identity.json": "d3191eb4adff835396ee03fb9078492c0eb92877586a242535a8c571352981c2",
+    "results/V2.5a-completion/escrow-threading-full-suite.json": "725eb92cb95199b4d59059e2da31d41de1aa202e42ff3cf6199594acc1166107",
+    "results/V2.5a-completion/escrow-threading-diff-summary.md": "a26d98b57f39345c994e2f2fbf282ee3c66e93db7e3186256fa37d2f95703c92",
+    "results/V2.5a-completion/ready-to-commit.md": "877249779b0f1841e19b694213af4c18ad7ca48b6a2e66460d9f68102ce20178"
+  },
+  "note": "The unchanged base freeze remains authoritative. This overlay adds explicit evaluator-release threading while preserving default Epoch-B development bytes exactly."
+}

@@ -1,0 +1,12 @@
+{
+  "addendum_to": "freeze-manifest.json",
+  "classification": "authorized custody succession",
+  "authorizing_commits": ["35e23e0", "2277cfc", "56ee77f", "f599f7c"],
+  "files": {
+    "protocols/v2.g0-released-blocks.json": "1faecb7671b91a6192f773e30a67a81b777d03558ba7d60595da2cf0e90a8fb1",
+    "results/R0/stage-report.md": "9993ac8d8cb4d1384b516a43b0f79ccccf1f628db57dc19626bcd590a4e566af",
+    "run_v2g0_gates.py": "2a12791de678ac2580d8163c46cb1b536e1eac36a298a47b1402eff857cfecf5",
+    "tests/test_v2g0_grammar.py": "e6a0aa1446c4091e80059d636d9ce0678e4b9994062a442eb8c57c2bdf6edd5c"
+  },
+  "note": "Overlays the parser-validated C-V2G0-C release record and sealed-exit stage report after the existing shared-helper addendum; the base freeze is unchanged."
+}

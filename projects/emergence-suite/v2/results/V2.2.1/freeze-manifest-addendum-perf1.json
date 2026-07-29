@@ -1,0 +1,11 @@
+{
+  "addendum_to": "freeze-manifest.json",
+  "classification": "authorized custody succession",
+  "authorizing_commits": ["56ee77f", "ca50944", "c67e853", "f599f7c"],
+  "files": {
+    "ref/oracle.py": "bcbbe3113e4910e05339cf51bfbe9e7dd01344bda3217abab62f093c6e372251",
+    "ref/rng.py": "1ef100d4d3fcd5bf01b772c8901b67cc8bb4e177550e8f4375508e047017fe71",
+    "ref/v20.py": "6d5e356e9443e9f02b47dab190cf13959a6c459d635ada779c566094ebc61432"
+  },
+  "note": "Overlays authorized performance, released-seed guard, and constitution-retrofit successors; the base freeze is unchanged."
+}

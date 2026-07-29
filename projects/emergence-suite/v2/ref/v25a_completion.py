@@ -98,10 +98,20 @@ def _softmax(values: np.ndarray) -> np.ndarray:
     return weights / weights.sum()
 
 
-def _development_rng(seed: int, component: str) -> np.random.Generator:
-    """Use only the master spec's public Epoch-B development namespace."""
+def _development_rng(
+    seed: int,
+    component: str,
+    released_block: tuple[int, int] | None = None,
+) -> np.random.Generator:
+    """Validate against explicit release authority or the development block."""
     return component_rng(
-        seed, component, released_block=EPOCH_B_DEVELOPMENT_BLOCK
+        seed,
+        component,
+        released_block=(
+            EPOCH_B_DEVELOPMENT_BLOCK
+            if released_block is None
+            else released_block
+        ),
     )
 
 
@@ -217,6 +227,7 @@ def generate_world(
     length: int,
     cue_count: int = 3,
     missingness: float | None = None,
+    released_block: tuple[int, int] | None = None,
 ) -> ConfiguralWorld:
     """Generate from every exact candidate using deterministic streams."""
     if truth_structure not in {"independent", "coupled"}:
@@ -233,15 +244,23 @@ def generate_world(
         if missingness is None
         else missingness
     )
-    root = int(_development_rng(seed, "v25a-completion-root").integers(0, 2))
+    root = int(
+        _development_rng(
+            seed, "v25a-completion-root", released_block
+        ).integers(0, 2)
+    )
     offset = int(
-        _development_rng(seed, "v25a-completion-cue-offset").integers(0, cue_count)
+        _development_rng(
+            seed, "v25a-completion-cue-offset", released_block
+        ).integers(0, cue_count)
     )
     episodes: list[Episode] = []
     for time, context in enumerate(context_path(length, context_regime)):
         cue = (time + offset) % int(cue_count)
         table = joint_table(cue, context, root, kappa)
-        rng = _development_rng(seed, f"v25a-completion-episode-{time}")
+        rng = _development_rng(
+            seed, f"v25a-completion-episode-{time}", released_block
+        )
         atom = ATOMS[int(rng.choice(len(ATOMS), p=table))]
         values: list[int | None] = [int(value) for value in atom]
         for axis in range(len(values)):
@@ -440,7 +459,10 @@ def untreated_transfer(result: ConfiguralScore, *, association: float | None = N
 
 
 def shuffled_episodes(
-    episodes: Sequence[Episode], seed: int
+    episodes: Sequence[Episode],
+    seed: int,
+    *,
+    released_block: tuple[int, int] | None = None,
 ) -> tuple[Episode, ...]:
     """Destroy episode membership within frozen cue/context coordinates.
 
@@ -459,6 +481,7 @@ def shuffled_episodes(
             order = _development_rng(
                 seed,
                 f"v25a-completion-shuffle-{cue}-{context}-{axis}",
+                released_block,
             ).permutation(len(indices))
             for target, source in zip(indices, order):
                 output[target][axis] = values[int(source)]

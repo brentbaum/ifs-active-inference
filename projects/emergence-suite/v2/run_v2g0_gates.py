@@ -452,7 +452,10 @@ def _verify_v244_manifest() -> dict[str, Any]:
     return manifest_chain.verify_manifest_chain(
         ROOT,
         "results/V2.4.4/freeze-manifest.json",
-        ("results/V2.4.4/freeze-manifest-addendum.json",),
+        (
+            "results/V2.4.4/freeze-manifest-addendum.json",
+            "results/V2.4.4/freeze-manifest-addendum-perf1.json",
+        ),
     )
 
 

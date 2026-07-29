@@ -158,10 +158,17 @@ class V2G0GrammarSemanticProofs(unittest.TestCase):
             self.assertIsInstance(key[2], str)
             self.assertIsNotNone(key[3])
 
-    def test_15_sealed_escrow_is_inaccessible(self):
+    def test_15_sealed_escrow_access_follows_committed_release_record(self):
         compiled = world_ir.compile_world(fixtures.world(fixtures.static()))
-        with self.assertRaisesRegex(ValueError, "escrow"):
-            world_ir.sample_world(compiled, 2_000_000)
+        released = world_ir._released_blocks()
+        self.assertIn((2_000_000, 2_000_499), released)
+        trace = world_ir.sample_world(compiled, 2_000_000)
+        self.assertTrue(trace.truth_trace)
+        self.assertTrue(
+            all(key[1] == 2_000_000 for key in trace.component_rng_keys)
+        )
+        with self.assertRaisesRegex(ValueError, "released"):
+            world_ir.sample_world(compiled, 2_000_500)
 
     def test_16_diagnosis_seeds_are_inaccessible_to_public_sampler(self):
         compiled = world_ir.compile_world(fixtures.world(fixtures.static()))
