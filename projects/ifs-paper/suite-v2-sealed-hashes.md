@@ -131,3 +131,9 @@ Escrow: C-V26A seeds 2030000:2031999, released by this record via the frozen rel
 1d9329bafd15fdc5e2c987bb4fa9105146d8740f05fefdd675f1fab61764cdd7  C-V234-attribution-challenge.md
 ```
 Escrow: C-V234 seeds 2040000:2041999, released by this record via the frozen released_block parameter. Full accumulated pre-seal linter applied.
+
+## C-V234-B seal (2026-07-29)
+```
+c4f6f72e14c83c2191b9724f43094736cad1b437cc9260d941b371a51146c336  C-V234B-attribution-challenge.md
+```
+Escrow: C-V234-B seeds 2042000:2043999 (fresh; 2040000:2041999 consumed by the retained C-V234 FAIL and closed). Pilot blocks 1330000:1331199 BARRED (attainability pilot, 300 worlds per rate, non-criterion). Floors corrected to pilot-derived attainable values; all else verbatim.
