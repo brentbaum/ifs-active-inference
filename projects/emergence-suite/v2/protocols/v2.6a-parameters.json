@@ -1,0 +1,40 @@
+{
+  "stage": "V2.6a",
+  "semantic_tolerance": 1e-10,
+  "partner_states": [
+    "reliable_contingent",
+    "soothing_noncontingent",
+    "intrusive",
+    "unstable"
+  ],
+  "partner_prior": [0.25, 0.25, 0.25, 0.25],
+  "emission_success_probabilities": {
+    "reliable_contingent": [0.9, 0.9, 0.9, 0.9],
+    "soothing_noncontingent": [0.9, 0.5, 0.5, 0.55],
+    "intrusive": [0.2, 0.8, 0.15, 0.2],
+    "unstable": [0.5, 0.5, 0.5, 0.5]
+  },
+  "relational_precision_by_state": [0.95, 0.42, 0.12, 0.28],
+  "transition_stay_probability": 0.94,
+  "base_global_precision": 0.35,
+  "broadcast_strength": 0.9,
+  "root_likelihood_gain": 0.45,
+  "root_prior": [0.5, 0.5],
+  "transfer_strength": 0.85,
+  "reliable_readout_minimum": 0.8,
+  "gate2_length": 48,
+  "gate3_length": 32,
+  "gate2_seed_block": [1200000, 1201499],
+  "gate3_seed_block": [1202000, 1205999],
+  "epoch_b_development_block": [1000000, 1899999],
+  "rationales": {
+    "partner_prior": "Uniform mass makes every partner family prospectively recoverable without label favoritism.",
+    "emission_success_probabilities": "Four-channel patterns distinguish contingency from soothing, intrusion, and instability in prior-predictive histories.",
+    "relational_precision_by_state": "Reliable contingency carries high precision while soothing, intrusive, and unstable states remain distinct low-to-moderate regimes.",
+    "transition_stay_probability": "A 0.94 stay prior permits switches while retaining enough dwell time for exact onset localization.",
+    "base_global_precision": "A moderate baseline leaves prior-predictive room for broadcast to increase or decrease evidence uptake.",
+    "broadcast_strength": "The dimensionless gain makes reliable-partner posterior mass capable of a visible but continuous precision shift.",
+    "root_likelihood_gain": "The likelihood remains strictly positive while producing an attainable co-regulation uptake contrast.",
+    "transfer_strength": "Transfer is a pure scaled readout of root-posterior movement, not a transfer-side mechanism."
+  }
+}

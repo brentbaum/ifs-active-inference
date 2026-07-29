@@ -1,0 +1,11 @@
+{
+  "development_authorization": [1000000, 1899999],
+  "escrow_accessed": false,
+  "escrow_block": [2030000, 2031999],
+  "gate_1_public_fixture_seeds": [1199900, 1199902],
+  "preflight_consumed_gate3_seeds": [1202000, 1202002],
+  "preflight_seed_hygiene_note": "The first local preflight used 1202000:1202002 before the formal gate run. No gate-3 criterion was evaluated, but these seeds are disclosed as consumed and must be adjudicated or barred before any future gate-3 continuation.",
+  "gate_2_consumed": [1200000, 1201499],
+  "gate_3_consumed": null,
+  "stop_reason": "gate-2 ECE 0.20101343381872663 exceeded 0.08"
+}

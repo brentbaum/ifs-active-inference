@@ -1,0 +1,163 @@
+{
+  "bounds": {
+    "B_max_v232_formation": 3.801426508560692,
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "B_max_v25a_configural": 6.084736253211209,
+    "B_max_v25a_marginal_accounting": 6.704414354964107,
+    "B_max_v25b": 11.302393144606405,
+    "B_max_v26a_relational": 6.9920964274158885,
+    "B_max_v26a_root": 2.9444389791664394,
+    "implied_relational_binary_change_bound": 0.9411502391813408,
+    "implied_root_binary_change_bound": 0.6267890062732583
+  },
+  "gate": 1,
+  "passed": true,
+  "proof_count": 16,
+  "proofs": {
+    "01_one_latent_all_channels": {
+      "channels": [
+        "regulation",
+        "remaining",
+        "respect",
+        "trust"
+      ],
+      "emission_shape": [
+        4,
+        4
+      ],
+      "passed": true
+    },
+    "02_emissions_normalize": {
+      "maximum_error": 0.0,
+      "passed": true
+    },
+    "03_transitions_normalize": {
+      "maximum_error": 0.0,
+      "passed": true
+    },
+    "04_initial_prior_normalizes": {
+      "error": 0.0,
+      "passed": true
+    },
+    "05_local_precision_controls_weighting": {
+      "analytic_derivative": 0.45,
+      "p_correct_precision_0_2": 0.59,
+      "p_correct_precision_0_8": 0.8600000000000001,
+      "passed": true
+    },
+    "06_broadcast_off_preserves_local": {
+      "maximum_error": 0.0,
+      "passed": true
+    },
+    "07_partner_labels_absent_from_G": {
+      "passed": true,
+      "score_reads_truth_family": false
+    },
+    "08_regulation_only_root_BF_zero": {
+      "maximum_absolute_log_bf": 0.0,
+      "passed": true
+    },
+    "09_root_evidence_arm_identity": {
+      "passed": true,
+      "root_tokens": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        1
+      ]
+    },
+    "10_intervention_evidence_separation": {
+      "fixed_g_transfer": 0.0,
+      "passed": true,
+      "regulation_only_root_movement": 0.0
+    },
+    "11_switch_posterior_identity": {
+      "maximum_error": 5.551115123125783e-16,
+      "passed": true
+    },
+    "12_independent_enumeration_oracle": {
+      "log_evidence_error": 0.0,
+      "occupancy_error": 2.0816681711721685e-17,
+      "passed": true
+    },
+    "13_oracle_input_immutability": {
+      "passed": true
+    },
+    "14_readout_purity": {
+      "co_regulated_is_frozen_output_only": true,
+      "passed": true
+    },
+    "15_one_posterior_and_constitutions": {
+      "one_posterior_passed": true,
+      "passed": true,
+      "permanent_constitution_passed": true
+    },
+    "16_bounds_constitution_and_custody": {
+      "bounds": {
+        "B_max_v232_formation": 3.801426508560692,
+        "B_max_v24_common_emissions": 6.704414354964107,
+        "B_max_v25a_configural": 6.084736253211209,
+        "B_max_v25a_marginal_accounting": 6.704414354964107,
+        "B_max_v25b": 11.302393144606405,
+        "B_max_v26a_relational": 6.9920964274158885,
+        "B_max_v26a_root": 2.9444389791664394,
+        "implied_relational_binary_change_bound": 0.9411502391813408,
+        "implied_root_binary_change_bound": 0.6267890062732583
+      },
+      "custody": {
+        "escrow_accessed": false,
+        "expected_escrow_accessed": false,
+        "negative_fact_passed": true
+      },
+      "manifest_chain": {
+        "base_manifest_file_count": 22,
+        "custody_files": {
+          "addenda": [],
+          "base": {
+            "file": "results/V2.5b/freeze-manifest.json",
+            "sha256": "db9f101c07b6d6f9ee67c9577fb861fe9ed54c8f3a9eb08355852f5a6dbdc079"
+          }
+        },
+        "effective_manifest_file_count": 22,
+        "mismatches": [],
+        "overlaid_entries": [],
+        "passed": true
+      },
+      "passed": true
+    }
+  },
+  "stage": "V2.6a",
+  "verdict_classes": {
+    "custody": true,
+    "scientific": true,
+    "semantic": true
+  }
+}
