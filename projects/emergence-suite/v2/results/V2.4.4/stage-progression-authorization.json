@@ -1,0 +1,28 @@
+{
+  "authorization": "External adjudication (GPT-5.6 Pro round 5, 2026-07-29): adjudicated mixed-verdict continuation of V2.4.4 to gates 3-5. See gate2-adjudication.md.",
+  "gate_2_verdict_unchanged": "FAIL",
+  "authorized_continuation": true,
+  "successor_authorized": false,
+  "allowed_failure_family": [
+    "gate2_cs_selective_rate_min_0.60",
+    "per_world_genuine_selective_rate_min_0.60",
+    "per_world_bridge_selective_rate_min_0.60",
+    "gate5_repetitions_of_the_same_benchmarks"
+  ],
+  "all_other_criteria_remain_blocking": true,
+  "hard_requirements_notably": [
+    "mean_E_null_lower_95_bound_gt_0_in_genuine_and_bridge",
+    "shuffled_selective_max_0.10",
+    "single_regime_material_and_selective_max_0.10",
+    "bma_regret_upper_ci_max_0.01_all_families",
+    "cs_matched_margin_mean_min_0.01_lower_ci_gt_0",
+    "transfer_retention_present_indexing_g_fixed_unchanged"
+  ],
+  "no_threshold_changed": true,
+  "no_information_budget_changed": true,
+  "no_model_code_changed": true,
+  "runner_control_flow_change_only": true,
+  "freeze_status_on_success": "FROZEN_ADJUDICATED_MIXED_SELECTIVITY_POWER_LIMITATION",
+  "c_v24_limitation_route": "authorized conditional on all non-adjudicated criteria passing gates 3-5; on any non-adjudicated failure C-V24 is archived unopened",
+  "date": "2026-07-29"
+}
