@@ -1,0 +1,7 @@
+{
+  "command": "python3 -m unittest discover -s tests",
+  "elapsed_seconds": 423.448,
+  "passed": true,
+  "test_count": 93,
+  "note": "The standing suite is green but does not exercise the frozen V2.4 cue_count=4 robustness cell that produced the Gate-5 preflight stop."
+}

@@ -1,0 +1,80 @@
+{
+  "B_max_inherited_formation": 3.801426508560692,
+  "B_max_v24_common_emissions": 6.704414354964107,
+  "checks": {
+    "broadcast_family_path_evidence_survives": true,
+    "broadcast_historical_query_survives": true,
+    "broadcast_root_uptake_and_transfer_eliminated": true,
+    "cue_root_historical_query_survives": true,
+    "cue_root_temporal_evidence_survives": true,
+    "cue_root_transfer_eliminated": true,
+    "family_equalization_common_likelihood_root_survive": true,
+    "family_equalization_compound_bf_zero": true,
+    "family_equalization_family_bfs_zero": true,
+    "marker_cue_local_survives": true,
+    "marker_present_indexing_eliminated": true,
+    "marker_root_uptake_survives": true,
+    "marker_selective_null_max_0.10": true,
+    "transition_learning_weakened": true,
+    "transition_non_cs_survivors": true,
+    "transition_prior_rows_normalized": true
+  },
+  "effects": {
+    "broadcast_transfer_lesioned": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "cue_root_transfer_lesioned": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "family_equalized_max_log_bf_range": 0.0,
+    "intact_E_null_descriptive": [
+      -1.1417137157504178,
+      -1.4145962494829483,
+      -0.8701868500757931
+    ],
+    "intact_material_rate": 0.6958333333333333,
+    "intact_selective_rate_adjudicated_descriptive": 0.2833333333333333,
+    "marker_E_null_descriptive": [
+      -3.1547775261269684,
+      -3.413108425106061,
+      -2.8935606353704313
+    ],
+    "marker_present_indexing_lesioned": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "marker_raw_material_rate_descriptive": 0.4166666666666667,
+    "marker_selective_rate": 0.05,
+    "transition_recovery_intact": [
+      0.07973882948671324,
+      0.07489608535623032,
+      0.0847108070640928
+    ],
+    "transition_recovery_lesioned": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "elapsed_seconds": 124.48833322525024,
+  "external_adjudication": "CONTINUE_WITH_TWO_SELECTIVITY_LIMITATIONS",
+  "failures": [],
+  "formal_gate_2_verdict": "FAIL",
+  "formal_gate_3_verdict": "FAIL",
+  "gate": 4,
+  "passed": true,
+  "pi1_24": 0.92741935483871,
+  "stage": "V2.4.4",
+  "verdict_classes": {
+    "distributional_stress": "DESCRIPTIVE_ONLY",
+    "process_custody": "PASS",
+    "scientific_outcomes": "PASS",
+    "semantic_integrity": "PASS"
+  },
+  "world_count": 240
+}

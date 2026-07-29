@@ -1,0 +1,71 @@
+{
+  "B_max_inherited_formation": 3.801426508560692,
+  "B_max_v24_common_emissions": 6.704414354964107,
+  "blocking_failures": [
+    "cue_count_4_public_support"
+  ],
+  "checks": {
+    "cue_count_4_public_support": false,
+    "gate1_primary": true,
+    "gate2_only_adjudicated_failure": true,
+    "gate3_only_adjudicated_failures": true,
+    "gate4_primary": true
+  },
+  "cue_count_4_preflight": [
+    {
+      "executed": true,
+      "family": "global_downweight",
+      "maximum_decomposition_error": 7.105427357601002e-15,
+      "maximum_update_identity_error": 1.7763568394002505e-15,
+      "seed": 795500
+    },
+    {
+      "exception_message": "'cue_4'",
+      "exception_type": "KeyError",
+      "executed": false,
+      "family": "cue_local_relearning",
+      "seed": 795501
+    },
+    {
+      "exception_message": "index 3 is out of bounds for axis 0 with size 3",
+      "exception_type": "IndexError",
+      "executed": false,
+      "family": "context_split",
+      "seed": 795502
+    },
+    {
+      "executed": true,
+      "family": "continuous_drift",
+      "maximum_decomposition_error": 1.4210854715202004e-14,
+      "maximum_update_identity_error": 8.881784197001252e-16,
+      "seed": 795503
+    },
+    {
+      "exception_message": "index 3 is out of bounds for axis 0 with size 3",
+      "exception_type": "IndexError",
+      "executed": false,
+      "family": "change_point",
+      "seed": 795504
+    }
+  ],
+  "external_adjudication": "CONTINUE_WITH_TWO_SELECTIVITY_LIMITATIONS",
+  "failure_class": "FROZEN_PUBLIC_VOCABULARY_EXECUTION_FAILURE",
+  "formal_gate_2_verdict": "FAIL",
+  "formal_gate_3_verdict": "FAIL",
+  "gate": 5,
+  "not_run_after_stop": [
+    "Gate-5 BMA population",
+    "Gate-5 CRT control repetitions",
+    "remaining robustness cells",
+    "cumulative standing-stage reruns"
+  ],
+  "passed_under_expanded_mixed_verdict": false,
+  "pi1_24": 0.92741935483871,
+  "stage": "V2.4.4",
+  "verdict_classes": {
+    "distributional_stress": "NOT_SCORED_AFTER_STOP",
+    "process_custody": "PASS",
+    "scientific_outcomes": "NOT_SCORED_AFTER_STOP",
+    "semantic_integrity": "FAIL"
+  }
+}
