@@ -1,0 +1,58 @@
+{
+  "checks": {
+    "all_recorded_nonverdict_fields_bitwise_identical": true,
+    "only_check_key_change_is_authorized_polarity": true,
+    "original_verdict_retained_fail": true,
+    "repaired_verdict_pass": true
+  },
+  "classification": "pure_software_error",
+  "compared_fields": {
+    "cell_counts": {
+      "bitwise_identical": true,
+      "original_sha256": "48cf7c19978704e935af8770978fbefe3c3f7c5af6bc397f5d05ae6475fce80c",
+      "repaired_sha256": "48cf7c19978704e935af8770978fbefe3c3f7c5af6bc397f5d05ae6475fce80c"
+    },
+    "dry_runs": {
+      "bitwise_identical": true,
+      "original_sha256": "de6a859e0659706346945236ceefba095225a1ca4c76a8a8ab1d3f656c3e5ca7",
+      "repaired_sha256": "de6a859e0659706346945236ceefba095225a1ca4c76a8a8ab1d3f656c3e5ca7"
+    },
+    "escrow_accessed": {
+      "bitwise_identical": true,
+      "original_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "repaired_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+    },
+    "failures": {
+      "bitwise_identical": true,
+      "original_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "repaired_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "gate": {
+      "bitwise_identical": true,
+      "original_sha256": "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce",
+      "repaired_sha256": "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce"
+    },
+    "seed_block": {
+      "bitwise_identical": true,
+      "original_sha256": "55466a408fe164cd9c8982bfac8669ce71def6df51905aedc9a79979750d15f0",
+      "repaired_sha256": "55466a408fe164cd9c8982bfac8669ce71def6df51905aedc9a79979750d15f0"
+    },
+    "stage": {
+      "bitwise_identical": true,
+      "original_sha256": "dbf5ee0f25b331d154367f7cdbdc5535e4b173085aeb06ddb82e8445870c811e",
+      "repaired_sha256": "dbf5ee0f25b331d154367f7cdbdc5535e4b173085aeb06ddb82e8445870c811e"
+    }
+  },
+  "original_record": "results/R0/gate-3.json",
+  "permitted_differences": {
+    "checks.new_code_required": false,
+    "checks.zero_new_code_required": true,
+    "verdict": {
+      "original": "FAIL",
+      "repaired": "PASS"
+    }
+  },
+  "repaired_record": "results/R0/gate-3-repaired.json",
+  "stage": "V2.G0",
+  "verdict": "PASS"
+}

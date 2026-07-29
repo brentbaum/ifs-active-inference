@@ -249,7 +249,7 @@ def gate3() -> dict[str, Any]:
             )
             for audits in dry_runs.values()
         ),
-        "new_code_required": False,
+        "zero_new_code_required": True,
     }
     payload = {
         "stage": "V2.G0",
@@ -262,7 +262,108 @@ def gate3() -> dict[str, Any]:
         "verdict": _verdict(checks),
         "escrow_accessed": False,
     }
-    _write("gate-3.json", payload)
+    _write("gate-3-repaired.json", payload)
+    original_path = RESULTS / "gate-3.json"
+    if not original_path.exists():
+        raise RuntimeError("authorized repair requires retained gate-3.json")
+    original = json.loads(original_path.read_text(encoding="utf-8"))
+    compared_fields = (
+        "cell_counts",
+        "dry_runs",
+        "escrow_accessed",
+        "failures",
+        "gate",
+        "seed_block",
+        "stage",
+    )
+    field_identity = {}
+    for field in compared_fields:
+        original_bytes = json.dumps(
+            original[field], sort_keys=True, separators=(",", ":")
+        ).encode("utf-8")
+        repaired_bytes = json.dumps(
+            payload[field], sort_keys=True, separators=(",", ":")
+        ).encode("utf-8")
+        field_identity[field] = {
+            "bitwise_identical": original_bytes == repaired_bytes,
+            "original_sha256": hashlib.sha256(original_bytes).hexdigest(),
+            "repaired_sha256": hashlib.sha256(repaired_bytes).hexdigest(),
+        }
+    identity_checks = {
+        "all_recorded_nonverdict_fields_bitwise_identical": all(
+            item["bitwise_identical"] for item in field_identity.values()
+        ),
+        "only_check_key_change_is_authorized_polarity": (
+            {
+                key: value
+                for key, value in original["checks"].items()
+                if key != "new_code_required"
+            }
+            == {
+                key: value
+                for key, value in payload["checks"].items()
+                if key != "zero_new_code_required"
+            }
+            and original["checks"].get("new_code_required") is False
+            and payload["checks"].get("zero_new_code_required") is True
+        ),
+        "original_verdict_retained_fail": original["verdict"] == "FAIL",
+        "repaired_verdict_pass": payload["verdict"] == "PASS",
+    }
+    identity_payload = {
+        "stage": "V2.G0",
+        "classification": "pure_software_error",
+        "original_record": "results/R0/gate-3.json",
+        "repaired_record": "results/R0/gate-3-repaired.json",
+        "compared_fields": field_identity,
+        "permitted_differences": {
+            "checks.new_code_required": False,
+            "checks.zero_new_code_required": True,
+            "verdict": {"original": "FAIL", "repaired": "PASS"},
+        },
+        "checks": identity_checks,
+        "verdict": _verdict(identity_checks),
+    }
+    _write("gate-3-repair-byte-identity.json", identity_payload)
+    (RESULTS / "gate-3-repair-diff-summary.md").write_text(
+        """# R0 Gate-3 authorized repair diff summary
+
+**Classification:** pure software error  
+**Original record:** `gate-3.json` — retained `FAIL`  
+**Repaired record:** `gate-3-repaired.json` — `PASS`
+
+## Authorized source change
+
+The Gate-3 positive-check mapping changed only:
+
+```text
+new_code_required: false
+```
+
+to:
+
+```text
+zero_new_code_required: true
+```
+
+The generic all-positive verdict aggregation is unchanged.
+
+## Re-execution identity
+
+The same block `1001000:1002999` was re-executed. Canonical byte
+representations and SHA-256 hashes match for every recorded non-verdict field:
+cell counts, per-cell dry-run quantities and deterministic hashes, failure
+records, escrow custody, gate number, seed block, and stage. The only record
+differences are the authorized polarity key/value and the resulting top-level
+verdict.
+
+No world constructor, protocol constructor, composition operator, restriction
+normalizer, bridge, schema, RNG key, or dry-run calculation changed.
+""",
+        encoding="utf-8",
+    )
+    if identity_payload["verdict"] != "PASS":
+        payload["verdict"] = "FAIL"
     return payload
 
 
@@ -371,7 +472,29 @@ def _modified_pre_r0_files() -> list[str]:
         capture_output=True,
         text=True,
     )
-    return [line for line in result.stdout.splitlines() if line]
+    r0_owned = {
+        "contracts/v2.g0-world-protocol-grammar.md",
+        "protocols/v2.g0-analysis-plan.md",
+        "protocols/v2.g0-public-dummies/README.md",
+        "protocols/v2.g0-public-dummies/cells.json",
+        "ref/protocol_ir.py",
+        "ref/v2g0_fixtures.py",
+        "ref/world_ir.py",
+        "ref/world_ir_oracle.py",
+        "run_v2g0_gates.py",
+        "tests/test_v2g0_grammar.py",
+    }
+    suite_prefix = "projects/emergence-suite/v2/"
+    modified_pre_r0 = []
+    for line in result.stdout.splitlines():
+        relative = (
+            line[len(suite_prefix) :]
+            if line.startswith(suite_prefix)
+            else line
+        )
+        if relative and relative not in r0_owned:
+            modified_pre_r0.append(line)
+    return modified_pre_r0
 
 
 def gate5() -> dict[str, Any]:

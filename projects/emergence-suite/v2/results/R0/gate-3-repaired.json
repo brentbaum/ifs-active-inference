@@ -1,0 +1,124 @@
+{
+  "cell_counts": {
+    "constrained_change_point": 334,
+    "family_parameterized_bridge": 333,
+    "mixed_subset_drift_plus_recurrent_split": 333,
+    "partner_switch_plus_action_contingent_availability": 333,
+    "recurrence_guaranteed_context_split": 333,
+    "subset_drift": 334
+  },
+  "checks": {
+    "all_required_cells_present": true,
+    "every_cell_executes": true,
+    "exact_seed_block": true,
+    "two_score_free_dry_runs_per_cell": true,
+    "zero_new_code_required": true
+  },
+  "dry_runs": {
+    "constrained_change_point": [
+      {
+        "construction_success": true,
+        "deterministic_hash": "2a671fca4a9367722c3d18ca59b045eb98940aa800c0fa18f6fc9bef77c19d61",
+        "requested_fields_present": true,
+        "scientific_scores_inspected": false,
+        "support_ok": true
+      },
+      {
+        "construction_success": true,
+        "deterministic_hash": "2a671fca4a9367722c3d18ca59b045eb98940aa800c0fa18f6fc9bef77c19d61",
+        "requested_fields_present": true,
+        "scientific_scores_inspected": false,
+        "support_ok": true
+      }
+    ],
+    "family_parameterized_bridge": [
+      {
+        "construction_success": true,
+        "deterministic_hash": "098367f1f4fd7e9a4201b2f9ad9540f8011e67bcea85643e4c311fd02fd409c1",
+        "requested_fields_present": true,
+        "scientific_scores_inspected": false,
+        "support_ok": true
+      },
+      {
+        "construction_success": true,
+        "deterministic_hash": "098367f1f4fd7e9a4201b2f9ad9540f8011e67bcea85643e4c311fd02fd409c1",
+        "requested_fields_present": true,
+        "scientific_scores_inspected": false,
+        "support_ok": true
+      }
+    ],
+    "mixed_subset_drift_plus_recurrent_split": [
+      {
+        "construction_success": true,
+        "deterministic_hash": "fe39d50d05817821ecba93c6c90bd285c4f7dd8b223ceab9bd6bbe1da1107ee9",
+        "requested_fields_present": true,
+        "scientific_scores_inspected": false,
+        "support_ok": true
+      },
+      {
+        "construction_success": true,
+        "deterministic_hash": "fe39d50d05817821ecba93c6c90bd285c4f7dd8b223ceab9bd6bbe1da1107ee9",
+        "requested_fields_present": true,
+        "scientific_scores_inspected": false,
+        "support_ok": true
+      }
+    ],
+    "partner_switch_plus_action_contingent_availability": [
+      {
+        "construction_success": true,
+        "deterministic_hash": "2f4d386f87e1ef5347485fadbf71e392d84fe41b0d0c7be39370d8c509d20c35",
+        "requested_fields_present": true,
+        "scientific_scores_inspected": false,
+        "support_ok": true
+      },
+      {
+        "construction_success": true,
+        "deterministic_hash": "2f4d386f87e1ef5347485fadbf71e392d84fe41b0d0c7be39370d8c509d20c35",
+        "requested_fields_present": true,
+        "scientific_scores_inspected": false,
+        "support_ok": true
+      }
+    ],
+    "recurrence_guaranteed_context_split": [
+      {
+        "construction_success": true,
+        "deterministic_hash": "c4083701149d65caeca3c2a5636415f8f84046bb594d6267702ed4be34804295",
+        "requested_fields_present": true,
+        "scientific_scores_inspected": false,
+        "support_ok": true
+      },
+      {
+        "construction_success": true,
+        "deterministic_hash": "c4083701149d65caeca3c2a5636415f8f84046bb594d6267702ed4be34804295",
+        "requested_fields_present": true,
+        "scientific_scores_inspected": false,
+        "support_ok": true
+      }
+    ],
+    "subset_drift": [
+      {
+        "construction_success": true,
+        "deterministic_hash": "eeee3a56a0d982f1dfe20574e575f1e3d4205c005297f4c1894bf79630bee626",
+        "requested_fields_present": true,
+        "scientific_scores_inspected": false,
+        "support_ok": true
+      },
+      {
+        "construction_success": true,
+        "deterministic_hash": "eeee3a56a0d982f1dfe20574e575f1e3d4205c005297f4c1894bf79630bee626",
+        "requested_fields_present": true,
+        "scientific_scores_inspected": false,
+        "support_ok": true
+      }
+    ]
+  },
+  "escrow_accessed": false,
+  "failures": [],
+  "gate": 3,
+  "seed_block": [
+    1001000,
+    1002999
+  ],
+  "stage": "V2.G0",
+  "verdict": "PASS"
+}

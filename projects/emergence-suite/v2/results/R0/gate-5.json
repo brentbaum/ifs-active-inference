@@ -1,0 +1,36 @@
+{
+  "checks": {
+    "exact_seed_block": true,
+    "full_old_and_new_unit_suite_passes": true,
+    "no_modified_pre_r0_files": true,
+    "six_thousand_r0_worlds": true,
+    "v244_freeze_manifest_byte_identical": false
+  },
+  "custody_failures": [],
+  "escrow_accessed": false,
+  "gate": 5,
+  "modified_pre_r0_files": [],
+  "r0_worlds": 6000,
+  "seed_block": [
+    1004000,
+    1009999
+  ],
+  "stage": "V2.G0",
+  "unit_suite": {
+    "command": "/opt/homebrew/opt/python@3.14/bin/python3.14 -m unittest discover -s tests -v",
+    "elapsed_seconds": 422.3179677920416,
+    "returncode": 0,
+    "summary": "Ran 126 tests in 422.145s"
+  },
+  "v244_manifest": {
+    "manifest_file_count": 86,
+    "mismatches": [
+      {
+        "expected": "d4a2ba54f505759a37242ee02973a299af5d2bb3b1886dd97d72f87f98acea1a",
+        "file": "results/V2.4.4/freeze-readiness.md",
+        "observed": "f350531534e38718f2c31973e1d96416e51de6d080fad441cae8ebe7c97c83f2"
+      }
+    ]
+  },
+  "verdict": "FAIL"
+}

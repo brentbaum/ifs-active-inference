@@ -237,6 +237,16 @@ class V2G0GrammarSemanticProofs(unittest.TestCase):
         self.assertEqual(value["policies"], fixtures.joint_policy_outcome()["policies"])
         self.assertEqual(len(value["outcomes"]), 3)
 
+    def test_25_negative_custody_fact_uses_positive_check_polarity(self):
+        import run_v2g0_gates
+
+        checks = {
+            "every_cell_executes": True,
+            "zero_new_code_required": True,
+        }
+        self.assertEqual(run_v2g0_gates._verdict(checks), "PASS")
+        self.assertNotIn("new_code_required", checks)
+
 
 if __name__ == "__main__":
     unittest.main()
