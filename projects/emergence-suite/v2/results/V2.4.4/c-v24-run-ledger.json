@@ -1,0 +1,67 @@
+{
+  "challenge": "C-V24",
+  "challenge_sha256": "574131ce32bf45a72e3163c91df0e924c84478b39c3c07691dfc216dc1b34665",
+  "status": "PROSPECTION_FAILURE_UNRUN",
+  "stop_phase": "pre-seed frozen-public-API expressibility validation",
+  "released_block_authorized": [
+    830001,
+    830600
+  ],
+  "released_block_consumed": false,
+  "seeds_consumed": [],
+  "worlds_generated": 0,
+  "criteria_evaluated": false,
+  "raw_traces_written": false,
+  "raw_trace_seal_commit_required": false,
+  "raw_trace_seal_commit_inapplicability": "No challenge trajectory was generated; there are no raw traces to seal.",
+  "frozen_identity": {
+    "primary_manifest_plus_addendum_files_checked": 87,
+    "mismatches": 0
+  },
+  "expressibility_failures": [
+    {
+      "cell": "D",
+      "sealed_requirement": "continuous slow drift on a subset of cue emissions",
+      "frozen_API": "generate_world('continuous_drift', ...) evolves one shared drift state and applies it to every observed cue",
+      "required_but_forbidden_extension": "a cue-subset drift constructor"
+    },
+    {
+      "cell": "K",
+      "sealed_requirement": "exactly one abrupt transition at a seed-drawn slice in the middle 60 percent",
+      "frozen_API": "generate_world('change_point', ...) samples a hazard and permits no change or a change at any slice",
+      "required_but_forbidden_extension": "a constrained-onset protocol constructor"
+    },
+    {
+      "cell": "S",
+      "sealed_requirement": "the old context recurs after the switch",
+      "frozen_API": "generate_world('context_split', ...) samples an unconstrained Markov path and does not guarantee a switch followed by recurrence",
+      "required_but_forbidden_extension": "a recurrence-conditioned protocol constructor or seed rejection"
+    },
+    {
+      "cell": "X",
+      "sealed_requirement": "partial drift on non-identity cues plus an abrupt recurrent contextual transition on identity-linked structure",
+      "frozen_API": "no frozen generator composes DR and recurrent CS processes over disjoint cue subsets",
+      "required_but_forbidden_extension": "a mixed split-plus-nuisance-drift constructor"
+    },
+    {
+      "cell": "D bridging negative control",
+      "sealed_requirement": "a formed banked state receives a D-cell witnessing-style bridge",
+      "frozen_API": "_composition_world(seed, bank_state=...) hard-codes generation of a context_split world",
+      "required_but_forbidden_extension": "a family-parameterized formed-state bridge constructor"
+    }
+  ],
+  "constants": {
+    "B_max_inherited_formation": 3.801426508560692,
+    "B_max_v24_common_emissions": 6.704414354964107,
+    "pi1": 0.92741935483871
+  },
+  "custody": {
+    "challenge_plaintext_read": true,
+    "challenge_hash_verified": true,
+    "no_engine_code_changed": true,
+    "no_challenge_runner_code_added": true,
+    "no_threshold_changed": true,
+    "no_seed_opened": true,
+    "no_rerun": true
+  }
+}
