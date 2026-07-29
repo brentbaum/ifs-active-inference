@@ -40,10 +40,23 @@ therefore inexpressible through the frozen API. Scientific criteria were not
 evaluated; semantic custody failed by prospection, ordinary escrow custody
 passed, and zero D seeds were consumed.
 
+## C-V28D-B — recurrence and durability, vocabulary-corrected sealing
+
+**Immutable verdict: PASS.**
+
+All 9 sealed criteria passed on 419 qualifying worlds. The full arm's material
+reduction rate was 0.9141, mean and minimum follow-up retention were both
+1.0, and mean rupture return was 0.7424. The premature-do-over material
+reduction rate was 0.0. Among 353 successful full-arm worlds, root revision
+preceded material reduction in every world (0 ordering violations).
+Scientific, semantic, and custody classes passed. The retained C-V28D
+prospection stop above remains part of the permanent record.
+
 ## Completion condition
 
-The four-verdict profile is published and custody passed. V2.8 does not meet
-the spec §9 completion condition because not every challenge was expressible
-and C-V28D could not run. No source repair, threshold change, or rerun was
+The final challenge profile is published and custody passed. The
+vocabulary-corrected final sealing was expressible and ran once on fresh
+escrow. Therefore V2.8 meets the spec §9 completion condition: each final
+challenge was expressible, ran once, passed custody, and its immutable verdict
+is published. No frozen-source repair, threshold change, or rerun was
 performed.
-

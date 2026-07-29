@@ -29,6 +29,7 @@ FILES = {
     "B": ("C-V28B-challenge.md", (2_110_000, 2_110_599)),
     "C": ("C-V28C-challenge.md", (2_120_000, 2_120_599)),
     "D": ("C-V28D-challenge.md", (2_130_000, 2_130_599)),
+    "DB": ("C-V28DB-challenge.md", (2_130_600, 2_131_199)),
 }
 
 
@@ -61,8 +62,7 @@ def parse_literal(path: Path) -> dict[str, Any]:
     text = path.read_text(encoding="utf-8")
     marker = text.index("## Bundle")
     start = text.index("{", marker)
-    end_marker = "\n\nCommon custody:"
-    end = text.index(end_marker, start)
+    end = text.index("\n", start)
     literal = text[start:end]
     if not literal.startswith("{") or not literal.endswith("}"):
         raise ValueError("bundle is not one exact bracketed literal")
@@ -388,11 +388,112 @@ def evaluate_c(rows: list[dict[str, Any]]) -> dict[str, Any]:
     return {"metrics": metrics, "checks": checks}
 
 
+def evaluate_db(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    q = [row for row in rows if row["qualified"]]
+    successful = [
+        row for row in q if row["arms"]["full"]["successful_sequence"]
+    ]
+    first_times = [
+        {
+            key: value
+            for key, value in row["arms"]["full"]["first_times"]
+        }
+        for row in q
+    ]
+    successful_times = [
+        {
+            key: value
+            for key, value in row["arms"]["full"]["first_times"]
+        }
+        for row in successful
+    ]
+    violations = [
+        not (
+            item.get("root") is not None
+            and item.get("reduction") is not None
+            and item["root"] < item["reduction"]
+        )
+        for item in successful_times
+    ]
+    reversal = [
+        bool(row["arms"]["premature_do_over"]["premature_return_reversal"])
+        for row in q
+    ]
+    metrics = {
+        "qualifying_count": len(q),
+        "qualifying_rate": len(q) / len(rows),
+        "full_material_reduction": rate(q, "full", "material_reduction"),
+        "full_followup_retention_mean": mean(q, "full", "followup_retention"),
+        "full_followup_retention_minimum": min(
+            float(row["arms"]["full"]["followup_retention"]) for row in q
+        ),
+        "full_rupture_return_mean": mean(q, "full", "rupture_return"),
+        "premature_material_reduction": rate(
+            q, "premature_do_over", "material_reduction"
+        ),
+        "premature_return_reversal": {
+            "numerator": int(sum(reversal)),
+            "denominator": len(reversal),
+            "rate": float(np.mean(reversal)),
+        },
+        "maximum_historical_error": max(
+            abs(float(row["arms"][arm]["historical_context_error"]))
+            for row in q
+            for arm in FILE_ARMS["DB"]
+        ),
+        "successful_full_worlds": len(successful),
+        "ordering_violation": {
+            "numerator": int(sum(violations)),
+            "denominator": len(violations),
+            "rate": float(np.mean(violations)) if violations else 1.0,
+        },
+        "full_first_times_distributions": {
+            key: {
+                str(value): sum(item.get(key) == value for item in first_times)
+                for value in sorted(
+                    {item.get(key) for item in first_times},
+                    key=lambda item: (-1 if item is None else item),
+                )
+            }
+            for key in ("depth", "policy", "contact", "root", "reduction")
+        },
+    }
+    checks = {
+        "qualifying_population": len(q) > 0,
+        "full_reduction_min_0.80": metrics["full_material_reduction"] >= .80,
+        "full_followup_retention_min_0.99": metrics[
+            "full_followup_retention_mean"
+        ] >= .99,
+        "full_rupture_return_min_0.55": metrics[
+            "full_rupture_return_mean"
+        ] >= .55,
+        "full_rupture_return_max_0.90": metrics[
+            "full_rupture_return_mean"
+        ] <= .90,
+        "premature_reduction_max_0.10": metrics[
+            "premature_material_reduction"
+        ] <= .10,
+        "historical_index_available": all(
+            row["arms"][arm]["historical_index_available"]
+            for row in q
+            for arm in FILE_ARMS["DB"]
+        ),
+        "historical_error_max_1e-10": metrics[
+            "maximum_historical_error"
+        ] <= 1e-10,
+        "root_before_reduction_violation_max_0.05": metrics[
+            "ordering_violation"
+        ]["rate"] <= .05,
+    }
+    return {"metrics": metrics, "checks": checks}
+
+
 FILE_ARMS = {
     "A": ("full", "regulation_only", "cue_exposure", "bypass_protectors"),
     "B": ("full", "unreliable_partner"),
     "C": ("full",),
     "D": ("full", "premature_do_over"),
+    "DB": ("full", "premature_do_over"),
 }
 
 
@@ -490,6 +591,8 @@ def run(code: str) -> None:
         else evaluate_b(sealed_rows)
         if code == "B"
         else evaluate_c(sealed_rows)
+        if code == "C"
+        else evaluate_db(sealed_rows)
     )
     scientific = all(evaluation["checks"].values())
     semantic = identity["passed"] and validation["expressible"]
