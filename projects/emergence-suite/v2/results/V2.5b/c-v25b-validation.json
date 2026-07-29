@@ -1,0 +1,44 @@
+{
+  "bundle_parse_instruction": "Cells declare generate_world kwargs plus an arm label drawn from the frozen GATE3_ARMS vocabulary in run_v25b_gates.py and per-cell scoring declarations; parse with ast.literal_eval on the exact bracketed text. No other transformation.",
+  "cell_order": [
+    "cell_1_correct_timing",
+    "cell_2_premature",
+    "cell_3_old_context_return",
+    "cell_4_partial_truth",
+    "cell_5_no_erasure"
+  ],
+  "challenge": "C-V25B",
+  "challenge_sha256": "e556e08eb23fe8fef14daad11735fb8066e9ce43e6558ca5520fef4710a65c36",
+  "errors": [
+    "cell_5_no_erasure: capacity_survival is inexpressible; the frozen public API has no capacity state field or capacity-readout function"
+  ],
+  "expressible": false,
+  "freeze_identity": {
+    "file_count": 22,
+    "manifest": "results/V2.5b/freeze-manifest.json",
+    "manifest_sha256": "db9f101c07b6d6f9ee67c9577fb861fe9ed54c8f3a9eb08355852f5a6dbdc079",
+    "mismatches": [],
+    "passed": true
+  },
+  "literal_parser": "ast.literal_eval",
+  "public_readout_mapping": {
+    "false_complete_reduction": "ref.v25b.score(...).material_reduction + q_structure",
+    "historical_retention": "ref.v25b.old_context_query_error",
+    "material_reduction": "ref.v25b.score(...).material_reduction.material",
+    "old_context_query_error": "ref.v25b.old_context_query_error",
+    "old_context_return_reversal": "frozen GATE3_ARMS prefix/final material readouts",
+    "premature_stable_reduction": "frozen GATE3_ARMS prefix score material readout",
+    "structure_recovery": "ref.v25b.score(...).q_structure",
+    "time_to_material": "ref.v25b.score(...).material_reduction.first_time"
+  },
+  "release_ledger": {
+    "commit": "dede51d",
+    "file": "projects/ifs-paper/suite-v2-sealed-hashes.md",
+    "release_phrase_found": true,
+    "sha256": "e697d555d9d5258665aacec879830987948fdd60c7d7dd77f9641aaf789183f5"
+  },
+  "seed_count_declared": 2000,
+  "seed_end": 2021999,
+  "seed_start": 2020000,
+  "verified_seal_sha256": "e556e08eb23fe8fef14daad11735fb8066e9ce43e6558ca5520fef4710a65c36"
+}
