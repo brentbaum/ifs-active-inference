@@ -691,21 +691,21 @@ def gate5():
           "verdict_classes":{"scientific_outcomes":"NOT_SCORED_AFTER_STOP",
             "semantic_integrity":"FAIL","distributional_stress":"NOT_SCORED_AFTER_STOP",
             "process_custody":"PASS"}}
-        dump("gate-5.json",result)
-        (OUT/"gate-5-report.md").write_text(
+        dump("gate-5-repaired.json",result)
+        (OUT/"gate-5-repaired-report.md").write_text(
           "# V2.4.4 Gate 5 — honest preflight stop\n\n"
           "Outcome: **FAIL** before the population run.\n\n"
           "The frozen public parameter block declares cue-count support `{2,3,4}`. "
           "At `cue_count=4`, global down-weight and continuous drift execute, but "
           "cue-local relearning raises `KeyError: 'cue_4'`, while context split and "
           "change point raise `IndexError: index 3 is out of bounds for axis 0 with size 3`. "
-          "The complete per-family preflight is in `gate-5.json`.\n\n"
+          "The complete per-family preflight is in `gate-5-repaired.json`.\n\n"
           "This prevents the mandatory all-dimensions robustness sweep. No scientific "
           "repair is authorized in this run, so the ratchet stops before the BMA, CRT, "
           "remaining robustness, and cumulative populations.\n\n"
           f"`B_max_inherited_formation = {B_MAX_FORMATION}`; "
           f"`B_max_v24_common_emissions = {B_MAX_V24}`; `pi1 = {PI1_24}`.\n")
-        (OUT/"gate-5-diagnosis-stub.md").write_text(
+        (OUT/"gate-5-repaired-diagnosis-stub.md").write_text(
           "# V2.4.4 Gate-5 diagnosis stub\n\n"
           "Blocking failure: `cue_count_4_public_support`.\n\n"
           "Apparatus localization: the generator indexes three-element cue prediction "
@@ -724,7 +724,7 @@ def gate5():
         if truth=="context_split" and math.isfinite(primary_row["generating_family_margin"]):
             cs_margins.append(primary_row["generating_family_margin"])
         for row in triplet[1:]:curves[row["total_length"]][truth].append(row["regret"])
-    (OUT/"gate-5-bma-information-curves-per_world.json").write_text(json.dumps(
+    (OUT/"gate-5-repaired-bma-information-curves-per_world.json").write_text(json.dumps(
       bma_rows,indent=2,sort_keys=True,default=lambda value:value.item() if isinstance(value,np.generic) else str(value))+"\n")
     regret_ci={family:interval(values,795500+index,f"v244-g5-regret-{family}")
       for index,(family,values) in enumerate(regrets.items())}
@@ -735,9 +735,9 @@ def gate5():
     checks["cs_margin_lower_ci_gt_0"]=cs_margin[1]>0
 
     control_rows,control_nulls=_parallel_gate5_controls()
-    (OUT/"gate-5-controls-per_world.json").write_text(json.dumps(
+    (OUT/"gate-5-repaired-controls-per_world.json").write_text(json.dumps(
       control_rows,indent=2,sort_keys=True,default=lambda value:value.item() if isinstance(value,np.generic) else str(value))+"\n")
-    np.savez_compressed(OUT/"gate-5-controls-crt-nulls.npz",null=control_nulls)
+    np.savez_compressed(OUT/"gate-5-repaired-controls-crt-nulls.npz",null=control_nulls)
     def subset(population,arm):
         return [row for row in control_rows if row["population"]==population and row["arm"]==arm]
     control_summary={}
@@ -825,11 +825,11 @@ def gate5():
       "verdict_classes":{"scientific_outcomes":"PASS" if not failures else "FAIL",
         "semantic_integrity":"PASS" if all(checks[name] for name in checks if "cumulative" in name or "constitution" in name or "semantics" in name) else "FAIL",
         "distributional_stress":"DESCRIPTIVE_ONLY","process_custody":"PASS"}}
-    dump("gate-5.json",result)
-    (OUT/"gate-5-robustness.json").write_text(json.dumps(
+    dump("gate-5-repaired.json",result)
+    (OUT/"gate-5-repaired-robustness.json").write_text(json.dumps(
       {"joint":joint_robustness,"parameter_sweeps":parameter_sweeps},indent=2,sort_keys=True,
       default=lambda value:value.item() if isinstance(value,np.generic) else str(value))+"\n")
-    (OUT/"gate-5-report.md").write_text(
+    (OUT/"gate-5-repaired-report.md").write_text(
       "# V2.4.4 Gate 5 — cumulative regression and robustness\n\n"
       f"Outcome: **{'PASS under expanded mixed verdict' if not failures else 'FAIL'}**. "
       f"Blocking failures: `{failures}`.\n\n"
@@ -841,7 +841,7 @@ def gate5():
       f"`B_max_inherited_formation = {B_MAX_FORMATION}`; "
       f"`B_max_v24_common_emissions = {B_MAX_V24}`; `pi1 = {PI1_24}`.\n")
     if failures:
-        (OUT/"gate-5-diagnosis-stub.md").write_text(
+        (OUT/"gate-5-repaired-diagnosis-stub.md").write_text(
           "# V2.4.4 Gate-5 honest stop\n\n"
           f"Blocking failures retained verbatim: `{failures}`.\n")
     return not failures

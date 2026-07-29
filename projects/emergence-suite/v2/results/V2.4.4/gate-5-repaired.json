@@ -1,0 +1,280 @@
+{
+  "B_max_inherited_formation": 3.801426508560692,
+  "B_max_v24_common_emissions": 6.704414354964107,
+  "blocking_failures": [],
+  "bma_regret_intervals": {
+    "change_point": [
+      0.001226972323836912,
+      0.0007870060642409281,
+      0.0018629930947801337
+    ],
+    "context_split": [
+      0.00223343764077514,
+      0.0010590740650717873,
+      0.003537905242957204
+    ],
+    "continuous_drift": [
+      0.0031365644409349133,
+      0.0013310468336495374,
+      0.004970039019001503
+    ],
+    "cue_local_relearning": [
+      0.006745565889722078,
+      0.005136271933060561,
+      0.008375166488137752
+    ],
+    "global_downweight": [
+      0.003906174882995808,
+      0.0025573099827367668,
+      0.0052800152146077325
+    ]
+  },
+  "checks": {
+    "bma_change_point_upper_ci_max_0.01": true,
+    "bma_context_split_upper_ci_max_0.01": true,
+    "bma_continuous_drift_upper_ci_max_0.01": true,
+    "bma_cue_local_relearning_upper_ci_max_0.01": true,
+    "bma_global_downweight_upper_ci_max_0.01": true,
+    "bridge_G_fixed": true,
+    "bridge_historical": true,
+    "bridge_material_min_0.60": true,
+    "bridge_present_indexing": true,
+    "bridge_raw_cs_min_0.60": true,
+    "bridge_shuffled_selective_max_0.10": true,
+    "bridge_single_material_max_0.10": true,
+    "bridge_single_selective_max_0.10": true,
+    "bridge_transfer": true,
+    "change_point_material_max_0.10": true,
+    "change_point_raw_cs_max_0.10": true,
+    "change_point_selective_max_0.10": true,
+    "continuous_drift_material_max_0.10": true,
+    "continuous_drift_raw_cs_max_0.10": true,
+    "continuous_drift_selective_max_0.10": true,
+    "cs_margin_lower_ci_gt_0": true,
+    "cs_margin_mean_min_0.01": true,
+    "cs_matched_min_375": true,
+    "cue_count_4_public_support": true,
+    "cue_local_material_max_0.10": true,
+    "cue_local_recovery_min_0.60": true,
+    "cue_local_selective_max_0.10": true,
+    "cumulative_V2.0": true,
+    "cumulative_V2.1": true,
+    "cumulative_V2.2.1": true,
+    "cumulative_formation": true,
+    "cumulative_maintenance": true,
+    "gate1_primary": true,
+    "gate2_only_adjudicated_failure": true,
+    "gate3_only_adjudicated_failures": true,
+    "gate4_primary": true,
+    "genuine_G_fixed": true,
+    "genuine_historical": true,
+    "genuine_material_min_0.60": true,
+    "genuine_present_indexing": true,
+    "genuine_raw_cs_min_0.60": true,
+    "genuine_shuffled_selective_max_0.10": true,
+    "genuine_single_material_max_0.10": true,
+    "genuine_single_selective_max_0.10": true,
+    "genuine_transfer": true,
+    "graded_update_constitution": true,
+    "model_evidence_constitution": true,
+    "v24_all_parameter_sweep_semantics": true,
+    "v24_joint_robustness_semantics": true
+  },
+  "control_summary": {
+    "bridge:genuine": {
+      "E_null": [
+        -1.4480584618081356,
+        -1.8904950281497226,
+        -1.0226566855604642
+      ],
+      "count": 120,
+      "material": 0.6583333333333333,
+      "raw_cs": 0.725,
+      "selective": 0.31666666666666665
+    },
+    "bridge:shuffled": {
+      "E_null": [
+        -3.1878072078465807,
+        -3.538578056099537,
+        -2.8524391725399236
+      ],
+      "count": 120,
+      "material": 0.35,
+      "raw_cs": 0.5333333333333333,
+      "selective": 0.016666666666666666
+    },
+    "bridge:single_regime": {
+      "E_null": [
+        -0.3160252478716286,
+        -0.35988431906985985,
+        -0.2749640145536577
+      ],
+      "count": 120,
+      "material": 0.0,
+      "raw_cs": 0.45,
+      "selective": 0.0
+    },
+    "change_point:exact": {
+      "E_null": [
+        -7.607940585866823,
+        -8.352598074701287,
+        -6.8506942393293615
+      ],
+      "count": 120,
+      "material": 0.0,
+      "raw_cs": 0.025,
+      "selective": 0.0
+    },
+    "continuous_drift:exact": {
+      "E_null": [
+        -12.178961322148162,
+        -13.041894745673428,
+        -11.316208959870485
+      ],
+      "count": 120,
+      "material": 0.0,
+      "raw_cs": 0.0,
+      "selective": 0.0
+    },
+    "cue_local_relearning:exact": {
+      "E_null": [
+        -11.215332643518488,
+        -11.906480474517796,
+        -10.53098732789046
+      ],
+      "count": 120,
+      "material": 0.0,
+      "raw_cs": 0.0,
+      "selective": 0.0
+    },
+    "genuine:genuine": {
+      "E_null": [
+        -1.2438903437507975,
+        -1.655568608182586,
+        -0.8498905276963248
+      ],
+      "count": 120,
+      "material": 0.6,
+      "raw_cs": 0.7083333333333334,
+      "selective": 0.275
+    },
+    "genuine:shuffled": {
+      "E_null": [
+        -2.8876353389729608,
+        -3.218674760839858,
+        -2.5503136319973922
+      ],
+      "count": 120,
+      "material": 0.4666666666666667,
+      "raw_cs": 0.6166666666666667,
+      "selective": 0.03333333333333333
+    },
+    "genuine:single_regime": {
+      "E_null": [
+        -0.2989442000405366,
+        -0.3424590095332836,
+        -0.25699652875038476
+      ],
+      "count": 120,
+      "material": 0.0,
+      "raw_cs": 0.5083333333333333,
+      "selective": 0.0
+    }
+  },
+  "cs_margin_interval": [
+    0.10445572276557186,
+    0.09402357259583247,
+    0.11479149500858499
+  ],
+  "cs_matched_count": 500,
+  "elapsed_seconds": 1518.2933518886566,
+  "external_adjudication": "CONTINUE_WITH_TWO_SELECTIVITY_LIMITATIONS",
+  "formal_gate_2_verdict": "FAIL",
+  "formal_gate_3_verdict": "FAIL",
+  "gate": 5,
+  "information_curves": {
+    "32": {
+      "change_point": [
+        0.013885358925553625,
+        0.009487842286687677,
+        0.017691060815051684
+      ],
+      "context_split": [
+        0.02236701411246031,
+        0.016229072254001782,
+        0.028771959445839927
+      ],
+      "continuous_drift": [
+        0.016736625711991866,
+        0.010951864729268897,
+        0.022581302933131393
+      ],
+      "cue_local_relearning": [
+        0.01633025098569899,
+        0.011664414584608873,
+        0.020895844892477682
+      ],
+      "global_downweight": [
+        0.01568609146331482,
+        0.0110742367642758,
+        0.02035051533087811
+      ]
+    },
+    "64": {
+      "change_point": [
+        0.003479989040595322,
+        0.0025584767538166676,
+        0.004532995824073117
+      ],
+      "context_split": [
+        0.005841047242630241,
+        0.0031441194409851827,
+        0.008717351405363002
+      ],
+      "continuous_drift": [
+        0.005857938336523163,
+        0.003054580414533998,
+        0.008736409161635423
+      ],
+      "cue_local_relearning": [
+        0.007153519000956608,
+        0.004657207710759844,
+        0.009662486285263772
+      ],
+      "global_downweight": [
+        0.0069791394291971575,
+        0.004544268507415433,
+        0.00945778134156891
+      ]
+    }
+  },
+  "passed_under_expanded_mixed_verdict": true,
+  "pi1_24": 0.92741935483871,
+  "repeated_adjudicated_limitations": {
+    "bridge_E_null": [
+      -1.4480584618081356,
+      -1.8904950281497226,
+      -1.0226566855604642
+    ],
+    "bridge_selective_rate": 0.31666666666666665,
+    "genuine_E_null": [
+      -1.2438903437507975,
+      -1.655568608182586,
+      -0.8498905276963248
+    ],
+    "genuine_selective_rate": 0.275
+  },
+  "robustness": {
+    "all_declared_axes_reported": true,
+    "joint_cell_count": 3000,
+    "joint_semantics_passed": true,
+    "one_at_a_time_cell_count": 120
+  },
+  "stage": "V2.4.4",
+  "verdict_classes": {
+    "distributional_stress": "DESCRIPTIVE_ONLY",
+    "process_custody": "PASS",
+    "scientific_outcomes": "PASS",
+    "semantic_integrity": "PASS"
+  }
+}

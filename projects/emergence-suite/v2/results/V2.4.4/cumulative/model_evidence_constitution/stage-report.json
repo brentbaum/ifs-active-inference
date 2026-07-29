@@ -1,0 +1,160 @@
+{
+  "V2.0": {
+    "observation": "D",
+    "passed": true,
+    "results": {
+      "1_candidates_normalized": {
+        "maximum_error": 1.5543122344752192e-15,
+        "passed": true
+      },
+      "2_prior_complexity_once": {
+        "passed": true,
+        "structural_prior_factor_count": 1
+      },
+      "3_masked_increment_zero": {
+        "incremental_log_bf": -1.5543122344752203e-15,
+        "passed": true
+      },
+      "4_absent_increment_zero": {
+        "incremental_log_bf": -1.5543122344752203e-15,
+        "passed": true
+      },
+      "5_identical_predictions_zero": {
+        "incremental_log_bf": 0.0,
+        "passed": true
+      },
+      "6_prequential_recombination": {
+        "absolute_error": 0.0,
+        "passed": true,
+        "posterior_log_odds": 0.7269140430307628,
+        "published_contributions": [
+          0.7269140430307628
+        ],
+        "recombined_log_odds": 0.7269140430307628
+      },
+      "7_partition_included": {
+        "candidate_row_sums": [
+          1.0,
+          0.9999999999999984
+        ],
+        "passed": true
+      },
+      "8_no_evidence_dynamics": {
+        "declared_dynamics": "static",
+        "passed": true,
+        "predicted_final": [
+          0.5,
+          0.5
+        ]
+      },
+      "9_independent_implementation": {
+        "maximum_error": 1.3877787807814457e-17,
+        "passed": true
+      }
+    },
+    "structure": "H"
+  },
+  "V2.1": {
+    "observation": null,
+    "passed": true,
+    "results": {
+      "1_candidates_normalized": {
+        "maximum_cpt_error": 0.0,
+        "passed": true,
+        "structural_comparisons": 0
+      },
+      "2_prior_complexity_once": {
+        "passed": true,
+        "structural_comparisons": 0
+      },
+      "3_masked_increment_zero": {
+        "incremental_log_bf": 0.0,
+        "not_applicable": true,
+        "passed": true
+      },
+      "4_absent_increment_zero": {
+        "incremental_log_bf": 0.0,
+        "not_applicable": true,
+        "passed": true
+      },
+      "5_identical_predictions_zero": {
+        "incremental_log_bf": 0.0,
+        "not_applicable": true,
+        "passed": true
+      },
+      "6_prequential_recombination": {
+        "passed": true,
+        "structural_comparisons": 0
+      },
+      "7_partition_included": {
+        "maximum_cpt_error": 0.0,
+        "passed": true
+      },
+      "8_no_evidence_dynamics": {
+        "declared_dynamics": "no structural hypothesis",
+        "passed": true
+      },
+      "9_independent_implementation": {
+        "passed": true,
+        "structural_comparisons": 0
+      }
+    },
+    "structure": null
+  },
+  "V2.2.1": {
+    "observation": "K",
+    "passed": true,
+    "results": {
+      "1_candidates_normalized": {
+        "maximum_error": 6.961098364399732e-14,
+        "passed": true
+      },
+      "2_prior_complexity_once": {
+        "passed": true,
+        "structural_prior_factor_count": 1
+      },
+      "3_masked_increment_zero": {
+        "incremental_log_bf": -6.961098364399974e-14,
+        "passed": true
+      },
+      "4_absent_increment_zero": {
+        "incremental_log_bf": -6.961098364399974e-14,
+        "passed": true
+      },
+      "5_identical_predictions_zero": {
+        "incremental_log_bf": 0.0,
+        "passed": true
+      },
+      "6_prequential_recombination": {
+        "absolute_error": 8.881784197001252e-16,
+        "passed": true,
+        "posterior_log_odds": -5.980461694034714,
+        "published_contributions": [
+          -5.5749965859265505
+        ],
+        "recombined_log_odds": -5.980461694034715
+      },
+      "7_partition_included": {
+        "candidate_row_sums": [
+          1.0,
+          0.9999999999999304
+        ],
+        "passed": true
+      },
+      "8_no_evidence_dynamics": {
+        "declared_dynamics": "static",
+        "passed": true,
+        "predicted_final": [
+          0.6,
+          0.4
+        ]
+      },
+      "9_independent_implementation": {
+        "maximum_error": 6.938893903907228e-18,
+        "passed": true
+      }
+    },
+    "structure": "Z"
+  },
+  "passed": true
+}
