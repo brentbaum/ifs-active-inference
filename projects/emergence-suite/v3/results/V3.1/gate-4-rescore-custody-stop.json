@@ -1,0 +1,25 @@
+{
+  "authorized_substitution": false,
+  "binding_instruction": "No world re-generation; re-score the retained 2,000 Gate-4 worlds.",
+  "gate_5_opened": false,
+  "inventory": {
+    "aggregate_gate_4_records_present": [
+      "gate-4.json",
+      "gate-4-repaired.json"
+    ],
+    "per_world_hashes_present": false,
+    "per_world_traces_present": false,
+    "serialized_worlds_present": false
+  },
+  "required_world_count": 2000,
+  "rescore_started": false,
+  "seed_block": [
+    3110000,
+    3111999
+  ],
+  "status": "STOPPED_MISSING_RETAINED_WORLDS",
+  "substitutions_rejected": [
+    "deterministic regeneration from seed and committed generator",
+    "reconstruction from aggregate lesion statistics"
+  ]
+}

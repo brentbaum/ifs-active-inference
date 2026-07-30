@@ -42,3 +42,13 @@ The identity-edge lesion removed part-like posterior mass exactly, but only
 182/333 worlds kept the retained `W→Y` posterior within the blocking `0.20`
 survival band (`0.5465465465465466` versus the `0.90` survival floor). The
 other five lesions passed. Gate 5 and C-V31 were not opened.
+
+## Gate-4 restricted-prior rescore custody stop
+
+The selectivity adjudication replaced the unaudited absolute-movement
+criterion with a restricted-prior identity and required rescoring the
+retained 2,000 worlds without regeneration. No serialized worlds, per-world
+traces, or per-world hashes exist. The prior runner retained only aggregate
+statistics. Deterministic regeneration was not substituted for the missing
+artifacts because the adjudication prohibits regeneration. No rescore or
+Gate-5 execution began.

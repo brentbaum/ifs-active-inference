@@ -1,7 +1,6 @@
 # V3.1 stage report
 
-Status: **STOPPED_AT_REPAIRED_GATE_4_SELECTIVITY_FAILURE**. No freeze manifest
-exists.
+Status: **STOPPED_AT_GATE_4_RESCORE_CUSTODY**. No freeze manifest exists.
 
 - Stage 0: thresholds frozen from the barred 3100000–3101999 block, including
   a prospective efficacy construct amendment on its previously unconsumed
@@ -26,6 +25,11 @@ exists.
 - Gate 4 repaired run: FAIL. Five lesions passed. The identity-edge lesion
   removed part-like mass exactly, but retained-edge survival was only 182/333
   (`0.546547`) against the blocking `0.90` floor.
+- Gate-4 selectivity adjudication: the absolute-movement statistic was
+  reclassified and replaced by a restricted-prior identity. The required
+  rescore could not begin because the prior runner retained no serialized
+  worlds, per-world traces, or hashes, while the adjudication forbids
+  regeneration.
 - Gate 5: not opened.
 
 Post-stop regression status: V3 22/22 green, including the new masking

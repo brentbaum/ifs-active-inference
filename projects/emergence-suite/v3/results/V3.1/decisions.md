@@ -26,3 +26,8 @@
     disappeared exactly, but `W→Y` posterior survival missed its blocking
     floor. No interpretation of hypothesis-space renormalization was authored
     after seeing the result.
+11. The evaluator replaced absolute retained-edge movement with the exact
+    restricted-prior identity. Rescoring stopped before code changes because
+    the required retained worlds were never serialized and regeneration is
+    explicitly forbidden. Deterministic seed replay was not treated as
+    retention.
