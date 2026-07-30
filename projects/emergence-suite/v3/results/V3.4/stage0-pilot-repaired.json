@@ -1,0 +1,60 @@
+{
+  "attainable": {
+    "broadcast_local_identity_max": 0.0012646499592706695,
+    "broadcast_root_uptake_mean": 0.0728511951298685,
+    "factorial_transfer_difference_mean": 0.05097903648004664,
+    "factorial_uptake_difference_mean": 0.07282719497149519,
+    "intrusive_trust_q95": 0.08628129002098521,
+    "local_precision_difference_mean": 0.42467692956425407,
+    "no_evidence_root_bf_max_abs": 0.0,
+    "regulation_only_root_bf_max_abs": 0.0,
+    "reliable_trust_mean": 0.7803599444285565,
+    "soothing_contingency_gap_mean": 0.5977741228549831,
+    "switch_onset_error_q95": 0.0,
+    "unstable_transition_probability_mean": 0.9923516719336533
+  },
+  "barred_block": [
+    3430000,
+    3431999
+  ],
+  "frozen_criteria": {
+    "broadcast_local_identity_max": 1e-10,
+    "broadcast_root_uptake_min": 0.03642559756493425,
+    "coverage_min": 0.93,
+    "ece_max": 0.08,
+    "edge_accuracy_min": 0.84,
+    "factorial_transfer_difference_min": 0.02548951824002332,
+    "factorial_uptake_difference_min": 0.036413597485747594,
+    "intrusive_trust_max": 0.1362812900209852,
+    "local_precision_difference_min": 0.21233846478212703,
+    "partner_accuracy_min": 0.91,
+    "program_accuracy_min": 0.78,
+    "reliable_trust_min": 0.7018360236571606,
+    "root_accuracy_min": 0.74,
+    "soothing_contingency_gap_min": 0.29888706142749155,
+    "switch_onset_error_max": 2.0,
+    "transition_accuracy_min": 0.94,
+    "unstable_transition_probability_min": 0.7442637539502399
+  },
+  "recovery": {
+    "coverage": 0.9825,
+    "edge_accuracy": {
+      "L_PREC": 0.94125,
+      "L_TRANSITION": 0.99125,
+      "L_Y": 0.89375,
+      "PA_RY": 0.98625
+    },
+    "maximum_exact_complete_log_probability_error": 0.0,
+    "maximum_normalization_error": 1.432187701766452e-14,
+    "minimum_edge_accuracy": 0.89375,
+    "partner_accuracy": 0.9691145833333333,
+    "program_accuracy": 0.83875,
+    "root_accuracy": 0.79125,
+    "root_ece": 0.019092896412940177,
+    "structure_brier": 0.09553102438578595,
+    "structure_ece": 0.02745597246490784,
+    "transition_accuracy": 0.99125,
+    "world_count": 800
+  },
+  "verdict": "DESCRIPTIVE_ATTAINABILITY_PASS"
+}

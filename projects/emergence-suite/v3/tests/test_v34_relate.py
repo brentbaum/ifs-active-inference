@@ -24,6 +24,67 @@ class V34RelateTests(unittest.TestCase):
         self.assertEqual(posterior.root_log_bf, 0.0)
         self.assertEqual(posterior.root_movement, 0.0)
 
+    def test_root_generator_probability_matches_scorer_for_both_roots(self):
+        """The Bernoulli generator parameter is exactly p(O_G=1)."""
+        for root_state in (0, 1):
+            for partner_state in range(v34.PARTNER_CARDINALITY):
+                for structure in v34.STRUCTURES:
+                    for broadcast in (False, True):
+                        generated_one_probability = v34.root_probability(
+                            1,
+                            root_state,
+                            partner_state,
+                            structure,
+                            broadcast=broadcast,
+                        )
+                        scorer_one_probability = v34.observation_likelihood(
+                            v34.RelateObservation(
+                                time=0,
+                                relational=(None,) * 5,
+                                regulation_response=None,
+                                partner_action=0,
+                                outcome=None,
+                                root_evidence=1,
+                            ),
+                            partner_state,
+                            root_state,
+                            structure,
+                            broadcast=broadcast,
+                            relational_enabled=False,
+                        )
+                        scorer_zero_probability = (
+                            v34.observation_likelihood(
+                                v34.RelateObservation(
+                                    time=0,
+                                    relational=(None,) * 5,
+                                    regulation_response=None,
+                                    partner_action=0,
+                                    outcome=None,
+                                    root_evidence=0,
+                                ),
+                                partner_state,
+                                root_state,
+                                structure,
+                                broadcast=broadcast,
+                                relational_enabled=False,
+                            )
+                        )
+                        self.assertLessEqual(
+                            abs(
+                                generated_one_probability
+                                - scorer_one_probability
+                            ),
+                            1e-10,
+                        )
+                        self.assertLessEqual(
+                            abs(
+                                generated_one_probability
+                                + scorer_zero_probability
+                                - 1.0
+                            ),
+                            1e-10,
+                        )
+
     def test_independent_oracle_copies_and_matches(self):
         world = v34.generate_world(
             3_400_001,

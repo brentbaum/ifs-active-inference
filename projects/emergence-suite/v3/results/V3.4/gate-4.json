@@ -1,0 +1,89 @@
+{
+  "checks": {
+    "broadcast_target_only": true,
+    "partner_to_outcome_removed": true,
+    "partner_to_precision_target_only": true,
+    "restricted_prior_and_oracle_identity": true,
+    "root_evidence_mask_is_neutral": true,
+    "transition_lesion_removes_switch_localization": true
+  },
+  "metrics": {
+    "L_PREC": {
+      "full_minus_lesioned_local_precision": {
+        "lower_95": 0.44960561353594003,
+        "mean": 0.4498127480936148,
+        "upper_95": 0.4500198826512896
+      },
+      "local_precision_baseline_error_max": 6.38378239159465e-15,
+      "restricted_edge_max": 0.0
+    },
+    "L_TRANSITION": {
+      "full_switch_error": {
+        "lower_95": 0.009394226664916402,
+        "mean": 0.03,
+        "upper_95": 0.05060577333508359
+      },
+      "lesioned_switch_error": {
+        "lower_95": 13.054915384881335,
+        "mean": 13.6775,
+        "upper_95": 14.300084615118665
+      },
+      "restricted_edge_max": 0.0
+    },
+    "L_Y": {
+      "full_edge_probability": {
+        "lower_95": 0.9994422246964492,
+        "mean": 0.9996908037481396,
+        "upper_95": 0.99993938279983
+      },
+      "restricted_edge_max": 0.0
+    },
+    "broadcast": {
+      "global_baseline_error_max": 0.0,
+      "local_partner_identity_max": 0.0,
+      "local_structure_identity_max": 0.0,
+      "uptake_removed": {
+        "lower_95": 0.06716106778528178,
+        "mean": 0.07279833657491225,
+        "upper_95": 0.07843560536454272
+      }
+    },
+    "restricted_prior_identity": {
+      "all_finite": true,
+      "all_oracle_inputs_unchanged": true,
+      "conditioned_prior_max_error": 2.7422508708241367e-14,
+      "independent_oracle_max_error": 5.384581669432009e-14,
+      "normalization_max_error": 2.853273173286652e-14
+    },
+    "root_evidence": {
+      "normalization_error_max": 1.3988810110276972e-14,
+      "root_bf_max_abs": 0.0,
+      "root_movement_max_abs": 0.0,
+      "root_prior_error_max": 0.0
+    }
+  },
+  "renormalization_note": "absolute unrelated posterior movement after a structure deletion is descriptive; selectivity is the exact conditioned-prior identity",
+  "seed_allocations": {
+    "L_PREC": [
+      3410000,
+      3410399
+    ],
+    "L_TRANSITION": [
+      3411600,
+      3411999
+    ],
+    "L_Y": [
+      3410800,
+      3411199
+    ],
+    "broadcast": [
+      3410400,
+      3410799
+    ],
+    "root_evidence": [
+      3411200,
+      3411599
+    ]
+  },
+  "verdict": "PASS"
+}

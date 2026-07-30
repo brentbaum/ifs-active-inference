@@ -670,12 +670,15 @@ def _sample_observation(
     )
     root = None
     if root_evidence_present:
+        # ``_bernoulli`` returns the observed bit, so its parameter must be
+        # p(O_G=1), not p(O_G=G).  Keeping this expressed through the public
+        # likelihood pins recovery generation to the scorer for either G.
         root = _bernoulli(
             seed,
             "root-evidence",
             time,
             root_probability(
-                root_state,
+                1,
                 root_state,
                 state,
                 structure,

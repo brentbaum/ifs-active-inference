@@ -1,0 +1,228 @@
+{
+  "assay_checks": {
+    "action_prevalence": true,
+    "broadcast_primary": true,
+    "missingness": true,
+    "reduced_emission": true
+  },
+  "assay_metrics": {
+    "action_prevalence": {
+      "all_finite": true,
+      "normalization_error_max": 1.4432899320127035e-14,
+      "root_movement": {
+        "lower_95": 0.4396911804278022,
+        "mean": 0.4489582168298046,
+        "upper_95": 0.45822525323180696
+      }
+    },
+    "broadcast_primary": {
+      "local_partner_identity_max": 0.0,
+      "local_structure_identity_max": 0.0,
+      "normalization_error_max": 1.4210854715202004e-14,
+      "uptake_difference": {
+        "lower_95": 0.06641228874403356,
+        "mean": 0.06990570945675487,
+        "upper_95": 0.07339913016947618
+      }
+    },
+    "missingness": {
+      "all_finite": true,
+      "normalization_error_max": 7.327471962526033e-15,
+      "root_movement": {
+        "lower_95": 0.4378664436098805,
+        "mean": 0.44753588034759617,
+        "upper_95": 0.45720531708531187
+      }
+    },
+    "reduced_emission": {
+      "all_finite": true,
+      "normalization_error_max": 7.327471962526033e-15,
+      "trust_gap": {
+        "lower_95": 0.5869126792767788,
+        "mean": 0.5888531230137691,
+        "upper_95": 0.5907935667507594
+      }
+    }
+  },
+  "checks": {
+    "gate3_primary_still_passes": true,
+    "gate4_primary_still_passes": true,
+    "prior_stage_manifests": true,
+    "recovery_robustness": false,
+    "scientific_robustness": true,
+    "trace_custody": true
+  },
+  "prior_stage_manifests": [
+    {
+      "file_count": 31,
+      "mismatches": [],
+      "passed": true,
+      "stage": "V3.0"
+    },
+    {
+      "file_count": 42,
+      "mismatches": [],
+      "passed": true,
+      "stage": "V3.1"
+    },
+    {
+      "file_count": 42,
+      "mismatches": [],
+      "passed": true,
+      "stage": "V3.2"
+    },
+    {
+      "file_count": 53,
+      "mismatches": [],
+      "passed": true,
+      "stage": "V3.3"
+    }
+  ],
+  "recovery_checks": {
+    "code_length_scale_1_5": {
+      "calibration": true,
+      "coverage": true,
+      "edge_recovery": true,
+      "exact_probability": true,
+      "normalization": true,
+      "oracle": true,
+      "program_recovery": true,
+      "root_recovery": true
+    },
+    "length_32": {
+      "calibration": true,
+      "coverage": true,
+      "edge_recovery": true,
+      "exact_probability": true,
+      "normalization": true,
+      "oracle": true,
+      "program_recovery": false,
+      "root_recovery": true
+    },
+    "length_96": {
+      "calibration": true,
+      "coverage": true,
+      "edge_recovery": true,
+      "exact_probability": true,
+      "normalization": true,
+      "oracle": true,
+      "program_recovery": true,
+      "root_recovery": true
+    },
+    "transition_stay_0_75": {
+      "calibration": true,
+      "coverage": true,
+      "edge_recovery": true,
+      "exact_probability": true,
+      "normalization": true,
+      "oracle": true,
+      "program_recovery": true,
+      "root_recovery": true
+    }
+  },
+  "recovery_metrics": {
+    "code_length_scale_1_5": {
+      "coverage": 0.986,
+      "edge_accuracy": {
+        "L_PREC": 0.948,
+        "L_TRANSITION": 0.994,
+        "L_Y": 0.887,
+        "PA_RY": 0.994
+      },
+      "maximum_exact_complete_log_probability_error": 0.0,
+      "maximum_normalization_error": 1.4432899320127035e-14,
+      "minimum_edge_accuracy": 0.887,
+      "oracle_inputs_unchanged": true,
+      "oracle_max_error": 8.526512829121202e-14,
+      "partner_accuracy": 0.9780833333333333,
+      "program_accuracy": 0.832,
+      "root_accuracy": 0.769,
+      "root_ece": 0.012581410812675962,
+      "structure_brier": 0.10116903124242192,
+      "structure_ece": 0.023371280648689215,
+      "transition_accuracy": 0.994,
+      "world_count": 1000
+    },
+    "length_32": {
+      "coverage": 0.975,
+      "edge_accuracy": {
+        "L_PREC": 0.9,
+        "L_TRANSITION": 0.975,
+        "L_Y": 0.845,
+        "PA_RY": 0.969
+      },
+      "maximum_exact_complete_log_probability_error": 0.0,
+      "maximum_normalization_error": 1.432187701766452e-14,
+      "minimum_edge_accuracy": 0.845,
+      "oracle_inputs_unchanged": true,
+      "oracle_max_error": 5.684341886080802e-14,
+      "partner_accuracy": 0.9705625,
+      "program_accuracy": 0.733,
+      "root_accuracy": 0.797,
+      "root_ece": 0.01336292120744247,
+      "structure_brier": 0.14269320378887296,
+      "structure_ece": 0.02019370504680673,
+      "transition_accuracy": 0.975,
+      "world_count": 1000
+    },
+    "length_96": {
+      "coverage": 0.997,
+      "edge_accuracy": {
+        "L_PREC": 0.977,
+        "L_TRANSITION": 1.0,
+        "L_Y": 0.935,
+        "PA_RY": 1.0
+      },
+      "maximum_exact_complete_log_probability_error": 0.0,
+      "maximum_normalization_error": 2.864375403532904e-14,
+      "minimum_edge_accuracy": 0.935,
+      "oracle_inputs_unchanged": true,
+      "oracle_max_error": 3.979039320256561e-13,
+      "partner_accuracy": 0.9761145833333333,
+      "program_accuracy": 0.915,
+      "root_accuracy": 0.768,
+      "root_ece": 0.021199575930785145,
+      "structure_brier": 0.058384870351307,
+      "structure_ece": 0.013232751035546705,
+      "transition_accuracy": 1.0,
+      "world_count": 1000
+    },
+    "transition_stay_0_75": {
+      "coverage": 0.989,
+      "edge_accuracy": {
+        "L_PREC": 0.947,
+        "L_TRANSITION": 0.999,
+        "L_Y": 0.89,
+        "PA_RY": 0.992
+      },
+      "maximum_exact_complete_log_probability_error": 0.0,
+      "maximum_normalization_error": 1.432187701766452e-14,
+      "minimum_edge_accuracy": 0.89,
+      "oracle_inputs_unchanged": true,
+      "oracle_max_error": 2.842170943040401e-14,
+      "partner_accuracy": 0.946375,
+      "program_accuracy": 0.841,
+      "root_accuracy": 0.757,
+      "root_ece": 0.022763318857158717,
+      "structure_brier": 0.09382916954777139,
+      "structure_ece": 0.016119641246096116,
+      "transition_accuracy": 0.999,
+      "world_count": 1000
+    }
+  },
+  "seed_block": [
+    3412000,
+    3419999
+  ],
+  "trace_custody": {
+    "gate-5-action_prevalence": true,
+    "gate-5-broadcast_primary": true,
+    "gate-5-code_length_scale_1_5": true,
+    "gate-5-length_32": true,
+    "gate-5-length_96": true,
+    "gate-5-missingness": true,
+    "gate-5-reduced_emission": true,
+    "gate-5-transition_stay_0_75": true
+  },
+  "verdict": "FAIL"
+}

@@ -1,0 +1,53 @@
+{
+  "assay_checks": {
+    "action_prevalence": true,
+    "broadcast_primary": true,
+    "missingness": true,
+    "reduced_emission": true
+  },
+  "failed_checks": [
+    "recovery_robustness"
+  ],
+  "recovery_checks": {
+    "code_length_scale_1_5": {
+      "calibration": true,
+      "coverage": true,
+      "edge_recovery": true,
+      "exact_probability": true,
+      "normalization": true,
+      "oracle": true,
+      "program_recovery": true,
+      "root_recovery": true
+    },
+    "length_32": {
+      "calibration": true,
+      "coverage": true,
+      "edge_recovery": true,
+      "exact_probability": true,
+      "normalization": true,
+      "oracle": true,
+      "program_recovery": false,
+      "root_recovery": true
+    },
+    "length_96": {
+      "calibration": true,
+      "coverage": true,
+      "edge_recovery": true,
+      "exact_probability": true,
+      "normalization": true,
+      "oracle": true,
+      "program_recovery": true,
+      "root_recovery": true
+    },
+    "transition_stay_0_75": {
+      "calibration": true,
+      "coverage": true,
+      "edge_recovery": true,
+      "exact_probability": true,
+      "normalization": true,
+      "oracle": true,
+      "program_recovery": true,
+      "root_recovery": true
+    }
+  }
+}

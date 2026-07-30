@@ -1,0 +1,117 @@
+{
+  "checks": {
+    "broadcast_increases_root_uptake": true,
+    "broadcast_off_preserves_local_inference": true,
+    "instability_supports_transitions": true,
+    "intrusion_distinguished": true,
+    "partner_switch_localized": true,
+    "regulation_increases_local_precision": true,
+    "regulation_increases_root_uptake": true,
+    "regulation_increases_transfer": true,
+    "regulation_without_root_is_exactly_neutral": true,
+    "reliable_partner_trust": true,
+    "root_evidence_available_without_regulation": true,
+    "soothing_without_contingency_distinguished": true
+  },
+  "metrics": {
+    "broadcast_local_q_partner_identity_max": 0.0,
+    "broadcast_local_structure_identity_max": 0.0,
+    "broadcast_off_global_baseline_error_max": 0.0,
+    "broadcast_off_local_precision": {
+      "lower_95": 0.896869954600899,
+      "mean": 0.8984413812240998,
+      "upper_95": 0.9000128078473005
+    },
+    "broadcast_root_uptake_difference": {
+      "lower_95": 0.07037469767604006,
+      "mean": 0.07438669628283778,
+      "upper_95": 0.07839869488963551
+    },
+    "intrusive_trust_q95": 0.08452347926503112,
+    "local_precision_difference": {
+      "lower_95": 0.4247107766784615,
+      "mean": 0.4247962340030722,
+      "upper_95": 0.4248816913276829
+    },
+    "no_root_movement_max_abs": 0.0,
+    "regulated_transfer_difference": {
+      "lower_95": 0.0491514365349281,
+      "mean": 0.051775424859503004,
+      "upper_95": 0.054399413184077906
+    },
+    "regulated_uptake_difference": {
+      "lower_95": 0.07021633790704013,
+      "mean": 0.07396489265643286,
+      "upper_95": 0.07771344740582559
+    },
+    "regulation_only_root_bf_max_abs": 0.0,
+    "reliable_trust": {
+      "lower_95": 0.7798792260288278,
+      "mean": 0.7801927313293555,
+      "upper_95": 0.7805062366298833
+    },
+    "soothing_noncontingent_trust_gap": {
+      "lower_95": 0.5966920749464082,
+      "mean": 0.5978625802152158,
+      "upper_95": 0.5990330854840233
+    },
+    "switch_onset_error_q95": 0.0,
+    "unregulated_root_evidence_movement": {
+      "lower_95": 0.37210210838141683,
+      "mean": 0.38036880070668316,
+      "upper_95": 0.3886354930319495
+    },
+    "unstable_transition_probability": {
+      "lower_95": 0.9752990570345261,
+      "mean": 0.9834489027500026,
+      "upper_95": 0.9915987484654791
+    }
+  },
+  "root_write_separation": "regulation-only root BF and root movement are exact zero",
+  "seed_allocations": {
+    "broadcast": [
+      3409200,
+      3409999
+    ],
+    "factorial": [
+      3405000,
+      3405999
+    ],
+    "intrusive": [
+      3406800,
+      3407599
+    ],
+    "soothing_noncontingent": [
+      3406000,
+      3406799
+    ],
+    "switch": [
+      3408400,
+      3409199
+    ],
+    "unstable": [
+      3407600,
+      3408399
+    ]
+  },
+  "thresholds": {
+    "broadcast_local_identity_max": 1e-10,
+    "broadcast_root_uptake_min": 0.03642559756493425,
+    "coverage_min": 0.93,
+    "ece_max": 0.08,
+    "edge_accuracy_min": 0.84,
+    "factorial_transfer_difference_min": 0.02548951824002332,
+    "factorial_uptake_difference_min": 0.036413597485747594,
+    "intrusive_trust_max": 0.1362812900209852,
+    "local_precision_difference_min": 0.21233846478212703,
+    "partner_accuracy_min": 0.91,
+    "program_accuracy_min": 0.78,
+    "reliable_trust_min": 0.7018360236571606,
+    "root_accuracy_min": 0.74,
+    "soothing_contingency_gap_min": 0.29888706142749155,
+    "switch_onset_error_max": 2.0,
+    "transition_accuracy_min": 0.94,
+    "unstable_transition_probability_min": 0.7442637539502399
+  },
+  "verdict": "PASS"
+}

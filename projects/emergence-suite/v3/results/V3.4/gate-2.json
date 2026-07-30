@@ -1,0 +1,67 @@
+{
+  "calibration_by_theorem": "world structures, roots, paths, and observations are sampled from the scorer's own normalized process",
+  "checks": {
+    "complete_log_probability": true,
+    "coverage": true,
+    "independent_oracle": true,
+    "minimum_edge_accuracy": true,
+    "normalization": true,
+    "partner_accuracy": true,
+    "program_accuracy": true,
+    "root_accuracy": true,
+    "root_ece": true,
+    "structure_ece": true,
+    "transition_accuracy": true
+  },
+  "independent_oracle": {
+    "all_inputs_unchanged": true,
+    "maximum_evidence_error": 1.7053025658242404e-13,
+    "maximum_root_error": 1.354472090042691e-14,
+    "maximum_structure_error": 6.317169010117141e-14,
+    "world_count": 100
+  },
+  "metrics": {
+    "coverage": 0.9903333333333333,
+    "edge_accuracy": {
+      "L_PREC": 0.9493333333333334,
+      "L_TRANSITION": 0.993,
+      "L_Y": 0.888,
+      "PA_RY": 0.994
+    },
+    "maximum_exact_complete_log_probability_error": 0.0,
+    "maximum_normalization_error": 1.4432899320127035e-14,
+    "minimum_edge_accuracy": 0.888,
+    "partner_accuracy": 0.9712430555555557,
+    "program_accuracy": 0.837,
+    "root_accuracy": 0.7823333333333333,
+    "root_ece": 0.010738725111008072,
+    "structure_brier": 0.0966366269461162,
+    "structure_ece": 0.015816303036017356,
+    "transition_accuracy": 0.993,
+    "world_count": 3000
+  },
+  "seed_block": [
+    3402000,
+    3404999
+  ],
+  "thresholds": {
+    "broadcast_local_identity_max": 1e-10,
+    "broadcast_root_uptake_min": 0.03642559756493425,
+    "coverage_min": 0.93,
+    "ece_max": 0.08,
+    "edge_accuracy_min": 0.84,
+    "factorial_transfer_difference_min": 0.02548951824002332,
+    "factorial_uptake_difference_min": 0.036413597485747594,
+    "intrusive_trust_max": 0.1362812900209852,
+    "local_precision_difference_min": 0.21233846478212703,
+    "partner_accuracy_min": 0.91,
+    "program_accuracy_min": 0.78,
+    "reliable_trust_min": 0.7018360236571606,
+    "root_accuracy_min": 0.74,
+    "soothing_contingency_gap_min": 0.29888706142749155,
+    "switch_onset_error_max": 2.0,
+    "transition_accuracy_min": 0.94,
+    "unstable_transition_probability_min": 0.7442637539502399
+  },
+  "verdict": "PASS"
+}
