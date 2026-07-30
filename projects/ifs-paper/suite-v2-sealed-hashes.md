@@ -170,3 +170,9 @@ Escrows: C-V28A 2100000:2100599, C-V28B 2110000:2110599, C-V28C 2120000:2120599,
 7d25943eb3d22198fb3380537a619cc5a5daa5aa9a9d759af0d7331026258c17  C-V28DB-challenge.md
 ```
 Escrow: C-V28D-B seeds 2130600:2131199 (fresh prefix; the never-opened 2130000:2130599 prefix closed). Ordering criterion corrected to the frozen first_times vocabulary (root < reduction), validated on a dev-seed trajectory pre-seal.
+
+## C-V30 seal (2026-07-30)
+```
+fdc8b516379048f7d2b1e5fde40c647de76bab02f060119339118debd4cdff73  C-V30-grammar-challenge.md
+```
+Escrow: C-V30 seeds 4000000:4001999 (Epoch C), released by this record via the frozen released_block parameter. Full accumulated pre-seal linter; dry-run on the exact constructor arguments sealed.
