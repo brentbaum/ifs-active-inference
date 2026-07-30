@@ -1,0 +1,67 @@
+{
+  "checks": {
+    "each_edge_production_removed": true,
+    "finite_normalized_posteriors": true,
+    "imaginal_effect_removed": true,
+    "imaginal_mask_candidate_common": true,
+    "imaginal_mask_paired_identity": true,
+    "independent_oracle_evidence": true,
+    "independent_oracle_probability": true,
+    "restricted_prior_identity": true
+  },
+  "metrics": {
+    "cell_counts": {
+      "G_A": 333,
+      "G_W": 334,
+      "G_Y": 333,
+      "M1_G": 334,
+      "W_Y": 333,
+      "imaginal_channel": 333
+    },
+    "finite_posterior_rate": 1.0,
+    "independent_oracle_evidence_error_max": 0.0,
+    "independent_oracle_probability_error_max": 0.0,
+    "masked_channel_neutrality_error_max": 0.0,
+    "masked_paired_no_do_identity_error_max": 0.0,
+    "masked_timing_identity_rate": 1.0,
+    "normalization_error_max": 1.3766765505351941e-14,
+    "restricted_prior_identity_error_max": 6.5503158452884236e-15,
+    "target_edge_probability_max": {
+      "G_A": 0.0,
+      "G_W": 0.0,
+      "G_Y": 0.0,
+      "M1_G": 0.0,
+      "W_Y": 0.0
+    },
+    "unrelated_movement_descriptive": {
+      "G_A": {
+        "maximum_absolute": 1.2656542480726785e-14,
+        "mean_absolute": 3.3365952643447527e-15
+      },
+      "G_W": {
+        "maximum_absolute": 1.4099832412739488e-14,
+        "mean_absolute": 3.46245819773423e-15
+      },
+      "G_Y": {
+        "maximum_absolute": 0.9427125189060482,
+        "mean_absolute": 0.16230330119378128
+      },
+      "M1_G": {
+        "maximum_absolute": 1.2989609388114332e-14,
+        "mean_absolute": 3.415203083740735e-15
+      },
+      "W_Y": {
+        "maximum_absolute": 0.9433494415014992,
+        "mean_absolute": 0.16213179348773402
+      }
+    },
+    "world_count": 2000
+  },
+  "seed_block": [
+    3310000,
+    3311999
+  ],
+  "selectivity_definition": "restricted-prior consistency; unrelated marginal movement is descriptive because conditioning renormalizes the posterior",
+  "trace_ledger": "gate-4-trace-hashes.json",
+  "verdict": "PASS"
+}

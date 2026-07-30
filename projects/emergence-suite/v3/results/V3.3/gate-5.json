@@ -1,0 +1,215 @@
+{
+  "adjudicated_nonblocking": {
+    "authorization": "gate3-adjudication.md",
+    "do_over_speedup_floor_repetition": {
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "frozen_floor": 0.00025,
+      "mean": 0.0,
+      "passed": false
+    },
+    "suggestion_direction_repetition": {
+      "ci95": [
+        -0.0117681634573112,
+        0.001722225536766276
+      ],
+      "frozen_direction": "positive",
+      "mean": -0.004940118398975422,
+      "passed": false
+    }
+  },
+  "blocking": {
+    "cumulative_regression": true,
+    "recovery_robustness": true,
+    "scientific_robustness": true
+  },
+  "cumulative": {
+    "gate1_pass": true,
+    "gate2_pass": true,
+    "gate3_blocking_checks": {
+      "adaptive_edge_survives": true,
+      "corrective_material": true,
+      "do_over_not_necessary": true,
+      "history_query": true,
+      "mode_retained": true,
+      "neutral_identity": true,
+      "premature_not_durable": true,
+      "suggestion_specificity": true
+    },
+    "gate3_formal_verdict_retained": "FAIL",
+    "gate3_nonblocking_checks": {
+      "do_over_acceleration": false,
+      "root_revision_without_pruning": false
+    },
+    "gate4_pass": true,
+    "prior_stage_manifests": [
+      {
+        "file_count": 31,
+        "mismatches": [],
+        "passed": true,
+        "stage": "V3.0"
+      },
+      {
+        "file_count": 42,
+        "mismatches": [],
+        "passed": true,
+        "stage": "V3.1"
+      },
+      {
+        "file_count": 42,
+        "mismatches": [],
+        "passed": true,
+        "stage": "V3.2"
+      }
+    ],
+    "trace_ledgers": {
+      "gate-2": true,
+      "gate-3": true,
+      "gate-4": true,
+      "gate-5-assays": true,
+      "gate-5-recovery": true
+    }
+  },
+  "recovery_checks": {
+    "recovery_code_scale_1_25": {
+      "coverage": true,
+      "edge_accuracy": true,
+      "exact_log_probability": true,
+      "normalization": true
+    },
+    "recovery_concentration_1": {
+      "coverage": true,
+      "edge_accuracy": true,
+      "exact_log_probability": true,
+      "normalization": true
+    },
+    "recovery_length_32": {
+      "coverage": true,
+      "edge_accuracy": true,
+      "exact_log_probability": true,
+      "normalization": true
+    },
+    "recovery_length_96": {
+      "coverage": true,
+      "edge_accuracy": true,
+      "exact_log_probability": true,
+      "normalization": true
+    }
+  },
+  "recovery_metrics": {
+    "recovery_code_scale_1_25": {
+      "brier": 0.20957270106813183,
+      "coverage": 0.955,
+      "ece": 0.03142419505082625,
+      "edge_accuracy": {
+        "G_A": 0.85375,
+        "G_W": 0.83375,
+        "G_Y": 0.83625,
+        "M1_G": 0.73,
+        "W_Y": 0.85625,
+        "doA_Y": 0.90125
+      },
+      "maximum_exact_log_probability_error": 0.0,
+      "maximum_normalization_error": 1.4210854715202004e-14,
+      "minimum_edge_accuracy": 0.73,
+      "program_accuracy": 0.34625,
+      "world_count": 800
+    },
+    "recovery_concentration_1": {
+      "brier": 0.17265981541166614,
+      "coverage": 0.93375,
+      "ece": 0.034974852352741746,
+      "edge_accuracy": {
+        "G_A": 0.80125,
+        "G_W": 0.80625,
+        "G_Y": 0.81,
+        "M1_G": 0.685,
+        "W_Y": 0.79875,
+        "doA_Y": 0.84125
+      },
+      "maximum_exact_log_probability_error": 0.0,
+      "maximum_normalization_error": 1.4210854715202004e-14,
+      "minimum_edge_accuracy": 0.685,
+      "program_accuracy": 0.24875,
+      "world_count": 800
+    },
+    "recovery_length_32": {
+      "brier": 0.15337039995524504,
+      "coverage": 0.94375,
+      "ece": 0.02131699603538427,
+      "edge_accuracy": {
+        "G_A": 0.77375,
+        "G_W": 0.7925,
+        "G_Y": 0.77625,
+        "M1_G": 0.68125,
+        "W_Y": 0.78625,
+        "doA_Y": 0.85
+      },
+      "maximum_exact_log_probability_error": 0.0,
+      "maximum_normalization_error": 7.327471962526033e-15,
+      "minimum_edge_accuracy": 0.68125,
+      "program_accuracy": 0.2,
+      "world_count": 800
+    },
+    "recovery_length_96": {
+      "brier": 0.19924804280521202,
+      "coverage": 0.94375,
+      "ece": 0.024797605497095383,
+      "edge_accuracy": {
+        "G_A": 0.855,
+        "G_W": 0.8225,
+        "G_Y": 0.85375,
+        "M1_G": 0.69875,
+        "W_Y": 0.845,
+        "doA_Y": 0.88875
+      },
+      "maximum_exact_log_probability_error": 0.0,
+      "maximum_normalization_error": 2.8199664825478976e-14,
+      "minimum_edge_accuracy": 0.69875,
+      "program_accuracy": 0.30625,
+      "world_count": 800
+    }
+  },
+  "scientific_checks": {
+    "correction_length_12": true,
+    "correction_length_30": true,
+    "do_over_schedule_identity": true,
+    "later_stress_30": true,
+    "primary_adaptive_survival": true,
+    "primary_correction": true,
+    "primary_neutral_identity": true,
+    "primary_suggestion_specificity": true
+  },
+  "scientific_metrics": {
+    "correction_length_12_material_rate": 0.97375,
+    "correction_length_30_material_rate": 0.9775,
+    "do_over_schedule_identity_rate": 1.0,
+    "do_over_speedup_ci95": [
+      0.0,
+      0.0
+    ],
+    "do_over_speedup_mean": 0.0,
+    "later_stress_30_material_rate": 0.98125,
+    "primary_adaptive_edge_survival": 0.9983143142701036,
+    "primary_adaptive_material_rate": 0.9733333333333334,
+    "primary_correction_material_rate": 0.9866666666666667,
+    "primary_neutral_error_max": 0.0,
+    "primary_suggestion_false_reduction_rate": 0.0,
+    "suggestion_root_direction_ci95": [
+      -0.0117681634573112,
+      0.001722225536766276
+    ],
+    "suggestion_root_direction_mean": -0.004940118398975422
+  },
+  "seed_block": [
+    3312000,
+    3319999
+  ],
+  "trace_ledgers": [
+    "gate-5-recovery-trace-hashes.json",
+    "gate-5-assays-trace-hashes.json"
+  ],
+  "verdict": "PASS"
+}

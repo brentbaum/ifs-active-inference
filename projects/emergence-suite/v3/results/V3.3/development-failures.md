@@ -21,3 +21,17 @@
 - The suggestion-only root-revision sign check also failed: mean
   historical-minus-current root estimate was `-0.007463967250969002`.
 - Gates 4–5 and escrow remained unopened.
+
+## Gate 5 — adjudicated findings repeated
+
+Under the committed mixed-verdict continuation, both Gate-3 failures remained
+non-blocking and repeated without rescue:
+
+- timely do-over speedup was exactly `0.0`, 95% interval `[0.0, 0.0]`, below
+  the frozen `0.00025` floor;
+- suggestion root direction was `-0.004940118398975422`, 95% interval
+  `[-0.0117681634573112, 0.001722225536766276]`, against the frozen positive
+  direction.
+
+Every blocking Gate-4 and Gate-5 criterion passed. These repetitions remain
+scientific limitations in the freeze candidate.

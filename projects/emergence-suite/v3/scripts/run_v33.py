@@ -10,7 +10,7 @@ import json
 import math
 import os
 import sys
-from dataclasses import asdict
+from dataclasses import asdict, replace
 from multiprocessing import get_context
 from pathlib import Path
 from typing import Any, Mapping, Sequence
@@ -1099,6 +1099,924 @@ def run_gate3() -> bool:
     return passed
 
 
+def _masked_imaginal_world(
+    world: v33.ReductionWorld,
+) -> v33.ReductionWorld:
+    slices = tuple(
+        replace(
+            item,
+            mode=None,
+            root=None,
+            world=None,
+            policy_proposal=None,
+            action=None,
+            outcome=None,
+        )
+        if item.episode_kind == "imaginal_post"
+        else item
+        for item in world.slices
+    )
+    return replace(world, slices=slices)
+
+
+@traced_execution
+def _worker_gate4(
+    task: tuple[int, str, Mapping[str, float]]
+) -> dict[str, Any]:
+    seed, lesion, thresholds_map = task
+    thresholds = v33.MaterialReductionThresholds(
+        mode_retained=float(thresholds_map["mode_retained"]),
+        burden_edge_mass_max=float(
+            thresholds_map["burden_edge_mass_max"]
+        ),
+        absent_present_bf_min=float(
+            thresholds_map["absent_present_bf_min"]
+        ),
+        stability_observations=int(
+            thresholds_map["stability_observations"]
+        ),
+        neutral_tolerance=float(thresholds_map["neutral_tolerance"]),
+    )
+    if lesion != "imaginal_channel":
+        adaptive = "W_Y" if lesion == "W_Y" else "none"
+        world = v33.generate_world(
+            seed,
+            v33.ReductionConfig(
+                "suggestion_only",
+                "none",
+                adaptive_edge=adaptive,
+                corrective_length=18,
+                return_length=18,
+            ),
+        )
+        full = v33.score_world(world).current
+        restrictions = {lesion: (0,)}
+        lesioned = v33.score_world(
+            world, restrictions=restrictions
+        ).current
+        allowed = {
+            program: probability
+            for program, probability in zip(
+                full.programs, full.probabilities
+            )
+            if v31.program_values(program)[lesion] == 0
+        }
+        allowed_mass = math.fsum(allowed.values())
+        identity_error = max(
+            abs(probability - allowed[program] / allowed_mass)
+            for program, probability in zip(
+                lesioned.programs, lesioned.probabilities
+            )
+        )
+        copied = [
+            asdict(item) for item in world.slices if item.context == 1
+        ]
+        oracle_programs, oracle_probabilities, oracle_evidence = (
+            v33_oracle.posterior(copied, restrictions=restrictions)
+        )
+        oracle_map = dict(
+            zip(oracle_programs, oracle_probabilities)
+        )
+        oracle_error = max(
+            abs(
+                probability
+                - oracle_map[_program_bits(program)]
+            )
+            for program, probability in zip(
+                lesioned.programs, lesioned.probabilities
+            )
+        )
+        unrelated_movement = {
+            edge: (
+                lesioned.edge_probabilities[edge]
+                - full.edge_probabilities[edge]
+            )
+            for edge in v33.EDGE_NAMES
+            if edge != lesion
+        }
+        return {
+            "seed": seed,
+            "cell": lesion,
+            "restriction": {lesion: [0]},
+            "restricted_prior_identity_error": identity_error,
+            "independent_oracle_probability_error": oracle_error,
+            "independent_oracle_evidence_error": abs(
+                lesioned.log_evidence - oracle_evidence
+            ),
+            "normalization_error": abs(
+                math.fsum(lesioned.probabilities) - 1.0
+            ),
+            "finite_log_evidence": math.isfinite(lesioned.log_evidence),
+            "target_edge_probability": lesioned.edge_probabilities[lesion],
+            "unrelated_edge_movement": unrelated_movement,
+            "full_target_edge_probability": full.edge_probabilities[lesion],
+        }
+
+    post = v33.generate_world(
+        seed,
+        v33.ReductionConfig(
+            "configural",
+            "post_revision",
+            corrective_length=18,
+            return_length=18,
+        ),
+    )
+    no_do = v33.generate_world(
+        seed,
+        v33.ReductionConfig(
+            "configural",
+            "none",
+            corrective_length=18,
+            return_length=18,
+        ),
+    )
+    masked = _masked_imaginal_world(post)
+    dropped = replace(
+        post,
+        slices=tuple(
+            item
+            for item in post.slices
+            if item.episode_kind != "imaginal_post"
+        ),
+    )
+    masked_posterior = v33.score_world(masked).current
+    dropped_posterior = v33.score_world(dropped).current
+    no_do_posterior = v33.score_world(no_do).current
+    masked_neutrality_error = max(
+        abs(a - b)
+        for a, b in zip(
+            masked_posterior.probabilities,
+            dropped_posterior.probabilities,
+        )
+    )
+    paired_identity_error = max(
+        abs(a - b)
+        for a, b in zip(
+            masked_posterior.probabilities,
+            no_do_posterior.probabilities,
+        )
+    )
+    copied = [
+        asdict(item) for item in masked.slices if item.context == 1
+    ]
+    oracle_programs, oracle_probabilities, oracle_evidence = (
+        v33_oracle.posterior(copied)
+    )
+    oracle_map = dict(zip(oracle_programs, oracle_probabilities))
+    oracle_error = max(
+        abs(
+            probability
+            - oracle_map[_program_bits(program)]
+        )
+        for program, probability in zip(
+            masked_posterior.programs,
+            masked_posterior.probabilities,
+        )
+    )
+    return {
+        "seed": seed,
+        "cell": lesion,
+        "masked_neutrality_error": masked_neutrality_error,
+        "paired_no_do_identity_error": paired_identity_error,
+        "independent_oracle_probability_error": oracle_error,
+        "independent_oracle_evidence_error": abs(
+            masked_posterior.log_evidence - oracle_evidence
+        ),
+        "normalization_error": abs(
+            math.fsum(masked_posterior.probabilities) - 1.0
+        ),
+        "finite_log_evidence": math.isfinite(
+            masked_posterior.log_evidence
+        ),
+        "masked_first_material_time": v33.first_material_time(
+            masked, thresholds
+        ),
+        "no_do_first_material_time": v33.first_material_time(
+            no_do, thresholds
+        ),
+    }
+
+
+def run_gate4() -> bool:
+    parameters = json.loads(PARAMETERS.read_text())
+    if parameters["status"] != "STOPPED_AT_GATE3":
+        raise RuntimeError(
+            "V3.3 Gate 4 requires the committed Gate-3 adjudication"
+        )
+    lesions = (*v33.BURDEN_EDGES, "W_Y", "imaginal_channel")
+    tasks = [
+        (
+            seed,
+            lesions[(seed - 3_310_000) % len(lesions)],
+            parameters["material_readout"],
+        )
+        for seed in range(3_310_000, 3_312_000)
+    ]
+    rows = _trace_map("gate-4", tasks, _worker_gate4)
+    groups = {
+        lesion: [row for row in rows if row["cell"] == lesion]
+        for lesion in lesions
+    }
+    edge_rows = [
+        row for row in rows if row["cell"] != "imaginal_channel"
+    ]
+    mask_rows = groups["imaginal_channel"]
+    metrics = {
+        "world_count": len(rows),
+        "cell_counts": {
+            lesion: len(groups[lesion]) for lesion in lesions
+        },
+        "restricted_prior_identity_error_max": max(
+            row["restricted_prior_identity_error"] for row in edge_rows
+        ),
+        "independent_oracle_probability_error_max": max(
+            row["independent_oracle_probability_error"] for row in rows
+        ),
+        "independent_oracle_evidence_error_max": max(
+            row["independent_oracle_evidence_error"] for row in rows
+        ),
+        "normalization_error_max": max(
+            row["normalization_error"] for row in rows
+        ),
+        "finite_posterior_rate": float(
+            np.mean([row["finite_log_evidence"] for row in rows])
+        ),
+        "target_edge_probability_max": {
+            edge: max(
+                row["target_edge_probability"] for row in groups[edge]
+            )
+            for edge in (*v33.BURDEN_EDGES, "W_Y")
+        },
+        "unrelated_movement_descriptive": {
+            edge: {
+                "maximum_absolute": max(
+                    abs(value)
+                    for row in groups[edge]
+                    for value in row["unrelated_edge_movement"].values()
+                ),
+                "mean_absolute": float(
+                    np.mean(
+                        [
+                            abs(value)
+                            for row in groups[edge]
+                            for value in row[
+                                "unrelated_edge_movement"
+                            ].values()
+                        ]
+                    )
+                ),
+            }
+            for edge in (*v33.BURDEN_EDGES, "W_Y")
+        },
+        "masked_channel_neutrality_error_max": max(
+            row["masked_neutrality_error"] for row in mask_rows
+        ),
+        "masked_paired_no_do_identity_error_max": max(
+            row["paired_no_do_identity_error"] for row in mask_rows
+        ),
+        "masked_timing_identity_rate": float(
+            np.mean(
+                [
+                    row["masked_first_material_time"]
+                    == row["no_do_first_material_time"]
+                    for row in mask_rows
+                ]
+            )
+        ),
+    }
+    checks = {
+        "restricted_prior_identity": (
+            metrics["restricted_prior_identity_error_max"] <= TOLERANCE
+        ),
+        "independent_oracle_probability": (
+            metrics["independent_oracle_probability_error_max"] <= TOLERANCE
+        ),
+        "independent_oracle_evidence": (
+            metrics["independent_oracle_evidence_error_max"] <= TOLERANCE
+        ),
+        "finite_normalized_posteriors": (
+            metrics["normalization_error_max"] <= TOLERANCE
+            and metrics["finite_posterior_rate"] == 1.0
+        ),
+        "each_edge_production_removed": all(
+            value <= TOLERANCE
+            for value in metrics["target_edge_probability_max"].values()
+        ),
+        "imaginal_mask_candidate_common": (
+            metrics["masked_channel_neutrality_error_max"] <= TOLERANCE
+        ),
+        "imaginal_mask_paired_identity": (
+            metrics["masked_paired_no_do_identity_error_max"] <= TOLERANCE
+        ),
+        "imaginal_effect_removed": (
+            metrics["masked_timing_identity_rate"] == 1.0
+        ),
+    }
+    passed = all(checks.values())
+    payload = {
+        "verdict": "PASS" if passed else "FAIL",
+        "seed_block": [3_310_000, 3_311_999],
+        "checks": checks,
+        "metrics": metrics,
+        "selectivity_definition": (
+            "restricted-prior consistency; unrelated marginal movement is "
+            "descriptive because conditioning renormalizes the posterior"
+        ),
+        "trace_ledger": "gate-4-trace-hashes.json",
+    }
+    _write_json("gate-4.json", payload)
+    (RESULTS / "gate-4-report.md").write_text(
+        "# V3.3 Gate 4 — selective lesions\n\n"
+        f"Verdict: **{payload['verdict']}**.\n\n"
+        "All five production deletions were scored by conditioning the "
+        "structure prior. The maximum restricted-prior identity error was "
+        f"`{metrics['restricted_prior_identity_error_max']:.3e}` and the "
+        "independent-oracle probability error was "
+        f"`{metrics['independent_oracle_probability_error_max']:.3e}`. "
+        "The imaginal-channel lesion used candidate-common masking; its "
+        "maximum neutrality error was "
+        f"`{metrics['masked_channel_neutrality_error_max']:.3e}` and paired "
+        "no-do timing agreed in "
+        f"`{metrics['masked_timing_identity_rate']:.3f}` of worlds. "
+        "Non-target marginal movement is reported descriptively as posterior "
+        "renormalization, not treated as a second lesion target.\n",
+        encoding="utf-8",
+    )
+    if passed:
+        parameters["status"] = "GATE4_PASSED_ADJUDICATED_CONTINUATION"
+        PARAMETERS.write_text(
+            json.dumps(parameters, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+    else:
+        parameters["status"] = "STOPPED_AT_GATE4"
+        PARAMETERS.write_text(
+            json.dumps(parameters, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        _write_json(
+            "gate-4-diagnosis-stub.json",
+            {
+                "failed": [
+                    name for name, passed_check in checks.items()
+                    if not passed_check
+                ],
+                "metrics": metrics,
+            },
+        )
+    return passed
+
+
+@traced_execution
+def _worker_gate5_assay(
+    task: tuple[int, str, str, Mapping[str, float]]
+) -> dict[str, Any]:
+    seed, cell, arm, thresholds = task
+    if arm == "suggestion":
+        world = v33.generate_world(
+            seed,
+            v33.ReductionConfig(
+                "suggestion_only",
+                "none",
+                corrective_length=18,
+                return_length=18,
+            ),
+        )
+        summary = _arm_summary(world)
+        return {
+            "seed": seed,
+            "cell": cell,
+            "arm": arm,
+            "material": _material_from_row(
+                summary, _trajectory(world), thresholds
+            ),
+            "root_revision": summary["root_revision"],
+        }
+    if arm == "speedup":
+        no_do = v33.generate_world(
+            seed,
+            v33.ReductionConfig(
+                "configural",
+                "none",
+                corrective_length=18,
+                return_length=18,
+            ),
+        )
+        timely = v33.generate_world(
+            seed,
+            v33.ReductionConfig(
+                "configural",
+                "post_revision",
+                corrective_length=18,
+                return_length=18,
+            ),
+        )
+        no_time = _first_from_trajectory(
+            _trajectory(no_do),
+            mode=thresholds["mode_retained"],
+            burden=thresholds["burden_edge_mass_max"],
+            bf=thresholds["absent_present_bf_min"],
+        )
+        timely_time = _first_from_trajectory(
+            _trajectory(timely),
+            mode=thresholds["mode_retained"],
+            burden=thresholds["burden_edge_mass_max"],
+            bf=thresholds["absent_present_bf_min"],
+        )
+        event = v33.root_revision_event(timely)
+        opportunity = [
+            item.time
+            for item in timely.slices
+            if item.episode_kind == "imaginal_post"
+        ]
+        return {
+            "seed": seed,
+            "cell": cell,
+            "arm": arm,
+            "no_do_time": no_time,
+            "timely_time": timely_time,
+            "speedup": (
+                (no_time - timely_time) / no_time
+                if no_time is not None and timely_time is not None
+                else None
+            ),
+            "schedule_identity": (
+                event is not None
+                and bool(opportunity)
+                and min(opportunity) == event + 1
+            ),
+        }
+    corrective_length = (
+        12 if cell == "correction_length_12"
+        else 30 if cell == "correction_length_30"
+        else 18
+    )
+    return_length = 30 if cell == "later_stress_30" else 18
+    adaptive = "W_Y" if arm == "adaptive" else "none"
+    world = v33.generate_world(
+        seed,
+        v33.ReductionConfig(
+            "configural",
+            "none",
+            adaptive_edge=adaptive,
+            corrective_length=corrective_length,
+            return_length=return_length,
+        ),
+    )
+    summary = _arm_summary(world)
+    return {
+        "seed": seed,
+        "cell": cell,
+        "arm": arm,
+        "material": _material_from_row(
+            summary, _trajectory(world), thresholds
+        ),
+        "mode": summary["mode"],
+        "adaptive_w_y": summary["adaptive_w_y"],
+        "neutral_error": summary["neutral_error"],
+        "old_graph": summary["old_graph"],
+    }
+
+
+def _verify_stage_manifest(stage: str) -> dict[str, Any]:
+    path = ROOT / "results" / stage / "freeze-manifest.json"
+    manifest = json.loads(path.read_text(encoding="utf-8"))
+    mismatches = []
+    for relative, expected in manifest["files"].items():
+        target = ROOT / relative
+        actual = (
+            hashlib.sha256(target.read_bytes()).hexdigest()
+            if target.exists()
+            else None
+        )
+        if actual != expected:
+            mismatches.append(
+                {
+                    "file": relative,
+                    "expected": expected,
+                    "actual": actual,
+                }
+            )
+    return {
+        "stage": stage,
+        "file_count": len(manifest["files"]),
+        "mismatches": mismatches,
+        "passed": not mismatches,
+    }
+
+
+def _trace_ledger_valid(name: str) -> bool:
+    ledger = json.loads(
+        (RESULTS / f"{name}-trace-hashes.json").read_text(encoding="utf-8")
+    )
+    path = RESULTS / ledger["file"]
+    return (
+        path.exists()
+        and hashlib.sha256(path.read_bytes()).hexdigest()
+        == ledger["file_sha256"]
+        and sum(1 for _ in path.open("rb")) == ledger["world_count"]
+    )
+
+
+def run_gate5() -> bool:
+    parameters = json.loads(PARAMETERS.read_text())
+    if parameters["status"] != "GATE4_PASSED_ADJUDICATED_CONTINUATION":
+        raise RuntimeError("V3.3 Gate 4 must pass before Gate 5")
+    recovery_specs = (
+        ("recovery_length_32", 3_312_000, 32, 0.5, 1.0),
+        ("recovery_length_96", 3_312_800, 96, 0.5, 1.0),
+        ("recovery_concentration_1", 3_313_600, 64, 1.0, 1.0),
+        ("recovery_code_scale_1_25", 3_314_400, 64, 0.5, 1.25),
+    )
+    recovery_tasks = [
+        (seed, length, concentration, scale)
+        for _, start, length, concentration, scale in recovery_specs
+        for seed in range(start, start + 800)
+    ]
+    recovery_rows = _trace_map(
+        "gate-5-recovery", recovery_tasks, _worker_recovery
+    )
+    recovery_metrics = {}
+    for index, (name, *_rest) in enumerate(recovery_specs):
+        subset = recovery_rows[index * 800 : (index + 1) * 800]
+        recovery_metrics[name] = _recovery_metrics(subset)
+
+    thresholds = parameters["material_readout"]
+    assay_tasks: list[tuple[int, str, str, Mapping[str, float]]] = []
+    for seed in range(3_315_200, 3_316_000):
+        assay_tasks.append(
+            (seed, "correction_length_12", "correction", thresholds)
+        )
+    for seed in range(3_316_000, 3_316_800):
+        assay_tasks.append(
+            (seed, "correction_length_30", "correction", thresholds)
+        )
+    for seed in range(3_316_800, 3_317_600):
+        assay_tasks.append(
+            (seed, "later_stress_30", "correction", thresholds)
+        )
+    primary_arms = ("correction", "suggestion", "speedup", "adaptive")
+    for seed in range(3_317_600, 3_320_000):
+        assay_tasks.append(
+            (
+                seed,
+                "primary_repetition",
+                primary_arms[(seed - 3_317_600) % 4],
+                thresholds,
+            )
+        )
+    assay_rows = _trace_map(
+        "gate-5-assays", assay_tasks, _worker_gate5_assay
+    )
+    assay_groups = {
+        cell: [row for row in assay_rows if row["cell"] == cell]
+        for cell in (
+            "correction_length_12",
+            "correction_length_30",
+            "later_stress_30",
+            "primary_repetition",
+        )
+    }
+    primary = assay_groups["primary_repetition"]
+    primary_by_arm = {
+        arm: [row for row in primary if row["arm"] == arm]
+        for arm in primary_arms
+    }
+    speeds = [
+        float(row["speedup"])
+        for row in primary_by_arm["speedup"]
+        if row["speedup"] is not None
+    ]
+    suggestions = [
+        float(row["root_revision"])
+        for row in primary_by_arm["suggestion"]
+    ]
+    scientific = {
+        "correction_length_12_material_rate": float(
+            np.mean(
+                [
+                    row["material"]
+                    for row in assay_groups["correction_length_12"]
+                ]
+            )
+        ),
+        "correction_length_30_material_rate": float(
+            np.mean(
+                [
+                    row["material"]
+                    for row in assay_groups["correction_length_30"]
+                ]
+            )
+        ),
+        "later_stress_30_material_rate": float(
+            np.mean(
+                [
+                    row["material"]
+                    for row in assay_groups["later_stress_30"]
+                ]
+            )
+        ),
+        "primary_correction_material_rate": float(
+            np.mean(
+                [
+                    row["material"]
+                    for row in primary_by_arm["correction"]
+                ]
+            )
+        ),
+        "primary_suggestion_false_reduction_rate": float(
+            np.mean(
+                [
+                    row["material"]
+                    for row in primary_by_arm["suggestion"]
+                ]
+            )
+        ),
+        "primary_adaptive_edge_survival": float(
+            np.mean(
+                [
+                    row["adaptive_w_y"]
+                    for row in primary_by_arm["adaptive"]
+                ]
+            )
+        ),
+        "primary_adaptive_material_rate": float(
+            np.mean(
+                [
+                    row["material"]
+                    for row in primary_by_arm["adaptive"]
+                ]
+            )
+        ),
+        "primary_neutral_error_max": max(
+            row["neutral_error"]
+            for arm in ("correction", "adaptive")
+            for row in primary_by_arm[arm]
+        ),
+        "do_over_speedup_mean": float(np.mean(speeds)),
+        "do_over_speedup_ci95": list(
+            _bootstrap_mean_interval(speeds, seed=3_318_202)
+        ),
+        "do_over_schedule_identity_rate": float(
+            np.mean(
+                [
+                    row["schedule_identity"]
+                    for row in primary_by_arm["speedup"]
+                ]
+            )
+        ),
+        "suggestion_root_direction_mean": float(np.mean(suggestions)),
+        "suggestion_root_direction_ci95": list(
+            _bootstrap_mean_interval(suggestions, seed=3_318_201)
+        ),
+    }
+    criterion = parameters["criteria"]
+    recovery_checks = {
+        name: {
+            "edge_accuracy": (
+                values["minimum_edge_accuracy"]
+                >= max(0.45, criterion["edge_accuracy_min"] - 0.08)
+            ),
+            "coverage": (
+                values["coverage"]
+                >= max(0.75, criterion["coverage_min"] - 0.10)
+            ),
+            "normalization": (
+                values["maximum_normalization_error"] <= TOLERANCE
+            ),
+            "exact_log_probability": (
+                values["maximum_exact_log_probability_error"] <= TOLERANCE
+            ),
+        }
+        for name, values in recovery_metrics.items()
+    }
+    scientific_checks = {
+        "correction_length_12": (
+            scientific["correction_length_12_material_rate"] >= 0.75
+        ),
+        "correction_length_30": (
+            scientific["correction_length_30_material_rate"]
+            >= criterion["material_reduction_rate_min"]
+        ),
+        "later_stress_30": (
+            scientific["later_stress_30_material_rate"]
+            >= criterion["material_reduction_rate_min"]
+        ),
+        "primary_correction": (
+            scientific["primary_correction_material_rate"]
+            >= criterion["material_reduction_rate_min"]
+        ),
+        "primary_suggestion_specificity": (
+            scientific["primary_suggestion_false_reduction_rate"]
+            <= criterion["suggestion_false_reduction_max"]
+        ),
+        "primary_adaptive_survival": (
+            scientific["primary_adaptive_edge_survival"]
+            >= criterion["adaptive_edge_survival_min"]
+        ),
+        "primary_neutral_identity": (
+            scientific["primary_neutral_error_max"] <= TOLERANCE
+        ),
+        "do_over_schedule_identity": (
+            scientific["do_over_schedule_identity_rate"] == 1.0
+        ),
+    }
+    prior_stage_manifests = [
+        _verify_stage_manifest(stage)
+        for stage in ("V3.0", "V3.1", "V3.2")
+    ]
+    gate1 = json.loads((RESULTS / "gate-1.json").read_text())
+    gate2 = json.loads((RESULTS / "gate-2.json").read_text())
+    gate3 = json.loads((RESULTS / "gate-3.json").read_text())
+    gate4 = json.loads((RESULTS / "gate-4.json").read_text())
+    nonblocking_names = {
+        "do_over_acceleration",
+        "root_revision_without_pruning",
+    }
+    gate3_blocking = {
+        name: value
+        for name, value in gate3["checks"].items()
+        if name not in nonblocking_names
+    }
+    cumulative = {
+        "gate1_pass": gate1["verdict"] == "PASS",
+        "gate2_pass": gate2["verdict"] == "PASS",
+        "gate3_formal_verdict_retained": gate3["verdict"],
+        "gate3_blocking_checks": gate3_blocking,
+        "gate3_nonblocking_checks": {
+            name: gate3["checks"][name] for name in nonblocking_names
+        },
+        "gate4_pass": gate4["verdict"] == "PASS",
+        "prior_stage_manifests": prior_stage_manifests,
+        "trace_ledgers": {
+            name: _trace_ledger_valid(name)
+            for name in (
+                "gate-2",
+                "gate-3",
+                "gate-4",
+                "gate-5-recovery",
+                "gate-5-assays",
+            )
+        },
+    }
+    cumulative_pass = (
+        cumulative["gate1_pass"]
+        and cumulative["gate2_pass"]
+        and all(gate3_blocking.values())
+        and cumulative["gate4_pass"]
+        and all(item["passed"] for item in prior_stage_manifests)
+        and all(cumulative["trace_ledgers"].values())
+    )
+    blocking = {
+        "recovery_robustness": all(
+            all(values.values()) for values in recovery_checks.values()
+        ),
+        "scientific_robustness": all(scientific_checks.values()),
+        "cumulative_regression": cumulative_pass,
+    }
+    nonblocking = {
+        "do_over_speedup_floor_repetition": {
+            "passed": (
+                scientific["do_over_speedup_mean"]
+                >= criterion["do_over_speedup_min"]
+                and scientific["do_over_speedup_ci95"][0] > 0.0
+            ),
+            "mean": scientific["do_over_speedup_mean"],
+            "ci95": scientific["do_over_speedup_ci95"],
+            "frozen_floor": criterion["do_over_speedup_min"],
+        },
+        "suggestion_direction_repetition": {
+            "passed": scientific["suggestion_root_direction_mean"] > 0.0,
+            "mean": scientific["suggestion_root_direction_mean"],
+            "ci95": scientific["suggestion_root_direction_ci95"],
+            "frozen_direction": "positive",
+        },
+        "authorization": "gate3-adjudication.md",
+    }
+    passed = all(blocking.values())
+    payload = {
+        "verdict": "PASS" if passed else "FAIL",
+        "seed_block": [3_312_000, 3_319_999],
+        "blocking": blocking,
+        "recovery_metrics": recovery_metrics,
+        "recovery_checks": recovery_checks,
+        "scientific_metrics": scientific,
+        "scientific_checks": scientific_checks,
+        "adjudicated_nonblocking": nonblocking,
+        "cumulative": cumulative,
+        "trace_ledgers": [
+            "gate-5-recovery-trace-hashes.json",
+            "gate-5-assays-trace-hashes.json",
+        ],
+    }
+    _write_json("gate-5.json", payload)
+    (RESULTS / "gate-5-report.md").write_text(
+        "# V3.3 Gate 5 — cumulative robustness\n\n"
+        f"Verdict: **{payload['verdict']}** for all blocking criteria.\n\n"
+        "The adjudicated families remain non-blocking and are reported "
+        "verbatim. Timely do-over speedup repeated at "
+        f"`{scientific['do_over_speedup_mean']:.6f}` (95% CI "
+        f"`[{scientific['do_over_speedup_ci95'][0]:.6f}, "
+        f"{scientific['do_over_speedup_ci95'][1]:.6f}]`; floor "
+        f"`{criterion['do_over_speedup_min']}`). Suggestion root direction "
+        f"repeated at `{scientific['suggestion_root_direction_mean']:.6f}` "
+        f"(95% CI `[{scientific['suggestion_root_direction_ci95'][0]:.6f}, "
+        f"{scientific['suggestion_root_direction_ci95'][1]:.6f}]`).\n\n"
+        "All V3.0–V3.2 freeze manifests were independently rehashed. Gate-3 "
+        "remains formally FAIL; only its two adjudicated families are omitted "
+        "from cumulative blocking aggregation.\n",
+        encoding="utf-8",
+    )
+    if passed:
+        parameters["status"] = (
+            "FROZEN_ADJUDICATED_MIXED_DO_OVER_NULL_AND_"
+            "SUGGESTION_DIRECTION"
+        )
+    else:
+        parameters["status"] = "STOPPED_AT_GATE5"
+        _write_json(
+            "gate-5-diagnosis-stub.json",
+            {
+                "failed": [
+                    name for name, value in blocking.items() if not value
+                ],
+                "recovery_checks": recovery_checks,
+                "scientific_checks": scientific_checks,
+            },
+        )
+    PARAMETERS.write_text(
+        json.dumps(parameters, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    return passed
+
+
+def write_freeze_manifest() -> bool:
+    parameters = json.loads(PARAMETERS.read_text())
+    expected_status = (
+        "FROZEN_ADJUDICATED_MIXED_DO_OVER_NULL_AND_"
+        "SUGGESTION_DIRECTION"
+    )
+    if parameters["status"] != expected_status:
+        raise RuntimeError("V3.3 is not freeze-ready")
+    fixed = (
+        ROOT / "contracts" / "v3.3-prune-contract.md",
+        ROOT / "protocols" / "v3.3-analysis-plan.md",
+        ROOT / "protocols" / "v3.3-parameters.json",
+        ROOT / "protocols" / "v3.3-public-dummy.json",
+        ROOT / "ref" / "trace_sink.py",
+        ROOT / "ref" / "v31.py",
+        ROOT / "ref" / "v33.py",
+        ROOT / "ref" / "v33_oracle.py",
+        ROOT / "scripts" / "run_v33.py",
+        ROOT / "tests" / "test_v33_prune.py",
+    )
+    result_files = tuple(
+        path
+        for path in sorted(RESULTS.iterdir())
+        if path.is_file()
+        and path.name not in {
+            "freeze-manifest.json",
+            "ready-to-commit.md",
+        }
+    )
+    files = {}
+    local_only = {}
+    for path in (*fixed, *result_files):
+        relative = str(path.relative_to(ROOT))
+        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        if path.stat().st_size > 90 * 1024 * 1024:
+            local_only[relative] = {
+                "sha256": digest,
+                "size_bytes": path.stat().st_size,
+            }
+        else:
+            files[relative] = digest
+    payload = {
+        "stage": "V3.3",
+        "status": expected_status,
+        "files": files,
+        "local_only_trace_bundles": local_only,
+        "escrow": {
+            "block": [4_030_000, 4_033_999],
+            "status": "UNTOUCHED",
+        },
+        "formal_gate_verdicts": {
+            "gate1": "PASS",
+            "gate2": "PASS",
+            "gate3": "FAIL",
+            "gate4": "PASS",
+            "gate5": "PASS",
+        },
+        "adjudicated_nonblocking_families": [
+            "do_over_speedup",
+            "suggestion_direction",
+        ],
+    }
+    _write_json("freeze-manifest.json", payload)
+    return True
+
+
 def run_pilot() -> bool:
     parameters = json.loads(PARAMETERS.read_text())
     if parameters["status"] != "EVENT_INDEXED_REPAIR_PILOT_PENDING":
@@ -1364,7 +2282,18 @@ def run_pilot() -> bool:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("step", choices=("gate1", "pilot", "gate2", "gate3"))
+    parser.add_argument(
+        "step",
+        choices=(
+            "gate1",
+            "pilot",
+            "gate2",
+            "gate3",
+            "gate4",
+            "gate5",
+            "freeze",
+        ),
+    )
     args = parser.parse_args()
     if args.step == "gate1":
         passed = run_gate1()
@@ -1372,8 +2301,14 @@ def main() -> int:
         passed = run_pilot()
     elif args.step == "gate2":
         passed = run_gate2()
-    else:
+    elif args.step == "gate3":
         passed = run_gate3()
+    elif args.step == "gate4":
+        passed = run_gate4()
+    elif args.step == "gate5":
+        passed = run_gate5()
+    else:
+        passed = write_freeze_manifest()
     return 0 if passed else 1
 
 

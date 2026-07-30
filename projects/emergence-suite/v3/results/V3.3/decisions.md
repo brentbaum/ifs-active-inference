@@ -19,3 +19,10 @@
 8. Gate 3 failed the prospective speedup criterion and the separately reported
    suggestion-only root-revision sign check. The stage stopped without opening
    Gate 4 or Gate 5.
+9. `gate3-adjudication.md` retained both failures and authorized mixed-verdict
+   continuation. Gate 4 therefore treated production selectivity as exact
+   restricted-prior consistency; non-target marginal changes were descriptive
+   renormalization, not additional lesion criteria.
+10. Gate 5 retained both authorized families verbatim and excluded only those
+    two checks from blocking aggregation. All other V3.3 criteria and the
+    V3.0–V3.2 manifest regressions remained blocking.

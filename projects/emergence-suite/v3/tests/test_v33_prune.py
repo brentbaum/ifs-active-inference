@@ -1,6 +1,6 @@
 import math
 import unittest
-from dataclasses import asdict
+from dataclasses import asdict, replace
 
 from ref import v31, v33, v33_oracle
 from ref.trace_sink import serializing_trace_context
@@ -145,6 +145,74 @@ class V33PruneTests(unittest.TestCase):
         self.assertLessEqual(abs(evidence - production.log_evidence), 1e-10)
         self.assertEqual(
             snapshot, tuple(tuple(sorted(item.items())) for item in slices)
+        )
+
+    def test_restricted_prior_and_candidate_common_masking(self):
+        world = v33.generate_world(
+            3_310_000,
+            v33.ReductionConfig("suggestion_only", "none"),
+        )
+        full = v33.score_world(world).current
+        restricted = v33.score_world(
+            world, restrictions={"G_W": (0,)}
+        ).current
+        allowed = {
+            program: probability
+            for program, probability in zip(
+                full.programs, full.probabilities
+            )
+            if v31.program_values(program)["G_W"] == 0
+        }
+        mass = math.fsum(allowed.values())
+        self.assertLessEqual(
+            max(
+                abs(probability - allowed[program] / mass)
+                for program, probability in zip(
+                    restricted.programs, restricted.probabilities
+                )
+            ),
+            1e-10,
+        )
+        timely = v33.generate_world(
+            3_310_001,
+            v33.ReductionConfig("configural", "post_revision"),
+        )
+        masked = replace(
+            timely,
+            slices=tuple(
+                replace(
+                    item,
+                    mode=None,
+                    root=None,
+                    world=None,
+                    policy_proposal=None,
+                    action=None,
+                    outcome=None,
+                )
+                if item.episode_kind == "imaginal_post"
+                else item
+                for item in timely.slices
+            ),
+        )
+        dropped = replace(
+            timely,
+            slices=tuple(
+                item
+                for item in timely.slices
+                if item.episode_kind != "imaginal_post"
+            ),
+        )
+        masked_posterior = v33.score_world(masked).current
+        dropped_posterior = v33.score_world(dropped).current
+        self.assertLessEqual(
+            max(
+                abs(a - b)
+                for a, b in zip(
+                    masked_posterior.probabilities,
+                    dropped_posterior.probabilities,
+                )
+            ),
+            1e-10,
         )
 
     def test_runtime_guard_refuses_untraced_generation(self):
