@@ -16,6 +16,8 @@ from typing import Any, Mapping, Sequence
 
 import numpy as np
 
+from .trace_sink import require_trace_sink
+
 
 STAGE_VERSION = "V3.2"
 DEVELOPMENT_BLOCKS = (
@@ -324,6 +326,7 @@ def generate_world(
     hyperparameters: TemporalHyperparameters = DEFAULT_HYPERPARAMETERS,
     released_block: tuple[int, int] | None = None,
 ) -> TemporalWorld:
+    require_trace_sink("v32.generate_world", seed=int(seed))
     if length < 2 or cue_count < 2:
         raise ValueError("length and cue_count are below V3.2 bounds")
     if not 0.0 <= missingness < 1.0:
@@ -534,6 +537,7 @@ def score_world(
     restrictions: Mapping[str, tuple[Any, ...]] | None = None,
     masked_channels: frozenset[str] = frozenset(),
 ) -> TemporalPosterior:
+    require_trace_sink("v32.score_world", seed=int(world.seed))
     if any(label in ANALYSIS_LABELS for label in world.analysis_labels):
         raise ValueError("analysis labels may not reach V3.2 inference")
     restrictions = {} if restrictions is None else dict(restrictions)

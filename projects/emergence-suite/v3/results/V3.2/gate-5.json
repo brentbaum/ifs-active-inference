@@ -1,0 +1,463 @@
+{
+  "blocking": {
+    "cue2": true,
+    "cue4": true,
+    "length32": true,
+    "length96": true,
+    "missing20": true,
+    "primary": true,
+    "prior125": true,
+    "reliability68": true,
+    "standing_regression": true
+  },
+  "metrics": {
+    "cue2": {
+      "active_context_accuracy": 1.0,
+      "brier": 0.03811282379440232,
+      "confusion": {
+        "continuous_drift": {
+          "continuous_drift": 193,
+          "cue_local": 0,
+          "one_way_change": 3,
+          "recurrent_context": 0,
+          "static": 4
+        },
+        "cue_local": {
+          "continuous_drift": 2,
+          "cue_local": 195,
+          "one_way_change": 0,
+          "recurrent_context": 0,
+          "static": 3
+        },
+        "one_way_change": {
+          "continuous_drift": 7,
+          "cue_local": 0,
+          "one_way_change": 168,
+          "recurrent_context": 25,
+          "static": 0
+        },
+        "recurrent_context": {
+          "continuous_drift": 1,
+          "cue_local": 0,
+          "one_way_change": 0,
+          "recurrent_context": 199,
+          "static": 0
+        },
+        "static": {
+          "continuous_drift": 1,
+          "cue_local": 0,
+          "one_way_change": 0,
+          "recurrent_context": 0,
+          "static": 199
+        }
+      },
+      "coverage": 0.996,
+      "dynamics_accuracy": 0.9515,
+      "ece": 0.013218742479135582,
+      "macro_region_recovery": 0.954,
+      "max_exact_log_probability_error": 4.092726157978177e-12,
+      "per_family_accuracy": {
+        "continuous_drift": 0.965,
+        "cue_local": 0.975,
+        "one_way_change": 0.84,
+        "recurrent_context": 0.995,
+        "static": 0.995
+      },
+      "scope_accuracy": 0.996,
+      "world_count": 1000
+    },
+    "cue4": {
+      "active_context_accuracy": 1.0,
+      "brier": 0.023809942142429107,
+      "confusion": {
+        "continuous_drift": {
+          "continuous_drift": 200,
+          "cue_local": 0,
+          "one_way_change": 0,
+          "recurrent_context": 0,
+          "static": 0
+        },
+        "cue_local": {
+          "continuous_drift": 0,
+          "cue_local": 200,
+          "one_way_change": 0,
+          "recurrent_context": 0,
+          "static": 0
+        },
+        "one_way_change": {
+          "continuous_drift": 3,
+          "cue_local": 0,
+          "one_way_change": 169,
+          "recurrent_context": 28,
+          "static": 0
+        },
+        "recurrent_context": {
+          "continuous_drift": 0,
+          "cue_local": 0,
+          "one_way_change": 0,
+          "recurrent_context": 200,
+          "static": 0
+        },
+        "static": {
+          "continuous_drift": 0,
+          "cue_local": 0,
+          "one_way_change": 0,
+          "recurrent_context": 0,
+          "static": 200
+        }
+      },
+      "coverage": 0.995,
+      "dynamics_accuracy": 0.964,
+      "ece": 0.00972339948005402,
+      "macro_region_recovery": 0.969,
+      "max_exact_log_probability_error": 2.7284841053187847e-11,
+      "per_family_accuracy": {
+        "continuous_drift": 1.0,
+        "cue_local": 1.0,
+        "one_way_change": 0.845,
+        "recurrent_context": 1.0,
+        "static": 1.0
+      },
+      "scope_accuracy": 0.9995,
+      "world_count": 1000
+    },
+    "length32": {
+      "active_context_accuracy": 1.0,
+      "brier": 0.037449043248126486,
+      "confusion": {
+        "continuous_drift": {
+          "continuous_drift": 191,
+          "cue_local": 0,
+          "one_way_change": 2,
+          "recurrent_context": 0,
+          "static": 7
+        },
+        "cue_local": {
+          "continuous_drift": 0,
+          "cue_local": 200,
+          "one_way_change": 0,
+          "recurrent_context": 0,
+          "static": 0
+        },
+        "one_way_change": {
+          "continuous_drift": 5,
+          "cue_local": 0,
+          "one_way_change": 166,
+          "recurrent_context": 29,
+          "static": 0
+        },
+        "recurrent_context": {
+          "continuous_drift": 0,
+          "cue_local": 0,
+          "one_way_change": 0,
+          "recurrent_context": 200,
+          "static": 0
+        },
+        "static": {
+          "continuous_drift": 5,
+          "cue_local": 0,
+          "one_way_change": 0,
+          "recurrent_context": 0,
+          "static": 195
+        }
+      },
+      "coverage": 0.996,
+      "dynamics_accuracy": 0.952,
+      "ece": 0.01712173356907381,
+      "macro_region_recovery": 0.952,
+      "max_exact_log_probability_error": 4.320099833421409e-12,
+      "per_family_accuracy": {
+        "continuous_drift": 0.955,
+        "cue_local": 1.0,
+        "one_way_change": 0.83,
+        "recurrent_context": 1.0,
+        "static": 0.975
+      },
+      "scope_accuracy": 0.9975,
+      "world_count": 1000
+    },
+    "length96": {
+      "active_context_accuracy": 1.0,
+      "brier": 0.026612803249911186,
+      "confusion": {
+        "continuous_drift": {
+          "continuous_drift": 200,
+          "cue_local": 0,
+          "one_way_change": 0,
+          "recurrent_context": 0,
+          "static": 0
+        },
+        "cue_local": {
+          "continuous_drift": 0,
+          "cue_local": 200,
+          "one_way_change": 0,
+          "recurrent_context": 0,
+          "static": 0
+        },
+        "one_way_change": {
+          "continuous_drift": 0,
+          "cue_local": 0,
+          "one_way_change": 166,
+          "recurrent_context": 34,
+          "static": 0
+        },
+        "recurrent_context": {
+          "continuous_drift": 0,
+          "cue_local": 0,
+          "one_way_change": 0,
+          "recurrent_context": 200,
+          "static": 0
+        },
+        "static": {
+          "continuous_drift": 0,
+          "cue_local": 0,
+          "one_way_change": 0,
+          "recurrent_context": 0,
+          "static": 200
+        }
+      },
+      "coverage": 0.994,
+      "dynamics_accuracy": 0.968,
+      "ece": 0.007716882759633611,
+      "macro_region_recovery": 0.966,
+      "max_exact_log_probability_error": 5.729816621169448e-11,
+      "per_family_accuracy": {
+        "continuous_drift": 1.0,
+        "cue_local": 1.0,
+        "one_way_change": 0.83,
+        "recurrent_context": 1.0,
+        "static": 1.0
+      },
+      "scope_accuracy": 1.0,
+      "world_count": 1000
+    },
+    "missing20": {
+      "active_context_accuracy": 1.0,
+      "brier": 0.037625322563600266,
+      "confusion": {
+        "continuous_drift": {
+          "continuous_drift": 192,
+          "cue_local": 0,
+          "one_way_change": 5,
+          "recurrent_context": 0,
+          "static": 3
+        },
+        "cue_local": {
+          "continuous_drift": 1,
+          "cue_local": 199,
+          "one_way_change": 0,
+          "recurrent_context": 0,
+          "static": 0
+        },
+        "one_way_change": {
+          "continuous_drift": 2,
+          "cue_local": 0,
+          "one_way_change": 156,
+          "recurrent_context": 42,
+          "static": 0
+        },
+        "recurrent_context": {
+          "continuous_drift": 0,
+          "cue_local": 0,
+          "one_way_change": 0,
+          "recurrent_context": 200,
+          "static": 0
+        },
+        "static": {
+          "continuous_drift": 2,
+          "cue_local": 0,
+          "one_way_change": 0,
+          "recurrent_context": 0,
+          "static": 198
+        }
+      },
+      "coverage": 0.993,
+      "dynamics_accuracy": 0.943,
+      "ece": 0.01669224370403882,
+      "macro_region_recovery": 0.945,
+      "max_exact_log_probability_error": 9.549694368615746e-12,
+      "per_family_accuracy": {
+        "continuous_drift": 0.96,
+        "cue_local": 0.995,
+        "one_way_change": 0.78,
+        "recurrent_context": 1.0,
+        "static": 0.99
+      },
+      "scope_accuracy": 1.0,
+      "world_count": 1000
+    },
+    "primary": {
+      "active_context_accuracy": 1.0,
+      "brier": 0.03003727748390775,
+      "confusion": {
+        "continuous_drift": {
+          "continuous_drift": 197,
+          "cue_local": 0,
+          "one_way_change": 1,
+          "recurrent_context": 0,
+          "static": 2
+        },
+        "cue_local": {
+          "continuous_drift": 0,
+          "cue_local": 200,
+          "one_way_change": 0,
+          "recurrent_context": 0,
+          "static": 0
+        },
+        "one_way_change": {
+          "continuous_drift": 4,
+          "cue_local": 0,
+          "one_way_change": 161,
+          "recurrent_context": 35,
+          "static": 0
+        },
+        "recurrent_context": {
+          "continuous_drift": 0,
+          "cue_local": 0,
+          "one_way_change": 0,
+          "recurrent_context": 200,
+          "static": 0
+        },
+        "static": {
+          "continuous_drift": 2,
+          "cue_local": 0,
+          "one_way_change": 0,
+          "recurrent_context": 0,
+          "static": 198
+        }
+      },
+      "coverage": 0.993,
+      "dynamics_accuracy": 0.957,
+      "ece": 0.010248161978414784,
+      "macro_region_recovery": 0.9560000000000001,
+      "max_exact_log_probability_error": 1.6370904631912708e-11,
+      "per_family_accuracy": {
+        "continuous_drift": 0.985,
+        "cue_local": 1.0,
+        "one_way_change": 0.805,
+        "recurrent_context": 1.0,
+        "static": 0.99
+      },
+      "scope_accuracy": 1.0,
+      "world_count": 1000
+    },
+    "prior125": {
+      "active_context_accuracy": 1.0,
+      "brier": 0.024037983875119087,
+      "confusion": {
+        "continuous_drift": {
+          "continuous_drift": 197,
+          "cue_local": 0,
+          "one_way_change": 0,
+          "recurrent_context": 0,
+          "static": 3
+        },
+        "cue_local": {
+          "continuous_drift": 0,
+          "cue_local": 200,
+          "one_way_change": 0,
+          "recurrent_context": 0,
+          "static": 0
+        },
+        "one_way_change": {
+          "continuous_drift": 7,
+          "cue_local": 0,
+          "one_way_change": 162,
+          "recurrent_context": 31,
+          "static": 0
+        },
+        "recurrent_context": {
+          "continuous_drift": 0,
+          "cue_local": 0,
+          "one_way_change": 0,
+          "recurrent_context": 200,
+          "static": 0
+        },
+        "static": {
+          "continuous_drift": 0,
+          "cue_local": 0,
+          "one_way_change": 0,
+          "recurrent_context": 0,
+          "static": 200
+        }
+      },
+      "coverage": 0.994,
+      "dynamics_accuracy": 0.956,
+      "ece": 0.01491362406125589,
+      "macro_region_recovery": 0.959,
+      "max_exact_log_probability_error": 1.6143530956469476e-11,
+      "per_family_accuracy": {
+        "continuous_drift": 0.985,
+        "cue_local": 1.0,
+        "one_way_change": 0.81,
+        "recurrent_context": 1.0,
+        "static": 1.0
+      },
+      "scope_accuracy": 0.999,
+      "world_count": 1000
+    },
+    "reliability68": {
+      "active_context_accuracy": 1.0,
+      "brier": 0.028827780572425264,
+      "confusion": {
+        "continuous_drift": {
+          "continuous_drift": 197,
+          "cue_local": 0,
+          "one_way_change": 1,
+          "recurrent_context": 0,
+          "static": 2
+        },
+        "cue_local": {
+          "continuous_drift": 3,
+          "cue_local": 197,
+          "one_way_change": 0,
+          "recurrent_context": 0,
+          "static": 0
+        },
+        "one_way_change": {
+          "continuous_drift": 2,
+          "cue_local": 0,
+          "one_way_change": 168,
+          "recurrent_context": 30,
+          "static": 0
+        },
+        "recurrent_context": {
+          "continuous_drift": 0,
+          "cue_local": 0,
+          "one_way_change": 0,
+          "recurrent_context": 200,
+          "static": 0
+        },
+        "static": {
+          "continuous_drift": 1,
+          "cue_local": 0,
+          "one_way_change": 0,
+          "recurrent_context": 0,
+          "static": 199
+        }
+      },
+      "coverage": 0.992,
+      "dynamics_accuracy": 0.95,
+      "ece": 0.010550726935584787,
+      "macro_region_recovery": 0.961,
+      "max_exact_log_probability_error": 1.659827830735594e-11,
+      "per_family_accuracy": {
+        "continuous_drift": 0.985,
+        "cue_local": 0.985,
+        "one_way_change": 0.84,
+        "recurrent_context": 1.0,
+        "static": 0.995
+      },
+      "scope_accuracy": 0.9995,
+      "world_count": 1000
+    }
+  },
+  "standing_regression": {
+    "checks": {
+      "V3.0": true,
+      "V3.1": true
+    },
+    "passed": true
+  },
+  "verdict": "PASS"
+}

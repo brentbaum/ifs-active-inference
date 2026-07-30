@@ -19,7 +19,8 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from ref import v32, v32_oracle  # noqa: E402
+from ref import trace_sink, v32, v32_oracle  # noqa: E402
+from ref.trace_sink import traced_execution  # noqa: E402
 
 
 RESULTS = ROOT / "results" / "V3.2"
@@ -186,6 +187,7 @@ def _truth_log_likelihood(
     return active + blocks
 
 
+@traced_execution
 def _worker_recovery(task: tuple[int, str, int, int, float, float, float]) -> dict[str, Any]:
     seed, label, length, cue_count, missingness, scale, reliability = task
     hp = v32.TemporalHyperparameters(reliability, scale, 0.08)
@@ -259,6 +261,43 @@ def _trace_map(
     }
     _write_json(f"{name}-trace-hashes.json", ledger)
     return rows
+
+
+def _seal_trace_rows(
+    name: str, records: Sequence[Mapping[str, Any]]
+) -> dict[str, Any]:
+    RESULTS.mkdir(parents=True, exist_ok=True)
+    path = RESULTS / f"{name}-traces.jsonl"
+    hashes = []
+    file_hash = hashlib.sha256()
+    with path.open("wb") as handle:
+        for record in records:
+            encoded = (
+                json.dumps(
+                    _plain(record),
+                    sort_keys=True,
+                    separators=(",", ":"),
+                    allow_nan=False,
+                ).encode()
+                + b"\n"
+            )
+            handle.write(encoded)
+            handle.flush()
+            file_hash.update(encoded)
+            hashes.append(
+                {
+                    "seed": record.get("seed", "semantic-fixture"),
+                    "sha256": hashlib.sha256(encoded).hexdigest(),
+                }
+            )
+    ledger = {
+        "file": path.name,
+        "world_count": len(records),
+        "file_sha256": file_hash.hexdigest(),
+        "records": hashes,
+    }
+    _write_json(f"{name}-trace-hashes.json", ledger)
+    return ledger
 
 
 def _ece(confidences: Sequence[float], correct: Sequence[bool]) -> float:
@@ -397,6 +436,7 @@ def run_pilot() -> None:
     )
 
 
+@traced_execution
 def _pilot_assays(seeds: Iterable[int]) -> dict[str, float]:
     mixed, recurrent, material, history, false_recurrent, gains, transfers = (
         [],
@@ -472,6 +512,166 @@ def _pilot_assays(seeds: Iterable[int]) -> dict[str, float]:
     }
 
 
+PREFLIGHT_PRINTED_AGGREGATES = {
+    "mixed_accuracy": 1.0,
+    "recurrent_context_probability": 0.999929008891109,
+    "material_rate": 1.0,
+    "history_separation": 0.6980000000000001,
+    "false_recurrence": 0.2157242853189813,
+    "witnessing_gain": 0.8000884820639629,
+    "present_transfer": 0.3235751179796528,
+}
+
+
+@traced_execution
+def _worker_pilot_reproduction(seed: int) -> dict[str, Any]:
+    mixed_p = v32.score_world(
+        v32.generate_world(seed, structure=MIXED, length=48)
+    )
+    mixed_correct = [
+        max(
+            mixed_p.dynamics_probabilities[block],
+            key=mixed_p.dynamics_probabilities[block].get,
+        )
+        == MIXED.dynamics[index]
+        for index, block in enumerate(v32.BLOCKS)
+    ]
+    recurrent_world = v32.generate_world(
+        seed, structure=CANONICAL["recurrent_context"], length=48
+    )
+    recurrent = v32.score_world(recurrent_world)
+    one_way = v32.score_world(
+        v32.generate_world(
+            seed, structure=CANONICAL["one_way_change"], length=48
+        )
+    )
+    witness = v32.score_world(
+        v32.generate_world(
+            seed,
+            structure=CANONICAL["recurrent_context"],
+            length=48,
+            evidence_style="witnessing",
+        )
+    )
+    baseline = v32.score_world(
+        v32.generate_world(
+            seed,
+            structure=CANONICAL["recurrent_context"],
+            length=48,
+            evidence_style="single_regime",
+        )
+    )
+    return {
+        "seed": seed,
+        "cell": "repair_pilot_reproduction",
+        "mixed_correct": mixed_correct,
+        "recurrent_context_probability": recurrent.scope_probability(
+            "cue_emission", "context_specific"
+        ),
+        "material": v32.redescription_readouts(recurrent)["material"],
+        "history_separation": abs(
+            v32.historical_prediction(recurrent, "cue_emission", 1, 0)
+            - v32.historical_prediction(recurrent, "cue_emission", 0, 0)
+        ),
+        "false_recurrence": one_way.dynamics_probability(
+            "cue_emission", "discrete_recurrent_context"
+        ),
+        "witnessing_gain": (
+            witness.scope_probability("cue_emission", "context_specific")
+            - baseline.scope_probability("cue_emission", "context_specific")
+        ),
+        "present_transfer": v32.present_context_transfer(witness, context=1),
+        "rng_keys_sha256": {
+            "mixed": _sha_payload(
+                v32.generate_world(seed, structure=MIXED, length=48).rng_keys
+            ),
+            "recurrent": _sha_payload(recurrent_world.rng_keys),
+        },
+    }
+
+
+def _aggregate_pilot_reproduction(
+    rows: Sequence[Mapping[str, Any]],
+) -> dict[str, float]:
+    return {
+        "mixed_accuracy": float(
+            np.mean(
+                [
+                    value
+                    for row in rows
+                    for value in row["mixed_correct"]
+                ]
+            )
+        ),
+        "recurrent_context_probability": float(
+            np.mean(
+                [row["recurrent_context_probability"] for row in rows]
+            )
+        ),
+        "material_rate": float(np.mean([row["material"] for row in rows])),
+        "history_separation": float(
+            np.mean([row["history_separation"] for row in rows])
+        ),
+        "false_recurrence": float(
+            np.mean([row["false_recurrence"] for row in rows])
+        ),
+        "witnessing_gain": float(
+            np.mean([row["witnessing_gain"] for row in rows])
+        ),
+        "present_transfer": float(
+            np.mean([row["present_transfer"] for row in rows])
+        ),
+    }
+
+
+def run_reproduction() -> bool:
+    rows = _trace_map(
+        "stage0-preflight-reproduction",
+        list(range(3_230_000, 3_230_020)),
+        _worker_pilot_reproduction,
+    )
+    reproduced = _aggregate_pilot_reproduction(rows)
+    comparisons = {
+        key: {
+            "printed": expected,
+            "reproduced": reproduced[key],
+            "bit_equal": reproduced[key] == expected,
+            "absolute_error": abs(reproduced[key] - expected),
+        }
+        for key, expected in PREFLIGHT_PRINTED_AGGREGATES.items()
+    }
+    passed = all(item["bit_equal"] for item in comparisons.values())
+    _write_json(
+        "stage0-preflight-reproduction.json",
+        {
+            "verdict": "PASS" if passed else "FAIL",
+            "comparison": comparisons,
+            "trace_rule": "records serialized before aggregate comparison",
+        },
+    )
+    return passed
+
+
+def run_trace_guard_audit() -> bool:
+    violations = trace_sink.audit_runner_trace_contexts(ROOT / "scripts")
+    runtime_refusal = False
+    try:
+        v32.generate_world(3_230_010, length=8)
+    except RuntimeError as error:
+        runtime_refusal = "serializing trace context" in str(error)
+    passed = not violations and runtime_refusal
+    _write_json(
+        "stage0-trace-guard-audit.json",
+        {
+            "verdict": "PASS" if passed else "FAIL",
+            "repository_violations": violations,
+            "unguarded_generation_refused": runtime_refusal,
+            "scope": "V3.2 public generation/scoring calls in scripts",
+        },
+    )
+    return passed
+
+
 def _parameters() -> dict[str, Any]:
     payload = json.loads(PARAMETERS.read_text())
     if payload["status"] != "FROZEN_AFTER_STAGE0_PILOT":
@@ -479,7 +679,8 @@ def _parameters() -> dict[str, Any]:
     return payload
 
 
-def run_gate1() -> bool:
+@traced_execution
+def _gate1_execution() -> dict[str, Any]:
     dummy = v32.generate_world(
         3_230_000,
         structure=MIXED,
@@ -659,16 +860,24 @@ def run_gate1() -> bool:
         <= TOLERANCE,
     ]
     passed = all(blocking)
-    _write_json(
-        "gate-1.json",
-        {
+    return {
+        "seed": dummy.seed,
+        "cell": "gate1_semantic_fixtures",
+        "passed": passed,
+        "report": {
             "verdict": "PASS" if passed else "FAIL",
             "proofs": proofs,
             "tolerance": TOLERANCE,
             "structure_space_size": 432,
         },
-    )
-    return passed
+    }
+
+
+def run_gate1() -> bool:
+    payload = _gate1_execution()
+    _seal_trace_rows("gate-1", [payload])
+    _write_json("gate-1.json", payload["report"])
+    return bool(payload["passed"])
 
 
 def _check_recovery(metrics: Mapping[str, Any], thresholds: Mapping[str, float]) -> dict[str, bool]:
@@ -710,11 +919,14 @@ def run_gate2() -> bool:
     return passed
 
 
+@traced_execution
 def _worker_gate3(task: tuple[int, str]) -> dict[str, Any]:
     seed, cell = task
     if cell == "canonical":
         label = tuple(CANONICAL)[seed % 5]
-        return _worker_recovery((seed, label, 48, 3, 0.0, 1.0, 0.74))
+        return _worker_recovery.__wrapped__(
+            (seed, label, 48, 3, 0.0, 1.0, 0.74)
+        )
     if cell == "mixed":
         world = v32.generate_world(seed, structure=MIXED, length=48)
         posterior = v32.score_world(world)
@@ -874,6 +1086,7 @@ def run_gate3() -> bool:
     return passed
 
 
+@traced_execution
 def _worker_gate4(task: tuple[int, str]) -> dict[str, Any]:
     seed, lesion = task
     world = v32.generate_world(
@@ -1090,19 +1303,79 @@ def _diagnosis_stub(gate: int, criteria: Mapping[str, Any]) -> None:
 
 
 def freeze() -> None:
+    readiness = RESULTS / "freeze-readiness.md"
+    readiness.write_text(
+        "# V3.2 freeze readiness\n\n"
+        "Status: **FREEZE_CANDIDATE — gates 1–5 passed; "
+        "CUSTODY_NOTE_PREFLIGHT_UNSERIALIZED**.\n\n"
+        "V3.2 expresses static, cue-local, recurrent-context, drift, one-way, "
+        "and mixed temporal worlds as regions of one 432-program grammar. "
+        "The repaired likelihood satisfies exact single-regime scope "
+        "neutrality, historical parameters remain queryable, and present "
+        "transfer disappears under fixed-G and zero-association controls. "
+        "Raw, material, and selective redescription remain reported "
+        "diagnostics.\n\n"
+        "The untraced repair-pilot preflight remains a permanent negative "
+        "custody fact. Its printed aggregates were reproduced bit-for-bit from "
+        "traced records under the evaluator's attestation-erratum adjudication. "
+        "Escrow `4020000:4023999` was not accessed.\n",
+        encoding="utf-8",
+    )
+    stage_report = RESULTS / "stage-report.md"
+    stage_report.write_text(
+        "# V3.2 stage report\n\n"
+        "Gates 1–5: **PASS**.\n\n"
+        "- Exact single-regime shared/context scope likelihood error: `0.0`.\n"
+        "- Gate-2 macro recovery: `0.9603333333333334`; ECE "
+        "`0.010656877447728438`; coverage `0.994`.\n"
+        "- Gate-3 witnessing scope gain: `0.8012482371389283`, 95% CI "
+        "`[0.8003803931856911, 0.8023327237953816]`.\n"
+        "- Mixed-block accuracy: `0.98625`; material redescription: `0.9975`; "
+        "old-context retention error: `0.0`.\n"
+        "- Gate-4 restricted-prior identity maximum error: "
+        "`1.0080269952084109e-12`.\n\n"
+        "Disposition carries `CUSTODY_NOTE_PREFLIGHT_UNSERIALIZED` exactly as "
+        "required by the custody adjudication.\n",
+        encoding="utf-8",
+    )
     files = [
         ROOT / "ref" / "v32.py",
         ROOT / "ref" / "v32_oracle.py",
+        ROOT / "ref" / "trace_sink.py",
         ROOT / "tests" / "test_v32_split.py",
+        ROOT / "scripts" / "run_v32.py",
         ROOT / "contracts" / "v3.2-split-contract.md",
         ROOT / "protocols" / "v3.2-analysis-plan.md",
         ROOT / "protocols" / "v3.2-public-dummy.json",
         PARAMETERS,
+        RESULTS / "stage0-adjudication.md",
+        RESULTS / "stage0-custody-adjudication.md",
+        RESULTS / "stage0-preflight-reproduction.json",
+        RESULTS / "stage0-preflight-reproduction-trace-hashes.json",
+        RESULTS / "stage0-trace-guard-audit.json",
+        RESULTS / "stage0-repair-pilot.json",
+        RESULTS / "stage0-repair-pilot-trace-hashes.json",
+        RESULTS / "stage0-repair-pilot-custody-disclosure.md",
+        RESULTS / "decisions.md",
+        RESULTS / "development-failures.md",
+        readiness,
+        stage_report,
     ]
     files.extend(RESULTS / f"gate-{gate}.json" for gate in range(1, 6))
+    files.extend(
+        RESULTS / f"gate-{gate}-trace-hashes.json"
+        for gate in range(1, 6)
+    )
+    files.extend(
+        path
+        for path in sorted(RESULTS.iterdir())
+        if path.is_file() and path.name != "freeze-manifest.json"
+    )
     manifest = {
         "stage": "V3.2",
-        "status": "FREEZE_CANDIDATE",
+        "status": (
+            "FREEZE_CANDIDATE_CUSTODY_NOTE_PREFLIGHT_UNSERIALIZED"
+        ),
         "files": {
             str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest()
             for path in files
@@ -1110,25 +1383,35 @@ def freeze() -> None:
         "escrow": {"block": [4_020_000, 4_023_999], "status": "UNTOUCHED"},
     }
     _write_json("freeze-manifest.json", manifest)
-    (RESULTS / "freeze-readiness.md").write_text(
-        "# V3.2 freeze readiness\n\n"
-        "Status: **FREEZE_CANDIDATE — gates 1–5 passed**.\n\n"
-        "V3.2 expresses static, cue-local, recurrent-context, drift, one-way, "
-        "and mixed temporal worlds as regions of one 432-program grammar. "
-        "Historical parameters remain queryable; present transfer disappears "
-        "under fixed-G and zero-association controls. Raw, material, and "
-        "selective redescription remain reported diagnostics. Escrow "
-        "`4020000:4023999` was not accessed.\n",
-        encoding="utf-8",
-    )
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("step", choices=("pilot", "gate1", "gate2", "gate3", "gate4", "gate5", "all"))
+    parser.add_argument(
+        "step",
+        choices=(
+            "reproduction",
+            "guard",
+            "pilot",
+            "gate1",
+            "gate2",
+            "gate3",
+            "gate4",
+            "gate5",
+            "all",
+        ),
+    )
     args = parser.parse_args()
     steps = ("pilot", "gate1", "gate2", "gate3", "gate4", "gate5") if args.step == "all" else (args.step,)
     for step in steps:
+        if step == "reproduction":
+            if not run_reproduction():
+                return 1
+            continue
+        if step == "guard":
+            if not run_trace_guard_audit():
+                return 1
+            continue
         if step == "pilot":
             run_pilot()
             continue

@@ -1,0 +1,23 @@
+{
+  "criteria": {
+    "association": true,
+    "context_scope": true,
+    "context_slot": true,
+    "fixed_g": true,
+    "independent_oracle": true,
+    "recurrent": true,
+    "restricted_prior_identity": true,
+    "selectivity_survival": true
+  },
+  "metrics": {
+    "association_transfer_max": 0.0,
+    "context_scope_mass_max": 0.0,
+    "context_slot_active_mass_max": 0.0,
+    "fixed_g_transfer_max": 0.0,
+    "max_independent_oracle_error": 1.0306200337595328e-12,
+    "max_restricted_identity_error": 1.0080269952084109e-12,
+    "recurrent_mass_max": 0.0,
+    "unrelated_transfer_survival": 1.0
+  },
+  "verdict": "PASS"
+}

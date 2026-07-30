@@ -1,6 +1,11 @@
 import math
 import unittest
+from pathlib import Path
 
+from ref.trace_sink import (
+    audit_runner_trace_contexts,
+    serializing_trace_context,
+)
 from ref.v32 import (
     DEFAULT_HYPERPARAMETERS,
     DYNAMICS,
@@ -20,6 +25,13 @@ from ref.v32_oracle import (
 
 
 class V32SplitTests(unittest.TestCase):
+    def setUp(self):
+        self.trace_context = serializing_trace_context(self.id())
+        self.trace_context.__enter__()
+
+    def tearDown(self):
+        self.trace_context.__exit__(None, None, None)
+
     def test_bounded_structure_space_and_prior(self):
         self.assertEqual(structure_space_size(), 432)
         self.assertAlmostEqual(full_prior_sum(), 1.0, places=14)
@@ -112,6 +124,16 @@ class V32SplitTests(unittest.TestCase):
         self.assertEqual(
             posterior.parameter_mean("cue_emission", context=1, cue=0), 0.5
         )
+
+
+class V32TraceGuardTests(unittest.TestCase):
+    def test_public_generation_refuses_without_trace_sink(self):
+        with self.assertRaisesRegex(RuntimeError, "serializing trace context"):
+            generate_world(3_230_010, length=8)
+
+    def test_runner_repository_has_no_unguarded_public_calls(self):
+        scripts = Path(__file__).resolve().parents[1] / "scripts"
+        self.assertEqual(audit_runner_trace_contexts(scripts), ())
 
 
 if __name__ == "__main__":

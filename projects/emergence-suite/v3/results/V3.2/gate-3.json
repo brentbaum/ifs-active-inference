@@ -1,0 +1,54 @@
+{
+  "criteria": {
+    "fixed_g": true,
+    "historical": true,
+    "material": true,
+    "mixed": true,
+    "one_way_selectivity": true,
+    "recurrent_probability": true,
+    "retention": true,
+    "transfer": true,
+    "witnessing": true,
+    "zero_association": true
+  },
+  "metrics": {
+    "fixed_g_max_abs": 0.0,
+    "historical_query_separation": 0.6861999999999999,
+    "material_redescription_rate": 0.9975,
+    "mixed_block_accuracy": 0.98625,
+    "old_context_retention_max_error": 0.0,
+    "one_way_false_recurrence": 0.23326372106281207,
+    "present_transfer": 0.3190371330851802,
+    "present_transfer_ci": [
+      0.3168570862548854,
+      0.32126052306710273
+    ],
+    "raw_redescription_rate": 0.99875,
+    "recurrent_context_probability": 0.9981472981356299,
+    "selective_redescription_rate": 0.99375,
+    "witnessing_scope_gain": 0.8012482371389283,
+    "witnessing_scope_gain_ci": [
+      0.8003803931856911,
+      0.8023327237953816
+    ],
+    "zero_association_max_abs": 0.0
+  },
+  "thresholds": {
+    "active_context_accuracy": 0.95,
+    "brier_max": 0.08,
+    "coverage_min": 0.94,
+    "dynamics_accuracy": 0.91,
+    "ece_max": 0.06,
+    "historical_query_separation": 0.344,
+    "macro_region_recovery": 0.87,
+    "material_redescription_rate": 0.91,
+    "mixed_block_accuracy": 0.9,
+    "old_context_retention_error_max": 1e-10,
+    "one_way_false_recurrence_max": 0.29,
+    "present_transfer": 0.159,
+    "recurrent_context_probability": 0.749,
+    "scope_accuracy": 0.94,
+    "witnessing_scope_gain": 0.4
+  },
+  "verdict": "PASS"
+}

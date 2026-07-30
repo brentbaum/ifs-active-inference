@@ -1,0 +1,48 @@
+{
+  "comparison": {
+    "false_recurrence": {
+      "absolute_error": 0.0,
+      "bit_equal": true,
+      "printed": 0.2157242853189813,
+      "reproduced": 0.2157242853189813
+    },
+    "history_separation": {
+      "absolute_error": 0.0,
+      "bit_equal": true,
+      "printed": 0.6980000000000001,
+      "reproduced": 0.6980000000000001
+    },
+    "material_rate": {
+      "absolute_error": 0.0,
+      "bit_equal": true,
+      "printed": 1.0,
+      "reproduced": 1.0
+    },
+    "mixed_accuracy": {
+      "absolute_error": 0.0,
+      "bit_equal": true,
+      "printed": 1.0,
+      "reproduced": 1.0
+    },
+    "present_transfer": {
+      "absolute_error": 0.0,
+      "bit_equal": true,
+      "printed": 0.3235751179796528,
+      "reproduced": 0.3235751179796528
+    },
+    "recurrent_context_probability": {
+      "absolute_error": 0.0,
+      "bit_equal": true,
+      "printed": 0.999929008891109,
+      "reproduced": 0.999929008891109
+    },
+    "witnessing_gain": {
+      "absolute_error": 0.0,
+      "bit_equal": true,
+      "printed": 0.8000884820639629,
+      "reproduced": 0.8000884820639629
+    }
+  },
+  "trace_rule": "records serialized before aggregate comparison",
+  "verdict": "PASS"
+}

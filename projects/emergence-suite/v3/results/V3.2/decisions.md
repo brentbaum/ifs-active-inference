@@ -14,3 +14,7 @@
 5. The repair pilot established attainability, but an untraced 20-seed
    preflight was disclosed as a negative custody fact. Progression stopped
    before Gate 1; no criterion block was opened.
+6. The evaluator classified the disclosure as an attestation erratum after
+   bit-exact reproduction. Stage progression carries the permanent
+   `CUSTODY_NOTE_PREFLIGHT_UNSERIALIZED` clause. A runtime trace-sink guard and
+   repository audit are mandatory from Gate 1 onward.
