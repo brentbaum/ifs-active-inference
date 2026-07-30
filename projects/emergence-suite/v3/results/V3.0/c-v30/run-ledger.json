@@ -1,0 +1,61 @@
+{
+  "ascending_gap_free": true,
+  "challenge": "C-V30",
+  "challenge_sha256": "fdc8b516379048f7d2b1e5fde40c647de76bab02f060119339118debd4cdff73",
+  "first_seed": 4000000,
+  "freeze_manifest": {
+    "declared_count": 31,
+    "errors": [],
+    "manifest_path": "results/V3.0/freeze-manifest.json",
+    "pass": true,
+    "verified_count": 31
+  },
+  "last_seed": 4001999,
+  "phase_events": [
+    {
+      "at": "2026-07-30T11:34:50.309652+00:00",
+      "phase": "escrow_run_started"
+    },
+    {
+      "at": "2026-07-30T11:34:59.689711+00:00",
+      "phase": "raw_traces_hashed"
+    },
+    {
+      "at": "2026-07-30T11:35:00.145329+00:00",
+      "phase": "criteria_evaluated"
+    }
+  ],
+  "raw_trace_seal": {
+    "files": {
+      "cell_1_identity_no_danger-raw.jsonl": {
+        "bytes": 14320118,
+        "sha256": "949005b766320dfc6d2e03e48a2a49233d1a2e5582faf2385c6d47d3befc1ac7"
+      },
+      "cell_2_danger_plus_action-raw.jsonl": {
+        "bytes": 14424397,
+        "sha256": "82b5c65c3aa7bb540d691c242ec86d4e708be39965d51107cdfa5d0bc606eb6a"
+      },
+      "cell_3_mixed_scope_dynamics-raw.jsonl": {
+        "bytes": 18670980,
+        "sha256": "11f358a918dd8f411d0d72c759ca0a9ef6e16c7b0256bc5f6919dcb7f0955095"
+      },
+      "cell_4_two_modes_full-raw.jsonl": {
+        "bytes": 18535777,
+        "sha256": "050315973d6aaa48d4f39f4536f8713f21631ad0769b25bdd9c1d492fd4b3d5c"
+      }
+    },
+    "record_count": 2000,
+    "sealed_at": "2026-07-30T11:34:59.689711+00:00",
+    "sealed_before_criteria": true
+  },
+  "release_authority": {
+    "authorization": "evaluator release accompanying revealed seal fdc8b516",
+    "purpose": "C-V30 sealed challenge",
+    "released_block": [
+      4000000,
+      4001999
+    ]
+  },
+  "seed_count": 2000,
+  "unique_seed_count": 2000
+}

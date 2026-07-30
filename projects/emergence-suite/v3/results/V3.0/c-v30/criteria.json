@@ -1,0 +1,60 @@
+{
+  "cells": {
+    "cell_1_identity_no_danger": {
+      "cell": "cell_1_identity_no_danger",
+      "ece_10_bin": 0.0007668774443994675,
+      "first_seed": 4000000,
+      "last_seed": 4000499,
+      "max_absent_edge_independence_error": 0.0,
+      "max_dormant_likelihood_error": 0.0,
+      "max_local_recombination_error": 1.2079226507921703e-13,
+      "max_oracle_log_probability_error": 2.842170943040401e-14,
+      "structure_field_accuracy": 0.9985714285714286,
+      "world_count": 500
+    },
+    "cell_2_danger_plus_action": {
+      "cell": "cell_2_danger_plus_action",
+      "ece_10_bin": 0.0007963696565371282,
+      "first_seed": 4000500,
+      "last_seed": 4000999,
+      "max_absent_edge_independence_error": 0.0,
+      "max_dormant_likelihood_error": 0.0,
+      "max_local_recombination_error": 1.2789769243681803e-13,
+      "max_oracle_log_probability_error": 4.263256414560601e-14,
+      "structure_field_accuracy": 0.9982857142857143,
+      "world_count": 500
+    },
+    "cell_3_mixed_scope_dynamics": {
+      "cell": "cell_3_mixed_scope_dynamics",
+      "ece_10_bin": 0.0002425632330152272,
+      "first_seed": 4001000,
+      "last_seed": 4001499,
+      "max_absent_edge_independence_error": 0.0,
+      "max_dormant_likelihood_error": 0.0,
+      "max_local_recombination_error": 4.831690603168681e-13,
+      "max_oracle_log_probability_error": 1.4210854715202004e-13,
+      "structure_field_accuracy": 0.9997142857142857,
+      "world_count": 500
+    },
+    "cell_4_two_modes_full": {
+      "cell": "cell_4_two_modes_full",
+      "ece_10_bin": 0.00023177244469094711,
+      "first_seed": 4001500,
+      "last_seed": 4001999,
+      "max_absent_edge_independence_error": 0.0,
+      "max_dormant_likelihood_error": 0.0,
+      "max_local_recombination_error": 3.126388037344441e-13,
+      "max_oracle_log_probability_error": 1.1368683772161603e-13,
+      "structure_field_accuracy": 0.9997142857142857,
+      "world_count": 500
+    }
+  },
+  "criteria": {
+    "criterion_1_compile_sample_score": true,
+    "criterion_2_exact_probability": true,
+    "criterion_3_structure_recovery": true,
+    "criterion_4_semantics": true,
+    "criterion_5_custody": true
+  },
+  "immutable_verdict": "PASS"
+}
