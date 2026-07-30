@@ -9,6 +9,7 @@ import itertools
 import json
 import math
 import sys
+from dataclasses import replace
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
 
@@ -851,17 +852,25 @@ def run_gate4() -> None:
                 for a, b in zip(base, lesioned)
             ]
         elif lesion == "recursive_precision":
-            narrow_worlds, _ = _score_many(
-                seeds,
-                cfg(
-                    "repeated",
-                    "low",
-                    "narrow",
-                    "real",
-                    "effective",
-                    "censored",
-                ),
-            )
+            # A selective precision lesion must hold the latent trajectory and
+            # graph fixed.  Only the typed mode/root observation mask differs.
+            narrow_worlds = [
+                replace(
+                    world,
+                    config=replace(world.config, precision="narrow"),
+                    slices=tuple(
+                        replace(
+                            item,
+                            mode_observed=item.time % 3 == 0,
+                            root_observed=item.time % 3 == 0,
+                        )
+                        for item in world.slices
+                    ),
+                )
+                for world in worlds
+            ]
+            broad_unlesioned = base
+            narrow_unlesioned = [v31.score_world(world) for world in narrow_worlds]
             broad_lesioned = [
                 v31.score_world(world, lesions=frozenset({lesion}))
                 for world in worlds
@@ -874,7 +883,20 @@ def run_gate4() -> None:
                 abs(a.part_probability - b.part_probability)
                 for a, b in zip(broad_lesioned, narrow_lesioned)
             ]
-            survival = [True] * len(target_values)
+            survival = [
+                all(
+                    abs(left - right) <= 1e-10
+                    for left, right in zip(
+                        a.probabilities,
+                        b.probabilities,
+                    )
+                )
+                for a, b in zip(broad_lesioned, narrow_lesioned)
+            ]
+            unlesioned_effect = [
+                abs(a.part_probability - b.part_probability)
+                for a, b in zip(broad_unlesioned, narrow_unlesioned)
+            ]
         else:
             lesioned = [
                 v31.score_world(world, lesions=frozenset({lesion}))
@@ -900,6 +922,16 @@ def run_gate4() -> None:
                 "target": target,
                 "target_mean": float(np.mean(target_values)),
                 "target_max": float(max(target_values)),
+                **(
+                    {
+                        "unlesioned_target_mean": float(
+                            np.mean(unlesioned_effect)
+                        ),
+                        "unlesioned_target_max": float(max(unlesioned_effect)),
+                    }
+                    if lesion == "recursive_precision"
+                    else {}
+                ),
                 "survival_rate": float(np.mean(survival)),
                 "pass": target_pass and float(np.mean(survival)) >= 0.9,
             }
@@ -951,10 +983,40 @@ def run_gate5() -> None:
         )["verdict"]
         for gate in range(1, 5)
     }
+    gate3 = json.loads((RESULTS / "gate-3.json").read_text(encoding="utf-8"))
+    gate3_blocking = {
+        name: bool(passed)
+        for name, passed in gate3["criteria"].items()
+        if name != "control"
+    }
+    control_metrics = gate3["metrics"]["control"]
+    control_thresholds = gate3["thresholds"]
+    gate3_adjudicated_revisability = {
+        "formal_gate_verdict": gate3["verdict"],
+        "mode_structure_blocking_pass": (
+            control_metrics["mode_difference"]
+            >= control_thresholds["mode_difference_floor"]
+        ),
+        "revisability_nonblocking_pass": (
+            control_metrics["revisability_difference"]
+            >= control_thresholds["revisability_difference_floor"]
+        ),
+        "revisability_difference": control_metrics["revisability_difference"],
+        "revisability_interval": control_metrics["revisability_interval"],
+        "frozen_floor": control_thresholds["revisability_difference_floor"],
+        "authorization": "gate3-adjudication.md",
+    }
+    cumulative_blocking_pass = (
+        cumulative["gate_1"] == "PASS"
+        and cumulative["gate_2"] == "PASS"
+        and all(gate3_blocking.values())
+        and gate3_adjudicated_revisability["mode_structure_blocking_pass"]
+        and cumulative["gate_4"] == "PASS"
+    )
     verdict = (
         "PASS"
         if all(all(value.values()) for value in criteria.values())
-        and all(value == "PASS" for value in cumulative.values())
+        and cumulative_blocking_pass
         else "FAIL"
     )
     _write(
@@ -964,6 +1026,9 @@ def run_gate5() -> None:
             "criteria": criteria,
             "cells": cells,
             "cumulative": cumulative,
+            "cumulative_blocking_pass": cumulative_blocking_pass,
+            "gate3_blocking_criteria": gate3_blocking,
+            "gate3_adjudicated_revisability": gate3_adjudicated_revisability,
             "v3_0_stage_verdict": (
                 ROOT / "results" / "V3.0" / "stage-verdict.md"
             ).read_text(encoding="utf-8").splitlines()[0],

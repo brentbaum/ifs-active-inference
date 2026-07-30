@@ -1,0 +1,15 @@
+{
+  "attempted_seed_block": [
+    3110000,
+    3110199
+  ],
+  "criteria_evaluated": false,
+  "first_failure": {
+    "exception": "ValueError: Out of range float values are not JSON compliant: nan",
+    "lesion": "mode_slot",
+    "localization": "_mode_log_score returns -inf for every surviving active_mode=0 program when an observed mode value is 1; posterior normalization therefore has maximum=-inf and computes exp(-inf - -inf)",
+    "scientific_interpretation": "none; the lesion posterior is undefined"
+  },
+  "later_gates_opened": false,
+  "verdict": "FAIL_SOFTWARE_STOP"
+}

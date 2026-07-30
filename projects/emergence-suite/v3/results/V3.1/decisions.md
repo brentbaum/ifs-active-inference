@@ -11,5 +11,11 @@
 5. The initial efficacy pilot's safe baseline was construct-inadequate. The
    correction used an unconsumed, prospectively barred pilot tail before any
    criterion seed and retained the initial result.
-6. Gate 3 stopped on the preregistered control revisability miss. No tuning or
-   later gate execution followed.
+6. Gate 3 stopped on the preregistered control revisability miss. The evaluator
+   later authorized continuation with that family alone non-blocking.
+7. Before Gate 4, the recursive-precision lesion runner was corrected to
+   compare one shared latent trajectory under broad versus narrow typed
+   observation masks. This was assay wiring only; inference was unchanged.
+8. Gate 4 stopped when the mode-slot deletion made the posterior undefined.
+   No semantics were invented for observations whose latent production had
+   been deleted, and no repair was attempted without adjudication.
