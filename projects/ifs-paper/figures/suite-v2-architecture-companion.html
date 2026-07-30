@@ -79,6 +79,16 @@ code, .mono {
   font-size: .84em; background: var(--code-bg); padding: .08em .35em; border-radius: 3px;
 }
 .small { font-size: .85rem; color: var(--muted); }
+.formal-subtitle {
+  margin: .1rem 0 .85rem; color: var(--muted);
+  font: .78rem/1.5 ui-monospace, Menlo, monospace; letter-spacing: .015em;
+}
+.notation-rule {
+  margin: .85rem 0 1.1rem; padding: .72rem .9rem;
+  border-left: 3px solid var(--accent); background: var(--accent-soft);
+  border-radius: 0 6px 6px 0; color: var(--muted); font-size: .84rem;
+}
+.notation-rule b { color: var(--ink); }
 a { color: var(--accent); }
 
 /* legend for the constitution motif */
@@ -109,15 +119,199 @@ svg .edge.lit { stroke: var(--accent); stroke-width: 2.2; opacity: 1; }
 .node:hover rect { stroke-width: 2.6; }
 .group-label { font-size: 11px; fill: var(--muted); letter-spacing: .08em; }
 
+/* dual architecture views */
+.map-toolbar {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  margin: 1rem 0 .65rem;
+}
+.view-switch {
+  display: inline-grid; grid-template-columns: 1fr 1fr; padding: 3px;
+  border: 1px solid var(--line); border-radius: 999px; background: var(--code-bg);
+  box-shadow: inset 0 1px 2px rgba(20, 25, 32, .06);
+}
+.view-switch button {
+  border: 0; border-radius: 999px; padding: .48rem .9rem; cursor: pointer;
+  color: var(--muted); background: transparent; font: .78rem ui-monospace, Menlo, monospace;
+  letter-spacing: .025em;
+}
+.view-switch button[aria-selected="true"] {
+  color: var(--ink); background: var(--panel);
+  box-shadow: 0 1px 4px rgba(20, 25, 32, .14);
+}
+.view-intent { color: var(--muted); font-size: .82rem; text-align: right; max-width: 34rem; }
+.map-panel { animation: map-in .22s ease-out both; }
+.map-panel[hidden] { display: none; }
+@keyframes map-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.map-legend {
+  display: flex; flex-wrap: wrap; gap: .65rem 1rem; padding: .65rem .8rem;
+  border: 1px solid var(--line); border-bottom: 0; border-radius: 8px 8px 0 0;
+  background: color-mix(in srgb, var(--panel) 92%, var(--accent-soft));
+  color: var(--muted); font-size: .76rem;
+}
+.map-legend span { display: inline-flex; align-items: center; gap: .38rem; }
+.legend-shape { display: inline-block; width: 24px; height: 14px; flex: none; }
+.legend-shape.latent { border: 1.6px solid var(--accent); border-radius: 50%; background: var(--accent-soft); }
+.legend-shape.structure { border: 1.6px solid var(--warn); background: var(--warn-soft);
+  clip-path: polygon(12% 0,88% 0,100% 50%,88% 100%,12% 100%,0 50%); }
+.legend-shape.factor { width: 18px; border: 1.6px solid var(--muted); background: var(--panel); }
+.legend-shape.policy { border: 2px solid var(--pass); border-radius: 3px; background: var(--pass-soft); }
+.legend-shape.observation { border: 1.6px solid var(--muted); background: transparent; }
+.legend-shape.derived { border: 1.6px dashed var(--readout); background: var(--readout-soft); }
+.map-panel .scrollwrap { border-radius: 0 0 8px 8px; }
+
+/* formal map: a compact model atlas */
+#arch-formal .plate {
+  fill: color-mix(in srgb, var(--panel) 92%, var(--accent-soft));
+  stroke: var(--line); stroke-width: 1;
+}
+#arch-formal .plate.policy-plate {
+  fill: color-mix(in srgb, var(--panel) 90%, var(--pass-soft));
+}
+#arch-formal .plate.readout-plate {
+  fill: color-mix(in srgb, var(--panel) 91%, var(--readout-soft));
+  stroke-dasharray: 5 4;
+}
+#arch-formal .plate-label {
+  font: 10px ui-monospace, Menlo, monospace; letter-spacing: .12em; fill: var(--muted);
+}
+#arch-formal .node.latent ellipse {
+  fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.6;
+}
+#arch-formal .node.structure polygon {
+  fill: var(--warn-soft); stroke: var(--warn); stroke-width: 1.6;
+}
+#arch-formal .node.factor rect {
+  fill: var(--panel); stroke: var(--muted); stroke-width: 1.25; rx: 2;
+}
+#arch-formal .node.policy rect {
+  fill: var(--pass-soft); stroke: var(--pass); stroke-width: 2; rx: 5;
+}
+#arch-formal .node.observation rect {
+  fill: none; stroke: var(--muted); stroke-width: 1.35; rx: 3;
+}
+#arch-formal .node.readout rect {
+  fill: var(--readout-soft); stroke: var(--readout); stroke-width: 1.5;
+  stroke-dasharray: 6 4; rx: 5;
+}
+#arch-formal .node.modulator rect {
+  fill: color-mix(in srgb, var(--accent-soft) 45%, var(--panel));
+  stroke: var(--accent); stroke-width: 1.35; stroke-dasharray: 2 3; rx: 12;
+}
+#arch-formal .node text { font-size: 11.5px; }
+#arch-formal .node .symbol { font: 12px ui-monospace, Menlo, monospace; }
+#arch-formal .node .type-tag {
+  font: 8.5px ui-monospace, Menlo, monospace; letter-spacing: .07em; fill: var(--muted);
+}
+#arch-formal .factor-label {
+  font: 10px ui-monospace, Menlo, monospace; fill: var(--muted);
+}
+#arch-formal .edge.generative { stroke: var(--muted); }
+#arch-formal .edge.modulates { stroke: var(--accent); stroke-dasharray: 2 4; }
+#arch-formal .edge.derived { stroke: var(--readout); stroke-dasharray: 5 4; }
+#arch-formal .edge.policy-edge { stroke: var(--pass); }
+#arch-formal .node.selected ellipse,
+#arch-formal .node.selected polygon,
+#arch-formal .node.selected rect,
+#arch-clinical .node.selected rect {
+  stroke-width: 3; filter: drop-shadow(0 2px 3px rgba(20, 25, 32, .18));
+}
+#arch-clinical .clinical-lane {
+  fill: color-mix(in srgb, var(--panel) 93%, var(--accent-soft));
+  stroke: var(--line); stroke-width: 1;
+}
+#arch-clinical .clinical-lane.change {
+  fill: color-mix(in srgb, var(--panel) 91%, var(--pass-soft));
+}
+#arch-clinical .lane-label {
+  font: 10px ui-monospace, Menlo, monospace; letter-spacing: .12em; fill: var(--muted);
+}
+#arch-clinical .node.clinical-state rect {
+  fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.6; rx: 14;
+}
+#arch-clinical .node.clinical-protection rect {
+  fill: var(--warn-soft); stroke: var(--warn); stroke-width: 1.6; rx: 14;
+}
+#arch-clinical .node.clinical-change rect {
+  fill: var(--pass-soft); stroke: var(--pass); stroke-width: 1.6; rx: 14;
+}
+#arch-clinical .node.clinical-observation rect {
+  fill: var(--panel); stroke: var(--muted); stroke-width: 1.4; rx: 4;
+}
+#arch-clinical .node.readout rect {
+  fill: var(--readout-soft); stroke: var(--readout); stroke-dasharray: 6 4; rx: 5;
+}
+#arch-clinical .node text { font-size: 12px; }
+#arch-clinical .node .clinical-kicker {
+  font: 8.5px ui-monospace, Menlo, monospace; letter-spacing: .08em; fill: var(--muted);
+}
+#arch-clinical .clinical-edge {
+  stroke: var(--muted); stroke-width: 1.6; fill: none; opacity: .84;
+}
+#arch-clinical .clinical-edge.change { stroke: var(--pass); }
+#arch-clinical .clinical-edge.feedback { stroke: var(--warn); stroke-dasharray: 5 4; }
+#arch-clinical .clinical-edge.derived { stroke: var(--readout); stroke-dasharray: 5 4; }
+#arch-clinical .continuity {
+  stroke: var(--accent); stroke-width: 3; fill: none; opacity: .32;
+}
+#arch-clinical .continuity-label {
+  font: italic 11px Georgia, serif; fill: var(--accent);
+}
+@media (max-width: 720px) {
+  .map-toolbar { align-items: stretch; flex-direction: column; }
+  .view-intent { text-align: left; max-width: none; }
+  .view-switch { width: 100%; }
+}
+@media (min-width: 1320px) {
+  .map-toolbar, .map-panel, #nodeinfo {
+    width: 1280px;
+    margin-left: calc((100% - 1280px) / 2);
+  }
+}
+
 /* annotation panel */
-#nodeinfo {
+#nodeinfo, #nodeinfo3 {
   margin-top: .75rem; padding: .9rem 1.1rem; min-height: 3.6rem;
   background: var(--panel); border: 1px solid var(--line);
   border-left: 4px solid var(--accent); border-radius: 6px; font-size: .92rem;
 }
-#nodeinfo .ni-title { font-weight: bold; }
-#nodeinfo .ni-stage { font-family: ui-monospace, Menlo, monospace; font-size: .8rem;
-  color: var(--muted); margin-left: .5rem; }
+#nodeinfo .ni-title, #nodeinfo3 .ni-title { font-weight: bold; }
+#nodeinfo .ni-stage, #nodeinfo3 .ni-stage { font-family: ui-monospace, Menlo, monospace;
+  font-size: .8rem; color: var(--muted); margin-left: .5rem; }
+
+/* v3 supergraph map */
+#arch-v3 .node.dormant rect { opacity: .5; stroke-dasharray: 4 3; }
+#arch-v3 .node.dormant text { opacity: .6; }
+#arch-v3 .zdot { fill: var(--panel); stroke: var(--accent); stroke-width: 2; cursor: pointer; }
+#arch-v3 .zdot:hover { stroke-width: 3.2; }
+#arch-v3 .zlabel { font: bold 9px ui-monospace, Menlo, monospace; fill: var(--accent);
+  pointer-events: none; }
+#arch-v3 .mod-edge { stroke: var(--muted); stroke-dasharray: 3 3; opacity: .55; fill: none;
+  stroke-width: 1.4; }
+#arch-v3 .edge-label { font: 10.5px ui-monospace, Menlo, monospace; fill: var(--muted); }
+.compression { background: var(--code-bg); border: 1px solid var(--line); border-radius: 8px;
+  padding: .8rem 1rem; font: .78rem ui-monospace, Menlo, monospace; overflow-x: auto;
+  white-space: pre; line-height: 1.5; }
+.v3legend { display: flex; flex-wrap: wrap; gap: .9rem; margin: .7rem 0; font-size: .8rem;
+  color: var(--muted); align-items: center; }
+.v3legend .zkey { display: inline-block; width: 14px; height: 14px; border-radius: 50%;
+  border: 2px solid var(--accent); background: var(--panel); flex: none; }
+.v3legend .dormkey { display: inline-block; width: 26px; height: 14px; border-radius: 3px;
+  border: 2px dashed var(--accent); opacity: .5; background: var(--accent-soft); flex: none; }
+
+/* collapsed v2 reference block */
+.v2ref { margin-top: 1.75rem; border: 1px solid var(--line); border-radius: 8px;
+  background: var(--panel); padding: 0 .8rem .8rem; }
+.v2ref > summary { cursor: pointer; padding: .85rem .3rem; font-size: .95rem;
+  color: var(--muted); list-style-position: inside; }
+.v2ref > summary:hover { color: var(--ink); }
+.v2ref[open] > summary { border-bottom: 1px solid var(--line); margin-bottom: .6rem; }
+@media (min-width: 1320px) {
+  .v2ref { width: 1280px; margin-left: calc((100% - 1280px) / 2); }
+  .v2ref .map-toolbar, .v2ref .map-panel, .v2ref #nodeinfo { width: auto; margin-left: 0; }
+}
 
 /* stepper */
 .stepper { display: flex; flex-wrap: wrap; gap: .4rem; margin: 1rem 0; }
@@ -146,7 +340,7 @@ svg .edge.lit { stroke: var(--accent); stroke-width: 2.2; opacity: 1; }
 /* results panel */
 table { border-collapse: collapse; width: 100%; font-size: .88rem; }
 main > table { display: block; overflow-x: auto; }
-td code { word-break: break-word; }
+td code, p code { word-break: break-word; overflow-wrap: anywhere; }
 th, td { text-align: left; padding: .5rem .6rem; border-bottom: 1px solid var(--line);
   vertical-align: top; }
 th { font-weight: bold; color: var(--muted); font-size: .8rem; letter-spacing: .04em; }
@@ -169,6 +363,42 @@ footer { margin-top: 3.5rem; border-top: 1px solid var(--line); padding-top: 1re
   font-size: .8rem; color: var(--muted); }
 
 /* prior inventory */
+.assumption-audit {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: .75rem; margin: 1rem 0;
+}
+.audit-card {
+  position: relative; min-height: 145px; padding: .85rem .9rem .8rem;
+  border: 1px solid var(--line); border-top: 3px solid var(--accent);
+  border-radius: 7px; background: var(--panel);
+}
+.audit-card.no { border-top-color: var(--fail); }
+.audit-card.learn { border-top-color: var(--accent); }
+.audit-card.compare { border-top-color: var(--warn); }
+.audit-card.rule { border-top-color: var(--muted); }
+.audit-card .audit-kicker {
+  display: block; margin-bottom: .35rem; color: var(--muted);
+  font: .66rem ui-monospace, Menlo, monospace; letter-spacing: .09em;
+}
+.audit-card h3 { margin: 0 0 .35rem; font-size: .96rem; line-height: 1.25; }
+.audit-card p { margin: 0; color: var(--muted); font-size: .8rem; line-height: 1.5; }
+.anti-smuggle {
+  display: flex; align-items: center; gap: .75rem; margin: .85rem 0;
+  padding: .7rem .85rem; border: 1px solid var(--line); border-radius: 7px;
+  background: color-mix(in srgb, var(--panel) 90%, var(--pass-soft)); font-size: .84rem;
+}
+.anti-smuggle strong {
+  flex: none; color: var(--pass); font: .72rem ui-monospace, Menlo, monospace;
+  letter-spacing: .08em;
+}
+.prior-details { margin-top: 1rem; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+.prior-details > summary {
+  cursor: pointer; padding: .8rem 1rem; color: var(--ink); font-weight: bold;
+  list-style-position: inside;
+}
+.prior-details > summary span { color: var(--muted); font-weight: normal; font-size: .8rem; }
+.prior-details[open] > summary { border-bottom: 1px solid var(--line); }
+.prior-details .prior-grid { padding: 0 .9rem .9rem; }
+.prior-details .small { padding: 0 1rem .9rem; }
 .prior-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: .9rem; margin-top: 1rem; }
 .prior-card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
@@ -211,24 +441,61 @@ table.cmx td.on:hover, table.cmx td.zero:hover { background: var(--accent-soft);
   color: var(--muted); }
 .cmx-legend .on { color: var(--accent); } .cmx-legend .zero { color: var(--fail); }
 
-/* generative slice */
-.slice-controls { display: flex; flex-wrap: wrap; gap: .5rem; margin: .75rem 0; }
-.slice-controls button { font: .85rem Georgia, serif; padding: .4rem .8rem;
-  border: 1px solid var(--line); border-radius: 6px; background: var(--panel);
-  color: var(--ink); cursor: pointer; }
-.slice-controls button:disabled { opacity: .5; cursor: default; }
-#slice .snode rect { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.4; rx: 6; }
-#slice .snode text { font-size: 12px; }
-#slice .sobs rect { fill: none; stroke: var(--muted); stroke-width: 1.3; rx: 6; }
-#slice .sedge { stroke: var(--muted); stroke-width: 1.2; fill: none; opacity: .7; }
-#slice .guide { fill: none; stroke: none; }
-#slice .packet { fill: var(--warn); stroke: var(--bg); stroke-width: 1.5; }
-#slice .pulse rect { stroke: var(--warn); stroke-width: 3; }
-#slice .eq { font: 13px ui-monospace, Menlo, monospace; fill: var(--pass); opacity: 0; }
-#slice .eq.show { opacity: 1; transition: opacity .3s; }
-#sliceinfo { margin-top: .75rem; padding: .8rem 1rem; min-height: 2.6rem;
-  background: var(--panel); border: 1px solid var(--line);
-  border-left: 4px solid var(--warn); border-radius: 6px; font-size: .88rem; }
+/* evidence firewall */
+.firewall {
+  margin-top: 1rem; border: 1px solid var(--line); border-radius: 9px;
+  overflow: hidden; background: var(--panel);
+}
+.firewall-head, .firewall-row {
+  display: grid; grid-template-columns: 1.05fr 1fr 1fr;
+}
+.firewall-head {
+  background: var(--code-bg); color: var(--muted);
+  font: .68rem ui-monospace, Menlo, monospace; letter-spacing: .08em;
+}
+.firewall-head div, .firewall-row > div { padding: .65rem .8rem; }
+.firewall-row { border-top: 1px solid var(--line); }
+.firewall-row > div + div, .firewall-head div + div { border-left: 1px solid var(--line); }
+.firewall-row .experience { background: color-mix(in srgb, var(--panel) 94%, var(--accent-soft)); }
+.firewall-row .allowed { background: color-mix(in srgb, var(--panel) 91%, var(--pass-soft)); }
+.firewall-row .forbidden { background: color-mix(in srgb, var(--panel) 92%, var(--fail-soft)); }
+.firewall-row h3 { margin: 0 0 .2rem; font-size: .92rem; }
+.firewall-row p { margin: 0; color: var(--muted); font-size: .79rem; line-height: 1.45; }
+.firewall-row code { font-size: .76em; }
+.route-label {
+  display: inline-block; margin-bottom: .3rem;
+  font: .64rem ui-monospace, Menlo, monospace; letter-spacing: .08em;
+}
+.allowed .route-label { color: var(--pass); }
+.forbidden .route-label { color: var(--fail); }
+.seal-strip {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: .6rem; margin: .8rem 0 0;
+}
+.evidence-seal {
+  padding: .65rem .7rem; border: 1px solid var(--line); border-radius: 6px;
+  background: var(--panel); text-align: center;
+}
+.evidence-seal .seal-value {
+  display: block; color: var(--pass); font: 1rem ui-monospace, Menlo, monospace;
+}
+.evidence-seal .seal-label { display: block; color: var(--muted); font-size: .7rem; line-height: 1.35; }
+.firewall-conclusion {
+  margin-top: .8rem; padding: .75rem .9rem; border-left: 4px solid var(--warn);
+  background: var(--warn-soft); border-radius: 0 6px 6px 0; font-size: .86rem;
+}
+@media (max-width: 760px) {
+  .assumption-audit, .seal-strip { grid-template-columns: 1fr 1fr; }
+  .firewall-head { display: none; }
+  .firewall-row { display: grid; grid-template-columns: 1fr; }
+  .firewall-row > div + div { border-left: 0; border-top: 1px solid var(--line); }
+  .firewall-row .experience::before {
+    content: "EXPERIENCE ENTERING THE MODEL"; display: block; margin-bottom: .3rem;
+    color: var(--muted); font: .64rem ui-monospace, Menlo, monospace; letter-spacing: .08em;
+  }
+}
+@media (max-width: 460px) {
+  .assumption-audit, .seal-strip { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
@@ -276,22 +543,717 @@ back. Nothing may assign <code>formed</code>,
 polarization coefficient. The diagram keeps that distinction visible:</p>
 
 <div class="legend">
-  <div class="key"><span class="swatch solid"></span> Belief or model evidence — a quantity the model may update</div>
-  <div class="key"><span class="swatch dashed"></span> Pure readout — a summary computed afterward, never written back</div>
-  <div class="key"><span class="swatch obs"></span> Observation interface — evidence channels with declared meanings</div>
+  <div class="key"><span class="swatch solid"></span> Quantity the model can update — posterior belief or model evidence</div>
+  <div class="key"><span class="swatch dashed"></span> Summary computed afterward — a pure readout, never written back</div>
+  <div class="key"><span class="swatch obs"></span> Evidence supplied to the model — an observation in a declared channel</div>
 </div>
 
 <!-- ============ 2. ARCHITECTURE MAP ============ -->
 <h2>1 &nbsp;The architecture</h2>
-<p>Everything below belongs to one model. A cue such as a bark, a bodily fear response, a
+<p>The current architecture is Suite v3, the <em>minimal structural organism</em>. Suite v2
+answered each clinical question with its own hand-built menu of hypotheses: one menu for how
+a part forms, one for whole-episode evidence, one for burden couplings, one for whether a
+protective action works, and five named families for how things change over time. Those
+menus were good for falsification — each mechanism could fail alone — but they were all
+variants of one question: <em>which dependencies exist, which context or mode scopes them,
+how strong are they, and which observations support retaining or removing them?</em> v3 asks
+that question once, over one bounded causal graph:</p>
+<div class="compression">T/D/P formation menu
++ H_cfg / kappa episode menu
++ Z_W / Z_Pi / Z_Y reduction lattice
++ H_E / eta efficacy menu
++ five named temporal families
+------------------------------------------------
+= one posterior over a bounded structural grammar</div>
+<p>The graph has three context slots (<code>K_C = 3</code>), three binary mode slots
+(<code>K_M = 3</code> — binary rather than one-of-three, because polarization needs two
+modes active at once), a binary identity root <code>G</code>, world <code>W</code> and
+outcome <code>Y</code>, and an action in {<code>engage</code>, <code>protect</code>,
+<code>seek_support</code>}. Every optional dependency carries one generic existence variable
+<code>Z_e ∈ {0,1}</code> — the small <b>Z</b> dots on the edges below. Each learnable
+parameter block picks one scope (<code>shared_global</code> · <code>cue_specific</code> ·
+<code>context_specific</code> · <code>mode_specific</code>) and one temporal dynamics
+(<code>static</code> · <code>discrete_recurrent_context</code> ·
+<code>ordered_random_walk</code> · <code>one_way_change</code>). One code-length prior,
+<code>p(H) ∝ 2^(−L(H))</code>, replaces all the stage-specific structure priors. "Grow,"
+"split," and "prune" are names for posterior movement over this fixed grammar — no protocol
+can call them. And the clinical vocabulary of the v2 suite — T/D/P, burdens, efficacy,
+episodic coupling, trust, protector and exile — survives entirely as <em>derived
+readouts</em> over ordinary posteriors: the dashed box.</p>
+
+<div class="v3legend">
+  <span class="key"><span class="dormkey"></span> dormant slot — represented inside the prior; "birth" is posterior movement</span>
+  <span class="key"><span class="zkey"></span> Z_e existence spike on an optional edge</span>
+  <span class="key">solid = posterior / parameter · dashed = derived readout</span>
+</div>
+
+<div class="scrollwrap">
+<svg id="arch-v3" viewBox="0 0 1260 660" width="1260" height="660" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="Suite v3 licensed supergraph">
+  <defs>
+    <marker id="v3arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/>
+    </marker>
+  </defs>
+
+  <text class="group-label" x="60" y="158">MODE SLOTS (BINARY)</text>
+  <text class="group-label" x="1000" y="158">DERIVED READOUTS</text>
+
+  <!-- edges -->
+  <path class="edge" id="ev3-M1_G" d="M200,198 L330,258" marker-end="url(#v3arr)"/>
+  <path class="edge" id="ev3-M2_G" d="M200,274 L330,268" marker-end="url(#v3arr)"/>
+  <path class="edge" id="ev3-M3_G" d="M200,350 L330,282" marker-end="url(#v3arr)"/>
+  <path class="edge" id="ev3-G_W" d="M480,258 L580,186" marker-end="url(#v3arr)"/>
+  <path class="edge" id="ev3-G_A" d="M480,286 L580,352" marker-end="url(#v3arr)"/>
+  <path class="edge" id="ev3-G_Y" d="M480,272 C600,272 700,272 820,272" marker-end="url(#v3arr)"/>
+  <path class="edge" id="ev3-W_Y" d="M730,180 L820,252" marker-end="url(#v3arr)"/>
+  <path class="edge" id="ev3-doA_Y" d="M770,352 L820,290" marker-end="url(#v3arr)"/>
+  <text class="edge-label" x="758" y="336">do(A)</text>
+  <path class="edge" d="M250,478 L330,480" marker-end="url(#v3arr)"/>
+  <path class="edge" d="M130,378 C170,430 240,458 330,470" marker-end="url(#v3arr)"/>
+  <path class="mod-edge" d="M1000,100 C700,100 560,180 488,236" marker-end="url(#v3arr)"/>
+  <path class="edge readout-edge" d="M970,272 L1000,280" marker-end="url(#v3arr)"/>
+
+  <!-- Z_e dots on the eight licensed edges (grammar.py EDGES) -->
+  <g class="zg" data-edge="M1_G"><circle class="zdot" cx="265" cy="228" r="7"/><text class="zlabel" x="262" y="231">Z</text></g>
+  <g class="zg" data-edge="M2_G"><circle class="zdot" cx="265" cy="271" r="7"/><text class="zlabel" x="262" y="274">Z</text></g>
+  <g class="zg" data-edge="M3_G"><circle class="zdot" cx="265" cy="316" r="7"/><text class="zlabel" x="262" y="319">Z</text></g>
+  <g class="zg" data-edge="G_W"><circle class="zdot" cx="530" cy="222" r="7"/><text class="zlabel" x="527" y="225">Z</text></g>
+  <g class="zg" data-edge="G_A"><circle class="zdot" cx="530" cy="319" r="7"/><text class="zlabel" x="527" y="322">Z</text></g>
+  <g class="zg" data-edge="G_Y"><circle class="zdot" cx="650" cy="272" r="7"/><text class="zlabel" x="647" y="275">Z</text></g>
+  <g class="zg" data-edge="W_Y"><circle class="zdot" cx="775" cy="216" r="7"/><text class="zlabel" x="772" y="219">Z</text></g>
+  <g class="zg" data-edge="doA_Y"><circle class="zdot" cx="795" cy="321" r="7"/><text class="zlabel" x="792" y="324">Z</text></g>
+
+  <!-- nodes -->
+  <g class="node" id="v3-prior"
+     data-title="One structural prior"
+     data-stage="spec §2.4"
+     data-desc="A structure H is a finite grammar program: which mode and context slots are active, which edges exist, which parameters have nondefault scope or dynamics. Its prior is p(H) ∝ 2^(−L(H)), where L(H) is the frozen prefix-code length of those productions. This one prior replaces the separate T/D/P prior, burden-lattice prior, efficacy-existence prior, configural-coupling prior, temporal-family prior, and topology prior of v2. Ordinary parameter priors remain: every CPT row uses the same generic symmetric conjugate prior (Jeffreys / Krichevsky–Trofimov Dirichlet(1/2), unless the V3.0 prior-predictive audit had rejected it — it did not).">
+    <rect x="40" y="44" width="230" height="84"/>
+    <text x="155" y="74" text-anchor="middle">One structural prior</text>
+    <text x="155" y="94" text-anchor="middle" class="mono" style="font-size:12px">p(H) ∝ 2^(−L(H))</text>
+    <text class="stage-tag" x="155" y="114" text-anchor="middle">frozen prefix code</text>
+  </g>
+  <g class="node" id="v3-phi"
+     data-title="Recursive precision Φ_t"
+     data-stage="inherited V2.1"
+     data-desc="The precision hierarchy is inherited unchanged from V2.1 on its standing exact local/global support. It weights how strongly each typed evidence channel can update belief, exactly as in the v2 construction: collapsed depth discounts arriving evidence before it can revise anything.">
+    <rect x="1000" y="44" width="230" height="84"/>
+    <text x="1115" y="80" text-anchor="middle">Recursive precision</text>
+    <text x="1115" y="98" text-anchor="middle" class="mono" style="font-size:12px">Φ_t</text>
+    <text class="stage-tag" x="1115" y="116" text-anchor="middle">inherited V2.1</text>
+  </g>
+  <g class="node" id="v3-M1"
+     data-title="Mode slot M₁ (active)"
+     data-stage="spec §2.1"
+     data-desc="Latent internal modes are binary features, not one mutually exclusive category — polarization and coalition require two modes active at once. A part-like mode is a readout, not a state: mode k counts as materially part-like when its recurrent-use posterior is high, its activation materially changes q(G), at least two of G→W, G→A, G→Y are supported in that mode, the effect survives a neutral observation, and an external-danger-only graph explains it worse.">
+    <rect x="60" y="170" width="140" height="56"/>
+    <text x="130" y="194" text-anchor="middle">Mode M₁</text>
+    <text class="stage-tag" x="130" y="212" text-anchor="middle">active · binary</text>
+  </g>
+  <g class="node dormant" id="v3-M2"
+     data-title="Mode slot M₂ (dormant)"
+     data-stage="spec §2.1"
+     data-desc="A dormant slot is represented inside the prior. 'Birth' means posterior support moves from unused to used; no code creates an object after seeing an outcome. Growing a second mode is how the v2 multi-protector organization re-emerges in v3 — as posterior movement, never an operation.">
+    <rect x="60" y="246" width="140" height="56"/>
+    <text x="130" y="270" text-anchor="middle">Mode M₂</text>
+    <text class="stage-tag" x="130" y="288" text-anchor="middle">dormant slot</text>
+  </g>
+  <g class="node dormant" id="v3-M3"
+     data-title="Mode slot M₃ (dormant)"
+     data-stage="spec §2.1"
+     data-desc="The third bounded mode slot, also dormant until evidence moves posterior support onto it. K_M = 3 is the frozen publication bound.">
+    <rect x="60" y="322" width="140" height="56"/>
+    <text x="130" y="346" text-anchor="middle">Mode M₃</text>
+    <text class="stage-tag" x="130" y="364" text-anchor="middle">dormant slot</text>
+  </g>
+  <g class="node" id="v3-G"
+     data-title="Identity root G_t"
+     data-stage="spec §2.1"
+     data-desc="Binary identity root — the same 'who' the v2 construction carried, now one node in the supergraph. The v2 burden lattice Z_W / Z_Pi / Z_Y is gone as a separate object: burden_mass(k, c) is simply the posterior mass on the identity-conditioned edges {G→W, G→A, G→Y} in mode k and context c. Formation and unburdening concern the same edge posteriors in opposite evidential directions.">
+    <rect x="330" y="238" width="150" height="68"/>
+    <text x="405" y="264" text-anchor="middle">Identity root</text>
+    <text x="405" y="284" text-anchor="middle" class="mono" style="font-size:12px">G_t ∈ {0,1}</text>
+  </g>
+  <g class="node" id="v3-W"
+     data-title="World state W_t"
+     data-stage="spec §2.1"
+     data-desc="Binary world state. Persistent external danger is a graph classifier, not a candidate kind: stable W→Y (and possibly do(A)→Y) without material mode-to-identity organization.">
+    <rect x="580" y="150" width="150" height="60"/>
+    <text x="655" y="174" text-anchor="middle">World</text>
+    <text x="655" y="194" text-anchor="middle" class="mono" style="font-size:12px">W_t ∈ {0,1}</text>
+  </g>
+  <g class="node" id="v3-A"
+     data-title="Action A_t"
+     data-stage="spec §2.1"
+     data-desc="Three actions: engage, protect, seek_support. Interventions keep do(action) semantics — action selection is never evidence. Action efficacy is the readout q(Z_do(A)→Y = 1) plus its learned strength posterior; prevented harm is a counterfactual query over the same graph and never feeds back as an authored threat update.">
+    <rect x="580" y="330" width="190" height="68"/>
+    <text x="675" y="356" text-anchor="middle">Action A_t</text>
+    <text x="675" y="376" text-anchor="middle" class="mono" style="font-size:10.5px">engage · protect · seek_support</text>
+  </g>
+  <g class="node" id="v3-Y"
+     data-title="Outcome Y_t"
+     data-stage="spec §2.1"
+     data-desc="Binary outcome, jointly explained by world, identity-conditioned prediction (when G→Y exists), and intervention (when do(A)→Y exists). In later stages the outcome model is shared across modes — that shared dependence is the only path by which polarization can exist.">
+    <rect x="820" y="238" width="150" height="68"/>
+    <text x="895" y="264" text-anchor="middle">Outcome</text>
+    <text x="895" y="284" text-anchor="middle" class="mono" style="font-size:12px">Y_t ∈ {0,1}</text>
+  </g>
+  <g class="node" id="v3-C"
+     data-title="Context C_t"
+     data-stage="spec §2.1"
+     data-desc="External / temporal context with K_C = 3 bounded slots, dormant until used. The v2 'then versus now' machinery is now a scope production: redescription is posterior support for context-specific parameters or edges with retained historical-context predictions — a region of the grammar, not a named family.">
+    <rect x="60" y="440" width="190" height="76"/>
+    <text x="155" y="468" text-anchor="middle">Context C_t</text>
+    <text class="stage-tag" x="155" y="488" text-anchor="middle">K_C = 3 slots</text>
+    <text class="stage-tag" x="155" y="502" text-anchor="middle">dormant until used</text>
+  </g>
+  <g class="node" id="v3-params"
+     data-title="Parameter blocks with scope and dynamics"
+     data-stage="grammar.py BLOCKS"
+     data-desc="Two typed parameter blocks — cue_emission and outcome_emission — each with one generic scope production R_b ∈ {shared_global, cue_specific, context_specific, mode_specific} and one generic dynamics production D_b ∈ {static, discrete_recurrent_context, ordered_random_walk, one_way_change}. The five v2 temporal families become evaluator-side descriptions of regions of this space: global down-weight = shared parameter change; cue-local relearning = cue_specific scope; context split = discrete_recurrent_context with context_specific scope; drift = ordered_random_walk; change point = one_way_change.">
+    <rect x="330" y="440" width="260" height="96"/>
+    <text x="460" y="468" text-anchor="middle">Parameter blocks</text>
+    <text x="460" y="488" text-anchor="middle" class="mono" style="font-size:11px">cue_emission · outcome_emission</text>
+    <text class="stage-tag" x="460" y="508" text-anchor="middle">scope R_b (4) · dynamics D_b (4)</text>
+    <text class="stage-tag" x="460" y="522" text-anchor="middle">per-block, generic productions</text>
+  </g>
+  <g class="node dormant" id="v3-ext"
+     data-title="Later-stage extensions"
+     data-stage="spec §2.2"
+     data-desc="The relational extension (partner state L_t with four finite families, L → local relational precision, L → Y) arrives at V3.4; the multi-mode extension (joint mode-policy vector → Y; mode i's policy in mode j's outcome forecast) at the multi-protector stage. Both are licensed in the frozen supergraph now, dormant until their stage. Trust quantities are posterior-predictive queries over this one model — not four independently updated trust objects.">
+    <rect x="820" y="440" width="230" height="76"/>
+    <text x="935" y="468" text-anchor="middle">Later stages</text>
+    <text class="stage-tag" x="935" y="488" text-anchor="middle">partner L_t (V3.4)</text>
+    <text class="stage-tag" x="935" y="502" text-anchor="middle">joint mode-policy → Y</text>
+  </g>
+  <g class="node readout" id="v3-readouts"
+     data-title="Derived clinical readouts"
+     data-stage="spec §3 — frozen analysis only"
+     data-desc="Everything clinical is computed from ordinary posteriors, never stored: T/D/P as graph classifiers; part-like mode; burden_mass(k,c) = posterior mass on {G→W, G→A, G→Y}; efficacy q(Z_do(A)→Y); configurality Δ_I = log p(o_joint|H) − Σ log p(o_j|H) — evidence created by latent dependencies, not a format bonus; redescription; reduction; trust queries; protector-like and exile-like modes, access, polarization, coalition, witnessing, befriending. None of these may ever be a latent or mutable scientific object.">
+    <rect x="1000" y="170" width="232" height="252"/>
+    <text x="1116" y="196" text-anchor="middle" style="font-size:12px">Derived readouts</text>
+    <text x="1116" y="216" text-anchor="middle" style="font-size:11px">T / D / P classifiers</text>
+    <text x="1116" y="234" text-anchor="middle" style="font-size:11px">part-like mode</text>
+    <text x="1116" y="252" text-anchor="middle" class="mono" style="font-size:10.5px">burden_mass(k, c)</text>
+    <text x="1116" y="270" text-anchor="middle" class="mono" style="font-size:10.5px">efficacy q(Z_do(A)→Y)</text>
+    <text x="1116" y="288" text-anchor="middle" class="mono" style="font-size:10.5px">Δ_I configurality</text>
+    <text x="1116" y="306" text-anchor="middle" style="font-size:11px">redescription · reduction</text>
+    <text x="1116" y="324" text-anchor="middle" style="font-size:11px">trust queries</text>
+    <text x="1116" y="342" text-anchor="middle" style="font-size:11px">protector · exile · access</text>
+    <text x="1116" y="360" text-anchor="middle" style="font-size:11px">polarization · coalition</text>
+    <text x="1116" y="378" text-anchor="middle" style="font-size:11px">witnessing · befriending</text>
+    <text class="stage-tag" x="1116" y="402" text-anchor="middle">never latent, never mutable</text>
+  </g>
+  <g class="node obsband" id="v3-obs"
+     data-title="Typed observation channels"
+     data-stage="spec §1.1"
+     data-desc="Cue, bodily, relational, contextual, episodic, imaginal, and outcome channels. The channel ontology is declared: the model cannot learn from raw tokens that one stream is an action and another an interoceptive observation. No direct edge among observation tokens is permitted — configural or episodic evidence is induced by shared latent parents.">
+    <rect x="40" y="566" width="1194" height="60"/>
+    <text x="637" y="592" text-anchor="middle">Observation interface — typed channels</text>
+    <text class="stage-tag" x="637" y="612" text-anchor="middle">cue · bodily · relational · contextual · episodic · imaginal · outcome</text>
+  </g>
+</svg>
+</div>
+
+<div id="nodeinfo3"><span class="ni-title">Click any node or Z dot</span> — its role in the grammar, or the existence spike an edge carries.</div>
+
+<p><b>What has been validated so far.</b> V3.0 closed the exact grammar kernel: stage PASS,
+and the sealed C-V30 challenge passed all five criteria, including recovery of unseen
+grammar programs — against frozen floors of 0.979 accuracy, 0.03 ECE, and 0.98 coverage,
+the sealed cells recovered structure at 0.9983–0.9997 accuracy with ECE at or below 0.0008
+(one authorized Gate-5 verification repair, original FAIL retained). V3.1 closed GROW:
+disposition <code>PASS_WITH_ADJUDICATED_REVISABILITY_LIMITATION</code>, with the sealed
+C-V31 challenge passing all six criteria — part-like support 0.997–0.999 under chronic
+adversity, including a cell where real danger co-occurred; danger recovered at 0.756–0.926
+without identity organization; efficacy resolving (0.547) only when interventions could
+identify it and staying at its 0.333 prior under censored observation; Δ_I at 0.269–0.270
+only under learned joint dependence versus 0.003–0.004 without; classification separation
+0.9958 [0.9951, 0.9965]. One formal revisability-floor FAIL is retained under adjudication
+as an effect-size limitation. V3.2 (SPLIT) is in progress: its first attainability pilot
+stopped itself prospectively on a construct-design defect — retained in the ledger — and
+the adjudicated scope-neutrality repair has passed its fresh pilot; gates are pending.</p>
+
+<details class="v2ref" id="v2ref">
+<summary>The validated v2 construction (reference) — the expanded, mechanism-isolation architecture that v3 compresses</summary>
+<p>Suite v2 remains immutable as the expanded reference: every v2 verdict on this page was
+earned by this construction, and v3 is a compression study over it, not a repair or a
+replacement verdict. Everything below belongs to one model. A cue such as a bark, a bodily fear response, a
 therapist's response, and an imaginal do-over all enter through typed evidence channels.
 Each channel has a likelihood — the probability of that observation under each
 possible hidden cause. No evidence type receives an automatic bonus. Click a node to see
 why it matters clinically and how the model represents it.</p>
+<div class="notation-rule"><b>Labeling rule:</b> plain meaning comes first, standard
+active-inference notation comes second, and frozen implementation names appear only as
+traceability labels. For example: <em>identity-root belief</em> ·
+<code>q(s^id_t)</code> · implementation <code>G</code>.</div>
 
+<div class="map-toolbar">
+  <div class="view-switch" role="tablist" aria-label="Architecture view">
+    <button id="view-formal" role="tab" aria-selected="true" aria-controls="formal-map">Active inference</button>
+    <button id="view-clinical" role="tab" aria-selected="false" aria-controls="clinical-map">Clinical</button>
+  </div>
+  <div class="view-intent" id="view-intent">Formal lens: what is inferred, what generates evidence, and what selects action.</div>
+</div>
+
+<section class="map-panel" id="formal-map" role="tabpanel" aria-labelledby="view-formal">
+<div class="map-legend" aria-label="Active inference map key">
+  <span><i class="legend-shape latent"></i> hidden condition being estimated · <code>q(s)</code></span>
+  <span><i class="legend-shape structure"></i> either/or model structure · <code>q(m)</code></span>
+  <span><i class="legend-shape factor"></i> starting belief or prediction rule</span>
+  <span><i class="legend-shape policy"></i> possible course of action · <code>q(π)</code></span>
+  <span><i class="legend-shape observation"></i> evidence received · <code>o_t</code></span>
+  <span><i class="legend-shape derived"></i> summary computed afterward · <code>r=f(q)</code></span>
+</div>
 <div class="scrollwrap">
-<svg id="arch" viewBox="0 0 1260 720" width="1260" height="720" xmlns="http://www.w3.org/2000/svg" role="img"
-     aria-label="Suite v2 cumulative architecture diagram">
+<svg id="arch-formal" viewBox="0 0 1260 720" width="1260" height="720" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="Suite v2 representative-slice active inference architecture">
+  <defs>
+    <marker id="formal-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/>
+    </marker>
+    <marker id="formal-arr-pass" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--pass)"/>
+    </marker>
+  </defs>
+
+  <rect class="plate" x="24" y="24" width="822" height="112" rx="9"/>
+  <rect class="plate" x="24" y="154" width="822" height="342" rx="9"/>
+  <rect class="plate" x="24" y="514" width="822" height="178" rx="9"/>
+  <rect class="plate policy-plate" x="866" y="24" width="370" height="282" rx="9"/>
+  <rect class="plate readout-plate" x="866" y="324" width="370" height="368" rx="9"/>
+  <text class="plate-label" x="42" y="47">STARTING BELIEFS + PREDICTION RULES · model specification</text>
+  <text class="plate-label" x="42" y="177">BELIEFS AFTER CURRENT EVIDENCE · representative posterior slice t</text>
+  <text class="plate-label" x="42" y="537">EVIDENCE THE MODEL RECEIVES · typed observations o_t</text>
+  <text class="plate-label" x="884" y="47">CHOOSING WHAT TO DO · policy + intervention</text>
+  <text class="plate-label" x="884" y="347">CLINICAL SUMMARIES · deterministic readouts</text>
+
+  <!-- generative and computational dependencies -->
+  <path class="edge generative" data-stages="all formation witness whole" d="M150,112 C150,148 150,170 162,196" marker-end="url(#formal-arr)"/>
+  <path class="edge generative" data-stages="all formation witness coreg whole" d="M348,112 C348,152 360,174 386,197" marker-end="url(#formal-arr)"/>
+  <path class="edge generative" data-stages="all coreg access multi whole" d="M548,112 C548,152 592,172 624,198" marker-end="url(#formal-arr)"/>
+  <path class="edge generative" data-stages="all formation maint whole" d="M390,252 C332,276 250,294 206,316" marker-end="url(#formal-arr)"/>
+  <path class="edge generative" data-stages="all unburden whole" d="M424,253 L424,312" marker-end="url(#formal-arr)"/>
+  <path class="edge generative" data-stages="all unburden whole" d="M642,253 L642,312" marker-end="url(#formal-arr)"/>
+  <path class="edge generative" data-stages="all maint access whole" d="M684,238 C742,244 752,286 756,315" marker-end="url(#formal-arr)"/>
+  <path class="edge modulates" data-stages="all formation coreg witness whole" d="M542,452 C470,480 390,478 324,449" marker-end="url(#formal-arr)"/>
+  <path class="edge generative" data-stages="all formation witness whole" d="M170,253 C150,380 150,484 150,560" marker-end="url(#formal-arr)"/>
+  <path class="edge generative" data-stages="all formation witness whole" d="M392,253 C330,390 330,492 330,560" marker-end="url(#formal-arr)"/>
+  <path class="edge generative" data-stages="all coreg access whole" d="M640,253 C520,390 510,484 510,560" marker-end="url(#formal-arr)"/>
+  <path class="edge generative" data-stages="all unburden whole" d="M640,388 C682,438 690,500 690,560" marker-end="url(#formal-arr)"/>
+  <path class="edge generative" data-stages="all maint multi whole" d="M758,389 C770,452 790,506 788,560" marker-end="url(#formal-arr)"/>
+  <path class="edge policy-edge" data-stages="all access multi whole" d="M982,92 L1030,92" marker-end="url(#formal-arr-pass)"/>
+  <path class="edge policy-edge" data-stages="all access multi whole" d="M982,168 L1030,168" marker-end="url(#formal-arr-pass)"/>
+  <path class="edge policy-edge" data-stages="all access multi whole" d="M1113,144 L1113,126" marker-end="url(#formal-arr-pass)"/>
+  <path class="edge policy-edge" data-stages="all access multi whole" d="M994,247 C1012,247 1012,190 1030,178" marker-end="url(#formal-arr-pass)"/>
+  <path class="edge policy-edge" data-stages="all access multi whole" d="M1196,94 C1220,94 1220,247 1196,247" marker-end="url(#formal-arr-pass)"/>
+  <path class="edge generative" data-stages="all multi whole" d="M846,360 C934,314 960,288 1030,251" marker-end="url(#formal-arr)"/>
+  <path class="edge generative" data-stages="all maint access whole" d="M846,350 C910,302 917,270 908,262" marker-end="url(#formal-arr)"/>
+  <path class="edge derived" data-stages="all formation whole" d="M247,350 C560,350 724,390 886,408" marker-end="url(#formal-arr)"/>
+  <path class="edge derived" data-stages="all access multi whole" d="M1170,247 C1200,286 1182,336 1134,388" marker-end="url(#formal-arr)"/>
+  <path class="edge derived" data-stages="all witness whole" d="M214,226 C630,242 754,448 886,500" marker-end="url(#formal-arr)"/>
+  <path class="edge derived" data-stages="all unburden whole" d="M492,350 C692,370 780,516 886,574" marker-end="url(#formal-arr)"/>
+
+  <!-- specification factors -->
+  <g class="node factor" id="f-D" data-mechanism="initial-priors" data-stages="all formation witness whole"
+     data-title="Starting beliefs over initial states · D" data-stage="formal alias"
+     data-desc="D denotes priors over initial hidden states in conventional discrete active inference. In Suite v2, each state factor has its own declared prior; D is a formal grouping label, not a new fitted object.">
+    <rect x="66" y="62" width="168" height="50"/>
+    <text x="150" y="80" text-anchor="middle">Starting state beliefs</text>
+    <text x="150" y="98" text-anchor="middle" class="symbol">D = p(s₁)</text>
+    <text x="150" y="108" text-anchor="middle" class="type-tag">INITIAL-STATE PRIORS</text>
+  </g>
+  <g class="node factor" id="f-B" data-mechanism="transitions" data-stages="all formation witness coreg whole"
+     data-title="How hidden conditions can change · B(π)" data-stage="representative slice"
+     data-desc="B groups the transition factors carrying hidden-state beliefs from the preceding slice into slice t. Context and partner states have explicit persistence or switching structure; action-dependent transitions remain conditioned on policy.">
+    <rect x="264" y="62" width="168" height="50"/>
+    <text x="348" y="80" text-anchor="middle">How states can change</text>
+    <text x="348" y="98" text-anchor="middle" class="symbol">B(π): sₜ₋₁ → sₜ</text>
+    <text x="348" y="108" text-anchor="middle" class="type-tag">TRANSITION FACTORS</text>
+  </g>
+  <g class="node factor" id="f-A" data-mechanism="likelihoods" data-stages="all formation maint witness unburden coreg access multi whole"
+     data-title="How hidden conditions produce evidence · A" data-stage="R0 grammar"
+     data-desc="A is the conventional active-inference label for likelihood mappings from hidden causes to observations. Suite v2 uses multiple typed factors: cues, root evidence, context markers, relational channels, joint episodes, denied-contact observations, and outcomes.">
+    <rect x="464" y="62" width="168" height="50"/>
+    <text x="548" y="80" text-anchor="middle">How states produce evidence</text>
+    <text x="548" y="98" text-anchor="middle" class="symbol">A: p(oₜ | sₜ)</text>
+    <text x="548" y="108" text-anchor="middle" class="type-tag">TYPED LIKELIHOODS</text>
+  </g>
+  <g class="node factor" id="f-theta" data-mechanism="parameters" data-stages="all whole"
+     data-title="Learnable settings and fixed prediction rules · θ, κ, η" data-stage="all stages"
+     data-desc="Learnable parameters and frozen constants parameterize the likelihood, transition, precision, and policy factors. They are not additional psychological entities and should not be read as peer hidden states.">
+    <rect x="664" y="62" width="146" height="50"/>
+    <text x="737" y="80" text-anchor="middle">Model settings</text>
+    <text x="737" y="98" text-anchor="middle" class="symbol">θ, κ, η</text>
+    <text x="737" y="108" text-anchor="middle" class="type-tag">PARAMETERS</text>
+  </g>
+
+  <!-- posterior slice -->
+  <g class="node latent" id="f-context" data-mechanism="context" data-stages="all witness unburden whole"
+     data-title="Then/now context belief · q(s^ctx_t)" data-stage="V2.4 · implementation C_t"
+     data-desc="Collision-free formal alias for the latent then/now context. This preserves C for conventional prior preferences. The original implementation name C_t remains the traceability label.">
+    <ellipse cx="170" cy="225" rx="88" ry="36"/>
+    <text x="170" y="217" text-anchor="middle">Context state</text>
+    <text x="170" y="235" text-anchor="middle" class="symbol">q(s^ctx_t)</text>
+    <text x="170" y="250" text-anchor="middle" class="type-tag">HIDDEN STATE · C_t</text>
+  </g>
+  <g class="node latent" id="f-identity" data-mechanism="identity" data-stages="all formation witness unburden coreg whole"
+     data-title="Identity-root belief · q(s^id_t)" data-stage="V2.2.1 · implementation G"
+     data-desc="Collision-free formal alias for the identity root. This reserves G(π) for expected free energy. Root revision is posterior state inference; untreated-cue transfer runs only through this factor.">
+    <ellipse cx="408" cy="225" rx="88" ry="36"/>
+    <text x="408" y="217" text-anchor="middle">Identity root</text>
+    <text x="408" y="235" text-anchor="middle" class="symbol">q(s^id_t)</text>
+    <text x="408" y="250" text-anchor="middle" class="type-tag">HIDDEN STATE · G</text>
+  </g>
+  <g class="node latent" id="f-partner" data-mechanism="partner" data-stages="all coreg access multi whole"
+     data-title="Belief about the partner · q(s^partner_t)" data-stage="V2.6a · implementation L_t"
+     data-desc="Collision-free formal alias for the inferred partner family. A single latent state generates regulation, contingency, staying, and pressure observations without directly changing the identity root.">
+    <ellipse cx="650" cy="225" rx="98" ry="36"/>
+    <text x="650" y="217" text-anchor="middle">Partner process</text>
+    <text x="650" y="235" text-anchor="middle" class="symbol">q(s^partner_t)</text>
+    <text x="650" y="250" text-anchor="middle" class="type-tag">HIDDEN STATE · L_t</text>
+  </g>
+
+  <g class="node structure" id="f-formation" data-mechanism="formation" data-stages="all formation maint whole"
+     data-title="Which threat organization best explains the history? · q(m_form)" data-stage="V2.3.2–V2.3.3 · implementation T/D/P"
+     data-desc="A posterior over discrete explanations: transient threat, continuing external danger, or a part-like threat-and-identity organization. It is a model comparison, not a hidden formed flag.">
+    <polygon points="92,350 112,316 226,316 247,350 226,384 112,384"/>
+    <text x="169" y="340" text-anchor="middle">Formation model</text>
+    <text x="169" y="358" text-anchor="middle" class="symbol">q(m_form)</text>
+    <text x="169" y="374" text-anchor="middle" class="type-tag">STRUCTURE · T/D/P</text>
+  </g>
+  <g class="node structure" id="f-burden" data-mechanism="burden" data-stages="all unburden whole"
+     data-title="Which compulsory burden links still exist? · q(z^burden)" data-stage="V2.5b · implementation Z_W/Z_Pi/Z_Y"
+     data-desc="Posterior over the eight exact present-or-absent configurations of identity-to-world, identity-to-policy, and identity-to-outcome coupling. The alias preserves Z as a structural inclusion indicator.">
+    <polygon points="344,350 364,316 482,316 502,350 482,384 364,384"/>
+    <text x="423" y="340" text-anchor="middle">Burden structure</text>
+    <text x="423" y="358" text-anchor="middle" class="symbol">q(z^burden)</text>
+    <text x="423" y="374" text-anchor="middle" class="type-tag">STRUCTURE · Z_W/Z_Π/Z_Y</text>
+  </g>
+  <g class="node structure" id="f-config" data-mechanism="evidence-format" data-stages="all unburden whole"
+     data-title="Do the elements of the episode belong together? · q(H_cfg)" data-stage="V2.5a"
+     data-desc="A structural hypothesis asking whether episode channels are independent or coupled. κ parameterizes interaction strength under the coupled slab; neither is itself an observation or therapeutic operation.">
+    <polygon points="560,350 580,316 700,316 720,350 700,384 580,384"/>
+    <text x="640" y="340" text-anchor="middle">Episode structure</text>
+    <text x="640" y="358" text-anchor="middle" class="symbol">q(H_cfg), κ</text>
+    <text x="640" y="374" text-anchor="middle" class="type-tag">STRUCTURE + PARAMETER</text>
+  </g>
+  <g class="node structure" id="f-efficacy" data-mechanism="attribution" data-stages="all maint access whole"
+     data-title="Did protective action make a difference? · q(H_eff)" data-stage="V2.3.4 · implementation H_E/η"
+     data-desc="The exact efficacy-existence hypothesis distinguishes being safe from having been saved by protective action. η represents efficacy magnitude when the structural hypothesis is present.">
+    <polygon points="728,350 746,316 816,316 834,350 816,384 746,384"/>
+    <text x="781" y="340" text-anchor="middle">Efficacy</text>
+    <text x="781" y="358" text-anchor="middle" class="symbol">q(H_eff), η</text>
+    <text x="781" y="374" text-anchor="middle" class="type-tag">STRUCTURE</text>
+  </g>
+  <g class="node modulator" id="f-precision" data-mechanism="precision" data-stages="all formation coreg witness whole"
+     data-title="How strongly evidence is allowed to count · precision" data-stage="V2.1 / V2.6a"
+     data-desc="The inferred precision regime controls how strongly typed likelihood evidence updates posterior beliefs. Relational precision can broadcast into global epistemic depth; it changes evidence weighting, not identity content.">
+    <rect x="276" y="424" width="306" height="52"/>
+    <text x="429" y="445" text-anchor="middle">precision hyperstate · local → broadcast → global</text>
+    <text x="429" y="463" text-anchor="middle" class="type-tag">MODULATES LIKELIHOOD WEIGHTING</text>
+  </g>
+
+  <!-- observations -->
+  <g class="node observation" id="f-o-cue" data-mechanism="observations" data-stages="all formation maint witness whole"
+     data-title="Cue, bodily, and context observations" data-stage="typed o_t"
+     data-desc="Observed cue tokens, bodily responses, and uncertain context markers enter through declared likelihood factors. They are evidence generated by hidden causes, not labels assigned to those causes.">
+    <rect x="64" y="560" width="174" height="74"/>
+    <text x="151" y="585" text-anchor="middle">cue · bodily · context</text>
+    <text x="151" y="604" text-anchor="middle" class="symbol">oᶜᵘᵉₜ</text>
+    <text x="151" y="622" text-anchor="middle" class="type-tag">OBSERVED</text>
+  </g>
+  <g class="node observation" id="f-o-root" data-mechanism="root-evidence" data-stages="all formation witness whole"
+     data-title="Root-relevant observations" data-stage="typed o_t"
+     data-desc="Root-relevant observations update the identity factor only through their declared likelihood. Co-regulation can change their effective precision but supplies no root verdict of its own.">
+    <rect x="252" y="560" width="158" height="74"/>
+    <text x="331" y="585" text-anchor="middle">root-relevant token</text>
+    <text x="331" y="604" text-anchor="middle" class="symbol">oⁱᵈₜ</text>
+    <text x="331" y="622" text-anchor="middle" class="type-tag">OBSERVED</text>
+  </g>
+  <g class="node observation" id="f-o-rel" data-mechanism="relational-evidence" data-stages="all coreg access multi whole"
+     data-title="Relational observations" data-stage="typed o_t"
+     data-desc="Regulation, contingency, staying after refusal, and pressure are distinct observed modalities generated by the shared partner process and used by protector trust forecasts.">
+    <rect x="430" y="560" width="160" height="74"/>
+    <text x="510" y="585" text-anchor="middle">relational channels</text>
+    <text x="510" y="604" text-anchor="middle" class="symbol">oʳᵉˡₜ</text>
+    <text x="510" y="622" text-anchor="middle" class="type-tag">OBSERVED</text>
+  </g>
+  <g class="node observation" id="f-o-episode" data-mechanism="episodes" data-stages="all unburden whole"
+     data-title="Joint and imaginal episodes" data-stage="typed o_t"
+     data-desc="Whole remembered or imagined episodes enter through the same ordinary configural likelihood interface. A do-over supplies evidence; it cannot invoke reduction, erase context, or bypass precision.">
+    <rect x="610" y="560" width="156" height="74"/>
+    <text x="688" y="585" text-anchor="middle">joint / imaginal episode</text>
+    <text x="688" y="604" text-anchor="middle" class="symbol">oᵉᵖₜ</text>
+    <text x="688" y="622" text-anchor="middle" class="type-tag">OBSERVED</text>
+  </g>
+  <g class="node observation" id="f-o-outcome" data-mechanism="outcomes" data-stages="all maint multi whole"
+     data-title="Action and shared outcomes" data-stage="typed o_t"
+     data-desc="Outcomes generated after action bear on danger, efficacy, and multi-protector shared forecasts. The selected action enters as an intervention do(a), not as evidence about the world.">
+    <rect x="782" y="560" width="46" height="74"/>
+    <text x="805" y="584" text-anchor="middle">Y</text>
+    <text x="805" y="602" text-anchor="middle" class="symbol">oʸₜ</text>
+    <text x="805" y="621" text-anchor="middle" class="type-tag">OBS.</text>
+  </g>
+  <text class="factor-label" x="435" y="665" text-anchor="middle">Inference inverts these generative dependencies; interventions enter as do(a), never as authored evidence.</text>
+
+  <!-- policy selection -->
+  <g class="node factor" id="f-E" data-mechanism="policy-prior" data-stages="all access multi whole"
+     data-title="Starting pull toward each course of action · E" data-stage="formal grouping"
+     data-desc="E conventionally denotes a prior over policies or habits. Suite v2 declares policy priors separately at the relevant stages; this factor groups those priors without inventing an additional mechanism.">
+    <rect x="890" y="68" width="92" height="48"/>
+    <text x="936" y="85" text-anchor="middle">Starting pull</text>
+    <text x="936" y="101" text-anchor="middle" class="symbol">E</text>
+    <text x="936" y="111" text-anchor="middle" class="type-tag">POLICY PRIOR</text>
+  </g>
+  <g class="node factor" id="f-C" data-mechanism="preferences" data-stages="all access multi whole"
+     data-title="Which results are preferred or costly? · C" data-stage="formal alias"
+     data-desc="C is reserved for conventional prior preferences or costs used when evaluating policy consequences. It is distinct from the context hidden state, displayed as s_ctx.">
+    <rect x="890" y="144" width="92" height="48"/>
+    <text x="936" y="161" text-anchor="middle">Preferred results</text>
+    <text x="936" y="177" text-anchor="middle" class="symbol">C</text>
+    <text x="936" y="187" text-anchor="middle" class="type-tag">PREFERENCES</text>
+  </g>
+  <g class="node factor" id="f-Gpi" data-mechanism="expected-free-energy" data-stages="all access multi whole"
+     data-title="Expected consequences of each policy · G(π)" data-stage="policy evaluation"
+     data-desc="G(π) evaluates expected policy consequences, combining risk or preference-related terms with epistemic value where declared. Reserving G for this quantity removes the collision with the implementation name of the identity root.">
+    <rect x="1030" y="144" width="166" height="48"/>
+    <text x="1113" y="161" text-anchor="middle">Expected policy consequences</text>
+    <text x="1113" y="177" text-anchor="middle" class="symbol">G(π)</text>
+    <text x="1113" y="187" text-anchor="middle" class="type-tag">EXPECTED FREE ENERGY</text>
+  </g>
+  <g class="node policy" id="f-policy" data-mechanism="policy" data-stages="all access multi whole"
+     data-title="Current probability of each course of action · q(π)" data-stage="V2.6b / V2.7"
+     data-desc="The posterior over block, cautiously test, and permit policies follows from prior policy probability and expected consequences. With multiple protectors, the construction enumerates all 27 joint policies exactly.">
+    <rect x="1030" y="62" width="166" height="64"/>
+    <text x="1113" y="84" text-anchor="middle">Protector policy</text>
+    <text x="1113" y="103" text-anchor="middle" class="symbol">q(π)</text>
+    <text x="1113" y="118" text-anchor="middle" class="type-tag">POSTERIOR OVER POLICIES</text>
+  </g>
+  <g class="node factor" id="f-trust" data-mechanism="trust" data-stages="all access multi whole"
+     data-title="Protector trust forecasts θ_trust" data-stage="V2.6b · implementation T_*"
+     data-desc="A collision-free grouping for four learned forecasts: contact outcome, shared protection, partner response, and protective efficacy. These forecasts help parameterize expected policy consequences.">
+    <rect x="890" y="220" width="104" height="54"/>
+    <text x="942" y="241" text-anchor="middle" class="symbol">θ^trust</text>
+    <text x="942" y="258" text-anchor="middle" class="type-tag">FORECASTS · T_*</text>
+  </g>
+  <g class="node policy" id="f-action" data-mechanism="action" data-stages="all access multi whole"
+     data-title="Selected intervention do(a_t)" data-stage="action consequence"
+     data-desc="An action is sampled or selected under the policy posterior and enters the generative process as an intervention. The model evaluates its consequences without treating its own selection as evidence about danger or identity.">
+    <rect x="1030" y="216" width="166" height="62"/>
+    <text x="1113" y="239" text-anchor="middle">Action / contact</text>
+    <text x="1113" y="258" text-anchor="middle" class="symbol">do(aₜ)</text>
+    <text x="1113" y="272" text-anchor="middle" class="type-tag">INTERVENTION</text>
+  </g>
+
+  <!-- readouts -->
+  <g class="node readout" id="f-r-formed" data-mechanism="formation" data-stages="all formation whole"
+     data-title="Formation readout" data-stage="derived, never stored"
+     data-desc="Formation is computed from the posterior over formation explanations and declared qualifying conditions. No formed state or therapeutic-stage switch is written into the model.">
+    <rect x="886" y="382" width="300" height="52"/>
+    <text x="1036" y="404" text-anchor="middle">formation evidence · structure recovery</text>
+    <text x="1036" y="421" text-anchor="middle" class="type-tag">r_form = f(q(m_form), q(s_id), evidence)</text>
+  </g>
+  <g class="node readout" id="f-r-permission" data-mechanism="policy" data-stages="all access multi whole"
+     data-title="Permission and contact readouts" data-stage="derived, never stored"
+     data-desc="Permission mass and contact probability are deterministic summaries of the policy posterior. There is no gate entity, permission variable, or threshold written back into scientific state.">
+    <rect x="886" y="464" width="300" height="52"/>
+    <text x="1036" y="486" text-anchor="middle">permission_mass · contact_probability</text>
+    <text x="1036" y="503" text-anchor="middle" class="type-tag">r_contact = f(q(π))</text>
+  </g>
+  <g class="node readout" id="f-r-redesc" data-mechanism="context" data-stages="all witness whole"
+     data-title="Material-redescription readout" data-stage="derived, never stored"
+     data-desc="Material redescription summarizes posterior support for a genuine then/now organization while checking that the old context remains queryable. The model never stores a redescribed flag.">
+    <rect x="886" y="546" width="300" height="52"/>
+    <text x="1036" y="568" text-anchor="middle">material redescription</text>
+    <text x="1036" y="585" text-anchor="middle" class="type-tag">r_redesc = f(q(s_ctx), model evidence)</text>
+  </g>
+  <g class="node readout" id="f-r-reduction" data-mechanism="burden" data-stages="all unburden whole"
+     data-title="Material-reduction readout" data-stage="derived, never stored"
+     data-desc="Material reduction requires stable evidence for the 000 burden configuration under five frozen checks. It summarizes a structural posterior; it does not delete a part, memory, context, or capacity.">
+    <rect x="886" y="628" width="300" height="52"/>
+    <text x="1036" y="650" text-anchor="middle">material reduction · history retained</text>
+    <text x="1036" y="667" text-anchor="middle" class="type-tag">r_reduce = f(q(z_burden), stability)</text>
+  </g>
+</svg>
+</div>
+</section>
+
+<section class="map-panel" id="clinical-map" role="tabpanel" aria-labelledby="view-clinical" hidden>
+<div class="map-legend" aria-label="Clinical map key">
+  <span><i class="legend-shape latent"></i> inferred condition or forecast</span>
+  <span><i class="legend-shape policy"></i> protective course of action</span>
+  <span><i class="legend-shape observation"></i> experience entering as evidence</span>
+  <span><i class="legend-shape derived"></i> clinical description computed afterward</span>
+</div>
+<div class="scrollwrap">
+<svg id="arch-clinical" viewBox="0 0 1260 720" width="1260" height="720" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="Suite v2 clinical formation, protection, and therapy architecture">
+  <defs>
+    <marker id="clinical-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/>
+    </marker>
+    <marker id="clinical-arr-pass" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--pass)"/>
+    </marker>
+  </defs>
+
+  <rect class="clinical-lane" x="26" y="28" width="1208" height="288" rx="10"/>
+  <rect class="clinical-lane change" x="26" y="338" width="1208" height="330" rx="10"/>
+  <text class="lane-label" x="48" y="54">HOW A PROTECTIVE ORGANIZATION FORMS AND MAINTAINS ITSELF</text>
+  <text class="lane-label" x="48" y="364">HOW RELATIONSHIP CHANGES WHAT CAN BE LEARNED</text>
+
+  <!-- formation and maintenance -->
+  <path class="clinical-edge" data-stages="all formation whole" d="M236,156 L288,156" marker-end="url(#clinical-arr)"/>
+  <path class="clinical-edge" data-stages="all formation whole" d="M470,156 L522,156" marker-end="url(#clinical-arr)"/>
+  <path class="clinical-edge" data-stages="all maint whole" d="M704,156 L756,156" marker-end="url(#clinical-arr)"/>
+  <path class="clinical-edge" data-stages="all maint whole" d="M938,156 L990,156" marker-end="url(#clinical-arr)"/>
+  <path class="clinical-edge feedback" data-stages="all maint whole" d="M1082,214 C1082,276 640,282 613,214" marker-end="url(#clinical-arr)"/>
+  <path class="clinical-edge derived" data-stages="all formation whole" d="M379,214 L379,258" marker-end="url(#clinical-arr)"/>
+
+  <g class="node clinical-observation" id="c-adversity" data-mechanism="observations" data-stages="all formation whole"
+     data-title="Overwhelming adversity with low practical control" data-stage="formation evidence"
+     data-desc="The construction begins with observed episodes, bodily responses, self-relevant evidence, and information about where danger is located. No mature part or protector role is assigned at the start.">
+    <rect x="54" y="98" width="182" height="116"/>
+    <text x="145" y="126" text-anchor="middle" class="clinical-kicker">EXPERIENCE ENTERS</text>
+    <text x="145" y="151" text-anchor="middle">overwhelming adversity</text>
+    <text x="145" y="170" text-anchor="middle">+ low practical control</text>
+    <text x="145" y="195" text-anchor="middle" class="clinical-kicker">TYPED OBSERVATIONS</text>
+  </g>
+  <g class="node clinical-state" id="c-formation" data-mechanism="formation" data-stages="all formation maint whole"
+     data-title="A part-like organization becomes the best explanation" data-stage="V2.3.2–V2.3.3"
+     data-desc="The model compares a passing threat, continuing external danger, and a part-like threat-and-identity organization. Formation is posterior support for an explanation, never a formed switch.">
+    <rect x="288" y="98" width="182" height="116"/>
+    <text x="379" y="126" text-anchor="middle" class="clinical-kicker">MODEL COMPARISON</text>
+    <text x="379" y="151" text-anchor="middle">part-like organization</text>
+    <text x="379" y="170" text-anchor="middle">fits the history</text>
+    <text x="379" y="195" text-anchor="middle" class="clinical-kicker">TRANSIENT / EXTERNAL / PART-LIKE</text>
+  </g>
+  <g class="node clinical-state" id="c-identity" data-mechanism="identity" data-stages="all formation witness unburden whole"
+     data-title="Threat becomes identity-relevant" data-stage="V2.2.1"
+     data-desc="The pattern can become more than “that situation was dangerous”: the system also expects “I am the one who is unsafe.” The identity root lets learning transfer across related cues.">
+    <rect x="522" y="98" width="182" height="116"/>
+    <text x="613" y="126" text-anchor="middle" class="clinical-kicker">IDENTITY ROOT</text>
+    <text x="613" y="151" text-anchor="middle">“the world is dangerous”</text>
+    <text x="613" y="170" text-anchor="middle">becomes “I am unsafe”</text>
+    <text x="613" y="195" text-anchor="middle" class="clinical-kicker">HISTORY GENERALIZES</text>
+  </g>
+  <g class="node clinical-protection" id="c-protection" data-mechanism="policy" data-stages="all maint access multi whole"
+     data-title="Protection changes which evidence becomes available" data-stage="V2.3.3 / V2.6b / V2.7"
+     data-desc="Avoidance or blocking can prevent harm while hiding the safe encounters that would challenge the old organization. With multiple protectors, every joint policy is evaluated through shared outcome forecasts.">
+    <rect x="756" y="98" width="182" height="116"/>
+    <text x="847" y="126" text-anchor="middle" class="clinical-kicker">PROTECTIVE POLICY</text>
+    <text x="847" y="151" text-anchor="middle">avoid · block · exile</text>
+    <text x="847" y="170" text-anchor="middle">shape available evidence</text>
+    <text x="847" y="195" text-anchor="middle" class="clinical-kicker">ACTION CENSORS OUTCOMES</text>
+  </g>
+  <g class="node clinical-protection" id="c-attribution" data-mechanism="attribution" data-stages="all maint access whole"
+     data-title="Safety can be attributed to successful protection" data-stage="V2.3.4"
+     data-desc="After protective action and a safe outcome, the system distinguishes “danger was low” from “my action saved us.” Inferred efficacy can preserve protection without treating mere relief as evidence of danger.">
+    <rect x="990" y="98" width="182" height="116"/>
+    <text x="1081" y="126" text-anchor="middle" class="clinical-kicker">COUNTERFACTUAL ATTRIBUTION</text>
+    <text x="1081" y="151" text-anchor="middle">“were we safe—</text>
+    <text x="1081" y="170" text-anchor="middle">or did protection save us?”</text>
+    <text x="1081" y="195" text-anchor="middle" class="clinical-kicker">THE LOOP CAN CLOSE</text>
+  </g>
+  <g class="node readout" id="c-r-formed" data-mechanism="formation" data-stages="all formation whole"
+     data-title="Formation is a clinical readout" data-stage="computed, never stored"
+     data-desc="“Formed” names a pattern meeting a frozen posterior definition. It is not a latent stage label or an assignment written into model state.">
+    <rect x="288" y="258" width="182" height="38"/>
+    <text x="379" y="282" text-anchor="middle">formed · computed afterward</text>
+  </g>
+
+  <!-- therapeutic change -->
+  <path class="clinical-edge change" data-stages="all coreg whole" d="M234,470 L270,470" marker-end="url(#clinical-arr-pass)"/>
+  <path class="clinical-edge change" data-stages="all coreg access whole" d="M444,470 L480,470" marker-end="url(#clinical-arr-pass)"/>
+  <path class="clinical-edge change" data-stages="all access whole" d="M654,470 L690,470" marker-end="url(#clinical-arr-pass)"/>
+  <path class="clinical-edge change" data-stages="all witness whole" d="M864,470 L900,470" marker-end="url(#clinical-arr-pass)"/>
+  <path class="clinical-edge change" data-stages="all witness unburden whole" d="M1074,470 L1110,470" marker-end="url(#clinical-arr-pass)"/>
+  <path class="clinical-edge change" data-stages="all unburden whole" d="M1195,528 C1195,574 1080,590 984,590" marker-end="url(#clinical-arr-pass)"/>
+  <path class="clinical-edge derived" data-stages="all access whole" d="M567,528 L567,558" marker-end="url(#clinical-arr)"/>
+  <path class="clinical-edge derived" data-stages="all witness whole" d="M987,528 L987,558" marker-end="url(#clinical-arr)"/>
+
+  <g class="node clinical-observation" id="c-partner" data-mechanism="partner" data-stages="all coreg access whole"
+     data-title="A responsive partner is inferred from contingent behavior" data-stage="V2.6a"
+     data-desc="Soothing alone is not enough. Regulation, responsiveness, staying after refusal, and freedom from pressure must support a reliable partner explanation before the relationship changes evidence weighting.">
+    <rect x="60" y="410" width="174" height="118"/>
+    <text x="147" y="438" text-anchor="middle" class="clinical-kicker">RELATIONSHIP IS TESTED</text>
+    <text x="147" y="464" text-anchor="middle">responsive partner</text>
+    <text x="147" y="483" text-anchor="middle">stays without pressure</text>
+    <text x="147" y="509" text-anchor="middle" class="clinical-kicker">CONTINGENCY, NOT SOOTHING ALONE</text>
+  </g>
+  <g class="node clinical-change" id="c-depth" data-mechanism="precision" data-stages="all coreg witness whole"
+     data-title="Relational reliability restores epistemic depth" data-stage="V2.1 / V2.6a"
+     data-desc="Local relational confidence can broadcast into global depth, allowing later evidence to count. Co-regulation changes the inferential regime; it does not directly tell the identity root what to believe.">
+    <rect x="270" y="410" width="174" height="118"/>
+    <text x="357" y="438" text-anchor="middle" class="clinical-kicker">EVIDENCE CAN LAND</text>
+    <text x="357" y="464" text-anchor="middle">local confidence</text>
+    <text x="357" y="483" text-anchor="middle">broadcasts globally</text>
+    <text x="357" y="509" text-anchor="middle" class="clinical-kicker">DEPTH BEFORE CONTACT</text>
+  </g>
+  <g class="node clinical-change" id="c-trust-policy" data-mechanism="policy" data-stages="all access multi whole"
+     data-title="Protector forecasts change, then policy shifts" data-stage="V2.6b / V2.7"
+     data-desc="When refusal is respected, protector forecasts about contact, shared protection, the partner, and efficacy can improve. Block can give way to cautious testing or permission without a hidden gate object.">
+    <rect x="480" y="410" width="174" height="118"/>
+    <text x="567" y="438" text-anchor="middle" class="clinical-kicker">PROTECTOR PARTICIPATES</text>
+    <text x="567" y="464" text-anchor="middle">forecasts update;</text>
+    <text x="567" y="483" text-anchor="middle">block → test → permit</text>
+    <text x="567" y="509" text-anchor="middle" class="clinical-kicker">POLICY SHIFT BEFORE CONTACT</text>
+  </g>
+  <g class="node clinical-change" id="c-witness" data-mechanism="identity" data-stages="all witness whole"
+     data-title="Contact and witnessing make root-relevant evidence available" data-stage="V2.2.1 / V2.8"
+     data-desc="Contact follows protector policy. Sustained context-held activation allows the old scene and root-relevant evidence to be encountered at restored depth; witnessing is a procedure, not a latent healing state.">
+    <rect x="690" y="410" width="174" height="118"/>
+    <text x="777" y="438" text-anchor="middle" class="clinical-kicker">CONTACT BECOMES TOLERABLE</text>
+    <text x="777" y="464" text-anchor="middle">the part and scene</text>
+    <text x="777" y="483" text-anchor="middle">can be witnessed</text>
+    <text x="777" y="509" text-anchor="middle" class="clinical-kicker">ROOT-RELEVANT EVIDENCE</text>
+  </g>
+  <g class="node clinical-change" id="c-redescription" data-mechanism="context" data-stages="all witness unburden whole"
+     data-title="The danger is redescribed as then rather than everywhere now" data-stage="V2.4"
+     data-desc="The model learns a genuine then/now context organization. The historical context remains queryable; it stops governing every present prediction. Nothing is erased or declared redescribed.">
+    <rect x="900" y="410" width="174" height="118"/>
+    <text x="987" y="438" text-anchor="middle" class="clinical-kicker">TIME RE-ENTERS THE STORY</text>
+    <text x="987" y="464" text-anchor="middle">“danger then”</text>
+    <text x="987" y="483" text-anchor="middle">is not “danger everywhere”</text>
+    <text x="987" y="509" text-anchor="middle" class="clinical-kicker">HISTORY REMAINS AVAILABLE</text>
+  </g>
+  <g class="node clinical-change" id="c-reduction" data-mechanism="burden" data-stages="all unburden whole"
+     data-title="Compulsory burden couplings lose support" data-stage="V2.5a / V2.5b"
+     data-desc="A whole real or imagined episode can supply evidence that identity need not keep predicting world, policy, and outcome. Capacities and memory remain while compulsory coupling loses support.">
+    <rect x="1110" y="410" width="84" height="118"/>
+    <text x="1152" y="438" text-anchor="middle" class="clinical-kicker">RELEASE</text>
+    <text x="1152" y="463" text-anchor="middle">root</text>
+    <text x="1152" y="480" text-anchor="middle">revision +</text>
+    <text x="1152" y="497" text-anchor="middle">reduction</text>
+    <text x="1152" y="516" text-anchor="middle" class="clinical-kicker">NO ERASURE</text>
+  </g>
+
+  <g class="node readout" id="c-r-permission" data-mechanism="policy" data-stages="all access whole"
+     data-title="Permission is computed from policy" data-stage="computed, never stored"
+     data-desc="Permission mass and contact probability summarize protector policy. The gate is the present consequence of policy, not another internal entity.">
+    <rect x="480" y="558" width="174" height="42"/>
+    <text x="567" y="584" text-anchor="middle">permission · contact readouts</text>
+  </g>
+  <g class="node readout" id="c-r-redesc" data-mechanism="context" data-stages="all witness whole"
+     data-title="Redescription is computed from context evidence" data-stage="computed, never stored"
+     data-desc="Material redescription is a frozen summary of posterior support and historical retention, never a therapeutic-stage field.">
+    <rect x="900" y="558" width="174" height="42"/>
+    <text x="987" y="584" text-anchor="middle">material redescription</text>
+  </g>
+  <g class="node readout" id="c-r-reduction" data-mechanism="burden" data-stages="all unburden whole"
+     data-title="Unburdening is a clinical interpretation of stable reduction" data-stage="computed, never stored"
+     data-desc="Material reduction is computed only after stable evidence favors no compulsory burden couplings. “Unburdened” is the clinical description of that pattern, not a written state.">
+    <rect x="1020" y="622" width="194" height="30"/>
+    <text x="1117" y="642" text-anchor="middle">unburdened · computed afterward</text>
+  </g>
+
+  <path class="continuity" d="M62,626 L986,626"/>
+  <text class="continuity-label" x="62" y="648">capacities, memory, and the historical context continue through change</text>
+</svg>
+
+<svg id="arch-clinical-legacy" viewBox="0 0 1260 720" width="1260" height="720" xmlns="http://www.w3.org/2000/svg"
+     aria-hidden="true" style="display:none">
   <defs>
     <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
       <path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/>
@@ -508,14 +1470,18 @@ why it matters clinically and how the model represents it.</p>
   <text x="637" y="672" text-anchor="middle" class="group-label">Interventions enter as do(a): action selection is never evidence about the world unless another agent's action is itself an observation.</text>
 </svg>
 </div>
+</section>
 
 <div id="nodeinfo"><span class="ni-title">Click any node</span> — see the clinical question, the model's representation, and the limits on what may change.</div>
+</details>
 
 <!-- ============ 3. THERAPY STEPPER ============ -->
 <h2>2 &nbsp;How the architecture changes through therapy</h2>
 <p>Therapy does not press a hidden “healed” switch. Each step either changes what happens or
 provides new evidence. Use the controls below to follow the same model through the arc. The
-highlighted boxes are the beliefs allowed to update at that step.</p>
+highlighted boxes are the beliefs allowed to update at that step. The arc is drawn on the
+validated v2 reference construction — section 1's collapsed reference view opens
+automatically when you pick a step.</p>
 
 <div class="stepper" id="stepper"></div>
 <div id="steptext"></div>
@@ -525,32 +1491,72 @@ highlighted boxes are the beliefs allowed to update at that step.</p>
 </div>
 
 <!-- ============ 3b. PRIOR INVENTORY ============ -->
-<h2>3 &nbsp;What the model believes before anything happens: the prior inventory</h2>
-<p>Every simulated life begins with the declared starting beliefs below. The model is never
-handed a mature part, protector mandate, or exile story. Its history must <em>teach it those
-patterns</em>.
-Solid-edged entries are choices among discrete structures: for example, “temporary
-threat” versus “persistent danger” versus “part-like organization.” Dashed entries are
-uncertain numerical parameters that can be learned gradually. Dotted entries are fixed
-settings of the evidence machinery. The exact values are preserved so you can see what the
-model assumed before it saw anything.</p>
-<div class="prior-grid" id="priorgrid"></div>
-<p class="small">Values read from the frozen parameter blocks in
-<code>projects/emergence-suite/v2/protocols/*-parameters.json</code> (loaded verbatim by the
-<code>ref/*.py</code> modules). Large likelihood tables — including emission conditional
-probability tables (CPTs), which list observation probabilities for each hidden state — and
-joint outcome tables are shown by shape with one representative row rather than in full.</p>
+<h2>3 &nbsp;What the model is not allowed to know in advance</h2>
+<p class="formal-subtitle">Anti-smuggling audit: priors · learnable settings · fixed prediction rules</p>
+<p>A model can appear to “discover” a therapeutic pattern because that pattern was quietly
+placed in its starting assumptions. Suite v2 blocks that shortcut. Every simulated life
+starts without a mature part, protector mandate, exile story, trustworthy partner, or healed
+state. Its history must supply evidence for each of those patterns.</p>
+
+<div class="assumption-audit">
+  <div class="audit-card no">
+    <span class="audit-kicker">NOT SUPPLIED</span>
+    <h3>No clinical answer</h3>
+    <p>No formed part, protector role, permission gate, redescription flag, polarization
+    force, or unburdened state exists at the start—or anywhere as a writable stage label.</p>
+  </div>
+  <div class="audit-card learn">
+    <span class="audit-kicker">MUST BE LEARNED</span>
+    <h3>The psychologically meaningful structure</h3>
+    <p>Threat organization, identity relevance, then/now context, partner reliability,
+    protector forecasts, joint policy structure, and burden coupling must earn posterior
+    support from evidence.</p>
+  </div>
+  <div class="audit-card compare">
+    <span class="audit-kicker">FAIR COMPARISONS</span>
+    <h3>Real alternatives remain available</h3>
+    <p>Passing threat competes with real continuing danger and part-like organization.
+    Independent episodes compete with coupled episodes. No-change explanations remain
+    possible.</p>
+  </div>
+  <div class="audit-card rule">
+    <span class="audit-kicker">FIXED IN ADVANCE</span>
+    <h3>Only the rules of the test</h3>
+    <p>Evidence-channel meanings, candidate sets, scoring rules, and declared constants are
+    frozen. They determine how evidence may count, not which clinical conclusion must win.</p>
+  </div>
+</div>
+
+<div class="anti-smuggle">
+  <strong>THE CLAIM</strong>
+  <span>If a part-like organization, trust shift, redescription, or reduction appears, it
+  must be reproduced by the construction from evidence—not retrieved from a hidden starting
+  label.</span>
+</div>
+
+<details class="prior-details">
+  <summary>Inspect every frozen starting value and rule <span>— exact audit inventory</span></summary>
+  <div class="prior-grid" id="priorgrid"></div>
+  <p class="small">Values read from the frozen parameter blocks in
+  <code>projects/emergence-suite/v2/protocols/*-parameters.json</code> (loaded verbatim by the
+  <code>ref/*.py</code> modules). Large prediction tables—formally, likelihoods and conditional
+  probability tables (CPTs)—list how likely each observation is under each hidden condition.
+  They and the joint outcome tables are shown by shape with one representative row rather
+  than in full.</p>
+</details>
 
 <!-- ============ 3c. CONNECTIVITY MATRIX ============ -->
 <h2>4 &nbsp;What is connected to what</h2>
+<p class="formal-subtitle">Formal view: which hidden condition or model structure participates in which prediction</p>
 <p>Clinical claims often have the form “this helps, but only through that route.” Soothing
 may lower arousal without changing an identity-level belief. Avoidance may prevent harm
 while hiding the evidence needed to revise fear. The grid makes those routes explicit.
-Read from the row into the column. A filled dot means the row helps determine that evidence
-channel or forecast. A red ring means the route is <em>proven absent</em>: its effect is
+Read from the belief or structure named in the row into the evidence or forecast named in
+the column. A filled dot means the row helps generate or predict that column. A red ring
+means the route is <em>proven absent</em>: its effect is
 exactly zero. Blank cells share no modeled term. Hover or tap a mark for the mechanism.</p>
 <div class="cmx-legend">
-  <span><span class="on">●</span> enters this likelihood term / forecast</span>
+  <span><span class="on">●</span> helps generate this evidence / forecast</span>
   <span><span class="zero">◌</span> provably absent (exact zero, cited)</span>
   <span>blank &nbsp;no shared term</span>
 </div>
@@ -558,66 +1564,121 @@ exactly zero. Blank cells share no modeled term. Hover or tap a mark for the mec
 <div id="cmxinfo">Hover a mark for its mechanism.</div>
 
 <!-- ============ 3d. GENERATIVE SLICE ============ -->
-<h2>5 &nbsp;One slice, one packet: the one-posterior rule in motion</h2>
-<p>One experience should update only the beliefs it actually bears on. A safe-dog encounter
-can be evidence about dogs and context; a therapist staying after a protector says “no” can
-be evidence about the therapist. The model may not quietly use either event to change an
-unrelated belief. Formally, each observation updates only the posteriors named by its typed
-likelihood; all others remain bit-for-bit identical. Choose a token and watch where it may
-go.</p>
-<div class="slice-controls">
-  <button data-packet="root">Emit a root token</button>
-  <button data-packet="rel">Emit a relational token</button>
-  <button data-packet="doover">Emit an imaginal do-over episode</button>
+<h2>5 &nbsp;The evidence firewall</h2>
+<p class="formal-subtitle">Selective-update audit: what each experience may change · what it is forbidden to prove</p>
+<p>This is the model’s central anti-cheating rule. An experience may update only the beliefs
+its declared evidence channel actually bears on. It cannot be reused as a convenient verdict
+about identity, safety, trust, or healing. The forbidden column matters as much as the
+allowed column: if one of those quantities moves, the construction has violated its own
+scientific constitution.</p>
+
+<div class="firewall">
+  <div class="firewall-head">
+    <div>EXPERIENCE ENTERING THE MODEL</div>
+    <div>ALLOWED TO CHANGE</div>
+    <div>FORBIDDEN TO PROVE</div>
+  </div>
+  <div class="firewall-row">
+    <div class="experience">
+      <h3>The therapist stays after “no”</h3>
+      <p>Relationship evidence: responsiveness, contingency, staying, and absence of
+      pressure.</p>
+    </div>
+    <div class="allowed">
+      <span class="route-label">DECLARED ROUTE</span>
+      <p>Partner belief <code>q(s^partner)</code>, protector forecasts
+      <code>θ^trust</code>, and relationship evidence weighting. Broadcast may then change
+      global depth.</p>
+    </div>
+    <div class="forbidden">
+      <span class="route-label">FIREWALLED</span>
+      <p>It cannot directly revise the identity root, declare the world safe, remove burden
+      links, or count as witnessing. Regulation changes how later evidence lands; it is not
+      that later evidence.</p>
+    </div>
+  </div>
+  <div class="firewall-row">
+    <div class="experience">
+      <h3>Identity-relevant evidence is witnessed</h3>
+      <p>Evidence bearing specifically on “who am I in relation to this danger?” arrives at
+      restored depth.</p>
+    </div>
+    <div class="allowed">
+      <span class="route-label">DECLARED ROUTE</span>
+      <p>The identity-root belief <code>q(s^id)</code> may update. Because untreated-cue
+      transfer runs through that root, learning may generalize beyond the practiced cue.</p>
+    </div>
+    <div class="forbidden">
+      <span class="route-label">FIREWALLED</span>
+      <p>It cannot manufacture partner reliability, silently create a then/now split, or
+      directly set burden configuration 000. Root revision and redescription remain distinct.</p>
+    </div>
+  </div>
+  <div class="firewall-row">
+    <div class="experience">
+      <h3>An imagined whole episode is supplied</h3>
+      <p>A do-over enters through the same ordinary whole-episode prediction rule as other
+      configural evidence.</p>
+    </div>
+    <div class="allowed">
+      <span class="route-label">DECLARED ROUTE</span>
+      <p>Support for episode structure <code>q(H_cfg)</code> and compulsory burden links
+      <code>q(z^burden)</code> may change when the evidence warrants it.</p>
+    </div>
+    <div class="forbidden">
+      <span class="route-label">FIREWALLED</span>
+      <p>It cannot command reduction, erase the historical context, bypass evidence
+      weighting, revise the partner, or write “unburdened.” A premature do-over must be
+      allowed to fail.</p>
+    </div>
+  </div>
+  <div class="firewall-row">
+    <div class="experience">
+      <h3>A protector selects block, test, or permit</h3>
+      <p>The current policy changes what happens next and therefore which outcomes can become
+      observable.</p>
+    </div>
+    <div class="allowed">
+      <span class="route-label">DECLARED ROUTE</span>
+      <p>The action may permit contact, prevent contact, cautiously test the relationship,
+      or censor future evidence. Its consequences can later be observed.</p>
+    </div>
+    <div class="forbidden">
+      <span class="route-label">FIREWALLED</span>
+      <p>Selecting the action is not evidence that danger exists, identity is burdened, or
+      protection works. The model evaluates <code>do(a)</code> without treating its own
+      choice as an observation.</p>
+    </div>
+  </div>
 </div>
-<div class="scrollwrap">
-<svg id="slice" viewBox="0 0 1000 430" width="1000" height="430" xmlns="http://www.w3.org/2000/svg" role="img"
-     aria-label="Per-slice generative graph with an animated evidence packet">
-  <defs>
-    <marker id="sarr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/>
-    </marker>
-  </defs>
-  <text class="group-label" x="120" y="30">SLICE t−1</text>
-  <text class="group-label" x="560" y="30">SLICE t</text>
-  <!-- transition edges -->
-  <path class="sedge" d="M258,70 L532,70" marker-end="url(#sarr)"/>
-  <path class="sedge" d="M258,150 L532,150" marker-end="url(#sarr)"/>
-  <path class="sedge" d="M258,230 L532,230" marker-end="url(#sarr)"/>
-  <path class="sedge" d="M258,310 L532,310" marker-end="url(#sarr)"/>
-  <!-- t-1 nodes -->
-  <g class="snode"><rect x="110" y="48" width="148" height="44"/><text x="184" y="74" text-anchor="middle">C (context)</text></g>
-  <g class="snode"><rect x="110" y="128" width="148" height="44"/><text x="184" y="154" text-anchor="middle">G (identity root)</text></g>
-  <g class="snode"><rect x="110" y="208" width="148" height="44"/><text x="184" y="234" text-anchor="middle">Z lattice / H_cfg</text></g>
-  <g class="snode"><rect x="110" y="288" width="148" height="44"/><text x="184" y="314" text-anchor="middle">L (partner)</text></g>
-  <!-- t nodes -->
-  <g class="snode" id="sl-C"><rect x="534" y="48" width="148" height="44"/><text x="608" y="74" text-anchor="middle">C (context)</text><text class="eq" x="694" y="76">=</text></g>
-  <g class="snode" id="sl-G"><rect x="534" y="128" width="148" height="44"/><text x="608" y="154" text-anchor="middle">G (identity root)</text><text class="eq" x="694" y="156">=</text></g>
-  <g class="snode" id="sl-Z"><rect x="534" y="208" width="148" height="44"/><text x="608" y="234" text-anchor="middle">Z lattice / H_cfg</text><text class="eq" x="694" y="236">=</text></g>
-  <g class="snode" id="sl-L"><rect x="534" y="288" width="148" height="44"/><text x="608" y="314" text-anchor="middle">L (partner)</text><text class="eq" x="694" y="316">=</text></g>
-  <g class="snode" id="sl-prec"><rect x="790" y="128" width="170" height="60"/><text x="875" y="152" text-anchor="middle">precision field</text><text x="875" y="170" text-anchor="middle" style="font-size:10.5px">(weights every factor)</text><text class="eq" x="964" y="140">=</text></g>
-  <!-- observation boxes -->
-  <g class="sobs" id="so-root"><rect x="330" y="380" width="130" height="40"/><text x="395" y="404" text-anchor="middle">root token</text></g>
-  <g class="sobs" id="so-rel"><rect x="500" y="380" width="150" height="40"/><text x="575" y="404" text-anchor="middle">relational token</text></g>
-  <g class="sobs" id="so-doover"><rect x="690" y="380" width="180" height="40"/><text x="780" y="404" text-anchor="middle">imaginal joint episode</text></g>
-  <!-- observation edges -->
-  <path class="sedge" d="M395,380 C395,300 500,200 534,165 " marker-end="url(#sarr)"/>
-  <path class="sedge" d="M575,380 L600,335" marker-end="url(#sarr)"/>
-  <path class="sedge" d="M780,380 C780,320 700,270 684,240" marker-end="url(#sarr)"/>
-  <!-- guide paths for packets (invisible) -->
-  <path id="gp-root" class="guide" d="M395,400 C395,300 500,200 560,150"/>
-  <path id="gp-rel" class="guide" d="M575,400 C590,370 600,340 605,312"/>
-  <path id="gp-doover" class="guide" d="M780,400 C780,320 700,270 660,232"/>
-  <circle id="packet" class="packet" r="7" cx="-20" cy="-20"/>
-  <text x="500" y="428" text-anchor="middle" class="group-label">Every channel compiles to a typed likelihood factor; interventions enter as do(a), never as evidence.</text>
-</svg>
+
+<div class="seal-strip" aria-label="Exact evidence-boundary checks">
+  <div class="evidence-seal">
+    <span class="seal-value">0</span>
+    <span class="seal-label">regulation-only evidence for root revision</span>
+  </div>
+  <div class="evidence-seal">
+    <span class="seal-value">0</span>
+    <span class="seal-label">untreated-cue transfer when the identity root is fixed</span>
+  </div>
+  <div class="evidence-seal">
+    <span class="seal-value">0</span>
+    <span class="seal-label">aloneness strengthening when its evidence channel is masked</span>
+  </div>
+  <div class="evidence-seal">
+    <span class="seal-value">0%</span>
+    <span class="seal-label">durable reduction after a premature do-over</span>
+  </div>
 </div>
-<div id="sliceinfo">Choose a token. The packet travels only to beliefs that this evidence
-can inform. A node marked <span class="mono">=</span> remains bit-for-bit unchanged. The
-test suite checks this rule again at every stage.</div>
+
+<div class="firewall-conclusion"><b>Why this strengthens the case:</b> every positive result
+must arrive through its declared route, while the model must also reproduce exact zeros
+where a tempting shortcut is forbidden. The incomplete-therapy tests below then ask whether
+removing one permitted route produces its specific predicted failure.</div>
 
 <!-- ============ 4. COMPARATOR FINGERPRINTS ============ -->
-<h2>6 &nbsp;Comparator fingerprints: why each ablated therapy fails differently</h2>
+<h2>6 &nbsp;Why each incomplete therapy fails differently</h2>
+<p class="formal-subtitle">Formal view: comparator fingerprints · selective ablations against the full protocol</p>
 <p>The whole-therapy test compared the full twelve-step protocol with ten versions missing
 one ingredient. Each version ran on the same 480 simulated histories, so differences came
 from the protocol rather than different starting worlds. Before running the test, each
@@ -655,11 +1716,16 @@ stable reduction. Removing the aloneness update (<code>no_registration</code> in
 context learning, or reduction deletes only that target.</p>
 
 <!-- ============ 5. HONEST RESULTS PANEL ============ -->
-<h2>7 &nbsp;Stage dispositions, limitations, and retained failures</h2>
+<h2>7 &nbsp;What passed, what failed, and what remains limited</h2>
+<p class="formal-subtitle">Audit ledger: stage dispositions · sealed challenges · retained failures</p>
 <p>The ledger keeps bad news. A sealed failure remains visible even if a corrected successor
 later passes. An adjudication may explain that a criterion was badly authored, but it cannot
 change what the run produced. The table therefore includes mixed results and retained stops,
 not just the final passing lineage.</p>
+<p class="small"><b>Traceability note:</b> this audit ledger preserves frozen implementation
+names such as <code>G</code>, <code>C_t</code>, <code>L_t</code>, <code>H_E</code>, and
+<code>Z_W</code>. Elsewhere, the page uses plain meanings and collision-free formal aliases
+first.</p>
 
 <table>
 <thead><tr><th>Stage</th><th>What it adds</th><th>Disposition</th><th>Retained limitations / notes</th></tr></thead>
@@ -751,16 +1817,60 @@ Generated 2026-07-29.
 (function () {
   "use strict";
 
-  /* ---------- node info panel ---------- */
-  var svg = document.getElementById('arch');
+  /* ---------- dual architecture views + shared node info ---------- */
+  var maps = Array.from(document.querySelectorAll('#formal-map svg, #clinical-map svg'));
   var info = document.getElementById('nodeinfo');
-  svg.querySelectorAll('.node').forEach(function (n) {
+  var selectedMechanism = null;
+  var clinicalMechanisms = {
+    'n-depth': 'precision', 'n-bcast': 'precision', 'n-local': 'precision',
+    'n-partner': 'partner', 'n-trust': 'trust', 'n-G': 'identity',
+    'n-ctx': 'context', 'n-part': 'formation', 'n-Z': 'burden',
+    'n-hcfg': 'evidence-format', 'n-attr': 'attribution', 'n-policy': 'policy',
+    'n-joint': 'policy', 'n-reg': 'trust', 'n-rperm': 'policy',
+    'n-rred': 'burden', 'n-rlabels': 'readouts', 'n-obs': 'observations'
+  };
+  Object.keys(clinicalMechanisms).forEach(function (id) {
+    var n = document.getElementById(id);
+    if (n) n.dataset.mechanism = clinicalMechanisms[id];
+  });
+
+  function selectMechanism(mechanism) {
+    selectedMechanism = mechanism;
+    maps.forEach(function (map) {
+      map.querySelectorAll('.node').forEach(function (n) {
+        n.classList.toggle('selected', !!mechanism && n.dataset.mechanism === mechanism);
+      });
+    });
+  }
+
+  document.querySelectorAll('#formal-map .node, #clinical-map .node').forEach(function (n) {
     n.addEventListener('click', function () {
+      selectMechanism(n.dataset.mechanism || null);
       info.innerHTML = '<span class="ni-title">' + n.dataset.title + '</span>' +
         '<span class="ni-stage">' + n.dataset.stage + '</span>' +
         '<div>' + n.dataset.desc + '</div>';
     });
   });
+
+  var formalButton = document.getElementById('view-formal');
+  var clinicalButton = document.getElementById('view-clinical');
+  var formalPanel = document.getElementById('formal-map');
+  var clinicalPanel = document.getElementById('clinical-map');
+  var viewIntent = document.getElementById('view-intent');
+
+  function setView(view) {
+    var formal = view === 'formal';
+    formalPanel.hidden = !formal;
+    clinicalPanel.hidden = formal;
+    formalButton.setAttribute('aria-selected', String(formal));
+    clinicalButton.setAttribute('aria-selected', String(!formal));
+    viewIntent.textContent = formal
+      ? 'Formal lens: what is inferred, what generates evidence, and what selects action.'
+      : 'Clinical lens: what forms, what protects, and what changes through relationship.';
+    if (selectedMechanism) selectMechanism(selectedMechanism);
+  }
+  formalButton.addEventListener('click', function () { setView('formal'); });
+  clinicalButton.addEventListener('click', function () { setView('clinical'); });
 
   /* ---------- therapy stepper ---------- */
   var steps = [
@@ -769,10 +1879,10 @@ Generated 2026-07-29.
       text: 'Every box is available in every simulated world. What changes is the evidence each box receives. A posterior — the model’s updated belief after seeing evidence — moves only when the relevant observations support that move. Each V2.8 world starts with neutral priors, meaning its initial assumptions do not favor a mature history or role. Adversity, protector mandates, and partner history must all be learned from observations; none is assigned.' },
     { key: 'formation', label: '1 · Formation',
       title: 'Formation (V2.3.2): a part-like structure wins model comparison',
-      text: 'Clinically: when a child faces overwhelming events they cannot control, a protective pattern can become part of who they expect themselves to be. A dog bite, for example, can become more than “that dog was dangerous”; it can support “dogs are dangerous, I am vulnerable, and avoidance keeps me safe.” Formally, the model compares three explanations: transient threat (T), continuing external danger (D), and a part-like threat-and-identity organization (P). Evidence about the whole episode, the self, and where danger is located can favor P when practical control is low. The identity root G then links related cues, while reduced precision — how strongly evidence is allowed to update belief — can make later safety evidence count less. Nothing sets “formed.” Formation is a readout calculated from the posterior over the three explanations. In V2.8 qualification, formed populations arose in all four developmental strata without assignment (eligible rates 0.41–0.99 across strata).' },
+      text: 'Clinically: when a child faces overwhelming events they cannot control, a protective pattern can become part of who they expect themselves to be. A dog bite, for example, can become more than “that dog was dangerous”; it can support “dogs are dangerous, I am vulnerable, and avoidance keeps me safe.” Formally, the model compares three explanations: transient threat (T), continuing external danger (D), and a part-like threat-and-identity organization (P). Evidence about the whole episode, the self, and where danger is located can favor P when practical control is low. The identity-root belief q(s^id_t) — implementation name G — then links related cues, while reduced evidence weighting (precision) can make later safety evidence count less. Nothing sets “formed.” Formation is a summary calculated from the posterior over the three explanations. In V2.8 qualification, formed populations arose in all four developmental strata without assignment (eligible rates 0.41–0.99 across strata).' },
     { key: 'maint', label: '2 · Maintenance',
       title: 'Maintenance (V2.3.3 + V2.3.4): the structure defends itself with ordinary inference',
-      text: 'Clinically: a protector avoids the situations that could show the old danger prediction is no longer true. Each safe day may then feel like proof that avoidance worked. In the dog example, staying away from dogs prevents the person from observing a calm encounter. Formally, the protective policy makes some outcomes unavailable, so the model receives less disconfirming evidence. It also infers efficacy H_E — whether the action caused safety. Relief can make the protective policy more likely, but it cannot update threat or structure. The mere absence of catastrophe is not extra evidence that danger was present. Maintenance comes from censored outcomes plus inferred action efficacy.' },
+      text: 'Clinically: a protector avoids the situations that could show the old danger prediction is no longer true. Each safe day may then feel like proof that avoidance worked. In the dog example, staying away from dogs prevents the person from observing a calm encounter. Formally, the protective policy makes some outcomes unavailable, so the model receives less disconfirming evidence. It also estimates whether protection made a difference, q(H_eff) — implementation name H_E. Relief can make the protective policy more likely, but it cannot update threat or structure. The mere absence of catastrophe is not extra evidence that danger was present. Maintenance comes from censored outcomes plus inferred action efficacy.' },
     { key: 'coreg', label: '3 · Co-regulation',
       title: 'Co-regulation (V2.6a): the partner changes the regime, not the root',
       text: 'Clinically: a steady, responsive other can make it safer to approach painful material. The model first infers what kind of partner is present from relational observations such as responsiveness and pressure after refusal. A reliable partner raises local relational precision, so relational evidence counts more. Broadcast — the route that shares this local state with the wider system — can then raise global depth. Root-relevant evidence becomes easier to take in, but regulation does not write the root itself. The regulation-only root Bayes factor — the evidence ratio for changing versus retaining the root belief — is exactly zero. In V2.8, regulation alone raised depth by +0.416 while root change, transfer, and reduction stayed inside the equivalence region, meaning the data supported no meaningful change in them. Soothing without responsive contingency is not treated as reliable partnership.' },
@@ -781,7 +1891,7 @@ Generated 2026-07-29.
       text: 'Clinically: a protector begins to allow Self to approach an exile. This is permission in the IFS sense, but the model contains no permission switch. The protector instead forecasts whether contact is tolerable, whether protection can be shared, how the partner will respond, and whether its own action still works. Its policy posterior — the updated probabilities of block, test_contact, and permit_contact — follows an exact expected-cost calculation using those forecasts and the stakes. Trust grows when refusal is met by staying present rather than applying pressure. Contact-compatible policy becomes more likely because contact is no longer expected to be catastrophic. The gate is the current consequence of protector policy, not another internal entity. The sealed C-V26B challenge established this result. In successful worlds, the policy shift strictly precedes contact.' },
     { key: 'witness', label: '5 · Witnessing / redescription',
       title: 'Witnessing and redescription (V2.2.1 + V2.4): the burden becomes historical',
-      text: 'Clinically: the part is witnessed in the scene where its burden made sense, so “danger now” can become “danger then.” Witnessing is an IFS procedure modeled through sustained context-held activation; it is not identical to the field state or to revision. Two formal changes can follow. First, root revision updates G when root-relevant evidence can finally be taken in at restored depth. That update transfers to untreated cues only through G; when G is held fixed, transfer is exactly zero. Second, redescription re-indexes evidence by context. The model learns distinct then and now contexts instead of treating old evidence as globally current. The old context is not erased and remains queryable to 1e-10. In the full V2.8 protocol, material redescription occurred in 96.0% of worlds — about 96 in 100. When context learning was lesioned, meaning selectively disabled, it fell to 0.2% while root-state revision survived.' },
+      text: 'Clinically: the part is witnessed in the scene where its burden made sense, so “danger now” can become “danger then.” Witnessing is an IFS procedure modeled through sustained context-held activation; it is not identical to the field state or to revision. Two formal changes can follow. First, root revision updates the identity-root belief q(s^id_t) when identity-relevant evidence can finally be taken in at restored depth. That update reaches untreated cues only through this belief; holding its implementation variable G fixed makes transfer exactly zero. Second, redescription re-indexes evidence by the context belief q(s^ctx_t), implementation name C_t. The model learns distinct then and now contexts instead of treating old evidence as globally current. The old context is not erased and remains queryable to 1e-10. In the full V2.8 protocol, material redescription occurred in 96.0% of worlds — about 96 in 100. When context learning was lesioned, meaning selectively disabled, it fell to 0.2% while root-state revision survived.' },
     { key: 'unburden', label: '6 · Unburdening / reduction',
       title: 'Unburdening (V2.5a + V2.5b): evidence against compulsory couplings',
       text: 'Clinically: the part releases what it has been carrying without losing its capacities or memory. This is unburdening. A do-over is represented as an imagined episode scored through the same likelihood interface used for ordinary evidence. A likelihood is how probable an observation would be under a candidate explanation. The do-over cannot command reduction, erase the old context, or bypass precision. It can only supply evidence about three possible compulsory links: identity-to-world, identity-to-policy, and identity-to-outcome. The model compares all eight present-or-absent combinations; 000 means that none of the three links is required. Timing matters. A do-over before root-state revision produces reduction that can reverse when the old context returns. In V2.8, the premature comparator reached every milestone except stable reduction (0%). The honest caveat is that the measured do-over speedup was 12.4%, below its preregistered 20% floor.' },
@@ -811,11 +1921,15 @@ Generated 2026-07-29.
       b.classList.toggle('on', j === i);
     });
     steptextEl.innerHTML = '<h3>' + steps[i].title + '</h3><p>' + steps[i].text + '</p>';
-    svg.querySelectorAll('.node, .edge').forEach(function (el) {
-      var stages = (el.dataset.stages || '').split(/\s+/);
-      var hit = stages.indexOf(key) !== -1;
-      el.classList.toggle('dim', !hit);
-      el.classList.toggle('lit', hit && key !== 'all');
+    var v2ref = document.getElementById('v2ref');
+    if (v2ref && key !== 'all') v2ref.open = true;
+    maps.forEach(function (map) {
+      map.querySelectorAll('.node, .edge').forEach(function (el) {
+        var stages = (el.dataset.stages || '').split(/\s+/);
+        var hit = stages.indexOf(key) !== -1;
+        el.classList.toggle('dim', !hit);
+        el.classList.toggle('lit', hit && key !== 'all');
+      });
     });
   }
   document.getElementById('prevstep').addEventListener('click', function () {
@@ -938,85 +2052,85 @@ Generated 2026-07-29.
   var PRIORS = [
     { stage: 'V2.3.2 — formation', q: 'Which explanation best fits the adversity: a passing threat, continuing external danger, or a part-like organization?',
       items: [
-        { n: 'Structure candidates T / D / P', t: 'spike', v: '[0.50, 0.25, 0.25] over {T, D, P}',
+        { n: 'Kind of threat organization · q(m_form); code T / D / P', t: 'spike', v: '[0.50, 0.25, 0.25] over {T, D, P}',
           u: 'whole-event S×Y episodes, self-relevant observations, and evidence about where danger is located. D and P divide the prior probability of persistence, so continuing real-world danger is not mistaken for identity formation.' },
-        { n: 'Precision regime scale', t: 'const', v: 'ordinary 0.6 · overwhelm 1.0',
+        { n: 'How strongly whole episodes count · precision scale', t: 'const', v: 'ordinary 0.6 · overwhelm 1.0',
           u: 'not updated. It declares how strongly the same normalized whole-event likelihood counts in ordinary versus overwhelming conditions.' }
       ]},
     { stage: 'V2.4.4 — redescription', q: 'Did the world change, or did its context change?',
       items: [
-        { n: 'Candidate family prior', t: 'spike', v: '0.20 × 5: global_downweight · cue_local_relearning · context_split · continuous_drift · change_point',
+        { n: 'Which time-pattern explanation? · model-family prior', t: 'spike', v: '0.20 × 5: global_downweight · cue_local_relearning · context_split · continuous_drift · change_point',
           u: 'cue outcomes, context markers, and root-relevant observations. Exact model comparison asks which of the five temporal explanations predicts them best.' },
-        { n: 'Context-split transition prior', t: 'smooth', v: 'Dirichlet rows — then: (8, 2), now: (2, 8)',
+        { n: 'How then/now contexts tend to persist · transition prior', t: 'smooth', v: 'Dirichlet rows — then: (8, 2), now: (2, 8)',
           u: 'evidence that a context persists or returns. A Dirichlet prior is an initial distribution over transition probabilities.' },
-        { n: 'Two-context path prior π₁ (reported)', t: 'const', v: '0.92741935483871 at the frozen 24-slice prefix',
+        { n: 'Starting weight on paths using both contexts · reported π₁', t: 'const', v: '0.92741935483871 at the frozen 24-slice prefix',
           u: 'the exact initial probability that the context-split model assigns to paths that truly use two contexts. It is reported in the V2.4.4 parameter block, discussed in the paper, and protected from later alteration.' },
-        { n: 'Change-point onset prior', t: 'smooth', v: 'Beta(1, 9)',
+        { n: 'When an abrupt change might begin · onset prior', t: 'smooth', v: 'Beta(1, 9)',
           u: 'observations that support an abrupt change. The prior still allows no change or a late change.' },
-        { n: 'Free cue-prediction prior', t: 'smooth', v: 'uniform over the grid {0.1, 0.3, 0.5, 0.7, 0.9}',
+        { n: 'Starting cue predictions · free prediction prior', t: 'smooth', v: 'uniform over the grid {0.1, 0.3, 0.5, 0.7, 0.9}',
           u: 'observed outcomes for each cue-specific prediction table.' },
-        { n: 'Candidate-common nuisance context', t: 'const', v: 'initial [0.25, 0.25, 0.5] over {then, now, none}; 0.8-persistence transitions',
+        { n: 'Shared background-context rule · nuisance context', t: 'const', v: 'initial [0.25, 0.25, 0.5] over {then, now, none}; 0.8-persistence transitions',
           u: 'the same nuisance context process is included in every candidate, so it cannot by itself favor one candidate.' }
       ]},
     { stage: 'V2.3.4 — attribution', q: 'Was I safe, or was I saved?',
       items: [
-        { n: 'Efficacy existence H_E', t: 'spike', v: 'q(irrelevant) = 0.35 exact spike at η = 0',
+        { n: 'Did protection make a difference? · q(H_eff); code H_E', t: 'spike', v: 'q(irrelevant) = 0.35 exact spike at η = 0',
           u: 'visible outcomes during protective action, forced response-prevention probes, and near-misses. The exact probability at η = 0 lets the model represent “the action had no effect” instead of always fitting some efficacy.' },
-        { n: 'Efficacy magnitude η (slab)', t: 'smooth', v: 'weights [.05, .15, .25, .30, .25] over {0, .25, .5, .75, 1.0}',
+        { n: 'How much difference did protection make? · η', t: 'smooth', v: 'weights [.05, .15, .25, .30, .25] over {0, .25, .5, .75, 1.0}',
           u: 'the same outcome evidence, conditional on efficacy existing. The slab is the nonzero part of a spike-and-slab prior.' },
-        { n: 'Danger rate θ', t: 'smooth', v: 'uniform 0.20 × 5 over {0.1, 0.3, 0.5, 0.7, 0.9}',
+        { n: 'How often was danger actually present? · θ_danger', t: 'smooth', v: 'uniform 0.20 × 5 over {0.1, 0.3, 0.5, 0.7, 0.9}',
           u: 'outcomes during engagement and evaluator-scheduled probes that reveal how often danger was actually present.' },
-        { n: 'Policy prior', t: 'const', v: '[1, 1] (uniform)',
+        { n: 'Starting pull toward each action · policy prior', t: 'const', v: '[1, 1] (uniform)',
           u: 'relief may change which protective policy is expected, but never the inferred threat or structure.' }
       ]},
     { stage: 'V2.5a — evidence format', q: 'Do the elements of an episode belong together?',
       items: [
-        { n: 'Configural coupling H_cfg', t: 'spike', v: 'independent / coupled = 0.5 / 0.5 (spike-and-slab)',
+        { n: 'Do the episode elements belong together? · q(H_cfg)', t: 'spike', v: 'independent / coupled = 0.5 / 0.5 (spike-and-slab)',
           u: 'the same episode scored either jointly or one channel at a time using exact marginal probabilities. A marginal is the probability for one channel after summing over the others. No invented “format bonus” can move this belief.' },
-        { n: 'Interaction κ (slab)', t: 'smooth', v: '0.5 / 0.5 over {0.75 weak, 1.5 strong}',
+        { n: 'How strongly do the elements interact? · κ', t: 'smooth', v: '0.5 / 0.5 over {0.75 weak, 1.5 strong}',
           u: 'how well the joint table predicts episodes when configural coupling exists.' },
-        { n: 'Root prior', t: 'smooth', v: '[0.5, 0.5]',
+        { n: 'Starting identity-root belief · p(s^id)', t: 'smooth', v: '[0.5, 0.5]',
           u: 'root-relevant observations linked to the root at association strength 0.8.' }
       ]},
     { stage: 'V2.5b — reduction', q: 'Must identity keep predicting the world, the policy, the outcome?',
       items: [
-        { n: 'Burden-coupling lattice {0,1}³', t: 'spike', v: '1/8 × 8 over all configurations of Z_W · Z_Pi · Z_Y — exact spikes, no continuous shrinkage',
+        { n: 'Which compulsory links exist? · q(z^burden); code Z_W / Z_Pi / Z_Y', t: 'spike', v: '1/8 × 8 over all configurations of Z_W · Z_Pi · Z_Y — exact spikes, no continuous shrinkage',
           u: 'evidence after redescription, including imagined do-over episodes passed through the V2.5a interface. 111 means all three compulsory couplings remain; 000 means none is required.' },
-        { n: 'Coupling strength', t: 'const', v: '1.35 under any present edge',
+        { n: 'Strength of every present link · fixed coupling rule', t: 'const', v: '1.35 under any present edge',
           u: 'not updated. This is the frozen strength contributed by any coupling that is present.' }
       ]},
     { stage: 'V2.6a — partner', q: 'Who is this other, really?',
       items: [
-        { n: 'Partner state L_t', t: 'spike', v: '[0.25 × 4] over reliable_contingent · soothing_noncontingent · intrusive · unstable',
+        { n: 'What kind of partner is present? · q(s^partner_t); code L_t', t: 'spike', v: '[0.25 × 4] over reliable_contingent · soothing_noncontingent · intrusive · unstable',
           u: 'four kinds of relational observation generated by the same hidden partner state. For example, the reliable pattern is [0.9, 0.9, 0.9, 0.9], while soothing without contingency is [0.9, 0.5, 0.5, 0.55].' },
-        { n: 'Partner transition template', t: 'smooth', v: 'stay probability 0.94',
+        { n: 'How partner behavior tends to persist · transition rule', t: 'smooth', v: 'stay probability 0.94',
           u: 'observed changes in partner behavior. The posterior over when a switch began is computed exactly.' },
-        { n: 'Precision machinery', t: 'const', v: 'base global precision 0.35 · broadcast strength 0.9 · root likelihood gain 0.45 · per-state relational precision [0.95, 0.42, 0.12, 0.28]',
+        { n: 'How strongly evidence counts · precision rules', t: 'const', v: 'base global precision 0.35 · broadcast strength 0.9 · root likelihood gain 0.45 · per-state relational precision [0.95, 0.42, 0.12, 0.28]',
           u: 'frozen constants. The inferred partner state changes; these mappings do not.' }
       ]},
     { stage: 'V2.6b — one protector', q: 'Can contact be tolerated? Can protection be shared?',
       items: [
-        { n: 'Protector trust forecasts × 4', t: 'spike', v: '[0.5, 0.5] each: T_outcome · T_coprotection · T_partner · T_efficacy',
+        { n: 'Protector forecasts × 4 · θ^trust; code T_*', t: 'spike', v: '[0.5, 0.5] each: T_outcome · T_coprotection · T_partner · T_efficacy',
           u: 'what happens after refusal, observed through a channel with 0.9 reliability. Trust means the protector’s specific relational forecasts, not generic confidence.' },
-        { n: 'Policy-outcome parameter', t: 'smooth', v: 'uniform thirds over success levels {0.2, 0.5, 0.8}',
+        { n: 'How contact policies tend to turn out · outcome parameter', t: 'smooth', v: 'uniform thirds over success levels {0.2, 0.5, 0.8}',
           u: 'what actually happens when contact is attempted.' },
-        { n: 'Policy machine constants', t: 'const', v: 'β = 5.0 · stakes 1.5 · effort [.25, .18, .05] · epistemic value of test_contact 0.12 · unsupported-risk weight 0.8 · hope 0.2 · p(contact|π) = [0, .45, .9]',
+        { n: 'How policies are compared · fixed policy-selection rules', t: 'const', v: 'β = 5.0 · stakes 1.5 · effort [.25, .18, .05] · epistemic value of test_contact 0.12 · unsupported-risk weight 0.8 · hope 0.2 · p(contact|π) = [0, .45, .9]',
           u: 'not updated. Hope has the same value in both protector-role futures, so it cannot by itself create a difference between those roles.' }
       ]},
     { stage: 'V2.7 — multiple protectors', q: 'Are the protectors independent, opposed, or allied — and is the exile alone?',
       items: [
-        { n: 'Topology', t: 'spike', v: 'thirds over {independent, opposed, coalition}',
+        { n: 'How protectors relate · topology', t: 'spike', v: 'thirds over {independent, opposed, coalition}',
           u: 'histories of protectors’ joint policies and their shared outcomes.' },
-        { n: 'Mandate strength', t: 'smooth', v: 'thirds over {0.1, 0.55, 1.0}', u: 'the same joint-policy and shared-outcome histories.' },
-        { n: 'Shared outcome level', t: 'smooth', v: 'thirds over {0.3, 0.55, 0.8}', u: 'the outcomes jointly produced by the protectors’ policies.' },
-        { n: '“Alone with this” prior', t: 'smooth', v: '[0.5, 0.5]',
+        { n: 'How strongly each protector holds its job · mandate strength', t: 'smooth', v: 'thirds over {0.1, 0.55, 1.0}', u: 'the same joint-policy and shared-outcome histories.' },
+        { n: 'How their combined actions tend to turn out · shared outcome level', t: 'smooth', v: 'thirds over {0.3, 0.55, 0.8}', u: 'the outcomes jointly produced by the protectors’ policies.' },
+        { n: 'Starting belief about being alone with this · prior', t: 'smooth', v: '[0.5, 0.5]',
           u: 'typed evidence from denied contact about being alone with the burden, observed at reliability 0.9. Only the code field retains the retired label registration. When this channel is masked, it contributes exactly no evidence.' },
-        { n: 'Joint-policy constants', t: 'const', v: 'β_joint = 6.0 · shared outcome weight 2.4 · 27 joint policies enumerated exactly',
+        { n: 'How joint actions are compared · fixed joint-policy rules', t: 'const', v: 'β_joint = 6.0 · shared outcome weight 2.4 · 27 joint policies enumerated exactly',
           u: 'not updated. Polarization must emerge from shared outcome predictions; no polarization coefficient exists.' }
       ]},
     { stage: 'V2.8 — whole trajectory', q: 'Do the earned pieces compose?',
       items: [
-        { n: 'No new priors', t: 'const', v: '—',
+        { n: 'No new starting beliefs or prediction rules', t: 'const', v: '—',
           u: 'every V2.8 number is a protocol budget or evaluation criterion. No inherited likelihood, prior, or scientific parameter changed (frozen rationale, v2.8-parameters.json).' }
       ]}
   ];
@@ -1029,9 +2143,10 @@ Generated 2026-07-29.
     g.items.forEach(function (it) {
       var d = document.createElement('div');
       d.className = 'pi-item pi-' + (it.t === 'spike' ? 'spike' : it.t === 'smooth' ? 'smooth' : 'const');
-      var tlabel = it.t === 'spike' ? 'structural' : it.t === 'smooth' ? 'parameter' : 'frozen constant';
+      var tlabel = it.t === 'spike' ? 'either/or structure' : it.t === 'smooth' ? 'learnable setting' : 'fixed rule';
+      var updateLabel = it.t === 'const' ? 'status:' : 'learns from:';
       d.innerHTML = '<span class="pi-name"></span><span class="pi-type ' + it.t + '">' + tlabel + '</span>' +
-        '<span class="pi-val"></span><span class="pi-upd"><b>updated by:</b> </span>';
+        '<span class="pi-val"></span><span class="pi-upd"><b>' + updateLabel + '</b> </span>';
       d.querySelector('.pi-name').textContent = it.n;
       d.querySelector('.pi-val').textContent = it.v;
       d.querySelector('.pi-upd').appendChild(document.createTextNode(it.u));
@@ -1042,59 +2157,60 @@ Generated 2026-07-29.
 
   /* ============ CONNECTIVITY MATRIX ============ */
   var COLS = [
-    ['a', 'Cue tokens'], ['b', 'Root tokens'], ['c', 'Context markers'],
-    ['d', 'Joint episodes'], ['e', 'Relational channels'], ['f', 'Refusal / response'],
-    ['g', 'Shared outcomes Y'], ['h', 'Policy posterior q(π)'], ['i', 'Contact'],
-    ['j', 'Transfer (readout)']
+    ['a', 'Cue evidence · o_cue'], ['b', 'Identity evidence · o_id'],
+    ['c', 'Context evidence · o_ctx'], ['d', 'Whole episode · o_episode'],
+    ['e', 'Relationship evidence · o_rel'], ['f', 'After-refusal response · o_refusal'],
+    ['g', 'Shared outcome · Y'], ['h', 'Course of action · q(π)'],
+    ['i', 'Contact consequence'], ['j', 'New-cue change · readout']
   ];
   var ROWS = [
-    { name: 'G — identity root', cells: {
-      a: ['on', 'Cues associated with G can share the root’s predictions. Whether an association exists is represented by an exact structural spike: it is truly absent or present, not merely tiny.'],
-      b: ['on', 'Root-relevant observations use the conditional probability table (CPT) [0.85 / 0.15] under G. A CPT lists how likely each observation is for each hidden state.'],
-      g: ['on', 'Protectors predict shared outcomes partly from the current identity-root state G.'],
-      j: ['on', 'Learning at one cue transfers to untreated cues only through G. When G is held fixed, transfer is exactly zero — a Gate-1 proof rerun at every stage.'] } },
-    { name: 'C_t — context index', cells: {
-      a: ['on', 'C_t selects whether the then or now cue table predicts an observation. Redescription changes this indexing rather than erasing the old table.'],
-      c: ['on', 'Context markers are uncertain observations generated from C_t at reliability 0.80 with 0.15 ambiguity. They are evidence, never labels or assigned facts.'],
-      g: ['on', 'Protectors’ shared outcome predictions also depend on the inferred context C.'],
-      j: ['zero', 'Context has no direct route to transfer. Transfer runs through G alone, and fixed-G transfer is exactly zero.'] } },
-    { name: 'T / D / P structure', cells: {
-      a: ['on', 'Each candidate predicts the stream differently: T is a passing threat, D is continuing external danger, and P is a part-like organization formed under adversity and low practical control.'],
-      b: ['on', 'Only P strongly predicts the self-relevant observation: self-channel 0.8 for P versus 0.2 for T and D.'],
-      c: ['on', 'Evidence about where danger is located favors external T/D (0.65 / 0.85) over identity-level P (0.25).'] } },
-    { name: 'Z_W — identity→world', cells: {
-      a: ['on', 'When Z_W = 1, identity must influence predictions about the world. Z_W = 0 removes that compulsory link, not the memory.'] } },
-    { name: 'Z_Pi — identity→policy', cells: {
-      h: ['on', 'When Z_Pi = 1, identity must influence the policy mapping. Reduction removes that compulsion rather than deleting the policy.'] } },
-    { name: 'Z_Y — identity→outcome', cells: {
-      g: ['on', 'When Z_Y = 1, identity must predict outcomes. The 000 configuration removes all three compulsory couplings while capacities remain.'] } },
-    { name: 'H_cfg / κ — evidence format', cells: {
-      d: ['on', 'If channels are coupled, a whole episode is scored with a normalized joint table controlled by κ. If independent, it is scored as the exact product of one-channel marginal probabilities. The marginals match to 1e-12, so format alone earns no bonus.'],
-      j: ['zero', 'Evidence format has no direct route to transfer. A Gate-1 proof shows that any format effect reaches transfer only through G.'] } },
-    { name: 'Global precision (depth)', cells: {
-      a: ['on', 'Global precision controls how strongly likelihood evidence updates belief across channels. When depth collapses, cue evidence is discounted before it can act.'],
-      b: ['on', 'The same weighting applies to root-relevant observations. Restored depth is therefore what allows evidence during witnessing to count.'],
-      d: ['on', 'The same weighting applies to real and imagined joint episodes. A do-over cannot bypass the current precision field.'] } },
-    { name: 'Local relational precision', cells: {
-      e: ['on', 'Local relational precision controls how strongly relational observations count. Broadcast determines whether that local state reaches the global field.'],
-      b: ['zero', 'Regulation alone supplies exactly zero evidence for changing the root: its root Bayes factor is zero. Gate 1 proves this, and sealed challenge C-V26A confirmed it. Soothing can calm; it does not persuade the root.'] } },
-    { name: 'L_t — partner process', cells: {
-      e: ['on', 'One latent — meaning hidden — partner state generates all four relational channels. The reliable pattern is [0.9 × 4]; the soothing pattern is [0.9, .5, .5, .55].'],
-      f: ['on', 'L_t predicts whether the partner stays present or applies pressure after refusal. Protector trust learns from this response.'],
-      g: ['on', 'Protectors’ shared outcome predictions depend partly on the inferred partner state L.'],
-      b: ['zero', 'No partner state directly changes G. A partner can change the conditions for inference and evidence uptake, never write root content.'] } },
-    { name: 'Trust forecasts T_*', cells: {
-      f: ['on', 'What happens after refusal supplies typed trust evidence through a channel with 0.9 reliability. Here trust means the protector’s specific relational forecasts.'],
-      h: ['on', 'All four forecasts enter the exact expected-cost calculation G(π), together with stakes and effort. There is no separate permission variable.'] } },
-    { name: 'H_E / η — attribution', cells: {
-      g: ['on', 'Y = D·[1 − 1(A = protect)·P]. In plain language, danger and the success of protective action jointly explain the outcome.'],
-      h: ['on', 'T_efficacy changes forecasted future risk. Relief changes policy probability only; in the sham-action assay, threat change stays within ±.01.'] } },
-    { name: 'Joint policy π₁…π₃', cells: {
-      g: ['on', 'Each protector predicts Y while accounting for every protector’s policy. All 27 joint possibilities are enumerated exactly. Polarization can arise only through these shared outcome forecasts.'],
-      i: ['on', 'Contact follows from the chosen policy: p(contact | π) = [0, 0.45, 0.9]. No separate entity grants access.'],
-      b: ['zero', 'Choosing an action is never evidence about the world or root. Interventions enter as do(a): the model evaluates the action without treating its selection as an observation (constitution rule 1.4).'] } },
-    { name: '“Alone with this” prior', cells: {
-      e: ['on', 'A denied contact attempt can supply typed evidence, at reliability 0.9, about being alone with the burden. Only the code retains the retired label registration. Masking this channel is exactly neutral; in V2.8, the no_registration protocol strengthens the prior by exactly zero.'] } }
+    { name: 'Identity-root belief · q(s^id_t); code G', cells: {
+      a: ['on', 'Cues associated with the identity root can share its predictions. An exact either/or structure represents whether that association is absent or present, rather than merely tiny.'],
+      b: ['on', 'Identity-relevant evidence uses the declared prediction table [0.85 / 0.15] under the identity-root state. A prediction table lists how likely each observation is under each hidden condition.'],
+      g: ['on', 'Protectors predict shared outcomes partly from the current identity-root belief.'],
+      j: ['on', 'Learning at one cue reaches untreated cues only through the identity root. Holding the implementation variable G fixed makes this transfer exactly zero.'] } },
+    { name: 'Context belief · q(s^ctx_t); code C_t', cells: {
+      a: ['on', 'The inferred context selects whether a then or now cue-prediction table applies. Redescription changes this indexing rather than erasing the old table.'],
+      c: ['on', 'Uncertain context clues are generated from the context state at reliability 0.80 with 0.15 ambiguity. They are evidence, never assigned labels.'],
+      g: ['on', 'Protectors’ shared outcome predictions also depend on the inferred context.'],
+      j: ['zero', 'Context has no direct route to new-cue change. That route runs through the identity root alone, and fixed-root transfer is exactly zero.'] } },
+    { name: 'Threat-organization explanation · q(m_form); code T/D/P', cells: {
+      a: ['on', 'The alternatives predict the stream differently: a passing threat, continuing external danger, or a part-like organization formed under adversity and low practical control.'],
+      b: ['on', 'Only the part-like explanation strongly predicts identity-relevant evidence: 0.8 versus 0.2 for the passing-threat and external-danger explanations.'],
+      c: ['on', 'Evidence about where danger is located favors external explanations at 0.65 / 0.85 over the identity-level explanation at 0.25.'] } },
+    { name: 'Identity→world link · z_world; code Z_W', cells: {
+      a: ['on', 'When this link is present, identity must influence predictions about the world. Removing it releases that compulsion, not the memory.'] } },
+    { name: 'Identity→policy link · z_policy; code Z_Pi', cells: {
+      h: ['on', 'When this link is present, identity must influence the action mapping. Reduction removes that compulsion rather than deleting the available actions.'] } },
+    { name: 'Identity→outcome link · z_outcome; code Z_Y', cells: {
+      g: ['on', 'When this link is present, identity must predict outcomes. Configuration 000 removes all three compulsory links while capacities remain.'] } },
+    { name: 'Whole-episode structure · q(H_cfg), κ', cells: {
+      d: ['on', 'If channels belong together, a whole episode is scored with a normalized joint table controlled by κ. If independent, it is scored from the separate one-channel probabilities. Those one-channel probabilities match to 1e-12, so format alone earns no bonus.'],
+      j: ['zero', 'Episode structure has no direct route to new-cue change. A Gate-1 proof shows that any effect reaches new cues only through the identity root.'] } },
+    { name: 'Global evidence weighting · epistemic depth', cells: {
+      a: ['on', 'Global precision means how strongly cue evidence is allowed to update beliefs. When depth collapses, cue evidence is discounted before it can act.'],
+      b: ['on', 'The same weighting applies to identity-relevant evidence. Restored depth is what allows evidence during witnessing to count.'],
+      d: ['on', 'The same weighting applies to real and imagined whole episodes. A do-over cannot bypass the current weighting regime.'] } },
+    { name: 'Relationship evidence weighting · local precision', cells: {
+      e: ['on', 'Local relational precision means how strongly relationship evidence counts. Broadcast determines whether that local change reaches the wider system.'],
+      b: ['zero', 'Regulation alone supplies exactly zero evidence for changing the identity root. Soothing can calm; it does not tell the root what to believe.'] } },
+    { name: 'Partner belief · q(s^partner_t); code L_t', cells: {
+      e: ['on', 'One hidden partner condition generates all four relationship-evidence channels. The reliable pattern is [0.9 × 4]; the soothing pattern is [0.9, .5, .5, .55].'],
+      f: ['on', 'The partner belief predicts whether the partner stays present or applies pressure after refusal. Protector forecasts learn from this response.'],
+      g: ['on', 'Protectors’ shared outcome predictions depend partly on the inferred partner condition.'],
+      b: ['zero', 'No partner condition directly changes the identity root. A partner can change the conditions for learning, never write identity content.'] } },
+    { name: 'Protector forecasts · θ^trust; code T_*', cells: {
+      f: ['on', 'What happens after refusal supplies declared relationship evidence at reliability 0.9. Trust means the protector’s specific forecasts, not generic confidence.'],
+      h: ['on', 'All four forecasts enter the expected-consequence calculation G(π), together with stakes and effort. There is no separate permission variable.'] } },
+    { name: 'Protective efficacy · q(H_eff), η; code H_E', cells: {
+      g: ['on', 'Danger and the success of protective action jointly explain the outcome: was the situation safe, or did protection prevent harm?'],
+      h: ['on', 'Expected efficacy changes forecasted future risk. Relief changes action probability only; in the sham-action assay, threat change stays within ±.01.'] } },
+    { name: 'Joint protector action · q(π₁…π₃)', cells: {
+      g: ['on', 'Each protector predicts the shared outcome while accounting for every protector’s possible action. All 27 joint possibilities are evaluated exactly.'],
+      i: ['on', 'Contact follows from the selected action: p(contact | π) = [0, 0.45, 0.9]. No separate entity grants access.'],
+      b: ['zero', 'Selecting an action is never evidence about identity or the world. An intervention changes what happens without treating its own selection as an observation.'] } },
+    { name: 'Belief about being alone with this · prior', cells: {
+      e: ['on', 'A denied contact attempt can supply declared evidence, at reliability 0.9, about being alone with the burden. Masking this channel contributes exactly no evidence; the code retains the retired name registration.'] } }
   ];
 
   var tbl = document.getElementById('cmxtable');
@@ -1126,49 +2242,33 @@ Generated 2026-07-29.
     tbody.appendChild(tr);
   });
   tbl.appendChild(tbody);
-
-  /* ============ GENERATIVE SLICE PACKET ============ */
-  var PACKETS = {
-    root: { path: 'gp-root', touch: ['sl-G'],
-      msg: 'A root-relevant observation updates q(G), the posterior belief about the identity root. Because transfer runs through G, it also changes the structural evidence that can carry learning to untreated cues. The current precision field controls how strongly the observation counts. Context C, the Z coupling lattice, and the partner posterior remain bit-for-bit identical.' },
-    rel: { path: 'gp-rel', touch: ['sl-L', 'sl-prec'],
-      msg: 'A relational observation updates q(L), the posterior belief about the partner, and therefore local relational precision. It reaches the global field only through broadcast. It contains exactly no root-relevant evidence: the regulation-only root Bayes factor is zero (C-V26A). G, C, and Z remain bit-for-bit identical.' },
-    doover: { path: 'gp-doover', touch: ['sl-Z'],
-      msg: 'An imagined do-over episode supplies evidence about compulsory couplings through the ordinary whole-episode likelihood. It changes model evidence over the Z lattice and H_cfg, the configural-coupling hypothesis. It cannot command reduction, erase the old context, or bypass precision. G, C, and L remain bit-for-bit identical.' }
-  };
-  var sliceSvg = document.getElementById('slice');
-  var packet = document.getElementById('packet');
-  var sinfo = document.getElementById('sliceinfo');
-  var animating = false;
-  document.querySelectorAll('.slice-controls button').forEach(function (b) {
-    b.addEventListener('click', function () {
-      if (animating) return;
-      var spec = PACKETS[b.dataset.packet];
-      var path = document.getElementById(spec.path);
-      var len = path.getTotalLength();
-      var t0 = null; animating = true;
-      sliceSvg.querySelectorAll('.snode').forEach(function (n) {
-        n.classList.remove('pulse');
-        var eq = n.querySelector('.eq'); if (eq) eq.classList.remove('show');
-      });
-      sinfo.textContent = 'Packet in flight…';
-      function frame(ts) {
-        if (t0 === null) t0 = ts;
-        var f = Math.min((ts - t0) / 1100, 1);
-        var pt = path.getPointAtLength(f * len);
-        packet.setAttribute('cx', pt.x); packet.setAttribute('cy', pt.y);
-        if (f < 1) { requestAnimationFrame(frame); return; }
-        packet.setAttribute('cx', -20); packet.setAttribute('cy', -20);
-        spec.touch.forEach(function (id) { document.getElementById(id).classList.add('pulse'); });
-        sliceSvg.querySelectorAll('.snode').forEach(function (n) {
-          if (spec.touch.indexOf(n.id) === -1 && n.id && n.id.indexOf('sl-') === 0) {
-            var eq = n.querySelector('.eq'); if (eq) eq.classList.add('show');
-          }
-        });
-        sinfo.textContent = spec.msg;
-        animating = false;
-      }
-      requestAnimationFrame(frame);
+})();
+</script>
+<script>
+(function () {
+  "use strict";
+  /* v3 supergraph interactions */
+  var svg = document.getElementById('arch-v3');
+  var info = document.getElementById('nodeinfo3');
+  if (!svg || !info) return;
+  svg.querySelectorAll('.node').forEach(function (n) {
+    n.addEventListener('click', function () {
+      info.innerHTML = '<span class="ni-title">' + n.dataset.title + '</span>' +
+        '<span class="ni-stage">' + n.dataset.stage + '</span>' +
+        '<div>' + n.dataset.desc + '</div>';
+    });
+  });
+  svg.querySelectorAll('.zg').forEach(function (z) {
+    z.addEventListener('click', function () {
+      var e = z.dataset.edge;
+      info.innerHTML = '<span class="ni-title">Existence spike on edge ' + e + '</span>' +
+        '<span class="ni-stage">grammar.py EDGES · spec §2.2</span>' +
+        '<div>One generic existence variable <code>Z_e ∈ {0,1}</code> for the optional ' +
+        'dependency <code>' + e.replace('_', ' → ').replace('doA', 'do(A)') + '</code>, plus one generic parameter ' +
+        'posterior conditional on existence. Including or excluding this edge is a grammar ' +
+        'production charged by the code-length prior. "Grow" is posterior mass arriving on ' +
+        'an absent edge; "prune" is posterior mass leaving a present one — readouts of ' +
+        'posterior movement, never callable operations.</div>';
     });
   });
 })();
