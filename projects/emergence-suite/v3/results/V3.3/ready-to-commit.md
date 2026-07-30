@@ -1,33 +1,26 @@
 # V3.3 ready-to-commit list
 
 Stage status:
-**FROZEN_ADJUDICATED_MIXED_DO_OVER_NULL_AND_SUGGESTION_DIRECTION**.
+**PASS_WITH_ADJUDICATED_DO_OVER_NULL_AND_SUGGESTION_DIRECTION**.
 
-## Source and public declarations
+## Sealed-run code
 
-- `scripts/run_v33.py`
-- `tests/test_v33_prune.py`
-- `protocols/v3.3-parameters.json`
+- `challenges/run_c_v33.py`
 
-## Results and custody
+No frozen source, parameter, plan, threshold, or readout file changed.
 
-- `results/V3.3/gate-4.json`
-- `results/V3.3/gate-4-report.md`
-- `results/V3.3/gate-4-trace-hashes.json`
-- `results/V3.3/gate-4-traces.jsonl`
-- `results/V3.3/gate-5.json`
-- `results/V3.3/gate-5-report.md`
-- `results/V3.3/gate-5-assays-trace-hashes.json`
-- `results/V3.3/gate-5-assays-traces.jsonl`
-- `results/V3.3/gate-5-recovery-trace-hashes.json`
-- `results/V3.3/gate-5-recovery-traces.jsonl`
-- `results/V3.3/development-failures.md`
-- `results/V3.3/decisions.md`
-- `results/V3.3/full-fast-suite.json`
-- `results/V3.3/stage-report.md`
-- `results/V3.3/freeze-readiness.md`
-- `results/V3.3/freeze-manifest.json`
+## Verdict and custody
 
-All Gate-4 and Gate-5 trace bundles are below 90 MB and ready to commit. No new
-local-only trace note is required. Existing unrelated working-tree changes are
-not part of this list.
+- `results/V3.3/c-v33-verdict.md`
+- `results/V3.3/stage-verdict.md`
+- `results/V3.3/c-v33-full-fast-suite.json`
+- `results/V3.3/c-v33/run-ledger-precriteria.json`
+- `results/V3.3/c-v33/run-ledger.json`
+- `results/V3.3/c-v33/summary.json`
+- `results/V3.3/c-v33/cell_*-results.json`
+- `results/V3.3/c-v33/cell_*-trace-hashes.json`
+- `results/V3.3/c-v33/cell_*-traces.jsonl`
+
+Each cell trace file is 34–38 MB, below 90 MB, and is ready to commit. The
+standing ignore rule requires force-adding these four files. Existing unrelated
+working-tree changes are not part of this list.

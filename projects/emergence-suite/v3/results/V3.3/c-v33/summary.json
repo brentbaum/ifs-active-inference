@@ -1,0 +1,59 @@
+{
+  "cell_summaries": {
+    "cell_1_correction_reduces": {
+      "historical_query_error_max": 0.0,
+      "material_rate": 0.977,
+      "mode_retention_mean": 1.0
+    },
+    "cell_2_do_over_equivalence": {
+      "material_rate": 0.975,
+      "paired_first_material_time_censored": 0,
+      "paired_first_material_time_difference_mean": -0.008,
+      "paired_first_material_time_eligible": 1000,
+      "paired_material_rate_difference": -0.0020000000000000018,
+      "schedule_identity_rate": 1.0
+    },
+    "cell_3_premature_return": {
+      "durable_material_reduction_rate": 0.0
+    },
+    "cell_4_adaptive_survives": {
+      "adaptive_w_y_probability_mean": 0.9979791868949893,
+      "burden_material_reduction_rate": 0.975
+    }
+  },
+  "criteria": {
+    "1_correction_reduces": true,
+    "2_do_over_equivalence": true,
+    "3_premature_not_durable": true,
+    "4_adaptive_edge_survives": true,
+    "5_semantic_and_custody": true
+  },
+  "immutable_sealed_verdict": "PASS",
+  "neutral_identity_error_max": 0.0,
+  "standing_limitations": {
+    "do_over_speedup": "Gate-3/Gate-5 null retained; sealed equivalence criterion passed",
+    "suggestion_direction": "Gate-3/Gate-5 small-negative anomaly retained; C-V33 contains no suggestion-direction criterion"
+  },
+  "verdict_classes": {
+    "custody": {
+      "challenge_sha256": "c6ae7f5169be554cbead523f2ffe6ac797033eb63937ccf59bb7c104e21ac3a4",
+      "passed": true,
+      "released_block": [
+        4030000,
+        4033999
+      ],
+      "seeds_once_ascending_gap_free": true,
+      "trace_ledgers_verified_before_evaluation": true
+    },
+    "scientific": {
+      "1_correction_reduces": true,
+      "2_do_over_equivalence": true,
+      "3_premature_not_durable": true,
+      "4_adaptive_edge_survives": true
+    },
+    "semantic": {
+      "maximum_error": 0.0,
+      "neutral_observation_identity": true
+    }
+  }
+}

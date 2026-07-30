@@ -1,0 +1,81 @@
+{
+  "authorization_commit": "be21368",
+  "cell_ledgers": [
+    {
+      "cell": "cell_1_correction_reduces",
+      "criteria_evaluated": false,
+      "file": "cell_1_correction_reduces-traces.jsonl",
+      "file_sha256": "5660d2043dc1975ad199503c8ceb79860817df9adf221a46f323fcd08c458710",
+      "first_seed": 4030000,
+      "last_seed": 4030999,
+      "world_count": 1000
+    },
+    {
+      "cell": "cell_2_do_over_equivalence",
+      "criteria_evaluated": false,
+      "file": "cell_2_do_over_equivalence-traces.jsonl",
+      "file_sha256": "18faca364e2ca87575d70c29180e950a6f74961e06322c3e96cbda3a741bba12",
+      "first_seed": 4031000,
+      "last_seed": 4031999,
+      "world_count": 1000
+    },
+    {
+      "cell": "cell_3_premature_return",
+      "criteria_evaluated": false,
+      "file": "cell_3_premature_return-traces.jsonl",
+      "file_sha256": "7c12de34b6253cec3337677f46b8699da364dc7457415a6e136d5af5781305ce",
+      "first_seed": 4032000,
+      "last_seed": 4032999,
+      "world_count": 1000
+    },
+    {
+      "cell": "cell_4_adaptive_survives",
+      "criteria_evaluated": false,
+      "file": "cell_4_adaptive_survives-traces.jsonl",
+      "file_sha256": "e9e100f8982c377faac310aa64e08846f5f8476fa3c4edd2feb1f785a7561f97",
+      "first_seed": 4033000,
+      "last_seed": 4033999,
+      "world_count": 1000
+    }
+  ],
+  "challenge": "C-V33",
+  "criteria_evaluated": true,
+  "evaluated_utc": "2026-07-30T15:50:08.999213+00:00",
+  "immutable_sealed_verdict": "PASS",
+  "released_block": [
+    4030000,
+    4033999
+  ],
+  "run_count": 1,
+  "seed_consumption": {
+    "ascending_gap_free": true,
+    "count": 4000,
+    "first": 4030000,
+    "last": 4033999
+  },
+  "started_utc": "2026-07-30T15:48:46.465932+00:00",
+  "traces_sealed_utc": "2026-07-30T15:49:55.038928+00:00",
+  "validation": {
+    "ascending_gap_free": true,
+    "cell_count": 4,
+    "challenge_hash_matches": true,
+    "challenge_sha256": "c6ae7f5169be554cbead523f2ffe6ac797033eb63937ccf59bb7c104e21ac3a4",
+    "config_errors": [],
+    "manifest": {
+      "expected_files": 53,
+      "mismatches": [],
+      "passed": true,
+      "status": "FROZEN_ADJUDICATED_MIXED_DO_OVER_NULL_AND_SUGGESTION_DIRECTION"
+    },
+    "passed": true,
+    "public_api_missing": [],
+    "release_authorization_commit": "be21368",
+    "release_block": [
+      4030000,
+      4033999
+    ],
+    "seal_ledger_matches": true,
+    "seed_count": 4000,
+    "threshold_errors": {}
+  }
+}
