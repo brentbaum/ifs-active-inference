@@ -817,10 +817,6 @@ def run_gate3() -> None:
 
 def run_gate4() -> None:
     lesions = []
-    seeds = range(3_110_000, 3_110_200)
-    worlds, base = _score_many(
-        seeds, cfg("repeated", "low", "broad", "real", "effective", "censored")
-    )
     mappings = (
         ("mode_slot", "part_probability"),
         ("identity_edges", "part_probability"),
@@ -829,7 +825,19 @@ def run_gate4() -> None:
         ("recursive_precision", "precision"),
         ("fixed_G", "transfer"),
     )
-    for lesion, target in mappings:
+    counts = (333, 333, 333, 333, 333, 335)
+    cursor = 3_110_000
+    mode_mask_neutrality_errors = []
+    for (lesion, target), count in zip(mappings, counts):
+        seed_start = cursor
+        seed_stop = cursor + count
+        cursor = seed_stop
+        seeds = range(seed_start, seed_stop)
+        worlds, base = _score_many(
+            seeds,
+            cfg("repeated", "low", "broad", "real", "effective", "censored"),
+        )
+        posterior_for_normalization = base
         if lesion == "fixed_G":
             target_values = [
                 v31.transfer_readout(item, fixed_identity=True) for item in base
@@ -843,6 +851,7 @@ def run_gate4() -> None:
                 v31.score_world(world, lesions=frozenset({lesion}))
                 for world in worlds
             ]
+            posterior_for_normalization = lesioned
             target_values = [
                 abs(a.efficacy_probability - b.efficacy_probability)
                 for a, b in zip(base, lesioned)
@@ -879,6 +888,7 @@ def run_gate4() -> None:
                 v31.score_world(world, lesions=frozenset({lesion}))
                 for world in narrow_worlds
             ]
+            posterior_for_normalization = broad_lesioned + narrow_lesioned
             target_values = [
                 abs(a.part_probability - b.part_probability)
                 for a, b in zip(broad_lesioned, narrow_lesioned)
@@ -902,6 +912,7 @@ def run_gate4() -> None:
                 v31.score_world(world, lesions=frozenset({lesion}))
                 for world in worlds
             ]
+            posterior_for_normalization = lesioned
             target_values = [
                 getattr(item, target) for item in lesioned
             ]
@@ -910,16 +921,60 @@ def run_gate4() -> None:
                 < 0.2
                 for a, b in zip(base, lesioned)
             ]
+            if lesion == "mode_slot":
+                for world, posterior in zip(worlds, lesioned):
+                    remasked = replace(
+                        world,
+                        slices=tuple(
+                            replace(
+                                item,
+                                mode_observed=not item.mode_observed,
+                            )
+                            for item in world.slices
+                        ),
+                    )
+                    remasked_posterior = v31.score_world(
+                        remasked, lesions=frozenset({lesion})
+                    )
+                    mode_mask_neutrality_errors.append(
+                        max(
+                            abs(
+                                posterior.log_evidence
+                                - remasked_posterior.log_evidence
+                            ),
+                            max(
+                                abs(left - right)
+                                for left, right in zip(
+                                    posterior.probabilities,
+                                    remasked_posterior.probabilities,
+                                )
+                            ),
+                        )
+                    )
         if lesion in {"mode_slot", "identity_edges", "action_edge", "fixed_G"}:
             target_pass = max(target_values) <= 1e-10
         elif lesion == "recursive_precision":
             target_pass = float(np.mean(target_values)) <= 1e-10
         else:
             target_pass = float(np.mean(target_values)) > 0.01
+        normalization_errors = [
+            abs(math.fsum(item.probabilities) - 1.0)
+            for item in posterior_for_normalization
+        ]
+        finite_normalized = all(
+            np.isfinite(item.log_evidence)
+            and all(np.isfinite(item.probabilities))
+            and error <= 1e-10
+            for item, error in zip(
+                posterior_for_normalization, normalization_errors
+            )
+        )
         lesions.append(
             {
                 "lesion": lesion,
                 "target": target,
+                "seed_block": [seed_start, seed_stop - 1],
+                "world_count": count,
                 "target_mean": float(np.mean(target_values)),
                 "target_max": float(max(target_values)),
                 **(
@@ -933,13 +988,50 @@ def run_gate4() -> None:
                     else {}
                 ),
                 "survival_rate": float(np.mean(survival)),
-                "pass": target_pass and float(np.mean(survival)) >= 0.9,
+                "finite_normalized": finite_normalized,
+                "normalization_error_max": float(max(normalization_errors)),
+                "pass": (
+                    target_pass
+                    and float(np.mean(survival)) >= 0.9
+                    and finite_normalized
+                ),
             }
         )
-    verdict = "PASS" if all(item["pass"] for item in lesions) else "FAIL"
-    _write("gate-4.json", {"verdict": verdict, "lesions": lesions})
+    masked_channel_proof = {
+        "world_count": counts[0],
+        "maximum_posterior_or_log_evidence_error": float(
+            max(mode_mask_neutrality_errors)
+        ),
+        "tolerance": 1e-10,
+        "pass": max(mode_mask_neutrality_errors) <= 1e-10,
+    }
+    verdict = (
+        "PASS"
+        if all(item["pass"] for item in lesions)
+        and masked_channel_proof["pass"]
+        else "FAIL"
+    )
+    _write(
+        "gate-4-repaired.json",
+        {
+            "verdict": verdict,
+            "lesions": lesions,
+            "masked_channel_exact_neutrality": masked_channel_proof,
+            "original_stop_retained": "gate-4.json",
+            "repair_authorization": "gate4-lesion-semantics-adjudication.md",
+            "seed_block": [3_110_000, 3_111_999],
+        },
+    )
     if verdict != "PASS":
-        _write("gate-4-diagnosis-stub.json", {"failed": [x["lesion"] for x in lesions if not x["pass"]]})
+        _write(
+            "gate-4-repaired-diagnosis-stub.json",
+            {
+                "failed": [
+                    x["lesion"] for x in lesions if not x["pass"]
+                ],
+                "masked_channel_proof": masked_channel_proof,
+            },
+        )
         raise SystemExit("V3.1 Gate 4 failed")
 
 
@@ -978,10 +1070,18 @@ def run_gate5() -> None:
         for name, metrics in cells.items()
     }
     cumulative = {
-        f"gate_{gate}": json.loads(
-            (RESULTS / f"gate-{gate}.json").read_text(encoding="utf-8")
-        )["verdict"]
-        for gate in range(1, 5)
+        "gate_1": json.loads(
+            (RESULTS / "gate-1.json").read_text(encoding="utf-8")
+        )["verdict"],
+        "gate_2": json.loads(
+            (RESULTS / "gate-2.json").read_text(encoding="utf-8")
+        )["verdict"],
+        "gate_3": json.loads(
+            (RESULTS / "gate-3.json").read_text(encoding="utf-8")
+        )["verdict"],
+        "gate_4_repaired": json.loads(
+            (RESULTS / "gate-4-repaired.json").read_text(encoding="utf-8")
+        )["verdict"],
     }
     gate3 = json.loads((RESULTS / "gate-3.json").read_text(encoding="utf-8"))
     gate3_blocking = {
@@ -1011,7 +1111,7 @@ def run_gate5() -> None:
         and cumulative["gate_2"] == "PASS"
         and all(gate3_blocking.values())
         and gate3_adjudicated_revisability["mode_structure_blocking_pass"]
-        and cumulative["gate_4"] == "PASS"
+        and cumulative["gate_4_repaired"] == "PASS"
     )
     verdict = (
         "PASS"

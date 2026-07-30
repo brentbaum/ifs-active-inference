@@ -19,3 +19,10 @@
 8. Gate 4 stopped when the mode-slot deletion made the posterior undefined.
    No semantics were invented for observations whose latent production had
    been deleted, and no repair was attempted without adjudication.
+9. The adjudicated repair masks the deleted slot's typed channel
+   candidate-commonly. It adds no mode-absent likelihood and leaves the world
+   unchanged.
+10. The repaired Gate-4 run stopped on identity-edge selectivity. The target
+    disappeared exactly, but `W→Y` posterior survival missed its blocking
+    floor. No interpretation of hypothesis-space renormalization was authored
+    after seeing the result.

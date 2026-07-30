@@ -260,7 +260,10 @@ def _mode_log_score(
     active: int,
     concentration: float,
     sever_precision: bool,
+    mask_channel: bool = False,
 ) -> float:
+    if mask_channel:
+        return 0.0
     observed = [
         item.mode
         for item in slices
@@ -294,7 +297,11 @@ def _program_log_joint(
     reveal_censored = "availability_control" in lesions
     total = structure_log_prior(structure, hyperparameters)
     total += _mode_log_score(
-        world.slices, values["active_mode"], concentration, sever_precision
+        world.slices,
+        values["active_mode"],
+        concentration,
+        sever_precision,
+        mask_channel="mode_slot" in lesions,
     )
     total += beta_bernoulli_log_marginal(
         _counts(

@@ -1,6 +1,7 @@
 # V3.1 stage report
 
-Status: **STOPPED_AT_GATE_4_SOFTWARE_FAILURE**. No freeze manifest exists.
+Status: **STOPPED_AT_REPAIRED_GATE_4_SELECTIVITY_FAILURE**. No freeze manifest
+exists.
 
 - Stage 0: thresholds frozen from the barred 3100000–3101999 block, including
   a prospective efficacy construct amendment on its previously unconsumed
@@ -16,12 +17,18 @@ Status: **STOPPED_AT_GATE_4_SOFTWARE_FAILURE**. No freeze manifest exists.
   frozen `0.0071` floor, with a 95% interval crossing zero.
 - Gate-3 adjudication: mixed-verdict continuation authorized the revisability
   family as non-blocking; every other criterion remained blocking.
-- Gate 4: software stop before criterion evaluation. Removing the only mode
-  slot left observed mode-one values with zero support under every surviving
-  program. All candidate scores were `-inf`, so the posterior was undefined.
+- Gate 4 original run: software stop before criterion evaluation. Removing the
+  only mode slot left observed mode-one values with zero support under every
+  surviving program. All candidate scores were `-inf`, so the posterior was
+  undefined.
+- Gate-4 repair: candidate-common masking passed with exact error `0.0`; all
+  lesioned posteriors were finite and normalized.
+- Gate 4 repaired run: FAIL. Five lesions passed. The identity-edge lesion
+  removed part-like mass exactly, but retained-edge survival was only 182/333
+  (`0.546547`) against the blocking `0.90` floor.
 - Gate 5: not opened.
 
-No repair was attempted. Post-stop regression status: V3 21/21 green; frozen
-V2 180/180 green.
+Post-stop regression status: V3 22/22 green, including the new masking
+regression; frozen V2 180/180 green.
 
 C-V31 escrow 4010000–4013999 was not accessed.

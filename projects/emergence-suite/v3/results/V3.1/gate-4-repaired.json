@@ -1,0 +1,109 @@
+{
+  "lesions": [
+    {
+      "finite_normalized": true,
+      "lesion": "mode_slot",
+      "normalization_error_max": 7.327471962526033e-15,
+      "pass": true,
+      "seed_block": [
+        3110000,
+        3110332
+      ],
+      "survival_rate": 1.0,
+      "target": "part_probability",
+      "target_max": 0.0,
+      "target_mean": 0.0,
+      "world_count": 333
+    },
+    {
+      "finite_normalized": true,
+      "lesion": "identity_edges",
+      "normalization_error_max": 1.3988810110276972e-14,
+      "pass": false,
+      "seed_block": [
+        3110333,
+        3110665
+      ],
+      "survival_rate": 0.5465465465465466,
+      "target": "part_probability",
+      "target_max": 0.0,
+      "target_mean": 0.0,
+      "world_count": 333
+    },
+    {
+      "finite_normalized": true,
+      "lesion": "action_edge",
+      "normalization_error_max": 1.0436096431476471e-14,
+      "pass": true,
+      "seed_block": [
+        3110666,
+        3110998
+      ],
+      "survival_rate": 1.0,
+      "target": "efficacy_probability",
+      "target_max": 0.0,
+      "target_mean": 0.0,
+      "world_count": 333
+    },
+    {
+      "finite_normalized": true,
+      "lesion": "availability_control",
+      "normalization_error_max": 1.4099832412739488e-14,
+      "pass": true,
+      "seed_block": [
+        3110999,
+        3111331
+      ],
+      "survival_rate": 1.0,
+      "target": "availability",
+      "target_max": 0.6655821716695016,
+      "target_mean": 0.20984411323520927,
+      "world_count": 333
+    },
+    {
+      "finite_normalized": true,
+      "lesion": "recursive_precision",
+      "normalization_error_max": 7.327471962526033e-15,
+      "pass": true,
+      "seed_block": [
+        3111332,
+        3111664
+      ],
+      "survival_rate": 1.0,
+      "target": "precision",
+      "target_max": 0.0,
+      "target_mean": 0.0,
+      "unlesioned_target_max": 0.7278056770403523,
+      "unlesioned_target_mean": 0.09939674758293938,
+      "world_count": 333
+    },
+    {
+      "finite_normalized": true,
+      "lesion": "fixed_G",
+      "normalization_error_max": 7.327471962526033e-15,
+      "pass": true,
+      "seed_block": [
+        3111665,
+        3111999
+      ],
+      "survival_rate": 1.0,
+      "target": "transfer",
+      "target_max": 0.0,
+      "target_mean": 0.0,
+      "world_count": 335
+    }
+  ],
+  "masked_channel_exact_neutrality": {
+    "maximum_posterior_or_log_evidence_error": 0.0,
+    "pass": true,
+    "tolerance": 1e-10,
+    "world_count": 333
+  },
+  "original_stop_retained": "gate-4.json",
+  "repair_authorization": "gate4-lesion-semantics-adjudication.md",
+  "seed_block": [
+    3110000,
+    3111999
+  ],
+  "verdict": "FAIL"
+}

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import copy
 import unittest
+from dataclasses import replace
 
 import numpy as np
 
@@ -83,6 +84,39 @@ class V31GrowTests(unittest.TestCase):
             v31.transfer_readout(posterior, fixed_identity=True), 0.0
         )
         self.assertEqual(v31.score_world(world), posterior)
+
+    def test_deleted_mode_slot_masks_typed_channel_candidate_commonly(self):
+        config = v31.FormationConfig(
+            "repeated", "low", "broad", "real", "effective", "censored", 16
+        )
+        world = v31.generate_world(3_100_006, config)
+        masked_copy = replace(
+            world,
+            slices=tuple(
+                replace(
+                    item,
+                    mode_observed=not item.mode_observed,
+                )
+                for item in world.slices
+            ),
+        )
+        lesion = frozenset({"mode_slot"})
+        original = v31.score_world(world, lesions=lesion)
+        remasked = v31.score_world(masked_copy, lesions=lesion)
+        self.assertTrue(np.isfinite(original.log_evidence))
+        self.assertAlmostEqual(sum(original.probabilities), 1.0, places=12)
+        self.assertTrue(np.all(np.isfinite(original.probabilities)))
+        np.testing.assert_allclose(
+            original.probabilities,
+            remasked.probabilities,
+            atol=1e-10,
+            rtol=0.0,
+        )
+        self.assertAlmostEqual(
+            original.log_evidence,
+            remasked.log_evidence,
+            places=10,
+        )
 
     def test_released_block_threading(self):
         with self.assertRaises(ValueError):
