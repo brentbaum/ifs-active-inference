@@ -1,0 +1,143 @@
+{
+  "cell_ledgers": [
+    {
+      "cell": "cell_1_reliable_regulated",
+      "criteria_evaluated": false,
+      "file": "cell_1_reliable_regulated-traces.jsonl",
+      "file_sha256": "3991c92dcd96d466db3fa63a9ac1d56fb56acba004be09b0d7ea09f67ada697f",
+      "first_seed": 4040000,
+      "last_seed": 4040999,
+      "world_count": 1000
+    },
+    {
+      "cell": "cell_2_no_root_evidence",
+      "criteria_evaluated": false,
+      "file": "cell_2_no_root_evidence-traces.jsonl",
+      "file_sha256": "e56bffd524e5d7ff256358f03c80780e75431f7be628e2f07d550eb8ab8cb671",
+      "first_seed": 4041000,
+      "last_seed": 4041999,
+      "world_count": 1000
+    },
+    {
+      "cell": "cell_3_unregulated",
+      "criteria_evaluated": false,
+      "file": "cell_3_unregulated-traces.jsonl",
+      "file_sha256": "f0415a5bef1a437dc9240a94048b3cc3fe93264232c9fb64df085eae1e86604e",
+      "first_seed": 4042000,
+      "last_seed": 4042999,
+      "world_count": 1000
+    },
+    {
+      "cell": "cell_4_switch",
+      "criteria_evaluated": false,
+      "file": "cell_4_switch-traces.jsonl",
+      "file_sha256": "9d58cb956d97a5afe82d9553378c20dfc74b64f4d3f4eebb66185474fd77cb9e",
+      "first_seed": 4043000,
+      "last_seed": 4043999,
+      "world_count": 1000
+    }
+  ],
+  "challenge": "C-V34",
+  "criteria_evaluated": true,
+  "evaluated_utc": "2026-07-30T18:05:51.389754+00:00",
+  "immutable_sealed_verdict": "PASS",
+  "release_authority": "suite-v2-sealed-hashes.md C-V34 release record",
+  "released_block": [
+    4040000,
+    4043999
+  ],
+  "run_count": 1,
+  "seed_consumption": {
+    "ascending_gap_free": true,
+    "count": 4000,
+    "first": 4040000,
+    "last": 4043999
+  },
+  "started_utc": "2026-07-30T18:05:07.367142+00:00",
+  "traces_sealed_utc": "2026-07-30T18:05:45.715304+00:00",
+  "validation": {
+    "ascending_gap_free": true,
+    "cell_count": 4,
+    "cell_schemas": [
+      {
+        "cell": "cell_1_reliable_regulated",
+        "config": {
+          "broadcast": true,
+          "length": 48,
+          "partner_pattern": "reliable",
+          "regulation_present": true,
+          "root_evidence_present": true
+        },
+        "end": 4040999,
+        "n_worlds": 1000,
+        "start": 4040000
+      },
+      {
+        "cell": "cell_2_no_root_evidence",
+        "config": {
+          "broadcast": true,
+          "length": 48,
+          "partner_pattern": "reliable",
+          "regulation_present": true,
+          "root_evidence_present": false
+        },
+        "end": 4041999,
+        "n_worlds": 1000,
+        "start": 4041000
+      },
+      {
+        "cell": "cell_3_unregulated",
+        "config": {
+          "broadcast": true,
+          "length": 48,
+          "partner_pattern": "reliable",
+          "regulation_present": false,
+          "root_evidence_present": true
+        },
+        "end": 4042999,
+        "n_worlds": 1000,
+        "start": 4042000
+      },
+      {
+        "cell": "cell_4_switch",
+        "config": {
+          "broadcast": true,
+          "length": 64,
+          "partner_pattern": "switch",
+          "regulation_present": true,
+          "root_evidence_present": true
+        },
+        "end": 4043999,
+        "n_worlds": 1000,
+        "start": 4043000
+      }
+    ],
+    "challenge_hash_matches": true,
+    "challenge_sha256": "6b09fd32e32e7b79e1ef5e99a136bf90f32695b10369eb04f902f4275f3a4c16",
+    "config_errors": [],
+    "manifest": {
+      "expected_files": 82,
+      "mismatches": [],
+      "passed": true,
+      "status": "FROZEN_ADJUDICATED_SHORT_HISTORY_CONJUNCTION_BOUND"
+    },
+    "passed": true,
+    "public_api_missing": [],
+    "public_readout_fields": [
+      "root_movement",
+      "global_precision",
+      "q_partner",
+      "smoothed_partner",
+      "root_log_bf",
+      "structure_probabilities",
+      "switch_onset"
+    ],
+    "release_authority": "suite-v2-sealed-hashes.md C-V34 release record",
+    "release_block": [
+      4040000,
+      4043999
+    ],
+    "seal_ledger_matches": true,
+    "seed_count": 4000
+  }
+}

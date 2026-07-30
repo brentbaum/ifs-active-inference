@@ -1,0 +1,80 @@
+{
+  "cell_summaries": {
+    "cell_1_reliable_regulated": {
+      "global_precision_mean": 0.8988581674462452,
+      "partner_argmax_accuracy": 1.0,
+      "root_movement": {
+        "lower_95": 0.4436333143572849,
+        "mean": 0.45256335455910174,
+        "upper_95": 0.46149339476091855
+      }
+    },
+    "cell_2_no_root_evidence": {
+      "paired_cell1_minus_cell2_movement": {
+        "lower_95": 0.4436333143572849,
+        "mean": 0.45256335455910174,
+        "upper_95": 0.46149339476091855
+      },
+      "root_log_bf_max_abs": 0.0,
+      "root_movement_max_abs": 0.0
+    },
+    "cell_3_unregulated": {
+      "global_precision_mean": 0.4991948085285285,
+      "paired_cell1_minus_cell3_movement": {
+        "lower_95": 0.05546058892335464,
+        "mean": 0.06733541626131241,
+        "upper_95": 0.07921024359927017
+      }
+    },
+    "cell_4_switch": {
+      "post_switch_partner_recovery": 0.99165625,
+      "pre_switch_query_error_max": 0.0,
+      "switch_onset_error": {
+        "maximum": 31,
+        "mean": 0.189,
+        "q95": 1
+      }
+    }
+  },
+  "criteria": {
+    "1_reliable_regulated": true,
+    "2_no_root_writing_and_uptake": true,
+    "3_regulation_increases_uptake": true,
+    "4_switch_tracking_and_retention": true,
+    "5_semantic_and_custody": true
+  },
+  "descriptive": {
+    "switch_onset_error": {
+      "maximum": 31,
+      "mean": 0.189,
+      "q95": 1
+    }
+  },
+  "immutable_sealed_verdict": "PASS",
+  "normalization_error_max": 1.432187701766452e-14,
+  "verdict_classes": {
+    "custody": {
+      "challenge_sha256": "6b09fd32e32e7b79e1ef5e99a136bf90f32695b10369eb04f902f4275f3a4c16",
+      "paired_indices_aligned": true,
+      "passed": true,
+      "released_block": [
+        4040000,
+        4043999
+      ],
+      "seeds_once_ascending_gap_free": true,
+      "trace_ledgers_verified_before_evaluation": true
+    },
+    "scientific": {
+      "1_reliable_regulated": true,
+      "2_no_root_writing_and_uptake": true,
+      "3_regulation_increases_uptake": true,
+      "4_switch_tracking_and_retention": true
+    },
+    "semantic": {
+      "maximum_normalization_error": 1.432187701766452e-14,
+      "maximum_regulation_only_root_log_bf": 0.0,
+      "posterior_normalization": true,
+      "regulation_only_root_log_bf_exact_zero": true
+    }
+  }
+}
