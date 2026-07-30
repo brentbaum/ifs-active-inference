@@ -1,0 +1,24 @@
+{
+  "affected_criterion": "root_accuracy_min",
+  "consumed_blocks": [
+    [
+      3400000,
+      3401999
+    ]
+  ],
+  "escrow_untouched": [
+    4040000,
+    4043999
+  ],
+  "gate_blocks_unopened": [
+    [
+      3402000,
+      3419999
+    ]
+  ],
+  "localized_defect": "recovery generator samples the root observation with p(O_G=G) as though it were p(O_G=1), so truth-zero worlds are generated from a likelihood different from the scorer",
+  "pilot_root_accuracy": 0.475,
+  "pilot_root_ece": 0.30359522775662495,
+  "status": "STOPPED_AT_STAGE0_GENERATOR_SCORER_MISMATCH",
+  "unattainable_frozen_floor": 0.7
+}

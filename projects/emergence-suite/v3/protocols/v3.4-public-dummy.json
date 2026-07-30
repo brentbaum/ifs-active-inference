@@ -1,0 +1,28 @@
+{
+  "config": {
+    "broadcast": true,
+    "length": 8,
+    "partner_pattern": "reliable",
+    "regulation_present": true,
+    "root_evidence_present": false
+  },
+  "observations": [
+    {
+      "outcome": 1,
+      "partner_action": 0,
+      "regulation_response": 1,
+      "relational": [1, 1, 0, 1, 0],
+      "root_evidence": null,
+      "time": 0
+    },
+    {
+      "outcome": 1,
+      "partner_action": 1,
+      "regulation_response": 1,
+      "relational": [1, 1, 0, 1, 0],
+      "root_evidence": null,
+      "time": 1
+    }
+  ],
+  "purpose": "Public enumerable semantic fixture; no development seed."
+}

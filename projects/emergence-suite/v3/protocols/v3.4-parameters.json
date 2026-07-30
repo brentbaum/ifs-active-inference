@@ -1,0 +1,61 @@
+{
+  "bounds": {
+    "B_max_v34_relational": 3.8066624897703196,
+    "B_max_v34_root": 1.9736255489018601,
+    "implied_relational_binary_change_bound": 0.7405361848863923,
+    "implied_root_binary_change_bound": 0.45691585232961845
+  },
+  "criteria": {
+    "broadcast_local_identity_max": 1e-10,
+    "broadcast_root_uptake_min": 0.03604713882065614,
+    "coverage_min": 0.93,
+    "ece_max": 0.2,
+    "edge_accuracy_min": 0.82,
+    "factorial_transfer_difference_min": 0.025213293259721804,
+    "factorial_uptake_difference_min": 0.036018990371031144,
+    "intrusive_trust_max": 0.13393668369611583,
+    "local_precision_difference_min": 0.2120590298067602,
+    "partner_accuracy_min": 0.91,
+    "program_accuracy_min": 0.76,
+    "reliable_trust_min": 0.7018119593617874,
+    "root_accuracy_min": 0.7,
+    "soothing_contingency_gap_min": 0.29916377467585503,
+    "switch_onset_error_max": 2.0,
+    "transition_accuracy_min": 0.94,
+    "unstable_transition_probability_min": 0.7400675059519821
+  },
+  "hyperparameters": {
+    "code_length_scale": 1.0,
+    "transition_stay": 0.88
+  },
+  "pilot_summary_sha256": "6eaebd5b30fa11fcb88fc629718ffe1ffa666353284e0f93393218e4a71a41ff",
+  "seed_blocks": {
+    "escrow_closed": [
+      4040000,
+      4043999
+    ],
+    "gate2": [
+      3402000,
+      3404999
+    ],
+    "gate3": [
+      3405000,
+      3409999
+    ],
+    "gate4": [
+      3410000,
+      3411999
+    ],
+    "gate5": [
+      3412000,
+      3419999
+    ],
+    "pilot": [
+      3400000,
+      3401999
+    ]
+  },
+  "stage": "V3.4",
+  "status": "STOPPED_AT_STAGE0_GENERATOR_SCORER_MISMATCH",
+  "tolerance": 1e-10
+}
