@@ -194,3 +194,9 @@ Escrow: C-V32 seeds 4020000:4023999, released by this record. Pilot blocks 32320
 c6ae7f5169be554cbead523f2ffe6ac797033eb63937ccf59bb7c104e21ac3a4  C-V33-prune-challenge.md
 ```
 Escrow: C-V33 seeds 4030000:4033999, released by this record. Pilot blocks 3332000:3333959 BARRED (two evaluator pilot passes: hand-rolled readout superseded by frozen-construct pilot; both traced). The do-over null is sealed prospectively as an equivalence claim.
+
+## C-V34 seal (2026-07-30)
+```
+6b09fd32e32e7b79e1ef5e99a136bf90f32695b10369eb04f902f4275f3a4c16  C-V34-relate-challenge.md
+```
+Escrow: C-V34 seeds 4040000:4043999, released by this record. Pilot blocks 3432000:3433959 BARRED (traced exact-cell pilots).
