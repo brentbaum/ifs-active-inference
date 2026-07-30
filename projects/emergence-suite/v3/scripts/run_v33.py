@@ -429,8 +429,11 @@ def _credible_contains(posterior: v33.ContextPosterior, truth: Any) -> bool:
 
 
 @traced_execution
-def _worker_recovery(task: tuple[int, int, float, float]) -> dict[str, Any]:
-    seed, length, concentration, scale = task
+def _worker_recovery(
+    task: tuple[int, int, float, float] | tuple[int, int, float, float, bool],
+) -> dict[str, Any]:
+    seed, length, concentration, scale = task[:4]
+    audit_oracle = bool(task[4]) if len(task) == 5 else False
     hp = v31.V31Hyperparameters(concentration, scale)
     world = v33.generate_recovery_world(
         seed, length=length, hyperparameters=hp
@@ -442,7 +445,7 @@ def _worker_recovery(task: tuple[int, int, float, float]) -> dict[str, Any]:
     truth_probability = posterior.structure_probability(
         world.current_truth_structure
     )
-    return {
+    row = {
         "seed": seed,
         "cell": "recovery",
         "truth_bits": truth_bits,
@@ -470,6 +473,27 @@ def _worker_recovery(task: tuple[int, int, float, float]) -> dict[str, Any]:
             repr(world.rng_keys).encode()
         ).hexdigest(),
     }
+    if audit_oracle:
+        copied = [asdict(item) for item in world.slices]
+        programs, probabilities, evidence = v33_oracle.posterior(
+            copied,
+            concentration=concentration,
+            code_length_scale=scale,
+        )
+        production = {
+            _program_bits(program): probability
+            for program, probability in zip(
+                posterior.programs, posterior.probabilities
+            )
+        }
+        row["oracle_probability_error"] = max(
+            abs(probability - production[program])
+            for program, probability in zip(programs, probabilities)
+        )
+        row["oracle_evidence_error"] = abs(
+            evidence - posterior.log_evidence
+        )
+    return row
 
 
 def _recovery_metrics(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
@@ -505,6 +529,89 @@ def _recovery_metrics(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
             row["exact_log_probability_error"] for row in rows
         ),
     }
+
+
+def run_gate2() -> bool:
+    parameters = json.loads(PARAMETERS.read_text())
+    if parameters["status"] != "FROZEN_AFTER_ATTAINABILITY_PILOT":
+        raise RuntimeError("V3.3 pilot floors must be frozen before Gate 2")
+    rows = _trace_map(
+        "gate-2",
+        [
+            (seed, 64, 0.5, 1.0, (seed - 3_302_000) % 30 == 0)
+            for seed in range(3_302_000, 3_305_000)
+        ],
+        _worker_recovery,
+    )
+    metrics = _recovery_metrics(rows)
+    oracle_rows = [
+        row for row in rows if "oracle_probability_error" in row
+    ]
+    metrics["oracle_audit_worlds"] = len(oracle_rows)
+    metrics["maximum_oracle_probability_error"] = max(
+        row["oracle_probability_error"] for row in oracle_rows
+    )
+    metrics["maximum_oracle_evidence_error"] = max(
+        row["oracle_evidence_error"] for row in oracle_rows
+    )
+    criteria = parameters["criteria"]
+    checks = {
+        "edge_accuracy": (
+            metrics["minimum_edge_accuracy"] >= criteria["edge_accuracy_min"]
+        ),
+        "program_accuracy": (
+            metrics["program_accuracy"] >= criteria["program_accuracy_min"]
+        ),
+        "brier": metrics["brier"] <= criteria["brier_max"],
+        "ece": metrics["ece"] <= criteria["ece_max"],
+        "coverage": metrics["coverage"] >= criteria["coverage_min"],
+        "normalization": (
+            metrics["maximum_normalization_error"] <= TOLERANCE
+        ),
+        "exact_log_probability": (
+            metrics["maximum_exact_log_probability_error"] <= TOLERANCE
+        ),
+        "independent_oracle_probability": (
+            metrics["maximum_oracle_probability_error"] <= TOLERANCE
+        ),
+        "independent_oracle_evidence": (
+            metrics["maximum_oracle_evidence_error"] <= TOLERANCE
+        ),
+    }
+    passed = all(checks.values())
+    payload = {
+        "verdict": "PASS" if passed else "FAIL",
+        "seed_block": [3_302_000, 3_304_999],
+        "criteria": criteria,
+        "checks": checks,
+        "metrics": metrics,
+        "trace_ledger": "gate-2-trace-hashes.json",
+    }
+    _write_json("gate-2.json", payload)
+    (RESULTS / "gate-2-report.md").write_text(
+        "# V3.3 Gate 2 — exact recovery\n\n"
+        f"Verdict: **{payload['verdict']}**.\n\n"
+        "The scorer recovered worlds sampled from its own exact prior. "
+        f"Minimum edge accuracy was {metrics['minimum_edge_accuracy']:.3f}; "
+        f"exact-program accuracy {metrics['program_accuracy']:.3f}; Brier "
+        f"{metrics['brier']:.3f}; ECE {metrics['ece']:.3f}; and 95% set "
+        f"coverage {metrics['coverage']:.3f}. The independent oracle's "
+        f"maximum probability error was "
+        f"{metrics['maximum_oracle_probability_error']:.3e}.\n",
+        encoding="utf-8",
+    )
+    if passed:
+        parameters["status"] = "GATE2_PASSED"
+        PARAMETERS.write_text(
+            json.dumps(parameters, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+    else:
+        _write_json(
+            "gate-2-diagnosis-stub.json",
+            {"failure": [key for key, value in checks.items() if not value]},
+        )
+    return passed
 
 
 def _trajectory(world: v33.ReductionWorld) -> list[dict[str, float]]:
@@ -589,7 +696,24 @@ def _worker_pilot_assays(seed: int) -> dict[str, Any]:
     suggestion_world = v33.generate_world(seed, suggestion_config)
     premature_world = v33.generate_world(seed, premature_config)
     post_world = v33.generate_world(seed, post_config)
+    no_do_world = v33.generate_world(seed, corrected_config)
     adaptive_world = v33.generate_world(seed, adaptive_config)
+    event = v33.root_revision_event(post_world)
+    post_times = [
+        item.time
+        for item in post_world.slices
+        if item.episode_kind == "imaginal_post"
+    ]
+    no_do_times = [
+        item.time
+        for item in no_do_world.slices
+        if item.episode_kind == "no_do_masked"
+    ]
+    premature_times = [
+        item.time
+        for item in premature_world.slices
+        if item.episode_kind == "imaginal_premature"
+    ]
     return {
         "seed": seed,
         "cell": "pilot_exact_gate3_configurations",
@@ -598,6 +722,33 @@ def _worker_pilot_assays(seed: int) -> dict[str, Any]:
         "premature": _arm_summary(premature_world),
         "post_revision": _arm_summary(post_world),
         "adaptive": _arm_summary(adaptive_world),
+        "schedule": {
+            "root_revision_event": event,
+            "first_post_revision_slice": (
+                min(post_times) if post_times else None
+            ),
+            "first_no_do_opportunity_slice": (
+                min(no_do_times) if no_do_times else None
+            ),
+            "first_premature_slice": (
+                min(premature_times) if premature_times else None
+            ),
+            "post_is_first_slice_after_event": (
+                event is not None
+                and bool(post_times)
+                and min(post_times) == event + 1
+            ),
+            "no_do_is_first_slice_after_event": (
+                event is not None
+                and bool(no_do_times)
+                and min(no_do_times) == event + 1
+            ),
+            "premature_begins_before_event": (
+                event is not None
+                and bool(premature_times)
+                and min(premature_times) < event
+            ),
+        },
         "corrected_trajectory": _trajectory(corrected_world),
         "post_revision_trajectory": _trajectory(post_world),
     }
@@ -644,21 +795,325 @@ def _material_from_row(
     )
 
 
+@traced_execution
+def _worker_gate3(task: tuple[int, str, Mapping[str, float]]) -> dict[str, Any]:
+    seed, cell, thresholds = task
+    base = {
+        "corrective_evidence": "configural",
+        "do_over": "none",
+        "corrective_length": 18,
+        "return_length": 18,
+    }
+    if cell == "correction":
+        world = v33.generate_world(seed, v33.ReductionConfig(**base))
+        arm = _arm_summary(world)
+        trajectory = _trajectory(world)
+        return {
+            "seed": seed,
+            "cell": cell,
+            "arm": arm,
+            "material": _material_from_row(arm, trajectory, thresholds),
+        }
+    if cell == "suggestion":
+        world = v33.generate_world(
+            seed,
+            v33.ReductionConfig(
+                "suggestion_only",
+                "none",
+                corrective_length=18,
+                return_length=18,
+            ),
+        )
+        arm = _arm_summary(world)
+        trajectory = _trajectory(world)
+        return {
+            "seed": seed,
+            "cell": cell,
+            "arm": arm,
+            "material": _material_from_row(arm, trajectory, thresholds),
+        }
+    if cell == "premature":
+        world = v33.generate_world(
+            seed,
+            v33.ReductionConfig(
+                "none",
+                "premature",
+                return_burden=True,
+                corrective_length=18,
+                return_length=24,
+            ),
+        )
+        arm = _arm_summary(world)
+        trajectory = _trajectory(world)
+        return {
+            "seed": seed,
+            "cell": cell,
+            "arm": arm,
+            "material": _material_from_row(arm, trajectory, thresholds),
+        }
+    if cell == "speedup":
+        no_world = v33.generate_world(seed, v33.ReductionConfig(**base))
+        post_world = v33.generate_world(
+            seed,
+            v33.ReductionConfig(
+                "configural",
+                "post_revision",
+                corrective_length=18,
+                return_length=18,
+            ),
+        )
+        no_time = _first_from_trajectory(
+            _trajectory(no_world),
+            mode=thresholds["mode_retained"],
+            burden=thresholds["burden_edge_mass_max"],
+            bf=thresholds["absent_present_bf_min"],
+        )
+        post_time = _first_from_trajectory(
+            _trajectory(post_world),
+            mode=thresholds["mode_retained"],
+            burden=thresholds["burden_edge_mass_max"],
+            bf=thresholds["absent_present_bf_min"],
+        )
+        return {
+            "seed": seed,
+            "cell": cell,
+            "no_do_time": no_time,
+            "post_revision_time": post_time,
+            "speedup": (
+                (no_time - post_time) / no_time
+                if no_time is not None and post_time is not None
+                else None
+            ),
+            "root_revision_event": v33.root_revision_event(post_world),
+        }
+    if cell == "necessity":
+        world = v33.generate_world(seed, v33.ReductionConfig(**base))
+        arm = _arm_summary(world)
+        trajectory = _trajectory(world)
+        return {
+            "seed": seed,
+            "cell": cell,
+            "material": _material_from_row(arm, trajectory, thresholds),
+        }
+    if cell == "adaptive":
+        world = v33.generate_world(
+            seed,
+            v33.ReductionConfig(
+                "configural",
+                "none",
+                adaptive_edge="W_Y",
+                corrective_length=18,
+                return_length=18,
+            ),
+        )
+        arm = _arm_summary(world)
+        trajectory = _trajectory(world)
+        return {
+            "seed": seed,
+            "cell": cell,
+            "arm": arm,
+            "material": _material_from_row(arm, trajectory, thresholds),
+        }
+    world = v33.generate_world(seed, v33.ReductionConfig(**base))
+    arm = _arm_summary(world)
+    return {
+        "seed": seed,
+        "cell": cell,
+        "old_graph": arm["old_graph"],
+        "neutral_error": arm["neutral_error"],
+    }
+
+
+def _bootstrap_mean_interval(
+    values: Sequence[float], *, seed: int, replicates: int = 10_000
+) -> tuple[float, float]:
+    array = np.asarray(values, dtype=float)
+    rng = np.random.default_rng(seed)
+    means = np.empty(replicates, dtype=float)
+    for index in range(replicates):
+        means[index] = float(
+            np.mean(rng.choice(array, size=len(array), replace=True))
+        )
+    return (
+        float(np.quantile(means, 0.025)),
+        float(np.quantile(means, 0.975)),
+    )
+
+
+def run_gate3() -> bool:
+    parameters = json.loads(PARAMETERS.read_text())
+    if parameters["status"] != "GATE2_PASSED":
+        raise RuntimeError("V3.3 Gate 2 must pass before Gate 3")
+    thresholds = parameters["material_readout"]
+    allocations = (
+        ("correction", 3_305_000, 3_305_800),
+        ("suggestion", 3_305_800, 3_306_500),
+        ("premature", 3_306_500, 3_307_200),
+        ("speedup", 3_307_200, 3_308_000),
+        ("necessity", 3_308_000, 3_308_700),
+        ("adaptive", 3_308_700, 3_309_400),
+        ("neutral_history", 3_309_400, 3_310_000),
+    )
+    tasks = [
+        (seed, cell, thresholds)
+        for cell, start, end in allocations
+        for seed in range(start, end)
+    ]
+    rows = _trace_map("gate-3", tasks, _worker_gate3)
+    grouped = {
+        cell: [row for row in rows if row["cell"] == cell]
+        for cell, _, _ in allocations
+    }
+    speeds = [
+        float(row["speedup"])
+        for row in grouped["speedup"]
+        if row["speedup"] is not None
+    ]
+    speed_interval = _bootstrap_mean_interval(speeds, seed=3_307_200)
+    metrics = {
+        "correction_material_rate": float(
+            np.mean([row["material"] for row in grouped["correction"]])
+        ),
+        "suggestion_false_reduction_rate": float(
+            np.mean([row["material"] for row in grouped["suggestion"]])
+        ),
+        "suggestion_root_revision_mean": float(
+            np.mean(
+                [row["arm"]["root_revision"] for row in grouped["suggestion"]]
+            )
+        ),
+        "premature_durable_reduction_rate": float(
+            np.mean([row["material"] for row in grouped["premature"]])
+        ),
+        "necessity_material_rate": float(
+            np.mean([row["material"] for row in grouped["necessity"]])
+        ),
+        "adaptive_edge_survival_mean": float(
+            np.mean(
+                [
+                    row["arm"]["adaptive_w_y"]
+                    for row in grouped["adaptive"]
+                ]
+            )
+        ),
+        "adaptive_material_rate": float(
+            np.mean([row["material"] for row in grouped["adaptive"]])
+        ),
+        "mode_retention_mean": float(
+            np.mean(
+                [row["arm"]["mode"] for row in grouped["correction"]]
+            )
+        ),
+        "history_reconstruction_mean": float(
+            np.mean([row["old_graph"] for row in grouped["neutral_history"]])
+        ),
+        "neutral_error_max": max(
+            row["neutral_error"] for row in grouped["neutral_history"]
+        ),
+        "speedup_eligible_worlds": len(speeds),
+        "do_over_speedup_mean": float(np.mean(speeds)),
+        "do_over_speedup_ci95": list(speed_interval),
+    }
+    criteria = parameters["criteria"]
+    checks = {
+        "corrective_material": (
+            metrics["correction_material_rate"]
+            >= criteria["material_reduction_rate_min"]
+        ),
+        "suggestion_specificity": (
+            metrics["suggestion_false_reduction_rate"]
+            <= criteria["suggestion_false_reduction_max"]
+        ),
+        "root_revision_without_pruning": (
+            metrics["suggestion_root_revision_mean"] > 0.0
+        ),
+        "premature_not_durable": (
+            metrics["premature_durable_reduction_rate"]
+            <= criteria["premature_durable_reduction_max"]
+        ),
+        "do_over_not_necessary": (
+            metrics["necessity_material_rate"]
+            >= criteria["material_reduction_rate_min"]
+        ),
+        "adaptive_edge_survives": (
+            metrics["adaptive_edge_survival_mean"]
+            >= criteria["adaptive_edge_survival_min"]
+        ),
+        "mode_retained": (
+            metrics["mode_retention_mean"]
+            >= criteria["mode_retention_min"]
+        ),
+        "history_query": (
+            metrics["history_reconstruction_mean"]
+            >= criteria["history_reconstruction_min"]
+        ),
+        "neutral_identity": metrics["neutral_error_max"] <= TOLERANCE,
+        "do_over_acceleration": (
+            metrics["do_over_speedup_mean"]
+            >= criteria["do_over_speedup_min"]
+            and speed_interval[0] > 0.0
+        ),
+    }
+    passed = all(checks.values())
+    payload = {
+        "verdict": "PASS" if passed else "FAIL",
+        "seed_block": [3_305_000, 3_309_999],
+        "criteria": criteria,
+        "checks": checks,
+        "metrics": metrics,
+        "trace_ledger": "gate-3-trace-hashes.json",
+    }
+    _write_json("gate-3.json", payload)
+    (RESULTS / "gate-3-report.md").write_text(
+        "# V3.3 Gate 3 — same-edge reduction and do-over\n\n"
+        f"Verdict: **{payload['verdict']}**.\n\n"
+        f"Configural correction produced material reduction in "
+        f"{metrics['correction_material_rate']:.3f} of worlds. Suggestion-only "
+        f"false reduction was {metrics['suggestion_false_reduction_rate']:.3f}; "
+        f"premature durable reduction was "
+        f"{metrics['premature_durable_reduction_rate']:.3f}. Mean timely "
+        f"do-over speedup was {metrics['do_over_speedup_mean']:.6f} "
+        f"(95% whole-world bootstrap "
+        f"[{speed_interval[0]:.6f}, {speed_interval[1]:.6f}]).\n",
+        encoding="utf-8",
+    )
+    if passed:
+        parameters["status"] = "GATE3_PASSED"
+        PARAMETERS.write_text(
+            json.dumps(parameters, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+    else:
+        parameters["status"] = "STOPPED_AT_GATE3"
+        PARAMETERS.write_text(
+            json.dumps(parameters, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        _write_json(
+            "gate-3-diagnosis-stub.json",
+            {
+                "failure": [key for key, value in checks.items() if not value],
+                "metrics": metrics,
+            },
+        )
+    return passed
+
+
 def run_pilot() -> bool:
     parameters = json.loads(PARAMETERS.read_text())
-    if parameters["status"] != "GATE1_PASSED_PILOT_UNOPENED":
-        raise RuntimeError("Gate 1 must pass before the V3.3 pilot")
+    if parameters["status"] != "EVENT_INDEXED_REPAIR_PILOT_PENDING":
+        raise RuntimeError("event-indexed V3.3 pilot is not authorized")
     recovery_rows = _trace_map(
-        "stage0-pilot-recovery",
+        "stage0-event-pilot-recovery",
         [
             (seed, 64, 0.5, 1.0)
-            for seed in range(3_300_000, 3_301_000)
+            for seed in range(3_330_000, 3_331_000)
         ],
         _worker_recovery,
     )
     assay_rows = _trace_map(
-        "stage0-pilot-assays",
-        list(range(3_301_000, 3_302_000)),
+        "stage0-event-pilot-assays",
+        list(range(3_331_000, 3_332_000)),
         _worker_pilot_assays,
     )
     recovery = _recovery_metrics(recovery_rows)
@@ -684,7 +1139,7 @@ def run_pilot() -> bool:
     )
     if not separable:
         _write_json(
-            "stage0-pilot.json",
+            "stage0-event-pilot.json",
             {
                 "verdict": "STOP_UNATTAINABLE",
                 "recovery": recovery,
@@ -775,13 +1230,45 @@ def run_pilot() -> bool:
         "neutral_error_max": max(
             row["corrected"]["neutral_error"] for row in assay_rows
         ),
+        "event_world_rate": float(
+            np.mean(
+                [
+                    row["schedule"]["root_revision_event"] is not None
+                    for row in assay_rows
+                ]
+            )
+        ),
+        "post_schedule_identity_rate": float(
+            np.mean(
+                [
+                    row["schedule"]["post_is_first_slice_after_event"]
+                    for row in assay_rows
+                ]
+            )
+        ),
+        "no_do_schedule_identity_rate": float(
+            np.mean(
+                [
+                    row["schedule"]["no_do_is_first_slice_after_event"]
+                    for row in assay_rows
+                ]
+            )
+        ),
+        "premature_precedes_event_rate": float(
+            np.mean(
+                [
+                    row["schedule"]["premature_begins_before_event"]
+                    for row in assay_rows
+                ]
+            )
+        ),
     }
     if (
         attainable["material_reduction_rate"] <= 0.0
         or attainable["do_over_speedup"] <= 0.0
     ):
         _write_json(
-            "stage0-pilot.json",
+            "stage0-event-pilot.json",
             {
                 "verdict": "STOP_UNATTAINABLE",
                 "recovery": recovery,
@@ -843,9 +1330,7 @@ def run_pilot() -> bool:
         "adaptive_edge_survival_min": max(
             0.50, round(attainable["adaptive_edge_survival"] * 0.75, 3)
         ),
-        "do_over_speedup_min": round(
-            attainable["do_over_speedup"] * 0.5, 3
-        ),
+        "do_over_speedup_min": attainable["do_over_speedup"] * 0.5,
     }
     parameters["status"] = "FROZEN_AFTER_ATTAINABILITY_PILOT"
     parameters["material_readout"] = readout
@@ -864,10 +1349,10 @@ def run_pilot() -> bool:
         encoding="utf-8",
     )
     _write_json(
-        "stage0-pilot.json",
+        "stage0-event-pilot.json",
         {
             "verdict": "DESCRIPTIVE_ATTAINABILITY_PASS",
-            "barred_block": [3_300_000, 3_301_999],
+            "barred_block": [3_330_000, 3_331_999],
             "recovery": recovery,
             "material_readout": readout,
             "attainable": attainable,
@@ -879,9 +1364,16 @@ def run_pilot() -> bool:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("step", choices=("gate1", "pilot"))
+    parser.add_argument("step", choices=("gate1", "pilot", "gate2", "gate3"))
     args = parser.parse_args()
-    passed = run_gate1() if args.step == "gate1" else run_pilot()
+    if args.step == "gate1":
+        passed = run_gate1()
+    elif args.step == "pilot":
+        passed = run_pilot()
+    elif args.step == "gate2":
+        passed = run_gate2()
+    else:
+        passed = run_gate3()
     return 0 if passed else 1
 
 

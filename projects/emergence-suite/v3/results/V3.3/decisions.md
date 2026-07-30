@@ -10,4 +10,12 @@
    dormancy identities.
 5. The stage stopped after the pilot showed zero attainable do-over speedup.
    No schedule, threshold, likelihood, or estimand was tuned after inspection.
-
+6. The evaluator-authorized repair moved the timely and masked no-do
+   opportunities to the first slice after the observed root-revision event.
+   The premature episode remained ordered before corrective evidence. No
+   likelihood, prior, typed evidence, or readout changed.
+7. The fresh pilot's nonzero speedup (`0.0005`) was not rounded to zero. Its
+   criterion floor was frozen at half that value (`0.00025`) before Gate 2.
+8. Gate 3 failed the prospective speedup criterion and the separately reported
+   suggestion-only root-revision sign check. The stage stopped without opening
+   Gate 4 or Gate 5.

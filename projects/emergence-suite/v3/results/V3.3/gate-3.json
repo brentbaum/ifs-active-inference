@@ -1,0 +1,52 @@
+{
+  "checks": {
+    "adaptive_edge_survives": true,
+    "corrective_material": true,
+    "do_over_acceleration": false,
+    "do_over_not_necessary": true,
+    "history_query": true,
+    "mode_retained": true,
+    "neutral_identity": true,
+    "premature_not_durable": true,
+    "root_revision_without_pruning": false,
+    "suggestion_specificity": true
+  },
+  "criteria": {
+    "adaptive_edge_survival_min": 0.748,
+    "brier_max": 0.24,
+    "coverage_min": 0.9,
+    "do_over_speedup_min": 0.00025,
+    "ece_max": 0.08,
+    "edge_accuracy_min": 0.66,
+    "history_reconstruction_min": 0.505,
+    "material_reduction_rate_min": 0.89,
+    "mode_retention_min": 0.9,
+    "premature_durable_reduction_max": 0.09,
+    "program_accuracy_min": 0.25,
+    "suggestion_false_reduction_max": 0.08
+  },
+  "metrics": {
+    "adaptive_edge_survival_mean": 0.998022948485152,
+    "adaptive_material_rate": 0.9814285714285714,
+    "correction_material_rate": 0.9775,
+    "do_over_speedup_ci95": [
+      -0.0009375,
+      0.0
+    ],
+    "do_over_speedup_mean": -0.0003125,
+    "history_reconstruction_mean": 0.6935534142718022,
+    "mode_retention_mean": 1.0000000000000002,
+    "necessity_material_rate": 0.9828571428571429,
+    "neutral_error_max": 0.0,
+    "premature_durable_reduction_rate": 0.004285714285714286,
+    "speedup_eligible_worlds": 800,
+    "suggestion_false_reduction_rate": 0.0,
+    "suggestion_root_revision_mean": -0.007463967250969002
+  },
+  "seed_block": [
+    3305000,
+    3309999
+  ],
+  "trace_ledger": "gate-3-trace-hashes.json",
+  "verdict": "FAIL"
+}

@@ -1,0 +1,54 @@
+{
+  "checks": {
+    "brier": true,
+    "coverage": true,
+    "ece": true,
+    "edge_accuracy": true,
+    "exact_log_probability": true,
+    "independent_oracle_evidence": true,
+    "independent_oracle_probability": true,
+    "normalization": true,
+    "program_accuracy": true
+  },
+  "criteria": {
+    "adaptive_edge_survival_min": 0.748,
+    "brier_max": 0.24,
+    "coverage_min": 0.9,
+    "do_over_speedup_min": 0.00025,
+    "ece_max": 0.08,
+    "edge_accuracy_min": 0.66,
+    "history_reconstruction_min": 0.505,
+    "material_reduction_rate_min": 0.89,
+    "mode_retention_min": 0.9,
+    "premature_durable_reduction_max": 0.09,
+    "program_accuracy_min": 0.25,
+    "suggestion_false_reduction_max": 0.08
+  },
+  "metrics": {
+    "brier": 0.19297028757974832,
+    "coverage": 0.9576666666666667,
+    "ece": 0.01613140356109771,
+    "edge_accuracy": {
+      "G_A": 0.8186666666666667,
+      "G_W": 0.807,
+      "G_Y": 0.824,
+      "M1_G": 0.7153333333333334,
+      "W_Y": 0.8233333333333334,
+      "doA_Y": 0.8853333333333333
+    },
+    "maximum_exact_log_probability_error": 0.0,
+    "maximum_normalization_error": 1.4432899320127035e-14,
+    "maximum_oracle_evidence_error": 0.0,
+    "maximum_oracle_probability_error": 0.0,
+    "minimum_edge_accuracy": 0.7153333333333334,
+    "oracle_audit_worlds": 100,
+    "program_accuracy": 0.29733333333333334,
+    "world_count": 3000
+  },
+  "seed_block": [
+    3302000,
+    3304999
+  ],
+  "trace_ledger": "gate-2-trace-hashes.json",
+  "verdict": "PASS"
+}

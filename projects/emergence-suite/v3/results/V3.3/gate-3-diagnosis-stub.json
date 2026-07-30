@@ -1,0 +1,24 @@
+{
+  "failure": [
+    "root_revision_without_pruning",
+    "do_over_acceleration"
+  ],
+  "metrics": {
+    "adaptive_edge_survival_mean": 0.998022948485152,
+    "adaptive_material_rate": 0.9814285714285714,
+    "correction_material_rate": 0.9775,
+    "do_over_speedup_ci95": [
+      -0.0009375,
+      0.0
+    ],
+    "do_over_speedup_mean": -0.0003125,
+    "history_reconstruction_mean": 0.6935534142718022,
+    "mode_retention_mean": 1.0000000000000002,
+    "necessity_material_rate": 0.9828571428571429,
+    "neutral_error_max": 0.0,
+    "premature_durable_reduction_rate": 0.004285714285714286,
+    "speedup_eligible_worlds": 800,
+    "suggestion_false_reduction_rate": 0.0,
+    "suggestion_root_revision_mean": -0.007463967250969002
+  }
+}

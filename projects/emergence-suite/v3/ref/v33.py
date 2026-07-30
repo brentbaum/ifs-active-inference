@@ -20,7 +20,10 @@ from .trace_sink import require_trace_sink
 
 
 STAGE_VERSION = "V3.3"
-DEVELOPMENT_BLOCK = (3_300_000, 3_329_999)
+DEVELOPMENT_BLOCKS = (
+    (3_300_000, 3_319_999),
+    (3_330_000, 3_331_999),
+)
 BURDEN_EDGES = ("M1_G", "G_W", "G_A", "G_Y")
 EDGE_NAMES = v31.EDGE_NAMES
 PROGRAMS = v31.PROGRAMS
@@ -145,8 +148,8 @@ def _rng(
     released_block: tuple[int, int] | None,
     keys: list[tuple[str, int, str, int | str]],
 ) -> np.random.Generator:
-    block = DEVELOPMENT_BLOCK if released_block is None else released_block
-    if not block[0] <= int(seed) <= block[1]:
+    blocks = DEVELOPMENT_BLOCKS if released_block is None else (released_block,)
+    if not any(block[0] <= int(seed) <= block[1] for block in blocks):
         raise ValueError("seed is outside the authorized V3.3 block")
     key = (STAGE_VERSION, int(seed), str(component), event)
     keys.append(key)
@@ -526,59 +529,66 @@ def generate_world(
                 )
             )
             current_time += 1
+    scheduled_opportunity = False
     for index in range(config.corrective_length):
         kind = (
             "corrective"
             if config.corrective_evidence != "none"
             else "ordinary"
         )
-        slices.append(
-            _sample_current_slice(
-                seed,
-                current_time,
-                config,
-                kind,
-                index,
-                released_block,
-                keys,
-            )
+        observed = _sample_current_slice(
+            seed,
+            current_time,
+            config,
+            kind,
+            index,
+            released_block,
+            keys,
         )
+        slices.append(observed)
         current_time += 1
-    if config.do_over == "post_revision":
-        for index in range(12):
-            slices.append(
-                _sample_current_slice(
-                    seed,
-                    current_time,
-                    config,
-                    "imaginal_post",
-                    index,
-                    released_block,
-                    keys,
-                )
-            )
-            current_time += 1
-    elif (
-        config.do_over == "none"
-        and config.corrective_evidence == "configural"
-    ):
-        # Same scheduled opportunity as the imaginal arm, but with every typed
-        # channel masked.  It contributes exactly zero structural evidence.
-        for _ in range(12):
-            slices.append(
-                ReductionSlice(
-                    current_time,
-                    1,
-                    None,
-                    None,
-                    None,
-                    None,
-                    None,
-                    None,
-                    "no_do_masked",
-                )
-            )
-            current_time += 1
+        root_revision_event = (
+            kind == "corrective"
+            and observed.mode == 1
+            and observed.root == 0
+        )
+        if root_revision_event and not scheduled_opportunity:
+            scheduled_opportunity = True
+            if config.do_over == "post_revision":
+                for imaginal_index in range(12):
+                    slices.append(
+                        _sample_current_slice(
+                            seed,
+                            current_time,
+                            config,
+                            "imaginal_post",
+                            imaginal_index,
+                            released_block,
+                            keys,
+                        )
+                    )
+                    current_time += 1
+            elif (
+                config.do_over == "none"
+                and config.corrective_evidence == "configural"
+            ):
+                # Same event-indexed opportunity as the imaginal arm, with
+                # every typed channel candidate-common masked.
+                for _ in range(12):
+                    slices.append(
+                        ReductionSlice(
+                            current_time,
+                            1,
+                            None,
+                            None,
+                            None,
+                            None,
+                            None,
+                            None,
+                            "no_do_masked",
+                        )
+                    )
+                    current_time += 1
     for index in range(config.return_length):
         slices.append(
             _sample_current_slice(
@@ -615,6 +625,19 @@ def generate_world(
         float(exact),
         provisional.rng_keys,
     )
+
+
+def root_revision_event(world: ReductionWorld) -> int | None:
+    """Return the first observed configural contradiction of the old M1→G link."""
+    for item in world.slices:
+        if (
+            item.context == 1
+            and item.episode_kind == "corrective"
+            and item.mode == 1
+            and item.root == 0
+        ):
+            return item.time
+    return None
 
 
 def append_neutral_observation(world: ReductionWorld) -> ReductionWorld:

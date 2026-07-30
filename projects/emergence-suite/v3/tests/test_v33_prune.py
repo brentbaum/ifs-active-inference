@@ -57,6 +57,61 @@ class V33PruneTests(unittest.TestCase):
             1e-10,
         )
 
+    def test_event_indexed_do_over_schedule(self):
+        timely = v33.generate_world(
+            3_330_000,
+            v33.ReductionConfig(
+                "configural",
+                "post_revision",
+                corrective_length=18,
+                return_length=18,
+            ),
+        )
+        no_do = v33.generate_world(
+            3_330_000,
+            v33.ReductionConfig(
+                "configural",
+                "none",
+                corrective_length=18,
+                return_length=18,
+            ),
+        )
+        event = v33.root_revision_event(timely)
+        timely_start = min(
+            item.time
+            for item in timely.slices
+            if item.episode_kind == "imaginal_post"
+        )
+        no_do_start = min(
+            item.time
+            for item in no_do.slices
+            if item.episode_kind == "no_do_masked"
+        )
+        self.assertEqual(timely_start, event + 1)
+        self.assertEqual(no_do_start, event + 1)
+        premature = v33.generate_world(
+            3_330_001,
+            v33.ReductionConfig(
+                "none",
+                "premature",
+                return_burden=True,
+                corrective_length=18,
+                return_length=24,
+            ),
+        )
+        self.assertLess(
+            max(
+                item.time
+                for item in premature.slices
+                if item.episode_kind == "imaginal_premature"
+            ),
+            min(
+                item.time
+                for item in premature.slices
+                if item.episode_kind == "ordinary"
+            ),
+        )
+
     def test_independent_oracle_copies_and_matches(self):
         world = v33.generate_world(
             3_300_002,

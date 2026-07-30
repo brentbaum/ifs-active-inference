@@ -1,33 +1,38 @@
 {
   "criteria": {
-    "adaptive_edge_survival_min": "PENDING",
-    "brier_max": "PENDING",
-    "coverage_min": "PENDING",
-    "do_over_speedup_min": "PENDING",
-    "ece_max": "PENDING",
-    "edge_accuracy_min": "PENDING",
-    "history_reconstruction_min": "PENDING",
-    "material_reduction_rate_min": "PENDING",
-    "mode_retention_min": "PENDING",
-    "premature_durable_reduction_max": "PENDING",
-    "program_accuracy_min": "PENDING",
-    "suggestion_false_reduction_max": "PENDING"
+    "adaptive_edge_survival_min": 0.748,
+    "brier_max": 0.24,
+    "coverage_min": 0.9,
+    "do_over_speedup_min": 0.00025,
+    "ece_max": 0.08,
+    "edge_accuracy_min": 0.66,
+    "history_reconstruction_min": 0.505,
+    "material_reduction_rate_min": 0.89,
+    "mode_retention_min": 0.9,
+    "premature_durable_reduction_max": 0.09,
+    "program_accuracy_min": 0.25,
+    "suggestion_false_reduction_max": 0.08
   },
   "hyperparameters": {
     "code_length_scale": 1.0,
     "concentration": 0.5
   },
   "material_readout": {
-    "absent_present_bf_min": "PENDING",
-    "burden_edge_mass_max": "PENDING",
-    "mode_retained": "PENDING",
+    "absent_present_bf_min": 5.3387558362702816e-08,
+    "burden_edge_mass_max": 0.8957220041345053,
+    "mode_retained": 0.9499999999999938,
     "neutral_tolerance": 1e-10,
     "stability_observations": 3
   },
+  "pilot_summary_sha256": "3ff99bba633215cf615fb21fb9bbb420f2da60a7b8b669a01fd7150a6c809fed",
   "seed_blocks": {
     "escrow_closed": [
       4030000,
       4033999
+    ],
+    "event_indexed_repair_pilot": [
+      3330000,
+      3331999
     ],
     "gate2": [
       3302000,
@@ -51,6 +56,6 @@
     ]
   },
   "stage": "V3.3",
-  "status": "STOPPED_AT_STAGE0_UNATTAINABLE_DO_OVER_SPEEDUP",
+  "status": "STOPPED_AT_GATE3",
   "tolerance": 1e-10
 }
