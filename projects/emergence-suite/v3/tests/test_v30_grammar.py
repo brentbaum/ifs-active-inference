@@ -8,6 +8,7 @@ from pathlib import Path
 import numpy as np
 
 from ref import audit, grammar, oracle
+from scripts.run_v30 import recovery_rows
 
 
 class V30GrammarTests(unittest.TestCase):
@@ -156,6 +157,51 @@ class V30GrammarTests(unittest.TestCase):
             4_000_000, released_block=(4_000_000, 4_001_999), length=1
         )
         self.assertEqual(world.seed, 4_000_000)
+
+    def test_gate5_parity_helper_forwards_robustness_hyperparameters(self):
+        cells = (
+            {},
+            {
+                "bounds": grammar.GrammarBounds(
+                    context_slots=1, mode_slots=1, cue_count=2
+                )
+            },
+            {
+                "bounds": grammar.GrammarBounds(
+                    context_slots=2, mode_slots=2, cue_count=3
+                )
+            },
+            {
+                "bounds": grammar.GrammarBounds(
+                    context_slots=3, mode_slots=3, cue_count=4
+                )
+            },
+            {"missingness": 0.25},
+            {
+                "hyperparameters": grammar.GrammarHyperparameters(
+                    diagnostic_reliability=0.86,
+                    concentration=0.5,
+                    code_length_scale=1.25,
+                )
+            },
+            {
+                "hyperparameters": grammar.GrammarHyperparameters(
+                    diagnostic_reliability=0.86,
+                    concentration=1.0,
+                    code_length_scale=1.0,
+                )
+            },
+        )
+        for offset, kwargs in enumerate(cells):
+            rows = recovery_rows(
+                [3_015_900 + offset],
+                length=3,
+                **kwargs,
+            )
+            self.assertLessEqual(
+                max(row["log_probability_parity_error"] for row in rows),
+                1e-10,
+            )
 
 
 if __name__ == "__main__":

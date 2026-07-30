@@ -1,0 +1,577 @@
+{
+  "cells": {
+    "concentration_1.0": {
+      "by_field": {
+        "active_contexts": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.999997629445586
+        },
+        "active_modes": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9999994007958167
+        },
+        "dynamics:cue_emission": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.998994846933465
+        },
+        "dynamics:outcome_emission": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9999997966352997
+        },
+        "edge:G_A": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9978356926444976
+        },
+        "edge:G_W": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9982392156256452
+        },
+        "edge:G_Y": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9979745087087639
+        },
+        "edge:M1_G": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9977256293419627
+        },
+        "edge:M2_G": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9993261448178455
+        },
+        "edge:M3_G": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9994499821144432
+        },
+        "edge:W_Y": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9975353305782163
+        },
+        "edge:doA_Y": {
+          "accuracy": 0.995,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9945113220852555
+        },
+        "scope:cue_emission": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9999999737304472
+        },
+        "scope:outcome_emission": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9999995530539074
+        }
+      },
+      "coverage_95": 1.0,
+      "coverage_95_interval": [
+        1.0,
+        1.0
+      ],
+      "ece_10_bin": 0.0008388790587272935,
+      "field_decision_count": 2800,
+      "macro_accuracy": 0.9996428571428572,
+      "macro_accuracy_95_interval": [
+        0.9989285714285714,
+        1.0
+      ],
+      "max_log_probability_parity_error": 1.2789769243681803e-13,
+      "world_count": 200
+    },
+    "cue_count_4": {
+      "by_field": {
+        "active_contexts": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9999983534979344
+        },
+        "active_modes": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9999982478837268
+        },
+        "dynamics:cue_emission": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9999999900713084
+        },
+        "dynamics:outcome_emission": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9999999743599761
+        },
+        "edge:G_A": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9999073452512586
+        },
+        "edge:G_W": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9992929588471042
+        },
+        "edge:G_Y": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9996231920678623
+        },
+        "edge:M1_G": {
+          "accuracy": 0.995,
+          "coverage_95": 0.995,
+          "mean_truth_probability": 0.9949082016145361
+        },
+        "edge:M2_G": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9979808442729358
+        },
+        "edge:M3_G": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9997582134837512
+        },
+        "edge:W_Y": {
+          "accuracy": 0.99,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9932231347425432
+        },
+        "edge:doA_Y": {
+          "accuracy": 0.995,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9934622823102631
+        },
+        "scope:cue_emission": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9999989785824082
+        },
+        "scope:outcome_emission": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9999997510050366
+        }
+      },
+      "coverage_95": 0.9996428571428572,
+      "coverage_95_interval": [
+        0.9989285714285714,
+        1.0
+      ],
+      "ece_10_bin": 0.0007750493979173664,
+      "field_decision_count": 2800,
+      "macro_accuracy": 0.9985714285714286,
+      "macro_accuracy_95_interval": [
+        0.9971428571428571,
+        0.9996428571428572
+      ],
+      "max_log_probability_parity_error": 1.2079226507921703e-13,
+      "world_count": 200
+    },
+    "missingness_0.25": {
+      "by_field": {
+        "active_contexts": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9996965463433796
+        },
+        "active_modes": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9991279752666137
+        },
+        "dynamics:cue_emission": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9999940240813475
+        },
+        "dynamics:outcome_emission": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9999702922551503
+        },
+        "edge:G_A": {
+          "accuracy": 0.99,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9876130461372754
+        },
+        "edge:G_W": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9953914013582912
+        },
+        "edge:G_Y": {
+          "accuracy": 0.99,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9879693183458704
+        },
+        "edge:M1_G": {
+          "accuracy": 0.985,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9866660403892001
+        },
+        "edge:M2_G": {
+          "accuracy": 0.995,
+          "coverage_95": 0.995,
+          "mean_truth_probability": 0.9906856710962765
+        },
+        "edge:M3_G": {
+          "accuracy": 0.995,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.991480673946279
+        },
+        "edge:W_Y": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9971314862737367
+        },
+        "edge:doA_Y": {
+          "accuracy": 0.99,
+          "coverage_95": 0.995,
+          "mean_truth_probability": 0.9894015565503085
+        },
+        "scope:cue_emission": {
+          "accuracy": 0.99,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9901116495523058
+        },
+        "scope:outcome_emission": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9996505760043746
+        }
+      },
+      "coverage_95": 0.9992857142857143,
+      "coverage_95_interval": [
+        0.9982142857142857,
+        1.0
+      ],
+      "ece_10_bin": 0.0017680929156355478,
+      "field_decision_count": 2800,
+      "macro_accuracy": 0.9953571428571428,
+      "macro_accuracy_95_interval": [
+        0.9928482142857143,
+        0.9978571428571429
+      ],
+      "max_log_probability_parity_error": 1.0658141036401503e-13,
+      "world_count": 200
+    },
+    "shorter_code_penalty": {
+      "by_field": {
+        "active_contexts": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9999983796584323
+        },
+        "active_modes": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9999999684893757
+        },
+        "dynamics:cue_emission": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9999296560822407
+        },
+        "dynamics:outcome_emission": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9999852240709025
+        },
+        "edge:G_A": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9978904542376114
+        },
+        "edge:G_W": {
+          "accuracy": 0.995,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9963855868633874
+        },
+        "edge:G_Y": {
+          "accuracy": 0.99,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9931692056135714
+        },
+        "edge:M1_G": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9999082330086196
+        },
+        "edge:M2_G": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9995878201129575
+        },
+        "edge:M3_G": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.997711428902019
+        },
+        "edge:W_Y": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9997380963620189
+        },
+        "edge:doA_Y": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9999337967514694
+        },
+        "scope:cue_emission": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9999961096895348
+        },
+        "scope:outcome_emission": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9999995156648939
+        }
+      },
+      "coverage_95": 1.0,
+      "coverage_95_interval": [
+        1.0,
+        1.0
+      ],
+      "ece_10_bin": 0.0006499898447356203,
+      "field_decision_count": 2800,
+      "macro_accuracy": 0.9989285714285714,
+      "macro_accuracy_95_interval": [
+        0.9975,
+        1.0
+      ],
+      "max_log_probability_parity_error": 1.2789769243681803e-13,
+      "world_count": 200
+    },
+    "slot_bounds_1": {
+      "by_field": {
+        "active_contexts": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 1.0
+        },
+        "active_modes": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.999243642929485
+        },
+        "dynamics:cue_emission": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.99992668189154
+        },
+        "dynamics:outcome_emission": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9999924123239048
+        },
+        "edge:G_A": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.999813179601367
+        },
+        "edge:G_W": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9994846604043996
+        },
+        "edge:G_Y": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9995475509973454
+        },
+        "edge:M1_G": {
+          "accuracy": 0.995,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9958623315867524
+        },
+        "edge:M2_G": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9993072220403353
+        },
+        "edge:M3_G": {
+          "accuracy": 0.99,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.993062612053403
+        },
+        "edge:W_Y": {
+          "accuracy": 0.995,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9965638500541742
+        },
+        "edge:doA_Y": {
+          "accuracy": 0.99,
+          "coverage_95": 0.995,
+          "mean_truth_probability": 0.9899724142523345
+        },
+        "scope:cue_emission": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.999999751213065
+        },
+        "scope:outcome_emission": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.999998172579435
+        }
+      },
+      "coverage_95": 0.9996428571428572,
+      "coverage_95_interval": [
+        0.9989285714285714,
+        1.0
+      ],
+      "ece_10_bin": 0.001141217426941527,
+      "field_decision_count": 2800,
+      "macro_accuracy": 0.9978571428571429,
+      "macro_accuracy_95_interval": [
+        0.9960714285714286,
+        0.9992857142857143
+      ],
+      "max_log_probability_parity_error": 1.2789769243681803e-13,
+      "world_count": 200
+    },
+    "slot_bounds_2": {
+      "by_field": {
+        "active_contexts": {
+          "accuracy": 0.995,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9931852656363372
+        },
+        "active_modes": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9999817068527024
+        },
+        "dynamics:cue_emission": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.999999815197811
+        },
+        "dynamics:outcome_emission": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.999999983081131
+        },
+        "edge:G_A": {
+          "accuracy": 0.995,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9943351985833024
+        },
+        "edge:G_W": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9997002306469909
+        },
+        "edge:G_Y": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9998141409027527
+        },
+        "edge:M1_G": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9996280657344403
+        },
+        "edge:M2_G": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9997212719103203
+        },
+        "edge:M3_G": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9996465795031245
+        },
+        "edge:W_Y": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9976113044212298
+        },
+        "edge:doA_Y": {
+          "accuracy": 0.99,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9932978680424701
+        },
+        "scope:cue_emission": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.999999132675334
+        },
+        "scope:outcome_emission": {
+          "accuracy": 1.0,
+          "coverage_95": 1.0,
+          "mean_truth_probability": 0.9999327984289473
+        }
+      },
+      "coverage_95": 1.0,
+      "coverage_95_interval": [
+        1.0,
+        1.0
+      ],
+      "ece_10_bin": 0.00045357308196093476,
+      "field_decision_count": 2800,
+      "macro_accuracy": 0.9985714285714286,
+      "macro_accuracy_95_interval": [
+        0.9971428571428571,
+        0.9996428571428572
+      ],
+      "max_log_probability_parity_error": 1.2789769243681803e-13,
+      "world_count": 200
+    }
+  },
+  "criteria": {
+    "concentration_1.0": {
+      "accuracy": true,
+      "coverage": true,
+      "ece": true,
+      "log_probability": true
+    },
+    "cue_count_4": {
+      "accuracy": true,
+      "coverage": true,
+      "ece": true,
+      "log_probability": true
+    },
+    "missingness_0.25": {
+      "accuracy": true,
+      "coverage": true,
+      "ece": true,
+      "log_probability": true
+    },
+    "shorter_code_penalty": {
+      "accuracy": true,
+      "coverage": true,
+      "ece": true,
+      "log_probability": true
+    },
+    "slot_bounds_1": {
+      "accuracy": true,
+      "coverage": true,
+      "ece": true,
+      "log_probability": true
+    },
+    "slot_bounds_2": {
+      "accuracy": true,
+      "coverage": true,
+      "ece": true,
+      "log_probability": true
+    }
+  },
+  "cumulative": {
+    "gate1": "PASS",
+    "gate2": "PASS",
+    "gate3": "PASS",
+    "gate4": "PASS"
+  },
+  "verdict": "PASS"
+}

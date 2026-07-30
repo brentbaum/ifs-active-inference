@@ -1,0 +1,10 @@
+{
+  "excluded_parity_derived_fields": [
+    "verdict",
+    "criteria.*.log_probability",
+    "cells.*.max_log_probability_parity_error"
+  ],
+  "non_parity_quantities_bitwise_identical": true,
+  "original_shorter_code_penalty_error": 1.2473394093880898,
+  "repaired_shorter_code_penalty_error": 1.2789769243681803e-13
+}

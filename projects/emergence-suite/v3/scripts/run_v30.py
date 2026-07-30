@@ -82,12 +82,21 @@ def _coverage(probabilities: tuple[float, ...], truth_index: int) -> bool:
 
 def recovery_rows(seeds: Iterable[int], *, length: int = 12, **world_kwargs: Any):
     rows = []
+    parity_hyperparameters = world_kwargs.get(
+        "hyperparameters", grammar.DEFAULT_HYPERPARAMETERS
+    )
     for seed in seeds:
         world = grammar.generate_world(seed, length=length, **world_kwargs)
         posterior = grammar.score_world(world)
         truths = grammar.structure_values(world.structure)
         local_parity = abs(
-            sum(grammar.local_log_scores(world, world.structure).values())
+            sum(
+                grammar.local_log_scores(
+                    world,
+                    world.structure,
+                    parity_hyperparameters,
+                ).values()
+            )
             - world.exact_log_probability
         )
         for field, truth in truths.items():
@@ -473,7 +482,7 @@ def run_gate4() -> None:
         raise SystemExit("gate 4 failed")
 
 
-def run_gate5() -> None:
+def run_gate5(*, repaired: bool = False) -> None:
     configurations = [
         (
             "slot_bounds_1",
@@ -543,38 +552,89 @@ def run_gate5() -> None:
         if all(all(cell.values()) for cell in criteria.values())
         else "FAIL"
     )
-    _write(
-        "gate-5.json",
-        {
-            "verdict": verdict,
-            "criteria": criteria,
-            "cells": cells,
-            "cumulative": {
-                "gate1": json.loads((RESULTS / "gate-1.json").read_text())["verdict"],
-                "gate2": json.loads((RESULTS / "gate-2.json").read_text())["verdict"],
-                "gate3": json.loads((RESULTS / "gate-3.json").read_text())["verdict"],
-                "gate4": json.loads((RESULTS / "gate-4.json").read_text())["verdict"],
-            },
+    payload = {
+        "verdict": verdict,
+        "criteria": criteria,
+        "cells": cells,
+        "cumulative": {
+            "gate1": json.loads((RESULTS / "gate-1.json").read_text())["verdict"],
+            "gate2": json.loads((RESULTS / "gate-2.json").read_text())["verdict"],
+            "gate3": json.loads((RESULTS / "gate-3.json").read_text())["verdict"],
+            "gate4": json.loads((RESULTS / "gate-4.json").read_text())["verdict"],
         },
-    )
-    if verdict != "PASS":
-        _write(
-            "gate-5-diagnosis-stub.json",
-            {
-                "failed": {
-                    name: [key for key, value in cell.items() if not value]
-                    for name, cell in criteria.items()
-                    if not all(cell.values())
+    }
+    output_name = "gate-5-repaired.json" if repaired else "gate-5.json"
+    _write(output_name, payload)
+    if repaired:
+        original = json.loads((RESULTS / "gate-5.json").read_text(encoding="utf-8"))
+        repaired_payload = json.loads(
+            (RESULTS / output_name).read_text(encoding="utf-8")
+        )
+
+        def without_parity(value: Any) -> Any:
+            if isinstance(value, dict):
+                return {
+                    key: without_parity(child)
+                    for key, child in value.items()
+                    if key
+                    not in {
+                        "verdict",
+                        "log_probability",
+                        "max_log_probability_parity_error",
+                    }
                 }
+            if isinstance(value, list):
+                return [without_parity(child) for child in value]
+            return value
+
+        identity = without_parity(original) == without_parity(repaired_payload)
+        _write(
+            "gate-5-repair-byte-identity.json",
+            {
+                "non_parity_quantities_bitwise_identical": identity,
+                "excluded_parity_derived_fields": [
+                    "verdict",
+                    "criteria.*.log_probability",
+                    "cells.*.max_log_probability_parity_error",
+                ],
+                "original_shorter_code_penalty_error": original["cells"][
+                    "shorter_code_penalty"
+                ]["max_log_probability_parity_error"],
+                "repaired_shorter_code_penalty_error": repaired_payload["cells"][
+                    "shorter_code_penalty"
+                ]["max_log_probability_parity_error"],
             },
         )
+        if not identity:
+            raise SystemExit("gate 5 repair changed a non-parity quantity")
+    if verdict != "PASS":
+        if not repaired:
+            _write(
+                "gate-5-diagnosis-stub.json",
+                {
+                    "failed": {
+                        name: [key for key, value in cell.items() if not value]
+                        for name, cell in criteria.items()
+                        if not all(cell.values())
+                    }
+                },
+            )
         raise SystemExit("gate 5 failed")
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "stage", choices=("pilot", "gate1", "gate2", "gate3", "gate4", "gate5")
+        "stage",
+        choices=(
+            "pilot",
+            "gate1",
+            "gate2",
+            "gate3",
+            "gate4",
+            "gate5",
+            "gate5-repaired",
+        ),
     )
     args = parser.parse_args()
     {
@@ -584,6 +644,7 @@ def main() -> None:
         "gate3": run_gate3,
         "gate4": run_gate4,
         "gate5": run_gate5,
+        "gate5-repaired": lambda: run_gate5(repaired=True),
     }[args.stage]()
 
 

@@ -1,6 +1,6 @@
 # V3.0 stage report
 
-Status: **STOPPED_AT_GATE_5**. No freeze candidate exists.
+Status: **FREEZE_READY_AFTER_AUTHORIZED_GATE_5_SOFTWARE_REPAIR**.
 
 - Stage 0: 2,000 barred pilot worlds. Macro accuracy 0.999179, ten-bin
   ECE 0.000112, and 95% posterior-set coverage 0.999786. Frozen Gate-2
@@ -16,10 +16,13 @@ Status: **STOPPED_AT_GATE_5**. No freeze candidate exists.
   subsets.
 - Gate 4: PASS. All five production lesions were selective in 100/100 worlds
   and changed their declared target in 100/100.
-- Gate 5: FAIL. The code-length-scale robustness cell failed only the
-  exact-log-probability verification. The retained error is
-  1.2473394093880898. The verification path used the default prior scale on
-  one side; no repair was made.
+- Gate 5 original run: FAIL retained. The code-length-scale robustness cell
+  failed only the exact-log-probability verification, with error
+  1.2473394093880898.
+- Gate 5 repaired instrument: PASS. Under evaluator authorization, the
+  existing hyperparameter was forwarded to the parity helper. The repaired
+  error is 1.2789769243681803e-13. All non-parity quantities are byte-identical
+  to the original run.
 
-Test status at stop: V3 tests 12/12 green; frozen V2 tests 180/180 green.
+Final test status is recorded in `freeze-readiness.md`.
 Escrow 4000000–4001999 was not accessed.
