@@ -1,0 +1,62 @@
+{
+  "cell_summaries": {
+    "cell_1_witnessed_split": {
+      "cue_dynamics_accuracy": 0.0,
+      "maximum_normalization_error": 1.1357581541915351e-13,
+      "mean_outcome_context_scope_probability": 0.9999872078120163,
+      "mean_outcome_recurrence_probability": 0.0013765568062743476,
+      "mean_truth_structure_probability": 0.9789723712259663,
+      "outcome_dynamics_accuracy": 0.0
+    },
+    "cell_2_single_regime": {
+      "cue_dynamics_accuracy": 0.0,
+      "maximum_normalization_error": 1.13464793116691e-13,
+      "mean_outcome_context_scope_probability": 0.19987903900984771,
+      "mean_outcome_recurrence_probability": 2.2270642964307067e-07,
+      "mean_truth_structure_probability": 0.633918225813378,
+      "outcome_dynamics_accuracy": 0.0
+    },
+    "cell_3_mixed_drift_recurrent": {
+      "cue_dynamics_accuracy": 0.963,
+      "maximum_normalization_error": 1.1357581541915351e-13,
+      "mean_outcome_context_scope_probability": 0.9999777885020372,
+      "mean_outcome_recurrence_probability": 0.9998466763392846,
+      "mean_truth_structure_probability": 0.9565693066839972,
+      "outcome_dynamics_accuracy": 1.0
+    },
+    "cell_4_one_way_no_recurrence": {
+      "cue_dynamics_accuracy": 0.0,
+      "maximum_normalization_error": 1.1368683772161603e-13,
+      "mean_outcome_context_scope_probability": 0.9990908275912972,
+      "mean_outcome_recurrence_probability": 0.221269878871138,
+      "mean_truth_structure_probability": 0.5835539093576068,
+      "outcome_dynamics_accuracy": 0.0
+    }
+  },
+  "criteria": {
+    "criterion_1_witnessed_split": true,
+    "criterion_2_single_regime_scope_neutrality": true,
+    "criterion_3_mixed_temporal_structure": true,
+    "criterion_4_one_way_not_recurrent": true,
+    "criterion_5_semantic_and_custody": true
+  },
+  "historical_parameter_query_max_error": 0.0,
+  "immutable_verdict": "PASS",
+  "maximum_normalization_error": 1.1368683772161603e-13,
+  "raw_trace_seal_sha256": "7c0e0a108186d7966a4352989bea3ea417dbf47817c6791c285a97295c174cf1",
+  "stage_custody_note": "CUSTODY_NOTE_PREFLIGHT_UNSERIALIZED",
+  "verdict_classes": {
+    "custody": true,
+    "scientific": true,
+    "semantic": true
+  },
+  "witnessing_gain": {
+    "bootstrap_replicates": 10000,
+    "comparator": "same-seed, same-structure single_regime presentation; frozen Gate-3 construct",
+    "mean": 0.7999880464919698,
+    "whole_world_bootstrap_95_interval": [
+      0.7999683039043091,
+      0.8000005582522656
+    ]
+  }
+}

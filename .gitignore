@@ -12,3 +12,6 @@ projects/ifs-paper/*.pdf
 .herenow/
 .claude/worktrees/
 .claude/skills/avoid-ai-writing/
+# Raw trace bundles over GitHub's 100MB limit stay local; their sha256 ledgers are committed.
+projects/emergence-suite/v3/results/**/*-traces.jsonl
+!projects/emergence-suite/v3/results/**/gate-*-traces.jsonl

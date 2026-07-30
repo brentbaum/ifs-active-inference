@@ -1,0 +1,23 @@
+{
+  "challenge": "C-V32",
+  "challenge_sha256": "441c4a2abe24cb639fcaff1f2058b8ea501f55a1a117ec372156c1f68d8575f0",
+  "consumed_seed_count": 4000,
+  "consumption": "ascending_gap_free_once",
+  "criteria_evaluated_after_trace_seal": true,
+  "first_seed": 4020000,
+  "frozen_identity": {
+    "manifest_files_verified": 42,
+    "manifest_path": "projects/emergence-suite/v3/results/V3.2/freeze-manifest.json",
+    "manifest_status": "FREEZE_CANDIDATE_CUSTODY_NOTE_PREFLIGHT_UNSERIALIZED",
+    "mismatches": []
+  },
+  "last_seed": 4023999,
+  "raw_trace_seal": "raw-traces-seal.json",
+  "raw_trace_seal_sha256": "7c0e0a108186d7966a4352989bea3ea417dbf47817c6791c285a97295c174cf1",
+  "release_authority": "projects/ifs-paper/suite-v2-sealed-hashes.md C-V32 record committed at 36e9861",
+  "released_block": [
+    4020000,
+    4023999
+  ],
+  "stage_custody_note_carried": "CUSTODY_NOTE_PREFLIGHT_UNSERIALIZED"
+}
