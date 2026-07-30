@@ -1,0 +1,78 @@
+{
+  "proofs": [
+    {
+      "max_row_error": 0.0,
+      "pass": true,
+      "proof": "normalization:static"
+    },
+    {
+      "max_row_error": 1.1102230246251565e-16,
+      "pass": true,
+      "proof": "normalization:discrete_recurrent_context"
+    },
+    {
+      "max_row_error": 0.0,
+      "pass": true,
+      "proof": "normalization:ordered_random_walk"
+    },
+    {
+      "max_row_error": 0.0,
+      "pass": true,
+      "proof": "normalization:one_way_change"
+    },
+    {
+      "pass": true,
+      "proof": "code_length_prior",
+      "structure_space_size": 786432,
+      "sum": 0.9999999999999991
+    },
+    {
+      "max_parent_difference": 0.0,
+      "pass": true,
+      "proof": "edge_absence_conditional_independence"
+    },
+    {
+      "likelihood": 1.0,
+      "pass": true,
+      "proof": "dormant_slots_idle"
+    },
+    {
+      "log_evidence_error": 4.440892098500626e-16,
+      "max_probability_error": 0.0,
+      "pass": true,
+      "proof": "structure_posterior_independent_bruteforce"
+    },
+    {
+      "absolute_error": 3.552713678800501e-14,
+      "pass": true,
+      "proof": "local_score_recombination"
+    },
+    {
+      "error": 0.0,
+      "pass": true,
+      "proof": "doA_excludes_action_selection"
+    },
+    {
+      "count": 4,
+      "pass": true,
+      "proof": "scope_compilation"
+    },
+    {
+      "count": 4,
+      "pass": true,
+      "proof": "dynamics_compilation"
+    },
+    {
+      "block_count": 2,
+      "pass": true,
+      "proof": "mixed_scopes_coexist"
+    },
+    {
+      "import_violations": [],
+      "pass": true,
+      "proof": "analysis_label_exclusion"
+    }
+  ],
+  "structure_space_size": 786432,
+  "verdict": "PASS"
+}

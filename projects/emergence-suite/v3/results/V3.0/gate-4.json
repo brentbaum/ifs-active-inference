@@ -1,0 +1,40 @@
+{
+  "lesions": [
+    {
+      "pass": true,
+      "production": "mode_slots",
+      "selective_rate": 1.0,
+      "target_change_rate": 1.0,
+      "world_count": 100
+    },
+    {
+      "pass": true,
+      "production": "context_slots",
+      "selective_rate": 1.0,
+      "target_change_rate": 1.0,
+      "world_count": 100
+    },
+    {
+      "pass": true,
+      "production": "edges",
+      "selective_rate": 1.0,
+      "target_change_rate": 1.0,
+      "world_count": 100
+    },
+    {
+      "pass": true,
+      "production": "scopes",
+      "selective_rate": 1.0,
+      "target_change_rate": 1.0,
+      "world_count": 100
+    },
+    {
+      "pass": true,
+      "production": "dynamics",
+      "selective_rate": 1.0,
+      "target_change_rate": 1.0,
+      "world_count": 100
+    }
+  ],
+  "verdict": "PASS"
+}

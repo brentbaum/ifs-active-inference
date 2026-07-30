@@ -1,0 +1,43 @@
+{
+  "barred_blocks": [
+    [
+      3000000,
+      3001999
+    ]
+  ],
+  "bounds": {
+    "context_slots": 3,
+    "cue_count": 3,
+    "mode_slots": 3
+  },
+  "diagnostic_reliability": {
+    "rationale": "Prior-predictive fixtures remain noisy while repeated typed observations make every production recoverable.",
+    "value": 0.86
+  },
+  "gate2_thresholds": {
+    "coverage_95_floor": 0.98,
+    "derivation": {
+      "accuracy": "pilot lower 95% bootstrap bound minus 0.02",
+      "coverage": "pilot lower 95% bootstrap bound minus 0.02",
+      "ece": "pilot ten-bin ECE plus 0.03"
+    },
+    "ece_ceiling": 0.03,
+    "log_probability_tolerance": 1e-10,
+    "macro_accuracy_floor": 0.979
+  },
+  "generic_parameter_prior": {
+    "concentration": 0.5,
+    "family": "symmetric_dirichlet",
+    "rationale": "The reusable Jeffreys/Krichevsky-Trofimov prior is symmetric and keeps every categorical outcome supported."
+  },
+  "sealed_escrow_closed": [
+    4000000,
+    4001999
+  ],
+  "structure_prior": {
+    "code_length_scale": 1.0,
+    "form": "2^(-L(H)) normalized over the bounded grammar",
+    "rationale": "Shorter grammar programs receive more prior mass without naming a preferred scientific outcome."
+  },
+  "version": "V3.0"
+}

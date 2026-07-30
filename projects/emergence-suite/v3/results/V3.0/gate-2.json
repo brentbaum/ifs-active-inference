@@ -1,0 +1,108 @@
+{
+  "criteria": {
+    "calibration": true,
+    "coverage": true,
+    "log_probability": true,
+    "macro_accuracy": true
+  },
+  "summary": {
+    "by_field": {
+      "active_contexts": {
+        "accuracy": 1.0,
+        "coverage_95": 1.0,
+        "mean_truth_probability": 0.9999830993744849
+      },
+      "active_modes": {
+        "accuracy": 1.0,
+        "coverage_95": 1.0,
+        "mean_truth_probability": 0.9998494192390459
+      },
+      "dynamics:cue_emission": {
+        "accuracy": 1.0,
+        "coverage_95": 1.0,
+        "mean_truth_probability": 0.999999481132704
+      },
+      "dynamics:outcome_emission": {
+        "accuracy": 1.0,
+        "coverage_95": 1.0,
+        "mean_truth_probability": 0.9999991667342146
+      },
+      "edge:G_A": {
+        "accuracy": 0.998,
+        "coverage_95": 1.0,
+        "mean_truth_probability": 0.9981707145616365
+      },
+      "edge:G_W": {
+        "accuracy": 0.998,
+        "coverage_95": 1.0,
+        "mean_truth_probability": 0.9980854922987985
+      },
+      "edge:G_Y": {
+        "accuracy": 1.0,
+        "coverage_95": 1.0,
+        "mean_truth_probability": 0.999016094044655
+      },
+      "edge:M1_G": {
+        "accuracy": 0.999,
+        "coverage_95": 0.999,
+        "mean_truth_probability": 0.9981841775819928
+      },
+      "edge:M2_G": {
+        "accuracy": 0.998,
+        "coverage_95": 1.0,
+        "mean_truth_probability": 0.9973113156880425
+      },
+      "edge:M3_G": {
+        "accuracy": 1.0,
+        "coverage_95": 1.0,
+        "mean_truth_probability": 0.999093451423055
+      },
+      "edge:W_Y": {
+        "accuracy": 0.998,
+        "coverage_95": 1.0,
+        "mean_truth_probability": 0.9974155172075466
+      },
+      "edge:doA_Y": {
+        "accuracy": 0.999,
+        "coverage_95": 1.0,
+        "mean_truth_probability": 0.9985899454019111
+      },
+      "scope:cue_emission": {
+        "accuracy": 1.0,
+        "coverage_95": 1.0,
+        "mean_truth_probability": 0.9999728363903574
+      },
+      "scope:outcome_emission": {
+        "accuracy": 1.0,
+        "coverage_95": 1.0,
+        "mean_truth_probability": 0.9997700404699681
+      }
+    },
+    "coverage_95": 0.9999285714285714,
+    "coverage_95_interval": [
+      0.9997857142857143,
+      1.0
+    ],
+    "ece_10_bin": 0.00033471931444381,
+    "field_decision_count": 14000,
+    "macro_accuracy": 0.9992857142857143,
+    "macro_accuracy_95_interval": [
+      0.9987857142857143,
+      0.9996428571428572
+    ],
+    "max_log_probability_parity_error": 1.2789769243681803e-13,
+    "world_count": 1000
+  },
+  "thresholds": {
+    "coverage_95_floor": 0.98,
+    "derivation": {
+      "accuracy": "pilot lower 95% bootstrap bound minus 0.02",
+      "coverage": "pilot lower 95% bootstrap bound minus 0.02",
+      "ece": "pilot ten-bin ECE plus 0.03"
+    },
+    "ece_ceiling": 0.03,
+    "log_probability_tolerance": 1e-10,
+    "macro_accuracy_floor": 0.979
+  },
+  "verdict": "PASS"
+}

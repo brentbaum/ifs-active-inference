@@ -1,0 +1,62 @@
+{
+  "cells": {
+    "causal_action_absent": {
+      "field_accuracy": 1.0,
+      "mean_truth_probability": 0.9991582502419591,
+      "world_count": 100
+    },
+    "causal_action_present": {
+      "field_accuracy": 0.9992857142857143,
+      "mean_truth_probability": 0.9988403378321524,
+      "world_count": 100
+    },
+    "cue_local_plus_context": {
+      "field_accuracy": 0.9985714285714286,
+      "mean_truth_probability": 0.9977692101102347,
+      "world_count": 100
+    },
+    "danger_without_identity": {
+      "field_accuracy": 1.0,
+      "mean_truth_probability": 0.9996098409280479,
+      "world_count": 100
+    },
+    "drift_plus_recurrence": {
+      "field_accuracy": 1.0,
+      "mean_truth_probability": 0.9999054769969653,
+      "world_count": 100
+    },
+    "identity_without_danger": {
+      "field_accuracy": 1.0,
+      "mean_truth_probability": 0.9994026959333293,
+      "world_count": 100
+    },
+    "two_modes_no_cross_interaction": {
+      "field_accuracy": 1.0,
+      "mean_truth_probability": 0.9997399569032885,
+      "world_count": 100
+    }
+  },
+  "criteria": {
+    "all_cell_field_accuracy": true,
+    "causal_pair_differs_only_doA_Y": true,
+    "r0_mixed_world_compiles": true,
+    "two_modes_no_cross_mode_edge": true
+  },
+  "r0_mixed_temporal_compilation": {
+    "process_kinds": {
+      "cue_subset_drift": "ordered_drift",
+      "cue_subset_recurrence": "recurrent_context"
+    },
+    "process_scopes": {
+      "cue_subset_drift": [
+        "cue:0",
+        "cue:1"
+      ],
+      "cue_subset_recurrence": [
+        "cue:2"
+      ]
+    },
+    "world_spec_hash": "5a0d9725a3157dd02398ecc8eabfc90f2b16b98cbf5a4da34555f31640076ef6"
+  },
+  "verdict": "PASS"
+}

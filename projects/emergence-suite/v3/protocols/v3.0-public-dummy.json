@@ -1,0 +1,18 @@
+{
+  "version": "V3.0",
+  "bounds": {"context_slots": 3, "mode_slots": 3, "cue_count": 3},
+  "structure": {
+    "active_modes": 2,
+    "active_contexts": 2,
+    "edges": [1, 1, 0, 1, 0, 1, 1, 0],
+    "scopes": ["cue_specific", "context_specific"],
+    "dynamics": ["ordered_random_walk", "discrete_recurrent_context"]
+  },
+  "typed_observation_schema": {
+    "field": "grammar field name",
+    "index": "time/event index",
+    "value": "finite-support integer",
+    "missing": false
+  },
+  "intervention_semantics": "do(A); no action-selection likelihood"
+}
