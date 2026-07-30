@@ -1,6 +1,6 @@
 # V3.1 stage report
 
-Status: **STOPPED_AT_GATE_4_RESCORE_CUSTODY**. No freeze manifest exists.
+Status: **FROZEN_ADJUDICATED_MIXED_REVISABILITY_LIMITATION**.
 
 - Stage 0: thresholds frozen from the barred 3100000–3101999 block, including
   a prospective efficacy construct amendment on its previously unconsumed
@@ -26,13 +26,27 @@ Status: **STOPPED_AT_GATE_4_RESCORE_CUSTODY**. No freeze manifest exists.
   removed part-like mass exactly, but retained-edge survival was only 182/333
   (`0.546547`) against the blocking `0.90` floor.
 - Gate-4 selectivity adjudication: the absolute-movement statistic was
-  reclassified and replaced by a restricted-prior identity. The required
-  rescore could not begin because the prior runner retained no serialized
-  worlds, per-world traces, or hashes, while the adjudication forbids
-  regeneration.
-- Gate 5: not opened.
+  reclassified and replaced by a restricted-prior identity. An initial custody
+  stop found that the prior runner had not serialized its worlds.
+- Gate-4 amended rescore: PASS. The evaluator authorized deterministic
+  reconstruction of the consumed block. The complete prior aggregate object
+  reproduced exactly. All six declared consequences passed; the largest
+  restricted-prior and independent-oracle errors were below `1e-14`.
+  Absolute retained-edge movement is descriptive and decomposes into
+  typed-evidence transformation, prior renormalization, and numerical
+  residual.
+- Gate 5: PASS. All four V3.1 robustness cells passed field-accuracy,
+  coverage, and exact-log-probability criteria. Standing V3.0 robustness
+  across missingness, cue count, slot bounds, code prior, and concentration
+  remained PASS.
+- Gate-5 report assembly: a stale interval key caused a post-scoring crash.
+  All 800 traces had already been serialized and hashed. The report was
+  assembled from those hash-verified traces without rerunning a world.
 
-Post-stop regression status: V3 22/22 green, including the new masking
-regression; frozen V2 180/180 green.
+Final regression status: V3 23/23 green; frozen V2 180/180 green.
+
+The formal Gate-3 verdict remains FAIL. Its sole revisability-floor miss is
+retained verbatim and non-blocking under `gate3-adjudication.md`; it is not
+converted to a pass.
 
 C-V31 escrow 4010000–4013999 was not accessed.

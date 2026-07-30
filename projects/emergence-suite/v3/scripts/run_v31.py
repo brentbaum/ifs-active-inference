@@ -9,7 +9,7 @@ import itertools
 import json
 import math
 import sys
-from dataclasses import replace
+from dataclasses import asdict, replace
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
 
@@ -44,6 +44,41 @@ def _write(name: str, payload: Any) -> None:
     )
 
 
+def _write_jsonl_trace_bundle(name: str, records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+    """Serialize per-world records and publish per-record plus file hashes."""
+    RESULTS.mkdir(parents=True, exist_ok=True)
+    trace_path = RESULTS / f"{name}.jsonl"
+    record_hashes = []
+    file_hasher = hashlib.sha256()
+    with trace_path.open("wb") as handle:
+        for record in records:
+            encoded = (
+                json.dumps(
+                    _plain(record),
+                    sort_keys=True,
+                    separators=(",", ":"),
+                    allow_nan=False,
+                ).encode("utf-8")
+                + b"\n"
+            )
+            handle.write(encoded)
+            file_hasher.update(encoded)
+            record_hashes.append(
+                {
+                    "seed": int(record["seed"]),
+                    "sha256": hashlib.sha256(encoded).hexdigest(),
+                }
+            )
+    ledger = {
+        "trace_file": trace_path.name,
+        "world_count": len(records),
+        "file_sha256": file_hasher.hexdigest(),
+        "records": record_hashes,
+    }
+    _write(f"{name}-hashes.json", ledger)
+    return ledger
+
+
 def _bootstrap(
     values: Sequence[float], seed: int, draws: int = 2000
 ) -> tuple[float, float]:
@@ -76,7 +111,14 @@ def _truth_bits(structure: v31.GrammarStructure) -> tuple[int, ...]:
     return (values["active_mode"], *(values[edge] for edge in v31.EDGE_NAMES))
 
 
-def recovery_metrics(seeds: Iterable[int], *, length: int = 64, **kwargs: Any):
+def recovery_metrics(
+    seeds: Iterable[int],
+    *,
+    length: int = 64,
+    trace_records: list[dict[str, Any]] | None = None,
+    trace_cell: str | None = None,
+    **kwargs: Any,
+):
     field_correct = []
     program_correct = []
     confidence = []
@@ -122,12 +164,73 @@ def recovery_metrics(seeds: Iterable[int], *, length: int = 64, **kwargs: Any):
                 - world.exact_log_probability
             )
         )
+        if trace_records is not None:
+            trace_records.append(
+                {
+                    "seed": world.seed,
+                    "cell": trace_cell,
+                    "world": asdict(world),
+                    "score": {
+                        "truth_index": truth_index,
+                        "predicted_index": predicted_index,
+                        "truth_probability": posterior.probabilities[
+                            truth_index
+                        ],
+                        "predicted_probability": posterior.probabilities[
+                            predicted_index
+                        ],
+                        "covered_95": truth_index in selected,
+                        "exact_log_probability_error": exact_errors[-1],
+                    },
+                }
+            )
     return {
         "world_count": len(program_correct),
         "field_accuracy": float(np.mean(field_correct)),
         "field_accuracy_95_interval": _bootstrap(field_correct, 31_000_001),
         "program_accuracy": float(np.mean(program_correct)),
         "program_accuracy_95_interval": _bootstrap(program_correct, 31_000_002),
+        "ece_10_bin": _ece(confidence, program_correct),
+        "coverage_95": float(np.mean(coverage)),
+        "coverage_95_interval": _bootstrap(coverage, 31_000_003),
+        "mean_truth_probability": float(np.mean(truth_probability)),
+        "max_exact_log_probability_error": float(max(exact_errors)),
+    }
+
+
+def recovery_metrics_from_trace(
+    records: Sequence[Mapping[str, Any]],
+) -> dict[str, Any]:
+    field_correct = []
+    program_correct = []
+    confidence = []
+    coverage = []
+    truth_probability = []
+    exact_errors = []
+    for record in records:
+        score = record["score"]
+        truth_index = int(score["truth_index"])
+        predicted_index = int(score["predicted_index"])
+        truth = _truth_bits(v31.PROGRAMS[truth_index])
+        predicted = _truth_bits(v31.PROGRAMS[predicted_index])
+        field_correct.extend(
+            left == right for left, right in zip(predicted, truth)
+        )
+        program_correct.append(predicted_index == truth_index)
+        confidence.append(float(score["predicted_probability"]))
+        truth_probability.append(float(score["truth_probability"]))
+        coverage.append(bool(score["covered_95"]))
+        exact_errors.append(float(score["exact_log_probability_error"]))
+    return {
+        "world_count": len(program_correct),
+        "field_accuracy": float(np.mean(field_correct)),
+        "field_accuracy_95_interval": _bootstrap(
+            field_correct, 31_000_001
+        ),
+        "program_accuracy": float(np.mean(program_correct)),
+        "program_accuracy_95_interval": _bootstrap(
+            program_correct, 31_000_002
+        ),
         "ece_10_bin": _ece(confidence, program_correct),
         "coverage_95": float(np.mean(coverage)),
         "coverage_95_interval": _bootstrap(coverage, 31_000_003),
@@ -815,6 +918,314 @@ def run_gate3() -> None:
         raise SystemExit("V3.1 Gate 3 failed")
 
 
+GATE4_SPECS = (
+    ("mode_slot", "part_probability", 333),
+    ("identity_edges", "part_probability", 333),
+    ("action_edge", "efficacy_probability", 333),
+    ("availability_control", "availability", 333),
+    ("recursive_precision", "precision", 333),
+    ("fixed_G", "transfer", 335),
+)
+
+
+def _narrow_precision_copy(world: v31.FormationWorld) -> v31.FormationWorld:
+    return replace(
+        world,
+        config=replace(world.config, precision="narrow"),
+        slices=tuple(
+            replace(
+                item,
+                mode_observed=item.time % 3 == 0,
+                root_observed=item.time % 3 == 0,
+            )
+            for item in world.slices
+        ),
+    )
+
+
+def _conditioned_world(
+    world: v31.FormationWorld, lesion: str
+) -> v31.FormationWorld:
+    if lesion == "mode_slot":
+        return replace(
+            world,
+            slices=tuple(
+                replace(item, mode_observed=False) for item in world.slices
+            ),
+        )
+    if lesion == "availability_control":
+        return replace(
+            world,
+            slices=tuple(
+                replace(
+                    item,
+                    outcome_observed=(
+                        item.outcome_true
+                        if item.outcome_observed is None
+                        else item.outcome_observed
+                    ),
+                )
+                for item in world.slices
+            ),
+        )
+    if lesion == "recursive_precision":
+        return replace(
+            world,
+            slices=tuple(
+                replace(
+                    item,
+                    mode_observed=item.time % 2 == 0,
+                    root_observed=item.time % 2 == 0,
+                )
+                for item in world.slices
+            ),
+        )
+    return world
+
+
+def _program_allowed(program: v31.GrammarStructure, lesion: str) -> bool:
+    values = v31.program_values(program)
+    if lesion == "mode_slot":
+        return values["active_mode"] == 0
+    if lesion == "identity_edges":
+        return not any(
+            values[name] for name in ("M1_G", "G_W", "G_A", "G_Y")
+        )
+    if lesion == "action_edge":
+        return values["doA_Y"] == 0
+    return True
+
+
+def _condition_probabilities(
+    posterior: v31.FormationPosterior, lesion: str
+) -> tuple[float, ...]:
+    retained = [
+        probability
+        for program, probability in zip(
+            posterior.programs, posterior.probabilities
+        )
+        if _program_allowed(program, lesion)
+    ]
+    mass = math.fsum(retained)
+    return tuple(
+        probability / mass if _program_allowed(program, lesion) else 0.0
+        for program, probability in zip(
+            posterior.programs, posterior.probabilities
+        )
+    )
+
+
+def _reconstruct_gate4_cells() -> list[dict[str, Any]]:
+    cells = []
+    cursor = 3_110_000
+    config = cfg(
+        "repeated", "low", "broad", "real", "effective", "censored"
+    )
+    for lesion, target, count in GATE4_SPECS:
+        seed_start = cursor
+        seed_stop = cursor + count
+        cursor = seed_stop
+        worlds, base = _score_many(range(seed_start, seed_stop), config)
+        cells.append(
+            {
+                "lesion": lesion,
+                "target": target,
+                "seed_block": [seed_start, seed_stop - 1],
+                "worlds": worlds,
+                "base": base,
+            }
+        )
+    if cursor != 3_112_000:
+        raise AssertionError("Gate-4 partition does not consume the full block")
+    return cells
+
+
+def _recorded_gate4_payload(cells: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+    lesions = []
+    mode_mask_neutrality_errors = []
+    for cell in cells:
+        lesion = str(cell["lesion"])
+        target = str(cell["target"])
+        worlds = cell["worlds"]
+        base = cell["base"]
+        posterior_for_normalization = base
+        if lesion == "fixed_G":
+            target_values = [
+                v31.transfer_readout(item, fixed_identity=True)
+                for item in base
+            ]
+            survival = [
+                a.edge_probabilities["W_Y"] == b.edge_probabilities["W_Y"]
+                for a, b in zip(base, base)
+            ]
+        elif lesion == "availability_control":
+            lesioned = [
+                v31.score_world(world, lesions=frozenset({lesion}))
+                for world in worlds
+            ]
+            posterior_for_normalization = lesioned
+            target_values = [
+                abs(a.efficacy_probability - b.efficacy_probability)
+                for a, b in zip(base, lesioned)
+            ]
+            survival = [
+                abs(a.part_probability - b.part_probability) < 0.25
+                for a, b in zip(base, lesioned)
+            ]
+        elif lesion == "recursive_precision":
+            narrow_worlds = [_narrow_precision_copy(world) for world in worlds]
+            narrow_unlesioned = [
+                v31.score_world(world) for world in narrow_worlds
+            ]
+            broad_lesioned = [
+                v31.score_world(world, lesions=frozenset({lesion}))
+                for world in worlds
+            ]
+            narrow_lesioned = [
+                v31.score_world(world, lesions=frozenset({lesion}))
+                for world in narrow_worlds
+            ]
+            posterior_for_normalization = broad_lesioned + narrow_lesioned
+            target_values = [
+                abs(a.part_probability - b.part_probability)
+                for a, b in zip(broad_lesioned, narrow_lesioned)
+            ]
+            survival = [
+                all(
+                    abs(left - right) <= 1e-10
+                    for left, right in zip(
+                        a.probabilities, b.probabilities
+                    )
+                )
+                for a, b in zip(broad_lesioned, narrow_lesioned)
+            ]
+            unlesioned_effect = [
+                abs(a.part_probability - b.part_probability)
+                for a, b in zip(base, narrow_unlesioned)
+            ]
+        else:
+            lesioned = [
+                v31.score_world(world, lesions=frozenset({lesion}))
+                for world in worlds
+            ]
+            posterior_for_normalization = lesioned
+            target_values = [getattr(item, target) for item in lesioned]
+            survival = [
+                abs(
+                    a.edge_probabilities["W_Y"]
+                    - b.edge_probabilities["W_Y"]
+                )
+                < 0.2
+                for a, b in zip(base, lesioned)
+            ]
+            if lesion == "mode_slot":
+                for world, posterior in zip(worlds, lesioned):
+                    remasked = replace(
+                        world,
+                        slices=tuple(
+                            replace(
+                                item,
+                                mode_observed=not item.mode_observed,
+                            )
+                            for item in world.slices
+                        ),
+                    )
+                    remasked_posterior = v31.score_world(
+                        remasked, lesions=frozenset({lesion})
+                    )
+                    mode_mask_neutrality_errors.append(
+                        max(
+                            abs(
+                                posterior.log_evidence
+                                - remasked_posterior.log_evidence
+                            ),
+                            max(
+                                abs(left - right)
+                                for left, right in zip(
+                                    posterior.probabilities,
+                                    remasked_posterior.probabilities,
+                                )
+                            ),
+                        )
+                    )
+        if lesion in {
+            "mode_slot",
+            "identity_edges",
+            "action_edge",
+            "fixed_G",
+        }:
+            target_pass = max(target_values) <= 1e-10
+        elif lesion == "recursive_precision":
+            target_pass = float(np.mean(target_values)) <= 1e-10
+        else:
+            target_pass = float(np.mean(target_values)) > 0.01
+        normalization_errors = [
+            abs(math.fsum(item.probabilities) - 1.0)
+            for item in posterior_for_normalization
+        ]
+        finite_normalized = all(
+            np.isfinite(item.log_evidence)
+            and all(np.isfinite(item.probabilities))
+            and error <= 1e-10
+            for item, error in zip(
+                posterior_for_normalization, normalization_errors
+            )
+        )
+        lesions.append(
+            {
+                "lesion": lesion,
+                "target": target,
+                "seed_block": cell["seed_block"],
+                "world_count": len(worlds),
+                "target_mean": float(np.mean(target_values)),
+                "target_max": float(max(target_values)),
+                **(
+                    {
+                        "unlesioned_target_mean": float(
+                            np.mean(unlesioned_effect)
+                        ),
+                        "unlesioned_target_max": float(
+                            max(unlesioned_effect)
+                        ),
+                    }
+                    if lesion == "recursive_precision"
+                    else {}
+                ),
+                "survival_rate": float(np.mean(survival)),
+                "finite_normalized": finite_normalized,
+                "normalization_error_max": float(
+                    max(normalization_errors)
+                ),
+                "pass": (
+                    target_pass
+                    and float(np.mean(survival)) >= 0.9
+                    and finite_normalized
+                ),
+            }
+        )
+    masked_channel_proof = {
+        "world_count": GATE4_SPECS[0][2],
+        "maximum_posterior_or_log_evidence_error": float(
+            max(mode_mask_neutrality_errors)
+        ),
+        "tolerance": 1e-10,
+        "pass": max(mode_mask_neutrality_errors) <= 1e-10,
+    }
+    return {
+        "verdict": (
+            "PASS"
+            if all(item["pass"] for item in lesions)
+            and masked_channel_proof["pass"]
+            else "FAIL"
+        ),
+        "lesions": lesions,
+        "masked_channel_exact_neutrality": masked_channel_proof,
+        "original_stop_retained": "gate-4.json",
+        "repair_authorization": "gate4-lesion-semantics-adjudication.md",
+        "seed_block": [3_110_000, 3_111_999],
+    }
+
+
 def run_gate4() -> None:
     lesions = []
     mappings = (
@@ -1035,6 +1446,301 @@ def run_gate4() -> None:
         raise SystemExit("V3.1 Gate 4 failed")
 
 
+def run_gate4_rescore() -> None:
+    cells = _reconstruct_gate4_cells()
+    raw_records = [
+        {
+            "seed": world.seed,
+            "lesion": cell["lesion"],
+            "world": asdict(world),
+        }
+        for cell in cells
+        for world in cell["worlds"]
+    ]
+    raw_ledger = _write_jsonl_trace_bundle(
+        "gate-4-reconstructed-worlds", raw_records
+    )
+
+    recorded = json.loads(
+        (RESULTS / "gate-4-repaired.json").read_text(encoding="utf-8")
+    )
+    reproduced = _recorded_gate4_payload(cells)
+    reproduction_pass = reproduced == recorded
+    reproduction = {
+        "pass": reproduction_pass,
+        "comparison": "exact parsed-JSON equality",
+        "recorded_file": "gate-4-repaired.json",
+        "reconstructed_world_ledger": raw_ledger,
+        "reproduced": reproduced,
+    }
+    _write("gate-4-reconstruction-audit.json", reproduction)
+    if not reproduction_pass:
+        _write(
+            "gate-4-rescore-reproduction-stop.json",
+            {
+                "status": "STOPPED_REPRODUCTION_FAILURE",
+                "recorded": recorded,
+                "reproduced": reproduced,
+            },
+        )
+        raise SystemExit("V3.1 Gate 4 reconstruction failed")
+
+    rows = []
+    cell_results = []
+    for cell in cells:
+        lesion = str(cell["lesion"])
+        base_posteriors = cell["base"]
+        consequences = []
+        identity_errors = []
+        oracle_errors = []
+        normalization_errors = []
+        w_y_movements = []
+        movement_l1 = []
+        evidence_component_l1 = []
+        renormalization_component_l1 = []
+        residual_l1 = []
+        for world, base in zip(cell["worlds"], base_posteriors):
+            direct = (
+                base
+                if lesion == "fixed_G"
+                else v31.score_world(
+                    world, lesions=frozenset({lesion})
+                )
+            )
+            transformed_world = _conditioned_world(world, lesion)
+            transformed = v31.score_world(transformed_world)
+            conditioned = _condition_probabilities(transformed, lesion)
+            identity_error = max(
+                abs(left - right)
+                for left, right in zip(
+                    direct.probabilities, conditioned
+                )
+            )
+            raw_slices = [asdict(item) for item in world.slices]
+            oracle_programs, oracle_probabilities = (
+                v31_oracle.lesion_posterior(raw_slices, lesion)
+            )
+            production_programs = tuple(
+                _truth_bits(program) for program in direct.programs
+            )
+            if oracle_programs != production_programs:
+                raise AssertionError("oracle program ordering mismatch")
+            oracle_error = max(
+                abs(left - right)
+                for left, right in zip(
+                    direct.probabilities, oracle_probabilities
+                )
+            )
+
+            if lesion in {"mode_slot", "identity_edges"}:
+                consequence = direct.part_probability
+            elif lesion == "action_edge":
+                consequence = direct.efficacy_probability
+            elif lesion == "availability_control":
+                consequence = abs(
+                    base.efficacy_probability
+                    - direct.efficacy_probability
+                )
+            elif lesion == "recursive_precision":
+                narrow = _narrow_precision_copy(world)
+                narrow_direct = v31.score_world(
+                    narrow, lesions=frozenset({lesion})
+                )
+                consequence = abs(
+                    direct.part_probability
+                    - narrow_direct.part_probability
+                )
+            else:
+                consequence = v31.transfer_readout(
+                    direct, fixed_identity=True
+                )
+
+            base_array = np.asarray(base.probabilities)
+            transformed_array = np.asarray(transformed.probabilities)
+            conditioned_array = np.asarray(conditioned)
+            direct_array = np.asarray(direct.probabilities)
+            evidence_component = transformed_array - base_array
+            renormalization_component = (
+                conditioned_array - transformed_array
+            )
+            residual = direct_array - conditioned_array
+            observed = direct_array - base_array
+            decomposition_error = float(
+                np.max(
+                    np.abs(
+                        observed
+                        - evidence_component
+                        - renormalization_component
+                        - residual
+                    )
+                )
+            )
+            normalization_error = abs(
+                math.fsum(direct.probabilities) - 1.0
+            )
+            w_y_movement = abs(
+                direct.edge_probabilities["W_Y"]
+                - base.edge_probabilities["W_Y"]
+            )
+            identity_errors.append(identity_error)
+            oracle_errors.append(oracle_error)
+            consequences.append(float(consequence))
+            normalization_errors.append(normalization_error)
+            w_y_movements.append(w_y_movement)
+            movement_l1.append(float(np.abs(observed).sum()))
+            evidence_component_l1.append(
+                float(np.abs(evidence_component).sum())
+            )
+            renormalization_component_l1.append(
+                float(np.abs(renormalization_component).sum())
+            )
+            residual_l1.append(float(np.abs(residual).sum()))
+            rows.append(
+                {
+                    "seed": world.seed,
+                    "lesion": lesion,
+                    "restricted_prior_identity_error": identity_error,
+                    "independent_oracle_error": oracle_error,
+                    "normalization_error": normalization_error,
+                    "declared_consequence_value": float(consequence),
+                    "w_y_absolute_movement": w_y_movement,
+                    "posterior_l1_movement": float(
+                        np.abs(observed).sum()
+                    ),
+                    "evidence_transform_l1": float(
+                        np.abs(evidence_component).sum()
+                    ),
+                    "renormalization_l1": float(
+                        np.abs(renormalization_component).sum()
+                    ),
+                    "identity_residual_l1": float(
+                        np.abs(residual).sum()
+                    ),
+                    "decomposition_error": decomposition_error,
+                }
+            )
+
+        if lesion in {"mode_slot", "identity_edges", "action_edge", "fixed_G"}:
+            consequence_pass = max(consequences) <= 1e-10
+        elif lesion == "recursive_precision":
+            consequence_pass = float(np.mean(consequences)) <= 1e-10
+        else:
+            consequence_pass = float(np.mean(consequences)) > 0.01
+        identity_pass = (
+            max(identity_errors) <= 1e-10
+            and max(oracle_errors) <= 1e-10
+            and max(normalization_errors) <= 1e-10
+        )
+        cell_results.append(
+            {
+                "lesion": lesion,
+                "seed_block": cell["seed_block"],
+                "world_count": len(cell["worlds"]),
+                "restricted_prior_identity_error_max": float(
+                    max(identity_errors)
+                ),
+                "independent_oracle_error_max": float(max(oracle_errors)),
+                "normalization_error_max": float(
+                    max(normalization_errors)
+                ),
+                "identity_pass": identity_pass,
+                "declared_consequence_mean": float(
+                    np.mean(consequences)
+                ),
+                "declared_consequence_max": float(max(consequences)),
+                "declared_consequence_pass": consequence_pass,
+                "movement_descriptive": {
+                    "w_y_absolute_mean": float(np.mean(w_y_movements)),
+                    "w_y_absolute_max": float(max(w_y_movements)),
+                    "posterior_l1_mean": float(np.mean(movement_l1)),
+                    "posterior_l1_max": float(max(movement_l1)),
+                    "evidence_transform_l1_mean": float(
+                        np.mean(evidence_component_l1)
+                    ),
+                    "renormalization_l1_mean": float(
+                        np.mean(renormalization_component_l1)
+                    ),
+                    "identity_residual_l1_max": float(max(residual_l1)),
+                },
+                "pass": identity_pass and consequence_pass,
+            }
+        )
+
+    result_ledger = _write_jsonl_trace_bundle(
+        "gate-4-rescored-per-world", rows
+    )
+    verdict = (
+        "PASS" if all(item["pass"] for item in cell_results) else "FAIL"
+    )
+    result = {
+        "verdict": verdict,
+        "seed_block": [3_110_000, 3_111_999],
+        "reconstruction_exact": reproduction_pass,
+        "reconstruction_audit": "gate-4-reconstruction-audit.json",
+        "world_trace_ledger": raw_ledger,
+        "rescore_trace_ledger": result_ledger,
+        "tolerance": 1e-10,
+        "cells": cell_results,
+        "prior_verdicts_retained": [
+            "gate-4.json",
+            "gate-4-repaired.json",
+        ],
+        "authorization": "gate4-selectivity-adjudication.md amendment",
+    }
+    _write("gate-4-rescored.json", result)
+    report_lines = [
+        "# V3.1 Gate-4 restricted-prior rescore",
+        "",
+        f"Verdict: **{verdict}**.",
+        "",
+        "The consumed 2,000-world block was deterministically reconstructed. "
+        "Its complete repaired-Gate-4 aggregate record matched exactly before "
+        "the corrected statistics were applied.",
+        "",
+        "Every cell uses a per-world blocking restricted-prior identity and "
+        "an independently enumerated oracle at tolerance `1e-10`. Absolute "
+        "movement is descriptive; it is decomposed into typed-evidence "
+        "transformation, prior renormalization, and identity residual.",
+        "",
+        "| lesion | identity max | oracle max | consequence | pass |",
+        "|---|---:|---:|---:|:---:|",
+    ]
+    report_lines.extend(
+        "| {lesion} | {identity:.3g} | {oracle:.3g} | {consequence:.6g} | {passed} |".format(
+            lesion=item["lesion"],
+            identity=item["restricted_prior_identity_error_max"],
+            oracle=item["independent_oracle_error_max"],
+            consequence=item["declared_consequence_mean"],
+            passed="PASS" if item["pass"] else "FAIL",
+        )
+        for item in cell_results
+    )
+    report_lines.extend(
+        [
+            "",
+            "Both earlier Gate-4 verdicts remain unchanged in the ledger. "
+            "Per-world reconstructed worlds, corrected readouts, and SHA-256 "
+            "ledgers accompany this report.",
+            "",
+        ]
+    )
+    (RESULTS / "gate-4-rescored-report.md").write_text(
+        "\n".join(report_lines), encoding="utf-8"
+    )
+    if verdict != "PASS":
+        _write(
+            "gate-4-rescored-diagnosis-stub.json",
+            {
+                "failed": [
+                    item["lesion"]
+                    for item in cell_results
+                    if not item["pass"]
+                ]
+            },
+        )
+        raise SystemExit("V3.1 Gate 4 rescore failed")
+
+
 def run_gate5() -> None:
     configurations = (
         ("length_32", {"length": 32}),
@@ -1053,11 +1759,18 @@ def run_gate5() -> None:
         ),
     )
     cells = {}
+    trace_records: list[dict[str, Any]] = []
     start = 3_112_000
     for index, (name, kwargs) in enumerate(configurations):
         cells[name] = recovery_metrics(
-            range(start + index * 200, start + index * 200 + 200), **kwargs
+            range(start + index * 200, start + index * 200 + 200),
+            trace_records=trace_records,
+            trace_cell=name,
+            **kwargs,
         )
+    trace_ledger = _write_jsonl_trace_bundle(
+        "gate-5-per-world", trace_records
+    )
     thresholds = _thresholds("gate2")
     criteria = {
         name: {
@@ -1079,10 +1792,15 @@ def run_gate5() -> None:
         "gate_3": json.loads(
             (RESULTS / "gate-3.json").read_text(encoding="utf-8")
         )["verdict"],
-        "gate_4_repaired": json.loads(
-            (RESULTS / "gate-4-repaired.json").read_text(encoding="utf-8")
+        "gate_4_rescored": json.loads(
+            (RESULTS / "gate-4-rescored.json").read_text(encoding="utf-8")
         )["verdict"],
     }
+    v30_gate5 = json.loads(
+        (ROOT / "results" / "V3.0" / "gate-5-repaired.json").read_text(
+            encoding="utf-8"
+        )
+    )
     gate3 = json.loads((RESULTS / "gate-3.json").read_text(encoding="utf-8"))
     gate3_blocking = {
         name: bool(passed)
@@ -1102,7 +1820,9 @@ def run_gate5() -> None:
             >= control_thresholds["revisability_difference_floor"]
         ),
         "revisability_difference": control_metrics["revisability_difference"],
-        "revisability_interval": control_metrics["revisability_interval"],
+        "revisability_interval": control_metrics[
+            "revisability_difference_95_interval"
+        ],
         "frozen_floor": control_thresholds["revisability_difference_floor"],
         "authorization": "gate3-adjudication.md",
     }
@@ -1111,7 +1831,8 @@ def run_gate5() -> None:
         and cumulative["gate_2"] == "PASS"
         and all(gate3_blocking.values())
         and gate3_adjudicated_revisability["mode_structure_blocking_pass"]
-        and cumulative["gate_4_repaired"] == "PASS"
+        and cumulative["gate_4_rescored"] == "PASS"
+        and v30_gate5["verdict"] == "PASS"
     )
     verdict = (
         "PASS"
@@ -1129,6 +1850,12 @@ def run_gate5() -> None:
             "cumulative_blocking_pass": cumulative_blocking_pass,
             "gate3_blocking_criteria": gate3_blocking,
             "gate3_adjudicated_revisability": gate3_adjudicated_revisability,
+            "trace_ledger": trace_ledger,
+            "v3_0_robustness_regression": {
+                "verdict": v30_gate5["verdict"],
+                "dimensions": sorted(v30_gate5["cells"]),
+                "source": "../V3.0/gate-5-repaired.json",
+            },
             "v3_0_stage_verdict": (
                 ROOT / "results" / "V3.0" / "stage-verdict.md"
             ).read_text(encoding="utf-8").splitlines()[0],
@@ -1148,6 +1875,158 @@ def run_gate5() -> None:
         raise SystemExit("V3.1 Gate 5 failed")
 
 
+def run_gate5_aggregate() -> None:
+    trace_path = RESULTS / "gate-5-per-world.jsonl"
+    ledger = json.loads(
+        (RESULTS / "gate-5-per-world-hashes.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    trace_bytes = trace_path.read_bytes()
+    if hashlib.sha256(trace_bytes).hexdigest() != ledger["file_sha256"]:
+        raise SystemExit("V3.1 Gate 5 trace hash mismatch")
+    lines = trace_bytes.splitlines(keepends=True)
+    if len(lines) != ledger["world_count"]:
+        raise SystemExit("V3.1 Gate 5 trace count mismatch")
+    for line, expected in zip(lines, ledger["records"]):
+        if hashlib.sha256(line).hexdigest() != expected["sha256"]:
+            raise SystemExit("V3.1 Gate 5 record hash mismatch")
+    records = [json.loads(line) for line in lines]
+    grouped = {
+        name: [record for record in records if record["cell"] == name]
+        for name in (
+            "length_32",
+            "length_96",
+            "concentration_1",
+            "code_scale_1.25",
+        )
+    }
+    cells = {
+        name: recovery_metrics_from_trace(cell_records)
+        for name, cell_records in grouped.items()
+    }
+    thresholds = _thresholds("gate2")
+    criteria = {
+        name: {
+            "field_accuracy": metrics["field_accuracy"]
+            >= max(0.45, thresholds["field_accuracy_floor"] - 0.08),
+            "coverage": metrics["coverage_95"]
+            >= max(0.75, thresholds["coverage_floor"] - 0.1),
+            "exact": metrics["max_exact_log_probability_error"] <= 1e-10,
+        }
+        for name, metrics in cells.items()
+    }
+    cumulative = {
+        "gate_1": json.loads(
+            (RESULTS / "gate-1.json").read_text(encoding="utf-8")
+        )["verdict"],
+        "gate_2": json.loads(
+            (RESULTS / "gate-2.json").read_text(encoding="utf-8")
+        )["verdict"],
+        "gate_3": json.loads(
+            (RESULTS / "gate-3.json").read_text(encoding="utf-8")
+        )["verdict"],
+        "gate_4_rescored": json.loads(
+            (RESULTS / "gate-4-rescored.json").read_text(encoding="utf-8")
+        )["verdict"],
+    }
+    v30_gate5 = json.loads(
+        (ROOT / "results" / "V3.0" / "gate-5-repaired.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    gate3 = json.loads((RESULTS / "gate-3.json").read_text(encoding="utf-8"))
+    gate3_blocking = {
+        name: bool(passed)
+        for name, passed in gate3["criteria"].items()
+        if name != "control"
+    }
+    control_metrics = gate3["metrics"]["control"]
+    control_thresholds = gate3["thresholds"]
+    gate3_adjudicated_revisability = {
+        "formal_gate_verdict": gate3["verdict"],
+        "mode_structure_blocking_pass": (
+            control_metrics["mode_difference"]
+            >= control_thresholds["mode_difference_floor"]
+        ),
+        "revisability_nonblocking_pass": (
+            control_metrics["revisability_difference"]
+            >= control_thresholds["revisability_difference_floor"]
+        ),
+        "revisability_difference": control_metrics["revisability_difference"],
+        "revisability_interval": control_metrics[
+            "revisability_difference_95_interval"
+        ],
+        "frozen_floor": control_thresholds["revisability_difference_floor"],
+        "authorization": "gate3-adjudication.md",
+    }
+    cumulative_blocking_pass = (
+        cumulative["gate_1"] == "PASS"
+        and cumulative["gate_2"] == "PASS"
+        and all(gate3_blocking.values())
+        and gate3_adjudicated_revisability["mode_structure_blocking_pass"]
+        and cumulative["gate_4_rescored"] == "PASS"
+        and v30_gate5["verdict"] == "PASS"
+    )
+    verdict = (
+        "PASS"
+        if all(all(value.values()) for value in criteria.values())
+        and cumulative_blocking_pass
+        else "FAIL"
+    )
+    _write(
+        "gate-5.json",
+        {
+            "verdict": verdict,
+            "criteria": criteria,
+            "cells": cells,
+            "cumulative": cumulative,
+            "cumulative_blocking_pass": cumulative_blocking_pass,
+            "gate3_blocking_criteria": gate3_blocking,
+            "gate3_adjudicated_revisability": gate3_adjudicated_revisability,
+            "trace_ledger": ledger,
+            "report_assembly_repair": {
+                "worlds_reexecuted": False,
+                "source": "gate-5-per-world.jsonl",
+                "defect": "revisability_interval field-name mismatch",
+                "corrected_field": "revisability_difference_95_interval",
+            },
+            "v3_0_robustness_regression": {
+                "verdict": v30_gate5["verdict"],
+                "dimensions": sorted(v30_gate5["cells"]),
+                "source": "../V3.0/gate-5-repaired.json",
+            },
+            "v3_0_stage_verdict": (
+                ROOT / "results" / "V3.0" / "stage-verdict.md"
+            ).read_text(encoding="utf-8").splitlines()[0],
+        },
+    )
+    _write(
+        "gate-5-report-assembly-repair.json",
+        {
+            "trace_hash_verified": True,
+            "record_hashes_verified": len(lines),
+            "worlds_reexecuted": False,
+            "corrected_field": "revisability_difference_95_interval",
+            "verdict": verdict,
+        },
+    )
+    if verdict != "PASS":
+        _write(
+            "gate-5-diagnosis-stub.json",
+            {
+                "failed": {
+                    name: [
+                        key for key, passed in values.items() if not passed
+                    ]
+                    for name, values in criteria.items()
+                    if not all(values.values())
+                }
+            },
+        )
+        raise SystemExit("V3.1 Gate 5 failed")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -1159,7 +2038,9 @@ def main() -> None:
             "gate2",
             "gate3",
             "gate4",
+            "gate4-rescore",
             "gate5",
+            "gate5-aggregate",
         ),
     )
     arguments = parser.parse_args()
@@ -1170,7 +2051,9 @@ def main() -> None:
         "gate2": run_gate2,
         "gate3": run_gate3,
         "gate4": run_gate4,
+        "gate4-rescore": run_gate4_rescore,
         "gate5": run_gate5,
+        "gate5-aggregate": run_gate5_aggregate,
     }[arguments.stage]()
 
 

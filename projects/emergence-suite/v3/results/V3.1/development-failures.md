@@ -52,3 +52,16 @@ traces, or per-world hashes exist. The prior runner retained only aggregate
 statistics. Deterministic regeneration was not substituted for the missing
 artifacts because the adjudication prohibits regeneration. No rescore or
 Gate-5 execution began.
+
+The evaluator amended the adjudication to permit deterministic reconstruction
+of the already-consumed block. The reconstruction reproduced the complete
+recorded aggregate object exactly, then passed all corrected identities and
+declared consequences. The custody stop remains in the ledger.
+
+## Gate-5 report-assembly software error
+
+All 800 Gate-5 worlds were scored and serialized before the runner requested
+the nonexistent key `revisability_interval`; the committed Gate-3 record names
+that field `revisability_difference_95_interval`. Whole-file and all 800
+record hashes were verified. Gate-5 metrics were reconstructed from the
+serialized score fields, with no world reexecution, and passed.

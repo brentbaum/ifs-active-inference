@@ -118,6 +118,46 @@ class V31GrowTests(unittest.TestCase):
             places=10,
         )
 
+    def test_lesion_oracle_copies_and_matches_restricted_prior(self):
+        config = v31.FormationConfig(
+            "repeated", "low", "broad", "real", "effective", "censored", 16
+        )
+        world = v31.generate_world(3_100_007, config)
+        raw = [item.__dict__ for item in world.slices]
+        original = copy.deepcopy(raw)
+        for lesion in (
+            "mode_slot",
+            "identity_edges",
+            "action_edge",
+            "availability_control",
+            "recursive_precision",
+            "fixed_G",
+        ):
+            programs, oracle = v31_oracle.lesion_posterior(raw, lesion)
+            production = (
+                v31.score_world(world)
+                if lesion == "fixed_G"
+                else v31.score_world(world, lesions=frozenset({lesion}))
+            )
+            production_bits = tuple(
+                (
+                    v31.program_values(program)["active_mode"],
+                    *(
+                        v31.program_values(program)[edge]
+                        for edge in v31.EDGE_NAMES
+                    ),
+                )
+                for program in production.programs
+            )
+            self.assertEqual(programs, production_bits)
+            np.testing.assert_allclose(
+                oracle,
+                production.probabilities,
+                atol=1e-10,
+                rtol=0.0,
+            )
+        self.assertEqual(raw, original)
+
     def test_released_block_threading(self):
         with self.assertRaises(ValueError):
             v31.generate_recovery_world(4_010_000)

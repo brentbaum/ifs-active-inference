@@ -134,3 +134,62 @@ def posterior(
     log_evidence = maximum + math.log(float(np.exp(values - maximum).sum()))
     probabilities = tuple(float(value) for value in np.exp(values - log_evidence))
     return programs, probabilities, log_evidence
+
+
+def lesion_posterior(
+    slices_input: Sequence[Mapping[str, Any]],
+    lesion: str,
+    *,
+    concentration: float = 0.5,
+    code_length_scale: float = 1.0,
+) -> tuple[tuple[tuple[int, ...], ...], tuple[float, ...]]:
+    """Independently score a lesion as a conditioned structure prior.
+
+    Typed-evidence transformations are copied and applied independently of the
+    production scorer.  No caller-owned input is mutated.
+    """
+    slices = copy.deepcopy(tuple(dict(item) for item in slices_input))
+    if lesion == "mode_slot":
+        for item in slices:
+            item["mode_observed"] = False
+    elif lesion == "availability_control":
+        for item in slices:
+            if item["outcome_observed"] is None:
+                item["outcome_observed"] = item["outcome_true"]
+    elif lesion == "recursive_precision":
+        for item in slices:
+            observed = item["time"] % 2 == 0
+            item["mode_observed"] = observed
+            item["root_observed"] = observed
+    elif lesion not in {
+        "identity_edges",
+        "action_edge",
+        "fixed_G",
+    }:
+        raise ValueError("unknown lesion")
+
+    programs, probabilities, _ = posterior(
+        slices,
+        concentration=concentration,
+        code_length_scale=code_length_scale,
+    )
+
+    def allowed(program: tuple[int, ...]) -> bool:
+        if lesion == "mode_slot":
+            return program[0] == 0
+        if lesion == "identity_edges":
+            return all(program[index] == 0 for index in (1, 2, 3, 4))
+        if lesion == "action_edge":
+            return program[6] == 0
+        return True
+
+    retained_mass = math.fsum(
+        probability
+        for program, probability in zip(programs, probabilities)
+        if allowed(program)
+    )
+    conditioned = tuple(
+        probability / retained_mass if allowed(program) else 0.0
+        for program, probability in zip(programs, probabilities)
+    )
+    return programs, conditioned

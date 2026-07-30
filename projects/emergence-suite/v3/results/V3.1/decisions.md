@@ -31,3 +31,16 @@
     the required retained worlds were never serialized and regeneration is
     explicitly forbidden. Deterministic seed replay was not treated as
     retention.
+12. The amended adjudication authorized deterministic reconstruction of the
+    already-consumed block. Reconstruction had to reproduce the complete
+    repaired-Gate-4 aggregate object exactly before corrected scoring; it did.
+13. Restricted-prior consistency is evaluated independently in two paths:
+    production scoring conditions a candidate-common evidence transform,
+    while the oracle copies raw slices, independently applies the lesion, and
+    enumerates all 128 programs.
+14. Every reconstructed Gate-4 world and every Gate-5 world is now serialized
+    with per-record and whole-file SHA-256 hashes. This is binding for future
+    V3 runners.
+15. Gate-5 world execution completed before report assembly failed on a stale
+    interval key. The corrected report was derived only from the verified
+    trace file; no world was reexecuted.

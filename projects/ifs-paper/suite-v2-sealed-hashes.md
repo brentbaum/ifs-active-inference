@@ -176,3 +176,9 @@ Escrow: C-V28D-B seeds 2130600:2131199 (fresh prefix; the never-opened 2130000:2
 fdc8b516379048f7d2b1e5fde40c647de76bab02f060119339118debd4cdff73  C-V30-grammar-challenge.md
 ```
 Escrow: C-V30 seeds 4000000:4001999 (Epoch C), released by this record via the frozen released_block parameter. Full accumulated pre-seal linter; dry-run on the exact constructor arguments sealed.
+
+## C-V31 seal (2026-07-30)
+```
+1e78a9c3443ddb10dfc8e7b56d75321f0487db49eb79443caecfb9e0011cf740  C-V31-grow-challenge.md
+```
+Escrow: C-V31 seeds 4010000:4013999, released by this record. Pilot blocks 3130000:3130959 BARRED (exact-configuration attainability pilots). Full accumulated linter.
