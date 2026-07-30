@@ -1,0 +1,56 @@
+{
+  "criteria": {
+    "adaptive_edge_survival_min": "PENDING",
+    "brier_max": "PENDING",
+    "coverage_min": "PENDING",
+    "do_over_speedup_min": "PENDING",
+    "ece_max": "PENDING",
+    "edge_accuracy_min": "PENDING",
+    "history_reconstruction_min": "PENDING",
+    "material_reduction_rate_min": "PENDING",
+    "mode_retention_min": "PENDING",
+    "premature_durable_reduction_max": "PENDING",
+    "program_accuracy_min": "PENDING",
+    "suggestion_false_reduction_max": "PENDING"
+  },
+  "hyperparameters": {
+    "code_length_scale": 1.0,
+    "concentration": 0.5
+  },
+  "material_readout": {
+    "absent_present_bf_min": "PENDING",
+    "burden_edge_mass_max": "PENDING",
+    "mode_retained": "PENDING",
+    "neutral_tolerance": 1e-10,
+    "stability_observations": 3
+  },
+  "seed_blocks": {
+    "escrow_closed": [
+      4030000,
+      4033999
+    ],
+    "gate2": [
+      3302000,
+      3304999
+    ],
+    "gate3": [
+      3305000,
+      3309999
+    ],
+    "gate4": [
+      3310000,
+      3311999
+    ],
+    "gate5": [
+      3312000,
+      3319999
+    ],
+    "pilot": [
+      3300000,
+      3301999
+    ]
+  },
+  "stage": "V3.3",
+  "status": "STOPPED_AT_STAGE0_UNATTAINABLE_DO_OVER_SPEEDUP",
+  "tolerance": 1e-10
+}

@@ -1,0 +1,26 @@
+{
+  "executed_before_pilot": true,
+  "proofs": {
+    "10_independent_restricted_oracle_error": 0.0,
+    "10_restricted_prior_identity_error": 4.996003610813204e-16,
+    "11_readout_purity": true,
+    "12_forbidden_operations": [],
+    "13_analysis_label_rejected": true,
+    "14_trace_sink_refusal": true,
+    "1_same_edges": true,
+    "1_same_programs": true,
+    "2_posterior_normalization_error": 4.440892098500626e-16,
+    "2_prior_normalization_error": 6.661338147750939e-16,
+    "3_local_joint_recombination_error": 0.0,
+    "4_independent_oracle_evidence_error": 0.0,
+    "4_independent_oracle_probability_error": 0.0,
+    "5_neutral_observation_probability_error": 0.0,
+    "6_episode_label_neutrality_error": 0.0,
+    "7_context_dormancy_probability_error": 0.0,
+    "8_mode_spike_separate_from_burden": true,
+    "9_action_selection_likelihood_absent": true
+  },
+  "structure_space_size": 128,
+  "tolerance": 1e-10,
+  "verdict": "PASS"
+}
