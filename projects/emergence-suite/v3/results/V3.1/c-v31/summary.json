@@ -1,0 +1,56 @@
+{
+  "cell_summaries": {
+    "cell_1_chronic_real_effective_censored": {
+      "mean_danger_probability": 0.0009824399632810345,
+      "mean_delta_i": 0.2704413843996976,
+      "mean_efficacy_probability": 0.3333333333333332,
+      "mean_normalization_error": 3.554379013337439e-15,
+      "mean_part_probability": 0.9985308538490347
+    },
+    "cell_2_acute_real_effective_full": {
+      "mean_danger_probability": 0.7560068285665912,
+      "mean_delta_i": 0.003665096428306349,
+      "mean_efficacy_probability": 0.547093719283393,
+      "mean_normalization_error": 3.4970915052667805e-15,
+      "mean_part_probability": 0.002184533242746272
+    },
+    "cell_3_chronic_safe_sham_masked": {
+      "mean_danger_probability": 0.0011607188088446866,
+      "mean_delta_i": 0.26903262255961635,
+      "mean_efficacy_probability": 0.3333333333333332,
+      "mean_normalization_error": 3.4574565432876624e-15,
+      "mean_part_probability": 0.9967495766480695
+    },
+    "cell_4_none_real_sham_full": {
+      "mean_danger_probability": 0.9264007676931737,
+      "mean_delta_i": 0.003400128134462075,
+      "mean_efficacy_probability": 0.20697544098554535,
+      "mean_normalization_error": 3.6731728769723305e-15,
+      "mean_part_probability": 0.0014705419003021999
+    }
+  },
+  "classification_separation": {
+    "bootstrap_replicates": 2000,
+    "difference": 0.9958126776770279,
+    "whole_world_bootstrap_95_interval": [
+      0.9950511395560971,
+      0.9964573157343227
+    ]
+  },
+  "criteria": {
+    "criterion_1": true,
+    "criterion_2": true,
+    "criterion_3": true,
+    "criterion_4": true,
+    "criterion_5": true,
+    "criterion_6": true
+  },
+  "immutable_verdict": "PASS",
+  "maximum_normalization_error": 1.354472090042691e-14,
+  "raw_trace_seal_sha256": "10e19f3b4f054bc49e8955d47a7a3495ad0fe45a9eca4dbe7e7512e14904dade",
+  "verdict_classes": {
+    "custody": true,
+    "scientific": true,
+    "semantic": true
+  }
+}

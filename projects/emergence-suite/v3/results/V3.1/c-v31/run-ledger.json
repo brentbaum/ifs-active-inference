@@ -1,0 +1,23 @@
+{
+  "challenge": "C-V31",
+  "challenge_sha256": "1e78a9c3443ddb10dfc8e7b56d75321f0487db49eb79443caecfb9e0011cf740",
+  "consumed_seed_count": 4000,
+  "consumption": "ascending_gap_free_once",
+  "criteria_evaluated_after_trace_seal": true,
+  "first_seed": 4010000,
+  "frozen_identity": {
+    "inherited_manifest_verified": true,
+    "manifest_file_count": 42,
+    "manifest_files_verified": 42,
+    "manifest_path": "projects/emergence-suite/v3/results/V3.1/freeze-manifest.json",
+    "mismatches": []
+  },
+  "last_seed": 4013999,
+  "raw_trace_seal": "raw-traces-seal.json",
+  "raw_trace_seal_sha256": "10e19f3b4f054bc49e8955d47a7a3495ad0fe45a9eca4dbe7e7512e14904dade",
+  "release_authority": "projects/ifs-paper/suite-v2-sealed-hashes.md C-V31 record at commit f9a9a49",
+  "released_block": [
+    4010000,
+    4013999
+  ]
+}
