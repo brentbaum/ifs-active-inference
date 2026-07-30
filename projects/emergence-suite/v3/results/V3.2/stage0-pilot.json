@@ -1,0 +1,89 @@
+{
+  "attainability": {
+    "false_recurrence": 0.1967671951309763,
+    "history_separation": 0.8029999999999999,
+    "material_rate": 1.0,
+    "mixed_accuracy": 0.95,
+    "present_transfer": 0.3187823834139562,
+    "recurrent_context_probability": 0.9999997441724191,
+    "witnessing_gain": -1.4481277843536589e-11
+  },
+  "barred_block": [
+    3200000,
+    3201999
+  ],
+  "candidate_thresholds_not_frozen_due_to_stop": {
+    "active_context_accuracy": 0.95,
+    "brier_max": 0.09,
+    "coverage_min": 0.93,
+    "dynamics_accuracy": 0.88,
+    "ece_max": 0.07,
+    "historical_query_separation": 0.401,
+    "macro_region_recovery": 0.87,
+    "material_redescription_rate": 0.92,
+    "mixed_block_accuracy": 0.87,
+    "old_context_retention_error_max": 1e-10,
+    "one_way_false_recurrence_max": 0.28,
+    "present_transfer": 0.159,
+    "recurrent_context_probability": 0.75,
+    "scope_accuracy": 0.95,
+    "witnessing_scope_gain": "UNATTAINABLE"
+  },
+  "recovery": {
+    "active_context_accuracy": 1.0,
+    "brier": 0.03078868040573414,
+    "confusion": {
+      "continuous_drift": {
+        "continuous_drift": 397,
+        "cue_local": 0,
+        "one_way_change": 1,
+        "recurrent_context": 0,
+        "static": 2
+      },
+      "cue_local": {
+        "continuous_drift": 0,
+        "cue_local": 400,
+        "one_way_change": 0,
+        "recurrent_context": 0,
+        "static": 0
+      },
+      "one_way_change": {
+        "continuous_drift": 45,
+        "cue_local": 0,
+        "one_way_change": 320,
+        "recurrent_context": 35,
+        "static": 0
+      },
+      "recurrent_context": {
+        "continuous_drift": 2,
+        "cue_local": 0,
+        "one_way_change": 0,
+        "recurrent_context": 398,
+        "static": 0
+      },
+      "static": {
+        "continuous_drift": 2,
+        "cue_local": 0,
+        "one_way_change": 0,
+        "recurrent_context": 0,
+        "static": 398
+      }
+    },
+    "coverage": 0.985,
+    "dynamics_accuracy": 0.9345,
+    "ece": 0.01590980389994151,
+    "macro_region_recovery": 0.9565000000000001,
+    "max_exact_log_probability_error": 1.6143530956469476e-11,
+    "per_family_accuracy": {
+      "continuous_drift": 0.9925,
+      "cue_local": 1.0,
+      "one_way_change": 0.8,
+      "recurrent_context": 0.995,
+      "static": 0.995
+    },
+    "scope_accuracy": 1.0,
+    "world_count": 2000
+  },
+  "stage0_status": "STOP_UNATTAINABLE_WITNESSING_CONTRAST",
+  "verdict_class": "descriptive_attainability_only"
+}

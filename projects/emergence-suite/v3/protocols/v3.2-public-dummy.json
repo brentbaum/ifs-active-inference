@@ -1,0 +1,30 @@
+{
+  "stage": "V3.2",
+  "public_only": true,
+  "structure": {
+    "active_contexts": 2,
+    "scopes": ["context_specific", "cue_specific"],
+    "dynamics": ["discrete_recurrent_context", "ordered_random_walk"]
+  },
+  "world": {
+    "seed": 3200000,
+    "length": 12,
+    "cue_count": 3,
+    "missingness": 0.0,
+    "evidence_style": "witnessing"
+  },
+  "readouts": [
+    "structure_posterior",
+    "region_probabilities",
+    "raw_redescription",
+    "material_redescription",
+    "selective_redescription",
+    "historical_prediction",
+    "present_context_transfer"
+  ],
+  "guards": {
+    "analysis_labels_enter_inference": false,
+    "grow_split_prune_callable": false,
+    "historical_parameter_erasure": false
+  }
+}

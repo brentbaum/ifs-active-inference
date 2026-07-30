@@ -1,0 +1,58 @@
+{
+  "criterion_thresholds": {
+    "active_context_accuracy": 0.95,
+    "brier_max": 0.09,
+    "coverage_min": 0.93,
+    "dynamics_accuracy": 0.88,
+    "ece_max": 0.07,
+    "historical_query_separation": 0.401,
+    "macro_region_recovery": 0.87,
+    "material_redescription_rate": 0.92,
+    "mixed_block_accuracy": 0.87,
+    "old_context_retention_error_max": 1e-10,
+    "one_way_false_recurrence_max": 0.28,
+    "present_transfer": 0.159,
+    "recurrent_context_probability": 0.75,
+    "scope_accuracy": 0.95,
+    "witnessing_scope_gain": "UNFROZEN_ATTAINABILITY_FAILURE"
+  },
+  "hyperparameters": {
+    "code_length_scale": 1.0,
+    "diagnostic_reliability": 0.74,
+    "emission_floor": 0.08
+  },
+  "pilot_summary_sha256": "9481abebd6df4c106667895ced0053e1636b16c68a93b1e4d57c6d51c0d123a8",
+  "readout_thresholds": {
+    "material_bayes_factor": 4.0,
+    "material_probability": 0.8
+  },
+  "seed_blocks": {
+    "escrow_closed": [
+      4020000,
+      4023999
+    ],
+    "gate2": [
+      3202000,
+      3204999
+    ],
+    "gate3": [
+      3205000,
+      3209999
+    ],
+    "gate4": [
+      3210000,
+      3211999
+    ],
+    "gate5": [
+      3212000,
+      3219999
+    ],
+    "pilot_barred_after_use": [
+      3200000,
+      3201999
+    ]
+  },
+  "stage": "V3.2",
+  "status": "STOPPED_AT_STAGE0_UNATTAINABLE_WITNESSING_CONTRAST",
+  "tolerance": 1e-10
+}
