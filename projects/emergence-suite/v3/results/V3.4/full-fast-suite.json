@@ -1,0 +1,11 @@
+{
+  "v2_command": "python3 run_tests_parallel.py",
+  "v2_failures": 0,
+  "v2_modules": 26,
+  "v2_passed": true,
+  "v3_command": "python3 -m unittest discover -s tests",
+  "v3_failures": 0,
+  "v3_passed": true,
+  "v3_tests": 43,
+  "when": "after V3.4 Gate-5 adjudicated re-issue"
+}

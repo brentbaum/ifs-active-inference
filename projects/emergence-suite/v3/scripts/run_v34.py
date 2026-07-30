@@ -2132,6 +2132,74 @@ def run_gate5() -> bool:
     return passed
 
 
+def write_freeze_manifest() -> bool:
+    parameters = json.loads(PARAMETERS.read_text(encoding="utf-8"))
+    expected_status = "FROZEN_ADJUDICATED_SHORT_HISTORY_CONJUNCTION_BOUND"
+    if parameters["status"] != expected_status:
+        raise RuntimeError("V3.4 is not freeze-ready")
+    fixed = (
+        ROOT / "contracts" / "v3.4-relate-contract.md",
+        ROOT / "protocols" / "v3.4-analysis-plan.md",
+        ROOT / "protocols" / "v3.4-parameters.json",
+        ROOT / "protocols" / "v3.4-public-dummy.json",
+        ROOT / "ref" / "audit.py",
+        ROOT / "ref" / "trace_sink.py",
+        ROOT / "ref" / "v34.py",
+        ROOT / "ref" / "v34_oracle.py",
+        ROOT / "scripts" / "run_v34.py",
+        ROOT / "tests" / "test_v34_relate.py",
+    )
+    result_files = tuple(
+        path
+        for path in sorted(RESULTS.iterdir())
+        if path.is_file()
+        and path.name not in {
+            "freeze-manifest.json",
+            "ready-to-commit.md",
+        }
+    )
+    files = {}
+    local_only = {}
+    for path in (*fixed, *result_files):
+        relative = str(path.relative_to(ROOT))
+        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        if path.stat().st_size > 90 * 1024 * 1024:
+            local_only[relative] = {
+                "sha256": digest,
+                "size_bytes": path.stat().st_size,
+            }
+        else:
+            files[relative] = digest
+    payload = {
+        "stage": "V3.4",
+        "status": expected_status,
+        "files": files,
+        "local_only_trace_bundles": local_only,
+        "escrow": {
+            "block": [4_040_000, 4_043_999],
+            "status": "UNTOUCHED",
+        },
+        "formal_gate_verdicts": {
+            "gate1": "PASS",
+            "gate2": "PASS",
+            "gate3": "PASS",
+            "gate4": "PASS",
+            "gate5": "FAIL_RETAINED",
+        },
+        "adjudicated_gate5_blocking_verdict": "PASS",
+        "adjudicated_limitation": (
+            "32-slice whole-program conjunction accuracy is descriptive; "
+            "the frozen 48-slice primary cell is blocking"
+        ),
+        "stage0_defect_record": (
+            "recovery root-observation generator/scorer mismatch repaired "
+            "under evaluator authorization; original pilot retained"
+        ),
+    }
+    _write_json("freeze-manifest.json", payload)
+    return True
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -2143,6 +2211,7 @@ def main() -> int:
             "gate3",
             "gate4",
             "gate5",
+            "freeze",
         ),
     )
     args = parser.parse_args()
@@ -2158,6 +2227,8 @@ def main() -> int:
         else run_gate4()
         if args.step == "gate4"
         else run_gate5()
+        if args.step == "gate5"
+        else write_freeze_manifest()
     )
     return 0 if passed else 1
 

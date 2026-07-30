@@ -1,0 +1,74 @@
+{
+  "adjudication": {
+    "authority": "results/V3.4/gate5-adjudication.md",
+    "classification": "unaudited_information_budget_transplant",
+    "original_gate5_verdict": "FAIL_RETAINED",
+    "standing_convention": "primary-cell thresholds bind only at the frozen primary information budget; robustness lengths are descriptive",
+    "worlds_reexecuted": false
+  },
+  "blocking_checks": {
+    "primary_48_slice_recovery": true,
+    "scientific_robustness": true,
+    "prior_stage_manifests": true,
+    "trace_custody": true,
+    "gate3_primary_still_passes": true,
+    "gate4_primary_still_passes": true
+  },
+  "information_curve": {
+    "32": {
+      "classification": "DESCRIPTIVE_ROBUSTNESS",
+      "coverage": 0.975,
+      "edge_accuracy": {
+        "L_PREC": 0.9,
+        "L_TRANSITION": 0.975,
+        "L_Y": 0.845,
+        "PA_RY": 0.969
+      },
+      "exact_program_accuracy": 0.733,
+      "root_accuracy": 0.797,
+      "root_ece": 0.01336292120744247,
+      "structure_ece": 0.02019370504680673
+    },
+    "48": {
+      "classification": "PRIMARY_BLOCKING",
+      "coverage": 0.9903333333333333,
+      "edge_accuracy": {
+        "L_PREC": 0.9493333333333334,
+        "L_TRANSITION": 0.993,
+        "L_Y": 0.888,
+        "PA_RY": 0.994
+      },
+      "exact_program_accuracy": 0.837,
+      "frozen_exact_program_floor": 0.78,
+      "root_accuracy": 0.7823333333333333,
+      "root_ece": 0.010738725111008072,
+      "structure_ece": 0.015816303036017356
+    },
+    "96": {
+      "classification": "DESCRIPTIVE_ROBUSTNESS",
+      "coverage": 0.997,
+      "edge_accuracy": {
+        "L_PREC": 0.977,
+        "L_TRANSITION": 1.0,
+        "L_Y": 0.935,
+        "PA_RY": 1.0
+      },
+      "exact_program_accuracy": 0.915,
+      "root_accuracy": 0.768,
+      "root_ece": 0.021199575930785145,
+      "structure_ece": 0.013232751035546705
+    }
+  },
+  "short_history_localization": {
+    "all_32_slice_edges_pass_frozen_edge_floor": true,
+    "frozen_edge_floor": 0.84,
+    "minimum_32_slice_edge_accuracy": 0.845,
+    "original_transplanted_comparison": {
+      "accuracy": 0.733,
+      "floor": 0.78,
+      "passed": false
+    },
+    "interpretation": "whole-program accuracy is the conjunction of four edge decisions and falls mechanically at the shorter information budget even while every edge, calibration, and coverage check passes"
+  },
+  "verdict": "PASS_UNDER_STANDING_GATE5_INFORMATION_BUDGET_CONVENTION"
+}
