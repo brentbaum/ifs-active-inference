@@ -1,27 +1,27 @@
 {
   "criterion_thresholds": {
     "active_context_accuracy": 0.95,
-    "brier_max": 0.09,
-    "coverage_min": 0.93,
-    "dynamics_accuracy": 0.88,
-    "ece_max": 0.07,
-    "historical_query_separation": 0.401,
+    "brier_max": 0.08,
+    "coverage_min": 0.94,
+    "dynamics_accuracy": 0.91,
+    "ece_max": 0.06,
+    "historical_query_separation": 0.344,
     "macro_region_recovery": 0.87,
-    "material_redescription_rate": 0.92,
-    "mixed_block_accuracy": 0.87,
+    "material_redescription_rate": 0.91,
+    "mixed_block_accuracy": 0.9,
     "old_context_retention_error_max": 1e-10,
-    "one_way_false_recurrence_max": 0.28,
+    "one_way_false_recurrence_max": 0.29,
     "present_transfer": 0.159,
-    "recurrent_context_probability": 0.75,
-    "scope_accuracy": 0.95,
-    "witnessing_scope_gain": "UNFROZEN_ATTAINABILITY_FAILURE"
+    "recurrent_context_probability": 0.749,
+    "scope_accuracy": 0.94,
+    "witnessing_scope_gain": 0.4
   },
   "hyperparameters": {
     "code_length_scale": 1.0,
     "diagnostic_reliability": 0.74,
     "emission_floor": 0.08
   },
-  "pilot_summary_sha256": "9481abebd6df4c106667895ced0053e1636b16c68a93b1e4d57c6d51c0d123a8",
+  "pilot_summary_sha256": "bc914dff41f7c3b12291fae17be5c496cfa96cb2c93414273541a604d291b7c6",
   "readout_thresholds": {
     "material_bayes_factor": 4.0,
     "material_probability": 0.8
@@ -50,9 +50,13 @@
     "pilot_barred_after_use": [
       3200000,
       3201999
+    ],
+    "repair_pilot_barred_after_use": [
+      3230000,
+      3231999
     ]
   },
   "stage": "V3.2",
-  "status": "STOPPED_AT_STAGE0_UNATTAINABLE_WITNESSING_CONTRAST",
+  "status": "FROZEN_AFTER_REPAIR_PILOT_PROGRESSION_STOPPED_CUSTODY_DISCLOSURE",
   "tolerance": 1e-10
 }

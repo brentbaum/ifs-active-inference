@@ -18,7 +18,10 @@ import numpy as np
 
 
 STAGE_VERSION = "V3.2"
-DEVELOPMENT_BLOCK = (3_200_000, 3_229_999)
+DEVELOPMENT_BLOCKS = (
+    (3_200_000, 3_219_999),
+    (3_230_000, 3_231_999),
+)
 BLOCKS = ("cue_emission", "outcome_emission")
 SCOPES = ("shared_global", "cue_specific", "context_specific")
 DYNAMICS = (
@@ -195,9 +198,8 @@ def _rng(
     released_block: tuple[int, int] | None,
     keys: list[tuple[str, int, str, int | str]],
 ) -> np.random.Generator:
-    block = DEVELOPMENT_BLOCK if released_block is None else released_block
-    start, end = block
-    if not start <= int(seed) <= end:
+    blocks = DEVELOPMENT_BLOCKS if released_block is None else (released_block,)
+    if not any(start <= int(seed) <= end for start, end in blocks):
         raise ValueError("seed is outside the authorized V3.2 block")
     key = (STAGE_VERSION, int(seed), str(component), event)
     keys.append(key)
@@ -218,7 +220,10 @@ def _scope_probability(scope: str, cue: int, context: int) -> float:
         return 0.5
     if scope == "cue_specific":
         return 0.22 if cue % 2 == 0 else 0.78
-    return (0.18, 0.82, 0.5)[context]
+    # Slot 0 is the pre-witness reference.  Until another context is observed,
+    # a context-specific parameter block is observationally equivalent to the
+    # shared block; dormant context parameters remain at their prior.
+    return (0.5, 0.82, 0.18)[context]
 
 
 def _dynamics_probability(
@@ -373,14 +378,7 @@ def generate_world(
                 )
                 diagnostic = time == 0 and cue == 0
                 scope_row = np.asarray(
-                    [
-                        (
-                            _categorical_probability(i, scope_truth, 3, reliability)
-                            if diagnostic
-                            else 1.0 / 3.0
-                        )
-                        for i in range(3)
-                    ]
+                    [1.0 / 3.0 for _ in range(3)]
                 )
                 dynamics_row = np.asarray(
                     [
@@ -478,22 +476,8 @@ def _candidate_log_likelihood(
                     reliability,
                 )
             )
-        diagnostic_reliability = (
-            reliability if item.time == 0 and item.cue == 0 else 1.0 / 3.0
-        )
         if not mask_scope_channel:
-            total += math.log(
-                (
-                    _categorical_probability(
-                        item.scope_token,
-                        SCOPES.index(scope),
-                        3,
-                        diagnostic_reliability,
-                    )
-                    if item.time == 0 and item.cue == 0
-                    else 1.0 / 3.0
-                )
-            )
+            total += math.log(1.0 / 3.0)
         if not mask_dynamics_channel:
             total += math.log(
                 (
@@ -680,6 +664,44 @@ def score_world(
         _parameter_means(world),
         _root_means(world),
     )
+
+
+def single_regime_scope_neutrality_error(
+    world: TemporalWorld,
+    hyperparameters: TemporalHyperparameters = DEFAULT_HYPERPARAMETERS,
+) -> float:
+    """Maximum shared-vs-context likelihood difference before a contrast.
+
+    This is an evidence identity, so structural prior odds are intentionally
+    excluded.  Every realized nonmissing observation must be in reference
+    context slot 0; dormant context parameter blocks contribute no likelihood.
+    """
+
+    if any(item.context != 0 for item in world.slices if not item.missing):
+        raise ValueError("scope-neutrality proof requires a single-regime world")
+    errors = []
+    for block in BLOCKS:
+        for dynamics in DYNAMICS:
+            shared = _candidate_log_likelihood(
+                world,
+                1,
+                block,
+                "shared_global",
+                dynamics,
+                hyperparameters,
+                mask_active_channel=True,
+            )
+            context = _candidate_log_likelihood(
+                world,
+                1,
+                block,
+                "context_specific",
+                dynamics,
+                hyperparameters,
+                mask_active_channel=True,
+            )
+            errors.append(abs(shared - context))
+    return max(errors)
 
 
 def _logsumexp(values: Sequence[float]) -> float:

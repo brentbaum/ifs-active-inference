@@ -33,6 +33,86 @@ class OraclePosterior:
     log_evidence: float
 
 
+def single_regime_scope_neutrality_error(
+    world: TemporalWorld,
+    hyperparameters: TemporalHyperparameters,
+) -> float:
+    """Independent direct likelihood reproduction of the neutrality identity."""
+
+    copied = tuple(
+        (
+            int(item.time),
+            int(item.cue),
+            int(item.context),
+            str(item.block),
+            int(item.value),
+            int(item.root_value),
+            int(item.scope_token),
+            int(item.dynamics_token),
+            bool(item.missing),
+        )
+        for item in tuple(world.slices)
+    )
+    if any(context != 0 for _, _, context, _, _, _, _, _, missing in copied if not missing):
+        raise ValueError("scope-neutrality proof requires a single-regime world")
+    reliability = float(hyperparameters.diagnostic_reliability)
+    floor = float(hyperparameters.emission_floor)
+    length = int(world.length)
+    errors = []
+    for block in _BLOCKS:
+        for dynamics in _DYNAMICS:
+            scores = []
+            for scope in ("shared_global", "context_specific"):
+                total = 0.0
+                for (
+                    time,
+                    cue,
+                    context,
+                    observed_block,
+                    observed,
+                    root,
+                    _scope_token,
+                    dynamics_token,
+                    missing,
+                ) in copied:
+                    if missing or observed_block != block:
+                        continue
+                    probability = _emission(
+                        scope,
+                        dynamics,
+                        cue,
+                        context,
+                        time,
+                        length,
+                        floor,
+                    )
+                    total += math.log(
+                        probability if observed else 1.0 - probability
+                    )
+                    root_probability = (
+                        _scope(scope, cue, context)
+                        if scope == "context_specific"
+                        else 0.5
+                    )
+                    total += math.log(
+                        root_probability if root else 1.0 - root_probability
+                    )
+                    total += math.log(1.0 / 3.0)
+                    total += math.log(
+                        _categorical(
+                            dynamics_token,
+                            _DYNAMICS.index(dynamics),
+                            4,
+                            reliability,
+                        )
+                        if time == 0 and cue == 0
+                        else 1.0 / 4.0
+                    )
+                scores.append(total)
+            errors.append(abs(scores[0] - scores[1]))
+    return max(errors)
+
+
 def _cost(value: Any) -> float:
     if isinstance(value, int):
         return float(value)
@@ -54,7 +134,7 @@ def _scope(scope: str, cue: int, context: int) -> float:
         return 0.5
     if scope == "cue_specific":
         return 0.22 if cue % 2 == 0 else 0.78
-    return (0.18, 0.82, 0.5)[context]
+    return (0.5, 0.82, 0.18)[context]
 
 
 def _dynamics(kind: str, time: int, length: int, context: int) -> float:
@@ -182,18 +262,7 @@ def brute_force_structure_posterior(
                     )
                 )
             if f"scope:{block}" not in masked_channels:
-                score += math.log(
-                    (
-                        _categorical(
-                            scope_token,
-                            _SCOPES.index(scope),
-                            3,
-                            reliability,
-                        )
-                        if time == 0 and cue == 0
-                        else 1.0 / 3.0
-                    )
-                )
+                score += math.log(1.0 / 3.0)
             if f"dynamics:{block}" not in masked_channels:
                 score += math.log(
                     (

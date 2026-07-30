@@ -10,3 +10,13 @@
 - Localization: the single-regime comparator already identifies
   context-specific scope through its context-0 likelihood.
 
+## Repair pilot — custody disclosure
+
+- Population: repair pilot `3230000:3231999` (barred).
+- Scientific result: repaired witnessing gain `0.800036943234541`; positive
+  SESOI `0.400` is attainable.
+- Process failure: seeds `3230000:3230019` were invoked once in a manual
+  preflight without execution-time trace serialization before the fully traced
+  formal pilot; seed `3230000` was also regenerated once after the stop for an
+  untraced semantic spot check.
+- Consequence: progression stopped before Gate 1 for external adjudication.

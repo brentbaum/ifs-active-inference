@@ -10,9 +10,13 @@ from ref.v32 import (
     generate_world,
     redescription_readouts,
     score_world,
+    single_regime_scope_neutrality_error,
     structure_space_size,
 )
-from ref.v32_oracle import brute_force_structure_posterior
+from ref.v32_oracle import (
+    brute_force_structure_posterior,
+    single_regime_scope_neutrality_error as brute_force_scope_neutrality,
+)
 
 
 class V32SplitTests(unittest.TestCase):
@@ -85,6 +89,29 @@ class V32SplitTests(unittest.TestCase):
                     generate_world(seed + index, structure=structure, length=8)
                 )
                 self.assertTrue(math.isfinite(posterior.log_evidence))
+
+    def test_single_regime_scope_neutrality_and_dormancy(self):
+        structure = TemporalStructure(
+            2,
+            ("context_specific", "context_specific"),
+            ("discrete_recurrent_context", "discrete_recurrent_context"),
+        )
+        world = generate_world(
+            3_230_000,
+            structure=structure,
+            length=24,
+            evidence_style="single_regime",
+        )
+        production_error = single_regime_scope_neutrality_error(world)
+        oracle_error = brute_force_scope_neutrality(
+            world, DEFAULT_HYPERPARAMETERS
+        )
+        self.assertLessEqual(production_error, 1e-10)
+        self.assertLessEqual(oracle_error, 1e-10)
+        posterior = score_world(world)
+        self.assertEqual(
+            posterior.parameter_mean("cue_emission", context=1, cue=0), 0.5
+        )
 
 
 if __name__ == "__main__":

@@ -340,13 +340,13 @@ def _bootstrap(values: Sequence[float], seed: int, draws: int = 2000) -> tuple[f
 def run_pilot() -> None:
     labels = tuple(CANONICAL)
     tasks = [
-        (seed, labels[(seed - 3_200_000) % 5], 48, 3, 0.0, 1.0, 0.74)
-        for seed in range(3_200_000, 3_202_000)
+        (seed, labels[(seed - 3_230_000) % 5], 48, 3, 0.0, 1.0, 0.74)
+        for seed in range(3_230_000, 3_232_000)
     ]
-    rows = _trace_map("stage0-pilot", tasks, _worker_recovery)
+    rows = _trace_map("stage0-repair-pilot", tasks, _worker_recovery)
     metrics = _recovery_metrics(rows)
     # Paired attainable-range fixtures use already-barred pilot seeds.
-    fixture = _pilot_assays(range(3_200_000, 3_200_200))
+    fixture = _pilot_assays(range(3_230_000, 3_230_200))
     thresholds = {
         "active_context_accuracy": max(0.50, math.floor((metrics["active_context_accuracy"] - 0.05) * 100) / 100),
         "scope_accuracy": max(0.50, math.floor((metrics["scope_accuracy"] - 0.05) * 100) / 100),
@@ -379,10 +379,10 @@ def run_pilot() -> None:
     )
     PARAMETERS.write_text(json.dumps(parameters, indent=2, sort_keys=True) + "\n")
     _write_json(
-        "stage0-pilot.json",
+        "stage0-repair-pilot.json",
         {
             "verdict_class": "descriptive_attainability_only",
-            "barred_block": [3_200_000, 3_201_999],
+            "barred_block": [3_230_000, 3_231_999],
             "recovery": metrics,
             "attainability": fixture,
             (
@@ -481,7 +481,7 @@ def _parameters() -> dict[str, Any]:
 
 def run_gate1() -> bool:
     dummy = v32.generate_world(
-        3_200_000,
+        3_230_000,
         structure=MIXED,
         length=12,
         evidence_style="witnessing",
@@ -527,6 +527,26 @@ def run_gate1() -> bool:
             v32.structure_log_prior(dummy.structure)
             + _truth_log_likelihood(dummy, dummy.structure)
         )
+    )
+    neutrality_world = v32.generate_world(
+        3_230_001,
+        structure=CANONICAL["recurrent_context"],
+        length=24,
+        evidence_style="single_regime",
+    )
+    neutrality_error = v32.single_regime_scope_neutrality_error(
+        neutrality_world
+    )
+    neutrality_oracle_error = (
+        v32_oracle.single_regime_scope_neutrality_error(
+            neutrality_world, v32.DEFAULT_HYPERPARAMETERS
+        )
+    )
+    dormant_parameter_error = abs(
+        v32.score_world(neutrality_world).parameter_mean(
+            "cue_emission", 1, 0
+        )
+        - 0.5
     )
     proofs = {
         "1_normalization": abs(math.fsum(production.probabilities) - 1.0),
@@ -603,6 +623,11 @@ def run_gate1() -> bool:
         "11_readout_purity": readout_pure,
         "12_analysis_label_rejected": label_rejected,
         "12_escrow_seed_rejected": custody_rejected,
+        "13_scope_neutrality_under_single_regime": {
+            "production_error": neutrality_error,
+            "independent_oracle_error": neutrality_oracle_error,
+            "dormant_parameter_prior_mean_error": dormant_parameter_error,
+        },
     }
     blocking = [
         proofs["1_normalization"] <= TOLERANCE,
@@ -620,6 +645,18 @@ def run_gate1() -> bool:
         proofs["11_readout_purity"],
         proofs["12_analysis_label_rejected"],
         proofs["12_escrow_seed_rejected"],
+        proofs["13_scope_neutrality_under_single_regime"][
+            "production_error"
+        ]
+        <= TOLERANCE,
+        proofs["13_scope_neutrality_under_single_regime"][
+            "independent_oracle_error"
+        ]
+        <= TOLERANCE,
+        proofs["13_scope_neutrality_under_single_regime"][
+            "dormant_parameter_prior_mean_error"
+        ]
+        <= TOLERANCE,
     ]
     passed = all(blocking)
     _write_json(
