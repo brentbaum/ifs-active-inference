@@ -1,0 +1,890 @@
+{
+  "assays": {
+    "censoring": {
+      "max_absolute_missing_slice_bf": 0.0,
+      "positive_strengthening_rate": 0.0
+    },
+    "control": {
+      "mode_difference": 0.9609739057075093,
+      "mode_difference_95_interval": [
+        0.9609739057075082,
+        0.9609739057075102
+      ],
+      "revisability_difference": 0.01835654404767594,
+      "revisability_difference_95_interval": [
+        0.008845598022104223,
+        0.03023192993348654
+      ]
+    },
+    "danger_only": {
+      "danger_support": 0.9502189599576017,
+      "part_false_rate": 0.0
+    },
+    "efficacy": {
+      "effective_minus_irrelevant": 0.1755010362370283,
+      "effective_minus_irrelevant_95_interval": [
+        0.12585246114248905,
+        0.22367366857312157
+      ],
+      "identified_minus_nonidentified": 0.0038144180588874127,
+      "identified_minus_nonidentified_95_interval": [
+        -0.04243593424324906,
+        0.051489506866567114
+      ],
+      "irrelevant_false_rate": 0.01
+    },
+    "episodic_information": {
+      "dependent_mean": 0.2619298615774205,
+      "difference": 0.25973412763725784,
+      "difference_95_interval": [
+        0.2432034813068424,
+        0.2766931509370092
+      ],
+      "independent_95_quantile": 0.009380951896198378,
+      "independent_mean": 0.0021957339401626028
+    },
+    "fixed_identity": {
+      "fixed_max_absolute": 0.0,
+      "transfer": 0.9986810860083497,
+      "transfer_95_interval": [
+        0.9974399425151114,
+        0.9994656265408345
+      ]
+    },
+    "identity_adversity": {
+      "material_rate": 1.0,
+      "part_support": 0.9987619573099735
+    },
+    "safe_irrelevant_action": {
+      "threat_drop": 0.09576247647037876,
+      "threat_drop_95_interval": [
+        0.06833439275275054,
+        0.12513009131083586
+      ]
+    }
+  },
+  "factorial_cross": {
+    "cell_count": 64,
+    "cells": [
+      {
+        "configuration": [
+          "acute",
+          "low",
+          "narrow",
+          "safe",
+          "irrelevant",
+          "full"
+        ],
+        "mean_part_probability": 0.0019349470473693973,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "low",
+          "narrow",
+          "safe",
+          "irrelevant",
+          "censored"
+        ],
+        "mean_part_probability": 0.0017479592366761438,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "low",
+          "narrow",
+          "safe",
+          "effective",
+          "full"
+        ],
+        "mean_part_probability": 0.0013936952868629478,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "low",
+          "narrow",
+          "safe",
+          "effective",
+          "censored"
+        ],
+        "mean_part_probability": 0.0019767629399647557,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "low",
+          "narrow",
+          "real",
+          "irrelevant",
+          "full"
+        ],
+        "mean_part_probability": 0.003135786983069333,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "low",
+          "narrow",
+          "real",
+          "irrelevant",
+          "censored"
+        ],
+        "mean_part_probability": 0.0024343406318271706,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "low",
+          "narrow",
+          "real",
+          "effective",
+          "full"
+        ],
+        "mean_part_probability": 0.0037145061636941635,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "low",
+          "narrow",
+          "real",
+          "effective",
+          "censored"
+        ],
+        "mean_part_probability": 0.0034344406230767096,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "low",
+          "broad",
+          "safe",
+          "irrelevant",
+          "full"
+        ],
+        "mean_part_probability": 0.0009807890539914707,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "low",
+          "broad",
+          "safe",
+          "irrelevant",
+          "censored"
+        ],
+        "mean_part_probability": 0.00082637875261363,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "low",
+          "broad",
+          "safe",
+          "effective",
+          "full"
+        ],
+        "mean_part_probability": 0.001740156845662262,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "low",
+          "broad",
+          "safe",
+          "effective",
+          "censored"
+        ],
+        "mean_part_probability": 0.0015692794047672074,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "low",
+          "broad",
+          "real",
+          "irrelevant",
+          "full"
+        ],
+        "mean_part_probability": 0.001255927435579985,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "low",
+          "broad",
+          "real",
+          "irrelevant",
+          "censored"
+        ],
+        "mean_part_probability": 0.0013624769990210677,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "low",
+          "broad",
+          "real",
+          "effective",
+          "full"
+        ],
+        "mean_part_probability": 0.0012562643302616381,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "low",
+          "broad",
+          "real",
+          "effective",
+          "censored"
+        ],
+        "mean_part_probability": 0.0012662138576902062,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "high",
+          "narrow",
+          "safe",
+          "irrelevant",
+          "full"
+        ],
+        "mean_part_probability": 0.0011507573052566195,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "high",
+          "narrow",
+          "safe",
+          "irrelevant",
+          "censored"
+        ],
+        "mean_part_probability": 0.002981960826522207,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "high",
+          "narrow",
+          "safe",
+          "effective",
+          "full"
+        ],
+        "mean_part_probability": 0.0014593298023560211,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "high",
+          "narrow",
+          "safe",
+          "effective",
+          "censored"
+        ],
+        "mean_part_probability": 0.003027935878805293,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "high",
+          "narrow",
+          "real",
+          "irrelevant",
+          "full"
+        ],
+        "mean_part_probability": 0.0030687021135539453,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "high",
+          "narrow",
+          "real",
+          "irrelevant",
+          "censored"
+        ],
+        "mean_part_probability": 0.0013162041239760732,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "high",
+          "narrow",
+          "real",
+          "effective",
+          "full"
+        ],
+        "mean_part_probability": 0.0013057481700139797,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "high",
+          "narrow",
+          "real",
+          "effective",
+          "censored"
+        ],
+        "mean_part_probability": 0.0017063777233432198,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "high",
+          "broad",
+          "safe",
+          "irrelevant",
+          "full"
+        ],
+        "mean_part_probability": 0.0008821568708662663,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "high",
+          "broad",
+          "safe",
+          "irrelevant",
+          "censored"
+        ],
+        "mean_part_probability": 0.0008715781583118738,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "high",
+          "broad",
+          "safe",
+          "effective",
+          "full"
+        ],
+        "mean_part_probability": 0.001350234934207606,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "high",
+          "broad",
+          "safe",
+          "effective",
+          "censored"
+        ],
+        "mean_part_probability": 0.0014933942293260823,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "high",
+          "broad",
+          "real",
+          "irrelevant",
+          "full"
+        ],
+        "mean_part_probability": 0.001841281554117322,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "high",
+          "broad",
+          "real",
+          "irrelevant",
+          "censored"
+        ],
+        "mean_part_probability": 0.0015256429961496474,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "high",
+          "broad",
+          "real",
+          "effective",
+          "full"
+        ],
+        "mean_part_probability": 0.0009483698000684723,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "acute",
+          "high",
+          "broad",
+          "real",
+          "effective",
+          "censored"
+        ],
+        "mean_part_probability": 0.0009196194058832265,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "low",
+          "narrow",
+          "safe",
+          "irrelevant",
+          "full"
+        ],
+        "mean_part_probability": 0.0034627660405865245,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "low",
+          "narrow",
+          "safe",
+          "irrelevant",
+          "censored"
+        ],
+        "mean_part_probability": 0.00249902306825421,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "low",
+          "narrow",
+          "safe",
+          "effective",
+          "full"
+        ],
+        "mean_part_probability": 0.0025173936949519937,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "low",
+          "narrow",
+          "safe",
+          "effective",
+          "censored"
+        ],
+        "mean_part_probability": 0.0044035290787535625,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "low",
+          "narrow",
+          "real",
+          "irrelevant",
+          "full"
+        ],
+        "mean_part_probability": 0.0013280585774766845,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "low",
+          "narrow",
+          "real",
+          "irrelevant",
+          "censored"
+        ],
+        "mean_part_probability": 0.0016482334038782171,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "low",
+          "narrow",
+          "real",
+          "effective",
+          "full"
+        ],
+        "mean_part_probability": 0.0011575212351634361,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "low",
+          "narrow",
+          "real",
+          "effective",
+          "censored"
+        ],
+        "mean_part_probability": 0.003034587742965089,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "low",
+          "broad",
+          "safe",
+          "irrelevant",
+          "full"
+        ],
+        "mean_part_probability": 0.9999872307880336,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "low",
+          "broad",
+          "safe",
+          "irrelevant",
+          "censored"
+        ],
+        "mean_part_probability": 0.999640063697619,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "low",
+          "broad",
+          "safe",
+          "effective",
+          "full"
+        ],
+        "mean_part_probability": 0.9999504048000791,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "low",
+          "broad",
+          "safe",
+          "effective",
+          "censored"
+        ],
+        "mean_part_probability": 0.9982510326007537,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "low",
+          "broad",
+          "real",
+          "irrelevant",
+          "full"
+        ],
+        "mean_part_probability": 0.9998576862242222,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "low",
+          "broad",
+          "real",
+          "irrelevant",
+          "censored"
+        ],
+        "mean_part_probability": 0.9997989183124713,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "low",
+          "broad",
+          "real",
+          "effective",
+          "full"
+        ],
+        "mean_part_probability": 0.9999862730440225,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "low",
+          "broad",
+          "real",
+          "effective",
+          "censored"
+        ],
+        "mean_part_probability": 0.999533148836435,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "high",
+          "narrow",
+          "safe",
+          "irrelevant",
+          "full"
+        ],
+        "mean_part_probability": 0.001452524097215013,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "high",
+          "narrow",
+          "safe",
+          "irrelevant",
+          "censored"
+        ],
+        "mean_part_probability": 0.003255430302108048,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "high",
+          "narrow",
+          "safe",
+          "effective",
+          "full"
+        ],
+        "mean_part_probability": 0.005861692675305718,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "high",
+          "narrow",
+          "safe",
+          "effective",
+          "censored"
+        ],
+        "mean_part_probability": 0.0019985357325739057,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "high",
+          "narrow",
+          "real",
+          "irrelevant",
+          "full"
+        ],
+        "mean_part_probability": 0.0016966165594147456,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "high",
+          "narrow",
+          "real",
+          "irrelevant",
+          "censored"
+        ],
+        "mean_part_probability": 0.0011630448289881457,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "high",
+          "narrow",
+          "real",
+          "effective",
+          "full"
+        ],
+        "mean_part_probability": 0.0009164703681782437,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "high",
+          "narrow",
+          "real",
+          "effective",
+          "censored"
+        ],
+        "mean_part_probability": 0.0020274991332081206,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "high",
+          "broad",
+          "safe",
+          "irrelevant",
+          "full"
+        ],
+        "mean_part_probability": 0.0014033110217000796,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "high",
+          "broad",
+          "safe",
+          "irrelevant",
+          "censored"
+        ],
+        "mean_part_probability": 0.00221866154155595,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "high",
+          "broad",
+          "safe",
+          "effective",
+          "full"
+        ],
+        "mean_part_probability": 0.0011774073364628325,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "high",
+          "broad",
+          "safe",
+          "effective",
+          "censored"
+        ],
+        "mean_part_probability": 0.0030544821966231837,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "high",
+          "broad",
+          "real",
+          "irrelevant",
+          "full"
+        ],
+        "mean_part_probability": 0.0036556100536551035,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "high",
+          "broad",
+          "real",
+          "irrelevant",
+          "censored"
+        ],
+        "mean_part_probability": 0.000946067300949204,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "high",
+          "broad",
+          "real",
+          "effective",
+          "full"
+        ],
+        "mean_part_probability": 0.0009975700188838313,
+        "world_count": 2
+      },
+      {
+        "configuration": [
+          "repeated",
+          "high",
+          "broad",
+          "real",
+          "effective",
+          "censored"
+        ],
+        "mean_part_probability": 0.0015330045425940605,
+        "world_count": 2
+      }
+    ],
+    "factor_count": 6,
+    "world_count": 128
+  },
+  "frozen_thresholds": {
+    "derivation": "Pilot lower 95% bound times 0.8 for positive paired effects; attainable mean/rate minus 0.10 for recovery rates; control ceilings add 0.05; exact-zero pathways retain 1e-10.",
+    "gate2": {
+      "coverage_floor": 0.913,
+      "ece_ceiling": 0.064,
+      "field_accuracy_floor": 0.811,
+      "oracle_tolerance": 1e-10,
+      "program_accuracy_floor": 0.235
+    },
+    "gate3": {
+      "censor_positive_rate_ceiling": 0.0,
+      "danger_support_floor": 0.85,
+      "delta_i_difference_floor": 0.1946,
+      "efficacy_difference_floor": 0.1007,
+      "fixed_transfer_tolerance": 1e-10,
+      "identification_difference_floor": 0.01,
+      "identity_material_rate_floor": 0.9,
+      "independent_delta_i_ceiling": 0.0144,
+      "irrelevant_false_ceiling": 0.06,
+      "missing_bf_tolerance": 1e-10,
+      "mode_difference_floor": 0.769,
+      "part_false_ceiling": 0.05,
+      "part_support_floor": 0.899,
+      "revisability_difference_floor": 0.0071,
+      "safe_threat_drop_floor": 0.0547,
+      "transfer_floor": 0.798
+    }
+  },
+  "recovery": {
+    "coverage_95": 0.947,
+    "coverage_95_interval": [
+      0.933,
+      0.96
+    ],
+    "ece_10_bin": 0.03399762359751283,
+    "field_accuracy": 0.8402857142857143,
+    "field_accuracy_95_interval": [
+      0.8314285714285714,
+      0.8488571428571429
+    ],
+    "max_exact_log_probability_error": 0.0,
+    "mean_truth_probability": 0.15538603626478523,
+    "program_accuracy": 0.283,
+    "program_accuracy_95_interval": [
+      0.255,
+      0.3110249999999999
+    ],
+    "world_count": 1000
+  }
+}

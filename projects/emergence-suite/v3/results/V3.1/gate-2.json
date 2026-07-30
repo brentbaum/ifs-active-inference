@@ -1,0 +1,40 @@
+{
+  "criteria": {
+    "calibration": true,
+    "coverage": true,
+    "exact_log_probability": true,
+    "field_accuracy": true,
+    "oracle": true,
+    "program_accuracy": true
+  },
+  "metrics": {
+    "coverage_95": 0.956,
+    "coverage_95_interval": [
+      0.9429749999999999,
+      0.968
+    ],
+    "ece_10_bin": 0.03291646782669142,
+    "field_accuracy": 0.8342857142857143,
+    "field_accuracy_95_interval": [
+      0.8252857142857143,
+      0.8434285714285714
+    ],
+    "max_exact_log_probability_error": 0.0,
+    "max_oracle_error": 0.0,
+    "mean_truth_probability": 0.1504297134965656,
+    "program_accuracy": 0.292,
+    "program_accuracy_95_interval": [
+      0.264,
+      0.32
+    ],
+    "world_count": 1000
+  },
+  "thresholds": {
+    "coverage_floor": 0.913,
+    "ece_ceiling": 0.064,
+    "field_accuracy_floor": 0.811,
+    "oracle_tolerance": 1e-10,
+    "program_accuracy_floor": 0.235
+  },
+  "verdict": "PASS"
+}

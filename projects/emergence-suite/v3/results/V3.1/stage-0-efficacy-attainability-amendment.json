@@ -1,0 +1,30 @@
+{
+  "frozen_thresholds": {
+    "efficacy_difference_floor": 0.1934,
+    "identification_difference_floor": 0.115,
+    "irrelevant_false_ceiling": 0.175
+  },
+  "metrics": {
+    "effective_mean": 0.5490626012102374,
+    "effective_minus_irrelevant": 0.3247234143886927,
+    "effective_minus_irrelevant_95_interval": [
+      0.24176479389912925,
+      0.41064698432832375
+    ],
+    "identified_minus_nonidentified": 0.21572926787690416,
+    "identified_minus_nonidentified_95_interval": [
+      0.14381095223723084,
+      0.28536083606524326
+    ],
+    "irrelevant_false_rate": 0.125,
+    "irrelevant_mean": 0.22433918682154472,
+    "nonidentifying_mean": 0.33333333333333326
+  },
+  "provenance": "pilot construct correction before criterion seeds",
+  "reason": "The initial safe baseline carried too little harmful-outcome variation to identify a protective action edge. The amended danger-present design varies the causal consequence while leaving the intervention semantics unchanged.",
+  "seed_block": [
+    3101928,
+    3101999
+  ],
+  "world_count": 72
+}

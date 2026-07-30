@@ -1,0 +1,31 @@
+{
+  "version": "V3.1",
+  "world_configuration": {
+    "adversity": "repeated",
+    "control": "low",
+    "precision": "broad",
+    "danger": "safe",
+    "action": "effective",
+    "availability": "censored",
+    "length": 48
+  },
+  "typed_slice_fields": [
+    "event",
+    "mode evidence",
+    "identity-root evidence",
+    "world evidence",
+    "policy proposal",
+    "do(action)",
+    "outcome or missing"
+  ],
+  "analysis_labels_available_to_inference": [],
+  "readouts": [
+    "transient_probability",
+    "danger_probability",
+    "part_probability",
+    "efficacy_probability",
+    "delta_i",
+    "burden_mass",
+    "transfer"
+  ]
+}
