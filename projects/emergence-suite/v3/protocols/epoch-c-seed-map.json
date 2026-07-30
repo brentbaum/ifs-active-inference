@@ -1,0 +1,21 @@
+{
+  "version": "suite-v3-epoch-C",
+  "authored_by": "evaluator (Fable), 2026-07-30; v2's Epoch A/B namespaces are closed to v3",
+  "development_namespace": [3000000, 3899999],
+  "sealed_escrow_namespace": [4000000, 4199999],
+  "stages": {
+    "V3.0": {"pilot": [3000000, 3001999], "gate2": [3002000, 3003999], "gate3": [3004000, 3006999], "gate4": [3007000, 3007999], "gate5": [3008000, 3015999], "diagnosis_reserved": [3016000, 3019999], "sealed": {"C-V30": [4000000, 4001999]}},
+    "V3.1": {"pilot": [3100000, 3101999], "gate2": [3102000, 3104999], "gate3": [3105000, 3109999], "gate4": [3110000, 3111999], "gate5": [3112000, 3119999], "diagnosis_reserved": [3120000, 3129999], "sealed": {"C-V31": [4010000, 4013999]}},
+    "V3.2": {"pilot": [3200000, 3201999], "gate2": [3202000, 3204999], "gate3": [3205000, 3209999], "gate4": [3210000, 3211999], "gate5": [3212000, 3219999], "diagnosis_reserved": [3220000, 3229999], "sealed": {"C-V32": [4020000, 4023999]}},
+    "V3.3": {"pilot": [3300000, 3301999], "gate2": [3302000, 3304999], "gate3": [3305000, 3309999], "gate4": [3310000, 3311999], "gate5": [3312000, 3319999], "diagnosis_reserved": [3320000, 3329999], "sealed": {"C-V33": [4030000, 4033999]}},
+    "V3.4": {"pilot": [3400000, 3401999], "gate2": [3402000, 3404999], "gate3": [3405000, 3409999], "gate4": [3410000, 3411999], "gate5": [3412000, 3419999], "diagnosis_reserved": [3420000, 3429999], "sealed": {"C-V34": [4040000, 4043999]}},
+    "V3.5": {"pilot": [3500000, 3501999], "gate2": [3502000, 3504999], "gate3": [3505000, 3509999], "gate4": [3510000, 3511999], "gate5": [3512000, 3519999], "diagnosis_reserved": [3520000, 3529999], "sealed": {"C-V35": [4050000, 4054999]}},
+    "V3.6": {"pilot": [3600000, 3603999], "gate2": [3604000, 3613999], "gate3": [3614000, 3629999], "gate4": [3630000, 3634999], "gate5": [3635000, 3659999], "diagnosis_reserved": [3660000, 3679999], "sealed": {"C-V36A": [4100000, 4109999], "C-V36B": [4110000, 4119999], "C-V36C": [4120000, 4129999]}}
+  },
+  "rules": [
+    "Never reuse a diagnosis, revealed, retired, burned, or challenge-assigned block; v2 Epoch A/B blocks are all closed to v3 criterion use.",
+    "All component RNG keys include stage version, seed, component namespace, and time/event index.",
+    "A sealed challenge uses only its own contiguous block; releases are data commits.",
+    "Every rate/effect floor requires a barred attainability pilot before freezing (the standing audit item 4)."
+  ]
+}
