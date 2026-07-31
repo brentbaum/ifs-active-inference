@@ -1,0 +1,474 @@
+{
+  "analysis": "Gate-3 predictive-noninferiority decomposition; non-criterial diagnosis only",
+  "authorized_seed_block": [
+    3665160,
+    3667159
+  ],
+  "calibration_cross_check": {
+    "diagnosis": "The tournament population has poor exact-structure recovery and elevated entropy; the passing 6C reference therefore missed this population. This is separate from, and cannot validate, the unequal-support predictive comparison.",
+    "gate2_profile_reference": {
+      "active_count_accuracy": 0.9996,
+      "brier": 0.36412222048942344,
+      "candidate_support_pass_rate": 1.0,
+      "coverage": 0.9796,
+      "ece": 0.01183026816963054,
+      "edge_accuracy": {
+        "CROSS_MODE_Y": 0.697,
+        "JOINT_POLICY_Y": 0.8473,
+        "M1_G": 0.9769,
+        "M2_G": 0.985,
+        "M3_G": 0.9909
+      },
+      "exact_log_error_max": 0.0,
+      "minimum_edge_accuracy": 0.697,
+      "normalization_error_max": 5.706546346573305e-14,
+      "partner_accuracy": 1.0,
+      "program_accuracy": 0.5696,
+      "registration_identity_error_max": 1.4577228313328305e-13,
+      "stakes_scientific_identity_error_max": 0.0,
+      "topology_accuracy": 0.6886,
+      "world_count": 10000
+    },
+    "profile_population_identity": false,
+    "profile_population_note": "Gate 3 copied the Gate-2 64-slice prior-sampled recovery metrics; it did not compute calibration on the 16-slice fixed-config tournament population.",
+    "v2_accuracy": 0.995,
+    "v2_ece": 0.0029369061876169003,
+    "v2_mean_normalized_entropy": 0.013242025287824668,
+    "v2_mean_truth_probability": 0.991206079161224,
+    "v3_accuracy": 0.025,
+    "v3_ece": 0.2863137680438755,
+    "v3_mean_normalized_entropy": 0.46494257309563897,
+    "v3_mean_truth_probability": 0.06530421044391274
+  },
+  "classification": "UNCLASSIFIED_DIAGNOSIS_ONLY",
+  "criteria_evaluated": false,
+  "custody": {
+    "ascending_gap_free": true,
+    "escrow_touched": false,
+    "event_ledgers_present": true,
+    "gates_4_5_touched": false,
+    "persisted_before_aggregation": true,
+    "trace_file": "gate3-noninferiority-diagnosis-traces.jsonl",
+    "trace_sha256": "646fd20d42b224aa37e7d82e55aa72c7520b3cf60fabe88371ba94e1eb29a9ca"
+  },
+  "normalization": {
+    "authored_v3_minus_v2_nats_per_nominal_token": {
+      "mean": -0.033416471435121435,
+      "quantiles": {
+        "q00": -0.4192149671252704,
+        "q01": -0.2998998493766058,
+        "q05": -0.2255334096604281,
+        "q100": 0.31413387974119655,
+        "q25": -0.0956330868165304,
+        "q50": -0.02287453525726202,
+        "q75": 0.04035977892531442,
+        "q95": 0.11655765316431084,
+        "q99": 0.171586822486009
+      }
+    },
+    "channel_type_equal_weight_v3_minus_v2": {
+      "mean": 0.02699649033085769,
+      "quantiles": {
+        "q00": -0.3876390379701585,
+        "q01": -0.24691702742162824,
+        "q05": -0.1574380641961702,
+        "q100": 0.3263521731155794,
+        "q25": -0.02947271832702228,
+        "q50": 0.03660169667429641,
+        "q75": 0.09526697783850299,
+        "q95": 0.17476759553582932,
+        "q99": 0.22006412054606164
+      }
+    },
+    "delivered_token_v3_minus_v2_nats_per_token": {
+      "mean": -0.002873687810116962,
+      "quantiles": {
+        "q00": -0.38258980341210763,
+        "q01": -0.25700075514975274,
+        "q05": -0.18195692736724334,
+        "q100": 0.31413387974119655,
+        "q25": -0.057800336026062174,
+        "q50": 0.005618484589137107,
+        "q75": 0.061082908586187645,
+        "q95": 0.13791147029331646,
+        "q99": 0.19209414841561606
+      }
+    },
+    "denominator_identity": {
+      "same_denominator_rule": false,
+      "v2": "3 * slice_count (counts deterministic localization sentinel as a nominal token)",
+      "v3": "5 * slice_count"
+    },
+    "normalization_stable": false,
+    "v3_minus_v2_total_nats_per_world": {
+      "mean": -1.090724964268431,
+      "quantiles": {
+        "q00": -41.155231422359485,
+        "q01": -33.330574933586554,
+        "q05": -28.371946388433607,
+        "q100": 31.976213040727366,
+        "q25": -9.689728495030472,
+        "q50": 3.548443732501987,
+        "q75": 9.06298251737955,
+        "q95": 15.70158895177521,
+        "q99": 20.36408362983032
+      }
+    }
+  },
+  "per_channel_decomposition": {
+    "alignment_warning": "No causal attribution of the cross-model deficit to a like-for-like channel is valid because the channel supports differ.",
+    "basis": "truth-structure-clamped frozen likelihood factors; exact additive within each model",
+    "channels": {
+      "contact": {
+        "comparison_warning": "different typed supports; this is an additive bookkeeping coordinate, not a like-for-like channel score",
+        "v2_mean_total_nats": 0.0,
+        "v2_present_in_tournament_score": false,
+        "v3_mean_total_nats": 0.0,
+        "v3_minus_v2_mean_total_nats": 0.0,
+        "v3_present_in_tournament_score": false
+      },
+      "context_cue_emissions": {
+        "comparison_warning": "different typed supports; this is an additive bookkeeping coordinate, not a like-for-like channel score",
+        "v2_mean_total_nats": -13.449779696704244,
+        "v2_present_in_tournament_score": true,
+        "v3_mean_total_nats": 0.0,
+        "v3_minus_v2_mean_total_nats": 13.449779696704244,
+        "v3_present_in_tournament_score": false
+      },
+      "mode_signals": {
+        "comparison_warning": "different typed supports; this is an additive bookkeeping coordinate, not a like-for-like channel score",
+        "v2_mean_total_nats": -14.876426225094503,
+        "v2_present_in_tournament_score": true,
+        "v3_mean_total_nats": -12.476617768154087,
+        "v3_minus_v2_mean_total_nats": 2.3998084569404172,
+        "v3_present_in_tournament_score": true
+      },
+      "outcomes": {
+        "comparison_warning": "different typed supports; this is an additive bookkeeping coordinate, not a like-for-like channel score",
+        "v2_mean_total_nats": -16.089608657201445,
+        "v2_present_in_tournament_score": true,
+        "v3_mean_total_nats": -6.957244502547636,
+        "v3_minus_v2_mean_total_nats": 9.132364154653809,
+        "v3_present_in_tournament_score": true
+      },
+      "partner": {
+        "comparison_warning": "different typed supports; this is an additive bookkeeping coordinate, not a like-for-like channel score",
+        "v2_mean_total_nats": 0.0,
+        "v2_present_in_tournament_score": false,
+        "v3_mean_total_nats": 0.0,
+        "v3_minus_v2_mean_total_nats": 0.0,
+        "v3_present_in_tournament_score": false
+      },
+      "policy": {
+        "comparison_warning": "different typed supports; this is an additive bookkeeping coordinate, not a like-for-like channel score",
+        "v2_mean_total_nats": 0.0,
+        "v2_present_in_tournament_score": false,
+        "v3_mean_total_nats": -8.074877448906664,
+        "v3_minus_v2_mean_total_nats": -8.074877448906664,
+        "v3_present_in_tournament_score": true
+      },
+      "registration": {
+        "comparison_warning": "different typed supports; this is an additive bookkeeping coordinate, not a like-for-like channel score",
+        "v2_mean_total_nats": 0.0,
+        "v2_present_in_tournament_score": false,
+        "v3_mean_total_nats": 0.0,
+        "v3_minus_v2_mean_total_nats": 0.0,
+        "v3_present_in_tournament_score": false
+      },
+      "root": {
+        "comparison_warning": "different typed supports; this is an additive bookkeeping coordinate, not a like-for-like channel score",
+        "v2_mean_total_nats": 0.0,
+        "v2_present_in_tournament_score": false,
+        "v3_mean_total_nats": -7.578966908922782,
+        "v3_minus_v2_mean_total_nats": -7.578966908922782,
+        "v3_present_in_tournament_score": true
+      },
+      "support": {
+        "comparison_warning": "different typed supports; this is an additive bookkeeping coordinate, not a like-for-like channel score",
+        "v2_mean_total_nats": 0.0,
+        "v2_present_in_tournament_score": false,
+        "v3_mean_total_nats": 0.0,
+        "v3_minus_v2_mean_total_nats": 0.0,
+        "v3_present_in_tournament_score": false
+      },
+      "world": {
+        "comparison_warning": "different typed supports; this is an additive bookkeeping coordinate, not a like-for-like channel score",
+        "v2_mean_total_nats": 0.0,
+        "v2_present_in_tournament_score": false,
+        "v3_mean_total_nats": -8.02118786841069,
+        "v3_minus_v2_mean_total_nats": -8.02118786841069,
+        "v3_present_in_tournament_score": true
+      }
+    },
+    "finding": "The deficit is concentrated in the structure/model-averaging coordinate, not a shared channel. V3 additionally scores root, world, and policy factors absent from the V2 quantity; V2 uses the compact joint T/D/P formation production.",
+    "partner_support_contact_registration_note": "These channels are absent from both predictive quantities used by the Gate-3 tournament and contribute exactly zero there."
+  },
+  "stage": "V3.6",
+  "structure_vs_parameters": {
+    "dominant_component": "structure prior/model averaging over the three-state V2 menu versus the 128-program V3 GROW space",
+    "maximum_recombination_error": 1.942890293094024e-16,
+    "recombined_mean": -0.033416471435121435,
+    "structure_mixture_difference_authored_per_token": {
+      "mean": -0.029305827457804967,
+      "quantiles": {
+        "q00": -0.09840740989066143,
+        "q01": -0.05677946691997271,
+        "q05": -0.05291084459618234,
+        "q100": 0.029448773960020342,
+        "q25": -0.039437248793922686,
+        "q50": -0.029937269833361747,
+        "q75": -0.019825089692763948,
+        "q95": -0.004811314320978023,
+        "q99": 0.004572200790037989
+      }
+    },
+    "structure_share_of_authored_mean_deficit": 0.8769874914741569,
+    "truth_clamped_parameter_difference_authored_per_token": {
+      "mean": -0.004110643977316477,
+      "quantiles": {
+        "q00": -0.41049391216403636,
+        "q01": -0.2796159935726204,
+        "q05": -0.20752741397355295,
+        "q100": 0.3263521731155793,
+        "q25": -0.06825464701333495,
+        "q50": 0.008011347686352144,
+        "q75": 0.06997614642038613,
+        "q95": 0.1508948934369088,
+        "q99": 0.2093835548822286
+      }
+    },
+    "v2_structure_mixture_effect_nats_per_world": {
+      "mean": -1.3697818677378302,
+      "quantiles": {
+        "q00": -1.3862943611198908,
+        "q01": -1.3862943611198908,
+        "q05": -1.3862943611198908,
+        "q100": 3.6183672775231983,
+        "q25": -1.3862943611197212,
+        "q50": -1.386294361035997,
+        "q75": -1.3862927761200403,
+        "q95": -1.378542210689805,
+        "q99": -1.1128228704430143
+      }
+    },
+    "v3_structure_mixture_effect_nats_per_world": {
+      "mean": -3.7674269140646057,
+      "quantiles": {
+        "q00": -5.9235106860163995,
+        "q01": -5.753275097976649,
+        "q05": -5.514168175696326,
+        "q100": 0.3021324929203075,
+        "q25": -4.555165255627253,
+        "q50": -3.7944666467885,
+        "q75": -3.094229760455365,
+        "q95": -1.9946815393889286,
+        "q99": -1.3263314410130278
+      }
+    }
+  },
+  "support_equality": {
+    "byte_identical_rate": 0.0,
+    "byte_identical_worlds": 0,
+    "finding": "The two sides are not scored on a common observation support. Same seed and broad truth condition do not produce the same observations.",
+    "v2_authored_token_counts": [
+      54,
+      90
+    ],
+    "v2_delivered_token_counts": [
+      48,
+      85,
+      90
+    ],
+    "v2_masked_localization_count_distribution": {
+      "q00": 0.0,
+      "q01": 0.0,
+      "q05": 0.0,
+      "q100": 6.0,
+      "q25": 3.75,
+      "q50": 5.0,
+      "q75": 5.25,
+      "q95": 6.0,
+      "q99": 6.0
+    },
+    "v2_schema": [
+      "self_value",
+      "outcome",
+      "localization"
+    ],
+    "v2_slice_counts": [
+      18,
+      30
+    ],
+    "v3_authored_token_counts": [
+      80
+    ],
+    "v3_delivered_token_counts": [
+      80
+    ],
+    "v3_schema": [
+      "mode",
+      "root",
+      "world",
+      "policy_proposal",
+      "outcome"
+    ],
+    "v3_slice_counts": [
+      16
+    ]
+  },
+  "v2_predictive_advantage_distribution": {
+    "finding": "The advantage is not uniform: acute_one worlds drive it; real_danger_adaptive worlds favor V3 on average; topology has little separation.",
+    "overall": {
+      "mean": 0.033416471435121435,
+      "quantiles": {
+        "q00": -0.31413387974119655,
+        "q01": -0.171586822486009,
+        "q05": -0.11655765316431085,
+        "q100": 0.4192149671252704,
+        "q25": -0.04035977892531442,
+        "q50": 0.02287453525726202,
+        "q75": 0.0956330868165304,
+        "q95": 0.22553340966042804,
+        "q99": 0.29989984937660574
+      }
+    },
+    "subclasses": {
+      "stratum=acute_one": {
+        "mean_v2_advantage": 0.1494399179056096,
+        "quantiles": {
+          "q00": -0.15580966107618072,
+          "q01": -0.06793346397689275,
+          "q05": -0.017939526915036856,
+          "q100": 0.4192149671252704,
+          "q25": 0.09226608059521167,
+          "q50": 0.1482336564202549,
+          "q75": 0.20884501164137814,
+          "q95": 0.2939828226048492,
+          "q99": 0.36397454930246476
+        },
+        "world_count": 500
+      },
+      "stratum=chronic_multiple": {
+        "mean_v2_advantage": 0.011238537574797798,
+        "quantiles": {
+          "q00": -0.19662476005106194,
+          "q01": -0.14655461835876743,
+          "q05": -0.10075403689624365,
+          "q100": 0.21179445649022066,
+          "q25": -0.037534870567020095,
+          "q50": 0.011197641872583208,
+          "q75": 0.05986513028402768,
+          "q95": 0.12076783238787557,
+          "q99": 0.16204842110488832
+        },
+        "world_count": 500
+      },
+      "stratum=chronic_one": {
+        "mean_v2_advantage": 0.009164646767845779,
+        "quantiles": {
+          "q00": -0.2168992986903373,
+          "q01": -0.15807826992056068,
+          "q05": -0.10990111256032455,
+          "q100": 0.1879501877040845,
+          "q25": -0.04110035371984655,
+          "q50": 0.009788237561287105,
+          "q75": 0.05831801467697692,
+          "q95": 0.11950801935738144,
+          "q99": 0.16087075859046177
+        },
+        "world_count": 500
+      },
+      "stratum=real_danger_adaptive": {
+        "mean_v2_advantage": -0.036177216507767423,
+        "quantiles": {
+          "q00": -0.31413387974119655,
+          "q01": -0.20724784576390776,
+          "q05": -0.15512539875107326,
+          "q100": 0.1505112669479608,
+          "q25": -0.07768462175633115,
+          "q50": -0.03706625994135915,
+          "q75": 0.010994400550071226,
+          "q95": 0.07103928781742355,
+          "q99": 0.13143248718031
+        },
+        "world_count": 500
+      },
+      "truth_mode_count=1": {
+        "mean_v2_advantage": 0.04080911605522933,
+        "quantiles": {
+          "q00": -0.31413387974119655,
+          "q01": -0.18371963386686005,
+          "q05": -0.1239557352713838,
+          "q100": 0.4192149671252704,
+          "q25": -0.041305564272714534,
+          "q50": 0.02864141908836737,
+          "q75": 0.10990662842829256,
+          "q95": 0.24697121560911345,
+          "q99": 0.320002774049271
+        },
+        "world_count": 1500
+      },
+      "truth_mode_count=3": {
+        "mean_v2_advantage": 0.011238537574797798,
+        "quantiles": {
+          "q00": -0.19662476005106194,
+          "q01": -0.14655461835876743,
+          "q05": -0.10075403689624365,
+          "q100": 0.21179445649022066,
+          "q25": -0.037534870567020095,
+          "q50": 0.011197641872583208,
+          "q75": 0.05986513028402768,
+          "q95": 0.12076783238787557,
+          "q99": 0.16204842110488832
+        },
+        "world_count": 500
+      },
+      "truth_topology=allied": {
+        "mean_v2_advantage": 0.03458014043563597,
+        "quantiles": {
+          "q00": -0.2858916749427039,
+          "q01": -0.17099077975466392,
+          "q05": -0.11457137717900959,
+          "q100": 0.4192149671252704,
+          "q25": -0.037318452504266825,
+          "q50": 0.021574485166222845,
+          "q75": 0.09574951436575665,
+          "q95": 0.22905468447166494,
+          "q99": 0.29602309056274295
+        },
+        "world_count": 666
+      },
+      "truth_topology=independent": {
+        "mean_v2_advantage": 0.0340877520307833,
+        "quantiles": {
+          "q00": -0.2089272237230435,
+          "q01": -0.15320459653974508,
+          "q05": -0.11288932122453468,
+          "q100": 0.372169555284045,
+          "q25": -0.040095421729913205,
+          "q50": 0.025677740160380158,
+          "q75": 0.08874104413258452,
+          "q95": 0.22336873646725933,
+          "q99": 0.30601309852536085
+        },
+        "world_count": 667
+      },
+      "truth_topology=opposed": {
+        "mean_v2_advantage": 0.03158326647013024,
+        "quantiles": {
+          "q00": -0.31413387974119655,
+          "q01": -0.17808292710250972,
+          "q05": -0.12010097998583733,
+          "q100": 0.3605573065443117,
+          "q25": -0.04514906386276574,
+          "q50": 0.019494065210389877,
+          "q75": 0.10027523358346346,
+          "q95": 0.22140511503945848,
+          "q99": 0.29885655362724883
+        },
+        "world_count": 667
+      }
+    }
+  },
+  "world_count": 2000
+}

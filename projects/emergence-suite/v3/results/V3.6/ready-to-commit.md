@@ -113,3 +113,38 @@ Current disposition: **GATE3_FAIL_STOP_PREDICTIVE_NONINFERIORITY**.
 V3 full suite at stop: `63/63` green. The pre-existing evaluator partial file
 `cv36-preseal-pilot-traces-attempt1-partial.jsonl` remains untouched and is not
 part of this execution's ready-to-commit set.
+
+## Gate-3 noninferiority diagnosis
+
+- Diagnosis block `3665160:3667159`: 2,000 seeds consumed once, ascending and
+  gap-free. Per-world rows and runtime event ledgers were persisted before
+  aggregation; trace SHA-256 is
+  `646fd20d42b224aa37e7d82e55aa72c7520b3cf60fabe88371ba94e1eb29a9ca`.
+- Support equality failed apparatus-first: `0/2000` observation documents are
+  byte-identical. V2 scores `(self, outcome, localization)` over 18/30 slices;
+  V3 scores `(mode, root, world, policy proposal, outcome)` over 16 separately
+  generated slices. Token counts and masking also differ.
+- The deficit is not normalization-stable: frozen nominal-token mean
+  `-0.0334165`; delivered-token mean `-0.00287369`; equal-weight,
+  truth-clamped channel-type mean `+0.0269965`.
+- The structure/model-averaging term accounts for `87.7%` of the frozen mean
+  deficit. V2's three-candidate structure term averages `-1.36978` nats/world;
+  V3's 128-program GROW term averages `-3.76743` nats/world.
+- Gate 3 had copied its passing calibration profile from Gate 2; it did not
+  calibrate the fixed 16-slice tournament population. On the diagnosis worlds,
+  V3 exact-program accuracy is `0.025`, ECE `0.286`, and normalized entropy
+  `0.465`. This is separate from the unequal-support likelihood comparison.
+- Gates 4–5, escrow, barred blocks, criteria, floors, and scientific modules
+  were untouched. The committed Gate-3 FAIL remains unclassified pending
+  evaluator adjudication.
+
+Ready-to-commit diagnosis files:
+
+- `scripts/run_v36_noninferiority_diagnosis.py`
+- `results/V3.6/gate3-noninferiority-diagnosis-traces.jsonl` (local persisted
+  trace bundle, intentionally ignored by the repository's trace rule; pinned
+  by the committed hash ledger)
+- `results/V3.6/gate3-noninferiority-diagnosis-trace-hashes.json`
+- `results/V3.6/gate3-noninferiority-decomposition.json`
+- `results/V3.6/gate3-noninferiority-decomposition.md`
+- `results/V3.6/ready-to-commit.md`
