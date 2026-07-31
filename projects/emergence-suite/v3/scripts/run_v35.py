@@ -44,6 +44,8 @@ GATE2_BLOCK = (3_502_000, 3_504_999)
 GATE3_BLOCK = (3_505_000, 3_509_999)
 GATE4_BLOCK = (3_510_000, 3_511_999)
 GATE5_BLOCK = (3_512_000, 3_519_999)
+REPLACEMENT_GATE2_BLOCK = (3_530_000, 3_532_999)
+REPLACEMENT_GATE3_BLOCK = (3_533_000, 3_537_999)
 
 
 def _plain(value: Any) -> Any:
@@ -148,6 +150,53 @@ def _structure_probabilities(posterior):
         )
         result[key] = result.get(key, 0.0) + probability
     return result
+
+
+def _scientific_posterior_distance(left, right):
+    values = [
+        max(abs(a - b) for a, b in zip(
+            left.probabilities, right.probabilities
+        )),
+        max(abs(a - b) for a, b in zip(
+            left.active_mode_probabilities, right.active_mode_probabilities
+        )),
+        max(abs(a - b) for a, b in zip(
+            left.mode_occupancy, right.mode_occupancy
+        )),
+        max(abs(a - b) for a, b in zip(left.q_partner, right.q_partner)),
+        max(abs(
+            left.edge_probabilities[name] - right.edge_probabilities[name]
+        ) for name in v35.EDGE_NAMES),
+        max(abs(
+            left.topology_probabilities[name]
+            - right.topology_probabilities[name]
+        ) for name in left.topology_probabilities),
+        max(abs(a - b) for a, b in zip(
+            left.support_response_posterior,
+            right.support_response_posterior,
+        )),
+        max(abs(a - b) for a, b in zip(
+            left.contact_response_posterior,
+            right.contact_response_posterior,
+        )),
+    ]
+    return max(values)
+
+
+def _complete_posterior_distance(left, right):
+    values = [
+        _scientific_posterior_distance(left, right),
+        max(abs(a - b) for a, b in zip(
+            left.joint_policy_posterior, right.joint_policy_posterior
+        )),
+        max(
+            abs(left.interventional_influence[i][j]
+                - right.interventional_influence[i][j])
+            for i in range(v35.MODE_SLOTS)
+            for j in range(v35.MODE_SLOTS)
+        ),
+    ]
+    return max(values)
 
 
 @traced_execution
@@ -643,6 +692,28 @@ def _worker_recovery(task):
         seed, length=length, released_block=released
     )
     posterior = v35.score_world(world)
+    registration_masked = replace(
+        world,
+        observations=tuple(
+            replace(item, registration=(None, None, None))
+            for item in world.observations
+        ),
+    )
+    registration_masked_posterior = v35.score_world(registration_masked)
+    low_stakes = replace(
+        world,
+        observations=tuple(
+            replace(item, stakes=0.7) for item in world.observations
+        ),
+    )
+    high_stakes = replace(
+        world,
+        observations=tuple(
+            replace(item, stakes=1.3) for item in world.observations
+        ),
+    )
+    low_stakes_posterior = v35.score_world(low_stakes)
+    high_stakes_posterior = v35.score_world(high_stakes)
     structure_map = _structure_probabilities(posterior)
     truth_key = (
         world.truth_structure.active_modes,
@@ -702,6 +773,20 @@ def _worker_recovery(task):
             world.exact_log_probability
             - v35.exact_complete_log_probability(world)
         ),
+        "registration_delivered_masked_posterior_error": (
+            _complete_posterior_distance(
+                posterior, registration_masked_posterior
+            )
+        ),
+        "stakes_scientific_posterior_error": (
+            _scientific_posterior_distance(
+                low_stakes_posterior, high_stakes_posterior
+            )
+        ),
+        "stakes_policy_difference": max(abs(a - b) for a, b in zip(
+            low_stakes_posterior.joint_policy_posterior,
+            high_stakes_posterior.joint_policy_posterior,
+        )),
     }
 
 
@@ -746,6 +831,16 @@ def _recovery_metrics(rows):
             row["normalization_error"] for row in rows
         ),
         "exact_log_error_max": max(row["exact_log_error"] for row in rows),
+        "registration_delivered_masked_posterior_error_max": max(
+            row["registration_delivered_masked_posterior_error"]
+            for row in rows
+        ),
+        "stakes_scientific_posterior_error_max": max(
+            row["stakes_scientific_posterior_error"] for row in rows
+        ),
+        "stakes_policy_difference_mean": float(np.mean(
+            [row["stakes_policy_difference"] for row in rows]
+        )),
     }
 
 
@@ -852,6 +947,106 @@ def run_gate2():
     _write_report("gate-2-report.md", "V3.5 Gate 2 — Amendment 1", result)
     params["status"] = "GATE2_PASSED" if not failures else "STOPPED_AT_GATE2"
     PARAMETERS.write_text(json.dumps(params, indent=2, sort_keys=True) + "\n")
+    return not failures
+
+
+def run_gate2_amendment2():
+    params = json.loads(PARAMETERS.read_text())
+    if params["status"] != "FROZEN_AFTER_AMENDMENT2_PILOT":
+        raise RuntimeError("Amendment-2 refreeze must precede replacement Gate 2")
+    rows = _trace_map(
+        "gate-2-amendment-2",
+        [
+            (seed, 64, REPLACEMENT_GATE2_BLOCK)
+            for seed in range(
+                REPLACEMENT_GATE2_BLOCK[0],
+                REPLACEMENT_GATE2_BLOCK[1] + 1,
+            )
+        ],
+        _worker_recovery,
+    )
+    metrics = _recovery_metrics(rows)
+    failures, comparisons = _recovery_failures(metrics, params["criteria"])
+    tolerance = params["criteria"]["exact_identity_tolerance"]
+    identity_metrics = {
+        "registration_delivered_masked_posterior_error_max": (
+            metrics["registration_delivered_masked_posterior_error_max"]
+        ),
+        "stakes_scientific_posterior_error_max": (
+            metrics["stakes_scientific_posterior_error_max"]
+        ),
+    }
+    for name, value in identity_metrics.items():
+        if value > tolerance:
+            failures.append(f"{name}={value:.12g} exceeds {tolerance:.12g}")
+    gate1 = json.loads(
+        (RESULTS / "gate-1-amendment-2-rerun.json").read_text()
+    )
+    if gate1["verdict"] != "PASS":
+        failures.append("Amendment-2 permanent semantic proof battery is not PASS")
+    result = {
+        "verdict": "PASS" if not failures else "FAIL",
+        "seed_block": list(REPLACEMENT_GATE2_BLOCK),
+        "seeds_consumed": len(rows),
+        "ascending_gap_free": [row["seed"] for row in rows]
+        == list(range(
+            REPLACEMENT_GATE2_BLOCK[0],
+            REPLACEMENT_GATE2_BLOCK[1] + 1,
+        )),
+        "frozen_criteria": params["criteria"],
+        "comparisons": comparisons,
+        "metrics": metrics,
+        "semantic_proofs_at_scale": {
+            "candidate_common_registration_identity": identity_metrics[
+                "registration_delivered_masked_posterior_error_max"
+            ],
+            "three_case_active_dormant_masked": (
+                "permanent items 4, 6, 8, 17, and 19 plus common-support "
+                "own-model recovery over active counts 1/2/3"
+            ),
+            "hierarchical_partner_support": {
+                "partner_accuracy": metrics["partner_accuracy"],
+                "support_parameter_accuracy": metrics[
+                    "support_parameter_accuracy"
+                ],
+            },
+            "stakes_in_utility_scientific_posterior_identity": (
+                identity_metrics["stakes_scientific_posterior_error_max"]
+            ),
+            "stakes_policy_path_present_descriptive": metrics[
+                "stakes_policy_difference_mean"
+            ],
+            "theta_contact_target_accuracy": metrics[
+                "contact_parameter_accuracy"
+            ],
+            "interventional_D_fingerprints": gate1["proofs"][
+                "18_interventional_topology_fixture"
+            ],
+            "exact_zero_claims_scored_as_identities": True,
+        },
+        "failures": failures,
+        "bounds": dict(v35.finite_information_bounds()),
+        "custody": {
+            "runtime_events_persisted_in_trace_jsonl": True,
+            "trace_hash_ledger": "gate-2-amendment-2-trace-hashes.json",
+            "barred_blocks_touched": False,
+            "retired_or_sealed_escrow_touched": False,
+        },
+    }
+    _write_json("gate-2-amendment-2.json", result)
+    _write_report("gate-2-amendment-2-report.md", "V3.5 Replacement Gate 2", result)
+    params["status"] = (
+        "REPLACEMENT_GATE2_PASSED"
+        if not failures else "STOPPED_AT_REPLACEMENT_GATE2"
+    )
+    PARAMETERS.write_text(json.dumps(params, indent=2, sort_keys=True) + "\n")
+    if failures:
+        (RESULTS / "gate-2-amendment-2-diagnosis-stub.md").write_text(
+            "# V3.5 replacement Gate 2 diagnosis stub\n\n"
+            "Replacement Gate 2 stopped honestly. No replacement Gate-3 seed "
+            "was opened.\n\n"
+            + "\n".join(f"- {failure}" for failure in failures) + "\n"
+        )
     return not failures
 
 
@@ -1505,12 +1700,684 @@ def run_gate3():
     return not failures
 
 
+def run_gate3_amendment2():
+    params = json.loads(PARAMETERS.read_text())
+    if params["status"] != "REPLACEMENT_GATE2_PASSED":
+        raise RuntimeError("replacement Gate 2 must pass before replacement Gate 3")
+    tasks = [
+        (
+            seed,
+            GATE3_THEMES[
+                (seed - REPLACEMENT_GATE3_BLOCK[0]) % len(GATE3_THEMES)
+            ],
+            REPLACEMENT_GATE3_BLOCK,
+        )
+        for seed in range(
+            REPLACEMENT_GATE3_BLOCK[0],
+            REPLACEMENT_GATE3_BLOCK[1] + 1,
+        )
+    ]
+    rows = _trace_map("gate-3-amendment-2", tasks, _worker_pilot)
+    estimands = _pilot_estimands(rows, GATE3_THEMES)
+    criteria = params["criteria"]
+    failures = []
+    comparisons = {}
+    for key, floor in criteria["effect_minima"].items():
+        theme, name = key.split(":", 1)
+        metric = estimands[theme][name]
+        passed = metric["mean"] >= floor and metric["ci95"][0] > 0.0
+        comparisons[key] = {
+            "metric": metric,
+            "floor": floor,
+            "lower_ci_must_exceed_zero": True,
+            "passed": passed,
+        }
+        if not passed:
+            failures.append(
+                f"{key}: mean={metric['mean']:.12g}, "
+                f"CI={metric['ci95']}, floor={floor:.12g}"
+            )
+    identity_values = {
+        "stakes_scientific_posterior": max(
+            max(abs(a - b) for a, b in zip(
+                row["right"]["structure_probabilities"],
+                row["left"]["structure_probabilities"],
+            ))
+            for row in rows if row["theme"] == "stakes"
+        ),
+        "dormant_mode_influence": max(
+            abs(row["dormant_effect"])
+            for row in rows if row["theme"] == "mode_dormancy"
+        ),
+    }
+    for name, value in identity_values.items():
+        if value > criteria["exact_identity_tolerance"]:
+            failures.append(f"{name}={value:.12g} exceeds exact tolerance")
+    registration = estimands["registration"]
+    rope = criteria["equivalence_rope"]
+    registration_pass = (
+        registration["policy_difference"]["ci95"][0] >= -rope
+        and registration["policy_difference"]["ci95"][1] <= rope
+        and registration[
+            "scientific_posterior_max_abs_difference"
+        ]["ci95"][1] <= rope
+    )
+    if not registration_pass:
+        failures.append(
+            "registration equivalence interval is not wholly inside the frozen ROPE"
+        )
+    result = {
+        "verdict": "PASS" if not failures else "FAIL",
+        "seed_block": list(REPLACEMENT_GATE3_BLOCK),
+        "seeds_consumed": len(rows),
+        "ascending_gap_free": [row["seed"] for row in rows]
+        == list(range(
+            REPLACEMENT_GATE3_BLOCK[0],
+            REPLACEMENT_GATE3_BLOCK[1] + 1,
+        )),
+        "estimands": estimands,
+        "frozen_effect_comparisons": comparisons,
+        "identity_values": identity_values,
+        "registration_equivalence": {
+            "rope": [-rope, rope],
+            "metrics": registration,
+            "passed": registration_pass,
+        },
+        "opposed_recording_convention": (
+            "opposed_D_* is the negated raw interventional influence; "
+            "raw opposed D entries are negative"
+        ),
+        "opposed_allied_reported_separately": True,
+        "failures": failures,
+        "bounds": dict(v35.finite_information_bounds()),
+        "custody": {
+            "runtime_events_persisted_in_trace_jsonl": True,
+            "trace_hash_ledger": "gate-3-amendment-2-trace-hashes.json",
+            "barred_blocks_touched": False,
+            "retired_or_sealed_escrow_touched": False,
+        },
+    }
+    _write_json("gate-3-amendment-2.json", result)
+    _write_report("gate-3-amendment-2-report.md", "V3.5 Replacement Gate 3", result)
+    params["status"] = (
+        "REPLACEMENT_GATE3_PASSED"
+        if not failures else "STOPPED_AT_REPLACEMENT_GATE3"
+    )
+    PARAMETERS.write_text(json.dumps(params, indent=2, sort_keys=True) + "\n")
+    if failures:
+        (RESULTS / "gate-3-amendment-2-diagnosis-stub.md").write_text(
+            "# V3.5 replacement Gate 3 diagnosis stub\n\n"
+            "Replacement Gate 3 stopped honestly. No Gate-4 seed was opened.\n\n"
+            + "\n".join(f"- {failure}" for failure in failures) + "\n"
+        )
+    return not failures
+
+
+GATE4_LESIONS = (
+    "mode_slot",
+    "mode_root_edges",
+    "joint_policy_edge",
+    "cross_mode_edge",
+    "registration_channel",
+    "contact_channel",
+)
+
+
+def _program_allowed(structure, restrictions):
+    if structure.active_modes not in restrictions.get(
+        "active_modes", (1, 2, 3)
+    ):
+        return False
+    return all(
+        value in restrictions.get(name, (0, 1))
+        for name, value in v35.program_values(structure).items()
+    )
+
+
+def _restricted_prior_identity(full, restricted, restrictions):
+    retained = [
+        probability
+        for probability, (structure, _sign) in zip(
+            full.probabilities, full.components
+        )
+        if _program_allowed(structure, restrictions)
+    ]
+    mass = math.fsum(retained)
+    conditioned = [probability / mass for probability in retained]
+    return max(abs(a - b) for a, b in zip(
+        conditioned, restricted.probabilities
+    ))
+
+
+def _mask_slots(world, first_masked_slot):
+    def masked(values):
+        return tuple(
+            value if index < first_masked_slot else None
+            for index, value in enumerate(values)
+        )
+    return replace(
+        world,
+        observations=tuple(
+            replace(
+                item,
+                mode_signals=masked(item.mode_signals),
+                support_signals=masked(item.support_signals),
+                registration=masked(item.registration),
+                contact_signals=masked(item.contact_signals),
+                support_targets=tuple(
+                    value if index < first_masked_slot else 0
+                    for index, value in enumerate(item.support_targets)
+                ),
+            )
+            for item in world.observations
+        ),
+    )
+
+
+@traced_execution
+def _worker_gate4(task):
+    seed, lesion = task
+    config = _config(
+        mode_count=1 if lesion == "mode_slot" else 3,
+        topology="allied" if lesion == "cross_mode_edge" else "independent",
+    )
+    world = v35.generate_world(seed, config, released_block=GATE4_BLOCK)
+    restrictions = {}
+    scoring_world = world
+    if lesion == "mode_slot":
+        restrictions = {"active_modes": (1,)}
+        scoring_world = _mask_slots(world, 1)
+    elif lesion == "mode_root_edges":
+        restrictions = {name: (0,) for name in ("M1_G", "M2_G", "M3_G")}
+    elif lesion == "joint_policy_edge":
+        restrictions = {"JOINT_POLICY_Y": (0,)}
+    elif lesion == "cross_mode_edge":
+        restrictions = {"CROSS_MODE_Y": (0,)}
+    elif lesion == "registration_channel":
+        scoring_world = replace(
+            world,
+            observations=tuple(
+                replace(item, registration=(None, None, None))
+                for item in world.observations
+            ),
+        )
+    elif lesion == "contact_channel":
+        scoring_world = replace(
+            world,
+            observations=tuple(
+                replace(
+                    item,
+                    denied_contact=None,
+                    contact_signals=(None, None, None),
+                )
+                for item in world.observations
+            ),
+        )
+    full = v35.score_world(scoring_world)
+    lesioned = v35.score_world(scoring_world, restrictions=restrictions)
+    identity_error = _restricted_prior_identity(full, lesioned, restrictions)
+    result = {
+        "seed": seed,
+        "lesion": lesion,
+        "restriction": restrictions,
+        "restricted_prior_identity_error": identity_error,
+        "normalization_error": abs(math.fsum(lesioned.probabilities) - 1.0),
+        "finite_evidence": math.isfinite(lesioned.log_evidence),
+        "target_error": 0.0,
+        "selectivity_error": 0.0,
+    }
+    if lesion == "mode_slot":
+        baseline = v35.score_world(
+            world, restrictions={"active_modes": (1,)}
+        )
+        result["target_error"] = max(
+            max(abs(a - b) for a, b in zip(
+                baseline.q_partner, lesioned.q_partner
+            )),
+            abs(
+                baseline.edge_probabilities["JOINT_POLICY_Y"]
+                - lesioned.edge_probabilities["JOINT_POLICY_Y"]
+            ),
+        )
+        result["dormant_D_error"] = max(
+            abs(lesioned.interventional_influence[i][j])
+            for i in range(v35.MODE_SLOTS)
+            for j in range(v35.MODE_SLOTS)
+            if i >= 1 or j >= 1
+        )
+    elif lesion == "mode_root_edges":
+        result["target_error"] = max(
+            lesioned.edge_probabilities[name]
+            for name in ("M1_G", "M2_G", "M3_G")
+        )
+    elif lesion == "joint_policy_edge":
+        result["target_error"] = lesioned.edge_probabilities[
+            "JOINT_POLICY_Y"
+        ]
+    elif lesion == "cross_mode_edge":
+        result["target_error"] = max(
+            abs(lesioned.interventional_influence[i][j])
+            for i in range(v35.MODE_SLOTS)
+            for j in range(v35.MODE_SLOTS)
+            if i != j
+        )
+        result["cross_edge_probability"] = lesioned.edge_probabilities[
+            "CROSS_MODE_Y"
+        ]
+    elif lesion == "registration_channel":
+        disabled = v35.score_world(world, registration_enabled=False)
+        result["target_error"] = _complete_posterior_distance(
+            lesioned, disabled
+        )
+    elif lesion == "contact_channel":
+        disabled = v35.score_world(world, denied_enabled=False)
+        result["target_error"] = _complete_posterior_distance(
+            lesioned, disabled
+        )
+    return result
+
+
+def run_gate4():
+    params = json.loads(PARAMETERS.read_text())
+    if params["status"] != "REPLACEMENT_GATE3_PASSED":
+        raise RuntimeError("replacement Gate 3 must pass before Gate 4")
+    tasks = [
+        (
+            seed,
+            GATE4_LESIONS[(seed - GATE4_BLOCK[0]) % len(GATE4_LESIONS)],
+        )
+        for seed in range(GATE4_BLOCK[0], GATE4_BLOCK[1] + 1)
+    ]
+    rows = _trace_map("gate-4-amendment-2", tasks, _worker_gate4)
+    tolerance = params["criteria"]["exact_identity_tolerance"]
+    cells = {}
+    failures = []
+    for lesion in GATE4_LESIONS:
+        subset = [row for row in rows if row["lesion"] == lesion]
+        cell = {
+            "n": len(subset),
+            "restricted_prior_identity_error_max": max(
+                row["restricted_prior_identity_error"] for row in subset
+            ),
+            "normalization_error_max": max(
+                row["normalization_error"] for row in subset
+            ),
+            "finite_evidence_all": all(row["finite_evidence"] for row in subset),
+            "target_error_max": max(row["target_error"] for row in subset),
+        }
+        if lesion == "mode_slot":
+            cell["dormant_D_error_max"] = max(
+                row["dormant_D_error"] for row in subset
+            )
+        if lesion == "cross_mode_edge":
+            cell["cross_edge_probability_max"] = max(
+                row["cross_edge_probability"] for row in subset
+            )
+        cell["passed"] = (
+            cell["restricted_prior_identity_error_max"] <= tolerance
+            and cell["normalization_error_max"] <= tolerance
+            and cell["finite_evidence_all"]
+            and cell["target_error_max"] <= tolerance
+            and cell.get("dormant_D_error_max", 0.0) <= tolerance
+            and cell.get("cross_edge_probability_max", 0.0) <= tolerance
+        )
+        if not cell["passed"]:
+            failures.append(f"{lesion}: {cell}")
+        cells[lesion] = cell
+    result = {
+        "verdict": "PASS" if not failures else "FAIL",
+        "seed_block": list(GATE4_BLOCK),
+        "seeds_consumed": len(rows),
+        "ascending_gap_free": [row["seed"] for row in rows]
+        == list(range(GATE4_BLOCK[0], GATE4_BLOCK[1] + 1)),
+        "cells": cells,
+        "restricted_prior_identity_tolerance": tolerance,
+        "masking_semantics": (
+            "slot/channel deletion is candidate-common masking; masked "
+            "channels contribute no likelihood"
+        ),
+        "failures": failures,
+        "custody": {
+            "runtime_events_persisted_in_trace_jsonl": True,
+            "trace_hash_ledger": "gate-4-amendment-2-trace-hashes.json",
+            "barred_blocks_touched": False,
+            "retired_or_sealed_escrow_touched": False,
+        },
+    }
+    _write_json("gate-4-amendment-2.json", result)
+    _write_report("gate-4-amendment-2-report.md", "V3.5 Gate 4 lesions", result)
+    params["status"] = "GATE4_PASSED" if not failures else "STOPPED_AT_GATE4"
+    PARAMETERS.write_text(json.dumps(params, indent=2, sort_keys=True) + "\n")
+    if failures:
+        (RESULTS / "gate-4-amendment-2-diagnosis-stub.md").write_text(
+            "# V3.5 Gate 4 diagnosis stub\n\n"
+            "Gate 4 stopped honestly. No Gate-5 seed was opened.\n\n"
+            + "\n".join(f"- {failure}" for failure in failures) + "\n"
+        )
+    return not failures
+
+
+def _compact_recovery_row(world, posterior):
+    structure_map = _structure_probabilities(posterior)
+    truth_key = (
+        world.truth_structure.active_modes,
+        world.truth_structure.mode_root_edges,
+        world.truth_structure.joint_policy_outcome,
+        world.truth_structure.cross_mode_outcome,
+    )
+    predicted = max(structure_map, key=structure_map.get)
+    truth_edges = tuple(v35.program_values(world.truth_structure).values())
+    predicted_edges = (
+        predicted[1][0], predicted[1][1], predicted[1][2],
+        predicted[2], predicted[3],
+    )
+    return {
+        "truth_structure": truth_key,
+        "predicted_structure": predicted,
+        "edge_correct": [
+            left == right for left, right in zip(predicted_edges, truth_edges)
+        ],
+        "active_count_correct": predicted[0] == truth_key[0],
+        "program_correct": predicted == truth_key,
+        "confidence": structure_map[predicted],
+        "normalization_error": abs(math.fsum(posterior.probabilities) - 1.0),
+        "finite_evidence": math.isfinite(posterior.log_evidence),
+    }
+
+
+@traced_execution
+def _worker_gate5(task):
+    seed, cell, detail = task
+    if cell == "primary_assay":
+        row = _worker_pilot.__wrapped__((seed, detail, GATE5_BLOCK))
+        row["cell"] = cell
+        return row
+    if cell in {"primary_recovery_64", "length_32", "length_96"}:
+        length = {"primary_recovery_64": 64, "length_32": 32, "length_96": 96}[cell]
+        row = _worker_recovery.__wrapped__((seed, length, GATE5_BLOCK))
+        row["cell"] = cell
+        return row
+    if cell == "policy_schedule":
+        row = _worker_pilot.__wrapped__((seed, detail, GATE5_BLOCK))
+        row["cell"] = cell
+        return row
+    world = v35.generate_recovery_world(
+        seed, length=64, released_block=GATE5_BLOCK
+    )
+    if cell == "missingness_25pct":
+        observations = []
+        for item in world.observations:
+            if item.time % 4 == 0:
+                observations.append(replace(
+                    item,
+                    mode_signals=(None, None, None),
+                    root_signal=None,
+                    outcome=None,
+                    partner_remaining=None,
+                    partner_pressure=None,
+                    support_signals=(None, None, None),
+                    registration=(None, None, None),
+                    denied_contact=None,
+                    contact_signals=(None, None, None),
+                ))
+            else:
+                observations.append(item)
+        scored_world = replace(world, observations=tuple(observations))
+        posterior = v35.score_world(scored_world)
+        scale = 1.0
+    elif cell == "code_length_scale":
+        scale = 0.75 if seed % 2 == 0 else 1.25
+        posterior = v35.score_world(world, code_length_scale=scale)
+    else:
+        raise ValueError(f"unknown Gate-5 cell {cell}")
+    return {
+        "seed": seed,
+        "cell": cell,
+        "code_length_scale": scale,
+        **_compact_recovery_row(world, posterior),
+    }
+
+
+def _gate5_tasks():
+    tasks = []
+    seed = GATE5_BLOCK[0]
+    for theme in GATE3_THEMES:
+        for _ in range(500):
+            tasks.append((seed, "primary_assay", theme))
+            seed += 1
+    for _ in range(500):
+        tasks.append((seed, "primary_recovery_64", None))
+        seed += 1
+    for cell in (
+        "length_32",
+        "length_96",
+        "missingness_25pct",
+        "code_length_scale",
+        "policy_schedule",
+    ):
+        for index in range(200):
+            detail = (
+                ("policy_exclusion", "policy_monitoring", "policy_engagement")[
+                    index % 3
+                ]
+                if cell == "policy_schedule" else None
+            )
+            tasks.append((seed, cell, detail))
+            seed += 1
+    if seed != GATE5_BLOCK[1] + 1:
+        raise AssertionError("Gate-5 task partition does not fill its block")
+    return tasks
+
+
+def _manifest_verification(stage):
+    path = ROOT / "results" / stage / "freeze-manifest.json"
+    manifest = json.loads(path.read_text())
+    mismatches = []
+    for relative, expected in manifest["files"].items():
+        target = ROOT / relative
+        actual = hashlib.sha256(target.read_bytes()).hexdigest() if target.exists() else None
+        if actual != expected:
+            mismatches.append({
+                "file": relative,
+                "expected": expected,
+                "actual": actual,
+            })
+    return {
+        "stage": stage,
+        "file_count": len(manifest["files"]),
+        "mismatches": mismatches,
+        "passed": not mismatches,
+    }
+
+
+def _descriptive_recovery_metrics(rows):
+    edge = {
+        name: float(np.mean([row["edge_correct"][index] for row in rows]))
+        for index, name in enumerate(v35.EDGE_NAMES)
+    }
+    return {
+        "n": len(rows),
+        "edge_accuracy": edge,
+        "minimum_edge_accuracy": min(edge.values()),
+        "whole_program_accuracy": float(np.mean([
+            row["program_correct"] for row in rows
+        ])),
+        "active_count_accuracy": float(np.mean([
+            row["active_count_correct"] for row in rows
+        ])),
+        "normalization_error_max": max(
+            row["normalization_error"] for row in rows
+        ),
+        "finite_evidence_all": all(row.get("finite_evidence", True) for row in rows),
+    }
+
+
+def _evaluate_primary_assays(rows, criteria):
+    estimands = _pilot_estimands(rows, GATE3_THEMES)
+    failures = []
+    comparisons = {}
+    for key, floor in criteria["effect_minima"].items():
+        theme, name = key.split(":", 1)
+        metric = estimands[theme][name]
+        passed = metric["mean"] >= floor and metric["ci95"][0] > 0.0
+        comparisons[key] = {
+            "metric": metric,
+            "floor": floor,
+            "passed": passed,
+        }
+        if not passed:
+            failures.append(f"{key}: {comparisons[key]}")
+    tolerance = criteria["exact_identity_tolerance"]
+    identities = {
+        "stakes_scientific_posterior": max(
+            max(abs(a - b) for a, b in zip(
+                row["right"]["structure_probabilities"],
+                row["left"]["structure_probabilities"],
+            ))
+            for row in rows if row["theme"] == "stakes"
+        ),
+        "dormant_mode_influence": max(
+            abs(row["dormant_effect"])
+            for row in rows if row["theme"] == "mode_dormancy"
+        ),
+    }
+    for name, value in identities.items():
+        if value > tolerance:
+            failures.append(f"{name}={value:.12g} exceeds {tolerance:.12g}")
+    registration = estimands["registration"]
+    rope = criteria["equivalence_rope"]
+    registration_pass = (
+        registration["policy_difference"]["ci95"][0] >= -rope
+        and registration["policy_difference"]["ci95"][1] <= rope
+        and registration[
+            "scientific_posterior_max_abs_difference"
+        ]["ci95"][1] <= rope
+    )
+    if not registration_pass:
+        failures.append("primary registration equivalence failed")
+    return {
+        "estimands": estimands,
+        "comparisons": comparisons,
+        "identities": identities,
+        "registration_pass": registration_pass,
+        "failures": failures,
+    }
+
+
+def run_gate5():
+    params = json.loads(PARAMETERS.read_text())
+    if params["status"] != "GATE4_PASSED":
+        raise RuntimeError("Gate 4 must pass before Gate 5")
+    rows = _trace_map("gate-5-amendment-2", _gate5_tasks(), _worker_gate5)
+    criteria = params["criteria"]
+    primary_assay_rows = [row for row in rows if row["cell"] == "primary_assay"]
+    primary_recovery_rows = [
+        row for row in rows if row["cell"] == "primary_recovery_64"
+    ]
+    primary_recovery = _recovery_metrics(primary_recovery_rows)
+    recovery_failures, recovery_comparisons = _recovery_failures(
+        primary_recovery, criteria
+    )
+    primary_assays = _evaluate_primary_assays(primary_assay_rows, criteria)
+    manifests = [
+        _manifest_verification(stage)
+        for stage in ("V3.0", "V3.1", "V3.2", "V3.3", "V3.4")
+    ]
+    standing = {
+        name: json.loads((RESULTS / name).read_text())["verdict"]
+        for name in (
+            "gate-1-amendment-2-rerun.json",
+            "gate-2-amendment-2.json",
+            "gate-3-amendment-2.json",
+            "gate-4-amendment-2.json",
+        )
+    }
+    failures = list(recovery_failures) + list(primary_assays["failures"])
+    failures.extend(
+        f"manifest {item['stage']} mismatches: {item['mismatches']}"
+        for item in manifests if not item["passed"]
+    )
+    failures.extend(
+        f"standing result {name} is {verdict}"
+        for name, verdict in standing.items() if verdict != "PASS"
+    )
+    sweep_cells = {}
+    for cell in (
+        "length_32", "length_96", "missingness_25pct", "code_length_scale"
+    ):
+        subset = [row for row in rows if row["cell"] == cell]
+        if cell in {"length_32", "length_96"}:
+            sweep_cells[cell] = _recovery_metrics(subset)
+        else:
+            sweep_cells[cell] = _descriptive_recovery_metrics(subset)
+            if cell == "code_length_scale":
+                sweep_cells[cell]["by_scale"] = {
+                    str(scale): _descriptive_recovery_metrics([
+                        row for row in subset if row["code_length_scale"] == scale
+                    ])
+                    for scale in (0.75, 1.25)
+                }
+    policy_rows = [row for row in rows if row["cell"] == "policy_schedule"]
+    sweep_cells["policy_schedule"] = _pilot_estimands(
+        policy_rows,
+        ("policy_exclusion", "policy_monitoring", "policy_engagement"),
+    )
+    apparatus_errors = [
+        metric["normalization_error_max"]
+        for metric in sweep_cells.values()
+        if isinstance(metric, dict) and "normalization_error_max" in metric
+    ]
+    if apparatus_errors and max(apparatus_errors) > criteria["exact_identity_tolerance"]:
+        failures.append("a robustness cell exceeded normalization tolerance")
+    result = {
+        "verdict": "PASS" if not failures else "FAIL",
+        "seed_block": list(GATE5_BLOCK),
+        "seeds_consumed": len(rows),
+        "ascending_gap_free": [row["seed"] for row in rows]
+        == list(range(GATE5_BLOCK[0], GATE5_BLOCK[1] + 1)),
+        "partition": {
+            "primary_assays": len(primary_assay_rows),
+            "primary_recovery_64": len(primary_recovery_rows),
+            "sweeps": {
+                cell: len([row for row in rows if row["cell"] == cell])
+                for cell in (
+                    "length_32", "length_96", "missingness_25pct",
+                    "code_length_scale", "policy_schedule",
+                )
+            },
+        },
+        "primary_recovery": primary_recovery,
+        "primary_recovery_comparisons": recovery_comparisons,
+        "primary_assays": primary_assays,
+        "sweeps_descriptive_no_primary_floor_transplant": sweep_cells,
+        "manifest_verification": manifests,
+        "standing_gate_verdicts": standing,
+        "failures": failures,
+        "custody": {
+            "runtime_events_persisted_in_trace_jsonl": True,
+            "trace_hash_ledger": "gate-5-amendment-2-trace-hashes.json",
+            "barred_blocks_touched": False,
+            "retired_or_sealed_escrow_touched": False,
+        },
+    }
+    _write_json("gate-5-amendment-2.json", result)
+    _write_report("gate-5-amendment-2-report.md", "V3.5 Gate 5 robustness", result)
+    params["status"] = "GATE5_PASSED" if not failures else "STOPPED_AT_GATE5"
+    PARAMETERS.write_text(json.dumps(params, indent=2, sort_keys=True) + "\n")
+    if failures:
+        (RESULTS / "gate-5-amendment-2-diagnosis-stub.md").write_text(
+            "# V3.5 Gate 5 diagnosis stub\n\nGate 5 stopped honestly.\n\n"
+            + "\n".join(f"- {failure}" for failure in failures) + "\n"
+        )
+    return not failures
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "step", choices=(
             "gate1", "gate1a2", "preflight", "retro", "smoke", "pilot",
-            "gate2", "gate3", "pilot2",
+            "gate2", "gate2a2", "gate3", "gate3a2", "gate4", "gate5", "pilot2",
         )
     )
     args = parser.parse_args()
@@ -1528,8 +2395,16 @@ def main():
         passed = run_pilot()
     elif args.step == "gate2":
         passed = run_gate2()
+    elif args.step == "gate2a2":
+        passed = run_gate2_amendment2()
     elif args.step == "pilot2":
         passed = run_amendment2_pilot()
+    elif args.step == "gate3a2":
+        passed = run_gate3_amendment2()
+    elif args.step == "gate4":
+        passed = run_gate4()
+    elif args.step == "gate5":
+        passed = run_gate5()
     else:
         passed = run_gate3()
     return 0 if passed else 1

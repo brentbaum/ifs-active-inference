@@ -1,0 +1,83 @@
+# V3.5 Gate 4 lesions
+
+Verdict: **PASS**.
+
+All worlds were executed inside serializing trace contexts. The
+runtime event ledger is embedded in each persisted JSONL record; the
+record-level and whole-file SHA-256 hashes were written before this
+criterion report was produced.
+
+Seed block: `[3510000, 3511999]`.
+
+```json
+{
+  "ascending_gap_free": true,
+  "cells": {
+    "contact_channel": {
+      "finite_evidence_all": true,
+      "n": 333,
+      "normalization_error_max": 2.842170943040401e-14,
+      "passed": true,
+      "restricted_prior_identity_error_max": 2.0872192862952943e-14,
+      "target_error_max": 0.0
+    },
+    "cross_mode_edge": {
+      "cross_edge_probability_max": 0.0,
+      "finite_evidence_all": true,
+      "n": 333,
+      "normalization_error_max": 5.639932965095795e-14,
+      "passed": true,
+      "restricted_prior_identity_error_max": 5.140332604014475e-14,
+      "target_error_max": 6.661338147750939e-16
+    },
+    "joint_policy_edge": {
+      "finite_evidence_all": true,
+      "n": 333,
+      "normalization_error_max": 5.67323965583455e-14,
+      "passed": true,
+      "restricted_prior_identity_error_max": 4.7628567756419216e-14,
+      "target_error_max": 0.0
+    },
+    "mode_root_edges": {
+      "finite_evidence_all": true,
+      "n": 334,
+      "normalization_error_max": 5.639932965095795e-14,
+      "passed": true,
+      "restricted_prior_identity_error_max": 5.473399511402022e-14,
+      "target_error_max": 0.0
+    },
+    "mode_slot": {
+      "dormant_D_error_max": 1.1102230246251565e-16,
+      "finite_evidence_all": true,
+      "n": 334,
+      "normalization_error_max": 2.842170943040401e-14,
+      "passed": true,
+      "restricted_prior_identity_error_max": 1.8207657603852567e-14,
+      "target_error_max": 1.0491607582707729e-13
+    },
+    "registration_channel": {
+      "finite_evidence_all": true,
+      "n": 333,
+      "normalization_error_max": 2.842170943040401e-14,
+      "passed": true,
+      "restricted_prior_identity_error_max": 2.0650148258027912e-14,
+      "target_error_max": 0.0
+    }
+  },
+  "custody": {
+    "barred_blocks_touched": false,
+    "retired_or_sealed_escrow_touched": false,
+    "runtime_events_persisted_in_trace_jsonl": true,
+    "trace_hash_ledger": "gate-4-amendment-2-trace-hashes.json"
+  },
+  "failures": [],
+  "masking_semantics": "slot/channel deletion is candidate-common masking; masked channels contribute no likelihood",
+  "restricted_prior_identity_tolerance": 1e-10,
+  "seed_block": [
+    3510000,
+    3511999
+  ],
+  "seeds_consumed": 2000,
+  "verdict": "PASS"
+}
+```

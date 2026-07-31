@@ -1,0 +1,71 @@
+{
+  "escrow": {
+    "C-V35": {
+      "block": [4050000, 4054999],
+      "status": "RETIRED_UNOPENED"
+    },
+    "C-V35B": {
+      "block": [4055000, 4059999],
+      "status": "SEALED_UNOPENED"
+    }
+  },
+  "files": {
+    "contracts/v3.5-protect-contract.md": "246f91455e971a65f0dc5fa6798d3da0cea8f481a482c6cdfdf4ae119611c2cc",
+    "protocols/v3.5-analysis-plan.md": "c0b0efb83258fd96e4fd17d9b7d6a844bb9a5a2e11b4aa96213a285c65539cdb",
+    "protocols/v3.5-parameters.json": "bfe92aebfa7a776224b6b322c3ca60f549198e9f9ad795120d958bde3f44ee75",
+    "protocols/v3.5-public-dummy.json": "b3323d3d7025a8a527727d9f890f8c3a42b8c42f482d7ebb5fd15391e194a7bb",
+    "ref/audit.py": "2b67436885b11aa9394d641ffb51b0f32296b4b414b0c95307948259709c7118",
+    "ref/retro_calibration_audit.py": "e658914442d4a7cad11a4b304f2c7f168feee848031a53b3141c1a6302665dcf",
+    "ref/trace_sink.py": "538acd5d59584eebc865dcdbffc9f2b893ac9e9ea78d2cea4923c7000ae2c2bb",
+    "ref/v35.py": "7b71e5a7c8003d27c7f1bcafc8deae2d2eed07dd80942066362a1d9c5da8c264",
+    "ref/v35_calibration.py": "9dd9ab5c6d6bf3a91de0f28c733c784b52f87a806ef6e48e52dafa3632080dbf",
+    "ref/v35_calibration_oracle.py": "3cb46716acc33ff29d36a07d31d4df2d3223653b5cfe44019a5d835e8cba53e3",
+    "ref/v35_oracle.py": "57c76512d003808c705f64634ab08b5503d38c5a8300db3f8be970bdcbcdb702",
+    "ref/v35_topology.py": "57924f038840cbeebc1c1eec0870da11d19a04b127bd1c98f37df226135ed5f1",
+    "ref/v35_topology_oracle.py": "3f94632a7119dafb51cdd7ec35cf9ab7c6ea5721ab8193d4b2bf6a1664725e6d",
+    "results/V3.5/amendment-1-failure-record-addendum.md": "721bb5fec10efaede33afe11bf87efe30883ce4c4538784c9b7ad90aa18a1a99",
+    "results/V3.5/decisions.md": "15f5c2d58839ba98a10b7af63c3e522d952457273b472b517ee5ae4923610b1d",
+    "results/V3.5/development-failures.md": "3df1426122bade9abe5f1545df735c219c20782b59dff3cb9a3045dacf07d56e",
+    "results/V3.5/freeze-readiness.json": "7821516888c8f5cb3825be91ad50ad67f70bbc496c26e14812ee733d883386ba",
+    "results/V3.5/freeze-readiness.md": "37996b6c8a9a07cb5419617e20fbd7ee87cdad196ab53d5db04010761989d523",
+    "results/V3.5/full-fast-suite-final.json": "56df10d2d41480c7eff70f89a246835c7a1cc2b97886dfc9229b8990a9c149e6",
+    "results/V3.5/gate-1-amendment-2-rerun-trace-hashes.json": "dec8b3d76008141cdd1888ad9031467b096bef478f9c55ee433db3d9237163fa",
+    "results/V3.5/gate-1-amendment-2-rerun-traces.jsonl": "4fe882e84bec2b8798b956d1bc59a206d47cf3d2a8d8b6fc70629afb397c3f5b",
+    "results/V3.5/gate-1-amendment-2-rerun.json": "089c330a04f26ef47adee6e0d411fec181f643328df8bb71ea8f58ae2054cd27",
+    "results/V3.5/gate-2-amendment-2-report.md": "1cd9dc1c1d694f845edbd3aefd3c65365c3326fe5d2f1619cfc2123b653ba21a",
+    "results/V3.5/gate-2-amendment-2-trace-hashes.json": "08170275dd5fbf3ae5a3aa3d2e721b6f5e0527ff09c657f75febc5126bdec36d",
+    "results/V3.5/gate-2-amendment-2-traces.jsonl": "a89514e2d5ac478e3c4b09d99d80f362c60ad08897341239dd2779a077bee082",
+    "results/V3.5/gate-2-amendment-2.json": "6a77261ddf22a4f763773fcf0689a8c353fd2fa874e1ea771e0aab5b5e537cd7",
+    "results/V3.5/gate-3-amendment-2-report.md": "171ae227c8d22d1634b88e1543b885717dc2b6fa4d99e63a7024f1918e60eda2",
+    "results/V3.5/gate-3-amendment-2-trace-hashes.json": "9313f35a60d36a332f93a56e0532e4e523dfbf6e74a4ae8bc8d0d030ba4de042",
+    "results/V3.5/gate-3-amendment-2-traces.jsonl": "b6ad9bf1ef0e564a18cb5f4694c92971680949a01d30ce54b4e8a1a3f3f390f5",
+    "results/V3.5/gate-3-amendment-2.json": "d3bdb8ac587f65b97a4cbff1d94912c065d7845d3845e663dd6b85d2660699e5",
+    "results/V3.5/gate-4-amendment-2-report.md": "337e4d34e95f8b3bda8396e00a3d737fda6d6bb564bc4470cfa1d6f16b69e415",
+    "results/V3.5/gate-4-amendment-2-trace-hashes.json": "c8bcbc13ad03173e9609d31b471954baa7b40c07b2ec026534010b98f732870a",
+    "results/V3.5/gate-4-amendment-2-traces.jsonl": "a55d003c10e9d0880948321c0df3ff685a7e7e6eff6301dde0be62529c3d00e3",
+    "results/V3.5/gate-4-amendment-2.json": "eb4b78bf12c4a8f0ad56a55a57b714b20470e897db836cbd4084a0305d0f5d20",
+    "results/V3.5/gate-5-amendment-2-report.md": "0d4bf50f4528e88392a8eeb32bfca9bbfcf6bb5a54231b839eea0429601b3e83",
+    "results/V3.5/gate-5-amendment-2-trace-hashes.json": "4e912fb0d34eca68cde86fe584028558c8240fe51b9294c509987b3ca5099680",
+    "results/V3.5/gate-5-amendment-2-traces.jsonl": "2ff6c50142f6ba3e2ee5a9c18dce60169070e36afb1a587edbcc5dc8fc263896",
+    "results/V3.5/gate-5-amendment-2.json": "0b5fabdedbd561ac020813a9483d4b8bc0d897b6ff79f6b823c9b5c05ca01892",
+    "results/V3.5/gate3-adjudication-amendment-2.md": "87b6843a9cc8b8e5b72ebcb456c4acdd36a94afa1d2445b7e8068a26730db4e0",
+    "results/V3.5/stage0-adjudication-amendment-1.md": "1d5f917d63eddd0356cff695585015d269f29547d8631cfb851fe8f3142ced12",
+    "results/V3.5/stage0-adjudication.md": "6ad9f57bb8e6affa5eaadf62af069f85ac9ec6a2f05b47c81a2e3fca8b9d85ac",
+    "results/V3.5/stage0-amendment-2-pilot-assays-trace-hashes.json": "346a3129c4447e875f5513a76091ff2e0acbc979f6a263d573d5bc648f364534",
+    "results/V3.5/stage0-amendment-2-pilot-recovery-trace-hashes.json": "4e8c26f36f567e830aeb4a0bef6b4bee74c331dab643a21541368f31cd394556",
+    "results/V3.5/stage0-amendment-2-pilot.json": "5134b65ae848bf60c55e7cb95862bb67128b6570ca5d5e829c7dc45f20079b63",
+    "results/V3.5/stage0-external-round10-rulings.md": "159ad3e1f69448085d48794f01f4ffb309e4189c14c88a53987b9181fa54b592",
+    "scripts/run_v35.py": "3546f7847ea1e72d9a287b22c9f0f2e8af8dc8112908b3070eaa4e5d4ffe97cf",
+    "tests/test_v35_protect.py": "1026333cc1912a0549412244f5a7e6d09d56b7fc9c291d318d2bf3cce248a248"
+  },
+  "formal_gate_verdicts": {
+    "gate1_amendment2": "PASS",
+    "gate2_replacement": "PASS",
+    "gate3_replacement": "PASS",
+    "gate4": "PASS",
+    "gate5": "PASS"
+  },
+  "prior_failures_retained": true,
+  "stage": "V3.5",
+  "status": "FREEZE_READY_AMENDMENT2_ALL_GATES_PASS_AWAITING_C_V35B"
+}

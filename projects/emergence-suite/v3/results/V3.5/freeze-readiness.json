@@ -1,0 +1,63 @@
+{
+  "custody": {
+    "barred_blocks_touched": false,
+    "c_v35_retired_escrow_opened": false,
+    "c_v35b_escrow_opened": false,
+    "gate_blocks_consumed_once_ascending_gap_free": true,
+    "runtime_events_persisted": true
+  },
+  "formal_amendment_2_gate_verdicts": {
+    "gate1": "PASS",
+    "gate2_replacement": "PASS",
+    "gate3_replacement": "PASS",
+    "gate4": "PASS",
+    "gate5": "PASS"
+  },
+  "gate_2": {
+    "candidate_common_registration_error_max": 1.4016565685892601e-13,
+    "ece": 0.018048728700937322,
+    "minimum_edge_accuracy": 0.696,
+    "stakes_scientific_posterior_error_max": 0.0,
+    "whole_program_accuracy": 0.5623333333333334
+  },
+  "gate_3": {
+    "all_refrozen_effects_passed": true,
+    "registration_scientific_difference_mean": 3.2388886494691405e-14,
+    "registration_equivalence_passed": true
+  },
+  "gate_4": {
+    "all_six_lesions_passed": true,
+    "cross_mode_D_error_max": 6.661338147750939e-16,
+    "restricted_prior_identity_error_max": 5.473399511402022e-14
+  },
+  "gate_5": {
+    "all_primary_criteria_passed": true,
+    "descriptive_sweeps_used_primary_floor_transplants": false,
+    "minimum_edge_accuracy": 0.724,
+    "whole_program_accuracy": 0.598
+  },
+  "inherited_manifest_verification": {
+    "V3.0": "31/31",
+    "V3.1": "42/42",
+    "V3.2": "42/42",
+    "V3.3": "53/53",
+    "V3.4": "82/82"
+  },
+  "prior_records": {
+    "amendment_1_gate_3_fail_retained": true,
+    "amendment_1_records_non_probative_after_repair": true,
+    "c_v35_retired_unopened": true
+  },
+  "stage": "V3.5",
+  "status": "FREEZE_READY_AMENDMENT2_ALL_GATES_PASS_AWAITING_C_V35B",
+  "suites": {
+    "v2": "180/180 PASS",
+    "v3": "55/55 PASS"
+  },
+  "trace_file_sha256": {
+    "gate2": "a89514e2d5ac478e3c4b09d99d80f362c60ad08897341239dd2779a077bee082",
+    "gate3": "b6ad9bf1ef0e564a18cb5f4694c92971680949a01d30ce54b4e8a1a3f3f390f5",
+    "gate4": "a55d003c10e9d0880948321c0df3ff685a7e7e6eff6301dde0be62529c3d00e3",
+    "gate5": "2ff6c50142f6ba3e2ee5a9c18dce60169070e36afb1a587edbcc5dc8fc263896"
+  }
+}

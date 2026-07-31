@@ -127,3 +127,66 @@ freeze-readiness record or freeze manifest was produced.
 
 Replacement Gates 2–3, original Gates 4–5, retired C-V35 escrow, and new
 C-V35B escrow are unopened. STOP for evaluator sealing of C-V35B.
+
+## Post-seal replacement Gate 2
+
+- C-V35B seal `b57339b9...` was verified before opening the replacement
+  block; both escrow ranges remain closed.
+- `results/V3.5/gate-2-amendment-2.json`: PASS on all 3,000 ascending seeds.
+- `results/V3.5/gate-2-amendment-2-report.md`.
+- `results/V3.5/gate-2-amendment-2-trace-hashes.json`: whole-file trace hash
+  `a89514e2d5ac478e3c4b09d99d80f362c60ad08897341239dd2779a077bee082`.
+- Raw JSONL contains the persisted runtime events for every world.
+
+Replacement Gate 3 is now open. Gates 4–5 and escrow remain unopened.
+
+## Replacement Gate 3
+
+- `results/V3.5/gate-3-amendment-2.json`: PASS on all 5,000 ascending seeds;
+  all refrozen effects, identities, and registration equivalence passed.
+- `results/V3.5/gate-3-amendment-2-report.md`.
+- `results/V3.5/gate-3-amendment-2-trace-hashes.json`: whole-file trace hash
+  `b6ad9bf1ef0e564a18cb5f4694c92971680949a01d30ce54b4e8a1a3f3f390f5`.
+- Opposed/allied results are separate; opposed `D` values retain the
+  preregistered negated-raw convention.
+
+Gate 4 is now open. Gate 5 and escrow remain unopened.
+
+## Gate 4 and disconnect custody
+
+- `results/V3.5/gate-4-amendment-2.json`: PASS on all 2,000 ascending seeds.
+- `results/V3.5/gate-4-amendment-2-report.md`.
+- `results/V3.5/gate-4-amendment-2-trace-hashes.json`: whole-file trace hash
+  `a55d003c10e9d0880948321c0df3ff685a7e7e6eff6301dde0be62529c3d00e3`.
+- After the stream disconnect, no Gate-5 result, trace, partial JSONL, or hash
+  ledger existed. The full Gate-5 block was therefore established as
+  unconsumed before execution resumed.
+- V3.0–V3.4 freeze manifests preflight with zero mismatches.
+
+Gate 5 is now open. Both escrow ranges remain untouched.
+
+## Gate 5 and amendment-2 freeze candidate
+
+- `results/V3.5/gate-5-amendment-2.json`: **PASS** on all 8,000 seeds in
+  `3512000:3519999`, consumed once, ascending and gap-free.
+- `results/V3.5/gate-5-amendment-2-report.md`: primary cells block at their
+  refrozen floors; shorter-history and robustness sweeps are reported without
+  transplanting primary information-budget floors.
+- `results/V3.5/gate-5-amendment-2-trace-hashes.json`: 8,000 persisted runtime
+  records; whole-file trace hash
+  `2ff6c50142f6ba3e2ee5a9c18dce60169070e36afb1a587edbcc5dc8fc263896`.
+- Whole-program recovery accuracy is `0.598`; minimum per-edge accuracy is
+  `0.724`. Per-edge accuracies and all sweep localizations are retained in the
+  Gate-5 record.
+- V3.0–V3.4 freeze manifests verify **31/31, 42/42, 42/42, 53/53, and 82/82**.
+- `results/V3.5/full-fast-suite-final.json`: V3 **55/55** and cumulative V2
+  **180/180** green.
+- `results/V3.5/freeze-readiness.json` and `.md`: status
+  `FREEZE_READY_AMENDMENT2_ALL_GATES_PASS_AWAITING_C_V35B`.
+- `results/V3.5/freeze-manifest.json`: **47/47** hashes independently
+  reverified after packaging.
+- `results/V3.5/decisions.md` and `development-failures.md`: amendment history,
+  retained failures, and custody decisions remain explicit.
+
+Both escrow ranges remain untouched: retired C-V35 `4050000:4054999` and
+sealed C-V35B `4055000:4059999`. STOP for evaluator reveal-and-run of C-V35B.
