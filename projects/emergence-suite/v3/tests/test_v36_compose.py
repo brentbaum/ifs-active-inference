@@ -3,6 +3,7 @@ import json
 import math
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 
 from ref import audit, v36, v36_oracle
 
@@ -66,6 +67,29 @@ class V36CompositionTests(unittest.TestCase):
         self.assertIn("stakes-weighted policy utility", repairs)
         self.assertTrue(registry["reductions"]["factor_templates_at_least_50_percent"])
         self.assertTrue(registry["reductions"]["constants_at_least_50_percent"])
+
+    def test_do_over_schedule_is_event_indexed_not_fixed_slice(self):
+        def world(boundary):
+            slices = [
+                SimpleNamespace(time=time, episode_kind="imaginal_premature", context=1, mode=1, root=None)
+                for time in range(boundary - 3, boundary)
+            ]
+            slices.append(
+                SimpleNamespace(time=boundary, episode_kind="corrective", context=1, mode=1, root=0)
+            )
+            return SimpleNamespace(
+                config=SimpleNamespace(do_over="premature"),
+                slices=tuple(slices),
+            )
+
+        early = v36.do_over_schedule_audit(world(7))
+        late = v36.do_over_schedule_audit(world(19))
+        self.assertTrue(early["event_indexed"])
+        self.assertTrue(late["event_indexed"])
+        self.assertEqual(early["root_revision_event"], 7)
+        self.assertEqual(late["root_revision_event"], 19)
+        self.assertLess(max(early["premature_times"]), 7)
+        self.assertLess(max(late["premature_times"]), 19)
 
 
 if __name__ == "__main__":

@@ -13,6 +13,7 @@ import sys
 from dataclasses import asdict, replace
 from multiprocessing import get_context
 from pathlib import Path
+from types import SimpleNamespace
 from typing import Any, Mapping, Sequence
 
 import numpy as np
@@ -26,7 +27,8 @@ from ref.trace_sink import traced_execution  # noqa: E402
 
 RESULTS = ROOT / "results" / "V3.6"
 PARAMETERS = ROOT / "protocols" / "v3.6-parameters.json"
-PILOT_BLOCK = (3_600_001, 3_603_999)
+FIRST_PILOT_BLOCK = (3_600_001, 3_603_999)
+FRESH_PILOT_BLOCK = (3_660_000, 3_663_999)
 BARRED_CUSTODY_SEED = 3_600_000
 TOLERANCE = 1e-10
 
@@ -204,6 +206,62 @@ def run_gate1() -> dict[str, Any]:
     return result
 
 
+def run_gate1_adjudicated() -> dict[str, Any]:
+    retained = json.loads((RESULTS / "gate-1.json").read_text())
+
+    def fixture(boundary: int, kind: str) -> Any:
+        if kind == "premature":
+            slices = [
+                SimpleNamespace(time=time, episode_kind="imaginal_premature", context=1, mode=1, root=None)
+                for time in range(boundary - 3, boundary)
+            ]
+        else:
+            slices = []
+        slices.append(SimpleNamespace(
+            time=boundary, episode_kind="corrective", context=1, mode=1, root=0
+        ))
+        if kind == "post_revision":
+            slices.extend([
+                SimpleNamespace(time=time, episode_kind="imaginal_post", context=1, mode=1, root=None)
+                for time in range(boundary + 1, boundary + 4)
+            ])
+        return SimpleNamespace(
+            config=SimpleNamespace(do_over=kind), slices=tuple(slices)
+        )
+
+    audits = {
+        "premature_boundary_7": dict(v36.do_over_schedule_audit(fixture(7, "premature"))),
+        "premature_boundary_19": dict(v36.do_over_schedule_audit(fixture(19, "premature"))),
+        "post_revision_boundary_11": dict(v36.do_over_schedule_audit(fixture(11, "post_revision"))),
+    }
+    plan = (ROOT / "protocols" / "v3.6-analysis-plan.md").read_text()
+    proofs = {
+        "retained_gate1_pass": retained["verdict"] == "PASS",
+        "premature_schedule_follows_moving_boundary": all(
+            audits[key]["event_indexed"]
+            for key in ("premature_boundary_7", "premature_boundary_19")
+        ),
+        "post_revision_schedule_follows_observed_boundary": audits["post_revision_boundary_11"]["event_indexed"],
+        "premature_declared_positive_causal_effect": (
+            "full minus premature-do-over `q_current_edge_absence` | positive | causal effect" in plan
+        ),
+        "post_revision_equivalence_retained": (
+            "V3.3 post-revision do-over | full interval inside ROPE | equivalence retained finding" in plan
+        ),
+        "fresh_block_declared": "`3660000:3663999`" in plan,
+    }
+    result = {
+        "stage": "V3.6", "gate": "1-adjudicated-plan-fidelity",
+        "authorization": "results/V3.6/stage0-adjudication.md",
+        "seed_consumption": [], "schedule_fixtures": audits,
+        "proofs": proofs,
+        "verdict": "PASS" if all(proofs.values()) else "FAIL",
+    }
+    _write_json("gate-1-adjudicated.json", result)
+    _write_report("gate-1-adjudicated.md", "V3.6 Gate 1 plan-fidelity addendum", result)
+    return result
+
+
 def _config(protocol: str = "full", **changes: Any) -> v36.ComposeConfig:
     values = dict(
         protocol=protocol, mode_count=3, topology="allied", stakes="low",
@@ -220,14 +278,14 @@ def _readout_dict(readout: v36.CompositionReadout) -> dict[str, Any]:
 
 @traced_execution
 def _pilot_row(seed: int) -> dict[str, Any]:
-    if seed == BARRED_CUSTODY_SEED or not PILOT_BLOCK[0] <= seed <= PILOT_BLOCK[1]:
-        raise ValueError("pilot seed outside re-scoped authorized block")
-    offset = seed - PILOT_BLOCK[0]
+    if seed == BARRED_CUSTODY_SEED or not FRESH_PILOT_BLOCK[0] <= seed <= FRESH_PILOT_BLOCK[1]:
+        raise ValueError("pilot seed outside fresh adjudicated block")
+    offset = seed - FRESH_PILOT_BLOCK[0]
     comparator_protocols = v36.PROTOCOLS[1:]
     if offset < 1999:
         comparator = comparator_protocols[offset % len(comparator_protocols)]
-        full = v36.run_therapy(seed, _config("full"), released_block=PILOT_BLOCK)
-        other = v36.run_therapy(seed, _config(comparator), released_block=PILOT_BLOCK)
+        full = v36.run_therapy(seed, _config("full"), released_block=FRESH_PILOT_BLOCK)
+        other = v36.run_therapy(seed, _config(comparator), released_block=FRESH_PILOT_BLOCK)
         return {
             "seed": seed, "cell": "comparator", "comparator": comparator,
             "full": _readout_dict(full), "other": _readout_dict(other),
@@ -241,8 +299,8 @@ def _pilot_row(seed: int) -> dict[str, Any]:
             "policy_regime": ("exclusion", "monitoring", "engagement", "mixed")[stress % 4],
             "missingness": (0.0, 0.15, 0.3)[stress % 3],
         }
-        left = v36.run_therapy(seed, _config("full", stakes="low", **base_changes), released_block=PILOT_BLOCK)
-        right = v36.run_therapy(seed, _config("full", stakes="high", **base_changes), released_block=PILOT_BLOCK)
+        left = v36.run_therapy(seed, _config("full", stakes="low", **base_changes), released_block=FRESH_PILOT_BLOCK)
+        right = v36.run_therapy(seed, _config("full", stakes="high", **base_changes), released_block=FRESH_PILOT_BLOCK)
         return {
             "seed": seed, "cell": "round10_stress", "stress_index": stress,
             "low": _readout_dict(left), "high": _readout_dict(right),
@@ -259,7 +317,7 @@ def _pilot_row(seed: int) -> dict[str, Any]:
             policy_regime=("exclusion", "engagement")[offset % 2],
             missingness=(0.0, 0.15, 0.3)[offset % 3],
         ),
-        released_block=PILOT_BLOCK,
+        released_block=FRESH_PILOT_BLOCK,
     )
     return {
         "seed": seed, "cell": "compression_profile",
@@ -283,6 +341,7 @@ def _contrast(full: Mapping[str, Any], other: Mapping[str, Any], comparator: str
         "soothing_noncontingent_partner": "q_partner_reliable",
         "unreliable_partner": "q_partner_reliable",
         "broadcast_off_monitor": "root_evidence_uptake",
+        "premature_do_over": "q_current_edge_absence",
         "context_scope_disabled": "q_context_specific",
         "structural_pruning_disabled": "q_current_edge_absence",
     }
@@ -297,16 +356,10 @@ def _aggregate_pilot(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
     attainable = True
     for comparator in v36.PROTOCOLS[1:]:
         selected = [row for row in comparator_rows if row["comparator"] == comparator]
-        if comparator == "premature_do_over":
-            values = [float(row["full"]["q_current_edge_absence"] - row["other"]["q_current_edge_absence"]) for row in selected]
-            interval = _bootstrap_interval(values, 36_000 + len(effects))
-            ok = interval[0] >= -0.01 and interval[1] <= 0.01
-            effects[comparator] = {"kind": "equivalence", "mean": float(np.mean(values)), "interval_95": interval, "rope": 0.01, "attainable": ok}
-        else:
-            values = [_contrast(row["full"], row["other"], comparator) for row in selected]
-            interval = _bootstrap_interval(values, 36_000 + len(effects))
-            ok = interval[0] > 0.0
-            effects[comparator] = {"kind": "causal_effect", "mean": float(np.mean(values)), "interval_95": interval, "attainable": ok}
+        values = [_contrast(row["full"], row["other"], comparator) for row in selected]
+        interval = _bootstrap_interval(values, 36_000 + len(effects))
+        ok = interval[0] > 0.0
+        effects[comparator] = {"kind": "causal_effect", "direction": "positive", "mean": float(np.mean(values)), "interval_95": interval, "attainable": ok}
         attainable = attainable and ok
     stress_rows = [row for row in rows if row["cell"] == "round10_stress"]
     scientific_fields = (
@@ -340,10 +393,10 @@ def _aggregate_pilot(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
     lengths = [float(row["profile"]["L_total"]) for row in profile_rows]
     accounting = json.loads((ROOT / "audits" / "v3.6-compression-accounting.json").read_text())
     result = {
-        "stage": "V3.6", "pilot_block": list(PILOT_BLOCK),
+        "stage": "V3.6", "pilot_block": list(FRESH_PILOT_BLOCK),
         "barred_seed": BARRED_CUSTODY_SEED,
         "world_count": len(rows),
-        "seed_order_gap_free": [row["seed"] for row in rows] == list(range(PILOT_BLOCK[0], PILOT_BLOCK[1] + 1)),
+        "seed_order_gap_free": [row["seed"] for row in rows] == list(range(FRESH_PILOT_BLOCK[0], FRESH_PILOT_BLOCK[1] + 1)),
         "effects": effects,
         "stakes_identity_error_max": max(stakes_errors, default=0.0),
         "stakes_policy_low_minus_high": {"mean": float(np.mean(stakes_policy)), "interval_95": stakes_interval, "attainable": stakes_interval[0] > 0.0},
@@ -364,26 +417,98 @@ def _aggregate_pilot(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
     return result
 
 
-def run_pilot() -> dict[str, Any]:
-    gate1 = json.loads((RESULTS / "gate-1.json").read_text())
+def _mechanical_freeze(result: Mapping[str, Any]) -> None:
+    parameters = json.loads(PARAMETERS.read_text())
+    parameters["status"] = "STAGE0_MECHANICALLY_FROZEN_AWAITING_SEALS"
+    parameters["fresh_pilot_summary_sha256"] = hashlib.sha256(
+        (RESULTS / "stage-0-adjudicated-attainability-pilot.json").read_bytes()
+    ).hexdigest()
+    parameters["criteria"] = {
+        "effect_minima": {
+            name: 0.5 * abs(float(values["mean"]))
+            for name, values in result["effects"].items()
+        },
+        "stakes_policy_effect_min": 0.5 * abs(float(result["stakes_policy_low_minus_high"]["mean"])),
+        "stakes_scientific_identity_tolerance": TOLERANCE,
+        "equivalence_rope": 0.01,
+        "noninferiority_margin_nats_per_token": parameters["noninferiority_margin_nats_per_token"],
+    }
+    PARAMETERS.write_text(json.dumps(parameters, indent=2, sort_keys=True) + "\n")
+    accounting_path = ROOT / "audits" / "v3.6-compression-accounting.json"
+    accounting = json.loads(accounting_path.read_text())
+    accounting["status"] = "stage-0 mechanically frozen"
+    accounting["v3"]["per_world_structure_code_length"] = result["structure_code_length"]
+    accounting_path.write_text(json.dumps(accounting, indent=2, sort_keys=True) + "\n")
+
+
+def _freeze_readiness(result: Mapping[str, Any]) -> None:
+    files = [
+        "audits/v3.6-compression-accounting.json",
+        "contracts/v3.6-compose-contract.md",
+        "protocols/v3.6-analysis-plan.md",
+        "protocols/v3.6-parameters.json",
+        "protocols/v3.6-public-dummy.json",
+        "ref/v36.py", "ref/v36_oracle.py", "scripts/run_v36.py",
+        "tests/test_v36_compose.py",
+        "results/V3.6/gate-1.json", "results/V3.6/gate-1-adjudicated.json",
+        "results/V3.6/stage0-custody-stop.json",
+        "results/V3.6/stage0-custody-adjudication.md",
+        "results/V3.6/stage0-adjudication.md",
+        "results/V3.6/stage-0-attainability-pilot.json",
+        "results/V3.6/stage0-pilot-diagnosis-stub.json",
+        "results/V3.6/stage-0-adjudicated-attainability-pilot.json",
+        "results/V3.6/stage-0-adjudicated-attainability-pilot-trace-hashes.json",
+    ]
+    hashes = {
+        relative: hashlib.sha256((ROOT / relative).read_bytes()).hexdigest()
+        for relative in files
+    }
+    readiness = {
+        "stage": "V3.6", "status": "STAGE0_FREEZE_READY_AWAITING_C_V36A_B_C_SEALS",
+        "gate1": "PASS", "fresh_pilot": "PASS",
+        "first_pilot_stop_retained": True,
+        "floors_frozen_mechanically": True,
+        "fresh_pilot_block": list(FRESH_PILOT_BLOCK),
+        "gate_blocks_opened": False, "escrow_touched": False,
+        "bounds": dict(v36.finite_information_bounds()),
+    }
+    _write_json("stage0-freeze-readiness.json", readiness)
+    _write_report("stage0-freeze-readiness.md", "V3.6 Stage-0 freeze readiness", {**readiness, "verdict": "PASS"})
+    _write_json("stage0-freeze-manifest.json", {
+        "stage": "V3.6", "status": readiness["status"],
+        "hash_algorithm": "sha256", "files": hashes,
+        "escrow": {"C-V36A": [4100000, 4109999], "C-V36B": [4110000, 4119999], "C-V36C": [4120000, 4129999]},
+    })
+
+
+def run_fresh_pilot() -> dict[str, Any]:
+    gate1 = json.loads((RESULTS / "gate-1-adjudicated.json").read_text())
     if gate1["verdict"] != "PASS":
         raise RuntimeError("Gate 1 must pass before pilot")
     rows = _trace_map(
-        "stage-0-attainability-pilot",
-        list(range(PILOT_BLOCK[0], PILOT_BLOCK[1] + 1)),
+        "stage-0-adjudicated-attainability-pilot",
+        list(range(FRESH_PILOT_BLOCK[0], FRESH_PILOT_BLOCK[1] + 1)),
         _pilot_row,
     )
     result = _aggregate_pilot(rows)
-    _write_json("stage-0-attainability-pilot.json", result)
-    _write_report("stage-0-attainability-pilot.md", "V3.6 traced attainability pilot", result)
+    _write_json("stage-0-adjudicated-attainability-pilot.json", result)
+    _write_report("stage-0-adjudicated-attainability-pilot.md", "V3.6 adjudicated traced attainability pilot", result)
+    if result["verdict"] == "PASS":
+        _mechanical_freeze(result)
+        _freeze_readiness(result)
     return result
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("command", choices=("gate1", "pilot"))
+    parser.add_argument("command", choices=("gate1", "gate1-adjudicated", "fresh-pilot"))
     args = parser.parse_args()
-    result = run_gate1() if args.command == "gate1" else run_pilot()
+    if args.command == "gate1":
+        result = run_gate1()
+    elif args.command == "gate1-adjudicated":
+        result = run_gate1_adjudicated()
+    else:
+        result = run_fresh_pilot()
     print(json.dumps({"command": args.command, "verdict": result["verdict"]}, sort_keys=True))
 
 

@@ -230,6 +230,45 @@ def _event_order(
     return tuple(values)
 
 
+def do_over_schedule_audit(world: v33.ReductionWorld) -> Mapping[str, Any]:
+    """Prove do-over timing relative to the world's observed revision event.
+
+    The comparison uses the event recorded in this world, never a fixed slice.
+    It is a protocol-custody audit and does not enter scientific inference.
+    """
+    boundary = v33.root_revision_event(world)
+    premature = tuple(
+        item.time for item in world.slices
+        if item.episode_kind == "imaginal_premature"
+    )
+    post_revision = tuple(
+        item.time for item in world.slices
+        if item.episode_kind == "imaginal_post"
+    )
+    if world.config.do_over == "premature":
+        passed = (
+            boundary is not None
+            and bool(premature)
+            and max(premature) < boundary
+            and not post_revision
+        )
+    elif world.config.do_over == "post_revision":
+        passed = (
+            boundary is not None
+            and bool(post_revision)
+            and min(post_revision) > boundary
+            and not premature
+        )
+    else:
+        passed = not premature and not post_revision
+    return MappingProxyType({
+        "root_revision_event": boundary,
+        "premature_times": premature,
+        "post_revision_times": post_revision,
+        "event_indexed": bool(passed),
+    })
+
+
 def _code_lengths(
     config: ComposeConfig,
     grow_world: v31.FormationWorld,
@@ -293,6 +332,12 @@ def run_therapy(
     reduction_world = v33.generate_world(
         seed, declarations["reduction"], released_block=block
     )
+    schedule_audit = do_over_schedule_audit(reduction_world)
+    if not schedule_audit["event_indexed"]:
+        raise AssertionError(
+            "V3.6 do-over schedule is not indexed to the observed "
+            "root-revision event"
+        )
     reduction_restrictions = (
         {name: (1,) for name in v33.BURDEN_EDGES}
         if config.protocol == "structural_pruning_disabled" else None
