@@ -175,4 +175,38 @@ Pre-criterion bridge package:
 - `results/V3.6/v3.6-r1-bridge-proofs.json`
 - `results/V3.6/v3.6-r1-bridge-proofs.md`
 - `results/V3.6/v3.6-r1-bridge-proofs-trace-hashes.json`
+- `results/V3.6/v3.6-r1-bridge-proofs-trace.jsonl` (persisted public-dummy
+  proof ledger; pinned by the adjacent hash record)
 - `results/V3.6/v3.6-r1-precriterion-freeze-manifest.json`
+
+## Amendment 3 — bridge qualification honest stop
+
+- Consumed `3680000:3683999` exactly once, ascending and gap-free: 2,000
+  own-prior common-document fixtures followed by 2,000 fixed-stratum worlds.
+- Persisted all 4,000 event ledgers and per-world records before aggregation.
+  Trace SHA-256:
+  `d749ad565013357f976f45a542ecf83733618dbf40b043fd78e263df5f8a5201`.
+- Per-seed world, observation, and held-out-target hashes were identical across
+  the V2 and V3 adapter views.
+- V2 precision qualification passed for every target. Full 10,000-replicate
+  interval widths ranged from `0.00324` to `0.01533`, all below
+  `delta=0.01980262729617973`.
+- Predictive calibration failed its frozen `ECE <= 0.05` requirement for V2
+  identity `0.15170`, outcome `0.05650`, context `0.11897`, and partner
+  `0.22798`, and for V3 identity `0.08514`.
+- Structural calibration also failed: equivalence-class ECE `0.27892`, 95%
+  class-set coverage `0.2405`, and active-count ECE `0.26085`. Every
+  load-bearing edge ECE passed (`0.01493`–`0.04583`).
+- Verdict: **FAIL_APPARATUS_STOP**. The repaired tournament block
+  `3684000:3689999`, diagnosis reserve, Gates 4–5, and all escrow remain
+  untouched. No scientific predictive-price result was computed.
+
+Bridge-stop files ready to commit:
+
+- `results/V3.6/v3.6-r1-bridge-qualification.json`
+- `results/V3.6/v3.6-r1-bridge-qualification.md`
+- `results/V3.6/v3.6-r1-bridge-diagnosis-stub.json`
+- `results/V3.6/v3.6-r1-bridge-trace-hashes.json`
+- `results/V3.6/v3.6-r1-bridge-traces.jsonl` (local persisted trace bundle,
+  ignored by repository policy and pinned by the hash ledger)
+- `results/V3.6/ready-to-commit.md`

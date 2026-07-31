@@ -1,0 +1,13 @@
+{
+  "failures": [
+    "v2 identity predictive ECE 0.1517018825889041 > 0.05",
+    "v2 outcome predictive ECE 0.05650275294011285 > 0.05",
+    "v2 context predictive ECE 0.11897427236393532 > 0.05",
+    "v2 partner predictive ECE 0.2279808874033363 > 0.05",
+    "v3 identity predictive ECE 0.08514090828408276 > 0.05",
+    "class ECE 0.2789173561623322 > 0.05",
+    "95% class-set coverage 0.2405 < 0.90",
+    "active-count ECE 0.2608452474004112 > 0.05"
+  ],
+  "next_action": "HONEST_STOP_RETURN_TO_EVALUATOR"
+}
