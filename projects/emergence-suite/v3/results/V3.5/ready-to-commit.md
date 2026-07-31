@@ -190,3 +190,29 @@ Gate 5 is now open. Both escrow ranges remain untouched.
 
 Both escrow ranges remain untouched: retired C-V35 `4050000:4054999` and
 sealed C-V35B `4055000:4059999`. STOP for evaluator reveal-and-run of C-V35B.
+
+## C-V35B sealed run and final closure
+
+- Revealed challenge SHA-256 verified:
+  `b57339b9b1e8200ab94cf489870fbf3ae2a11a1041ce1b7762e1d65810403127`.
+- `results/V3.5/cv35b-challenge-traces.jsonl`: 5,000 per-seed records,
+  ascending and gap-free, with persisted runtime event ledgers and frozen
+  per-world statistics.
+- `results/V3.5/cv35b-challenge-trace-hashes.json`: every record hash verified;
+  whole-file SHA-256
+  `6f43f7c9fcfcc923ea8e711c0c2423bcd71dc29ff554946db29e307981d7b899`.
+- `results/V3.5/cv35b-challenge-raw-seal.json`: raw artifacts sealed before
+  criterion evaluation; SHA-256
+  `7aa8f98f9d5d48a1c616b1c834a69dd72ba3dfb8be45afb0564f9c0c60528eca`.
+- `results/V3.5/cv35b-challenge-verdict.json`: immutable **PASS, 7/7**;
+  scientific, semantic, and custody classes all PASS.
+- `results/V3.5/cv35b-challenge-report.md`: complete sealed statistics and
+  intervals, with opposed and allied topology results reported separately.
+- `results/V3.5/stage-verdict.json` and `.md`: final disposition
+  `CLOSED_PASS_AFTER_AMENDMENT_2`, including bounds and custody summary.
+- `results/V3.5/cv35b_runner.py`: one-shot mechanical custody runner; it changed
+  no frozen source and refuses execution if sealed-run artifacts already exist.
+
+C-V35B ran exactly once with no rerun, partial retry, software error, or
+threshold adjustment. Retired C-V35 escrow remains untouched. STOP for
+evaluator commit and stage closure.

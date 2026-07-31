@@ -1,0 +1,91 @@
+{
+  "ascending_gap_free_once": true,
+  "criteria_evaluated_at_write_time": false,
+  "preflight": {
+    "cells": [
+      {
+        "end": 4055499,
+        "name": "cell_1_befriend",
+        "start": 4055000
+      },
+      {
+        "end": 4055999,
+        "name": "cell_2_partner",
+        "start": 4055500
+      },
+      {
+        "end": 4056499,
+        "name": "cell_3_stakes",
+        "start": 4056000
+      },
+      {
+        "end": 4056899,
+        "name": "cell_4_support",
+        "start": 4056500
+      },
+      {
+        "end": 4057299,
+        "name": "cell_5_denied",
+        "start": 4056900
+      },
+      {
+        "end": 4057499,
+        "name": "cell_6_policy_exclusion",
+        "start": 4057300
+      },
+      {
+        "end": 4057999,
+        "name": "cell_7_policy_monitoring",
+        "start": 4057500
+      },
+      {
+        "end": 4058199,
+        "name": "cell_8_policy_engagement",
+        "start": 4058000
+      },
+      {
+        "end": 4058599,
+        "name": "cell_9_topology_opposed",
+        "start": 4058200
+      },
+      {
+        "end": 4058999,
+        "name": "cell_10_topology_allied",
+        "start": 4058600
+      },
+      {
+        "end": 4059299,
+        "name": "cell_11_mode_dormancy",
+        "start": 4059000
+      },
+      {
+        "end": 4059599,
+        "name": "cell_12_registration",
+        "start": 4059300
+      },
+      {
+        "end": 4059999,
+        "name": "cell_13_recovery",
+        "start": 4059600
+      }
+    ],
+    "challenge_sha256": "b57339b9b1e8200ab94cf489870fbf3ae2a11a1041ce1b7762e1d65810403127",
+    "freeze_files_verified": 47,
+    "freeze_manifest_sha256": "61f229da83b2636c32eaac2eaf7be593fd4c4a4d7d9d45a9f064509a28ebbab2",
+    "freeze_mismatches": [],
+    "ledger_sha256": "1d00397bb43088b08dbd6cec3595cd7ff26d90a1238f2d347395a30aba7974b6",
+    "literal_sha256": "811da637bab78a17a1677852b3152e6b47e1fefb26ffe5540b447c1613455a18",
+    "released_block": [
+      4055000,
+      4059999
+    ]
+  },
+  "record_count": 5000,
+  "seed_first": 4055000,
+  "seed_last": 4059999,
+  "status": "RAW_TRACES_AND_PER_WORLD_STATISTICS_SEALED_BEFORE_CRITERIA",
+  "trace_file": "cv35b-challenge-traces.jsonl",
+  "trace_file_sha256": "6f43f7c9fcfcc923ea8e711c0c2423bcd71dc29ff554946db29e307981d7b899",
+  "trace_hash_record": "cv35b-challenge-trace-hashes.json",
+  "trace_hash_record_sha256": "b55764bf3199548548ce18a127e51332d44f6c36cceb4765020314f012c888aa"
+}

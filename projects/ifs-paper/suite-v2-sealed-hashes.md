@@ -218,3 +218,6 @@ Sealed after the amendment-2 refreeze and BEFORE replacement Gate 2 (amendment-2
 
 ## C-V35B revealed and escrow released (2026-07-31)
 C-V35B plaintext revealed to projects/emergence-suite/v3/sealed-revealed/C-V35B-protect-challenge.md; sha256 verified against the sealed record (b57339b9...). All amendment-2 gates PASS (freeze manifest verified). Escrow 4055000:4059999 is RELEASED by this record for exactly one challenge execution per the sealed parse instruction. Immutable verdict before interpretation; traces sealed before criteria.
+
+## C-V35B executed (2026-07-31)
+C-V35B ran exactly once on released escrow 4055000:4059999 (5000 seeds, ascending, gap-free, event ledgers persisted and hashed before criteria). Immutable verdict: PASS on all seven criteria — befriending/targeted support, partner+stakes (identity exact in every pair), outcome-bearing policy histories (monitoring at n=500 cleared its floor), denied contact, interventional topology with exact dormancy, registration candidate-common null (identity + ROPE equivalence), recovery battery + custody. V3.5 disposition: CLOSED_PASS_AFTER_AMENDMENT_2. The retired C-V35 escrow 4050000:4054999 was never opened.

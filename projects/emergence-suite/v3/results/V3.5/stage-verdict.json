@@ -1,0 +1,65 @@
+{
+  "stage": "V3.5",
+  "disposition": "CLOSED_PASS_AFTER_AMENDMENT_2",
+  "open_development_gates": {
+    "gate_1_amendment_2": "PASS",
+    "replacement_gate_2": "PASS",
+    "replacement_gate_3": "PASS",
+    "gate_4_amendment_2": "PASS",
+    "gate_5_amendment_2": "PASS"
+  },
+  "sealed_challenge": {
+    "challenge": "C-V35B",
+    "challenge_sha256": "b57339b9b1e8200ab94cf489870fbf3ae2a11a1041ce1b7762e1d65810403127",
+    "immutable_verdict": "PASS",
+    "criteria_passed": 7,
+    "criteria_total": 7,
+    "scientific_class": "PASS",
+    "semantic_class": "PASS",
+    "custody_class": "PASS",
+    "verdict_sha256": "2f65234518c98fb10808d12f2e247e85cbe25a3ba53df8c9c33b80face1308db"
+  },
+  "bounds": {
+    "B_max_v35_atomic": 3.4760986898352733,
+    "implied_binary_change_bound": 0.7008782529950642,
+    "identity_tolerance": 1e-10,
+    "equivalence_rope": [-0.01, 0.01]
+  },
+  "sealed_recovery": {
+    "active_count_accuracy": 1.0,
+    "coverage": 0.9775,
+    "ece": 0.03666804217262897,
+    "exact_program_accuracy": 0.55,
+    "topology_accuracy": 0.715,
+    "minimum_edge_accuracy": 0.7075,
+    "partner_accuracy": 1.0,
+    "normalization_error_max": 5.684341886080802e-14,
+    "independent_oracle_error_max": 2.0539125955565396e-15
+  },
+  "custody": {
+    "released_escrow": [4055000, 4059999],
+    "seeds_consumed": 5000,
+    "seeds_consumed_once_ascending_gap_free": true,
+    "paired_cells_used_one_seed_per_pair": true,
+    "serializing_trace_contexts": true,
+    "runtime_event_ledgers_persisted": true,
+    "per_world_statistics_persisted": true,
+    "raw_traces_hashed_before_criteria": true,
+    "trace_file_sha256": "6f43f7c9fcfcc923ea8e711c0c2423bcd71dc29ff554946db29e307981d7b899",
+    "raw_seal_sha256": "7aa8f98f9d5d48a1c616b1c834a69dd72ba3dfb8be45afb0564f9c0c60528eca",
+    "record_hash_errors": 0,
+    "freeze_files_verified": "47/47",
+    "single_run": true,
+    "reruns": 0,
+    "threshold_adjustments": 0,
+    "partial_retries": 0,
+    "software_errors": 0,
+    "retired_c_v35_escrow_4050000_4054999_touched": false
+  },
+  "retained_history": {
+    "original_stage0_failure_retained": true,
+    "amendment_1_gate_3_failure_retained": true,
+    "c_v35_retired_unopened": true,
+    "amendment_2_registration_repair_disclosed": true
+  }
+}
