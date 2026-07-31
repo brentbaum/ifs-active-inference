@@ -1,0 +1,21 @@
+{
+  "stage": "V3.6-R1",
+  "status": "COMMON_TARGET_BRIDGE_FROZEN_BEFORE_CRITERION_SEEDS",
+  "hash_algorithm": "sha256",
+  "files": {
+    "contracts/v3.6-r1-common-target-bridge.md": "11cf988709d36f06555f14b65a2459877268a957ee5f7848ab95fd886f219b91",
+    "protocols/v3.6-r1-analysis-plan.md": "eddc889a892d5806ee5a64217c42c4d23708a7b1f13fcf34bc69a4b8b3c1627d",
+    "protocols/v3.6-r1-bridge-spec.json": "77d7e936cb994194785f98d2e136fd76511d43c880de7b921a2d21a95c9647d1",
+    "ref/v36_bridge.py": "01e876aca024647f8793759365b00f52b8136317e0f9686ecdfac27b7b07a3a0",
+    "ref/v36_bridge_oracle.py": "cc88513b8c7149ca49c2ea1b2428c075f49b85693cbffe436c5002f6cac3b561",
+    "scripts/run_v36_r1.py": "ddf82342baf23707b0d9b8f21238e4e7f2b0a5c9e1e246010d056357d89882fc",
+    "tests/test_v36_bridge.py": "8e7cbc2996cba14c7fab083ef4cf0198514ac2982daedb929035ca921234e376",
+    "results/V3.6/v3.6-r1-bridge-proofs.json": "3f8c7dd1ea89f9babe5e7460b4e38f189037b2d1f4951ecab2f90304ce428302",
+    "results/V3.6/v3.6-r1-bridge-proofs.md": "7c7f8f67858c3fc4861ef817d8ea0527a20c5e9aa13f96f89fc37a6288730537",
+    "results/V3.6/v3.6-r1-bridge-proofs-trace-hashes.json": "cba8b7316834e6769e3e30b7167e8ba2df58d89200e49a4780fffa869ff4105d"
+  },
+  "criterion_seeds_consumed_at_freeze": 0,
+  "fourteen_bridge_proofs": "PASS",
+  "margin": 0.01980262729617973,
+  "original_gate3_tournament": "FAIL_INVALID_COMMON_SUPPORT_APPARATUS_RETAINED"
+}

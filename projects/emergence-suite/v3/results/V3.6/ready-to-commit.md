@@ -148,3 +148,31 @@ Ready-to-commit diagnosis files:
 - `results/V3.6/gate3-noninferiority-decomposition.json`
 - `results/V3.6/gate3-noninferiority-decomposition.md`
 - `results/V3.6/ready-to-commit.md`
+
+## Amendment 3 — pre-criterion common-target bridge freeze
+
+- Read and adopted `gate3-adjudication-amendment-3.md` and external round-11
+  rulings 1–5 and 10. The invalid original tournament remains unchanged.
+- Added the canonical 64-slice R0 document, five deterministic target
+  adapters, native-prior V3 model average, exactly one V2 module per target,
+  predictive-equivalence classes, and independent arithmetic oracle.
+- All fourteen pre-criterion proofs pass on the RNG-free public dummy.
+- Frozen `delta = log(1.02) = 0.01980262729617973` per delivered target token.
+- The public-dummy event ledger was persisted and hashed before the proof
+  aggregate. No seed in `3680000:3689999` was consumed at this freeze point.
+- `v3.6-r1-precriterion-freeze-manifest.json` pins ten bridge, plan, oracle,
+  test, and proof artifacts before criterion execution.
+
+Pre-criterion bridge package:
+
+- `contracts/v3.6-r1-common-target-bridge.md`
+- `protocols/v3.6-r1-analysis-plan.md`
+- `protocols/v3.6-r1-bridge-spec.json`
+- `ref/v36_bridge.py`
+- `ref/v36_bridge_oracle.py`
+- `scripts/run_v36_r1.py`
+- `tests/test_v36_bridge.py`
+- `results/V3.6/v3.6-r1-bridge-proofs.json`
+- `results/V3.6/v3.6-r1-bridge-proofs.md`
+- `results/V3.6/v3.6-r1-bridge-proofs-trace-hashes.json`
+- `results/V3.6/v3.6-r1-precriterion-freeze-manifest.json`
