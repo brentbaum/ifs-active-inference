@@ -1,0 +1,68 @@
+{
+  "stage": "V3.5",
+  "status": "PILOT_FLOORS_FROZEN_AWAITING_C_V35_SEAL_BEFORE_GATE2",
+  "adjudication": "stage0-adjudication-amendment-1.md",
+  "original_stop_retained": true,
+  "original_pilot_barred": [3500000, 3501999],
+  "amendment_smoke": {
+    "block": [3520000, 3520999],
+    "verdict_retained": "FAIL",
+    "failure": "allied recovery was unexposed because the shifted-cycle schedule omitted the allied-identifying joint intervention",
+    "correction": "mixed schedules enumerate the base-3 joint-policy space; no second smoke was run"
+  },
+  "repaired_pilot": {
+    "block": [3521000, 3522999],
+    "consumed_once": true,
+    "verdict": "DESCRIPTIVE_ATTAINABILITY_PASS",
+    "worlds": 2000,
+    "recovery": {
+      "active_count_accuracy": 1.0,
+      "coverage": 0.97625,
+      "ece": 0.023927352737875805,
+      "minimum_edge_accuracy": 0.695,
+      "program_accuracy": 0.58375,
+      "topology_accuracy": 0.6875,
+      "partner_accuracy": 1.0,
+      "exact_log_error_max": 0.0
+    },
+    "all_declared_effect_intervals_have_required_sign": true,
+    "all_exact_identity_errors_within_1e-10": true,
+    "criteria_frozen_mechanically": true,
+    "effect_fraction": 0.5,
+    "recovery_fraction": 0.9,
+    "calibration_ceiling_allowance": 0.03,
+    "equivalence_rope": 0.01
+  },
+  "preflight": {
+    "expanded_item_17": "PASS",
+    "interventional_topology_fixture": "PASS",
+    "v3_0_through_v3_4_retro_audits": "PASS"
+  },
+  "custody": {
+    "gate2_opened": false,
+    "gate3_opened": false,
+    "gate4_opened": false,
+    "gate5_opened": false,
+    "c_v35_authored_by_implementation": false,
+    "escrow_opened": false,
+    "escrow": [4050000, 4054999]
+  },
+  "hashes": {
+    "contracts/v3.5-protect-contract.md": "246f91455e971a65f0dc5fa6798d3da0cea8f481a482c6cdfdf4ae119611c2cc",
+    "protocols/v3.5-analysis-plan.md": "b974559b1c699dcd15deee9abfce58a26f63f5d95d37e938f3c7072af65f7f12",
+    "protocols/v3.5-parameters.json": "a17a66c5eb362f6e723ce93bbaa652432eb970f46d71ac042c080235bc19565a",
+    "protocols/v3.5-public-dummy.json": "b3323d3d7025a8a527727d9f890f8c3a42b8c42f482d7ebb5fd15391e194a7bb",
+    "ref/v35.py": "60db1da22237c68c89aa89737d74a50e7707c5419d2032a02d31097fa25f00e1",
+    "ref/v35_oracle.py": "681eb1e06ca22879a7c02ba777881caa14b4a3936c78ccf2b5051ffeff1aaad2",
+    "ref/v35_calibration.py": "9dd9ab5c6d6bf3a91de0f28c733c784b52f87a806ef6e48e52dafa3632080dbf",
+    "ref/v35_calibration_oracle.py": "3cb46716acc33ff29d36a07d31d4df2d3223653b5cfe44019a5d835e8cba53e3",
+    "ref/v35_topology.py": "57924f038840cbeebc1c1eec0870da11d19a04b127bd1c98f37df226135ed5f1",
+    "ref/v35_topology_oracle.py": "3f94632a7119dafb51cdd7ec35cf9ab7c6ea5721ab8193d4b2bf6a1664725e6d",
+    "ref/retro_calibration_audit.py": "e658914442d4a7cad11a4b304f2c7f168feee848031a53b3141c1a6302665dcf",
+    "scripts/run_v35.py": "93b5bf8b94fa02e9b89e80b8e9bf904139f00ce1e4687105153175b4a2784fe7",
+    "tests/test_v35_protect.py": "363cb1f1825b04410785e9e14f413496d16c487009c97299035cbd9da508305f",
+    "results/V3.5/stage0-amendment-1-pilot.json": "ea915d851938296dea651abebed617643d5c5c39b8d52921cc5570b678af06cc",
+    "results/V3.5/stage0-amendment-1-pilot-recovery-trace-hashes.json": "7cd54f13cc3759a217868db67a63155391fa9060fc6c1c9c7c743f18a995dded",
+    "results/V3.5/stage0-amendment-1-pilot-assays-trace-hashes.json": "3f0877eb18ede31fa158ecbe361eb85ea82fa99e9ec8990cbcb27aff60c1ae3f"
+  }
+}

@@ -2,7 +2,14 @@ import math
 import unittest
 from dataclasses import asdict, replace
 
-from ref import v35, v35_oracle
+from ref import (
+    v35,
+    v35_calibration,
+    v35_calibration_oracle,
+    v35_oracle,
+    v35_topology,
+    v35_topology_oracle,
+)
 from ref.trace_sink import serializing_trace_context
 
 
@@ -69,6 +76,153 @@ class V35ProtectTests(unittest.TestCase):
                 direct.probabilities, disabled.probabilities
             )),
             1e-10,
+        )
+
+    def test_dormant_candidate_scores_higher_slot_channels(self):
+        structure = v35.ProtectStructure(1, (0, 0, 0), 0, 0)
+        observation = v35.ProtectObservation(
+            0,
+            (None, 1, None),
+            None,
+            (1, 1, 1),
+            0,
+            None,
+            None,
+            (None, None, None),
+            (None, 1, None),
+            None,
+            1.0,
+        )
+        masked = replace(
+            observation,
+            mode_signals=(None, None, None),
+            registration=(None, None, None),
+        )
+        modes = (0, 0, 0)
+        observed_likelihood = v35._slice_likelihood(
+            observation, modes, structure, 0, 0
+        )
+        masked_likelihood = v35._slice_likelihood(
+            masked, modes, structure, 0, 0
+        )
+        self.assertLess(observed_likelihood, masked_likelihood)
+        self.assertLessEqual(
+            abs(
+                observed_likelihood / masked_likelihood
+                - v35.mode_signal_probability(1, 0)
+                * v35.registration_probability(1, 0)
+            ),
+            1e-10,
+        )
+
+    def test_marginal_calibration_dummy_identity(self):
+        production = v35.marginal_calibration_dummy()
+        oracle = v35_oracle.marginal_calibration_dummy()
+        for name in ("priors", "likelihoods", "posteriors"):
+            production_values = tuple(
+                value
+                for row in production[name]
+                for value in (row if isinstance(row, tuple) else (row,))
+            )
+            oracle_values = tuple(
+                value
+                for row in oracle[name]
+                for value in (row if isinstance(row, tuple) else (row,))
+            )
+            self.assertEqual(len(production_values), len(oracle_values))
+            self.assertLessEqual(
+                max(abs(a - b) for a, b in zip(
+                    production_values, oracle_values
+                )),
+                1e-10,
+            )
+        self.assertLessEqual(production["exact_ece"], 1e-10)
+        self.assertLessEqual(
+            production["exact_accuracy_confidence_gap"], 1e-10
+        )
+        self.assertLessEqual(
+            production["sampled_ece"],
+            production["declared_sampling_tolerance"],
+        )
+        self.assertLessEqual(
+            production["sampled_coverage_error"],
+            production["declared_sampling_tolerance"],
+        )
+
+    def test_expanded_marginal_calibration_and_support(self):
+        result = v35_calibration.run()
+        production = v35_calibration.joint_tables()
+        oracle = v35_calibration_oracle.enumerate_joint()
+        self.assertTrue(result["passed"])
+        self.assertLessEqual(
+            result["common_support"]["normalization_error_max"], 1e-10
+        )
+        self.assertTrue(
+            result["candidate_support_stress"][
+                "all_candidates_finite_positive"
+            ]
+        )
+        self.assertLessEqual(
+            max(abs(a - b) for a, b in zip(
+                production["likelihoods"].flat,
+                (
+                    value
+                    for row in oracle["likelihoods"]
+                    for value in row
+                ),
+            )),
+            1e-10,
+        )
+        self.assertLessEqual(
+            max(abs(a - b) for a, b in zip(
+                production["posterior_by_observation"].flat,
+                (
+                    value
+                    for row in oracle["posterior_by_observation"]
+                    for value in row
+                ),
+            )),
+            1e-10,
+        )
+
+    def test_interventional_topology_fixture(self):
+        production = v35_topology.run()
+        oracle = v35_topology_oracle.run()
+        self.assertTrue(production["passed"])
+        for truth in ("independent", "opposed", "allied"):
+            for comparator in ("independent", "opposed", "allied"):
+                self.assertLessEqual(
+                    abs(
+                        production["expected_log_bf"][truth][comparator]
+                        - oracle["expected_log_bf"][truth][comparator]
+                    ),
+                    1e-10,
+                )
+            for source, target in ((0, 1), (1, 0)):
+                self.assertLessEqual(
+                    abs(
+                        production["fingerprints"][truth][source][target]
+                        - oracle["fingerprints"][truth][source][target]
+                    ),
+                    1e-10,
+                )
+
+    def test_mixed_schedule_balances_two_mode_joint_policies(self):
+        keys = []
+        policies = {
+            v35._policy_for(
+                3_520_003,
+                time,
+                "mixed",
+                2,
+                (3_520_000, 3_520_999),
+                keys,
+            )[:2]
+            for time in range(9)
+        }
+        self.assertEqual(
+            policies,
+            set(__import__("itertools").product(range(3), repeat=2)),
         )
 
     def test_independent_oracle_copies_and_matches(self):

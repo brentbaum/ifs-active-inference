@@ -1,0 +1,252 @@
+{
+  "barred_block": [
+    3521000,
+    3522999
+  ],
+  "estimands": {
+    "befriend": {
+      "access": {
+        "ci95": [
+          0.06181300244577729,
+          0.06486933432214943
+        ],
+        "mean": 0.06332260109602765,
+        "n": 100
+      },
+      "support_response_3": {
+        "ci95": [
+          0.4999999999999875,
+          0.5000000000000071
+        ],
+        "mean": 0.49999999999999817,
+        "n": 100
+      }
+    },
+    "denied": {
+      "access": {
+        "ci95": [
+          0.022336846676165957,
+          0.023915877954988257
+        ],
+        "mean": 0.02319981359878368,
+        "n": 100
+      },
+      "contact_response_3": {
+        "ci95": [
+          0.46733643899678046,
+          0.497175481371174
+        ],
+        "mean": 0.484641158187215,
+        "n": 100
+      }
+    },
+    "mode_dormancy": {
+      "dormant_influence_error": {
+        "ci95": [
+          7.549516567451065e-17,
+          1.0547118733938987e-16
+        ],
+        "mean": 8.992806499463769e-17,
+        "n": 100
+      }
+    },
+    "mode_recovery": {
+      "third_mode_exposure": {
+        "ci95": [
+          0.9999992996575475,
+          0.999999996126232
+        ],
+        "mean": 0.9999997257698986,
+        "n": 100
+      }
+    },
+    "partner": {
+      "access": {
+        "ci95": [
+          0.11595069440973851,
+          0.12148085436602656
+        ],
+        "mean": 0.1188094551005911,
+        "n": 100
+      },
+      "q_remaining": {
+        "ci95": [
+          0.9999999999999986,
+          1.0000000000000098
+        ],
+        "mean": 1.0000000000000042,
+        "n": 100
+      }
+    },
+    "policy_engagement": {
+      "joint_policy_edge_uptake": {
+        "ci95": [
+          0.5570068502666377,
+          0.6118499154004357
+        ],
+        "mean": 0.5862357684904947,
+        "n": 100
+      }
+    },
+    "policy_exclusion": {
+      "joint_policy_edge_uptake": {
+        "ci95": [
+          0.417483520161002,
+          0.5245440466981597
+        ],
+        "mean": 0.47329484220906637,
+        "n": 100
+      }
+    },
+    "policy_monitoring": {
+      "joint_policy_edge_uptake": {
+        "ci95": [
+          0.023046479165576356,
+          0.07720120749315992
+        ],
+        "mean": 0.04963077895554404,
+        "n": 100
+      }
+    },
+    "stakes": {
+      "access_low_minus_high": {
+        "ci95": [
+          0.10461740618407929,
+          0.1102482289801919
+        ],
+        "mean": 0.10736567578797576,
+        "n": 100
+      },
+      "scientific_posterior_identity_error": {
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "mean": 0.0,
+        "n": 100
+      }
+    },
+    "support": {
+      "access": {
+        "ci95": [
+          0.06134598768440898,
+          0.06370652888526508
+        ],
+        "mean": 0.06254375111740003,
+        "n": 100
+      },
+      "support_response_3": {
+        "ci95": [
+          0.49999999599844874,
+          0.4999999999999964
+        ],
+        "mean": 0.4999999986349698,
+        "n": 100
+      }
+    },
+    "topology_allied": {
+      "allied_D_0_1": {
+        "ci95": [
+          0.005199864244575334,
+          0.01315395122789922
+        ],
+        "mean": 0.009418563574180966,
+        "n": 100
+      },
+      "allied_D_1_0": {
+        "ci95": [
+          0.005309197288480508,
+          0.013216518917214724
+        ],
+        "mean": 0.00946543052607119,
+        "n": 100
+      },
+      "allied_recovery": {
+        "ci95": [
+          0.09879452286178243,
+          0.14691603200192638
+        ],
+        "mean": 0.12242232363406781,
+        "n": 100
+      }
+    },
+    "topology_opposed": {
+      "opposed_D_0_1": {
+        "ci95": [
+          0.03371452525701216,
+          0.04722428826998236
+        ],
+        "mean": 0.040321921027736816,
+        "n": 100
+      },
+      "opposed_D_1_0": {
+        "ci95": [
+          0.033449483276022374,
+          0.04652404369122762
+        ],
+        "mean": 0.03987103241640626,
+        "n": 100
+      },
+      "opposed_recovery": {
+        "ci95": [
+          0.29973365588493023,
+          0.3936452736022385
+        ],
+        "mean": 0.34584080806006445,
+        "n": 100
+      }
+    }
+  },
+  "frozen_criteria": {
+    "active_count_accuracy_min": 0.9,
+    "coverage_min": 0.878625,
+    "ece_max": 0.0539273527378758,
+    "edge_accuracy_min": 0.6255,
+    "effect_minima": {
+      "befriend:access": 0.031661300548013825,
+      "befriend:support_response_3": 0.24999999999999908,
+      "denied:access": 0.01159990679939184,
+      "denied:contact_response_3": 0.2423205790936075,
+      "mode_recovery:third_mode_exposure": 0.4999998628849493,
+      "partner:access": 0.05940472755029555,
+      "partner:q_remaining": 0.5000000000000021,
+      "policy_engagement:joint_policy_edge_uptake": 0.2931178842452474,
+      "policy_exclusion:joint_policy_edge_uptake": 0.23664742110453318,
+      "policy_monitoring:joint_policy_edge_uptake": 0.02481538947777202,
+      "stakes:access_low_minus_high": 0.05368283789398788,
+      "support:access": 0.031271875558700014,
+      "support:support_response_3": 0.2499999993174849,
+      "topology_allied:allied_D_0_1": 0.004709281787090483,
+      "topology_allied:allied_D_1_0": 0.004732715263035595,
+      "topology_allied:allied_recovery": 0.061211161817033906,
+      "topology_opposed:opposed_D_0_1": 0.020160960513868408,
+      "topology_opposed:opposed_D_1_0": 0.01993551620820313,
+      "topology_opposed:opposed_recovery": 0.17292040403003223
+    },
+    "equivalence_rope": 0.01,
+    "exact_identity_tolerance": 1e-10,
+    "partner_accuracy_min": 0.9,
+    "program_accuracy_min": 0.525375,
+    "topology_accuracy_min": 0.61875
+  },
+  "recovery": {
+    "active_count_accuracy": 1.0,
+    "coverage": 0.97625,
+    "ece": 0.023927352737875805,
+    "edge_accuracy": {
+      "CROSS_MODE_Y": 0.695,
+      "JOINT_POLICY_Y": 0.8475,
+      "M1_G": 0.9875,
+      "M2_G": 0.99,
+      "M3_G": 0.995
+    },
+    "exact_log_error_max": 0.0,
+    "minimum_edge_accuracy": 0.695,
+    "normalization_error_max": 5.706546346573305e-14,
+    "partner_accuracy": 1.0,
+    "program_accuracy": 0.58375,
+    "topology_accuracy": 0.6875,
+    "world_count": 800
+  },
+  "verdict": "DESCRIPTIVE_ATTAINABILITY_PASS"
+}

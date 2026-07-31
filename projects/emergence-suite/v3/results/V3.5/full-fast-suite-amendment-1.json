@@ -1,0 +1,23 @@
+{
+  "stage": "V3.5",
+  "status": "PILOT_FLOORS_FROZEN_AWAITING_C_V35_SEAL_BEFORE_GATE2",
+  "v3": {
+    "command": "python3 -m unittest discover -s tests",
+    "tests_run": 53,
+    "failures": 0,
+    "verdict": "PASS"
+  },
+  "v2": {
+    "command": "python3 run_tests_parallel.py",
+    "modules_run": 26,
+    "failures": 0,
+    "verdict": "PASS"
+  },
+  "custody": {
+    "gate2_opened": false,
+    "gate3_opened": false,
+    "gate4_opened": false,
+    "gate5_opened": false,
+    "escrow_opened": false
+  }
+}

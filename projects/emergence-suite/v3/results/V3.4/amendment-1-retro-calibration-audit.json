@@ -1,0 +1,140 @@
+{
+  "audit": "AMENDMENT_1_RETRO_MARGINAL_CALIBRATION_AND_COMMON_SUPPORT",
+  "existing_verdict_rewritten": false,
+  "fixtures": {
+    "candidate_support_stress": {
+      "all_relational_channels_nonmissing": true,
+      "every_structure_calls_same_observation_likelihood": true,
+      "masked_relational_likelihood": 1.0,
+      "passed": true,
+      "same_support": true
+    },
+    "edge:L_PREC": {
+      "candidate_count": 2,
+      "common_support_size": 2,
+      "masked_pattern_likelihood": 1.0,
+      "metrics": {
+        "brier_error": 0.0011836205919888987,
+        "class_count": 2,
+        "coverage_error_max": 0.0013933333333333575,
+        "exact_brier": 0.42835595776772245,
+        "exact_coverage": {
+          "0.5": 0.6666666666666666,
+          "0.8": 1.0,
+          "0.9": 1.0,
+          "0.95": 1.0
+        },
+        "exact_ece": 0.0,
+        "exact_log_score": 0.6180019575561071,
+        "log_score_error": 0.0013045103989950402,
+        "sampled_brier": 0.42717233717573355,
+        "sampled_coverage": {
+          "0.5": 0.66806,
+          "0.8": 1.0,
+          "0.9": 1.0,
+          "0.95": 1.0
+        },
+        "sampled_ece": 0.0012943891402715558,
+        "sampled_log_score": 0.616697447157112
+      },
+      "normalization_error_max": 0.0,
+      "passed": true
+    },
+    "edge:L_TRANSITION": {
+      "candidate_count": 2,
+      "common_support_size": 4,
+      "masked_pattern_likelihood": 1.0,
+      "metrics": {
+        "brier_error": 0.0005236728395060508,
+        "class_count": 2,
+        "coverage_error_max": 0.0007933333333334236,
+        "exact_brier": 0.4074074074074074,
+        "exact_coverage": {
+          "0.5": 0.7066666666666666,
+          "0.8": 0.9999999999999999,
+          "0.9": 0.9999999999999999,
+          "0.95": 0.9999999999999999
+        },
+        "exact_ece": 0.0,
+        "exact_log_score": 0.5908783509848764,
+        "log_score_error": 0.0004689896811814753,
+        "sampled_brier": 0.40688373456790133,
+        "sampled_coverage": {
+          "0.5": 0.70746,
+          "0.8": 1.0,
+          "0.9": 1.0,
+          "0.95": 1.0
+        },
+        "sampled_ece": 0.0009461111111109496,
+        "sampled_log_score": 0.5904093613036949
+      },
+      "normalization_error_max": 0.0,
+      "passed": true
+    },
+    "edge:L_Y": {
+      "candidate_count": 2,
+      "common_support_size": 2,
+      "masked_pattern_likelihood": 1.0,
+      "metrics": {
+        "brier_error": 0.0012554170209388427,
+        "class_count": 2,
+        "coverage_error_max": 0.00320666666666658,
+        "exact_brier": 0.43546576879910215,
+        "exact_coverage": {
+          "0.5": 0.6666666666666666,
+          "0.8": 1.0,
+          "0.9": 1.0,
+          "0.95": 1.0
+        },
+        "exact_ece": 0.0,
+        "exact_log_score": 0.6262890212993987,
+        "log_score_error": 0.0012618829135002674,
+        "sampled_brier": 0.436721185820041,
+        "sampled_coverage": {
+          "0.5": 0.66346,
+          "0.8": 1.0,
+          "0.9": 1.0,
+          "0.95": 1.0
+        },
+        "sampled_ece": 0.0035964309764309576,
+        "sampled_log_score": 0.6275509042128989
+      },
+      "normalization_error_max": 0.0,
+      "passed": true
+    },
+    "edge:PA_RY": {
+      "candidate_count": 2,
+      "common_support_size": 2,
+      "masked_pattern_likelihood": 1.0,
+      "metrics": {
+        "brier_error": 0.0016337788661020536,
+        "class_count": 2,
+        "coverage_error_max": 0.0024133333333333784,
+        "exact_brier": 0.43546576879910215,
+        "exact_coverage": {
+          "0.5": 0.6666666666666666,
+          "0.8": 1.0,
+          "0.9": 1.0,
+          "0.95": 1.0
+        },
+        "exact_ece": 0.0,
+        "exact_log_score": 0.626429403825258,
+        "log_score_error": 0.0017380884212478964,
+        "sampled_brier": 0.4338319899330001,
+        "sampled_coverage": {
+          "0.5": 0.66908,
+          "0.8": 1.0,
+          "0.9": 1.0,
+          "0.95": 1.0
+        },
+        "sampled_ece": 0.002542626262626269,
+        "sampled_log_score": 0.6246913154040101
+      },
+      "normalization_error_max": 0.0,
+      "passed": true
+    }
+  },
+  "sampling_tolerance": 0.03,
+  "stage": "V3.4",
+  "verdict": "PASS"
+}

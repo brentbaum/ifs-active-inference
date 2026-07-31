@@ -1,0 +1,34 @@
+{
+  "original_smoke_verdict_retained": "FAIL",
+  "runner_record_defect": {
+    "description": "The smoke writer omitted the return statement from the recovery-metric aggregator, so the original smoke JSON recorded recovery as null.",
+    "worlds_regenerated": false,
+    "repair": "Metrics recomputed read-only from the retained serialized recovery traces."
+  },
+  "recovery_from_retained_traces": {
+    "active_count_accuracy": 1.0,
+    "coverage": 0.9866666666666667,
+    "ece": 0.05573959933443695,
+    "edge_accuracy": {
+      "CROSS_MODE_Y": 0.6866666666666666,
+      "JOINT_POLICY_Y": 0.7666666666666667,
+      "M1_G": 0.9433333333333334,
+      "M2_G": 0.97,
+      "M3_G": 0.9866666666666667
+    },
+    "exact_log_error_max": 0.0,
+    "minimum_edge_accuracy": 0.6866666666666666,
+    "normalization_error_max": 2.8199664825478976e-14,
+    "partner_accuracy": 1.0,
+    "program_accuracy": 0.48333333333333334,
+    "topology_accuracy": 0.6833333333333333,
+    "world_count": 300
+  },
+  "scientific_smoke_failure": {
+    "criterion": "allied recovery sign",
+    "observed": 0.0,
+    "localization": "The shifted-cycle mixed schedule never presented the (2,2) policy pair to the first two modes, so the beneficial coalition production was observationally idle.",
+    "plan_fidelity_correction": "Mixed schedules now enumerate base-3 joint-policy digits; an authored regression proves all nine two-mode policies occur in nine slices.",
+    "second_smoke_run": false
+  }
+}

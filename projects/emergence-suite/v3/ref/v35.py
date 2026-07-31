@@ -33,6 +33,7 @@ EDGE_NAMES = (
     "CROSS_MODE_Y",
 )
 TOLERANCE = 1e-10
+MARGINAL_CALIBRATION_TOLERANCE = 0.03
 
 
 @dataclass(frozen=True)
@@ -97,13 +98,17 @@ class ProtectObservation:
     mode_signals: tuple[int | None, int | None, int | None]
     root_signal: int | None
     policy: tuple[int, int, int]
-    outcome: int
+    outcome: int | None
     partner_remaining: int | None
     partner_pressure: int | None
     support_signals: tuple[int | None, int | None, int | None]
     registration: tuple[int | None, int | None, int | None]
     denied_contact: int | None
     stakes: float
+    support_targets: tuple[int, int, int] = (0, 0, 0)
+    contact_signals: tuple[
+        int | None, int | None, int | None
+    ] = (None, None, None)
 
 
 @dataclass(frozen=True)
@@ -118,6 +123,8 @@ class ProtectWorld:
     exact_log_probability: float
     rng_keys: tuple[tuple[str, int, str, int | str], ...]
     analysis_labels: tuple[str, ...] = ()
+    truth_support_response: tuple[int, int, int] = (0, 0, 0)
+    truth_contact_response: tuple[int, int, int] = (0, 0, 0)
 
 
 @dataclass(frozen=True)
@@ -131,6 +138,13 @@ class ProtectPosterior:
     topology_probabilities: Mapping[str, float]
     q_partner: tuple[float, float]
     joint_policy_posterior: tuple[float, ...]
+    support_response_posterior: tuple[float, float, float]
+    contact_response_posterior: tuple[float, float, float]
+    interventional_influence: tuple[
+        tuple[float, float, float],
+        tuple[float, float, float],
+        tuple[float, float, float],
+    ]
     readouts: Mapping[str, float]
     latent_posterior: Mapping[str, tuple[float, ...]]
     parameter_posterior: Mapping[str, tuple[float, ...]]
@@ -267,7 +281,7 @@ def outcome_probability(
                     abs(policy[left] - policy[right]) / 2.0
                     for left, right in active_pairs
                 ) / len(active_pairs)
-                probability -= 0.30 * conflict
+                probability += 0.30 * conflict
             else:
                 coalition = math.fsum(
                     int(policy[left] == 2 and policy[right] == 2)
@@ -300,6 +314,18 @@ def denied_contact_probability(
     return probability if observed else 1.0 - probability
 
 
+def contact_probability(
+    observed: int,
+    reliable: int,
+    policy: int,
+    response: int,
+) -> float:
+    probability = 0.14
+    if response and policy == 0:
+        probability = 0.50 if reliable else 0.86
+    return probability if observed else 1.0 - probability
+
+
 def _mode_prior(modes: Sequence[int], active: int) -> float:
     if any(modes[active:]):
         return 0.0
@@ -317,24 +343,29 @@ def _slice_likelihood(
     denied_enabled: bool = True,
 ) -> float:
     result = 1.0
-    for index in range(structure.active_modes):
+    for index in range(MODE_SLOTS):
+        active = index < structure.active_modes
         signal = observation.mode_signals[index]
         if signal is not None:
-            result *= mode_signal_probability(signal, modes[index])
+            result *= (
+                mode_signal_probability(signal, modes[index])
+                if active else mode_signal_probability(signal, 0)
+            )
         registered = observation.registration[index]
         if registration_enabled and registered is not None:
-            result *= registration_probability(registered, modes[index])
-        support = observation.support_signals[index]
-        if support is not None:
-            result *= support_probability(support, reliable, 1)
+            result *= (
+                registration_probability(registered, modes[index])
+                if active else registration_probability(registered, 0)
+            )
     if observation.root_signal is not None:
         result *= root_signal_probability(
             observation.root_signal, modes, structure
         )
-    probability = outcome_probability(
-        observation.policy, modes, structure, cross_sign
-    )
-    result *= probability if observation.outcome else 1.0 - probability
+    if observation.outcome is not None:
+        probability = outcome_probability(
+            observation.policy, modes, structure, cross_sign
+        )
+        result *= probability if observation.outcome else 1.0 - probability
     if observation.partner_remaining is not None:
         result *= partner_channel_probability(
             observation.partner_remaining, reliable, "remaining"
@@ -353,6 +384,76 @@ def _slice_likelihood(
     return float(result)
 
 
+def _binary_parameter_evidence(
+    observations: Sequence[ProtectObservation],
+    structure: ProtectStructure,
+    reliable: int,
+    channel: str,
+    enabled: bool = True,
+) -> tuple[float, tuple[float, float, float]]:
+    if not enabled:
+        return 0.0, tuple(
+            0.5 if index < structure.active_modes else 0.0
+            for index in range(MODE_SLOTS)
+        )
+    log_evidence = 0.0
+    posteriors = []
+    for index in range(MODE_SLOTS):
+        if index >= structure.active_modes:
+            dormant_log = 0.0
+            for observation in observations:
+                observed = (
+                    observation.support_signals[index]
+                    if channel == "support"
+                    else observation.contact_signals[index]
+                )
+                if observed is None:
+                    continue
+                probability = (
+                    support_probability(observed, 0, 0)
+                    if channel == "support"
+                    else contact_probability(observed, 0, 1, 0)
+                )
+                dormant_log += math.log(probability)
+            log_evidence += dormant_log
+            posteriors.append(0.0)
+            continue
+        theta_logs = []
+        for theta in (0, 1):
+            value = -math.log(2.0)
+            for observation in observations:
+                observed = (
+                    observation.support_signals[index]
+                    if channel == "support"
+                    else observation.contact_signals[index]
+                )
+                if observed is None:
+                    continue
+                if channel == "support":
+                    targeted = observation.support_targets[index]
+                    probability = support_probability(
+                        observed,
+                        reliable,
+                        int(theta and targeted),
+                    )
+                else:
+                    probability = contact_probability(
+                        observed,
+                        reliable,
+                        observation.policy[index],
+                        theta,
+                    )
+                value += math.log(probability)
+            theta_logs.append(value)
+        maximum = max(theta_logs)
+        evidence = maximum + math.log(
+            math.fsum(math.exp(value - maximum) for value in theta_logs)
+        )
+        log_evidence += evidence
+        posteriors.append(math.exp(theta_logs[1] - evidence))
+    return float(log_evidence), tuple(float(value) for value in posteriors)
+
+
 def _component_evidence(
     observations: Sequence[ProtectObservation],
     structure: ProtectStructure,
@@ -361,7 +462,12 @@ def _component_evidence(
     *,
     registration_enabled: bool,
     denied_enabled: bool,
-) -> tuple[float, tuple[tuple[float, ...], ...]]:
+) -> tuple[
+    float,
+    tuple[tuple[float, ...], ...],
+    tuple[float, float, float],
+    tuple[float, float, float],
+]:
     log_evidence = 0.0
     mode_posteriors = []
     for observation in observations:
@@ -400,7 +506,22 @@ def _component_evidence(
                 for index in range(MODE_SLOTS)
             )
         )
-    return float(log_evidence), tuple(mode_posteriors)
+    support_log, support_posterior = _binary_parameter_evidence(
+        observations, structure, reliable, "support"
+    )
+    contact_log, contact_posterior = _binary_parameter_evidence(
+        observations,
+        structure,
+        reliable,
+        "contact",
+        enabled=denied_enabled,
+    )
+    return (
+        float(log_evidence + support_log + contact_log),
+        tuple(mode_posteriors),
+        support_posterior,
+        contact_posterior,
+    )
 
 
 def _softmax(values: Sequence[float]) -> tuple[float, ...]:
@@ -409,6 +530,116 @@ def _softmax(values: Sequence[float]) -> tuple[float, ...]:
     weights = np.exp(array - maximum)
     weights /= weights.sum()
     return tuple(float(value) for value in weights)
+
+
+def _policy_scores(
+    probabilities: Sequence[float],
+    components: Sequence[tuple[ProtectStructure, int]],
+    mode_occupancy: Sequence[float],
+    q_reliable: float,
+    support_response: Sequence[float],
+    contact_response: Sequence[float],
+    stakes: float,
+) -> tuple[float, ...]:
+    if stakes <= 0:
+        raise ValueError("stakes must be positive")
+    scores = []
+    for policy in JOINT_POLICIES:
+        safe = math.fsum(
+            float(probability)
+            * outcome_probability(
+                policy, mode_occupancy, structure, sign
+            )
+            for probability, (structure, sign) in zip(
+                probabilities, components
+            )
+        )
+        vulnerable_cost = math.fsum(
+            float(probability)
+            * mode_occupancy[structure.active_modes - 1]
+            * int(policy[structure.active_modes - 1] == 2)
+            * (
+                1.0
+                - (
+                    0.5
+                    + 0.18
+                    * (policy[structure.active_modes - 1] - 1.0)
+                    if structure.joint_policy_outcome
+                    else 0.5
+                )
+            )
+            for probability, (structure, _sign) in zip(
+                probabilities, components
+            )
+        )
+        support_benefit = math.fsum(
+            q_reliable
+            * support_response[index]
+            * mode_occupancy[index]
+            * int(policy[index] == 2)
+            for index in range(MODE_SLOTS)
+        )
+        denied_cost = math.fsum(
+            contact_response[index]
+            * mode_occupancy[index]
+            * int(policy[index] == 0)
+            for index in range(MODE_SLOTS)
+        )
+        effort = math.fsum(abs(value - 1) for value in policy)
+        scores.append(
+            2.0 * safe
+            - 4.0 * stakes * vulnerable_cost
+            + 1.2 * support_benefit
+            - 1.2 * denied_cost
+            - 0.05 * effort
+        )
+    return tuple(float(value) for value in scores)
+
+
+def _policy_distribution(
+    scores: Sequence[float],
+    fixed: Mapping[int, int] | None = None,
+) -> tuple[float, ...]:
+    fixed_values = {} if fixed is None else dict(fixed)
+    retained = [
+        index
+        for index, policy in enumerate(JOINT_POLICIES)
+        if all(policy[slot] == value for slot, value in fixed_values.items())
+    ]
+    selected = _softmax([scores[index] for index in retained])
+    result = [0.0] * len(JOINT_POLICIES)
+    for probability, index in zip(selected, retained):
+        result[index] = probability
+    return tuple(result)
+
+
+def interventional_policy_influence(
+    scores: Sequence[float],
+) -> tuple[
+    tuple[float, float, float],
+    tuple[float, float, float],
+    tuple[float, float, float],
+]:
+    result = []
+    for source in range(MODE_SLOTS):
+        low = _policy_distribution(scores, {source: 0})
+        high = _policy_distribution(scores, {source: 2})
+        row = []
+        for target in range(MODE_SLOTS):
+            if target == source:
+                row.append(0.0)
+                continue
+            high_mean = math.fsum(
+                probability * policy[target]
+                for probability, policy in zip(high, JOINT_POLICIES)
+            )
+            low_mean = math.fsum(
+                probability * policy[target]
+                for probability, policy in zip(low, JOINT_POLICIES)
+            )
+            row.append(float(high_mean - low_mean))
+        result.append(tuple(row))
+    return tuple(result)
 
 
 def score_world(
@@ -426,6 +657,8 @@ def score_world(
     log_weights = []
     mode_terms = []
     partner_terms = []
+    support_terms = []
+    contact_terms = []
     for structure in PROGRAMS:
         prior = structure_log_prior(
             structure,
@@ -437,7 +670,7 @@ def score_world(
         signs = (-1, 1) if structure.cross_mode_outcome else (0,)
         for sign in signs:
             for reliable in (0, 1):
-                likelihood, modes = _component_evidence(
+                likelihood, modes, support_q, contact_q = _component_evidence(
                     world.observations,
                     structure,
                     sign,
@@ -454,6 +687,8 @@ def score_world(
                 )
                 mode_terms.append(modes)
                 partner_terms.append(reliable)
+                support_terms.append(support_q)
+                contact_terms.append(contact_q)
     values = np.asarray(log_weights, dtype=float)
     maximum = float(values.max())
     log_evidence = maximum + math.log(float(np.exp(values - maximum).sum()))
@@ -507,6 +742,24 @@ def score_world(
             if reliable
         )
     )
+    support_response = tuple(
+        float(
+            math.fsum(
+                probability * term[index]
+                for probability, term in zip(probabilities, support_terms)
+            )
+        )
+        for index in range(MODE_SLOTS)
+    )
+    contact_response = tuple(
+        float(
+            math.fsum(
+                probability * term[index]
+                for probability, term in zip(probabilities, contact_terms)
+            )
+        )
+        for index in range(MODE_SLOTS)
+    )
     topology = MappingProxyType(
         {
             "independent": float(
@@ -542,53 +795,67 @@ def score_world(
     stakes = (
         world.observations[-1].stakes if world.observations else 1.0
     )
-    policy_scores = []
-    for policy in JOINT_POLICIES:
-        safe = 0.0
-        for probability, (structure, sign) in zip(
-            probabilities, components
-        ):
-            safe += float(probability) * outcome_probability(
-                policy, final_modes, structure, sign
-            )
-        support = q_reliable * (
-            sum(int(value == 2) for value in policy) / MODE_SLOTS
-        )
-        policy_scores.append(4.0 * stakes * safe + 0.8 * support)
-    joint_policy = _softmax(policy_scores)
-    vulnerable = MODE_SLOTS - 1
+    policy_scores = _policy_scores(
+        probabilities,
+        components,
+        final_modes,
+        q_reliable,
+        support_response,
+        contact_response,
+        stakes,
+    )
+    joint_policy = _policy_distribution(policy_scores)
+    influence = interventional_policy_influence(policy_scores)
     access_probability = float(
         math.fsum(
-            probability
-            for probability, policy in zip(joint_policy, JOINT_POLICIES)
-            if policy[vulnerable] == 2
+            component_probability
+            * policy_probability
+            * int(policy[structure.active_modes - 1] == 2)
+            for component_probability, (structure, _sign) in zip(
+                probabilities, components
+            )
+            for policy_probability, policy in zip(
+                joint_policy, JOINT_POLICIES
+            )
         )
     )
     exile_probability = float(
         math.fsum(
-            probability
-            for probability, policy in zip(joint_policy, JOINT_POLICIES)
-            if policy[vulnerable] == 0
+            component_probability
+            * policy_probability
+            * int(policy[structure.active_modes - 1] == 0)
+            for component_probability, (structure, _sign) in zip(
+                probabilities, components
+            )
+            for policy_probability, policy in zip(
+                joint_policy, JOINT_POLICIES
+            )
         )
     )
     protector_probability = float(
         math.fsum(
-            probability
-            for probability, policy in zip(joint_policy, JOINT_POLICIES)
-            if policy[0] in (0, 1) and policy[vulnerable] != 0
+            component_probability
+            * policy_probability
+            * int(
+                policy[0] in (0, 1)
+                and policy[structure.active_modes - 1] != 0
+            )
+            for component_probability, (structure, _sign) in zip(
+                probabilities, components
+            )
+            for policy_probability, policy in zip(
+                joint_policy, JOINT_POLICIES
+            )
         )
     )
-    def conditional_mode1(policy0: int) -> float:
-        selected = [
-            (probability, policy)
-            for probability, policy in zip(joint_policy, JOINT_POLICIES)
-            if policy[0] == policy0
-        ]
-        mass = math.fsum(value for value, _ in selected)
-        return math.fsum(
-            value * policy[1] / 2.0 for value, policy in selected
-        ) / mass
-    polarization = abs(conditional_mode1(0) - conditional_mode1(2))
+    polarization = float(
+        max(
+            abs(influence[left][right])
+            for left in range(MODE_SLOTS)
+            for right in range(MODE_SLOTS)
+            if left != right
+        )
+    )
     coalition = topology["coalition"] * float(
         math.fsum(
             probability
@@ -625,6 +892,9 @@ def score_world(
         topology_probabilities=topology,
         q_partner=(1.0 - q_reliable, q_reliable),
         joint_policy_posterior=joint_policy,
+        support_response_posterior=support_response,
+        contact_response_posterior=contact_response,
+        interventional_influence=influence,
         readouts=readouts,
         latent_posterior=MappingProxyType(
             {"M": tuple(occupancy), "L": (1.0 - q_reliable, q_reliable)}
@@ -634,7 +904,9 @@ def score_world(
                 "cross_sign": (
                     topology["opposed"],
                     topology["coalition"],
-                )
+                ),
+                "support_response": support_response,
+                "contact_response": contact_response,
             }
         ),
         structure_posterior=MappingProxyType(
@@ -696,7 +968,7 @@ def _policy_for(
         if mode >= active:
             result.append(1)
         elif regime == "mixed":
-            result.append((time + mode) % 3)
+            result.append((time // (3 ** mode)) % 3)
         else:
             jitter = int(
                 _rng(
@@ -720,6 +992,8 @@ def _sample_world(
     config: ProtectConfig | None,
     length: int,
     reliable: int,
+    support_response: tuple[int, int, int],
+    contact_response: tuple[int, int, int],
     released_block: tuple[int, int] | None,
     keys: list[tuple[str, int, str, int | str]],
 ) -> ProtectWorld:
@@ -749,17 +1023,39 @@ def _sample_world(
             released_block,
             keys,
         )
+        if config is None:
+            target_count = structure.active_modes
+            registration_delivered = True
+            denied_delivered = True
+            stakes = 1.0
+        else:
+            support_count = {
+                "none": 0,
+                "one": 1,
+                "all": structure.active_modes,
+            }[config.support_target]
+            befriend_count = {
+                "none": 0,
+                "one": 1,
+                "all": structure.active_modes,
+            }[config.befriend]
+            target_count = min(support_count, befriend_count)
+            registration_delivered = config.registration == "delivered"
+            denied_delivered = config.denied_contact == "delivered"
+            stakes = 0.7 if config.stakes == "low" else 1.3
         mode_signals = tuple(
             _bernoulli(
                 seed,
                 f"mode-signal:{index}",
                 time,
-                mode_signal_probability(1, modes[index]),
+                (
+                    mode_signal_probability(1, modes[index])
+                    if index < structure.active_modes
+                    else mode_signal_probability(1, 0)
+                ),
                 released_block,
                 keys,
             )
-            if index < structure.active_modes
-            else None
             for index in range(MODE_SLOTS)
         )
         roots = [
@@ -805,37 +1101,26 @@ def _sample_world(
             released_block,
             keys,
         )
-        if config is None:
-            target_count = structure.active_modes
-            registration_delivered = True
-            denied_delivered = True
-            stakes = 1.0
-        else:
-            support_count = {
-                "none": 0,
-                "one": 1,
-                "all": structure.active_modes,
-            }[config.support_target]
-            befriend_count = {
-                "none": 0,
-                "one": 1,
-                "all": structure.active_modes,
-            }[config.befriend]
-            target_count = min(support_count, befriend_count)
-            registration_delivered = config.registration == "delivered"
-            denied_delivered = config.denied_contact == "delivered"
-            stakes = 0.7 if config.stakes == "low" else 1.3
+        support_targets = tuple(
+            int(index < target_count) for index in range(MODE_SLOTS)
+        )
         support = tuple(
             _bernoulli(
                 seed,
                 f"support:{index}",
                 time,
-                0.82 if reliable and index < target_count else 0.25,
+                (
+                    0.82
+                    if reliable
+                    and index < target_count
+                    and support_response[index]
+                    else 0.25
+                )
+                if index < structure.active_modes
+                else support_probability(1, 0, 0),
                 released_block,
                 keys,
             )
-            if index < structure.active_modes
-            else None
             for index in range(MODE_SLOTS)
         )
         registration = tuple(
@@ -843,31 +1128,43 @@ def _sample_world(
                 seed,
                 f"registration:{index}",
                 time,
-                registration_probability(1, modes[index]),
+                (
+                    registration_probability(1, modes[index])
+                    if index < structure.active_modes
+                    else registration_probability(1, 0)
+                ),
                 released_block,
                 keys,
             )
-            if registration_delivered and index < structure.active_modes
+            if registration_delivered
             else None
             for index in range(MODE_SLOTS)
         )
-        vulnerable = structure.active_modes - 1
-        denied_probability = (
-            0.86
-            if modes[vulnerable] and policy[vulnerable] == 0
-            else 0.14
-        )
-        denied = (
+        denied = None
+        contact_signals = tuple(
             _bernoulli(
                 seed,
-                "denied-contact",
+                f"contact:{index}",
                 time,
-                denied_probability,
+                (
+                    0.50
+                    if reliable
+                    and contact_response[index]
+                    and policy[index] == 0
+                    else 0.86
+                    if (not reliable)
+                    and contact_response[index]
+                    and policy[index] == 0
+                    else 0.14
+                )
+                if index < structure.active_modes
+                else 0.14,
                 released_block,
                 keys,
             )
             if denied_delivered
             else None
+            for index in range(MODE_SLOTS)
         )
         observations.append(
             ProtectObservation(
@@ -882,11 +1179,15 @@ def _sample_world(
                 registration,
                 denied,
                 stakes,
+                support_targets,
+                contact_signals,
             )
         )
     total = structure_log_prior(structure)
     total += -math.log(2.0) if structure.cross_mode_outcome else 0.0
     total += -math.log(2.0)
+    total += -structure.active_modes * math.log(2.0)
+    total += -structure.active_modes * math.log(2.0)
     for modes, observation in zip(modes_path, observations):
         total += math.log(_mode_prior(modes, structure.active_modes))
         total += math.log(
@@ -898,6 +1199,36 @@ def _sample_world(
                 reliable,
             )
         )
+    for index in range(MODE_SLOTS):
+        for observation in observations:
+            support_value = observation.support_signals[index]
+            if support_value is not None:
+                probability = (
+                    support_probability(
+                        support_value,
+                        reliable,
+                        int(
+                            support_response[index]
+                            and observation.support_targets[index]
+                        ),
+                    )
+                    if index < structure.active_modes
+                    else support_probability(support_value, 0, 0)
+                )
+                total += math.log(probability)
+            contact_value = observation.contact_signals[index]
+            if contact_value is not None:
+                probability = (
+                    contact_probability(
+                        contact_value,
+                        reliable,
+                        observation.policy[index],
+                        contact_response[index],
+                    )
+                    if index < structure.active_modes
+                    else contact_probability(contact_value, 0, 1, 0)
+                )
+                total += math.log(probability)
     return ProtectWorld(
         int(seed),
         config,
@@ -908,6 +1239,9 @@ def _sample_world(
         tuple(observations),
         float(total),
         tuple(keys),
+        (),
+        support_response,
+        contact_response,
     )
 
 
@@ -936,6 +1270,10 @@ def generate_world(
         else 0
     )
     reliable = int(config.partner == "remaining")
+    support_response = tuple(
+        int(index < structure.active_modes) for index in range(MODE_SLOTS)
+    )
+    contact_response = support_response
     return _sample_world(
         seed,
         structure,
@@ -943,6 +1281,8 @@ def generate_world(
         config=config,
         length=config.length,
         reliable=reliable,
+        support_response=support_response,
+        contact_response=contact_response,
         released_block=released_block,
         keys=keys,
     )
@@ -978,6 +1318,32 @@ def generate_recovery_world(
     reliable = _bernoulli(
         seed, "partner-state", 0, 0.5, released_block, keys
     )
+    support_response = tuple(
+        _bernoulli(
+            seed,
+            f"support-response:{index}",
+            0,
+            0.5,
+            released_block,
+            keys,
+        )
+        if index < structure.active_modes
+        else 0
+        for index in range(MODE_SLOTS)
+    )
+    contact_response = tuple(
+        _bernoulli(
+            seed,
+            f"contact-response:{index}",
+            0,
+            0.5,
+            released_block,
+            keys,
+        )
+        if index < structure.active_modes
+        else 0
+        for index in range(MODE_SLOTS)
+    )
     return _sample_world(
         seed,
         structure,
@@ -985,6 +1351,8 @@ def generate_recovery_world(
         config=None,
         length=length,
         reliable=reliable,
+        support_response=support_response,
+        contact_response=contact_response,
         released_block=released_block,
         keys=keys,
     )
@@ -998,6 +1366,8 @@ def exact_complete_log_probability(world: ProtectWorld) -> float:
         else 0.0
     )
     total += -math.log(2.0)
+    total += -world.truth_structure.active_modes * math.log(2.0)
+    total += -world.truth_structure.active_modes * math.log(2.0)
     for modes, observation in zip(
         world.truth_modes, world.observations
     ):
@@ -1013,7 +1383,170 @@ def exact_complete_log_probability(world: ProtectWorld) -> float:
                 world.truth_partner,
             )
         )
+    for index in range(MODE_SLOTS):
+        for observation in world.observations:
+            support_value = observation.support_signals[index]
+            if support_value is not None:
+                probability = (
+                    support_probability(
+                        support_value,
+                        world.truth_partner,
+                        int(
+                            world.truth_support_response[index]
+                            and observation.support_targets[index]
+                        ),
+                    )
+                    if index < world.truth_structure.active_modes
+                    else support_probability(support_value, 0, 0)
+                )
+                total += math.log(probability)
+            contact_value = observation.contact_signals[index]
+            if contact_value is not None:
+                probability = (
+                    contact_probability(
+                        contact_value,
+                        world.truth_partner,
+                        observation.policy[index],
+                        world.truth_contact_response[index],
+                    )
+                    if index < world.truth_structure.active_modes
+                    else contact_probability(contact_value, 0, 1, 0)
+                )
+                total += math.log(probability)
     return float(total)
+
+
+def marginal_calibration_dummy(
+    sample_size: int = 20_000,
+) -> Mapping[str, Any]:
+    """Enumerable two-program calibration check on shared channel support."""
+    if sample_size <= 0:
+        raise ValueError("sample size must be positive")
+    programs = (
+        ProtectStructure(1, (0, 0, 0), 0, 0),
+        ProtectStructure(2, (0, 0, 0), 0, 0),
+    )
+    raw_priors = np.asarray(
+        [math.exp(structure_log_prior(program)) for program in programs],
+        dtype=float,
+    )
+    priors = raw_priors / raw_priors.sum()
+    outcomes = tuple(itertools.product((0, 1), repeat=2))
+    likelihoods = np.zeros((len(programs), len(outcomes)), dtype=float)
+    for h_index, program in enumerate(programs):
+        for o_index, (signal, registration) in enumerate(outcomes):
+            observation = ProtectObservation(
+                0,
+                (None, signal, None),
+                None,
+                (1, 1, 1),
+                0,
+                None,
+                None,
+                (None, None, None),
+                (None, registration, None),
+                None,
+                1.0,
+            )
+            likelihoods[h_index, o_index] = math.fsum(
+                _mode_prior(modes, program.active_modes)
+                * _slice_likelihood(
+                    observation, modes, program, 0, 0
+                )
+                for modes in itertools.product(
+                    (0, 1), repeat=MODE_SLOTS
+                )
+            )
+    observation_probabilities = priors @ likelihoods
+    observation_probabilities /= observation_probabilities.sum()
+    posteriors = (
+        priors[:, None] * likelihoods
+        / (priors @ likelihoods)[None, :]
+    )
+    joint = priors[:, None] * likelihoods
+    joint /= joint.sum()
+    exact_ece = 0.0
+    exact_accuracy = 0.0
+    exact_confidence = 0.0
+    exact_coverage = 0.0
+    for o_index in range(len(outcomes)):
+        predicted = int(np.argmax(posteriors[:, o_index]))
+        confidence = float(posteriors[predicted, o_index])
+        mass = float(joint[:, o_index].sum())
+        correct_mass = float(joint[predicted, o_index])
+        exact_accuracy += correct_mass
+        exact_confidence += mass * confidence
+        exact_ece += abs(correct_mass - mass * confidence)
+        order = np.argsort(-posteriors[:, o_index])
+        retained: set[int] = set()
+        cumulative = 0.0
+        for index in order:
+            retained.add(int(index))
+            cumulative += float(posteriors[int(index), o_index])
+            if cumulative >= 0.95:
+                break
+        exact_coverage += math.fsum(
+            float(joint[index, o_index]) for index in retained
+        )
+    generator = np.random.default_rng(35_000_001)
+    flat_joint = joint.reshape(-1)
+    draws = generator.choice(
+        flat_joint.size, size=sample_size, p=flat_joint
+    )
+    sampled_confidence = []
+    sampled_correct = []
+    sampled_covered = []
+    for draw in draws:
+        truth, o_index = np.unravel_index(int(draw), joint.shape)
+        predicted = int(np.argmax(posteriors[:, o_index]))
+        sampled_confidence.append(float(posteriors[predicted, o_index]))
+        sampled_correct.append(int(predicted == truth))
+        order = np.argsort(-posteriors[:, o_index])
+        retained = set()
+        cumulative = 0.0
+        for index in order:
+            retained.add(int(index))
+            cumulative += float(posteriors[int(index), o_index])
+            if cumulative >= 0.95:
+                break
+        sampled_covered.append(int(truth in retained))
+    sampled_ece = 0.0
+    confidence_array = np.asarray(sampled_confidence)
+    correct_array = np.asarray(sampled_correct, dtype=float)
+    for confidence in sorted(set(sampled_confidence)):
+        selected = np.isclose(
+            confidence_array, confidence, atol=1e-14, rtol=0.0
+        )
+        sampled_ece += float(selected.mean()) * abs(
+            float(confidence_array[selected].mean())
+            - float(correct_array[selected].mean())
+        )
+    return MappingProxyType(
+        {
+            "priors": tuple(float(value) for value in priors),
+            "likelihoods": tuple(
+                tuple(float(value) for value in row)
+                for row in likelihoods
+            ),
+            "posteriors": tuple(
+                tuple(float(value) for value in row)
+                for row in posteriors
+            ),
+            "exact_ece": float(exact_ece),
+            "exact_accuracy_confidence_gap": float(
+                abs(exact_accuracy - exact_confidence)
+            ),
+            "exact_coverage": float(exact_coverage),
+            "sampled_ece": float(sampled_ece),
+            "sampled_coverage": float(np.mean(sampled_covered)),
+            "sampled_coverage_error": float(
+                abs(np.mean(sampled_covered) - exact_coverage)
+            ),
+            "declared_sampling_tolerance": (
+                MARGINAL_CALIBRATION_TOLERANCE
+            ),
+        }
+    )
 
 
 def finite_information_bounds() -> Mapping[str, float]:

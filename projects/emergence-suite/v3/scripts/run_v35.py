@@ -21,13 +21,24 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from ref import audit, v35, v35_oracle  # noqa: E402
+from ref import (  # noqa: E402
+    audit,
+    v35,
+    v35_calibration,
+    v35_calibration_oracle,
+    v35_oracle,
+    retro_calibration_audit,
+    v35_topology,
+    v35_topology_oracle,
+)
 from ref.trace_sink import serializing_trace_context, traced_execution  # noqa: E402
 
 
 RESULTS = ROOT / "results" / "V3.5"
 PARAMETERS = ROOT / "protocols" / "v3.5-parameters.json"
 TOLERANCE = 1e-10
+SMOKE_BLOCK = (3_520_000, 3_520_999)
+REPAIRED_PILOT_BLOCK = (3_521_000, 3_522_999)
 
 
 def _plain(value: Any) -> Any:
@@ -118,7 +129,11 @@ def _structure_probabilities(posterior):
 
 @traced_execution
 def _gate1_row():
-    world = v35.generate_world(3_500_000, replace(_config(), length=8))
+    world = v35.generate_world(
+        3_520_002,
+        replace(_config(), length=8),
+        released_block=SMOKE_BLOCK,
+    )
     posterior = v35.score_world(world)
     observations = [asdict(item) for item in world.observations]
     snapshot = json.dumps(observations, sort_keys=True)
@@ -169,7 +184,12 @@ def _gate1_row():
     denied_masked = replace(
         world,
         observations=tuple(
-            replace(item, denied_contact=None) for item in world.observations
+            replace(
+                item,
+                denied_contact=None,
+                contact_signals=(None, None, None),
+            )
+            for item in world.observations
         ),
     )
     denied_error = max(
@@ -218,6 +238,54 @@ def _gate1_row():
         v35.score_world(replace(world, analysis_labels=("protector",)))
     except ValueError:
         label_rejected = True
+    calibration = dict(v35.marginal_calibration_dummy())
+    calibration_oracle = v35_oracle.marginal_calibration_dummy()
+    calibration_oracle_error = max(
+        abs(float(left) - float(right))
+        for name in ("priors", "likelihoods", "posteriors")
+        for production_row, oracle_row in zip(
+            calibration[name], calibration_oracle[name]
+        )
+        for left, right in zip(
+            (
+                production_row
+                if isinstance(production_row, tuple)
+                else (production_row,)
+            ),
+            (
+                oracle_row
+                if isinstance(oracle_row, tuple)
+                else (oracle_row,)
+            ),
+        )
+    )
+    expanded_calibration = v35_calibration.run()
+    expanded_tables = v35_calibration.joint_tables()
+    expanded_oracle = v35_calibration_oracle.enumerate_joint()
+    expanded_oracle_error = max(
+        max(abs(a - b) for a, b in zip(
+            expanded_tables["likelihoods"].flat,
+            (value for row in expanded_oracle["likelihoods"] for value in row),
+        )),
+        max(abs(a - b) for a, b in zip(
+            expanded_tables["posterior_by_observation"].flat,
+            (
+                value
+                for row in expanded_oracle["posterior_by_observation"]
+                for value in row
+            ),
+        )),
+    )
+    topology_fixture = v35_topology.run()
+    topology_oracle = v35_topology_oracle.run()
+    topology_oracle_error = max(
+        abs(
+            topology_fixture["fingerprints"][truth][source][target]
+            - topology_oracle["fingerprints"][truth][source][target]
+        )
+        for truth in ("independent", "opposed", "allied")
+        for source, target in ((0, 1), (1, 0))
+    )
     proofs = {
         "1_structure_prior_error": abs(prior_sum - 1.0),
         "2_factor_normalization_error": factor_error,
@@ -252,10 +320,31 @@ def _gate1_row():
         "14_analysis_label_rejected": label_rejected,
         "15_readout_state_audit": audit.audit_state(posterior),
         "15_import_audit": audit.audit_imports(ROOT / "ref"),
+        "17_marginal_dummy_oracle_error": calibration_oracle_error,
+        "17_marginal_dummy_exact_ece": calibration["exact_ece"],
+        "17_marginal_dummy_accuracy_confidence_gap": (
+            calibration["exact_accuracy_confidence_gap"]
+        ),
+        "17_marginal_dummy_sampled_ece": calibration["sampled_ece"],
+        "17_marginal_dummy_sampled_coverage_error": (
+            calibration["sampled_coverage_error"]
+        ),
+        "17_marginal_dummy_sampling_tolerance": (
+            calibration["declared_sampling_tolerance"]
+        ),
+        "17_expanded_marginal_calibration": expanded_calibration,
+        "17_expanded_independent_oracle_error": expanded_oracle_error,
+        "18_interventional_topology_fixture": topology_fixture,
+        "18_topology_independent_oracle_error": topology_oracle_error,
+    }
+    sampling_proofs = {
+        "17_marginal_dummy_sampled_ece",
+        "17_marginal_dummy_sampled_coverage_error",
+        "17_marginal_dummy_sampling_tolerance",
     }
     numeric = [
-        abs(value) for value in proofs.values()
-        if isinstance(value, float)
+        abs(value) for name, value in proofs.items()
+        if isinstance(value, float) and name not in sampling_proofs
     ]
     passed = (
         all(value <= TOLERANCE for value in numeric)
@@ -266,6 +355,17 @@ def _gate1_row():
         and label_rejected
         and not proofs["15_readout_state_audit"]
         and not proofs["15_import_audit"]
+        and calibration_oracle_error <= TOLERANCE
+        and calibration["exact_ece"] <= TOLERANCE
+        and calibration["exact_accuracy_confidence_gap"] <= TOLERANCE
+        and calibration["sampled_ece"]
+        <= calibration["declared_sampling_tolerance"]
+        and calibration["sampled_coverage_error"]
+        <= calibration["declared_sampling_tolerance"]
+        and expanded_calibration["passed"]
+        and expanded_oracle_error <= TOLERANCE
+        and topology_fixture["passed"]
+        and topology_oracle_error <= TOLERANCE
     )
     return {
         "seed": "authored_dummy",
@@ -280,13 +380,17 @@ def _gate1_row():
 def run_gate1():
     refusal = False
     try:
-        v35.generate_world(3_500_000, _config())
+        v35.generate_world(
+            3_520_002,
+            _config(),
+            released_block=SMOKE_BLOCK,
+        )
     except RuntimeError:
         refusal = True
     row = _gate1_row()
     row["proofs"]["16_trace_sink_refusal"] = refusal
     row["passed"] = row["passed"] and refusal
-    _trace_map_single("gate-1", row)
+    _trace_map_single("gate-1-amendment-1-rerun", row)
     result = {
         "verdict": "PASS" if row["passed"] else "FAIL",
         "proofs": row["proofs"],
@@ -294,12 +398,91 @@ def run_gate1():
         "component_space_size": row["component_space_size"],
         "bounds": row["bounds"],
     }
-    _write_json("gate-1.json", result)
+    _write_json("gate-1-amendment-1-rerun.json", result)
     params = json.loads(PARAMETERS.read_text())
     params["bounds"] = row["bounds"]
     params["status"] = "GATE1_PASSED" if row["passed"] else "STOPPED_AT_GATE1"
     PARAMETERS.write_text(json.dumps(params, indent=2, sort_keys=True) + "\n")
     return row["passed"]
+
+
+def run_amendment_preflight():
+    calibration = v35_calibration.run()
+    production_tables = v35_calibration.joint_tables()
+    oracle_tables = v35_calibration_oracle.enumerate_joint()
+    calibration_oracle_error = max(
+        max(abs(a - b) for a, b in zip(
+            production_tables["likelihoods"].flat,
+            (
+                value
+                for row in oracle_tables["likelihoods"]
+                for value in row
+            ),
+        )),
+        max(abs(a - b) for a, b in zip(
+            production_tables["posterior_by_observation"].flat,
+            (
+                value
+                for row in oracle_tables["posterior_by_observation"]
+                for value in row
+            ),
+        )),
+    )
+    topology = v35_topology.run()
+    topology_oracle = v35_topology_oracle.run()
+    topology_oracle_error = max(
+        max(
+            abs(
+                topology["expected_log_bf"][truth][comparator]
+                - topology_oracle["expected_log_bf"][truth][comparator]
+            )
+            for truth in ("independent", "opposed", "allied")
+            for comparator in ("independent", "opposed", "allied")
+        ),
+        max(
+            abs(
+                topology["fingerprints"][truth][source][target]
+                - topology_oracle["fingerprints"][truth][source][target]
+            )
+            for truth in ("independent", "opposed", "allied")
+            for source, target in ((0, 1), (1, 0))
+        ),
+    )
+    result = {
+        "verdict": "PASS" if (
+            calibration["passed"]
+            and calibration_oracle_error <= TOLERANCE
+            and topology["passed"]
+            and topology_oracle_error <= TOLERANCE
+        ) else "FAIL",
+        "item_17_expanded": calibration,
+        "item_17_independent_oracle_error": calibration_oracle_error,
+        "interventional_topology_fixture": topology,
+        "topology_independent_oracle_error": topology_oracle_error,
+        "seed_consumption": "none; authored enumerable fixtures",
+    }
+    _write_json("stage0-amendment-1-preflight.json", result)
+    return result["verdict"] == "PASS"
+
+
+def run_retro_audits():
+    results = {}
+    for stage in ("V3.0", "V3.1", "V3.2", "V3.3", "V3.4"):
+        result = retro_calibration_audit.run(stage)
+        results[stage] = result["verdict"]
+        path = ROOT / "results" / stage / "amendment-1-retro-calibration-audit.json"
+        path.write_text(
+            json.dumps(_plain(result), indent=2, sort_keys=True, allow_nan=False)
+            + "\n"
+        )
+    summary = {
+        "verdict": "PASS" if all(value == "PASS" for value in results.values()) else "FAIL",
+        "stages": results,
+        "existing_stage_verdicts_rewritten": False,
+        "seed_consumption": "none; authored enumerable dummies",
+    }
+    _write_json("suite-wide-retro-calibration-audit.json", summary)
+    return summary["verdict"] == "PASS"
 
 
 def _trace_map_single(name, row):
@@ -426,6 +609,200 @@ def _recovery_metrics(rows):
     }
 
 
+def _paired_interval(values, *, index):
+    array = np.asarray(values, dtype=float)
+    rng = np.random.default_rng(35_500 + index)
+    boot = np.mean(
+        array[rng.integers(0, len(array), size=(5_000, len(array)))],
+        axis=1,
+    )
+    return {
+        "mean": float(array.mean()),
+        "ci95": [
+            float(np.quantile(boot, 0.025)),
+            float(np.quantile(boot, 0.975)),
+        ],
+        "n": int(len(array)),
+    }
+
+
+def _pilot_estimands(rows):
+    result = {}
+    for index, theme in enumerate(PILOT_THEMES):
+        subset = [row for row in rows if row["theme"] == theme]
+        values = {}
+        if theme == "befriend":
+            values = {
+                "access": [r["right"]["access"] - r["left"]["access"] for r in subset],
+                "support_response_3": [
+                    r["right"]["support_response"][2]
+                    - r["left"]["support_response"][2]
+                    for r in subset
+                ],
+            }
+        elif theme == "partner":
+            values = {
+                "q_remaining": [r["right"]["trust"] - r["left"]["trust"] for r in subset],
+                "access": [r["right"]["access"] - r["left"]["access"] for r in subset],
+            }
+        elif theme == "stakes":
+            values = {
+                "access_low_minus_high": [
+                    r["right"]["access"] - r["left"]["access"] for r in subset
+                ],
+                "scientific_posterior_identity_error": [
+                    max(abs(a - b) for a, b in zip(
+                        r["right"]["structure_probabilities"],
+                        r["left"]["structure_probabilities"],
+                    ))
+                    for r in subset
+                ],
+            }
+        elif theme.startswith("policy_"):
+            values = {
+                "joint_policy_edge_uptake": [
+                    r["right"]["edges"]["JOINT_POLICY_Y"]
+                    - r["left"]["edges"]["JOINT_POLICY_Y"]
+                    for r in subset
+                ]
+            }
+        elif theme == "mode_recovery":
+            values = {
+                "third_mode_exposure": [
+                    r["right"]["active"][2] - r["left"]["active"][2]
+                    for r in subset
+                ]
+            }
+        elif theme == "mode_dormancy":
+            values = {"dormant_influence_error": [r["dormant_effect"] for r in subset]}
+        elif theme == "topology_opposed":
+            values = {
+                "opposed_recovery": [
+                    r["right"]["topology"]["opposed"]
+                    - r["left"]["topology"]["opposed"]
+                    for r in subset
+                ],
+                "opposed_D_0_1": [-r["right"]["influence"][0][1] for r in subset],
+                "opposed_D_1_0": [-r["right"]["influence"][1][0] for r in subset],
+            }
+        elif theme == "topology_allied":
+            values = {
+                "allied_recovery": [
+                    r["right"]["topology"]["coalition"]
+                    - r["left"]["topology"]["coalition"]
+                    for r in subset
+                ],
+                "allied_D_0_1": [r["right"]["influence"][0][1] for r in subset],
+                "allied_D_1_0": [r["right"]["influence"][1][0] for r in subset],
+            }
+        elif theme == "support":
+            values = {
+                "support_response_3": [
+                    r["right"]["support_response"][2]
+                    - r["left"]["support_response"][2]
+                    for r in subset
+                ],
+                "access": [r["right"]["access"] - r["left"]["access"] for r in subset],
+            }
+        elif theme == "denied":
+            values = {
+                "contact_response_3": [
+                    r["right"]["contact_response"][2]
+                    - r["left"]["contact_response"][2]
+                    for r in subset
+                ],
+                "access": [r["right"]["access"] - r["left"]["access"] for r in subset],
+            }
+        result[theme] = {
+            name: _paired_interval(value, index=index * 10 + offset)
+            for offset, (name, value) in enumerate(values.items())
+        }
+    return result
+
+
+def _attainable(estimands):
+    identity_names = {
+        "scientific_posterior_identity_error",
+        "dormant_influence_error",
+    }
+    failures = []
+    for theme, values in estimands.items():
+        for name, metric in values.items():
+            if name in identity_names:
+                if max(abs(value) for value in metric["ci95"]) > TOLERANCE:
+                    failures.append(f"{theme}:{name}:identity")
+            elif metric["ci95"][0] <= 0:
+                failures.append(f"{theme}:{name}:sign")
+    return failures
+
+
+def _tasks(start, end, released):
+    return [
+        (seed, PILOT_THEMES[(seed - start) % len(PILOT_THEMES)], released)
+        for seed in range(start, end + 1)
+    ]
+
+
+def run_smoke():
+    recovery = _trace_map(
+        "stage0-amendment-1-smoke-recovery",
+        [(seed, 32, SMOKE_BLOCK) for seed in range(3_520_003, 3_520_303)],
+        _worker_recovery,
+    )
+    assays = _trace_map(
+        "stage0-amendment-1-smoke-assays",
+        _tasks(3_520_303, 3_520_999, SMOKE_BLOCK),
+        _worker_pilot,
+    )
+    result = {
+        "verdict": "PASS" if not _attainable(_pilot_estimands(assays)) else "FAIL",
+        "block": [3_520_000, 3_520_999],
+        "prior_consumption": {
+            "3520000": "pre-amendment repaired Gate-1 trace",
+            "3520001": "retained masking-runner Gate-1 FAIL",
+            "3520002": "Gate-1 Amendment-1 PASS",
+        },
+        "recovery": _recovery_metrics(recovery),
+        "estimands": _pilot_estimands(assays),
+        "failures": _attainable(_pilot_estimands(assays)),
+    }
+    _write_json("stage0-amendment-1-smoke.json", result)
+    params = json.loads(PARAMETERS.read_text())
+    params["status"] = (
+        "AMENDMENT_1_SMOKE_PASSED"
+        if result["verdict"] == "PASS"
+        else "STOPPED_AT_AMENDMENT_1_SMOKE"
+    )
+    PARAMETERS.write_text(json.dumps(params, indent=2, sort_keys=True) + "\n")
+    return result["verdict"] == "PASS"
+    return {
+        "world_count": len(rows),
+        "edge_accuracy": edge,
+        "minimum_edge_accuracy": min(edge.values()),
+        "active_count_accuracy": float(np.mean(
+            [row["active_count_correct"] for row in rows]
+        )),
+        "program_accuracy": float(np.mean(
+            [row["program_correct"] for row in rows]
+        )),
+        "topology_accuracy": float(np.mean(
+            [row["topology_correct"] for row in rows]
+        )),
+        "partner_accuracy": float(np.mean(
+            [row["partner_correct"] for row in rows]
+        )),
+        "ece": _ece(
+            [row["confidence"] for row in rows],
+            [row["program_correct"] for row in rows],
+        ),
+        "coverage": float(np.mean([row["coverage"] for row in rows])),
+        "normalization_error_max": max(
+            row["normalization_error"] for row in rows
+        ),
+        "exact_log_error_max": max(row["exact_log_error"] for row in rows),
+    }
+
+
 def _summary(world):
     p = v35.score_world(world)
     return {
@@ -438,97 +815,181 @@ def _summary(world):
         "active": p.active_mode_probabilities,
         "mode": p.mode_occupancy,
         "policy": p.joint_policy_posterior,
+        "support_response": p.support_response_posterior,
+        "contact_response": p.contact_response_posterior,
+        "influence": p.interventional_influence,
+        "edges": dict(p.edge_probabilities),
+        "structure_probabilities": p.probabilities,
     }
+
+
+PILOT_THEMES = (
+    "befriend",
+    "partner",
+    "stakes",
+    "policy_exclusion",
+    "policy_monitoring",
+    "policy_engagement",
+    "mode_recovery",
+    "mode_dormancy",
+    "topology_opposed",
+    "topology_allied",
+    "support",
+    "denied",
+)
 
 
 @traced_execution
-def _worker_pilot(seed):
-    themes = ("befriend", "partner", "stakes", "policy", "modes",
-              "topology", "support", "denied")
-    theme = themes[(seed - 3_500_800) % len(themes)]
+def _worker_pilot(task):
+    seed, theme, released = task
     pairs = {
         "befriend": (_config(befriend="none"), _config(befriend="all")),
-        "partner": (_config(partner="pressure"), _config(partner="remaining")),
-        "stakes": (_config(stakes="low"), _config(stakes="high")),
-        "policy": (_config(policy_regime="exclusion"),
-                   _config(policy_regime="engagement")),
-        "modes": (_config(mode_count=2), _config(mode_count=3)),
-        "topology": (_config(topology="opposed"), _config(topology="allied")),
-        "support": (_config(support_target="one"), _config(support_target="all")),
-        "denied": (_config(denied_contact="masked"),
-                   _config(denied_contact="delivered")),
+        "partner": (
+            _config(partner="pressure"),
+            _config(partner="remaining"),
+        ),
+        "stakes": (_config(stakes="high"), _config(stakes="low")),
+        "mode_recovery": (
+            _config(mode_count=2),
+            _config(mode_count=3),
+        ),
+        "topology_opposed": (
+            _config(topology="independent"),
+            _config(topology="opposed"),
+        ),
+        "topology_allied": (
+            _config(topology="independent"),
+            _config(topology="allied"),
+        ),
+        "support": (
+            _config(support_target="one"),
+            _config(support_target="all"),
+        ),
+        "denied": (
+            _config(denied_contact="masked"),
+            _config(denied_contact="delivered"),
+        ),
     }
-    left, right = pairs[theme]
+    if theme.startswith("policy_"):
+        regime = theme.removeprefix("policy_")
+        world = v35.generate_world(
+            seed, _config(policy_regime=regime), released_block=released
+        )
+        masked = replace(
+            world,
+            observations=tuple(
+                replace(observation, outcome=None)
+                for observation in world.observations
+            ),
+        )
+        return {
+            "seed": seed,
+            "theme": theme,
+            "left": _summary(masked),
+            "right": _summary(world),
+        }
+    if theme == "mode_dormancy":
+        world = v35.generate_world(
+            seed, _config(mode_count=2), released_block=released
+        )
+        posterior = v35.score_world(
+            world, restrictions={"active_modes": (2,)}
+        )
+        dormant_effect = max(
+            abs(posterior.interventional_influence[2][index])
+            + abs(posterior.interventional_influence[index][2])
+            for index in (0, 1)
+        )
+        return {
+            "seed": seed,
+            "theme": theme,
+            "dormant_effect": dormant_effect,
+            "left": _summary(world),
+            "right": _summary(world),
+        }
+    left_config, right_config = pairs[theme]
+    left_world = v35.generate_world(
+        seed, left_config, released_block=released
+    )
+    right_world = v35.generate_world(
+        seed, right_config, released_block=released
+    )
     return {
-        "seed": seed, "theme": theme,
-        "left": _summary(v35.generate_world(seed, left)),
-        "right": _summary(v35.generate_world(seed, right)),
+        "seed": seed,
+        "theme": theme,
+        "left": _summary(left_world),
+        "right": _summary(right_world),
     }
 
 
 def run_pilot():
     params = json.loads(PARAMETERS.read_text())
-    if params["status"] != "GATE1_PASSED":
-        raise RuntimeError("Gate 1 must pass before pilot")
+    if params["status"] not in {
+        "AMENDMENT_1_SMOKE_PASSED",
+        "AMENDMENT_1_SMOKE_FAIL_RETAINED_PLAN_FIDELITY_CORRECTED",
+    }:
+        raise RuntimeError("Amendment-1 smoke must precede the pilot")
     recovery_rows = _trace_map(
-        "stage0-pilot-recovery",
-        [(seed, 64, None) for seed in range(3_500_000, 3_500_800)],
+        "stage0-amendment-1-pilot-recovery",
+        [
+            (seed, 64, REPAIRED_PILOT_BLOCK)
+            for seed in range(3_521_000, 3_521_800)
+        ],
         _worker_recovery,
     )
     assay_rows = _trace_map(
-        "stage0-pilot-assays",
-        list(range(3_500_800, 3_502_000)),
+        "stage0-amendment-1-pilot-assays",
+        _tasks(3_521_800, 3_522_999, REPAIRED_PILOT_BLOCK),
         _worker_pilot,
     )
     recovery = _recovery_metrics(recovery_rows)
-    effects = {}
-    for theme in {row["theme"] for row in assay_rows}:
-        subset = [row for row in assay_rows if row["theme"] == theme]
-        if theme == "partner":
-            values = [row["right"]["trust"] - row["left"]["trust"] for row in subset]
-        elif theme == "topology":
-            values = [
-                row["left"]["topology"]["opposed"]
-                + row["right"]["topology"]["coalition"] - 1.0
-                for row in subset
-            ]
-        elif theme == "modes":
-            values = [row["right"]["active"][2] - row["left"]["active"][2] for row in subset]
-        elif theme == "policy":
-            values = [abs(row["right"]["access"] - row["left"]["access"]) for row in subset]
-        elif theme == "denied":
-            values = [abs(row["right"]["exile"] - row["left"]["exile"]) for row in subset]
-        else:
-            values = [abs(row["right"]["access"] - row["left"]["access"]) for row in subset]
-        effects[theme] = float(np.mean(values))
-    if min(effects.values()) <= 0:
-        params["status"] = "STOPPED_AT_STAGE0_UNATTAINABLE"
+    estimands = _pilot_estimands(assay_rows)
+    failures = _attainable(estimands)
+    if failures:
+        params["status"] = "STOPPED_AT_STAGE0_AMENDMENT_1_PILOT"
         PARAMETERS.write_text(json.dumps(params, indent=2, sort_keys=True) + "\n")
-        _write_json("stage0-pilot.json", {
-            "verdict": "STOP_UNATTAINABLE", "recovery": recovery,
-            "effects": effects, "barred_block": [3500000, 3501999],
+        _write_json("stage0-amendment-1-pilot.json", {
+            "verdict": "STOP_UNATTAINABLE",
+            "recovery": recovery,
+            "estimands": estimands,
+            "failures": failures,
+            "barred_block": list(REPAIRED_PILOT_BLOCK),
         })
         return False
+    nonzero = {
+        f"{theme}:{name}": metric["mean"]
+        for theme, values in estimands.items()
+        for name, metric in values.items()
+        if name not in {
+            "scientific_posterior_identity_error",
+            "dormant_influence_error",
+        }
+    }
     criteria = {
-        "edge_accuracy_min": max(.5, math.floor((recovery["minimum_edge_accuracy"]-.05)*100)/100),
-        "active_count_accuracy_min": max(.5, math.floor((recovery["active_count_accuracy"]-.05)*100)/100),
-        "program_accuracy_min": max(.2, math.floor((recovery["program_accuracy"]-.05)*100)/100),
-        "topology_accuracy_min": max(.5, math.floor((recovery["topology_accuracy"]-.05)*100)/100),
-        "partner_accuracy_min": max(.7, math.floor((recovery["partner_accuracy"]-.05)*100)/100),
-        "ece_max": min(.15, math.ceil((recovery["ece"]+.05)*100)/100),
-        "coverage_min": max(.8, math.floor((recovery["coverage"]-.05)*100)/100),
-        **{f"{name}_effect_min": value*.5 for name, value in effects.items()},
+        "edge_accuracy_min": 0.9 * recovery["minimum_edge_accuracy"],
+        "active_count_accuracy_min": 0.9 * recovery["active_count_accuracy"],
+        "program_accuracy_min": 0.9 * recovery["program_accuracy"],
+        "topology_accuracy_min": 0.9 * recovery["topology_accuracy"],
+        "partner_accuracy_min": 0.9 * recovery["partner_accuracy"],
+        "coverage_min": 0.9 * recovery["coverage"],
+        "ece_max": recovery["ece"] + 0.03,
+        "effect_minima": {
+            name: 0.5 * value for name, value in nonzero.items()
+        },
+        "exact_identity_tolerance": TOLERANCE,
+        "equivalence_rope": 0.01,
     }
     params["criteria"] = criteria
     params["status"] = "FROZEN_AFTER_ATTAINABILITY_PILOT"
     params["pilot_summary_sha256"] = hashlib.sha256(
-        _canonical({"recovery": recovery, "effects": effects})
+        _canonical({"recovery": recovery, "estimands": estimands})
     ).hexdigest()
     PARAMETERS.write_text(json.dumps(params, indent=2, sort_keys=True) + "\n")
-    _write_json("stage0-pilot.json", {
+    _write_json("stage0-amendment-1-pilot.json", {
         "verdict": "DESCRIPTIVE_ATTAINABILITY_PASS",
-        "barred_block": [3500000, 3501999],
-        "recovery": recovery, "effects": effects,
+        "barred_block": list(REPAIRED_PILOT_BLOCK),
+        "recovery": recovery,
+        "estimands": estimands,
         "frozen_criteria": criteria,
     })
     return True
@@ -536,9 +997,20 @@ def run_pilot():
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("step", choices=("gate1", "pilot"))
+    parser.add_argument(
+        "step", choices=("gate1", "preflight", "retro", "smoke", "pilot")
+    )
     args = parser.parse_args()
-    passed = run_gate1() if args.step == "gate1" else run_pilot()
+    if args.step == "gate1":
+        passed = run_gate1()
+    elif args.step == "preflight":
+        passed = run_amendment_preflight()
+    elif args.step == "retro":
+        passed = run_retro_audits()
+    elif args.step == "smoke":
+        passed = run_smoke()
+    else:
+        passed = run_pilot()
     return 0 if passed else 1
 
 
