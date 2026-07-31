@@ -1,0 +1,42 @@
+{
+  "stage": "V3.6",
+  "phase": "fresh_adjudicated_attainability_pilot",
+  "authorization": "results/V3.6/stage0-adjudication.md",
+  "verdict": "FAIL_STOP_GENUINE_COMPOSITION_FINDING",
+  "seed_block": [3660000, 3663999],
+  "seed_count": 4000,
+  "custody": {
+    "ascending_gap_free": true,
+    "runtime_events_and_worlds_persisted_before_aggregation": true,
+    "trace_jsonl": "stage-0-adjudicated-attainability-pilot-traces.jsonl",
+    "trace_hash_ledger": "stage-0-adjudicated-attainability-pilot-trace-hashes.json",
+    "whole_file_hash_verified": true,
+    "barred_blocks_touched": false,
+    "diagnosis_remainder_touched": false,
+    "gate_or_escrow_blocks_touched": false
+  },
+  "schedule_fidelity": {
+    "event_indexed_runtime_assertion_applied_to_every_composed_world": true,
+    "fixed_slice_revision_boundary": false,
+    "regression_fixture_boundaries": [7, 19],
+    "regression_passed": true
+  },
+  "blocking_failure": {
+    "estimand": "q_current_edge_absence(full) - q_current_edge_absence(premature_do_over)",
+    "declared_direction": "positive",
+    "declared_kind": "causal_effect",
+    "mean": -0.007591287369016907,
+    "whole_world_bootstrap_interval_95": [-0.03688060730166053, 0.021721859932301718],
+    "attainable": false,
+    "interpretation_required_by_adjudication": "genuine composition finding; the corrected positive contrast is not supported at this pilot information budget"
+  },
+  "localization_only": {
+    "other_positive_comparator_contrasts_passing": 9,
+    "stakes_scientific_identity_error_max": 0.0,
+    "stakes_policy_effect_interval_95": [0.10291542939176537, 0.10598819209407398]
+  },
+  "floors_frozen": false,
+  "freeze_readiness_written": false,
+  "later_blocks_opened": false,
+  "next_action": "STOP and return to evaluator; no second repair cycle is authorized"
+}

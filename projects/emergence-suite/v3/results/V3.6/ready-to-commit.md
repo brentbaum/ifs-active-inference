@@ -44,3 +44,25 @@ Verification at stop: V3 suite `60/60` green; cumulative V2 suite `180/180`
 green. An initial repository-root V2 invocation was invalid because `ref` was
 not on that working directory's import path; the canonical invocation from
 `projects/emergence-suite/v2/` passed cleanly.
+
+## Premature-do-over adjudication and fresh pilot
+
+- `stage0-adjudication.md` classified the first plan's equivalence declaration
+  as a V3.3 claim-fidelity defect. Premature do-over was prospectively amended
+  to a positive causal contrast; post-revision do-over remains the equivalence.
+- Pre-pilot commits: `e583327` (plan fidelity and Gate-1 addendum), `e20b60f`
+  (pruning-disabled comparator retains corrective evidence).
+- `gate-1-adjudicated.json` / `.md`: PASS. The moving-boundary schedule fixture
+  proves premature and post-revision episodes follow each world's observed
+  event, not a fixed slice.
+- Fresh pilot `3660000:3663999`: 4,000 persisted, hashed, ascending gap-free
+  records. The JSONL hash verifies before aggregation.
+- The corrected premature contrast failed: mean `-0.0075913`, 95% interval
+  `[-0.0368806, 0.0217219]`, which does not carry the declared positive sign.
+  The other nine comparator directions and the stakes identity/path passed.
+- `stage0-adjudicated-pilot-diagnosis-stub.json` / `.md`: honest stop as the
+  genuine composition finding specified by the adjudication.
+
+Current disposition: **FRESH_PILOT_FAIL_STOP_GENUINE_COMPOSITION_FINDING**.
+No floors, freeze-readiness, or stage manifest were issued; all later and
+escrow blocks remain unopened.
