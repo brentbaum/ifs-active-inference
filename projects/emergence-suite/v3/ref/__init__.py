@@ -24,4 +24,7 @@ __all__ = [
     "StructurePosterior",
     "generate_world",
     "score_world",
+    "v36",
+    "v36_oracle",
 ]
+from . import v36, v36_oracle

@@ -1,0 +1,31 @@
+{
+  "stage": "V3.6",
+  "status": "STOPPED_BEFORE_ATTAINABILITY_PILOT_CUSTODY_FAILURE",
+  "failure_class": "runtime_trace_not_persisted_at_execution",
+  "consumed_seed": 3600000,
+  "assigned_block": [3600000, 3603999],
+  "execution": {
+    "operation": "public V3.6 composition smoke check",
+    "serializing_trace_context_was_active": true,
+    "scientific_readout_was_printed_to_terminal": true,
+    "event_count_observed_in_memory": 9,
+    "event_ledger_persisted_to_jsonl_at_execution": false,
+    "per_world_record_hashed_at_execution": false
+  },
+  "criterion_status": {
+    "attainability_metrics_computed": false,
+    "criterion_evaluated": false,
+    "floor_frozen": false,
+    "seed_reexecuted": false
+  },
+  "custody": {
+    "other_pilot_seeds_touched": false,
+    "gate2_block_touched": false,
+    "gate3_block_touched": false,
+    "gate4_block_touched": false,
+    "gate5_block_touched": false,
+    "diagnosis_block_touched": false,
+    "sealed_escrows_touched": false
+  },
+  "required_adjudication": "Evaluator must decide whether seed 3600000 is barred and a fresh pilot block is assigned, or whether a separately authorized reproduction-and-custody procedure is valid. The implementation may not decide this itself."
+}
