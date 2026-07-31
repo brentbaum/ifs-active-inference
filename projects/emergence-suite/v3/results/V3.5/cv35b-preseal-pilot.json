@@ -1,0 +1,57 @@
+{
+ "cell_1_befriend": {
+  "access": 0.062244813077505,
+  "support3": 0.5000000007097446
+ },
+ "cell_2_partner": {
+  "trust": 1.000000000000003,
+  "access": 0.1159470153937183
+ },
+ "cell_3_stakes": {
+  "access": 0.11077298435102989,
+  "identity_max": 0.0
+ },
+ "cell_4_support": {
+  "access": 0.06136621599149575,
+  "support3": 0.5000002397276001
+ },
+ "cell_5_denied": {
+  "contact3": 0.4853499431545772,
+  "access": 0.022945870305638362
+ },
+ "cell_6_policy_exclusion": {
+  "uptake": 0.5314161215849208
+ },
+ "cell_7_policy_monitoring": {
+  "uptake": 0.027566059867502556
+ },
+ "cell_8_policy_engagement": {
+  "uptake": 0.5677150650327056
+ },
+ "cell_9_topology_opposed": {
+  "recovery": 0.3976697501634141,
+  "D01": 0.04241307457519129,
+  "D10": 0.042939308230030344
+ },
+ "cell_10_topology_allied": {
+  "recovery": 0.09094399364289343,
+  "D01": 0.004149951035370481,
+  "D10": 0.004063878853767406
+ },
+ "cell_11_mode_dormancy": {
+  "dormant_max": 3.3306690738754696e-16
+ },
+ "cell_12_registration": {
+  "identity_max": 8.965050923848139e-14,
+  "policy_diff_absmax": 3.780309398848658e-14
+ },
+ "cell_13_recovery": {
+  "active_count": 1.0,
+  "program": 0.55,
+  "partner": 1.0
+ },
+ "seeds_consumed": [
+  3525961,
+  3526480
+ ]
+}

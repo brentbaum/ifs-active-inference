@@ -209,3 +209,9 @@ Sealed BEFORE Gate 2 per amendment-1 custody timing (round-10 external ruling 9)
 
 ## C-V35 RETIRED UNOPENED (2026-07-31)
 C-V35 (f7f560e77bbe97d6d40d7a2a6504caf74a88ea859db3d4261030cc98525fdb3c) is retired without being opened or run. Gate 3 exposed a registration construct-fidelity defect (declared candidate-common null scored mode-conditionally); the amendment-1 floors its criteria quote exactly are invalidated by the authorized repair (gate3-adjudication-amendment-2.md, applying the round-10 external ruling 9 incompatible-challenge branch). Escrow 4050000:4054999 is retired unopened — no seed from it may ever be consumed. The plaintext remains in evaluator custody; the hash above stands as the historical record. Seed-map amendment recorded: fresh pilot 3523961:3525960; replacement gate2 3530000:3532999; replacement gate3 3533000:3537999; C-V35B escrow 4055000:4059999 (allocated from the previously unassigned gap).
+
+## C-V35B seal (2026-07-31)
+```
+b57339b9b1e8200ab94cf489870fbf3ae2a11a1041ce1b7762e1d65810403127  C-V35B-protect-challenge.md
+```
+Sealed after the amendment-2 refreeze and BEFORE replacement Gate 2 (amendment-2 order item 4). Supersedes retired C-V35. Escrow 4055000:4059999 NOT released by this record; release follows gates by a later ledger record. Diagnosis-reserved seeds 3525961:3526480 BARRED (traced exact-cell attainability pilots, event ledger persisted, sha256 e61a8103aa84098a3abe8a0824d82f978ab2984636989adfde8d731aad58bd56; twelve of thirteen cells clear floors with ~2x margins; identities exact at <=9e-14). Monitoring-cell note: the linter spot sample (n=40, mean 0.0276) straddled the smallest frozen floor (0.0286; pilot mean 0.0572); the cell is sized at 500 worlds — variance reduction under the unchanged mechanical floor, decided pre-seal and stated in the sealed text itself. Thirteen cells include the new registration candidate-common-null identity+equivalence cell.
