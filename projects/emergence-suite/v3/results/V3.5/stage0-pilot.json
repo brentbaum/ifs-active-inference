@@ -1,0 +1,36 @@
+{
+  "barred_block": [
+    3500000,
+    3501999
+  ],
+  "effects": {
+    "befriend": 9.625633623500107e-16,
+    "denied": 5.628830734849544e-16,
+    "modes": -1.963123367338217e-32,
+    "partner": 0.9999999999999989,
+    "policy": 1.2445600106048006e-15,
+    "stakes": 4.3298697960381107e-17,
+    "support": 0.0,
+    "topology": -0.6666666666666671
+  },
+  "recovery": {
+    "active_count_accuracy": 0.4275,
+    "coverage": 0.4225,
+    "ece": 0.3296710498364094,
+    "edge_accuracy": {
+      "CROSS_MODE_Y": 0.64875,
+      "JOINT_POLICY_Y": 0.7825,
+      "M1_G": 0.91875,
+      "M2_G": 0.8025,
+      "M3_G": 0.92125
+    },
+    "exact_log_error_max": 0.0,
+    "minimum_edge_accuracy": 0.64875,
+    "normalization_error_max": 2.864375403532904e-14,
+    "partner_accuracy": 1.0,
+    "program_accuracy": 0.26125,
+    "topology_accuracy": 0.64875,
+    "world_count": 800
+  },
+  "verdict": "STOP_UNATTAINABLE"
+}

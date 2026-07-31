@@ -1,0 +1,20 @@
+{
+  "calibration_failure": {
+    "coverage": 0.4225,
+    "ece": 0.3296710498364094,
+    "expected_coverage": 0.95
+  },
+  "consumed_block": [3500000, 3501999],
+  "escrow_untouched": [4050000, 4054999],
+  "gate_blocks_unopened": [3502000, 3519999],
+  "status": "STOPPED_AT_STAGE0_UNATTAINABLE",
+  "unattainable_effects": [
+    "befriend",
+    "denied_contact",
+    "mode_count",
+    "policy_regime",
+    "stakes",
+    "support_target",
+    "topology"
+  ]
+}

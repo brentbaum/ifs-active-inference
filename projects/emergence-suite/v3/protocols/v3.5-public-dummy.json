@@ -1,0 +1,22 @@
+{
+  "config": {
+    "befriend": "all",
+    "denied_contact": "delivered",
+    "length": 16,
+    "mode_count": 3,
+    "partner": "remaining",
+    "policy_regime": "mixed",
+    "registration": "delivered",
+    "stakes": "high",
+    "support_target": "all",
+    "topology": "allied"
+  },
+  "public_readouts": [
+    "protector_like_probability",
+    "exile_like_probability",
+    "access_probability",
+    "polarization",
+    "coalition",
+    "trust_remaining"
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "bounds": {
+    "B_max_v35_atomic": 3.4760986898352733,
+    "implied_binary_change_bound": 0.7008782529950642
+  },
+  "criteria": {},
+  "seed_blocks": {
+    "escrow_closed": [
+      4050000,
+      4054999
+    ],
+    "gate2": [
+      3502000,
+      3504999
+    ],
+    "gate3": [
+      3505000,
+      3509999
+    ],
+    "gate4": [
+      3510000,
+      3511999
+    ],
+    "gate5": [
+      3512000,
+      3519999
+    ],
+    "pilot": [
+      3500000,
+      3501999
+    ]
+  },
+  "stage": "V3.5",
+  "status": "STOPPED_AT_STAGE0_UNATTAINABLE",
+  "tolerance": 1e-10
+}

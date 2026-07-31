@@ -1,0 +1,27 @@
+{
+  "stage": "V3.5",
+  "status": "STOPPED_AT_STAGE0_UNATTAINABLE",
+  "executed_after_stop": true,
+  "purpose": "cumulative regression verification only; no scientific criterion worlds were opened",
+  "v3_suite": {
+    "command": "python3 -m unittest discover -s tests",
+    "tests_run": 48,
+    "failures": 0,
+    "result": "PASS"
+  },
+  "v2_suite": {
+    "command": "python3 run_tests_parallel.py",
+    "modules_run": 26,
+    "failures": 0,
+    "result": "PASS"
+  },
+  "custody": {
+    "pilot_consumed": "3500000:3501999",
+    "gate2_opened": false,
+    "gate3_opened": false,
+    "gate4_opened": false,
+    "gate5_opened": false,
+    "escrow_opened": false
+  },
+  "freeze_candidate_created": false
+}

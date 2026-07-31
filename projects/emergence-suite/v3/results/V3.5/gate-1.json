@@ -1,0 +1,31 @@
+{
+  "bounds": {
+    "B_max_v35_atomic": 3.4760986898352733,
+    "implied_binary_change_bound": 0.7008782529950642
+  },
+  "component_space_size": 168,
+  "proofs": {
+    "10_generator_scorer_exact_log_error": 0.0,
+    "11_posterior_normalization_error": 2.886579864025407e-15,
+    "12_independent_oracle_error": 1.27675647831893e-15,
+    "12_oracle_evidence_error": 3.611118645726067e-35,
+    "12_oracle_input_copy": true,
+    "13_restricted_prior_error": 2.220446049250313e-15,
+    "14_analysis_label_rejected": true,
+    "15_import_audit": [],
+    "15_readout_state_audit": [],
+    "16_trace_sink_refusal": true,
+    "1_structure_prior_error": 2.220446049250313e-16,
+    "2_factor_normalization_error": 0.0,
+    "3_policy_normalization_error": 2.220446049250313e-16,
+    "3_policy_space_size": 27,
+    "4_dormant_slots_idle": true,
+    "5_edge_absence_error": 0.0,
+    "6_registration_mask_error": 0.0,
+    "7_registration_outcome_direct_path": false,
+    "8_denied_mask_error": 0.0,
+    "9_action_selection_functions": []
+  },
+  "structure_space_size": 56,
+  "verdict": "PASS"
+}
