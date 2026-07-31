@@ -90,3 +90,26 @@ escrow blocks remain unopened.
 
 Current disposition: **STAGE0_FREEZE_READY_AWAITING_C_V36A_B_C_SEALS**.
 Gates 2--5, diagnosis remainder, and all escrows remain untouched.
+
+## Authorized gates 2–3
+
+- C-V36A/B/C were sealed before Gate 2. Escrows remain closed. Evaluator-used
+  diagnosis seeds `3664000:3665159` were not touched.
+- Gate 2 `3604000:3613999`: **PASS**. Active-count accuracy `0.9996`, minimum
+  edge accuracy `0.697`, program accuracy `0.5696`, ECE `0.01183`, coverage
+  `0.9796`, candidate-support pass rate `1.0`, registration identity maximum
+  `1.46e-13`, and stakes scientific identity `0.0`.
+- Gate 3 `3614000:3629999`: formal **FAIL — honest stop**. All nine frozen
+  ablations, stakes, stress cells, and ≥50% economy criteria passed. Predictive
+  noninferiority alone failed: V3−V2 mean `-0.0338625`, 95% interval
+  `[-0.0379879, -0.0296089]`, versus frozen margin `0.018566762350958`.
+- The premature endpoint remains descriptive only. Gate-3 mean `0.0067153`,
+  95% interval `[-0.0063220, 0.0198961]`; both pilot intervals were also
+  published in the Gate-3 record.
+- Gate-2 and Gate-3 trace files were persisted and hashed before criteria;
+  both ledgers verify. Gates 4 and 5 were not opened.
+
+Current disposition: **GATE3_FAIL_STOP_PREDICTIVE_NONINFERIORITY**.
+V3 full suite at stop: `63/63` green. The pre-existing evaluator partial file
+`cv36-preseal-pilot-traces-attempt1-partial.jsonl` remains untouched and is not
+part of this execution's ready-to-commit set.

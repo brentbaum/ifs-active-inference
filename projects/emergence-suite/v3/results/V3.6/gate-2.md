@@ -1,0 +1,472 @@
+# V3.6 Gate 2 — recovery and calibration
+
+Verdict: **PASS**.
+
+```json
+{
+  "ascending_gap_free": true,
+  "bounds": {
+    "B_max_v31": 3.801426508560692,
+    "B_max_v34_relational": 3.8066624897703196,
+    "B_max_v34_root": 1.9736255489018601,
+    "B_max_v35_atomic": 3.4760986898352733,
+    "implied_binary_change_bound": 0.7008782529950642,
+    "implied_relational_binary_change_bound": 0.7405361848863923,
+    "implied_root_binary_change_bound": 0.45691585232961845
+  },
+  "comparisons": {
+    "active_count_accuracy": [
+      0.9996,
+      0.9,
+      ">="
+    ],
+    "candidate_support_pass_rate": [
+      1.0,
+      1.0,
+      ">="
+    ],
+    "coverage": [
+      0.9796,
+      0.8718750000000001,
+      ">="
+    ],
+    "ece": [
+      0.01183026816963054,
+      0.06279020976257683,
+      "<="
+    ],
+    "exact_log_error_max": [
+      0.0,
+      1e-10,
+      "<="
+    ],
+    "minimum_edge_accuracy": [
+      0.697,
+      0.6165,
+      ">="
+    ],
+    "normalization_error_max": [
+      5.706546346573305e-14,
+      1e-10,
+      "<="
+    ],
+    "partner_accuracy": [
+      1.0,
+      0.9,
+      ">="
+    ],
+    "program_accuracy": [
+      0.5696,
+      0.49612500000000004,
+      ">="
+    ],
+    "registration_identity_error_max": [
+      1.4577228313328305e-13,
+      1e-10,
+      "<="
+    ],
+    "stakes_scientific_identity_error_max": [
+      0.0,
+      1e-10,
+      "<="
+    ],
+    "topology_accuracy": [
+      0.6886,
+      0.61425,
+      ">="
+    ]
+  },
+  "custody": {
+    "barred_blocks_touched": false,
+    "escrow_touched": false,
+    "trace_hash_ledger": "gate-2-trace-hashes.json"
+  },
+  "expanded_item17": {
+    "candidate_support_stress": {
+      "all_candidates_finite_positive": true,
+      "candidate_likelihoods": {
+        "1": 1.2250000000000003e-06,
+        "2": 4.375000000000001e-06,
+        "3": 1.5625000000000004e-05
+      },
+      "higher_slot_channels_nonmissing": true,
+      "truth_active_modes": 3
+    },
+    "common_support": {
+      "candidate_count": 168,
+      "normalization_error_max": 3.3306690738754696e-16,
+      "support_size": 576
+    },
+    "max_sampling_error": 0.018518935265217095,
+    "objects": {
+      "active_mode_count": {
+        "brier_error": 0.0017285674336736112,
+        "class_count": 3,
+        "coverage_error_max": 0.001580000000000692,
+        "exact_brier": 0.3237504333368319,
+        "exact_coverage": {
+          "0.5": 0.8000000000000007,
+          "0.8": 0.8929837837837842,
+          "0.9": 0.944467027027027,
+          "0.95": 0.9896464864864875
+        },
+        "exact_ece": 2.847792531304738e-16,
+        "exact_log_score": 0.5998949454699578,
+        "log_score_error": 0.00220580747961463,
+        "sampled_brier": 0.3254790007705055,
+        "sampled_coverage": {
+          "0.5": 0.79842,
+          "0.8": 0.89286,
+          "0.9": 0.94452,
+          "0.95": 0.98982
+        },
+        "sampled_ece": 0.004109776715409107,
+        "sampled_log_score": 0.6021007529495724
+      },
+      "cross_mode_sign": {
+        "brier_error": 0.0004468972919404457,
+        "class_count": 3,
+        "coverage_error_max": 0.0010399999999999299,
+        "exact_brier": 0.2212853681943072,
+        "exact_coverage": {
+          "0.5": 0.8613333333333332,
+          "0.8": 0.9229999999999997,
+          "0.9": 0.9639999999999996,
+          "0.95": 0.9880000000000001
+        },
+        "exact_ece": 2.9983611080086625e-16,
+        "exact_log_score": 0.4094088985669476,
+        "log_score_error": 0.001892522663630991,
+        "sampled_brier": 0.22083847090236675,
+        "sampled_coverage": {
+          "0.5": 0.86158,
+          "0.8": 0.92346,
+          "0.9": 0.96492,
+          "0.95": 0.98904
+        },
+        "sampled_ece": 0.00107091185564387,
+        "sampled_log_score": 0.40751637590331663
+      },
+      "edge:CROSS_MODE_Y": {
+        "brier_error": 0.00016965798924997721,
+        "class_count": 2,
+        "coverage_error_max": 0.0005466666666662512,
+        "exact_brier": 0.17041615622066747,
+        "exact_coverage": {
+          "0.5": 0.8886666666666663,
+          "0.8": 0.97,
+          "0.9": 0.97,
+          "0.95": 0.9940000000000004
+        },
+        "exact_ece": 3.1086786790590626e-16,
+        "exact_log_score": 0.2816543637953732,
+        "log_score_error": 0.0004397781005941459,
+        "sampled_brier": 0.17058581420991745,
+        "sampled_coverage": {
+          "0.5": 0.88812,
+          "0.8": 0.96946,
+          "0.9": 0.96946,
+          "0.95": 0.99446
+        },
+        "sampled_ece": 0.002955198614296502,
+        "sampled_log_score": 0.28121458569477903
+      },
+      "edge:JOINT_POLICY_Y": {
+        "brier_error": 0.003349644985331246,
+        "class_count": 2,
+        "coverage_error_max": 0.0037200000000005007,
+        "exact_brier": 0.2749115291488172,
+        "exact_coverage": {
+          "0.5": 0.8200000000000005,
+          "0.8": 0.9399999999999995,
+          "0.9": 0.9399999999999995,
+          "0.95": 1.000000000000001
+        },
+        "exact_ece": 3.691437346770021e-16,
+        "exact_log_score": 0.4376918562317898,
+        "log_score_error": 0.0038230628998656146,
+        "sampled_brier": 0.27826117413414847,
+        "sampled_coverage": {
+          "0.5": 0.81628,
+          "0.8": 0.9394,
+          "0.9": 0.9394,
+          "0.95": 1.0
+        },
+        "sampled_ece": 0.003776356863475527,
+        "sampled_log_score": 0.4415149191316554
+      },
+      "edge:M1_G": {
+        "brier_error": 0.00039393895843425897,
+        "class_count": 2,
+        "coverage_error_max": 0.0007199999999993878,
+        "exact_brier": 0.2749115291488172,
+        "exact_coverage": {
+          "0.5": 0.8200000000000006,
+          "0.8": 0.9400000000000004,
+          "0.9": 0.9400000000000004,
+          "0.95": 1.000000000000001
+        },
+        "exact_ece": 3.6715151318506e-16,
+        "exact_log_score": 0.4376918562317898,
+        "log_score_error": 0.00028759617517565284,
+        "sampled_brier": 0.27451759019038297,
+        "sampled_coverage": {
+          "0.5": 0.82072,
+          "0.8": 0.93956,
+          "0.9": 0.93956,
+          "0.95": 1.0
+        },
+        "sampled_ece": 0.0011259899422611385,
+        "sampled_log_score": 0.43740426005661415
+      },
+      "edge:M2_G": {
+        "brier_error": 0.0010866447104242172,
+        "class_count": 2,
+        "coverage_error_max": 0.0008059459459446305,
+        "exact_brier": 0.18732052582910627,
+        "exact_coverage": {
+          "0.5": 0.8735675675675668,
+          "0.8": 0.9546432432432425,
+          "0.9": 0.9659459459459446,
+          "0.95": 0.9965945945945962
+        },
+        "exact_ece": 3.638175915046671e-16,
+        "exact_log_score": 0.3061132584969306,
+        "log_score_error": 0.0013005194038907542,
+        "sampled_brier": 0.1884071705395305,
+        "sampled_coverage": {
+          "0.5": 0.87348,
+          "0.8": 0.95394,
+          "0.9": 0.96514,
+          "0.95": 0.99682
+        },
+        "sampled_ece": 0.003848556561987469,
+        "sampled_log_score": 0.30741377790082136
+      },
+      "edge:M3_G": {
+        "brier_error": 0.0011386445409656692,
+        "class_count": 2,
+        "coverage_error_max": 0.0007048648648642075,
+        "exact_brier": 0.09504316670423002,
+        "exact_coverage": {
+          "0.5": 0.9351351351351358,
+          "0.8": 0.972108108108108,
+          "0.9": 0.977338378378378,
+          "0.95": 0.9970810810810833
+        },
+        "exact_ece": 4.865357249028701e-16,
+        "exact_log_score": 0.16586528044178472,
+        "log_score_error": 0.002889182089436726,
+        "sampled_brier": 0.09390452216326435,
+        "sampled_coverage": {
+          "0.5": 0.93584,
+          "0.8": 0.97262,
+          "0.9": 0.97792,
+          "0.95": 0.9976
+        },
+        "sampled_ece": 0.0018538592131490184,
+        "sampled_log_score": 0.162976098352348
+      },
+      "full_structure": {
+        "brier_error": 0.0016112129253347263,
+        "class_count": 56,
+        "coverage_error_max": 0.0010267051035665054,
+        "exact_brier": 0.7631815283663244,
+        "exact_coverage": {
+          "0.5": 0.5848667051035665,
+          "0.8": 0.816866473599904,
+          "0.9": 0.9111601370329041,
+          "0.95": 0.9542584183690255
+        },
+        "exact_ece": 2.131812521649623e-17,
+        "exact_log_score": 2.1118183105654973,
+        "log_score_error": 0.007951582885851849,
+        "sampled_brier": 0.7647927412916591,
+        "sampled_coverage": {
+          "0.5": 0.58384,
+          "0.8": 0.81612,
+          "0.9": 0.91078,
+          "0.95": 0.95428
+        },
+        "sampled_ece": 0.018518935265217095,
+        "sampled_log_score": 2.119769893451349
+      },
+      "partner_state": {
+        "brier_error": 0.0004320000000000157,
+        "class_count": 2,
+        "coverage_error_max": 0.0002999999999986347,
+        "exact_brier": 0.2408,
+        "exact_coverage": {
+          "0.5": 0.8599999999999987,
+          "0.8": 0.8599999999999987,
+          "0.9": 1.000000000000001,
+          "0.95": 1.000000000000001
+        },
+        "exact_ece": 4.804370876826392e-16,
+        "exact_log_score": 0.40496348506393837,
+        "log_score_error": 0.0005445869899915468,
+        "sampled_brier": 0.241232,
+        "sampled_coverage": {
+          "0.5": 0.8597,
+          "0.8": 0.8597,
+          "0.9": 1.0,
+          "0.95": 1.0
+        },
+        "sampled_ece": 0.00029999999999996696,
+        "sampled_log_score": 0.4055080720539299
+      }
+    },
+    "passed": true,
+    "sample_size": 50000,
+    "sampling_tolerance": 0.03,
+    "stratification": {
+      "fully_observed": {
+        "metrics": {
+          "brier_error": 0.00056110743185811,
+          "class_count": 3,
+          "coverage_error_max": 0.0011399999999998078,
+          "exact_brier": 0.5331412229390478,
+          "exact_coverage": {
+            "0.5": 0.6590000000000001,
+            "0.8": 0.9191999999999999,
+            "0.9": 0.9500000000000001,
+            "0.95": 1.0
+          },
+          "exact_ece": 0.0,
+          "exact_log_score": 0.9001056986856354,
+          "log_score_error": 0.00036219224958511376,
+          "sampled_brier": 0.5325801155071896,
+          "sampled_coverage": {
+            "0.5": 0.66014,
+            "0.8": 0.91846,
+            "0.9": 0.9497,
+            "0.95": 1.0
+          },
+          "sampled_ece": 0.0015290911652272353,
+          "sampled_log_score": 0.8997435064360503
+        },
+        "support_normalization_error": 2.220446049250313e-16,
+        "truth_strata": {
+          "1": {
+            "prior_mass": 0.5,
+            "support_size": 16
+          },
+          "2": {
+            "prior_mass": 0.3,
+            "support_size": 16
+          },
+          "3": {
+            "prior_mass": 0.2,
+            "support_size": 16
+          }
+        }
+      },
+      "registration_masked": {
+        "metrics": {
+          "brier_error": 0.001409601590231957,
+          "class_count": 3,
+          "coverage_error_max": 0.0015800000000000258,
+          "exact_brier": 0.5331412229390476,
+          "exact_coverage": {
+            "0.5": 0.659,
+            "0.8": 0.9192,
+            "0.9": 0.95,
+            "0.95": 1.0
+          },
+          "exact_ece": 0.0,
+          "exact_log_score": 0.9001056986856352,
+          "log_score_error": 0.001350652357714588,
+          "sampled_brier": 0.5345508245292796,
+          "sampled_coverage": {
+            "0.5": 0.65742,
+            "0.8": 0.91976,
+            "0.9": 0.95006,
+            "0.95": 1.0
+          },
+          "sampled_ece": 0.0022476761152374555,
+          "sampled_log_score": 0.9014563510433498
+        },
+        "support_normalization_error": 1.1102230246251565e-16,
+        "truth_strata": {
+          "1": {
+            "prior_mass": 0.5,
+            "support_size": 4
+          },
+          "2": {
+            "prior_mass": 0.3,
+            "support_size": 4
+          },
+          "3": {
+            "prior_mass": 0.2,
+            "support_size": 4
+          }
+        }
+      }
+    }
+  },
+  "failures": [],
+  "frozen_recovery_criteria": {
+    "active_count_accuracy_min": 0.9,
+    "coverage_min": 0.8718750000000001,
+    "ece_max": 0.06279020976257683,
+    "edge_accuracy_min": 0.6165,
+    "effect_minima": {
+      "befriend:access": 0.030808420228944897,
+      "befriend:support_response_3": 0.25002964669658534,
+      "denied:access": 0.011022406848183891,
+      "denied:contact_response_3": 0.23462657827078734,
+      "mode_recovery:third_mode_exposure": 0.49994076283590083,
+      "partner:access": 0.0575741252904589,
+      "partner:q_remaining": 0.4999999999999974,
+      "policy_engagement:joint_policy_edge_uptake": 0.2818778047497165,
+      "policy_exclusion:joint_policy_edge_uptake": 0.22369120540497045,
+      "policy_monitoring:joint_policy_edge_uptake": 0.028590899494582652,
+      "stakes:access_low_minus_high": 0.05456176795537784,
+      "support:access": 0.031786343743120116,
+      "support:support_response_3": 0.2500000001761959,
+      "topology_allied:allied_D_0_1": 0.004841000047368376,
+      "topology_allied:allied_D_1_0": 0.004820009680542292,
+      "topology_allied:allied_recovery": 0.04582309257999451,
+      "topology_opposed:opposed_D_0_1": 0.021813188533686426,
+      "topology_opposed:opposed_D_1_0": 0.02162728537716363,
+      "topology_opposed:opposed_recovery": 0.19077996532688585
+    },
+    "equivalence_rope": 0.01,
+    "exact_identity_tolerance": 1e-10,
+    "partner_accuracy_min": 0.9,
+    "program_accuracy_min": 0.49612500000000004,
+    "topology_accuracy_min": 0.61425
+  },
+  "gate": 2,
+  "metrics": {
+    "active_count_accuracy": 0.9996,
+    "brier": 0.36412222048942344,
+    "candidate_support_pass_rate": 1.0,
+    "coverage": 0.9796,
+    "ece": 0.01183026816963054,
+    "edge_accuracy": {
+      "CROSS_MODE_Y": 0.697,
+      "JOINT_POLICY_Y": 0.8473,
+      "M1_G": 0.9769,
+      "M2_G": 0.985,
+      "M3_G": 0.9909
+    },
+    "exact_log_error_max": 0.0,
+    "minimum_edge_accuracy": 0.697,
+    "normalization_error_max": 5.706546346573305e-14,
+    "partner_accuracy": 1.0,
+    "program_accuracy": 0.5696,
+    "registration_identity_error_max": 1.4577228313328305e-13,
+    "stakes_scientific_identity_error_max": 0.0,
+    "topology_accuracy": 0.6886,
+    "world_count": 10000
+  },
+  "seed_block": [
+    3604000,
+    3613999
+  ],
+  "seeds_consumed": 10000,
+  "stage": "V3.6",
+  "verdict": "PASS"
+}
+```

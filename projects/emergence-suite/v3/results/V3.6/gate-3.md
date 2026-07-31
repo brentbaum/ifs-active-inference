@@ -1,0 +1,220 @@
+# V3.6 Gate 3 — composition and compression tournament
+
+Verdict: **FAIL**.
+
+```json
+{
+  "ascending_gap_free": true,
+  "bounds": {
+    "B_max_v31": 3.801426508560692,
+    "B_max_v34_relational": 3.8066624897703196,
+    "B_max_v34_root": 1.9736255489018601,
+    "B_max_v35_atomic": 3.4760986898352733,
+    "implied_binary_change_bound": 0.7008782529950642,
+    "implied_relational_binary_change_bound": 0.7405361848863923,
+    "implied_root_binary_change_bound": 0.45691585232961845
+  },
+  "compression_tournament": {
+    "constant_reduction": 0.5416666666666666,
+    "constant_reduction_pass": true,
+    "factor_reduction_pass": true,
+    "factor_template_reduction": 0.5294117647058824,
+    "noninferiority_margin": 0.018566762350958,
+    "noninferiority_pass": false,
+    "pareto_profile_only": true,
+    "predictive_difference_interval_95": [
+      -0.03798791633183171,
+      -0.029608868564817037
+    ],
+    "predictive_difference_v3_minus_v2_mean": -0.033862519540155143,
+    "same_seed_common_truth_conditions": true,
+    "stress_cells": {
+      "higher_slot_nonmissing": true,
+      "mixed_masking_dormancy": true,
+      "mode_counts": [
+        1,
+        2,
+        3
+      ],
+      "policy_histories": [
+        "exclusion",
+        "monitoring",
+        "engagement",
+        "mixed"
+      ],
+      "signed_interventional_fingerprints_reported": true,
+      "stakes_posterior_identity": 0.0,
+      "support_one_vs_all": true,
+      "topologies": [
+        "independent",
+        "opposed",
+        "allied"
+      ]
+    },
+    "v2_formation_accuracy": 0.993,
+    "v2_mean_confidence": 0.9951138806954558,
+    "v2_qualification_rate": 0.6735,
+    "v3_gate2_calibration": {
+      "active_count_accuracy": 0.9996,
+      "candidate_support_pass_rate": 1.0,
+      "coverage": 0.9796,
+      "ece": 0.01183026816963054,
+      "minimum_edge_accuracy": 0.697
+    },
+    "v3_structure_length_mean": 104.78334976197756,
+    "world_count": 2000
+  },
+  "custody": {
+    "barred_blocks_touched": false,
+    "escrow_touched": false,
+    "trace_hash_ledger": "gate-3-trace-hashes.json"
+  },
+  "effects": {
+    "broadcast_off_monitor": {
+      "floor": 0.2285343371910469,
+      "interval_95": [
+        0.447984993590149,
+        0.4618876184760501
+      ],
+      "mean": 0.4551555073315704,
+      "passed": true,
+      "world_count": 1200
+    },
+    "context_scope_disabled": {
+      "floor": 0.4840615966920863,
+      "interval_95": [
+        0.9680245738895812,
+        0.9767781130362639
+      ],
+      "mean": 0.9724637168436525,
+      "passed": true,
+      "world_count": 1200
+    },
+    "cue_only_exposure": {
+      "floor": 0.16063329136963322,
+      "interval_95": [
+        0.3120738462612473,
+        0.32213264438090455
+      ],
+      "mean": 0.3172720400698451,
+      "passed": true,
+      "world_count": 1200
+    },
+    "denied_contact_masked": {
+      "floor": 0.06642048890922031,
+      "interval_95": [
+        0.10055598278533447,
+        0.1269403091002869
+      ],
+      "mean": 0.11410099281119547,
+      "passed": true,
+      "world_count": 1200
+    },
+    "mode_bypass": {
+      "floor": 0.034129478327372516,
+      "interval_95": [
+        0.06685456562291531,
+        0.06932503818737687
+      ],
+      "mean": 0.06809220858533159,
+      "passed": true,
+      "world_count": 1200
+    },
+    "premature_do_over": {
+      "classification": "DESCRIPTIVE_RETAINED_FINDING",
+      "floor": null,
+      "gate_criterion": false,
+      "interval_95": [
+        -0.006322025090671538,
+        0.01989613369212718
+      ],
+      "mean": 0.006715314746713889,
+      "world_count": 1200
+    },
+    "regulation_without_root_evidence": {
+      "floor": 0.2253894285635979,
+      "interval_95": [
+        0.445561267245795,
+        0.4597568312368113
+      ],
+      "mean": 0.4527851528373403,
+      "passed": true,
+      "world_count": 1200
+    },
+    "soothing_noncontingent_partner": {
+      "floor": 0.4970780975763216,
+      "interval_95": [
+        0.9937151492412963,
+        0.9954652197378243
+      ],
+      "mean": 0.9946396500169761,
+      "passed": true,
+      "world_count": 1200
+    },
+    "structural_pruning_disabled": {
+      "floor": 0.31858871026439994,
+      "interval_95": [
+        0.6059158001077273,
+        0.6279262639535163
+      ],
+      "mean": 0.6170952798474867,
+      "passed": true,
+      "world_count": 1200
+    },
+    "unreliable_partner": {
+      "floor": 0.37054935530184596,
+      "interval_95": [
+        0.7384176369469728,
+        0.771303975151712
+      ],
+      "mean": 0.7548646295648583,
+      "passed": true,
+      "world_count": 1200
+    }
+  },
+  "failures": [
+    "tournament predictive noninferiority failed"
+  ],
+  "gate": 3,
+  "premature_do_over_required_downstream_record": {
+    "first_pilot": {
+      "declaration": "equivalence",
+      "interval_95": [
+        -0.018567536075274952,
+        0.04911686181384986
+      ],
+      "mean": 0.015139500753264512
+    },
+    "floor": null,
+    "fresh_event_indexed_pilot": {
+      "declaration": "positive causal effect",
+      "interval_95": [
+        -0.03688060730166053,
+        0.021721859932301718
+      ],
+      "mean": -0.007591287369016907
+    },
+    "gate_criterion": false,
+    "required_in_every_downstream_profile": true,
+    "v3_3_cross_reference": "premature shortcut alone was not durable; post-revision do-over equivalence remains"
+  },
+  "seed_block": [
+    3614000,
+    3629999
+  ],
+  "seeds_consumed": 16000,
+  "stage": "V3.6",
+  "stakes": {
+    "identity_tolerance": 1e-10,
+    "passed": true,
+    "policy_effect_interval_95": [
+      0.10413918756147302,
+      0.10629243609154126
+    ],
+    "policy_effect_mean": 0.10524374421561607,
+    "policy_floor": 0.0522537705013991,
+    "scientific_identity_error_max": 0.0
+  },
+  "verdict": "FAIL"
+}
+```

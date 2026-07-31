@@ -1,0 +1,32 @@
+{
+  "stage": "V3.6",
+  "gate": 3,
+  "verdict": "FAIL_STOP",
+  "failures": ["tournament predictive noninferiority failed"],
+  "localization": {
+    "v3_minus_v2_predictive_mean_nats_per_atomic_token": -0.033862519540155143,
+    "whole_world_bootstrap_interval_95": [-0.03798791633183171, -0.029608868564817037],
+    "frozen_noninferiority_margin": 0.018566762350958,
+    "required_lower_bound": -0.018566762350958,
+    "observed_lower_bound": -0.03798791633183171,
+    "common_world_count": 2000
+  },
+  "passing_context": {
+    "nine_floor_bearing_ablation_contrasts": true,
+    "premature_do_over_descriptive_not_gated": true,
+    "stakes_identity_and_policy_effect": true,
+    "factor_template_reduction_at_least_50_percent": true,
+    "constant_reduction_at_least_50_percent": true,
+    "round10_stress_cells_executed": true
+  },
+  "custody": {
+    "seed_block": [3614000, 3629999],
+    "seeds_once_ascending_gap_free": true,
+    "trace_hash_ledger": "gate-3-trace-hashes.json",
+    "hash_verified_before_criteria": true,
+    "barred_or_escrow_seed_touched": false
+  },
+  "classification": "unadjudicated scientific-or-estimand failure; no repair inferred",
+  "gate4_or_gate5_opened": false,
+  "next_action": "HONEST_STOP for evaluator adjudication"
+}
