@@ -1,0 +1,17 @@
+{
+  "gate_3_verdict": "FAIL_RETAINED",
+  "gate_4_opened": false,
+  "gate_5_opened": false,
+  "v2": {
+    "command": "python3 -m unittest discover -s tests",
+    "cwd": "projects/emergence-suite/v2",
+    "passed": 180,
+    "verdict": "PASS"
+  },
+  "v3": {
+    "command": "python3 -m unittest discover -s tests",
+    "cwd": "projects/emergence-suite/v3",
+    "passed": 53,
+    "verdict": "PASS"
+  }
+}

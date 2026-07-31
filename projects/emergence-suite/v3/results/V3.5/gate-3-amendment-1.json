@@ -1,0 +1,513 @@
+{
+  "ascending_gap_free": true,
+  "bounds": {
+    "B_max_v35_atomic": 3.4760986898352733,
+    "implied_binary_change_bound": 0.7008782529950642
+  },
+  "custody": {
+    "barred_blocks_touched": false,
+    "escrow_touched": false,
+    "runtime_events_persisted_in_trace_jsonl": true,
+    "trace_hash_ledger": "gate-3-amendment-1-trace-hashes.json"
+  },
+  "estimands": {
+    "befriend": {
+      "access": {
+        "ci95": [
+          0.06156671362419133,
+          0.06305579439170185
+        ],
+        "mean": 0.062315147938430515,
+        "n": 385
+      },
+      "support_response_3": {
+        "ci95": [
+          0.5000000000000129,
+          0.5000000000057849
+        ],
+        "mean": 0.5000000000020312,
+        "n": 385
+      }
+    },
+    "denied": {
+      "access": {
+        "ci95": [
+          0.02096548817005476,
+          0.02247470160767485
+        ],
+        "mean": 0.021738450641922185,
+        "n": 384
+      },
+      "contact_response_3": {
+        "ci95": [
+          0.4461410919285085,
+          0.47600381343140835
+        ],
+        "mean": 0.4616725991948248,
+        "n": 384
+      }
+    },
+    "mode_dormancy": {
+      "dormant_influence_error": {
+        "ci95": [
+          9.948751779108545e-17,
+          1.1650132518144499e-16
+        ],
+        "mean": 1.081386062946581e-16,
+        "n": 385
+      }
+    },
+    "mode_recovery": {
+      "third_mode_exposure": {
+        "ci95": [
+          0.9999998700614371,
+          0.9999999883031574
+        ],
+        "mean": 0.9999999404634455,
+        "n": 385
+      }
+    },
+    "partner": {
+      "access": {
+        "ci95": [
+          0.11474819202237158,
+          0.117348084087549
+        ],
+        "mean": 0.11603973096030072,
+        "n": 385
+      },
+      "q_remaining": {
+        "ci95": [
+          0.9999999999999979,
+          1.0000000000000047
+        ],
+        "mean": 1.000000000000001,
+        "n": 385
+      }
+    },
+    "policy_engagement": {
+      "joint_policy_edge_uptake": {
+        "ci95": [
+          0.5354406797735722,
+          0.5721160835939559
+        ],
+        "mean": 0.5545641848464117,
+        "n": 385
+      }
+    },
+    "policy_exclusion": {
+      "joint_policy_edge_uptake": {
+        "ci95": [
+          0.4434772504654062,
+          0.49734590475991947
+        ],
+        "mean": 0.47080356175566573,
+        "n": 385
+      }
+    },
+    "policy_monitoring": {
+      "joint_policy_edge_uptake": {
+        "ci95": [
+          0.039340880754433954,
+          0.066093244732826
+        ],
+        "mean": 0.05264593610268273,
+        "n": 385
+      }
+    },
+    "registration": {
+      "policy_difference": {
+        "ci95": [
+          0.00020889193622388537,
+          0.0009221319929654291
+        ],
+        "mean": 0.0005656798970153739,
+        "n": 384
+      },
+      "scientific_posterior_max_abs_difference": {
+        "ci95": [
+          0.10178371268382558,
+          0.12148970876430541
+        ],
+        "mean": 0.11144131347734705,
+        "n": 384
+      }
+    },
+    "stakes": {
+      "access_low_minus_high": {
+        "ci95": [
+          0.10587385992858381,
+          0.10873169373382903
+        ],
+        "mean": 0.10730127098379483,
+        "n": 385
+      },
+      "scientific_posterior_identity_error": {
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "mean": 0.0,
+        "n": 385
+      }
+    },
+    "support": {
+      "access": {
+        "ci95": [
+          0.061242342102411154,
+          0.06258076184398574
+        ],
+        "mean": 0.061907583870010836,
+        "n": 384
+      },
+      "support_response_3": {
+        "ci95": [
+          0.4999999999923518,
+          0.5000000000114287
+        ],
+        "mean": 0.5000000000005757,
+        "n": 384
+      }
+    },
+    "topology_allied": {
+      "allied_D_0_1": {
+        "ci95": [
+          0.007993416180522985,
+          0.011830256505807444
+        ],
+        "mean": 0.009980222422735706,
+        "n": 384
+      },
+      "allied_D_1_0": {
+        "ci95": [
+          0.00804895177848683,
+          0.01197805674126089
+        ],
+        "mean": 0.010024667074906603,
+        "n": 384
+      },
+      "allied_recovery": {
+        "ci95": [
+          0.110669832379083,
+          0.13800505611772826
+        ],
+        "mean": 0.12382035172702771,
+        "n": 384
+      }
+    },
+    "topology_opposed": {
+      "opposed_D_0_1": {
+        "ci95": [
+          0.03995696258484605,
+          0.04676712290509348
+        ],
+        "mean": 0.04330904030332237,
+        "n": 384
+      },
+      "opposed_D_1_0": {
+        "ci95": [
+          0.04012619639117648,
+          0.04670697633707908
+        ],
+        "mean": 0.043365916792272675,
+        "n": 384
+      },
+      "opposed_recovery": {
+        "ci95": [
+          0.34930572998958653,
+          0.39900715113711827
+        ],
+        "mean": 0.3739202738953716,
+        "n": 384
+      }
+    }
+  },
+  "failures": [
+    "registration equivalence interval is not wholly inside the frozen ROPE"
+  ],
+  "frozen_effect_comparisons": {
+    "befriend:access": {
+      "floor": 0.031661300548013825,
+      "lower_ci_must_exceed_zero": true,
+      "metric": {
+        "ci95": [
+          0.06156671362419133,
+          0.06305579439170185
+        ],
+        "mean": 0.062315147938430515,
+        "n": 385
+      },
+      "passed": true
+    },
+    "befriend:support_response_3": {
+      "floor": 0.24999999999999908,
+      "lower_ci_must_exceed_zero": true,
+      "metric": {
+        "ci95": [
+          0.5000000000000129,
+          0.5000000000057849
+        ],
+        "mean": 0.5000000000020312,
+        "n": 385
+      },
+      "passed": true
+    },
+    "denied:access": {
+      "floor": 0.01159990679939184,
+      "lower_ci_must_exceed_zero": true,
+      "metric": {
+        "ci95": [
+          0.02096548817005476,
+          0.02247470160767485
+        ],
+        "mean": 0.021738450641922185,
+        "n": 384
+      },
+      "passed": true
+    },
+    "denied:contact_response_3": {
+      "floor": 0.2423205790936075,
+      "lower_ci_must_exceed_zero": true,
+      "metric": {
+        "ci95": [
+          0.4461410919285085,
+          0.47600381343140835
+        ],
+        "mean": 0.4616725991948248,
+        "n": 384
+      },
+      "passed": true
+    },
+    "mode_recovery:third_mode_exposure": {
+      "floor": 0.4999998628849493,
+      "lower_ci_must_exceed_zero": true,
+      "metric": {
+        "ci95": [
+          0.9999998700614371,
+          0.9999999883031574
+        ],
+        "mean": 0.9999999404634455,
+        "n": 385
+      },
+      "passed": true
+    },
+    "partner:access": {
+      "floor": 0.05940472755029555,
+      "lower_ci_must_exceed_zero": true,
+      "metric": {
+        "ci95": [
+          0.11474819202237158,
+          0.117348084087549
+        ],
+        "mean": 0.11603973096030072,
+        "n": 385
+      },
+      "passed": true
+    },
+    "partner:q_remaining": {
+      "floor": 0.5000000000000021,
+      "lower_ci_must_exceed_zero": true,
+      "metric": {
+        "ci95": [
+          0.9999999999999979,
+          1.0000000000000047
+        ],
+        "mean": 1.000000000000001,
+        "n": 385
+      },
+      "passed": true
+    },
+    "policy_engagement:joint_policy_edge_uptake": {
+      "floor": 0.2931178842452474,
+      "lower_ci_must_exceed_zero": true,
+      "metric": {
+        "ci95": [
+          0.5354406797735722,
+          0.5721160835939559
+        ],
+        "mean": 0.5545641848464117,
+        "n": 385
+      },
+      "passed": true
+    },
+    "policy_exclusion:joint_policy_edge_uptake": {
+      "floor": 0.23664742110453318,
+      "lower_ci_must_exceed_zero": true,
+      "metric": {
+        "ci95": [
+          0.4434772504654062,
+          0.49734590475991947
+        ],
+        "mean": 0.47080356175566573,
+        "n": 385
+      },
+      "passed": true
+    },
+    "policy_monitoring:joint_policy_edge_uptake": {
+      "floor": 0.02481538947777202,
+      "lower_ci_must_exceed_zero": true,
+      "metric": {
+        "ci95": [
+          0.039340880754433954,
+          0.066093244732826
+        ],
+        "mean": 0.05264593610268273,
+        "n": 385
+      },
+      "passed": true
+    },
+    "stakes:access_low_minus_high": {
+      "floor": 0.05368283789398788,
+      "lower_ci_must_exceed_zero": true,
+      "metric": {
+        "ci95": [
+          0.10587385992858381,
+          0.10873169373382903
+        ],
+        "mean": 0.10730127098379483,
+        "n": 385
+      },
+      "passed": true
+    },
+    "support:access": {
+      "floor": 0.031271875558700014,
+      "lower_ci_must_exceed_zero": true,
+      "metric": {
+        "ci95": [
+          0.061242342102411154,
+          0.06258076184398574
+        ],
+        "mean": 0.061907583870010836,
+        "n": 384
+      },
+      "passed": true
+    },
+    "support:support_response_3": {
+      "floor": 0.2499999993174849,
+      "lower_ci_must_exceed_zero": true,
+      "metric": {
+        "ci95": [
+          0.4999999999923518,
+          0.5000000000114287
+        ],
+        "mean": 0.5000000000005757,
+        "n": 384
+      },
+      "passed": true
+    },
+    "topology_allied:allied_D_0_1": {
+      "floor": 0.004709281787090483,
+      "lower_ci_must_exceed_zero": true,
+      "metric": {
+        "ci95": [
+          0.007993416180522985,
+          0.011830256505807444
+        ],
+        "mean": 0.009980222422735706,
+        "n": 384
+      },
+      "passed": true
+    },
+    "topology_allied:allied_D_1_0": {
+      "floor": 0.004732715263035595,
+      "lower_ci_must_exceed_zero": true,
+      "metric": {
+        "ci95": [
+          0.00804895177848683,
+          0.01197805674126089
+        ],
+        "mean": 0.010024667074906603,
+        "n": 384
+      },
+      "passed": true
+    },
+    "topology_allied:allied_recovery": {
+      "floor": 0.061211161817033906,
+      "lower_ci_must_exceed_zero": true,
+      "metric": {
+        "ci95": [
+          0.110669832379083,
+          0.13800505611772826
+        ],
+        "mean": 0.12382035172702771,
+        "n": 384
+      },
+      "passed": true
+    },
+    "topology_opposed:opposed_D_0_1": {
+      "floor": 0.020160960513868408,
+      "lower_ci_must_exceed_zero": true,
+      "metric": {
+        "ci95": [
+          0.03995696258484605,
+          0.04676712290509348
+        ],
+        "mean": 0.04330904030332237,
+        "n": 384
+      },
+      "passed": true
+    },
+    "topology_opposed:opposed_D_1_0": {
+      "floor": 0.01993551620820313,
+      "lower_ci_must_exceed_zero": true,
+      "metric": {
+        "ci95": [
+          0.04012619639117648,
+          0.04670697633707908
+        ],
+        "mean": 0.043365916792272675,
+        "n": 384
+      },
+      "passed": true
+    },
+    "topology_opposed:opposed_recovery": {
+      "floor": 0.17292040403003223,
+      "lower_ci_must_exceed_zero": true,
+      "metric": {
+        "ci95": [
+          0.34930572998958653,
+          0.39900715113711827
+        ],
+        "mean": 0.3739202738953716,
+        "n": 384
+      },
+      "passed": true
+    }
+  },
+  "identity_values": {
+    "dormant_mode_influence": 4.440892098500626e-16,
+    "stakes_scientific_posterior": 0.0
+  },
+  "opposed_recording_convention": "opposed_D_* is the negated raw interventional influence; the raw opposed D entries are negative",
+  "registration_equivalence": {
+    "metrics": {
+      "policy_difference": {
+        "ci95": [
+          0.00020889193622388537,
+          0.0009221319929654291
+        ],
+        "mean": 0.0005656798970153739,
+        "n": 384
+      },
+      "scientific_posterior_max_abs_difference": {
+        "ci95": [
+          0.10178371268382558,
+          0.12148970876430541
+        ],
+        "mean": 0.11144131347734705,
+        "n": 384
+      }
+    },
+    "passed": false,
+    "rope": [
+      -0.01,
+      0.01
+    ]
+  },
+  "seed_block": [
+    3505000,
+    3509999
+  ],
+  "seeds_consumed": 5000,
+  "verdict": "FAIL"
+}

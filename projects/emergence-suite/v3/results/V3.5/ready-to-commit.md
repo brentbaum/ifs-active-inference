@@ -62,5 +62,43 @@ prospective attainability/calibration pilot.
   modules).
 
 The numeric floors are frozen in `protocols/v3.5-parameters.json`. Gates 2–5
-are unopened. The next authorized action is evaluator sealing of C-V35; this
-implementation stops before Gate 2.
+were unopened at that custody stop. C-V35 was subsequently sealed before
+Gate 2 (`f7f560e7...`); escrow remains closed. Gate execution paths now persist
+the trace-sink event ledger inside every JSONL world record and seal both
+per-record and whole-file hashes before criterion aggregation. Gate 2 is the
+only criterion block presently opened by the runner.
+
+## Gate 2 — amendment-1 frozen recovery
+
+- `scripts/run_v35.py`: prospective Gate-2 execution/reporting path only.
+- `results/V3.5/gate-2-amendment-1.json`: PASS on all 3,000 ascending seeds.
+- `results/V3.5/gate-2-report.md`.
+- `results/V3.5/gate-2-amendment-1-trace-hashes.json`: 3,000 records;
+  whole-file SHA-256 `ade84592cb755a1463e24b94deef82c3911e4412630969fee12bbeac5a5df496`.
+- `results/V3.5/gate-2-amendment-1-traces.jsonl`: local persisted event ledger
+  under the standing trace-ignore convention.
+
+Gate 2 passed. Gate 3 is now authorized; Gates 4–5 and escrow remain unopened.
+
+## Gate 3 — honest stop
+
+- `scripts/run_v35.py`: prospective Gate-3 paired execution/reporting path;
+  no scientific inference code changed.
+- `results/V3.5/gate-3-amendment-1.json`: **FAIL**, retained verbatim.
+- `results/V3.5/gate-3-report.md`.
+- `results/V3.5/gate-3-diagnosis-stub.md`: apparatus-first localization only;
+  no repair proposal or criterion change.
+- `results/V3.5/full-fast-suite-gate3-stop.json`: V3 53/53 and cumulative
+  V2 180/180 green at the honest stop.
+- `results/V3.5/gate-3-amendment-1-trace-hashes.json`: 5,000 records;
+  whole-file SHA-256 `f04fdeebf327ceac1a7ddcd4da10b79e86f597e30b56a6c5a92efd6bbfe56c91`.
+- `results/V3.5/gate-3-amendment-1-traces.jsonl`: local persisted event ledger
+  under the standing trace-ignore convention.
+
+All nineteen nonzero contrasts and both exact identities passed. The blocking
+registration-equivalence control failed only for scientific structure weights:
+mean maximum absolute movement `0.11144131`, 95% interval
+`[0.10178371, 0.12148971]`, versus the frozen `0.01` ROPE. Policy movement was
+inside the ROPE. Per the stop rule, Gate 4 (`3510000:3511999`), Gate 5
+(`3512000:3519999`), and escrow (`4050000:4054999`) remain unopened. No stage
+freeze-readiness record or freeze manifest was produced.

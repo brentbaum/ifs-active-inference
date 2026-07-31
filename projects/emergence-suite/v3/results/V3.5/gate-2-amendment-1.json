@@ -1,0 +1,251 @@
+{
+  "ascending_gap_free": true,
+  "bounds": {
+    "B_max_v35_atomic": 3.4760986898352733,
+    "implied_binary_change_bound": 0.7008782529950642
+  },
+  "comparisons": {
+    "active_count_accuracy": [
+      1.0,
+      0.9,
+      ">="
+    ],
+    "coverage": [
+      0.983,
+      0.878625,
+      ">="
+    ],
+    "ece": [
+      0.017312721705830265,
+      0.0539273527378758,
+      "<="
+    ],
+    "exact_log_error_max": [
+      0.0,
+      1e-10,
+      "<="
+    ],
+    "minimum_edge_accuracy": [
+      0.6886666666666666,
+      0.6255,
+      ">="
+    ],
+    "normalization_error_max": [
+      5.684341886080802e-14,
+      1e-10,
+      "<="
+    ],
+    "partner_accuracy": [
+      1.0,
+      0.9,
+      ">="
+    ],
+    "topology_accuracy": [
+      0.6736666666666666,
+      0.61875,
+      ">="
+    ],
+    "whole_program_accuracy": [
+      0.571,
+      0.525375,
+      ">="
+    ]
+  },
+  "custody": {
+    "barred_blocks_touched": false,
+    "escrow_touched": false,
+    "runtime_events_persisted_in_trace_jsonl": true,
+    "trace_hash_ledger": "gate-2-amendment-1-trace-hashes.json"
+  },
+  "failures": [],
+  "frozen_criteria": {
+    "active_count_accuracy_min": 0.9,
+    "coverage_min": 0.878625,
+    "ece_max": 0.0539273527378758,
+    "edge_accuracy_min": 0.6255,
+    "effect_minima": {
+      "befriend:access": 0.031661300548013825,
+      "befriend:support_response_3": 0.24999999999999908,
+      "denied:access": 0.01159990679939184,
+      "denied:contact_response_3": 0.2423205790936075,
+      "mode_recovery:third_mode_exposure": 0.4999998628849493,
+      "partner:access": 0.05940472755029555,
+      "partner:q_remaining": 0.5000000000000021,
+      "policy_engagement:joint_policy_edge_uptake": 0.2931178842452474,
+      "policy_exclusion:joint_policy_edge_uptake": 0.23664742110453318,
+      "policy_monitoring:joint_policy_edge_uptake": 0.02481538947777202,
+      "stakes:access_low_minus_high": 0.05368283789398788,
+      "support:access": 0.031271875558700014,
+      "support:support_response_3": 0.2499999993174849,
+      "topology_allied:allied_D_0_1": 0.004709281787090483,
+      "topology_allied:allied_D_1_0": 0.004732715263035595,
+      "topology_allied:allied_recovery": 0.061211161817033906,
+      "topology_opposed:opposed_D_0_1": 0.020160960513868408,
+      "topology_opposed:opposed_D_1_0": 0.01993551620820313,
+      "topology_opposed:opposed_recovery": 0.17292040403003223
+    },
+    "equivalence_rope": 0.01,
+    "exact_identity_tolerance": 1e-10,
+    "partner_accuracy_min": 0.9,
+    "program_accuracy_min": 0.525375,
+    "topology_accuracy_min": 0.61875
+  },
+  "metrics": {
+    "active_count_accuracy": 1.0,
+    "contact_parameter_accuracy": [
+      0.9883333333333333,
+      0.9933333333333333,
+      0.9983333333333333
+    ],
+    "coverage": 0.983,
+    "ece": 0.017312721705830265,
+    "edge_accuracy": {
+      "CROSS_MODE_Y": 0.6886666666666666,
+      "JOINT_POLICY_Y": 0.8473333333333334,
+      "M1_G": 0.9853333333333333,
+      "M2_G": 0.9896666666666667,
+      "M3_G": 0.995
+    },
+    "exact_log_error_max": 0.0,
+    "minimum_edge_accuracy": 0.6886666666666666,
+    "normalization_error_max": 5.684341886080802e-14,
+    "partner_accuracy": 1.0,
+    "program_accuracy": 0.571,
+    "support_parameter_accuracy": [
+      0.745,
+      0.8563333333333333,
+      0.939
+    ],
+    "topology_accuracy": 0.6736666666666666,
+    "whole_program_accuracy": 0.571,
+    "world_count": 3000
+  },
+  "seed_block": [
+    3502000,
+    3504999
+  ],
+  "seeds_consumed": 3000,
+  "semantic_proofs": {
+    "exact_zero_claims_are_identities": true,
+    "hierarchical_partner_support": {
+      "partner_accuracy": 1.0,
+      "support_parameter_accuracy": [
+        0.745,
+        0.8563333333333333,
+        0.939
+      ]
+    },
+    "interventional_D_fingerprints": {
+      "allied_reciprocal": [
+        0.06756638938556081,
+        0.21224788164930308
+      ],
+      "balanced_interventional_policy_count": 9,
+      "cross_edge_lesion_error": 0.0,
+      "expected_log_bf": {
+        "allied": {
+          "allied": 0.0,
+          "independent": 19.27447570217575,
+          "opposed": 82.76532185926597
+        },
+        "independent": {
+          "allied": 22.31435513142098,
+          "independent": 0.0,
+          "opposed": 63.49084615709022
+        },
+        "opposed": {
+          "allied": 79.14352314589763,
+          "independent": 56.829168014476636,
+          "opposed": 0.0
+        }
+      },
+      "fingerprints": {
+        "allied": [
+          [
+            0.0,
+            0.06756638938556081,
+            2.220446049250313e-16
+          ],
+          [
+            0.21224788164930308,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "independent": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "opposed": [
+          [
+            0.0,
+            -0.2169301250839074,
+            -1.1102230246251565e-16
+          ],
+          [
+            -0.3876834134333653,
+            0.0,
+            -1.1102230246251565e-16
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ]
+        ]
+      },
+      "independent_error": 0.0,
+      "opposed_reciprocal": [
+        -0.2169301250839074,
+        -0.3876834134333653
+      ],
+      "passed": true,
+      "recovery": {
+        "allied": {
+          "allied": 0.9999999957420402,
+          "independent": 4.257959821877781e-09,
+          "opposed": 1.1362592238332889e-36
+        },
+        "independent": {
+          "allied": 2.0370359759196093e-10,
+          "independent": 0.9999999997962965,
+          "opposed": 2.668553183061115e-28
+        },
+        "opposed": {
+          "allied": 4.2501535380940405e-35,
+          "independent": 2.0864400960368704e-25,
+          "opposed": 1.0
+        }
+      },
+      "repetitions_per_policy": 100,
+      "single_mode_learning_identity_error": 0.0
+    },
+    "outcome_bearing_policy_history": "Gate-3 paired observed-vs-masked outcome path",
+    "stakes_in_utility_identity": "exact Gate-3 paired identity; no stakes field enters component evidence",
+    "theta_contact_target": [
+      0.9883333333333333,
+      0.9933333333333333,
+      0.9983333333333333
+    ],
+    "three_case_active_dormant_masked": "Gate-1 items 4, 6, 8, and expanded item 17; exercised at scale by common-support own-model recovery"
+  },
+  "verdict": "PASS"
+}
