@@ -200,3 +200,9 @@ Escrow: C-V33 seeds 4030000:4033999, released by this record. Pilot blocks 33320
 6b09fd32e32e7b79e1ef5e99a136bf90f32695b10369eb04f902f4275f3a4c16  C-V34-relate-challenge.md
 ```
 Escrow: C-V34 seeds 4040000:4043999, released by this record. Pilot blocks 3432000:3433959 BARRED (traced exact-cell pilots).
+
+## C-V35 seal (2026-07-31)
+```
+f7f560e77bbe97d6d40d7a2a6504caf74a88ea859db3d4261030cc98525fdb3c  C-V35-protect-challenge.md
+```
+Sealed BEFORE Gate 2 per amendment-1 custody timing (round-10 external ruling 9). Escrow 4050000:4054999 NOT released by this record; release follows gates 2-5 by a later ledger record. Diagnosis-reserved seeds 3523000:3523960 BARRED: 3523000 (API probe), 3523001:3523480 (attainability attempt 1, killed by timeout mid-run, partial unknown prefix consumed), 3523481:3523960 (attainability pilots, all twelve cells attainable with roughly 2x margins; identities exact at <=3.4e-16). Custody note, retained honestly: the first pass over 3523481:3523960 ran inside serializing trace contexts whose in-memory event ledgers were not persisted (evaluator runner error, same class as the V3.2 preflight note); a deterministic reconstruction of the same seeds (V3.1 amendment) reproduced every cell statistic bit-exactly and persisted the full event ledger (results/V3.5/cv35-preseal-pilot-traces.jsonl, sha256 49b974fdbc5a63fd846151cbe0855296dd60165569ff22a80498d9b3fd2c8172). Two evaluator statistic errors during linting are retained in the pilot records: hand-rolled active-count mappings (0.6, 0.5) superseded by the battery worker statistic (active 1.0, partner 1.0, program 0.525 at n=40). Binding sign-convention note: opposed_D_* fields record the negated raw interventional influence, so all frozen floors are positive; raw opposed effects are negative as declared.
