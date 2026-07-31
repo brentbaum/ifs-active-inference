@@ -238,7 +238,14 @@ def mode_signal_probability(observed: int, latent: int) -> float:
 
 
 def registration_probability(observed: int, latent: int) -> float:
-    return 0.80 if int(observed) == int(latent) else 0.20
+    """Candidate-common registration production.
+
+    ``latent`` remains in the public signature for channel-interface
+    compatibility, but registration is the plan-declared epistemic null.  All
+    candidates therefore use the frozen M_k=0 prior predictive: P(1)=0.20.
+    """
+    del latent
+    return 0.20 if int(observed) else 0.80
 
 
 def root_signal_probability(
@@ -353,10 +360,7 @@ def _slice_likelihood(
             )
         registered = observation.registration[index]
         if registration_enabled and registered is not None:
-            result *= (
-                registration_probability(registered, modes[index])
-                if active else registration_probability(registered, 0)
-            )
+            result *= registration_probability(registered, 0)
     if observation.root_signal is not None:
         result *= root_signal_probability(
             observation.root_signal, modes, structure

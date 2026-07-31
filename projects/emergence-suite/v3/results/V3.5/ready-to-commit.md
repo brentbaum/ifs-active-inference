@@ -102,3 +102,28 @@ mean maximum absolute movement `0.11144131`, 95% interval
 inside the ROPE. Per the stop rule, Gate 4 (`3510000:3511999`), Gate 5
 (`3512000:3519999`), and escrow (`4050000:4054999`) remain unopened. No stage
 freeze-readiness record or freeze manifest was produced.
+
+## Amendment 2 — registration construct repair and pre-seal refreeze
+
+- `results/V3.5/gate3-adjudication-amendment-2.md` governs; the earlier Gate-3
+  FAIL remains retained and its floors are invalidated.
+- `ref/v35.py`: registration alone now uses one candidate-common `M_k=0`
+  prior-predictive production in generation and scoring. No other channel was
+  changed.
+- `ref/v35_oracle.py`: independently authored oracle reflects the same
+  declared candidate-common registration model.
+- `tests/test_v35_protect.py`: exact cross-candidate evidence and
+  delivered-versus-masked posterior identities.
+- `results/V3.5/gate-1-amendment-2-rerun.json`: PASS; cross-candidate error
+  `0.0`, posterior identity error `7.22e-16`.
+- `results/V3.5/stage0-amendment-2-pilot.json`: fresh 2,000-seed traced pilot
+  PASS with no failed declared sign; floors mechanically refrozen.
+- pilot recovery/assay trace hash ledgers; raw JSONL event ledgers are 800 and
+  1,200 records respectively and remain available for custody.
+- `results/V3.5/full-fast-suite-amendment-2.json`: V3 55/55 and cumulative V2
+  180/180 green.
+- `results/V3.5/stage0-amendment-2-freeze-readiness.json` and `.md`: status
+  `READY_FOR_C_V35B_SEAL_BEFORE_REPLACEMENT_GATE2`.
+
+Replacement Gates 2–3, original Gates 4–5, retired C-V35 escrow, and new
+C-V35B escrow are unopened. STOP for evaluator sealing of C-V35B.

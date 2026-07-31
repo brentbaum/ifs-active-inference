@@ -1,0 +1,341 @@
+{
+  "ascending_gap_free_once": true,
+  "barred_on_consumption": true,
+  "custody": {
+    "assay_hash_ledger": "stage0-amendment-2-pilot-assays-trace-hashes.json",
+    "original_gate4_gate5_opened": false,
+    "recovery_hash_ledger": "stage0-amendment-2-pilot-recovery-trace-hashes.json",
+    "replacement_gate_blocks_opened": false,
+    "retired_or_new_escrow_opened": false,
+    "runtime_events_persisted_in_trace_jsonl": true
+  },
+  "estimands": {
+    "befriend": {
+      "access": {
+        "ci95": [
+          0.060157156825750534,
+          0.06305573942860893
+        ],
+        "mean": 0.061616840457889795,
+        "n": 93
+      },
+      "support_response_3": {
+        "ci95": [
+          0.500000000069891,
+          0.5001777427339186
+        ],
+        "mean": 0.5000592933931707,
+        "n": 93
+      }
+    },
+    "denied": {
+      "access": {
+        "ci95": [
+          0.020550498039587355,
+          0.023169494147563027
+        ],
+        "mean": 0.022044813696367783,
+        "n": 92
+      },
+      "contact_response_3": {
+        "ci95": [
+          0.43842691944507295,
+          0.4915344145246925
+        ],
+        "mean": 0.4692531565415747,
+        "n": 92
+      }
+    },
+    "mode_dormancy": {
+      "dormant_influence_error": {
+        "ci95": [
+          9.533436841889932e-17,
+          1.26710236506132e-16
+        ],
+        "mean": 1.1102230246251565e-16,
+        "n": 92
+      }
+    },
+    "mode_recovery": {
+      "third_mode_exposure": {
+        "ci95": [
+          0.9997602806415901,
+          0.9999735839490151
+        ],
+        "mean": 0.9998815256718017,
+        "n": 92
+      }
+    },
+    "partner": {
+      "access": {
+        "ci95": [
+          0.11192931746843979,
+          0.11828647224149261
+        ],
+        "mean": 0.1151482505809178,
+        "n": 93
+      },
+      "q_remaining": {
+        "ci95": [
+          0.9999999999999881,
+          1.0000000000000013
+        ],
+        "mean": 0.9999999999999948,
+        "n": 93
+      }
+    },
+    "policy_engagement": {
+      "joint_policy_edge_uptake": {
+        "ci95": [
+          0.5230148646746566,
+          0.6008549940811966
+        ],
+        "mean": 0.563755609499433,
+        "n": 92
+      }
+    },
+    "policy_exclusion": {
+      "joint_policy_edge_uptake": {
+        "ci95": [
+          0.3906746498965204,
+          0.5021857889347171
+        ],
+        "mean": 0.4473824108099409,
+        "n": 93
+      }
+    },
+    "policy_monitoring": {
+      "joint_policy_edge_uptake": {
+        "ci95": [
+          0.030828336051399202,
+          0.08419909111580212
+        ],
+        "mean": 0.057181798989165304,
+        "n": 92
+      }
+    },
+    "registration": {
+      "policy_difference": {
+        "ci95": [
+          -1.997798062246681e-15,
+          4.485572541421002e-15
+        ],
+        "mean": 1.241156935681493e-15,
+        "n": 92
+      },
+      "scientific_posterior_max_abs_difference": {
+        "ci95": [
+          2.8027482207074303e-14,
+          3.527085402125738e-14
+        ],
+        "mean": 3.147565239848126e-14,
+        "n": 92
+      }
+    },
+    "stakes": {
+      "access_low_minus_high": {
+        "ci95": [
+          0.10660635738806232,
+          0.11171353738662915
+        ],
+        "mean": 0.10912353591075569,
+        "n": 93
+      },
+      "scientific_posterior_identity_error": {
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "mean": 0.0,
+        "n": 93
+      }
+    },
+    "support": {
+      "access": {
+        "ci95": [
+          0.06219778385770307,
+          0.06491167457583258
+        ],
+        "mean": 0.06357268748624023,
+        "n": 92
+      },
+      "support_response_3": {
+        "ci95": [
+          0.5000000000391326,
+          0.5000000007417061
+        ],
+        "mean": 0.5000000003523918,
+        "n": 92
+      }
+    },
+    "topology_allied": {
+      "allied_D_0_1": {
+        "ci95": [
+          0.005590409833122112,
+          0.013321400945066267
+        ],
+        "mean": 0.009682000094736753,
+        "n": 92
+      },
+      "allied_D_1_0": {
+        "ci95": [
+          0.005663726934889828,
+          0.013264782142012505
+        ],
+        "mean": 0.009640019361084584,
+        "n": 92
+      },
+      "allied_recovery": {
+        "ci95": [
+          0.06621073578733246,
+          0.11904501987411828
+        ],
+        "mean": 0.09164618515998901,
+        "n": 92
+      }
+    },
+    "topology_opposed": {
+      "opposed_D_0_1": {
+        "ci95": [
+          0.03636357813778147,
+          0.050712789792831225
+        ],
+        "mean": 0.04362637706737285,
+        "n": 92
+      },
+      "opposed_D_1_0": {
+        "ci95": [
+          0.03576801934602313,
+          0.050216840309639806
+        ],
+        "mean": 0.04325457075432726,
+        "n": 92
+      },
+      "opposed_recovery": {
+        "ci95": [
+          0.33054491488568455,
+          0.43457822708180976
+        ],
+        "mean": 0.3815599306537717,
+        "n": 92
+      }
+    }
+  },
+  "failures": [],
+  "frozen_criteria": {
+    "active_count_accuracy_min": 0.9,
+    "coverage_min": 0.8718750000000001,
+    "ece_max": 0.06279020976257683,
+    "edge_accuracy_min": 0.6165,
+    "effect_minima": {
+      "befriend:access": 0.030808420228944897,
+      "befriend:support_response_3": 0.25002964669658534,
+      "denied:access": 0.011022406848183891,
+      "denied:contact_response_3": 0.23462657827078734,
+      "mode_recovery:third_mode_exposure": 0.49994076283590083,
+      "partner:access": 0.0575741252904589,
+      "partner:q_remaining": 0.4999999999999974,
+      "policy_engagement:joint_policy_edge_uptake": 0.2818778047497165,
+      "policy_exclusion:joint_policy_edge_uptake": 0.22369120540497045,
+      "policy_monitoring:joint_policy_edge_uptake": 0.028590899494582652,
+      "stakes:access_low_minus_high": 0.05456176795537784,
+      "support:access": 0.031786343743120116,
+      "support:support_response_3": 0.2500000001761959,
+      "topology_allied:allied_D_0_1": 0.004841000047368376,
+      "topology_allied:allied_D_1_0": 0.004820009680542292,
+      "topology_allied:allied_recovery": 0.04582309257999451,
+      "topology_opposed:opposed_D_0_1": 0.021813188533686426,
+      "topology_opposed:opposed_D_1_0": 0.02162728537716363,
+      "topology_opposed:opposed_recovery": 0.19077996532688585
+    },
+    "equivalence_rope": 0.01,
+    "exact_identity_tolerance": 1e-10,
+    "partner_accuracy_min": 0.9,
+    "program_accuracy_min": 0.49612500000000004,
+    "topology_accuracy_min": 0.61425
+  },
+  "mechanical_rule": {
+    "calibration_and_score_ceiling_allowance": 0.03,
+    "effect_fraction": 0.5,
+    "equivalence_rope_absolute": 0.01,
+    "exact_identity_tolerance": 1e-10,
+    "recovery_fraction": 0.9
+  },
+  "recovery": {
+    "active_count_accuracy": 1.0,
+    "contact_parameter_accuracy": [
+      0.98625,
+      0.98875,
+      0.9975
+    ],
+    "coverage": 0.96875,
+    "ece": 0.032790209762576836,
+    "edge_accuracy": {
+      "CROSS_MODE_Y": 0.685,
+      "JOINT_POLICY_Y": 0.83875,
+      "M1_G": 0.97875,
+      "M2_G": 0.9825,
+      "M3_G": 0.99
+    },
+    "exact_log_error_max": 0.0,
+    "minimum_edge_accuracy": 0.685,
+    "normalization_error_max": 5.684341886080802e-14,
+    "partner_accuracy": 1.0,
+    "program_accuracy": 0.55125,
+    "support_parameter_accuracy": [
+      0.76125,
+      0.85,
+      0.94125
+    ],
+    "topology_accuracy": 0.6825,
+    "whole_program_accuracy": 0.55125,
+    "world_count": 800
+  },
+  "retained_invalidated_amendment1_criteria": {
+    "active_count_accuracy_min": 0.9,
+    "coverage_min": 0.878625,
+    "ece_max": 0.0539273527378758,
+    "edge_accuracy_min": 0.6255,
+    "effect_minima": {
+      "befriend:access": 0.031661300548013825,
+      "befriend:support_response_3": 0.24999999999999908,
+      "denied:access": 0.01159990679939184,
+      "denied:contact_response_3": 0.2423205790936075,
+      "mode_recovery:third_mode_exposure": 0.4999998628849493,
+      "partner:access": 0.05940472755029555,
+      "partner:q_remaining": 0.5000000000000021,
+      "policy_engagement:joint_policy_edge_uptake": 0.2931178842452474,
+      "policy_exclusion:joint_policy_edge_uptake": 0.23664742110453318,
+      "policy_monitoring:joint_policy_edge_uptake": 0.02481538947777202,
+      "stakes:access_low_minus_high": 0.05368283789398788,
+      "support:access": 0.031271875558700014,
+      "support:support_response_3": 0.2499999993174849,
+      "topology_allied:allied_D_0_1": 0.004709281787090483,
+      "topology_allied:allied_D_1_0": 0.004732715263035595,
+      "topology_allied:allied_recovery": 0.061211161817033906,
+      "topology_opposed:opposed_D_0_1": 0.020160960513868408,
+      "topology_opposed:opposed_D_1_0": 0.01993551620820313,
+      "topology_opposed:opposed_recovery": 0.17292040403003223
+    },
+    "equivalence_rope": 0.01,
+    "exact_identity_tolerance": 1e-10,
+    "partner_accuracy_min": 0.9,
+    "program_accuracy_min": 0.525375,
+    "topology_accuracy_min": 0.61875
+  },
+  "seed_block": [
+    3523961,
+    3525960
+  ],
+  "seed_partition": {
+    "assays": [
+      3524761,
+      3525960
+    ],
+    "recovery": [
+      3523961,
+      3524760
+    ]
+  },
+  "verdict": "DESCRIPTIVE_ATTAINABILITY_PASS"
+}

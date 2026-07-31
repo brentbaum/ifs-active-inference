@@ -1,39 +1,40 @@
 {
+  "amendment2_pilot_summary_sha256": "83376228e160be17b6583a7c585c9440bef759d16ed377e39a74bf06dd7024da",
   "bounds": {
     "B_max_v35_atomic": 3.4760986898352733,
     "implied_binary_change_bound": 0.7008782529950642
   },
   "criteria": {
     "active_count_accuracy_min": 0.9,
-    "coverage_min": 0.878625,
-    "ece_max": 0.0539273527378758,
-    "edge_accuracy_min": 0.6255,
+    "coverage_min": 0.8718750000000001,
+    "ece_max": 0.06279020976257683,
+    "edge_accuracy_min": 0.6165,
     "effect_minima": {
-      "befriend:access": 0.031661300548013825,
-      "befriend:support_response_3": 0.24999999999999908,
-      "denied:access": 0.01159990679939184,
-      "denied:contact_response_3": 0.2423205790936075,
-      "mode_recovery:third_mode_exposure": 0.4999998628849493,
-      "partner:access": 0.05940472755029555,
-      "partner:q_remaining": 0.5000000000000021,
-      "policy_engagement:joint_policy_edge_uptake": 0.2931178842452474,
-      "policy_exclusion:joint_policy_edge_uptake": 0.23664742110453318,
-      "policy_monitoring:joint_policy_edge_uptake": 0.02481538947777202,
-      "stakes:access_low_minus_high": 0.05368283789398788,
-      "support:access": 0.031271875558700014,
-      "support:support_response_3": 0.2499999993174849,
-      "topology_allied:allied_D_0_1": 0.004709281787090483,
-      "topology_allied:allied_D_1_0": 0.004732715263035595,
-      "topology_allied:allied_recovery": 0.061211161817033906,
-      "topology_opposed:opposed_D_0_1": 0.020160960513868408,
-      "topology_opposed:opposed_D_1_0": 0.01993551620820313,
-      "topology_opposed:opposed_recovery": 0.17292040403003223
+      "befriend:access": 0.030808420228944897,
+      "befriend:support_response_3": 0.25002964669658534,
+      "denied:access": 0.011022406848183891,
+      "denied:contact_response_3": 0.23462657827078734,
+      "mode_recovery:third_mode_exposure": 0.49994076283590083,
+      "partner:access": 0.0575741252904589,
+      "partner:q_remaining": 0.4999999999999974,
+      "policy_engagement:joint_policy_edge_uptake": 0.2818778047497165,
+      "policy_exclusion:joint_policy_edge_uptake": 0.22369120540497045,
+      "policy_monitoring:joint_policy_edge_uptake": 0.028590899494582652,
+      "stakes:access_low_minus_high": 0.05456176795537784,
+      "support:access": 0.031786343743120116,
+      "support:support_response_3": 0.2500000001761959,
+      "topology_allied:allied_D_0_1": 0.004841000047368376,
+      "topology_allied:allied_D_1_0": 0.004820009680542292,
+      "topology_allied:allied_recovery": 0.04582309257999451,
+      "topology_opposed:opposed_D_0_1": 0.021813188533686426,
+      "topology_opposed:opposed_D_1_0": 0.02162728537716363,
+      "topology_opposed:opposed_recovery": 0.19077996532688585
     },
     "equivalence_rope": 0.01,
     "exact_identity_tolerance": 1e-10,
     "partner_accuracy_min": 0.9,
-    "program_accuracy_min": 0.525375,
-    "topology_accuracy_min": 0.61875
+    "program_accuracy_min": 0.49612500000000004,
+    "topology_accuracy_min": 0.61425
   },
   "floor_rule": {
     "calibration_and_score_ceiling_allowance": 0.03,
@@ -51,7 +52,7 @@
     "support_responsive": 0.82,
     "support_untargeted_baseline": 0.25
   },
-  "pilot_summary_sha256": "71ccda092af00bf313f1125eaf8586512c72f777b05c8d4ea85e83636cad5c8b",
+  "pilot_summary_sha256": "83376228e160be17b6583a7c585c9440bef759d16ed377e39a74bf06dd7024da",
   "policy_parameters": {
     "denied_contact_cost_weight": 1.2,
     "effort_weight": 0.05,
@@ -62,11 +63,23 @@
     "vulnerable_cost_weight": 4.0
   },
   "seed_blocks": {
+    "amendment2_pilot_barred_on_consumption": [
+      3523961,
+      3525960
+    ],
     "barred_original_pilot": [
       3500000,
       3501999
     ],
+    "c_v35b_escrow_closed": [
+      4055000,
+      4059999
+    ],
     "escrow_closed": [
+      4050000,
+      4054999
+    ],
+    "escrow_retired_unopened": [
       4050000,
       4054999
     ],
@@ -90,12 +103,20 @@
       3521000,
       3522999
     ],
+    "replacement_gate2_closed": [
+      3530000,
+      3532999
+    ],
+    "replacement_gate3_closed": [
+      3533000,
+      3537999
+    ],
     "smoke": [
       3520000,
       3520999
     ]
   },
   "stage": "V3.5",
-  "status": "FROZEN_AFTER_ATTAINABILITY_PILOT",
+  "status": "FROZEN_AFTER_AMENDMENT2_PILOT",
   "tolerance": 1e-10
 }

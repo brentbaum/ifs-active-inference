@@ -1,0 +1,16 @@
+{
+  "replacement_gate_2_opened": false,
+  "replacement_gate_3_opened": false,
+  "v2": {
+    "command": "python3 -m unittest discover -s tests",
+    "cwd": "projects/emergence-suite/v2",
+    "passed": 180,
+    "verdict": "PASS"
+  },
+  "v3": {
+    "command": "python3 -m unittest discover -s tests",
+    "cwd": "projects/emergence-suite/v3",
+    "passed": 55,
+    "verdict": "PASS"
+  }
+}

@@ -78,6 +78,67 @@ class V35ProtectTests(unittest.TestCase):
             1e-10,
         )
 
+    def test_registration_evidence_is_identical_across_candidates(self):
+        observation = v35.ProtectObservation(
+            0,
+            (None, None, None),
+            None,
+            (1, 1, 1),
+            None,
+            None,
+            None,
+            (None, None, None),
+            (1, 0, 1),
+            None,
+            1.0,
+        )
+        masked = replace(observation, registration=(None, None, None))
+        contributions = []
+        for structure in v35.PROGRAMS:
+            for modes in __import__("itertools").product((0, 1), repeat=3):
+                if any(modes[structure.active_modes:]):
+                    continue
+                observed = v35._slice_likelihood(
+                    observation, modes, structure, 0, 0
+                )
+                baseline = v35._slice_likelihood(
+                    masked, modes, structure, 0, 0
+                )
+                contributions.append(observed / baseline)
+        self.assertEqual(max(contributions) - min(contributions), 0.0)
+        self.assertLessEqual(
+            abs(contributions[0] - 0.20 * 0.80 * 0.20), 1e-10
+        )
+
+    def test_registration_delivered_and_masked_posteriors_are_identical(self):
+        world = v35.generate_world(3_500_005, self.config())
+        delivered = v35.score_world(world)
+        masked_world = replace(
+            world,
+            observations=tuple(
+                replace(item, registration=(None, None, None))
+                for item in world.observations
+            ),
+        )
+        masked = v35.score_world(masked_world)
+        comparisons = (
+            max(abs(a - b) for a, b in zip(
+                delivered.probabilities, masked.probabilities
+            )),
+            max(abs(a - b) for a, b in zip(
+                delivered.active_mode_probabilities,
+                masked.active_mode_probabilities,
+            )),
+            max(abs(a - b) for a, b in zip(
+                delivered.mode_occupancy, masked.mode_occupancy
+            )),
+            max(abs(a - b) for a, b in zip(
+                delivered.joint_policy_posterior,
+                masked.joint_policy_posterior,
+            )),
+        )
+        self.assertLessEqual(max(comparisons), 1e-10)
+
     def test_dormant_candidate_scores_higher_slot_channels(self):
         structure = v35.ProtectStructure(1, (0, 0, 0), 0, 0)
         observation = v35.ProtectObservation(

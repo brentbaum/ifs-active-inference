@@ -70,9 +70,7 @@ def _slice(item, modes, program, sign, reliable):
             ) if is_active else (0.14 if signal else 0.86)
         registration = item["registration"][index]
         if registration is not None:
-            value *= (
-                0.80 if int(registration) == modes[index] else 0.20
-            ) if is_active else (0.20 if registration else 0.80)
+            value *= 0.20 if registration else 0.80
     root_signal = item["root_signal"]
     if root_signal is not None:
         parents = [modes[i] for i in range(active) if roots[i]]

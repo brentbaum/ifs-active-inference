@@ -1,0 +1,64 @@
+{
+  "authorization": "results/V3.5/gate3-adjudication-amendment-2.md",
+  "custody": {
+    "amendment_2_pilot_ascending_gap_free_once": true,
+    "amendment_2_pilot_block": [
+      3523961,
+      3525960
+    ],
+    "c_v35_retired_escrow_opened": false,
+    "c_v35_retired_escrow_range": [
+      4050000,
+      4054999
+    ],
+    "c_v35b_escrow_opened": false,
+    "c_v35b_escrow_range": [
+      4055000,
+      4059999
+    ],
+    "original_gate_4_gate_5_opened": false,
+    "replacement_gate_2_gate_3_opened": false,
+    "runtime_events_persisted": true
+  },
+  "gate_1": {
+    "candidate_common_channels_audited": [
+      "registration"
+    ],
+    "cross_candidate_registration_evidence_error": 0.0,
+    "delivered_masked_posterior_error": 7.216449660063518e-16,
+    "expanded_item_17_passed": true,
+    "interventional_topology_fixture_passed": true,
+    "verdict": "PASS"
+  },
+  "hashes": {
+    "protocols/v3.5-analysis-plan.md": "c0b0efb83258fd96e4fd17d9b7d6a844bb9a5a2e11b4aa96213a285c65539cdb",
+    "protocols/v3.5-parameters.json": "f16c5e7b54d495d465dd5f744e8c095707cf357914592e963b57349dae9fc9a5",
+    "ref/v35.py": "7b71e5a7c8003d27c7f1bcafc8deae2d2eed07dd80942066362a1d9c5da8c264",
+    "ref/v35_oracle.py": "57c76512d003808c705f64634ab08b5503d38c5a8300db3f8be970bdcbcdb702",
+    "results/V3.5/gate-1-amendment-2-rerun.json": "089c330a04f26ef47adee6e0d411fec181f643328df8bb71ea8f58ae2054cd27",
+    "results/V3.5/gate3-adjudication-amendment-2.md": "87b6843a9cc8b8e5b72ebcb456c4acdd36a94afa1d2445b7e8068a26730db4e0",
+    "results/V3.5/stage0-amendment-2-pilot-assays-trace-hashes.json": "346a3129c4447e875f5513a76091ff2e0acbc979f6a263d573d5bc648f364534",
+    "results/V3.5/stage0-amendment-2-pilot-recovery-trace-hashes.json": "4e8c26f36f567e830aeb4a0bef6b4bee74c331dab643a21541368f31cd394556",
+    "results/V3.5/stage0-amendment-2-pilot.json": "5134b65ae848bf60c55e7cb95862bb67128b6570ca5d5e829c7dc45f20079b63",
+    "scripts/run_v35.py": "9ccfa982de431fdc7dc35aff67ef398bec38eb68572cbbd1021c9ac60ef401db",
+    "tests/test_v35_protect.py": "1026333cc1912a0549412244f5a7e6d09d56b7fc9c291d318d2bf3cce248a248"
+  },
+  "pilot": {
+    "assay_trace_sha256": "2e1acf97163f0229f7efe82390992eccc06e114b084e0b14c5641ea2f7744769",
+    "declared_sign_failures": [],
+    "registration_policy_difference_mean": 1.241156935681493e-15,
+    "registration_scientific_posterior_difference_mean": 3.147565239848126e-14,
+    "recovery_trace_sha256": "5df6654c4fb53827bb61945c83df603dd135e4ee74377065a214f3e07a120b82",
+    "verdict": "DESCRIPTIVE_ATTAINABILITY_PASS"
+  },
+  "prior_records": {
+    "amendment_1_gate_3_fail_retained": true,
+    "amendment_1_floors_invalidated": true,
+    "consumed_gate_2_gate_3_non_probative": true
+  },
+  "status": "READY_FOR_C_V35B_SEAL_BEFORE_REPLACEMENT_GATE2",
+  "suites": {
+    "v2": "180/180 PASS",
+    "v3": "55/55 PASS"
+  }
+}
