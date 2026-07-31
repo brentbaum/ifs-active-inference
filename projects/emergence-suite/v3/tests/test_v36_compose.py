@@ -91,6 +91,13 @@ class V36CompositionTests(unittest.TestCase):
         self.assertLess(max(early["premature_times"]), 7)
         self.assertLess(max(late["premature_times"]), 19)
 
+    def test_pruning_disabled_keeps_corrective_event_stream(self):
+        declarations = v36._component_declarations(
+            v36.ComposeConfig(protocol="structural_pruning_disabled")
+        )
+        self.assertEqual(declarations["reduction"].corrective_evidence, "configural")
+        self.assertEqual(declarations["reduction"].do_over, "post_revision")
+
 
 if __name__ == "__main__":
     unittest.main()

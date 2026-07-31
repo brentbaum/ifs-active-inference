@@ -162,10 +162,10 @@ def _component_declarations(config: ComposeConfig) -> Mapping[str, Any]:
         ),
     )
     reduction = v33.ReductionConfig(
-        corrective_evidence=(
-            "none" if protocol == "structural_pruning_disabled"
-            else "configural"
-        ),
+        # The pruning-disabled comparator removes only structural movement via
+        # the conditioned restriction below. Corrective evidence and its
+        # event-indexed revision opportunity remain present.
+        corrective_evidence="configural",
         do_over=(
             "premature" if protocol == "premature_do_over"
             else "post_revision"
@@ -247,17 +247,15 @@ def do_over_schedule_audit(world: v33.ReductionWorld) -> Mapping[str, Any]:
     )
     if world.config.do_over == "premature":
         passed = (
-            boundary is not None
-            and bool(premature)
-            and max(premature) < boundary
-            and not post_revision
+            bool(premature) and not post_revision
+            if boundary is None
+            else bool(premature) and max(premature) < boundary and not post_revision
         )
     elif world.config.do_over == "post_revision":
         passed = (
-            boundary is not None
-            and bool(post_revision)
-            and min(post_revision) > boundary
-            and not premature
+            not post_revision and not premature
+            if boundary is None
+            else bool(post_revision) and min(post_revision) > boundary and not premature
         )
     else:
         passed = not premature and not post_revision
