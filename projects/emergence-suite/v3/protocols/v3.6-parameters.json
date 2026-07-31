@@ -1,0 +1,38 @@
+{
+  "stage": "V3.6",
+  "status": "PRE_PILOT_FROZEN",
+  "tolerance": 1e-10,
+  "equivalence_rope": 0.01,
+  "pilot_to_floor": {
+    "effect_fraction": 0.5,
+    "recovery_fraction": 0.9,
+    "calibration_allowance": 0.03,
+    "attainability_requires_signed_95_interval": true
+  },
+  "noninferiority_margin_nats_per_token": 0.018566762350958,
+  "noninferiority_basis": {
+    "source": "v2/results/V2.4.4/gate-3-bma-information-curves-per_world.json",
+    "public_worlds": 2500,
+    "history_length": 96,
+    "bootstrap_replicates": 10000,
+    "bootstrap_rng_seed": 3606,
+    "mean": -1.8894736224815682,
+    "interval_95": [-1.89879339, -1.88022663],
+    "rule": "full width of V2-only bootstrap interval"
+  },
+  "seed_blocks": {
+    "barred_custody_seed": [3600000, 3600000],
+    "pilot_barred_on_consumption": [3600001, 3603999],
+    "gate2_closed": [3604000, 3613999],
+    "gate3_closed": [3614000, 3629999],
+    "gate4_closed": [3630000, 3634999],
+    "gate5_closed": [3635000, 3659999],
+    "diagnosis_closed": [3660000, 3679999],
+    "escrow_closed": {
+      "C-V36A": [4100000, 4109999],
+      "C-V36B": [4110000, 4119999],
+      "C-V36C": [4120000, 4129999]
+    }
+  },
+  "criteria": "PENDING_MECHANICAL_PILOT_FREEZE"
+}

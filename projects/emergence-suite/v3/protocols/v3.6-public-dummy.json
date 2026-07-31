@@ -1,0 +1,32 @@
+{
+  "stage": "V3.6",
+  "status": "public semantic dummy; no allocated seed",
+  "protocol": {
+    "events": [
+      "activation",
+      "partner_regulation",
+      "refusal_opportunity",
+      "noncoercive_relational_observation",
+      "policy_testing",
+      "vulnerable_mode_contact",
+      "root_relevant_evidence",
+      "contextual_evidence",
+      "imaginal_evidence",
+      "followup_stress"
+    ],
+    "authored_conclusions": []
+  },
+  "code_length_dummy": {
+    "L_grammar": 58.0,
+    "log_priors": {"grow": -1.0, "split": -2.0, "relate": -1.5, "protect": -2.5},
+    "L_theta_given_H": 12.0,
+    "protocol_count": 11
+  },
+  "readout_dummy": {
+    "grow": {"part_probability": 0.7, "danger_probability": 0.2},
+    "split": {"cue_context_specific": 0.8, "outcome_context_specific": 0.6, "cue_recurrent": 0.7, "outcome_recurrent": 0.5},
+    "prune": {"burden_mass": 0.25},
+    "relate": {"q_reliable": 0.85},
+    "protect": {"q_open": 0.65}
+  }
+}

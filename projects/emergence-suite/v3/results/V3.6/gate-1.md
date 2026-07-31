@@ -1,0 +1,73 @@
+# V3.6 Gate 1 — permanent composition battery
+
+Verdict: **PASS**.
+
+```json
+{
+  "bounds": {
+    "B_max_v31": 3.801426508560692,
+    "B_max_v34_relational": 3.8066624897703196,
+    "B_max_v34_root": 1.9736255489018601,
+    "B_max_v35_atomic": 3.4760986898352733,
+    "implied_binary_change_bound": 0.7008782529950642,
+    "implied_relational_binary_change_bound": 0.7405361848863923,
+    "implied_root_binary_change_bound": 0.45691585232961845
+  },
+  "gate": 1,
+  "manifest_audits": [
+    {
+      "mismatches": [],
+      "passed": true,
+      "stage": "V3.0"
+    },
+    {
+      "mismatches": [],
+      "passed": true,
+      "stage": "V3.1"
+    },
+    {
+      "mismatches": [],
+      "passed": true,
+      "stage": "V3.2"
+    },
+    {
+      "mismatches": [],
+      "passed": true,
+      "stage": "V3.3"
+    },
+    {
+      "mismatches": [],
+      "passed": true,
+      "stage": "V3.4"
+    },
+    {
+      "mismatches": [],
+      "passed": true,
+      "stage": "V3.5"
+    }
+  ],
+  "proofs": {
+    "01_no_v2_scientific_import": true,
+    "02_no_new_scientific_primitive": true,
+    "03_public_protocol_has_no_conclusion_field": true,
+    "04_independent_readout_input_copy": true,
+    "05_independent_readout_values": true,
+    "06_independent_code_input_copy": true,
+    "07_code_length_recombination_error": 0.0,
+    "08_composition_readout_purity": true,
+    "09_expanded_item17_retained": true,
+    "10_candidate_common_registration_error": 0.0,
+    "11_registration_delivered_masked_error": 7.216449660063518e-16,
+    "12_stakes_scientific_invariance_error": 0.0,
+    "13_interventional_topology_fixture": true,
+    "14_restricted_prior_identity_error": 2.609024107869118e-15,
+    "15_all_inherited_manifest_chains_effective": true,
+    "16_v35_repair_factors_counted": true,
+    "17_factor_reduction_at_least_half": true,
+    "18_constant_reduction_at_least_half": true
+  },
+  "seed_consumption": [],
+  "stage": "V3.6",
+  "verdict": "PASS"
+}
+```

@@ -19,3 +19,28 @@ was not persisted to JSONL and hashed at execution. No criterion was evaluated,
 no floor was frozen, and no other V3.6 seed was touched. Gates 2–5, diagnosis
 blocks, and C-V36A/B/C escrow remain unopened. STOP for evaluator custody
 adjudication.
+
+## Custody adjudication and resumed Stage 0
+
+- `stage0-custody-adjudication.md` permanently bars seed `3600000` and
+  re-scopes the pilot to `3600001:3603999`.
+- The public contract, prospective analysis plan, parameters, dummy bundle,
+  compression registry, composition module, independent oracle, tests, and
+  runner were written before the re-scoped pilot.
+- `gate-1.json` / `gate-1.md`: PASS, 18/18 permanent composition checks; no
+  seed consumed.
+- `stage-0-attainability-pilot-traces.jsonl` and
+  `stage-0-attainability-pilot-trace-hashes.json`: 3,999 persisted, hashed,
+  ascending gap-free records. The hash verifies before aggregation.
+- `stage-0-attainability-pilot.json` / `.md`: FAIL because the premature
+  do-over 95% interval `[-0.01857, 0.04912]` is not contained in the frozen
+  `[-0.01, 0.01]` ROPE.
+- `stage0-pilot-diagnosis-stub.json` / `.md`: honest stop. No floors frozen;
+  no Gate-2/3/4/5, diagnosis, or escrow seed opened.
+
+Current disposition: **STAGE0_PILOT_FAIL_STOP_FOR_EVALUATOR**.
+
+Verification at stop: V3 suite `60/60` green; cumulative V2 suite `180/180`
+green. An initial repository-root V2 invocation was invalid because `ref` was
+not on that working directory's import path; the canonical invocation from
+`projects/emergence-suite/v2/` passed cleanly.

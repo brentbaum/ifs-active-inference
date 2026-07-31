@@ -1,0 +1,35 @@
+{
+  "stage": "V3.6",
+  "phase": "stage_0_attainability_pilot",
+  "verdict": "FAIL_STOP",
+  "seed_block": [3600001, 3603999],
+  "seed_count": 3999,
+  "custody": {
+    "ascending_gap_free": true,
+    "seed_3600000_touched": false,
+    "runtime_events_persisted_before_aggregation": true,
+    "per_world_records_persisted_before_aggregation": true,
+    "trace_hash_ledger": "stage-0-attainability-pilot-trace-hashes.json",
+    "trace_jsonl": "stage-0-attainability-pilot-traces.jsonl",
+    "whole_file_hash_verified": true
+  },
+  "blocking_failure": {
+    "estimand": "full minus premature-do-over q_current_edge_absence",
+    "declared_kind": "equivalence",
+    "declared_rope": [-0.01, 0.01],
+    "mean": 0.015139500753264512,
+    "whole_world_bootstrap_interval_95": [-0.018567536075274952, 0.04911686181384986],
+    "reason": "the full interval is not contained in the prospectively frozen ROPE"
+  },
+  "localization_only": {
+    "other_comparator_effects_with_declared_positive_intervals": 9,
+    "stakes_scientific_identity_error_max": 0.0,
+    "stakes_policy_effect_interval_95": [0.10407715430994677, 0.10717623019155693],
+    "interpretation": "The composed premature-do-over endpoint is not equivalent at this information budget. This record does not classify the cause as scientific, parametric, or software."
+  },
+  "floors_frozen": false,
+  "later_blocks_opened": false,
+  "diagnosis_block_opened": false,
+  "sealed_escrow_touched": false,
+  "next_action": "STOP for evaluator adjudication; no self-authorized repair"
+}

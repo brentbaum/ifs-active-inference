@@ -1,0 +1,62 @@
+{
+  "stage": "V3.6",
+  "status": "prospective registry before pilot; per-world distribution pending pilot",
+  "equation": "L_total = L_grammar + L(H) + L(theta|H) + L(protocol)",
+  "counting_rules": {
+    "dormant_emission": "one generic candidate-common grammar production, counted once",
+    "active_mode_count": "charged in L(H), never again per dormant slot",
+    "learned_channel_parameters": "charged in L(theta|H)",
+    "source_lines": "descriptive only, not a scientific complexity measure"
+  },
+  "v2": {
+    "primitive_latent_types": 18,
+    "generic_or_stage_specific_factor_templates": 34,
+    "structural_prior_families": 9,
+    "parameter_prior_families": 12,
+    "frozen_scientific_constants": 48,
+    "protocol_specific_scientific_branches": 11,
+    "factor_template_registry": [
+      "kernel-discrete-CPT", "kernel-conjugate-parameter", "recursive-precision-channel",
+      "global-precision-prior", "broadcast-route", "return-route", "cue-root-association",
+      "shared-structure-candidate", "factorized-structure-candidate", "reversed-structure-candidate",
+      "formation-transient", "formation-danger", "formation-persistent", "formation-configural",
+      "five-family-global-downweight", "five-family-cue-local", "five-family-context-split",
+      "five-family-drift", "five-family-change-point", "configural-spike-slab",
+      "marginal-presentation", "burden-edge-ZW", "burden-edge-ZPi", "burden-edge-ZY",
+      "efficacy-spike", "efficacy-magnitude", "prevented-outcome", "relief",
+      "partner-process", "partner-precision-lookup", "protector-trust-forecast",
+      "joint-protector-policy", "registration-aloneness", "trajectory-branch"
+    ]
+  },
+  "v3": {
+    "primitive_latent_types": 8,
+    "generic_factor_templates": 16,
+    "structural_prior_families": 1,
+    "generic_parameter_prior_families": 4,
+    "frozen_scientific_constants": 22,
+    "protocol_specific_scientific_branches": 0,
+    "shared_grammar_code_length_bits": 58.0,
+    "factor_template_registry": [
+      "binary-latent-CPT", "generic-edge-existence-spike", "generic-parameter-scope",
+      "generic-temporal-dynamics", "context-transition", "mode-transition",
+      "action-controlled-availability", "recursive-precision", "joint-configural-emission",
+      "partner-latent-emission", "mode-specific-support", "mode-specific-contact-outcome",
+      "candidate-common-registration", "joint-policy-outcome", "cross-mode-outcome",
+      "stakes-weighted-policy-utility"
+    ],
+    "repair_introduced_items_included": [
+      "candidate-common dormant emission", "mode-specific support",
+      "mode-specific contact outcome", "candidate-common registration",
+      "stakes-weighted policy utility"
+    ],
+    "per_world_structure_code_length": "PENDING_PILOT"
+  },
+  "reductions": {
+    "factor_templates_fraction": 0.5294117647058824,
+    "frozen_scientific_constants_fraction": 0.5416666666666666,
+    "factor_templates_at_least_50_percent": true,
+    "constants_at_least_50_percent": true
+  },
+  "forbidden_exclusions": [],
+  "pareto_only": true
+}
