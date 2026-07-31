@@ -66,3 +66,27 @@ not on that working directory's import path; the canonical invocation from
 Current disposition: **FRESH_PILOT_FAIL_STOP_GENUINE_COMPOSITION_FINDING**.
 No floors, freeze-readiness, or stage manifest were issued; all later and
 escrow blocks remain unopened.
+
+## Adjudication 2 and pre-seal freeze
+
+- `stage0-adjudication-2.md` retains the premature endpoint contrast as a
+  descriptive composition finding, not a criterion. No third pilot ran.
+- Both required estimates are frozen into `v3.6-parameters.json`: first pilot
+  `0.0151395 [-0.0185675, 0.0491169]`; fresh event-indexed pilot
+  `-0.0075913 [-0.0368806, 0.0217219]`.
+- The finding has `floor: null` and `gate_criterion: false`. The sealed V3.3
+  post-revision equivalence remains unchanged.
+- Nine remaining comparator floors and the stakes-policy floor were computed
+  mechanically at exactly `0.50 * abs(fresh pilot mean)`. Stakes scientific
+  identity remains `1e-10`; the V2-only noninferiority margin remains
+  `0.018566762350958` nats/token.
+- `v3.6-compression-accounting.json` is finalized, including every V3.5 repair
+  factor and the fresh-pilot per-world structure-length distribution (mean
+  `106.7830171`, range `101.4503498:111.4503498` bits).
+- `stage0-freeze-readiness.json` / `.md`, `stage0-freeze-manifest.json`, and
+  `stage0-pre-seal-package.json` are ready. The manifest verifies `21/21`
+  hashes.
+- V3 full suite: `63/63` green.
+
+Current disposition: **STAGE0_FREEZE_READY_AWAITING_C_V36A_B_C_SEALS**.
+Gates 2--5, diagnosis remainder, and all escrows remain untouched.

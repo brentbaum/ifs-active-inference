@@ -28,5 +28,14 @@
     "prune": {"burden_mass": 0.25},
     "relate": {"q_reliable": 0.85},
     "protect": {"q_open": 0.65}
+  },
+  "retained_finding_schema": {
+    "premature_do_over_endpoint": {
+      "classification": "descriptive_retained_finding",
+      "floor": null,
+      "gate_criterion": false,
+      "required_profiles": ["first_pilot", "fresh_event_indexed_pilot"],
+      "cross_reference": "sealed V3.3 premature shortcut non-durability and post-revision equivalence"
+    }
   }
 }

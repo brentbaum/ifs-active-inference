@@ -98,6 +98,20 @@ class V36CompositionTests(unittest.TestCase):
         self.assertEqual(declarations["reduction"].corrective_evidence, "configural")
         self.assertEqual(declarations["reduction"].do_over, "post_revision")
 
+    def test_premature_finding_is_descriptive_and_has_no_floor(self):
+        parameters = json.loads(
+            (ROOT / "protocols" / "v3.6-parameters.json").read_text()
+        )
+        self.assertNotIn(
+            "premature_do_over", parameters["criteria"]["effect_minima"]
+        )
+        finding = parameters["retained_descriptive_findings"][
+            "premature_do_over_endpoint_path_independence"
+        ]
+        self.assertIsNone(finding["floor"])
+        self.assertFalse(finding["gate_criterion"])
+        self.assertTrue(finding["required_in_every_downstream_profile"])
+
 
 if __name__ == "__main__":
     unittest.main()

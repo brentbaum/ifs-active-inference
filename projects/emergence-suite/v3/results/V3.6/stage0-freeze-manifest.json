@@ -1,0 +1,42 @@
+{
+  "escrow": {
+    "C-V36A": [
+      4100000,
+      4109999
+    ],
+    "C-V36B": [
+      4110000,
+      4119999
+    ],
+    "C-V36C": [
+      4120000,
+      4129999
+    ]
+  },
+  "files": {
+    "audits/v3.6-compression-accounting.json": "44b97b1863f041b2da4c721aca22420e275ece38195c7e129de824283bd31028",
+    "contracts/v3.6-compose-contract.md": "c92ca924b64d8b221cd9eb424ad0e31f1e0256e7d0c97493311e52cb2e4e71a9",
+    "protocols/v3.6-analysis-plan.md": "da517c2115485a4396d33fda91fa2dfb17dc7874399d7ce21f9fb940cb2d04ab",
+    "protocols/v3.6-parameters.json": "34617d1af03cdbebf3ca141bb615b253bc6ca85b53b5049cfa3746228f57fdc1",
+    "protocols/v3.6-public-dummy.json": "fcab0f904da6114552cbcaeffa7d52dc88c719cbb50698bd3d0e2a090ded6e2c",
+    "ref/v36.py": "99fe821485b8112e84ab3fe2ea45f73bf8055be22003982089a135eb07f4dc72",
+    "ref/v36_oracle.py": "955bf9fb15db510d5b387526c6c8c742d546d0092b7ab971e1a936c31539ba25",
+    "results/V3.6/gate-1-adjudicated.json": "811ea89533de66021d2eb46f2bcfee5a51feec5b491d912f431976e9bcfbcb61",
+    "results/V3.6/gate-1.json": "7f442fd71aed170b16e1627d2089b05810c6bbce9600f84edc4f243810c27d9e",
+    "results/V3.6/stage-0-adjudicated-attainability-pilot-trace-hashes.json": "479958f93ed75f7d56e4ec940ea24b5f65f2ec8a80b919cca6ca66437e9b47bf",
+    "results/V3.6/stage-0-adjudicated-attainability-pilot.json": "b72650ee5be6687ea8ec2e6c5621f14eeafde2a585d1273b6c4b805917b1b1c8",
+    "results/V3.6/stage-0-attainability-pilot.json": "a7a90b3446e5962640dc300d540c64e335c455e8d8d257350b92449871a9ad40",
+    "results/V3.6/stage0-adjudicated-pilot-diagnosis-stub.json": "964ca9ed035e33a6a3d80a6461c69f92903f796bf11ff4630fa387344b117302",
+    "results/V3.6/stage0-adjudication-2-conformance.json": "f495e99d7390b7bbfd9565a29fa7da312173b10cb32760d64a8c0f50a2b91972",
+    "results/V3.6/stage0-adjudication-2.md": "45c275cc73751bab2f1575d61a0995d04a89b07f86c05247b8df3f1d578826de",
+    "results/V3.6/stage0-adjudication.md": "d156495d6ff9805a1e4433f2708ffc270f865f23c527018535a9208b57d59fe1",
+    "results/V3.6/stage0-custody-adjudication.md": "fe0737684786db69d37463aa81920eb454fb7729eb9f909f271900202f0d6e26",
+    "results/V3.6/stage0-custody-stop.json": "15131611958ee1a70e1dd9e155b3b3cac73c54a4ecc37b2eed30eba4d9f37cc2",
+    "results/V3.6/stage0-pilot-diagnosis-stub.json": "620d05763cfa0c681f909efda209e7f0af9ba11d23c1bc1e06596a0cf556d7b2",
+    "scripts/run_v36.py": "8928246d97a8fcde985daffa7270c64ed946a0e42072d854d86ded068b90c6ec",
+    "tests/test_v36_compose.py": "22618b7ae03763d2fe1936e04004b00026a9b54a2e01508f4e1c14aef3a5ed79"
+  },
+  "hash_algorithm": "sha256",
+  "stage": "V3.6",
+  "status": "STAGE0_FREEZE_READY_AWAITING_C_V36A_B_C_SEALS"
+}

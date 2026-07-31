@@ -1,39 +1,116 @@
 {
-  "stage": "V3.6",
-  "status": "PRE_FRESH_PILOT_ADJUDICATED",
-  "tolerance": 1e-10,
-  "equivalence_rope": 0.01,
-  "pilot_to_floor": {
-    "effect_fraction": 0.5,
-    "recovery_fraction": 0.9,
-    "calibration_allowance": 0.03,
-    "attainability_requires_signed_95_interval": true
+  "criteria": {
+    "effect_minima": {
+      "broadcast_off_monitor": 0.2285343371910469,
+      "context_scope_disabled": 0.4840615966920863,
+      "cue_only_exposure": 0.16063329136963322,
+      "denied_contact_masked": 0.06642048890922031,
+      "mode_bypass": 0.034129478327372516,
+      "regulation_without_root_evidence": 0.2253894285635979,
+      "soothing_noncontingent_partner": 0.4970780975763216,
+      "structural_pruning_disabled": 0.31858871026439994,
+      "unreliable_partner": 0.37054935530184596
+    },
+    "equivalence_rope": 0.01,
+    "noninferiority_margin_nats_per_token": 0.018566762350958,
+    "stakes_policy_effect_min": 0.0522537705013991,
+    "stakes_scientific_identity_tolerance": 1e-10
   },
-  "noninferiority_margin_nats_per_token": 0.018566762350958,
+  "equivalence_rope": 0.01,
+  "fresh_pilot_summary_sha256": "b72650ee5be6687ea8ec2e6c5621f14eeafde2a585d1273b6c4b805917b1b1c8",
   "noninferiority_basis": {
-    "source": "v2/results/V2.4.4/gate-3-bma-information-curves-per_world.json",
-    "public_worlds": 2500,
-    "history_length": 96,
     "bootstrap_replicates": 10000,
     "bootstrap_rng_seed": 3606,
+    "history_length": 96,
+    "interval_95": [
+      -1.89879339,
+      -1.88022663
+    ],
     "mean": -1.8894736224815682,
-    "interval_95": [-1.89879339, -1.88022663],
-    "rule": "full width of V2-only bootstrap interval"
+    "public_worlds": 2500,
+    "rule": "full width of V2-only bootstrap interval",
+    "source": "v2/results/V2.4.4/gate-3-bma-information-curves-per_world.json"
   },
-  "seed_blocks": {
-    "barred_custody_seed": [3600000, 3600000],
-    "barred_first_pilot": [3600001, 3603999],
-    "fresh_pilot_barred_on_consumption": [3660000, 3663999],
-    "gate2_closed": [3604000, 3613999],
-    "gate3_closed": [3614000, 3629999],
-    "gate4_closed": [3630000, 3634999],
-    "gate5_closed": [3635000, 3659999],
-    "diagnosis_remainder_closed": [3664000, 3679999],
-    "escrow_closed": {
-      "C-V36A": [4100000, 4109999],
-      "C-V36B": [4110000, 4119999],
-      "C-V36C": [4120000, 4129999]
+  "noninferiority_margin_nats_per_token": 0.018566762350958,
+  "pilot_to_floor": {
+    "attainability_requires_signed_95_interval": true,
+    "calibration_allowance": 0.03,
+    "effect_fraction": 0.5,
+    "recovery_fraction": 0.9
+  },
+  "retained_descriptive_findings": {
+    "premature_do_over_endpoint_path_independence": {
+      "first_pilot": {
+        "declaration": "equivalence",
+        "interval_95": [
+          -0.018567536075274952,
+          0.04911686181384986
+        ],
+        "mean": 0.015139500753264512
+      },
+      "floor": null,
+      "fresh_event_indexed_pilot": {
+        "declaration": "positive causal effect",
+        "interval_95": [
+          -0.03688060730166053,
+          0.021721859932301718
+        ],
+        "mean": -0.007591287369016907
+      },
+      "gate_criterion": false,
+      "required_in_every_downstream_profile": true,
+      "v3_3_cross_reference": "premature shortcut alone was not durable; post-revision do-over equivalence remains"
     }
   },
-  "criteria": "PENDING_MECHANICAL_PILOT_FREEZE"
+  "seed_blocks": {
+    "barred_custody_seed": [
+      3600000,
+      3600000
+    ],
+    "barred_first_pilot": [
+      3600001,
+      3603999
+    ],
+    "diagnosis_remainder_closed": [
+      3664000,
+      3679999
+    ],
+    "escrow_closed": {
+      "C-V36A": [
+        4100000,
+        4109999
+      ],
+      "C-V36B": [
+        4110000,
+        4119999
+      ],
+      "C-V36C": [
+        4120000,
+        4129999
+      ]
+    },
+    "fresh_pilot_barred_on_consumption": [
+      3660000,
+      3663999
+    ],
+    "gate2_closed": [
+      3604000,
+      3613999
+    ],
+    "gate3_closed": [
+      3614000,
+      3629999
+    ],
+    "gate4_closed": [
+      3630000,
+      3634999
+    ],
+    "gate5_closed": [
+      3635000,
+      3659999
+    ]
+  },
+  "stage": "V3.6",
+  "status": "STAGE0_MECHANICALLY_FROZEN_AWAITING_SEALS",
+  "tolerance": 1e-10
 }

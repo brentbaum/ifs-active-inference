@@ -427,17 +427,52 @@ def _mechanical_freeze(result: Mapping[str, Any]) -> None:
         "effect_minima": {
             name: 0.5 * abs(float(values["mean"]))
             for name, values in result["effects"].items()
+            if name != "premature_do_over"
         },
         "stakes_policy_effect_min": 0.5 * abs(float(result["stakes_policy_low_minus_high"]["mean"])),
         "stakes_scientific_identity_tolerance": TOLERANCE,
         "equivalence_rope": 0.01,
         "noninferiority_margin_nats_per_token": parameters["noninferiority_margin_nats_per_token"],
     }
+    first = json.loads(
+        (RESULTS / "stage-0-attainability-pilot.json").read_text()
+    )["effects"]["premature_do_over"]
+    fresh = result["effects"]["premature_do_over"]
+    parameters["retained_descriptive_findings"] = {
+        "premature_do_over_endpoint_path_independence": {
+            "floor": None,
+            "gate_criterion": False,
+            "required_in_every_downstream_profile": True,
+            "first_pilot": {
+                "mean": first["mean"],
+                "interval_95": first["interval_95"],
+                "declaration": "equivalence",
+            },
+            "fresh_event_indexed_pilot": {
+                "mean": fresh["mean"],
+                "interval_95": fresh["interval_95"],
+                "declaration": "positive causal effect",
+            },
+            "v3_3_cross_reference": "premature shortcut alone was not durable; post-revision do-over equivalence remains",
+        }
+    }
     PARAMETERS.write_text(json.dumps(parameters, indent=2, sort_keys=True) + "\n")
     accounting_path = ROOT / "audits" / "v3.6-compression-accounting.json"
     accounting = json.loads(accounting_path.read_text())
     accounting["status"] = "stage-0 mechanically frozen"
     accounting["v3"]["per_world_structure_code_length"] = result["structure_code_length"]
+    accounting["finalization"] = {
+        "pilot_block": list(FRESH_PILOT_BLOCK),
+        "pilot_summary_sha256": parameters["fresh_pilot_summary_sha256"],
+        "v3_5_repair_factors_included": True,
+        "factor_and_constant_reductions_exceed_50_percent": True,
+        "one_structural_prior_only": True,
+        "named_v2_hypothesis_menu_in_scientific_state": False,
+        "separate_formation_and_reduction_edge_stores": False,
+        "independent_efficacy_or_episode_ontology": False,
+        "topology_or_trust_state_ontology": False,
+        "pareto_profile_required": True,
+    }
     accounting_path.write_text(json.dumps(accounting, indent=2, sort_keys=True) + "\n")
 
 
@@ -454,10 +489,13 @@ def _freeze_readiness(result: Mapping[str, Any]) -> None:
         "results/V3.6/stage0-custody-stop.json",
         "results/V3.6/stage0-custody-adjudication.md",
         "results/V3.6/stage0-adjudication.md",
+        "results/V3.6/stage0-adjudication-2.md",
         "results/V3.6/stage-0-attainability-pilot.json",
         "results/V3.6/stage0-pilot-diagnosis-stub.json",
         "results/V3.6/stage-0-adjudicated-attainability-pilot.json",
         "results/V3.6/stage-0-adjudicated-attainability-pilot-trace-hashes.json",
+        "results/V3.6/stage0-adjudicated-pilot-diagnosis-stub.json",
+        "results/V3.6/stage0-adjudication-2-conformance.json",
     ]
     hashes = {
         relative: hashlib.sha256((ROOT / relative).read_bytes()).hexdigest()
@@ -465,8 +503,12 @@ def _freeze_readiness(result: Mapping[str, Any]) -> None:
     }
     readiness = {
         "stage": "V3.6", "status": "STAGE0_FREEZE_READY_AWAITING_C_V36A_B_C_SEALS",
-        "gate1": "PASS", "fresh_pilot": "PASS",
+        "gate1": "PASS",
+        "fresh_pilot_formal_record": "FAIL_RETAINED_AS_DESCRIPTIVE_FINDING",
+        "stage0_adjudication_2_authorized_progression": True,
         "first_pilot_stop_retained": True,
+        "premature_do_over_floor": None,
+        "premature_do_over_gate_criterion": False,
         "floors_frozen_mechanically": True,
         "fresh_pilot_block": list(FRESH_PILOT_BLOCK),
         "gate_blocks_opened": False, "escrow_touched": False,
@@ -479,6 +521,49 @@ def _freeze_readiness(result: Mapping[str, Any]) -> None:
         "hash_algorithm": "sha256", "files": hashes,
         "escrow": {"C-V36A": [4100000, 4109999], "C-V36B": [4110000, 4119999], "C-V36C": [4120000, 4129999]},
     })
+    _write_json("stage0-pre-seal-package.json", {
+        "stage": "V3.6",
+        "status": readiness["status"],
+        "public_dummy": "protocols/v3.6-public-dummy.json",
+        "parameters": "protocols/v3.6-parameters.json",
+        "compression_accounting": "audits/v3.6-compression-accounting.json",
+        "freeze_manifest": "results/V3.6/stage0-freeze-manifest.json",
+        "freeze_manifest_sha256": hashlib.sha256(
+            (RESULTS / "stage0-freeze-manifest.json").read_bytes()
+        ).hexdigest(),
+        "gate_blocks_opened": False,
+        "escrow_touched": False,
+    })
+
+
+def run_adjudicated_freeze() -> dict[str, Any]:
+    result = json.loads(
+        (RESULTS / "stage-0-adjudicated-attainability-pilot.json").read_text()
+    )
+    failures = sorted(
+        name for name, values in result["effects"].items()
+        if not values["attainable"]
+    )
+    if failures != ["premature_do_over"]:
+        raise RuntimeError(f"adjudicated freeze mismatch: {failures}")
+    if result["stakes_identity_error_max"] > TOLERANCE:
+        raise RuntimeError("stakes identity no longer exact")
+    if not result["stakes_policy_low_minus_high"]["attainable"]:
+        raise RuntimeError("stakes policy effect not attainable")
+    conformance = {
+        "stage": "V3.6",
+        "authorization": "results/V3.6/stage0-adjudication-2.md",
+        "seed_consumption": [],
+        "only_nonattainable_contrast": failures,
+        "premature_floor": None,
+        "premature_gate_criterion": False,
+        "remaining_floors_frozen_mechanically": True,
+        "verdict": "PASS",
+    }
+    _write_json("stage0-adjudication-2-conformance.json", conformance)
+    _mechanical_freeze(result)
+    _freeze_readiness(result)
+    return conformance
 
 
 def run_fresh_pilot() -> dict[str, Any]:
@@ -501,14 +586,16 @@ def run_fresh_pilot() -> dict[str, Any]:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("command", choices=("gate1", "gate1-adjudicated", "fresh-pilot"))
+    parser.add_argument("command", choices=("gate1", "gate1-adjudicated", "fresh-pilot", "adjudicated-freeze"))
     args = parser.parse_args()
     if args.command == "gate1":
         result = run_gate1()
     elif args.command == "gate1-adjudicated":
         result = run_gate1_adjudicated()
-    else:
+    elif args.command == "fresh-pilot":
         result = run_fresh_pilot()
+    else:
+        result = run_adjudicated_freeze()
     print(json.dumps({"command": args.command, "verdict": result["verdict"]}, sort_keys=True))
 
 
