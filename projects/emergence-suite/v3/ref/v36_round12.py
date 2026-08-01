@@ -12,6 +12,7 @@ import itertools
 import json
 import math
 from dataclasses import dataclass
+from types import MappingProxyType
 from typing import Any, Mapping, Sequence
 
 import numpy as np
@@ -30,7 +31,7 @@ TOLERANCE = 1e-10
 DELTA = math.log(1.02)
 # Re-scoped by the evaluator's round-12 precommit custody adjudication.
 # The three block-first seeds are permanently barred.
-V2_NATIVE_BLOCK = (3_690_001, 3_691_999)
+V2_NATIVE_BLOCK = (3_700_000, 3_701_999)
 V3_NATIVE_BLOCK = (3_692_001, 3_693_999)
 EXTERNAL_QUALIFICATION_BLOCK = (3_694_001, 3_695_999)
 TOURNAMENT_BLOCK = (3_684_000, 3_689_999)
@@ -491,7 +492,16 @@ def _v2_context_native(
         seed, "v2-native-context-nuisance", 0,
         v24._nuisance_initial(), released_block, keys,  # noqa: SLF001
     )
-    context = 0
+    context = (
+        _sample_index(
+            seed, "v2-native-context-initial", 0,
+            v24.PARAMETERS["family_processes"]["context_split"][
+                "initial_distribution"
+            ],
+            released_block, keys,
+        )
+        if family == "context_split" else 0
+    )
     change_phase = 0
     change_stays = 0
     counts = [[0, 0], [0, 0]]
@@ -503,7 +513,17 @@ def _v2_context_native(
             descriptor = "then" if change_phase == 0 else "now"
         else:
             descriptor = ("then", "now", "none")[nuisance]
-        probability = v24._marker_likelihood(descriptor, "now_marker")  # noqa: SLF001
+        # The shared context target is binary (then/now).  Derive its row from
+        # the frozen three-valued marker CPT by marginalizing the excluded
+        # no-marker value and conditioning on the declared bridge support.
+        # Never assign the no-marker mass to `then` by complementation.
+        then_probability = v24._marker_likelihood(  # noqa: SLF001
+            descriptor, "then_marker"
+        )
+        now_probability = v24._marker_likelihood(  # noqa: SLF001
+            descriptor, "now_marker"
+        )
+        probability = now_probability / (then_probability + now_probability)
         values.append(_draw(
             seed, "v2-native-context-observation", time, probability,
             released_block, keys,
@@ -573,6 +593,250 @@ def _v2_contact_native(
         for time in range(PREFIX_SLICES + 1)
     ]
     return values[:PREFIX_SLICES], values[PREFIX_SLICES]
+
+
+# Seed-free native-fixture identity dummies.  These are production-side
+# finite expansions of the exact distributions used by the seeded fixture
+# constructors.  The independent oracle lives in v36_fixture_oracle.py and
+# imports none of these helpers.
+NATIVE_DUMMY_LENGTH = 2
+
+
+def _dummy_binary(probability_one: float, value: int) -> float:
+    return float(probability_one if value else 1.0 - probability_one)
+
+
+def _dummy_context_initial(
+    family: str,
+) -> tuple[tuple[tuple[int, ...], float], ...]:
+    if family == "context_split":
+        initial = v24.PARAMETERS["family_processes"][family][
+            "initial_distribution"
+        ]
+        return tuple(
+            ((context, 0, 0, 0, 0), float(mass))
+            for context, mass in enumerate(initial)
+        )
+    if family == "change_point":
+        return (((0, 0), 1.0),)
+    return tuple(
+        ((state,), float(mass))
+        for state, mass in enumerate(v24._nuisance_initial())  # noqa: SLF001
+    )
+
+
+def _dummy_context_descriptor(
+    family: str, state: tuple[int, ...]
+) -> str:
+    if family in {"context_split", "change_point"}:
+        return "then" if state[0] == 0 else "now"
+    return ("then", "now", "none")[state[0]]
+
+
+def _dummy_context_transition(
+    family: str, state: tuple[int, ...]
+) -> tuple[tuple[tuple[int, ...], float], ...]:
+    if family == "context_split":
+        context, n00, n01, n10, n11 = state
+        alpha = v24._cs_alpha()  # noqa: SLF001
+        counts = ((n00, n01), (n10, n11))[context]
+        row = np.asarray(alpha[context], dtype=float) + np.asarray(
+            counts, dtype=float
+        )
+        row /= float(row.sum())
+        output = []
+        for next_context, mass in enumerate(row):
+            updated = [n00, n01, n10, n11]
+            updated[context * 2 + next_context] += 1
+            output.append(((next_context, *updated), float(mass)))
+        return tuple(output)
+    if family == "change_point":
+        phase, stays = state
+        if phase:
+            return (((1, stays), 1.0),)
+        a, b = v24.PARAMETERS["family_processes"][family][
+            "hazard_beta_prior"
+        ]
+        switch = float(a / (a + b + stays))
+        return (((1, stays), switch), ((0, stays + 1), 1.0 - switch))
+    transition = v24._nuisance_transition()  # noqa: SLF001
+    return tuple(
+        ((next_state,), float(mass))
+        for next_state, mass in enumerate(transition[state[0]])
+    )
+
+
+def _dummy_context_bridge_probability(descriptor: str) -> float:
+    then = v24._marker_likelihood(descriptor, "then_marker")  # noqa: SLF001
+    now = v24._marker_likelihood(descriptor, "now_marker")  # noqa: SLF001
+    return float(now / (then + now))
+
+
+def native_v2_fixture_dummy_joint(
+    target: str,
+) -> Mapping[tuple[Any, ...], float]:
+    """Production-side two-slice native joint for one frozen V2 target."""
+    output: dict[tuple[Any, ...], float] = {}
+    if target == "identity":
+        for index, candidate in enumerate(v232_formation.LABELS):
+            row = v232_formation.slice_distribution(
+                candidate, event=True, precision="ordinary", control="low",
+                broadcast="integrated", real_danger=False,
+            )
+            probability = math.fsum(
+                float(row[atom_index])
+                for atom_index, atom in enumerate(v232_formation.SUPPORT)
+                if atom[0] == 1
+            )
+            for tokens in itertools.product((0, 1), repeat=NATIVE_DUMMY_LENGTH):
+                output[(index, tokens)] = float(v232_formation.PRIOR[index]) * math.prod(
+                    _dummy_binary(probability, token) for token in tokens
+                )
+    elif target == "outcome":
+        for truth, prior in enumerate(v234.JOINT_PRIOR):
+            for tokens in itertools.product((0, 1), repeat=NATIVE_DUMMY_LENGTH):
+                mass = float(prior)
+                for time, token in enumerate(tokens):
+                    likelihood, _ = v234.slice_likelihood(
+                        v234.Episode(time % 2, (time // 12) % 2, 1)
+                    )
+                    mass *= _dummy_binary(float(likelihood[truth]), token)
+                output[(truth, tokens)] = mass
+    elif target == "partner":
+        for initial, prior in enumerate(v26a.PRIOR):
+            for next_state in range(len(v26a.PRIOR)):
+                path_mass = float(prior) * float(
+                    v26a.TRANSITION[initial, next_state]
+                )
+                for tokens in itertools.product((0, 1), repeat=2):
+                    output[((initial, next_state), tokens)] = path_mass * math.prod((
+                        float(v26a.EMISSIONS[initial, tokens[0]]),
+                        float(v26a.EMISSIONS[next_state, tokens[1]]),
+                    ))
+    elif target == "contact":
+        for parameter, prior in enumerate(v26b.OUTCOME_PRIOR):
+            probability = float(v26b.OUTCOME_SUPPORT[parameter])
+            for tokens in itertools.product((0, 1), repeat=NATIVE_DUMMY_LENGTH):
+                output[(parameter, tokens)] = float(prior) * math.prod(
+                    _dummy_binary(probability, token) for token in tokens
+                )
+    elif target == "context":
+        def recurse(
+            family: str, time: int, state: tuple[int, ...], mass: float,
+            path: tuple[tuple[int, ...], ...], tokens: tuple[int, ...],
+        ) -> None:
+            probability = _dummy_context_bridge_probability(
+                _dummy_context_descriptor(family, state)
+            )
+            for token in (0, 1):
+                next_mass = mass * _dummy_binary(probability, token)
+                next_path = (*path, state)
+                next_tokens = (*tokens, token)
+                if time == NATIVE_DUMMY_LENGTH - 1:
+                    output[(family, next_path, next_tokens)] = next_mass
+                else:
+                    for next_state, transition_mass in _dummy_context_transition(
+                        family, state
+                    ):
+                        recurse(
+                            family, time + 1, next_state,
+                            next_mass * transition_mass,
+                            next_path, next_tokens,
+                        )
+        for family_index, family in enumerate(v24.FAMILIES):
+            for state, initial_mass in _dummy_context_initial(family):
+                recurse(
+                    family, 0, state,
+                    float(v24.PRIOR[family_index]) * initial_mass, (), (),
+                )
+    else:
+        raise ValueError(f"unknown native target {target!r}")
+    return MappingProxyType(output)
+
+
+def native_v3_fixture_dummy_factors() -> Mapping[str, Mapping[tuple[Any, ...], float]]:
+    """Production-side factorized one-slice joint of the V3 native fixture."""
+    protect: dict[tuple[Any, ...], float] = {}
+    structure_weights = np.asarray(
+        [math.exp(v35.structure_log_prior(item)) for item in v35.PROGRAMS],
+        dtype=float,
+    )
+    structure_weights /= float(structure_weights.sum())
+    time = 1
+    action = time % 2
+    for structure_index, (structure, structure_mass) in enumerate(
+        zip(v35.PROGRAMS, structure_weights)
+    ):
+        signs = (-1, 1) if structure.cross_mode_outcome else (0,)
+        for sign in signs:
+            for reliable in (0, 1):
+                for contact in (0, 1):
+                    latent_mass = float(structure_mass) / len(signs) / 4.0
+                    for active_values in itertools.product(
+                        (0, 1), repeat=structure.active_modes
+                    ):
+                        modes = tuple(active_values) + (0,) * (
+                            3 - structure.active_modes
+                        )
+                        mode_mass = 0.5 ** structure.active_modes
+                        policy_value = 2 if action else 0
+                        policy = tuple(
+                            policy_value if index < structure.active_modes else 1
+                            for index in range(3)
+                        )
+                        probabilities = (
+                            v35.root_signal_probability(1, modes, structure),
+                            v35.outcome_probability(
+                                policy, modes, structure, sign
+                            ),
+                            v35.partner_channel_probability(
+                                1, reliable, "remaining"
+                            ),
+                            v35.contact_probability(
+                                1, reliable, policy[0], contact
+                            ),
+                        )
+                        for tokens in itertools.product((0, 1), repeat=4):
+                            mass = latent_mass * mode_mass * math.prod(
+                                _dummy_binary(probability, token)
+                                for probability, token in zip(
+                                    probabilities, tokens
+                                )
+                            )
+                            protect[(
+                                structure_index, sign, reliable, contact,
+                                modes, tokens,
+                            )] = mass
+
+    temporal: dict[tuple[Any, ...], float] = {}
+    supports: tuple[Sequence[Any], ...] = (
+        (1, 2, 3), v32.SCOPES, v32.SCOPES,
+        v32.DYNAMICS, v32.DYNAMICS,
+    )
+    priors = tuple(v32._prior(support) for support in supports)  # noqa: SLF001
+    program_index = {program: index for index, program in enumerate(v32.PROGRAMS)}
+    for values in itertools.product(*(range(len(support)) for support in supports)):
+        program = v32.TemporalStructure(
+            int(supports[0][values[0]]),
+            (str(supports[1][values[1]]), str(supports[2][values[2]])),
+            (str(supports[3][values[3]]), str(supports[4][values[4]])),
+        )
+        prior_mass = math.prod(
+            float(prior[index]) for prior, index in zip(priors, values)
+        )
+        context = int(v32.context_path(program, TOTAL_SLICES, "natural")[time])
+        probability = v32.emission_probability(
+            program.scopes[0], program.dynamics[0], cue=time % 3,
+            context=context, time=time, length=TOTAL_SLICES,
+        )
+        for token in (0, 1):
+            temporal[(program_index[program], context, token)] = (
+                prior_mass * _dummy_binary(probability, token)
+            )
+    return MappingProxyType({
+        "protect": MappingProxyType(protect),
+        "temporal": MappingProxyType(temporal),
+    })
 
 
 def _v2_fixture_world(

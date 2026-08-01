@@ -21,7 +21,9 @@ SUITE_ROOT = ROOT.parent
 sys.path.insert(0, str(SUITE_ROOT))
 sys.path.insert(0, str(ROOT))
 
-from ref import v35, v36_bridge, v36_bridge_oracle, v36_round12  # noqa: E402
+from ref import (  # noqa: E402
+    v35, v36_bridge, v36_bridge_oracle, v36_fixture_oracle, v36_round12,
+)
 from ref.trace_sink import serializing_trace_context, traced_execution  # noqa: E402
 
 
@@ -68,6 +70,124 @@ def _write_report(name: str, title: str, result: Mapping[str, Any]) -> None:
         ]),
         encoding="utf-8",
     )
+
+
+def _distribution_identity(
+    production: Mapping[Any, float], oracle: Mapping[Any, float]
+) -> dict[str, Any]:
+    keys = set(production) | set(oracle)
+    maximum = max(
+        (abs(float(production.get(key, 0.0)) - float(oracle.get(key, 0.0)))
+         for key in keys),
+        default=0.0,
+    )
+    production_rows = sorted(
+        ((repr(key), float(value)) for key, value in production.items()),
+        key=lambda item: item[0],
+    )
+    oracle_rows = sorted(
+        ((repr(key), float(value)) for key, value in oracle.items()),
+        key=lambda item: item[0],
+    )
+    production_sum = math.fsum(production.values())
+    oracle_sum = math.fsum(oracle.values())
+    return {
+        "support_union_size": len(keys),
+        "production_probability_sum": float(production_sum),
+        "oracle_probability_sum": float(oracle_sum),
+        "max_absolute_probability_error": float(maximum),
+        "production_sha256": hashlib.sha256(_canonical(production_rows)).hexdigest(),
+        "oracle_sha256": hashlib.sha256(_canonical(oracle_rows)).hexdigest(),
+        "passed": bool(
+            maximum <= TOLERANCE
+            and abs(production_sum - 1.0) <= TOLERANCE
+            and abs(oracle_sum - 1.0) <= TOLERANCE
+        ),
+    }
+
+
+def run_fixture_identity_proofs() -> dict[str, Any]:
+    """Permanent seed-free proof; it must pass before Population B."""
+    v2_results = {
+        target: _distribution_identity(
+            v36_round12.native_v2_fixture_dummy_joint(target),
+            v36_fixture_oracle.v2_joint(target),
+        )
+        for target in TARGETS
+    }
+    production_v3 = v36_round12.native_v3_fixture_dummy_factors()
+    oracle_v3 = v36_fixture_oracle.v3_factors()
+    v3_results = {
+        factor: _distribution_identity(
+            production_v3[factor], oracle_v3[factor]
+        )
+        for factor in ("protect", "temporal")
+    }
+    bridge_spec = json.loads(
+        (ROOT / "protocols" / "v3.6-r1-bridge-spec.json").read_text()
+    )
+    source_hashes = {
+        relative: hashlib.sha256(
+            (ROOT.parent / relative).read_bytes()
+        ).hexdigest()
+        for relative in bridge_spec["scientific_source_sha256"]
+    }
+    source_identity = source_hashes == bridge_spec["scientific_source_sha256"]
+    passed = (
+        all(item["passed"] for item in v2_results.values())
+        and all(item["passed"] for item in v3_results.values())
+        and source_identity
+    )
+    record = {
+        "stage": "V3.6-R1-round12",
+        "proof": "permanent_pre_block_native_fixture_identity",
+        "tolerance": TOLERANCE,
+        "dummy_slices": 2,
+        "seed_consumption": [],
+        "scientific_entry_points_invoked": [],
+        "v2_native_fixtures": v2_results,
+        "v3_native_generator_factorized_joint": v3_results,
+        "v3_full_joint_recombination": {
+            "production_sum": float(
+                math.fsum(production_v3["protect"].values())
+                * math.fsum(production_v3["temporal"].values())
+            ),
+            "oracle_sum": float(
+                math.fsum(oracle_v3["protect"].values())
+                * math.fsum(oracle_v3["temporal"].values())
+            ),
+            "factorization": "protect joint x temporal joint",
+        },
+        "scientific_source_hash_identity": source_identity,
+        "scientific_source_hashes": source_hashes,
+        "passed": passed,
+        "verdict": "PASS" if passed else "FAIL_APPARATUS_STOP",
+    }
+    trace_path = RESULTS / "v3.6-r1-native-fixture-identity-proof-trace.jsonl"
+    ledger_path = RESULTS / "v3.6-r1-native-fixture-identity-proof-trace-hashes.json"
+    if trace_path.exists() or ledger_path.exists():
+        raise RuntimeError("native fixture proof record already exists")
+    encoded = _canonical(record)
+    with trace_path.open("xb") as handle:
+        handle.write(encoded); handle.flush(); os.fsync(handle.fileno())
+    ledger = {
+        "file": trace_path.name,
+        "record_count": 1,
+        "sha256": hashlib.sha256(encoded).hexdigest(),
+        "persisted_before_output": True,
+        "seed_consumption": [],
+    }
+    ledger_path.write_text(
+        json.dumps(ledger, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    result = {**record, "custody": ledger}
+    _write_json("v3.6-r1-native-fixture-identity-proofs.json", result)
+    _write_report(
+        "v3.6-r1-native-fixture-identity-proofs.md",
+        "V3.6-R1 permanent native-fixture identity proofs", result,
+    )
+    return result
 
 
 def _persist_rows(
@@ -508,12 +628,17 @@ def run_v2_native() -> dict[str, Any]:
     )
     if precommit["verdict"] != "PASS":
         raise RuntimeError("round-12 precommitments are not PASS")
+    fixture_proofs = json.loads(
+        (RESULTS / "v3.6-r1-native-fixture-identity-proofs.json").read_text()
+    )
+    if fixture_proofs["verdict"] != "PASS":
+        raise RuntimeError("pre-block native-fixture identity proofs are not PASS")
     seeds = list(range(
         v36_round12.V2_NATIVE_BLOCK[0],
         v36_round12.V2_NATIVE_BLOCK[1] + 1,
     ))
     rows, ledger = _persist_rows(
-        "v3.6-r1-round12-v2-native", seeds, _v2_native_row,
+        "v3.6-r1-round12-v2-native-replacement", seeds, _v2_native_row,
         chunksize=2,
     )
     targets = {}
@@ -549,17 +674,17 @@ def run_v2_native() -> dict[str, Any]:
         "targets": targets, "failures": failures, "custody": ledger,
         "verdict": "PASS" if not failures else "FAIL_APPARATUS_STOP",
     }
-    _write_json("v3.6-r1-round12-v2-native-qualification.json", result)
+    _write_json("v3.6-r1-round12-v2-native-replacement-qualification.json", result)
     _write_report(
-        "v3.6-r1-round12-v2-native-qualification.md",
-        "V3.6-R1 Population B native qualification", result,
+        "v3.6-r1-round12-v2-native-replacement-qualification.md",
+        "V3.6-R1 replacement Population B native qualification", result,
     )
     return result
 
 
 def run_v3_native() -> dict[str, Any]:
     previous = json.loads(
-        (RESULTS / "v3.6-r1-round12-v2-native-qualification.json").read_text()
+        (RESULTS / "v3.6-r1-round12-v2-native-replacement-qualification.json").read_text()
     )
     if previous["verdict"] != "PASS":
         raise RuntimeError("Population B did not pass")
@@ -789,11 +914,12 @@ def run_tournament() -> dict[str, Any]:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("phase", choices=(
-        "precommit", "v2-native", "v3-native", "external", "tournament"
+        "precommit", "fixture-proofs", "v2-native", "v3-native", "external", "tournament"
     ))
     phase = parser.parse_args().phase
     runners = {
         "precommit": run_precommit,
+        "fixture-proofs": run_fixture_identity_proofs,
         "v2-native": run_v2_native,
         "v3-native": run_v3_native,
         "external": run_external_qualification,

@@ -335,3 +335,32 @@ Additional ready-for-evaluator-commit files:
 - `scripts/diagnose_v36_population_b_context.py`
 - `results/V3.6/population-b-context-ece-decomposition.json`
 - `results/V3.6/population-b-context-ece-decomposition.md`
+
+### Native-fixture permanent-proof honest stop
+
+The fixture-only repair and six-family proof apparatus were implemented, but
+the persisted pre-block proof returned **FAIL_APPARATUS_STOP** before any seed
+was opened. The V2 partner proof normalized to `1.7912`: both independently
+authored paths mistakenly treated V2.6a's four typed-channel success
+probabilities as binary outcome columns. Every other fixture identity and all
+frozen scientific hashes passed. No self-authorized proof repair was made.
+
+New ready-for-evaluator-commit files:
+
+- `ref/v36_round12.py`
+- `ref/v36_fixture_oracle.py`
+- `scripts/run_v36_round12.py`
+- `tests/test_v36_round12.py`
+- `protocols/v3.6-r1-analysis-plan.md`
+- `protocols/v3.6-r1-bridge-spec.json`
+- `results/V3.6/v3.6-r1-native-fixture-identity-proof-trace.jsonl`
+- `results/V3.6/v3.6-r1-native-fixture-identity-proof-trace-hashes.json`
+- `results/V3.6/v3.6-r1-native-fixture-identity-proofs.json`
+- `results/V3.6/v3.6-r1-native-fixture-identity-proofs.md`
+- `results/V3.6/native-fixture-proof-diagnosis-stub.json`
+- `results/V3.6/native-fixture-proof-diagnosis-stub.md`
+- `results/V3.6/ready-to-commit.md`
+
+Seed consumption in this dispatch: none. Replacement Population B,
+Populations A/C, the tournament, Gate 4, Gate 5, diagnosis reserves, barred
+blocks, and escrows remain untouched.

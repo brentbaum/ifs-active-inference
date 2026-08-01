@@ -1,0 +1,38 @@
+{
+  "stage": "V3.6-R1-round12",
+  "status": "HONEST_STOP_PRE_BLOCK_NATIVE_FIXTURE_PROOF_FAILURE",
+  "proof_verdict": "FAIL_APPARATUS_STOP",
+  "seed_consumption": [],
+  "replacement_population_b_opened": false,
+  "localization": {
+    "failed_fixture": "v2 partner",
+    "production_probability_sum": 1.7912000000000001,
+    "oracle_probability_sum": 1.7912000000000001,
+    "production_vs_oracle_max_absolute_error": 2.7755575615628914e-17,
+    "exact_error": "The proof indexed v26a.EMISSIONS[state, token] as a two-category emission row. EMISSIONS is instead a 4-column vector of Bernoulli success probabilities for the typed channels (regulation, remaining, respect, trust). The native fixture uses the remaining channel, EMISSIONS[state, 1], followed by a Bernoulli observation. Summing columns 0 and 1 as if they were complementary categories makes the enumerated joint non-normalized.",
+    "independence_failure": "Production and oracle were separately authored but repeated the same semantic indexing error; path equality alone was therefore necessary but insufficient."
+  },
+  "passing_items": {
+    "v2_identity": 0.0,
+    "v2_outcome": 0.0,
+    "v2_context": 8.673617379884035e-19,
+    "v2_contact": 0.0,
+    "v3_protect_factor": 5.421010862427522e-20,
+    "v3_temporal_factor": 6.938893903907228e-18,
+    "scientific_source_hash_identity": true
+  },
+  "custody": {
+    "proof_trace_persisted_before_output": true,
+    "proof_trace_sha256": "b251cf2309be627f6a20dd328e6cc6bd8a03533ccab8e74192a46f4986ab7bb0",
+    "seed_consumption": []
+  },
+  "unopened_blocks": {
+    "replacement_population_B": [3700000, 3701999],
+    "population_A": [3692001, 3693999],
+    "population_C": [3694001, 3695999],
+    "tournament": [3684000, 3689999],
+    "gate_4": [3630000, 3634999],
+    "gate_5": [3635000, 3659999]
+  },
+  "action": "STOP pending external adjudication; no local proof repair or seeded execution."
+}

@@ -2,18 +2,60 @@ import hashlib
 import json
 import unittest
 
-from ref import v36_bridge, v36_round12
+from ref import v36_bridge, v36_fixture_oracle, v36_round12
 from ref.trace_sink import serializing_trace_context
 
 
 class V36Round12Tests(unittest.TestCase):
     def test_custody_rescoped_blocks_exclude_barred_first_seeds(self):
-        self.assertEqual(v36_round12.V2_NATIVE_BLOCK, (3_690_001, 3_691_999))
+        self.assertEqual(v36_round12.V2_NATIVE_BLOCK, (3_700_000, 3_701_999))
         self.assertEqual(v36_round12.V3_NATIVE_BLOCK, (3_692_001, 3_693_999))
         self.assertEqual(
             v36_round12.EXTERNAL_QUALIFICATION_BLOCK,
             (3_694_001, 3_695_999),
         )
+
+    def test_context_fixture_uses_module_prior_and_exact_marker_bridge(self):
+        initial = v36_round12._dummy_context_initial("context_split")
+        self.assertEqual([mass for _state, mass in initial], [0.5, 0.5])
+        for descriptor in ("then", "now", "none"):
+            row = v36_round12.v24.PARAMETERS["observation_interface"][
+                "context_marker_cpt_nonmissing"
+            ][descriptor]
+            expected = row[1] / (row[0] + row[1])
+            self.assertLessEqual(
+                abs(
+                    v36_round12._dummy_context_bridge_probability(descriptor)
+                    - expected
+                ),
+                1e-10,
+            )
+
+    def test_all_native_fixture_dummy_joints_match_independent_oracle(self):
+        for target in v36_round12.TARGETS:
+            production = v36_round12.native_v2_fixture_dummy_joint(target)
+            oracle = v36_fixture_oracle.v2_joint(target)
+            keys = set(production) | set(oracle)
+            self.assertLessEqual(
+                max(abs(production.get(key, 0.0) - oracle.get(key, 0.0)) for key in keys),
+                1e-10,
+                target,
+            )
+        production_v3 = v36_round12.native_v3_fixture_dummy_factors()
+        oracle_v3 = v36_fixture_oracle.v3_factors()
+        for factor in ("protect", "temporal"):
+            keys = set(production_v3[factor]) | set(oracle_v3[factor])
+            self.assertLessEqual(
+                max(
+                    abs(
+                        production_v3[factor].get(key, 0.0)
+                        - oracle_v3[factor].get(key, 0.0)
+                    )
+                    for key in keys
+                ),
+                1e-10,
+                factor,
+            )
 
     def test_shared_target_support_audit(self):
         result = v36_round12.shared_target_support_audit()
