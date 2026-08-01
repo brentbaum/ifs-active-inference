@@ -308,3 +308,30 @@ Ready for evaluator commit:
 The 45 MB raw trace file is local at
 `results/V3.6/v3.6-r1-round12-v2-native-traces.jsonl` and is custody-pinned by
 the committed per-record hash ledger; it is ignored by repository policy.
+
+### Evaluator-ordered Population-B context ECE decomposition
+
+Read-only diagnosis used the retained trace bundle and deterministic finite
+enumeration. No new world or qualification seed was consumed.
+
+- Fixture identity is refuted: the three-slice full-support joint has maximum
+  absolute probability error `0.07872545454545457`. The fixture hard-codes
+  context-split initial mass `[1,0]` instead of `[0.5,0.5]` and folds the
+  frozen marker CPT's `none_marker` mass into `then`.
+- Context ECE `0.057465146695993494` exceeds the 2,000-replicate calibrated
+  parametric-null q99 `0.03684742695387956`; upper-tail plus-one probability
+  is `0.0004997501249375312`. None of the four control targets exceeds its
+  null q99.
+- The largest terminal-bin contribution is `[0.9,1.0)`: 142 worlds, mean
+  `P(now)=0.926353`, observed rate `0.739437`, ECE contribution `0.013278`.
+- Overprediction of `now_marker` is present early and late. An independently
+  written sequential filter matches every retained terminal forecast to
+  `6.661338147750939e-16`.
+- The earlier unit-test sink custody note remains retained and consumed zero
+  seeds.
+
+Additional ready-for-evaluator-commit files:
+
+- `scripts/diagnose_v36_population_b_context.py`
+- `results/V3.6/population-b-context-ece-decomposition.json`
+- `results/V3.6/population-b-context-ece-decomposition.md`
