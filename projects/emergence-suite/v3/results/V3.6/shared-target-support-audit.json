@@ -1,0 +1,196 @@
+{
+  "context_process": {
+    "bespoke_0_8_0_2_rule": false,
+    "emission_function": "v3.ref.v32.emission_probability",
+    "path_function": "v3.ref.v32.context_path"
+  },
+  "partner_process": {
+    "emission_grid": [
+      0.2,
+      0.5,
+      0.8
+    ],
+    "states": [
+      0,
+      1
+    ],
+    "transition": [
+      [
+        0.88,
+        0.12
+      ],
+      [
+        0.12,
+        0.88
+      ]
+    ]
+  },
+  "passed": true,
+  "selection_uses_model_score_difference": false,
+  "shared_action_schedule": "do(action)=time mod 2; never scored",
+  "stage": "V3.6-R1-round12",
+  "status": "PRE_CRITERION_FROZEN",
+  "strata": [
+    "acute_one",
+    "chronic_one",
+    "chronic_multiple",
+    "real_danger_adaptive"
+  ],
+  "stratum_labels_enter_inference": false,
+  "targets": {
+    "contact": {
+      "external_public_grid": [
+        0.2,
+        0.5,
+        0.8
+      ],
+      "finite_nonzero_support": true,
+      "intersection": [
+        0,
+        1
+      ],
+      "lexicographic_selection": {
+        "high": 0.8,
+        "low": 0.2,
+        "medium": 0.5
+      },
+      "observable_values_v2": [
+        0,
+        1
+      ],
+      "observable_values_v3": [
+        0,
+        1
+      ]
+    },
+    "context": {
+      "external_public_grid": [
+        0.2,
+        0.5,
+        0.8
+      ],
+      "finite_nonzero_support": true,
+      "intersection": [
+        0,
+        1
+      ],
+      "lexicographic_selection": {
+        "high": 0.8,
+        "low": 0.2,
+        "medium": 0.5
+      },
+      "observable_values_v2": [
+        0,
+        1
+      ],
+      "observable_values_v3": [
+        0,
+        1
+      ],
+      "public_v3_2_emission_representatives": [
+        {
+          "canonical_name": "context_specific:discrete_recurrent_context:cue0:context0:t0",
+          "context": 0,
+          "cue": 0,
+          "dynamics": "discrete_recurrent_context",
+          "probability": 0.2,
+          "scope": "context_specific",
+          "time": 0
+        },
+        {
+          "canonical_name": "context_specific:static:cue0:context0:t0",
+          "context": 0,
+          "cue": 0,
+          "dynamics": "static",
+          "probability": 0.5,
+          "scope": "context_specific",
+          "time": 0
+        },
+        {
+          "canonical_name": "shared_global:discrete_recurrent_context:cue0:context1:t0",
+          "context": 1,
+          "cue": 0,
+          "dynamics": "discrete_recurrent_context",
+          "probability": 0.8,
+          "scope": "shared_global",
+          "time": 0
+        }
+      ]
+    },
+    "identity": {
+      "external_public_grid": [
+        0.2,
+        0.5,
+        0.8
+      ],
+      "finite_nonzero_support": true,
+      "intersection": [
+        0,
+        1
+      ],
+      "lexicographic_selection": {
+        "high": 0.8,
+        "low": 0.2,
+        "medium": 0.5
+      },
+      "observable_values_v2": [
+        0,
+        1
+      ],
+      "observable_values_v3": [
+        0,
+        1
+      ]
+    },
+    "outcome": {
+      "external_public_grid": [
+        0.2,
+        0.5,
+        0.8
+      ],
+      "finite_nonzero_support": true,
+      "intersection": [
+        0,
+        1
+      ],
+      "lexicographic_selection": {
+        "high": 0.8,
+        "low": 0.2,
+        "medium": 0.5
+      },
+      "observable_values_v2": [
+        0,
+        1
+      ],
+      "observable_values_v3": [
+        0,
+        1
+      ]
+    },
+    "partner": {
+      "external_public_grid": [
+        0.2,
+        0.5,
+        0.8
+      ],
+      "finite_nonzero_support": true,
+      "intersection": [
+        0,
+        1
+      ],
+      "lexicographic_selection": {
+        "high": 0.8,
+        "low": 0.2,
+        "medium": 0.5
+      },
+      "observable_values_v2": [
+        0,
+        1
+      ],
+      "observable_values_v3": [
+        0,
+        1
+      ]
+    }
+  }
+}

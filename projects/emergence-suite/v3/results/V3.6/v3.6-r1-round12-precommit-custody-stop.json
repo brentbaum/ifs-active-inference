@@ -1,0 +1,53 @@
+{
+  "stage": "V3.6-R1-round12",
+  "phase": "precommitment custody boundary",
+  "classification": "CUSTODY_FAILURE_PRECOMMIT_SMOKE_CONSUMED_ASSIGNED_SEEDS_WITHOUT_PERSISTED_LEDGERS_AND_GIT_METADATA_READ_ONLY",
+  "precommitment_verdict": "PASS",
+  "precommitment_manifest": "v3.6-r1-round12-precommit-manifest.json",
+  "precommitment_manifest_hash_count": 17,
+  "precommitment_manifest_mismatch_count": 0,
+  "v3_test_suite": {
+    "passed": 70,
+    "failed": 0
+  },
+  "git_operation": {
+    "attempted": true,
+    "staged_files": false,
+    "commit_created": false,
+    "error": "fatal: Unable to create '/Users/brentbaum/dev/research/ifs-active-inference/.git/index.lock': Operation not permitted"
+  },
+  "seed_consumption": [
+    {
+      "seed": 3690000,
+      "population": "B_v2_target_native",
+      "operations": "five target-native fixture smoke calls",
+      "trace_context": "in-memory only",
+      "persisted_event_ledger": false,
+      "criterion_evaluated": false
+    },
+    {
+      "seed": 3692000,
+      "population": "A_v3_complete_native",
+      "operations": "one native world plus calibration-state smoke call",
+      "trace_context": "in-memory only",
+      "persisted_event_ledger": false,
+      "criterion_evaluated": false
+    },
+    {
+      "seed": 3694000,
+      "population": "C_external_shared_support",
+      "operations": "one external-world smoke call",
+      "trace_context": "in-memory only",
+      "persisted_event_ledger": false,
+      "criterion_evaluated": false
+    }
+  ],
+  "population_b_opened": true,
+  "population_a_opened": true,
+  "population_c_opened": true,
+  "tournament_opened": false,
+  "gate4_opened": false,
+  "gate5_opened": false,
+  "escrow_touched": false,
+  "next_action": "Return to evaluator for custody adjudication. The assigned qualification blocks cannot be run ascending and gap-free without addressing the three prematurely consumed first seeds."
+}

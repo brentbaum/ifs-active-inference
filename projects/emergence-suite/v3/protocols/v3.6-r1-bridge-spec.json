@@ -1,6 +1,6 @@
 {
   "stage": "V3.6-R1",
-  "status": "PRE_CRITERION_FROZEN_COMMON_TARGET_BRIDGE",
+  "status": "ROUND12_PRE_CRITERION_REQUALIFICATION",
   "r0_document": {
     "heldout_suffix": 16,
     "inference_prefix": 48,
@@ -46,7 +46,20 @@
     "bridge_own_prior": [3680000, 3681999],
     "bridge_fixed_stratum": [3682000, 3683999],
     "diagnosis_only": [3690000, 3699999],
-    "repaired_tournament": [3684000, 3689999]
+    "repaired_tournament": [3684000, 3689999],
+    "round12_v2_target_native": [3690000, 3691999],
+    "round12_v3_complete_native": [3692000, 3693999],
+    "round12_external_qualification": [3694000, 3695999],
+    "round12_diagnosis_only": [3696000, 3699999]
+  },
+  "round12": {
+    "hybrid_generator_status": "HYBRID_GENERATOR_DIAGNOSIS_ONLY",
+    "permanent_proof_15": "forecast-semantics identity for all five targets and both model adapters at 1e-10",
+    "external_generator_spec": "protocols/v3.6-r1-round12-external-generator.json",
+    "target_semantic_audit": "protocols/v3.6-r1-round12-target-semantic-audit.json",
+    "calibration_weighting": "one total unit per world; equal split across its delivered tokens",
+    "calibration_bins": 10,
+    "serialization_failure": "FAIL_UNEXECUTABLE — REQUIRED CALIBRATION STATE NOT SERIALIZED"
   },
   "scientific_source_sha256": {
     "v2/protocols/v2.3.2-formation-parameters.json": "d1e3b7e329682802c72d8a35e2e53a18ae259e34cfb6800b899a794342d50d91",

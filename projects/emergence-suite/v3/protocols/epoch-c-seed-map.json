@@ -256,15 +256,15 @@
         3683999
       ],
       "v2_target_native_calibration": [
-        3690000,
+        3690001,
         3691999
       ],
       "v3_native_prior_calibration": [
-        3692000,
+        3692001,
         3693999
       ],
       "external_generator_qualification": [
-        3694000,
+        3694001,
         3695999
       ],
       "r1_diagnosis_reserve_only": [
@@ -275,7 +275,12 @@
         3684000,
         3689999
       ],
-      "note": "Round-12 external rulings, adopted by gate3-adjudication-amendment-4.md; one requalification cycle only."
+      "note": "Round-12 external rulings, adopted by gate3-adjudication-amendment-4.md; one requalification cycle only. Precommit custody adjudication 2026-08-01: block-first seeds barred, blocks re-scoped.",
+      "barred_precommit_smoke_seeds": [
+        3690000,
+        3692000,
+        3694000
+      ]
     }
   }
 }

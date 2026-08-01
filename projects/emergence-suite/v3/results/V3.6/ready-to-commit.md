@@ -210,3 +210,54 @@ Bridge-stop files ready to commit:
 - `results/V3.6/v3.6-r1-bridge-traces.jsonl` (local persisted trace bundle,
   ignored by repository policy and pinned by the hash ledger)
 - `results/V3.6/ready-to-commit.md`
+
+## Amendment 4 — round-12 precommitments
+
+- The consumed amendment-3 hybrid is retained and demoted to
+  `HYBRID_GENERATOR_DIAGNOSIS_ONLY`; it is neither model's native-prior
+  calibration population.
+- Permanent bridge proof 15 independently enumerates the posterior predictive
+  of each observable target for both model adapters. All ten comparisons have
+  maximum error `0.0`; no latent posterior is reused as a token forecast.
+- The V3 context adapter now conditions only on context emissions present in
+  the common document. It no longer manufactures V3.2 root, active-count,
+  scope, or dynamics diagnostic tokens. Frozen V2/V3 scientific sources and
+  parameters remain byte-identical.
+- `shared-target-support-audit.json` freezes binary intersection support and
+  the external `.20/.50/.80` public grid without consulting model score
+  differences. The external generator uses a declared two-state Markov partner
+  process, public V3.2 context path/emission functions, a common intervention
+  schedule, and four balanced metadata-only strata.
+- Calibration is frozen as world-weighted ten-bin ECE, with repaired
+  active-count top-label and macro-classwise definitions and deterministic HPD
+  class coverage. The complete factorized structure/class posterior and every
+  recomputation field must be serialized before aggregation.
+- `v3.6-r1-round12-precommit.json`: **PASS**. Fifteen bridge proofs pass,
+  support passes, and scientific-source hash identity passes.
+- `v3.6-r1-round12-precommit-manifest.json`: 17/17 hashes verified. No seed was
+  consumed.
+
+Phase-1 commit boundary: all files in the round-12 precommit manifest must be
+committed before Population B seed `3690000` is opened.
+
+### Phase-1 custody stop
+
+- Phase-1 relevant tests: V3 suite `70/70` green.
+- The 17-file precommit manifest verifies with zero mismatches.
+- `git add`/commit could not begin because `.git` is read-only in this
+  execution environment: creation of `.git/index.lock` returned `Operation not
+  permitted`. Nothing was staged.
+- Additional custody failure discovered and disclosed: precommit smoke calls
+  consumed the first assigned seed of Population B (`3690000`, five target
+  fixtures), Population A (`3692000`, native world plus calibration state),
+  and Population C (`3694000`, external world). Their trace contexts remained
+  in memory; no JSONL event ledger was persisted or hashed. No criterion was
+  evaluated.
+- No other qualification seed and no tournament, Gate 4, Gate 5, diagnosis,
+  barred, or escrow seed was opened.
+- Stop records:
+  `v3.6-r1-round12-precommit-custody-stop.json` and `.md`.
+
+Current disposition:
+**CUSTODY_FAILURE_PRECOMMIT_SMOKE_CONSUMED_ASSIGNED_SEEDS_WITHOUT_PERSISTED_LEDGERS_AND_GIT_METADATA_READ_ONLY**.
+Return to the evaluator for custody adjudication before any seeded execution.

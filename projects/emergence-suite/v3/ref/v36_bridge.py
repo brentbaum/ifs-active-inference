@@ -81,6 +81,20 @@ class TargetPrediction:
     delivered: tuple[bool, ...]
 
 
+@dataclass(frozen=True)
+class BridgeTemporalPosterior:
+    """Emission-only V3.2 posterior for the shared context target.
+
+    The canonical bridge document has no V3.2 root, active-count, scope, or
+    dynamics diagnostic token.  The adapter must therefore condition only on
+    the delivered context/localization emissions rather than manufacture
+    values for absent channels.
+    """
+
+    programs: tuple[v32.TemporalStructure, ...]
+    probabilities: tuple[float, ...]
+
+
 def _plain(value: Any) -> Any:
     if isinstance(value, Mapping):
         return {str(key): _plain(child) for key, child in value.items()}
@@ -448,21 +462,39 @@ def _v3_components(world: CanonicalWorld) -> tuple[tuple[v35.ProtectStructure, i
     return tuple((structure, sign, reliable, math.exp(log_value - normalizer), contact_q) for (structure, sign, reliable, contact_q), log_value in zip(rows, logs))
 
 
-def _temporal_prefix(world: CanonicalWorld) -> v32.TemporalWorld:
-    slices = []
-    for item in world.slices[:PREFIX_SLICES]:
-        slices.append(v32.TemporalSlice(
-            item.time, item.cue, item.context_input, "cue_emission",
-            0 if item.context is None else item.context, item.identity,
-            min(world.temporal_structure.active_contexts - 1, 2), 0, 0,
-            item.context is None,
-        ))
-    return v32.TemporalWorld(world.seed, world.temporal_structure, TOTAL_SLICES, 3, tuple(slices), 0.0, ())
+def _bridge_temporal_posterior(
+    world: CanonicalWorld,
+) -> BridgeTemporalPosterior:
+    """Posterior over frozen V3.2 programs using shared emissions only."""
+    log_weights = []
+    for program in v32.PROGRAMS:
+        value = v32.structure_log_prior(program)
+        for item in world.slices[:PREFIX_SLICES]:
+            if item.context is None:
+                continue
+            probability = v32.emission_probability(
+                program.scopes[0], program.dynamics[0], cue=item.cue,
+                context=item.context_input, time=item.time,
+                length=TOTAL_SLICES,
+            )
+            value += math.log(
+                probability if int(item.context) == 1
+                else 1.0 - probability
+            )
+        log_weights.append(value)
+    maximum = max(log_weights)
+    normalizer = maximum + math.log(
+        math.fsum(math.exp(value - maximum) for value in log_weights)
+    )
+    return BridgeTemporalPosterior(
+        tuple(v32.PROGRAMS),
+        tuple(math.exp(value - normalizer) for value in log_weights),
+    )
 
 
 def _v3_predictions(world: CanonicalWorld) -> Mapping[str, TargetPrediction]:
     components = _v3_components(world)
-    temporal = v32.score_world(_temporal_prefix(world))
+    temporal = _bridge_temporal_posterior(world)
     output: dict[str, TargetPrediction] = {}
     for target in ("identity", "outcome", "partner", "contact"):
         rows = []
@@ -604,7 +636,7 @@ def equivalence_profile(world: CanonicalWorld) -> Mapping[str, Any]:
             exact_truth_mass += mass
             component_truth_key = key
 
-    temporal = v32.score_world(_temporal_prefix(world))
+    temporal = _bridge_temporal_posterior(world)
     temporal_classes: dict[tuple[int, ...], float] = {}
     temporal_truth_key = None
     for program, mass in zip(temporal.programs, temporal.probabilities):
@@ -674,7 +706,7 @@ V2_MODULE_BY_TARGET = MappingProxyType({
 
 
 def bridge_proofs(dummy: CanonicalWorld) -> Mapping[str, Any]:
-    """Fourteen pre-criterion bridge proofs on a supplied public dummy."""
+    """Permanent pre-criterion bridge proofs on a supplied public dummy."""
     views = adapter_documents(dummy)
     v2 = score_v2(dummy)
     v3 = score_v3(dummy)
@@ -711,6 +743,24 @@ def bridge_proofs(dummy: CanonicalWorld) -> Mapping[str, Any]:
         relative: hashlib.sha256((source_root.parent / relative).read_bytes()).hexdigest()
         for relative in expected
     }
+    direct_forecast_errors: dict[str, dict[str, float]] = {}
+    for model, scored in (("v2", v2), ("v3", v3)):
+        direct = v36_bridge_oracle.direct_forecasts(dummy, model)
+        direct_forecast_errors[model] = {
+            target: max(
+                abs(float(left) - float(right))
+                for production_row, oracle_row in zip(
+                    scored[target].probabilities, direct[target]
+                )
+                for left, right in zip(production_row, oracle_row)
+            )
+            for target in TARGETS
+        }
+    forecast_semantics_error = max(
+        value
+        for model in direct_forecast_errors.values()
+        for value in model.values()
+    )
     proof_values = {
         "01_canonical_document_identity": views["v2"] == views["v3"],
         "02_target_token_identity": views["v2"]["targets"] == views["v3"]["targets"],
@@ -726,6 +776,9 @@ def bridge_proofs(dummy: CanonicalWorld) -> Mapping[str, Any]:
         "12_one_v2_module_per_target": len(V2_MODULE_BY_TARGET) == len(set(V2_MODULE_BY_TARGET.values())) == len(TARGETS),
         "13_bridge_input_copying": views["v2"] is not views["v3"] and views["v2"] == views["v3"],
         "14_scientific_source_bitwise_unchanged": observed_hashes == expected,
+        "15_forecast_semantics_identity_all_five_targets": (
+            forecast_semantics_error <= TOLERANCE
+        ),
     }
     return MappingProxyType({
         "proofs": proof_values,
@@ -734,4 +787,6 @@ def bridge_proofs(dummy: CanonicalWorld) -> Mapping[str, Any]:
         "recombination_error_max": recombination_error,
         "delivered_counts": delivered_v2,
         "source_hashes": observed_hashes,
+        "forecast_semantics_error_max": forecast_semantics_error,
+        "forecast_semantics_errors": direct_forecast_errors,
     })

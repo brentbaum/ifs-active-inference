@@ -1,0 +1,19 @@
+{
+  "stage": "V3.6-R1-round12",
+  "status": "PRE_CRITERION_FROZEN",
+  "tolerance": 1e-10,
+  "proof": "15_forecast_semantics_identity_all_five_targets",
+  "observable_targets": {
+    "identity": "sum_G q(G|history) p(identity_token|G)",
+    "outcome": "sum_theta q(theta|history) p(outcome_token|do(action),context,theta)",
+    "context": "sum_H q(H|history) p(localization_token|context_input,H)",
+    "partner": "sum_Lt,Lnext q(Lt|history) p(Lnext|Lt) p(response_token|Lnext)",
+    "contact": "sum_theta q(theta|history) p(contact_response_token|do(policy),theta)"
+  },
+  "models": ["v2", "v3"],
+  "fixture": "deterministic enumerable public dummy; no random seed",
+  "oracle": "ref/v36_bridge_oracle.py::direct_forecasts",
+  "oracle_independence": "imports no production bridge helper and independently recomputes every posterior predictive",
+  "latent_posterior_as_forecast_forbidden": true,
+  "failure_action": "adapter-only repair or honest stop; target may not be dropped or replaced"
+}

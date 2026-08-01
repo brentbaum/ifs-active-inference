@@ -1,0 +1,33 @@
+{
+  "stage": "V3.6-R1-round12",
+  "status": "PRE_CRITERION_FROZEN",
+  "ownership": "external; neither V2 nor V3 prior predictive",
+  "document": {
+    "slices": 64,
+    "prefix": 48,
+    "heldout": 16,
+    "one_serialized_document_per_seed": true,
+    "byte_identical_adapter_views": true,
+    "action_schedule": "do(action)=time mod 2; action selection is never scored",
+    "mask_schedule": "context unavailable when time mod 13 = 0"
+  },
+  "targets": {
+    "identity": "binary root state -> binary identity observation",
+    "outcome": "danger and do(action) prevention -> realized danger -> binary outcome observation",
+    "context": "v3.ref.v32.context_path -> v3.ref.v32.emission_probability",
+    "partner": "two-state Markov chain with transition [[.88,.12],[.12,.88]] -> response observation",
+    "contact": "partner state and intervened policy -> contact-response observation"
+  },
+  "external_public_grid": [0.2, 0.5, 0.8],
+  "grid_selection": "nearest to .20, .50, .80; ties numeric then canonical name; no model score differences",
+  "strata": [
+    "acute_one",
+    "chronic_one",
+    "chronic_multiple",
+    "real_danger_adaptive"
+  ],
+  "stratum_labels_enter_inference": false,
+  "qualification_balance": 500,
+  "tournament_balance": 1500,
+  "hybrid_predecessor_status": "HYBRID_GENERATOR_DIAGNOSIS_ONLY"
+}

@@ -1,0 +1,287 @@
+{
+  "bridge_proofs": {
+    "delivered_counts": {
+      "contact": 16,
+      "context": 15,
+      "identity": 16,
+      "outcome": 16,
+      "partner": 16
+    },
+    "forecast_semantics_error_max": 0.0,
+    "forecast_semantics_errors": {
+      "v2": {
+        "contact": 0.0,
+        "context": 0.0,
+        "identity": 0.0,
+        "outcome": 0.0,
+        "partner": 0.0
+      },
+      "v3": {
+        "contact": 0.0,
+        "context": 0.0,
+        "identity": 0.0,
+        "outcome": 0.0,
+        "partner": 0.0
+      }
+    },
+    "normalization_error_max": 3.3306690738754696e-16,
+    "passed": true,
+    "proofs": {
+      "01_canonical_document_identity": true,
+      "02_target_token_identity": true,
+      "03_mask_identity": true,
+      "04_equal_delivered_target_counts": true,
+      "05_no_sentinel_counted": true,
+      "06_deterministic_zero_rng_adapters": true,
+      "07_normalized_shared_predictions": true,
+      "08_target_unavailable_before_prediction": true,
+      "09_native_structural_prior_included": true,
+      "10_truth_clamped_recombination": true,
+      "11_no_exclusive_channel_in_primary": true,
+      "12_one_v2_module_per_target": true,
+      "13_bridge_input_copying": true,
+      "14_scientific_source_bitwise_unchanged": true,
+      "15_forecast_semantics_identity_all_five_targets": true
+    },
+    "recombination_error_max": 0.0,
+    "source_hashes": {
+      "v2/protocols/v2.3.2-formation-parameters.json": "d1e3b7e329682802c72d8a35e2e53a18ae259e34cfb6800b899a794342d50d91",
+      "v2/protocols/v2.3.4-parameters.json": "3dd0851363133a77c0e4433b5b41ba1e2fdaaaaa1f2973f7a579c2a8635c3c68",
+      "v2/protocols/v2.4-parameters.json": "94972204bdb406f3d5ff8a8aa2df3f8577f4a71dc0032a79c75990ada6455fde",
+      "v2/protocols/v2.6a-parameters.json": "3d4a2c4643d78c5167a8a763037051f940e379787f700a1804cc9d1d8533bb24",
+      "v2/protocols/v2.6b-parameters.json": "2403f587f665ef313a1383194a5271e49c67ee9d2cb222a29c85b33b6b61f2ca",
+      "v2/ref/v232_formation.py": "499e0688a114ce86ac67878c8d1e986596e2cd3a54fa1ebe3c9d4b7917a03b0e",
+      "v2/ref/v234.py": "2110c07ad3c7495e44955486da7695450c9560eadacef4eb1cfddcd034ac1c1d",
+      "v2/ref/v24.py": "9efb9654308ca3f558b9b098cea733265ea263819278c36320413d30638633a8",
+      "v2/ref/v26a.py": "e7d4284847257353f4bfbfe0122425702449080162bdba7b4c24736e9e62db63",
+      "v2/ref/v26b.py": "3752bc019ffa5e460afb40289bd56d53418156dbe0b2f4c04a9aa5f64335a998",
+      "v3/ref/v31.py": "0481e51acf72ee8018cb3c9a1c780570b22e05657cc687376f08ca99544149e0",
+      "v3/ref/v32.py": "0b990eb4c28f3dd61ec37b57742548c1f63147ec48fe8fac465cf2123dba9833",
+      "v3/ref/v33.py": "018ebac662a925a3ed5431197d8c5914049fa5e1b20787fd5b13de3310c977fd",
+      "v3/ref/v34.py": "f9a37a36a0393f9fd437776457cc48018db6cfe1d5195d95a9cbf5b2e90744cd",
+      "v3/ref/v35.py": "7b71e5a7c8003d27c7f1bcafc8deae2d2eed07dd80942066362a1d9c5da8c264",
+      "v3/ref/v36.py": "99fe821485b8112e84ab3fe2ea45f73bf8055be22003982089a135eb07f4dc72"
+    }
+  },
+  "failures": [],
+  "hybrid_generator_status": "HYBRID_GENERATOR_DIAGNOSIS_ONLY",
+  "phase": "precommitments",
+  "scientific_source_hash_identity": true,
+  "scientific_source_hashes": {
+    "v2/protocols/v2.3.2-formation-parameters.json": "d1e3b7e329682802c72d8a35e2e53a18ae259e34cfb6800b899a794342d50d91",
+    "v2/protocols/v2.3.4-parameters.json": "3dd0851363133a77c0e4433b5b41ba1e2fdaaaaa1f2973f7a579c2a8635c3c68",
+    "v2/protocols/v2.4-parameters.json": "94972204bdb406f3d5ff8a8aa2df3f8577f4a71dc0032a79c75990ada6455fde",
+    "v2/protocols/v2.6a-parameters.json": "3d4a2c4643d78c5167a8a763037051f940e379787f700a1804cc9d1d8533bb24",
+    "v2/protocols/v2.6b-parameters.json": "2403f587f665ef313a1383194a5271e49c67ee9d2cb222a29c85b33b6b61f2ca",
+    "v2/ref/v232_formation.py": "499e0688a114ce86ac67878c8d1e986596e2cd3a54fa1ebe3c9d4b7917a03b0e",
+    "v2/ref/v234.py": "2110c07ad3c7495e44955486da7695450c9560eadacef4eb1cfddcd034ac1c1d",
+    "v2/ref/v24.py": "9efb9654308ca3f558b9b098cea733265ea263819278c36320413d30638633a8",
+    "v2/ref/v26a.py": "e7d4284847257353f4bfbfe0122425702449080162bdba7b4c24736e9e62db63",
+    "v2/ref/v26b.py": "3752bc019ffa5e460afb40289bd56d53418156dbe0b2f4c04a9aa5f64335a998",
+    "v3/ref/v31.py": "0481e51acf72ee8018cb3c9a1c780570b22e05657cc687376f08ca99544149e0",
+    "v3/ref/v32.py": "0b990eb4c28f3dd61ec37b57742548c1f63147ec48fe8fac465cf2123dba9833",
+    "v3/ref/v33.py": "018ebac662a925a3ed5431197d8c5914049fa5e1b20787fd5b13de3310c977fd",
+    "v3/ref/v34.py": "f9a37a36a0393f9fd437776457cc48018db6cfe1d5195d95a9cbf5b2e90744cd",
+    "v3/ref/v35.py": "7b71e5a7c8003d27c7f1bcafc8deae2d2eed07dd80942066362a1d9c5da8c264",
+    "v3/ref/v36.py": "99fe821485b8112e84ab3fe2ea45f73bf8055be22003982089a135eb07f4dc72"
+  },
+  "seed_consumption": [],
+  "stage": "V3.6-R1-round12",
+  "support_audit": {
+    "context_process": {
+      "bespoke_0_8_0_2_rule": false,
+      "emission_function": "v3.ref.v32.emission_probability",
+      "path_function": "v3.ref.v32.context_path"
+    },
+    "partner_process": {
+      "emission_grid": [
+        0.2,
+        0.5,
+        0.8
+      ],
+      "states": [
+        0,
+        1
+      ],
+      "transition": [
+        [
+          0.88,
+          0.12
+        ],
+        [
+          0.12,
+          0.88
+        ]
+      ]
+    },
+    "passed": true,
+    "selection_uses_model_score_difference": false,
+    "shared_action_schedule": "do(action)=time mod 2; never scored",
+    "stage": "V3.6-R1-round12",
+    "status": "PRE_CRITERION_FROZEN",
+    "strata": [
+      "acute_one",
+      "chronic_one",
+      "chronic_multiple",
+      "real_danger_adaptive"
+    ],
+    "stratum_labels_enter_inference": false,
+    "targets": {
+      "contact": {
+        "external_public_grid": [
+          0.2,
+          0.5,
+          0.8
+        ],
+        "finite_nonzero_support": true,
+        "intersection": [
+          0,
+          1
+        ],
+        "lexicographic_selection": {
+          "high": 0.8,
+          "low": 0.2,
+          "medium": 0.5
+        },
+        "observable_values_v2": [
+          0,
+          1
+        ],
+        "observable_values_v3": [
+          0,
+          1
+        ]
+      },
+      "context": {
+        "external_public_grid": [
+          0.2,
+          0.5,
+          0.8
+        ],
+        "finite_nonzero_support": true,
+        "intersection": [
+          0,
+          1
+        ],
+        "lexicographic_selection": {
+          "high": 0.8,
+          "low": 0.2,
+          "medium": 0.5
+        },
+        "observable_values_v2": [
+          0,
+          1
+        ],
+        "observable_values_v3": [
+          0,
+          1
+        ],
+        "public_v3_2_emission_representatives": [
+          {
+            "canonical_name": "context_specific:discrete_recurrent_context:cue0:context0:t0",
+            "context": 0,
+            "cue": 0,
+            "dynamics": "discrete_recurrent_context",
+            "probability": 0.2,
+            "scope": "context_specific",
+            "time": 0
+          },
+          {
+            "canonical_name": "context_specific:static:cue0:context0:t0",
+            "context": 0,
+            "cue": 0,
+            "dynamics": "static",
+            "probability": 0.5,
+            "scope": "context_specific",
+            "time": 0
+          },
+          {
+            "canonical_name": "shared_global:discrete_recurrent_context:cue0:context1:t0",
+            "context": 1,
+            "cue": 0,
+            "dynamics": "discrete_recurrent_context",
+            "probability": 0.8,
+            "scope": "shared_global",
+            "time": 0
+          }
+        ]
+      },
+      "identity": {
+        "external_public_grid": [
+          0.2,
+          0.5,
+          0.8
+        ],
+        "finite_nonzero_support": true,
+        "intersection": [
+          0,
+          1
+        ],
+        "lexicographic_selection": {
+          "high": 0.8,
+          "low": 0.2,
+          "medium": 0.5
+        },
+        "observable_values_v2": [
+          0,
+          1
+        ],
+        "observable_values_v3": [
+          0,
+          1
+        ]
+      },
+      "outcome": {
+        "external_public_grid": [
+          0.2,
+          0.5,
+          0.8
+        ],
+        "finite_nonzero_support": true,
+        "intersection": [
+          0,
+          1
+        ],
+        "lexicographic_selection": {
+          "high": 0.8,
+          "low": 0.2,
+          "medium": 0.5
+        },
+        "observable_values_v2": [
+          0,
+          1
+        ],
+        "observable_values_v3": [
+          0,
+          1
+        ]
+      },
+      "partner": {
+        "external_public_grid": [
+          0.2,
+          0.5,
+          0.8
+        ],
+        "finite_nonzero_support": true,
+        "intersection": [
+          0,
+          1
+        ],
+        "lexicographic_selection": {
+          "high": 0.8,
+          "low": 0.2,
+          "medium": 0.5
+        },
+        "observable_values_v2": [
+          0,
+          1
+        ],
+        "observable_values_v3": [
+          0,
+          1
+        ]
+      }
+    }
+  },
+  "verdict": "PASS"
+}
