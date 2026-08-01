@@ -1,0 +1,41 @@
+{
+  "stage": "V3.6-R1-round12",
+  "population": "B",
+  "status": "FAIL_APPARATUS_STOP",
+  "authorization": "round12-precommit-custody-adjudication.md",
+  "seed_block": [3690001, 3691999],
+  "world_count": 1999,
+  "five_target_native_fixtures_per_seed": true,
+  "blocking_failure": {
+    "target": "context",
+    "criterion": "world-weighted ten-fixed-bin predictive ECE <= 0.05",
+    "observed": 0.057465146695993466,
+    "threshold": 0.05
+  },
+  "other_targets_passed": ["identity", "outcome", "partner", "contact"],
+  "identities": {
+    "maximum_forecast_normalization_error": 4.440892098500626e-16,
+    "maximum_adapter_vs_direct_enumeration_error": 1.1102230246251565e-16,
+    "all_proper_scores_finite": true
+  },
+  "custody": {
+    "ascending_gap_free": true,
+    "persisted_before_aggregation": true,
+    "record_count": 1999,
+    "trace_sha256": "96c3ded41e3dfb9fbe62a3417faf360ceaaab9a0af28990646b26f9616f42935",
+    "trace_hash_ledger_sha256": "27b50fac0aae47470f83b58541d02969293b31912504ea451b51eff9fad220d1",
+    "qualification_json_sha256": "6680690898ccca0694f9628278f4ac83a48787c2e7a24ba2691357773385d4fe",
+    "qualification_md_sha256": "ef146b5a13782c67ae9be1afba0ad81df6d58358e5180df5b78eb25ec69ebc52"
+  },
+  "pre_run_custody_incident_discovered_afterward": "v3.6-r1-round12-resumption-custody-stop.json",
+  "probative_status": "REQUIRES_EVALUATOR_ADJUDICATION",
+  "later_blocks_opened": false,
+  "unopened": {
+    "population_A": [3692001, 3693999],
+    "population_C": [3694001, 3695999],
+    "tournament": [3684000, 3689999],
+    "gate_4": [3630000, 3634999],
+    "gate_5": [3635000, 3659999]
+  },
+  "stop_rule": "The next apparatus failure ends the one requalification cycle; return to the evaluator before any further seed."
+}

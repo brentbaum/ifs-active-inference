@@ -7,6 +7,14 @@ from ref.trace_sink import serializing_trace_context
 
 
 class V36Round12Tests(unittest.TestCase):
+    def test_custody_rescoped_blocks_exclude_barred_first_seeds(self):
+        self.assertEqual(v36_round12.V2_NATIVE_BLOCK, (3_690_001, 3_691_999))
+        self.assertEqual(v36_round12.V3_NATIVE_BLOCK, (3_692_001, 3_693_999))
+        self.assertEqual(
+            v36_round12.EXTERNAL_QUALIFICATION_BLOCK,
+            (3_694_001, 3_695_999),
+        )
+
     def test_shared_target_support_audit(self):
         result = v36_round12.shared_target_support_audit()
         self.assertTrue(result["passed"])

@@ -1,0 +1,33 @@
+{
+  "stage": "V3.6-R1-round12",
+  "status": "CUSTODY_FAILURE_PUBLIC_DUMMY_SCORING_SINKS_NOT_PERSISTED_BEFORE_POPULATION_B",
+  "governing_record": "round12-precommit-custody-adjudication.md",
+  "incident": {
+    "command": "python3 -m unittest tests.test_v36_round12 tests.test_v36_bridge",
+    "seed_consumption": [],
+    "scored_inputs": "deterministic enumerable public dummies",
+    "trace_contexts": [
+      "test-v36-round12-calibration-state",
+      "test-v36-r1-public-dummy",
+      "test-v36-r1-forecast-semantics",
+      "test-v36-r1-oracle"
+    ],
+    "persisted_event_ledgers": false,
+    "printed_before_persistence": true,
+    "detected": "after the fully traced Population B runner returned FAIL_APPARATUS_STOP"
+  },
+  "population_B_record": {
+    "status_as_run": "FAIL_APPARATUS_STOP",
+    "seed_block": [3690001, 3691999],
+    "record_count": 1999,
+    "ascending_gap_free": true,
+    "persisted_before_aggregation": true,
+    "trace_sha256": "96c3ded41e3dfb9fbe62a3417faf360ceaaab9a0af28990646b26f9616f42935",
+    "qualification_json_sha256": "6680690898ccca0694f9628278f4ac83a48787c2e7a24ba2691357773385d4fe",
+    "blocking_context_ece": 0.057465146695993466,
+    "threshold": 0.05,
+    "custody_interpretation": "retained as run; evaluator must adjudicate whether it is probative because it followed the unrecognized test-sink violation"
+  },
+  "later_blocks_opened": false,
+  "action": "HONEST STOP; no rerun, repair, Population A/C, tournament, Gate 4, or Gate 5"
+}

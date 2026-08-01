@@ -261,3 +261,50 @@ committed before Population B seed `3690000` is opened.
 Current disposition:
 **CUSTODY_FAILURE_PRECOMMIT_SMOKE_CONSUMED_ASSIGNED_SEEDS_WITHOUT_PERSISTED_LEDGERS_AND_GIT_METADATA_READ_ONLY**.
 Return to the evaluator for custody adjudication before any seeded execution.
+
+### Round-12 custody adjudication and resumed execution
+
+The evaluator committed Phase 1 and adjudicated the three unpersisted smoke
+seeds. Seeds `3690000`, `3692000`, and `3694000` are permanently barred; the
+one-requalification budget remains unconsumed. Execution constants and public
+block declarations now use `3690001:3691999`, `3692001:3693999`, and
+`3694001:3695999`, matching `epoch-c-seed-map.json`. A regression test pins
+the rescope. No generation or scoring entry point was invoked while making or
+testing this custody-only change.
+
+### Round-12 Population B qualification stop
+
+- Consumed `3690001:3691999` exactly once, ascending and gap-free.
+- Persisted 1,999 per-seed trace records and their event ledgers before any
+  aggregation; trace SHA-256 is
+  `96c3ded41e3dfb9fbe62a3417faf360ceaaab9a0af28990646b26f9616f42935`.
+- Immutable verdict: **FAIL_APPARATUS_STOP**. Context target ECE was
+  `0.057465146695993466 > 0.05`; all other target ECEs, normalization,
+  adapter/direct-enumeration identities, and proper-score checks passed.
+- Per the cycle-ending stop rule, Population A, Population C, the tournament,
+  Gate 4, and Gate 5 remain unopened.
+- A further custody failure was discovered after Population B completed: the
+  targeted post-rescope unit command invoked deterministic public-dummy
+  scoring in four in-memory trace contexts without persisting those event
+  ledgers before printing. It consumed no seed, but the ruling permits no
+  exception. Population B's fully traced FAIL is retained as run and marked
+  `REQUIRES_EVALUATOR_ADJUDICATION`; no later block was opened.
+
+Ready for evaluator commit:
+
+- `ref/v36_round12.py`
+- `protocols/v3.6-r1-analysis-plan.md`
+- `protocols/v3.6-r1-bridge-spec.json`
+- `tests/test_v36_round12.py`
+- `results/V3.6/v3.6-r1-round12-v2-native-qualification.json`
+- `results/V3.6/v3.6-r1-round12-v2-native-qualification.md`
+- `results/V3.6/v3.6-r1-round12-v2-native-trace-hashes.json`
+- `results/V3.6/v3.6-r1-round12-population-b-stop.json`
+- `results/V3.6/v3.6-r1-round12-population-b-stop.md`
+- `results/V3.6/v3.6-r1-round12-resumption-custody-stop.json`
+- `results/V3.6/v3.6-r1-round12-resumption-custody-stop.md`
+- `results/V3.6/ready-to-commit.md`
+
+The 45 MB raw trace file is local at
+`results/V3.6/v3.6-r1-round12-v2-native-traces.jsonl` and is custody-pinned by
+the committed per-record hash ledger; it is ignored by repository policy.
