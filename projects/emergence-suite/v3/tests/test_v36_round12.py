@@ -1,15 +1,17 @@
 import hashlib
 import json
+import math
 import unittest
 
 from ref import v36_bridge, v36_fixture_oracle, v36_round12
+from ref.custody import NonFiniteWorkerRow, validate_finite_worker_row
 from ref.trace_sink import serializing_trace_context
 
 
 class V36Round12Tests(unittest.TestCase):
     def test_custody_rescoped_blocks_exclude_barred_first_seeds(self):
         self.assertEqual(v36_round12.V2_NATIVE_BLOCK, (3_700_000, 3_701_999))
-        self.assertEqual(v36_round12.V3_NATIVE_BLOCK, (3_692_001, 3_693_999))
+        self.assertEqual(v36_round12.V3_NATIVE_BLOCK, (3_707_000, 3_708_999))
         self.assertEqual(
             v36_round12.EXTERNAL_QUALIFICATION_BLOCK,
             (3_694_001, 3_695_999),
@@ -68,6 +70,12 @@ class V36Round12Tests(unittest.TestCase):
         self.assertLessEqual(abs(sum(production.values()) - 1.0), 1e-10)
         self.assertLessEqual(abs(sum(oracle.values()) - 1.0), 1e-10)
         self.assertEqual(set(production), set(oracle))
+
+    def test_worker_row_finite_guard_rejects_with_provenance(self):
+        validate_finite_worker_row({"seed": 1, "nested": [0.0, 1.0]})
+        with self.assertRaises(NonFiniteWorkerRow) as caught:
+            validate_finite_worker_row({"seed": 1, "nested": [0.0, math.inf]})
+        self.assertEqual(caught.exception.paths, ("$.nested[1]",))
 
     def test_shared_target_support_audit(self):
         result = v36_round12.shared_target_support_audit()

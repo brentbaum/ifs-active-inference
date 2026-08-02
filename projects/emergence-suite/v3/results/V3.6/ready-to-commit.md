@@ -425,3 +425,61 @@ Round-13 ready-for-evaluator-commit files:
 - `results/V3.6/v3.6-r1-round13-population-a-interrupted-custody-stop.json`
 - `results/V3.6/v3.6-r1-round13-population-a-interrupted-custody-stop.md`
 - `results/V3.6/ready-to-commit.md`
+
+## Custody adjudication — replacement-block apparatus repair
+
+The retained Gate-4 and Population-A custody stops were adjudicated under the
+bar-and-reallocate precedent. Before any replacement seed, the Gate-4 helper
+was repaired so retained exact-zero programs remain in conditioned support,
+and a shared recursive finite-worker-row guard was added. A rejected worker
+row now produces a finite provenance record and incremental hash ledger before
+the runner stops. The seed-free exact-zero regression and finite-guard test
+both pass; all bridge-pinned scientific hashes remain bitwise unchanged.
+
+Pre-seed repair records:
+
+- `ref/custody.py`
+- `tests/test_v36_gate4_custody_repair.py`
+- `results/V3.6/custody-repair-preseed.json`
+- `results/V3.6/custody-repair-preseed.md`
+
+## Replacement execution — binding second custody stop
+
+The two replacement blocks opened in the authorized parallel order. The new
+finite guard operated correctly, but replacement Gate 4 produced a non-finite
+worker row before scientific-row serialization:
+
+- first returned seed: `3702000`, lesion `grow_mode_slot`;
+- offending fields: `restricted_prior_identity_error` and its same-cell alias
+  `masked_channel_neutrality_error`;
+- a finite provenance row was fsynced and hashed before the stop;
+- trace SHA-256:
+  `58cc82d0ffb764a5986adff907a5aeee6437bab5c454dff70525d1752315e2f8`;
+- no Gate-4 criterion or verdict was computed, and no repair was attempted.
+
+Multiprocessing prefetch makes the replacement Gate-4 attempted prefix
+unknowable. Under the binding ruling this is the next custody incident and
+stops the program for external adjudication.
+
+Replacement Population A was interrupted immediately. It had persisted 1,534
+ascending rows for `3707000:3708533`; SHA-256
+`6fbc27aabafe0a3292b8508ee374bef5bc0d21bea4dfe2cdda3604729328b35f`.
+No Population-A criterion was aggregated, and its exact attempted prefix is
+also unknowable because of worker prefetch.
+
+Final disposition for this dispatch: **HONEST STOP — REPLACEMENT GATE-4
+CUSTODY INCIDENT**. Population C, the tournament, Gate 5, compatibility
+attestations, the V3.6 freeze, every barred block, and every escrow remain
+unopened.
+
+Additional ready-for-evaluator-commit records:
+
+- `results/V3.6/gate-4-replacement-traces.jsonl`
+- `results/V3.6/gate-4-replacement-trace-hashes.json`
+- `results/V3.6/gate-4-replacement-custody-stop.json`
+- `results/V3.6/gate-4-replacement-custody-stop.md`
+- `results/V3.6/gate-4-replacement-diagnosis-stub.json`
+- `results/V3.6/v3.6-r1-round13-v3-native-replacement-traces.jsonl` (local partial bundle)
+- `results/V3.6/v3.6-r1-round13-population-a-replacement-interrupted-stop.json`
+- `results/V3.6/v3.6-r1-round13-population-a-replacement-interrupted-stop.md`
+- `results/V3.6/ready-to-commit.md`

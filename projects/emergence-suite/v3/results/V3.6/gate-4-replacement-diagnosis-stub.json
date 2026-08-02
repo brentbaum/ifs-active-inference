@@ -1,0 +1,23 @@
+{
+  "stage": "V3.6",
+  "gate": 4,
+  "classification": "CUSTODY_STOP_NONFINITE_WORKER_ROW",
+  "seed_block": [
+    3702000,
+    3706999
+  ],
+  "first_returned_row": {
+    "seed": 3702000,
+    "lesion": "grow_mode_slot"
+  },
+  "localization": "The grow_mode_slot restricted-prior identity computation remained non-finite; masked_channel_neutrality_error aliases that same value in this cell.",
+  "criterion_evaluation_started": false,
+  "exact_executed_prefix_known": false,
+  "evidence": [
+    "gate-4-replacement-traces.jsonl",
+    "gate-4-replacement-trace-hashes.json",
+    "gate-4-replacement-custody-stop.json",
+    "gate-4-replacement-custody-stop.md"
+  ],
+  "next_action": "EXTERNAL_ADJUDICATION_REQUIRED"
+}

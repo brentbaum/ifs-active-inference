@@ -1,0 +1,28 @@
+{
+  "authorization": "results/V3.6/gate4-and-population-a-custody-adjudication.md",
+  "apparatus_only": true,
+  "conditioned_support_semantics": "retained exact-zero entries remain in support and compare against an implicit zero if a restricted scorer omits their storage slot",
+  "finite_worker_row_guard": {
+    "behavior": "recursively reject inf/nan before strict worker-row serialization and persist a finite provenance row plus incremental hash ledger",
+    "module": "ref/custody.py"
+  },
+  "replacement_blocks": {
+    "gate_4": [3702000, 3706999],
+    "population_A": [3707000, 3708999]
+  },
+  "scientific_source_hash_identity": true,
+  "seed_consumption": [],
+  "targeted_regression_tests": {
+    "command": "python3 -m unittest tests.test_v36_gate4_custody_repair tests.test_v36_round12.V36Round12Tests.test_worker_row_finite_guard_rejects_with_provenance",
+    "passed": 2,
+    "failed": 0
+  },
+  "changed_file_sha256": {
+    "ref/custody.py": "2289144a116ad3c0be82235e57dc57cba8aad00dcda1b8a8572b776553876388",
+    "scripts/run_v36_gate4.py": "ff68a3426c2bb513b2e95a3193ba8ae90848530617255d88a8f8eeeadd94f60d",
+    "scripts/run_v36_round12.py": "6c6418c0f7680ccdc75068d17d9191d52ce90c311c0d9637785aae81f4fd63f3",
+    "tests/test_v36_gate4_custody_repair.py": "c39704c6bf090a577a14657c82ab3516d223aa5e4671ac3c19a4d991241952c9",
+    "tests/test_v36_round12.py": "7d82cf6b750ae11f0743abdca319272a3ba5bf1e43973111f34d6fcb494b28fc"
+  },
+  "verdict": "PASS_PRESEED_APPARATUS_REPAIR"
+}

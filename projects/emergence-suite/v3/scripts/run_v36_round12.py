@@ -24,6 +24,7 @@ sys.path.insert(0, str(ROOT))
 from ref import (  # noqa: E402
     v35, v36_bridge, v36_bridge_oracle, v36_fixture_oracle, v36_round12,
 )
+from ref.custody import NonFiniteWorkerRow, validate_finite_worker_row  # noqa: E402
 from ref.trace_sink import serializing_trace_context, traced_execution  # noqa: E402
 
 
@@ -477,6 +478,28 @@ def _persist_rows(
     with path.open("xb") as handle:
         with get_context("spawn").Pool(processes) as pool:
             for row in pool.imap(worker, tasks, chunksize=chunksize):
+                try:
+                    validate_finite_worker_row(row)
+                except NonFiniteWorkerRow as error:
+                    provenance = {
+                        "record_type": "NONFINITE_WORKER_ROW_REJECTION",
+                        "seed": int(row.get("seed", -1)),
+                        "offending_paths": list(error.paths),
+                    }
+                    encoded = _canonical(provenance)
+                    handle.write(encoded); handle.flush(); os.fsync(handle.fileno())
+                    file_hash.update(encoded)
+                    ledger_path.write_text(
+                        json.dumps({
+                            "file": path.name,
+                            "sha256": file_hash.hexdigest(),
+                            "record_count": len(rows) + 1,
+                            "status": "HONEST_STOP_NONFINITE_WORKER_ROW",
+                            "offending_row_provenance": provenance,
+                        }, indent=2, sort_keys=True) + "\n",
+                        encoding="utf-8",
+                    )
+                    raise RuntimeError(str(error)) from error
                 encoded = _canonical(row)
                 handle.write(encoded)
                 handle.flush()
@@ -966,7 +989,7 @@ def run_v3_native() -> dict[str, Any]:
         v36_round12.V3_NATIVE_BLOCK[1] + 1,
     ))
     rows, ledger = _persist_rows(
-        "v3.6-r1-round12-v3-native", seeds, _v3_native_row,
+        "v3.6-r1-round13-v3-native-replacement", seeds, _v3_native_row,
         chunksize=1,
     )
     predictive = _predictive_calibration(rows, "v3")
@@ -1002,9 +1025,9 @@ def run_v3_native() -> dict[str, Any]:
         "failures": failures, "custody": ledger,
         "verdict": "PASS" if not failures else "FAIL_APPARATUS_STOP",
     }
-    _write_json("v3.6-r1-round12-v3-native-qualification.json", result)
+    _write_json("v3.6-r1-round13-v3-native-replacement-qualification.json", result)
     _write_report(
-        "v3.6-r1-round12-v3-native-qualification.md",
+        "v3.6-r1-round13-v3-native-replacement-qualification.md",
         "V3.6-R1 Population A native qualification", result,
     )
     return result
@@ -1054,7 +1077,7 @@ def _external_descriptive(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
 
 def run_external_qualification() -> dict[str, Any]:
     previous = json.loads(
-        (RESULTS / "v3.6-r1-round12-v3-native-qualification.json").read_text()
+        (RESULTS / "v3.6-r1-round13-v3-native-replacement-qualification.json").read_text()
     )
     if previous["verdict"] != "PASS":
         raise RuntimeError("Population A did not pass")

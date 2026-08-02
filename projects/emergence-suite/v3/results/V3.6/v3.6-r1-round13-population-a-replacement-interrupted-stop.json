@@ -1,0 +1,27 @@
+{
+  "action": "HONEST_STOP_RETURN_TO_EVALUATOR",
+  "aggregation_performed": false,
+  "authorization": "results/V3.6/gate4-and-population-a-custody-adjudication.md",
+  "cause": "Replacement Gate 4 triggered the adjudication's next-custody-incident stop. The concurrently authorized replacement Population A was interrupted immediately.",
+  "criterion_evaluation": false,
+  "custody": {
+    "exact_attempted_seed_prefix_known": false,
+    "persisted_record_count": 1534,
+    "persisted_seed_end": 3708533,
+    "persisted_seed_start": 3707000,
+    "persisted_rows_ascending_gap_free": true,
+    "post_stop_trace_sha256": "6fbc27aabafe0a3292b8508ee374bef5bc0d21bea4dfe2cdda3604729328b35f",
+    "trace_bytes": 322670857,
+    "trace_file": "v3.6-r1-round13-v3-native-replacement-traces.jsonl",
+    "warning": "This post-stop hash records the retained partial artifact, not a completed qualification ledger. Multiprocessing prefetch may have executed additional unpersisted seeds."
+  },
+  "escrow_touched": false,
+  "population": "A_replacement",
+  "population_c_opened": false,
+  "seed_block": [3707000, 3708999],
+  "stage": "V3.6-R1-round13",
+  "status": "INTERRUPTED_DUE_TO_REPLACEMENT_GATE4_CUSTODY_STOP",
+  "tournament_opened": false,
+  "gate5_opened": false,
+  "verdict": "STOP"
+}

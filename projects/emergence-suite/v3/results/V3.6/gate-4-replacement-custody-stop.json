@@ -1,0 +1,40 @@
+{
+  "stage": "V3.6",
+  "gate": 4,
+  "status": "HONEST_STOP_NONFINITE_WORKER_ROW",
+  "authorization": "results/V3.6/gate4-and-population-a-custody-adjudication.md",
+  "replacement_block": [
+    3702000,
+    3706999
+  ],
+  "first_persisted_rejection": {
+    "seed": 3702000,
+    "lesion": "grow_mode_slot",
+    "offending_paths": [
+      "$.restricted_prior_identity_error",
+      "$.masked_channel_neutrality_error"
+    ]
+  },
+  "localization": {
+    "masked_error_aliases_identity_error_in_this_lesion": true,
+    "independent_nonfinite_statistics": [
+      "restricted_prior_identity_error"
+    ],
+    "criterion_evaluated": false,
+    "gate_verdict_computed": false,
+    "scientific_module_changed": false,
+    "repair_attempted": false
+  },
+  "custody": {
+    "trace_file": "gate-4-replacement-traces.jsonl",
+    "trace_hash_ledger": "gate-4-replacement-trace-hashes.json",
+    "persisted_record_count": 1,
+    "trace_sha256": "58cc82d0ffb764a5986adff907a5aeee6437bab5c454dff70525d1752315e2f8",
+    "hash_verified": true,
+    "first_returned_row_rejected_before_scientific_serialization": true,
+    "multiprocessing_prefetch_used": true,
+    "executed_prefix_exactly_known": false,
+    "further_seed_execution_after_stop": false
+  },
+  "required_next_action": "RETURN_TO_EXTERNAL_ADJUDICATION"
+}

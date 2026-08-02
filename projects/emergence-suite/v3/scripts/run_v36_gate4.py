@@ -28,11 +28,12 @@ sys.path.insert(0, str(SUITE_ROOT))
 sys.path.insert(0, str(ROOT))
 
 from ref import v31, v32, v33, v34, v35, v36  # noqa: E402
+from ref.custody import NonFiniteWorkerRow, validate_finite_worker_row  # noqa: E402
 from ref.trace_sink import require_trace_sink, traced_execution  # noqa: E402
 
 
 RESULTS = ROOT / "results" / "V3.6"
-GATE4_BLOCK = (3_630_000, 3_634_999)
+GATE4_BLOCK = (3_702_000, 3_706_999)
 TOLERANCE = 1e-10
 LESIONS = ("grow_mode_slot", "split_context_slot", "prune_M1_G", "relate_L_PREC", "protect_joint_policy")
 
@@ -79,11 +80,15 @@ def _conditioned_error(
     mass = math.fsum(retained.values())
     if not math.isfinite(mass) or mass <= 0.0:
         return math.inf
-    if set(retained) != set(restricted_keys):
+    restricted = {
+        key: float(probability)
+        for key, probability in zip(restricted_keys, restricted_probabilities)
+    }
+    if set(restricted) - set(retained):
         return math.inf
     return max(
-        abs(float(probability) - retained[key] / mass)
-        for key, probability in zip(restricted_keys, restricted_probabilities)
+        abs(restricted.get(key, 0.0) - retained[key] / mass)
+        for key in retained
     )
 
 
@@ -311,8 +316,8 @@ def _worker(task: tuple[int, str]) -> dict[str, Any]:
 
 def _trace_map(tasks: Sequence[tuple[int, str]]) -> list[dict[str, Any]]:
     RESULTS.mkdir(parents=True, exist_ok=True)
-    trace_path = RESULTS / "gate-4-traces.jsonl"
-    hash_path = RESULTS / "gate-4-trace-hashes.json"
+    trace_path = RESULTS / "gate-4-replacement-traces.jsonl"
+    hash_path = RESULTS / "gate-4-replacement-trace-hashes.json"
     if trace_path.exists() or hash_path.exists():
         raise RuntimeError("custody refusal: Gate-4 output already exists")
     rows: list[dict[str, Any]] = []
@@ -322,6 +327,26 @@ def _trace_map(tasks: Sequence[tuple[int, str]]) -> list[dict[str, Any]]:
     with trace_path.open("xb") as handle:
         with get_context("spawn").Pool(processes) as pool:
             for row in pool.imap(_worker, tasks, chunksize=2):
+                try:
+                    validate_finite_worker_row(row)
+                except NonFiniteWorkerRow as error:
+                    provenance = {
+                        "record_type": "NONFINITE_WORKER_ROW_REJECTION",
+                        "seed": int(row.get("seed", -1)),
+                        "lesion": row.get("lesion"),
+                        "offending_paths": list(error.paths),
+                    }
+                    encoded = _canonical(provenance)
+                    handle.write(encoded); handle.flush(); os.fsync(handle.fileno())
+                    file_hash.update(encoded)
+                    _write_json(hash_path.name, {
+                        "file": trace_path.name,
+                        "file_sha256": file_hash.hexdigest(),
+                        "record_count": len(rows) + 1,
+                        "status": "HONEST_STOP_NONFINITE_WORKER_ROW",
+                        "offending_row_provenance": provenance,
+                    })
+                    raise RuntimeError(str(error)) from error
                 encoded = _canonical(row)
                 handle.write(encoded)
                 handle.flush()
@@ -411,8 +436,8 @@ def run_gate4() -> dict[str, Any]:
             "tournament_statistics": False,
         },
         "custody": {
-            "trace_file": "gate-4-traces.jsonl",
-            "trace_hash_ledger": "gate-4-trace-hashes.json",
+            "trace_file": "gate-4-replacement-traces.jsonl",
+            "trace_hash_ledger": "gate-4-replacement-trace-hashes.json",
             "persisted_before_aggregation": True,
             "barred_blocks_touched": False,
             "escrow_touched": False,
