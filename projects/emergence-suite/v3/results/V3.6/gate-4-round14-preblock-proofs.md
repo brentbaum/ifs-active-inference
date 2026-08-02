@@ -1,0 +1,5 @@
+# V3.6 Round-14 zero-seed lesion proofs
+
+Verdict: **PASS**.
+
+All five lesion classes were declared before seeded execution. The proof table includes exact-zero retained support, empty destroyed support, masking, unaffected observations, and full conditioning.

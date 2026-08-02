@@ -32,7 +32,7 @@ DELTA = math.log(1.02)
 # Re-scoped by the evaluator's round-12 precommit custody adjudication.
 # The three block-first seeds are permanently barred.
 V2_NATIVE_BLOCK = (3_700_000, 3_701_999)
-V3_NATIVE_BLOCK = (3_707_000, 3_708_999)
+V3_NATIVE_BLOCK = (3_714_000, 3_715_999)
 EXTERNAL_QUALIFICATION_BLOCK = (3_694_001, 3_695_999)
 TOURNAMENT_BLOCK = (3_684_000, 3_689_999)
 EXTERNAL_GRID = (0.20, 0.50, 0.80)

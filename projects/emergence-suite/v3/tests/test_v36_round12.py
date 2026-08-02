@@ -11,7 +11,7 @@ from ref.trace_sink import serializing_trace_context
 class V36Round12Tests(unittest.TestCase):
     def test_custody_rescoped_blocks_exclude_barred_first_seeds(self):
         self.assertEqual(v36_round12.V2_NATIVE_BLOCK, (3_700_000, 3_701_999))
-        self.assertEqual(v36_round12.V3_NATIVE_BLOCK, (3_707_000, 3_708_999))
+        self.assertEqual(v36_round12.V3_NATIVE_BLOCK, (3_714_000, 3_715_999))
         self.assertEqual(
             v36_round12.EXTERNAL_QUALIFICATION_BLOCK,
             (3_694_001, 3_695_999),

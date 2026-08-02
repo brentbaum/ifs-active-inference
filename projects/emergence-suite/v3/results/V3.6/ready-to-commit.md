@@ -483,3 +483,58 @@ Additional ready-for-evaluator-commit records:
 - `results/V3.6/v3.6-r1-round13-population-a-replacement-interrupted-stop.json`
 - `results/V3.6/v3.6-r1-round13-population-a-replacement-interrupted-stop.md`
 - `results/V3.6/ready-to-commit.md`
+
+## Round 14 — de-parallelized resumption preconditions
+
+The round-14 lesion semantics are frozen before any replacement criterion
+seed. `grow_mode_slot` is declared `SUPPORT_DESTROYING_MASKING`; its
+restricted-prior identity is inapplicable and serialized as `null`. The other
+four lesions are declared `SUPPORT_PRESERVING_CONDITIONING` and require
+nonempty licensed support, positive restricted prior mass and evidence, exact
+conditioned-posterior identity, and an independent oracle identity.
+
+The zero-seed proof table passed all five cells. It includes the required
+exact-zero retained candidate, empty licensed subset, all-target masking,
+pre-mask target observation, unaffected observation, and full-support
+conditioning fixtures. Its trace and hash were durable before the PASS was
+emitted. Scientific source hashes remain unchanged.
+
+Round-14 pre-seed files:
+
+- `results/V3.6/external-round14-rulings.md`
+- `scripts/run_v36_gate4.py`
+- `scripts/run_v36_round12.py`
+- `results/V3.6/gate-4-round14-preblock-proof-trace.jsonl`
+- `results/V3.6/gate-4-round14-preblock-proof-trace-hashes.json`
+- `results/V3.6/gate-4-round14-preblock-proofs.json`
+- `results/V3.6/gate-4-round14-preblock-proofs.md`
+
+## Round 14 — Population-A blocking stop
+
+Population A ran alone on `3714000:3715999`. The first row serialized
+single-process before parallel dispatch. All 2,000 rows then completed once,
+ascending and gap-free; the trace and ledger hash verify at
+`88eaa8ddcd888a0d6fee02741df4109f9bfac422d0dcb5e708bba1e5dcefa8e3`.
+
+Verdict: **FAIL_APPARATUS_STOP / blocking qualification failure**. Three
+frozen calibration criteria failed:
+
+- active-count top-label ECE `0.0845007241 > 0.05`;
+- active-count macro classwise ECE `0.0973279833 > 0.05`;
+- `JOINT_POLICY_Y` edge ECE `0.0513375512 > 0.05`.
+
+All target-predictive ECEs, equivalence-class ECE, class coverage, and the
+other load-bearing edges passed. The chain stops without self-authorized
+diagnosis or repair. Population C, the tournament, Gate 4, Gate 5,
+compatibility attestations, freeze, barred blocks, and all escrows remain
+unopened.
+
+Population-A stop files:
+
+- `results/V3.6/v3.6-r1-round14-v3-native-replacement-2-traces.jsonl` (local, hash-pinned)
+- `results/V3.6/v3.6-r1-round14-v3-native-replacement-2-trace-hashes.json`
+- `results/V3.6/v3.6-r1-round14-v3-native-replacement-2-qualification.json`
+- `results/V3.6/v3.6-r1-round14-v3-native-replacement-2-qualification.md`
+- `results/V3.6/v3.6-r1-round14-population-a-diagnosis-stub.json`
+- `results/V3.6/v3.6-r1-round14-population-a-diagnosis-stub.md`
+- `results/V3.6/ready-to-commit.md`

@@ -1,0 +1,40 @@
+{
+  "action": "HONEST_STOP_NO_SELF_AUTHORIZED_REPAIR",
+  "authorization": "results/V3.6/external-round14-rulings.md",
+  "custody": {
+    "ascending_gap_free": true,
+    "record_count": 2000,
+    "seed_end": 3715999,
+    "seed_start": 3714000,
+    "trace_hash_verified": true,
+    "trace_sha256": "88eaa8ddcd888a0d6fee02741df4109f9bfac422d0dcb5e708bba1e5dcefa8e3"
+  },
+  "failures_retained_verbatim": [
+    "active-count top-label ECE > 0.05",
+    "active-count macro classwise ECE > 0.05",
+    "edge JOINT_POLICY_Y ECE > 0.05"
+  ],
+  "localization_only": {
+    "active_count_macro_classwise_ece": 0.09732798330066894,
+    "active_count_top_label_ece": 0.08450072407617874,
+    "equivalence_class_top_label_ece": 0.029368513371703917,
+    "joint_policy_y_edge_ece": 0.05133755120610839,
+    "minimum_required_95_class_coverage": 0.9,
+    "observed_95_class_coverage": 0.964,
+    "predictive_target_ece_all_pass": true,
+    "predictive_target_ece_max": 0.030871351859737484,
+    "threshold": 0.05
+  },
+  "later_blocks_opened": {
+    "population_C": false,
+    "tournament": false,
+    "gate_4": false,
+    "gate_5": false
+  },
+  "escrow_touched": false,
+  "population": "A",
+  "seed_block": [3714000, 3715999],
+  "stage": "V3.6-R1-round14",
+  "status": "POPULATION_A_BLOCKING_QUALIFICATION_FAILURE",
+  "verdict": "STOP"
+}

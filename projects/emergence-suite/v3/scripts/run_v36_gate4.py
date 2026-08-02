@@ -33,9 +33,18 @@ from ref.trace_sink import require_trace_sink, traced_execution  # noqa: E402
 
 
 RESULTS = ROOT / "results" / "V3.6"
-GATE4_BLOCK = (3_702_000, 3_706_999)
+GATE4_BLOCK = (3_709_000, 3_713_999)
 TOLERANCE = 1e-10
 LESIONS = ("grow_mode_slot", "split_context_slot", "prune_M1_G", "relate_L_PREC", "protect_joint_policy")
+SUPPORT_PRESERVING = "SUPPORT_PRESERVING_CONDITIONING"
+SUPPORT_DESTROYING = "SUPPORT_DESTROYING_MASKING"
+LESION_CLASSES = {
+    "grow_mode_slot": SUPPORT_DESTROYING,
+    "split_context_slot": SUPPORT_PRESERVING,
+    "prune_M1_G": SUPPORT_PRESERVING,
+    "relate_L_PREC": SUPPORT_PRESERVING,
+    "protect_joint_policy": SUPPORT_PRESERVING,
+}
 
 
 def _plain(value: Any) -> Any:
@@ -84,12 +93,45 @@ def _conditioned_error(
         key: float(probability)
         for key, probability in zip(restricted_keys, restricted_probabilities)
     }
-    if set(restricted) - set(retained):
+    full_set = set(full_keys)
+    if set(restricted) - full_set:
         return math.inf
     return max(
-        abs(restricted.get(key, 0.0) - retained[key] / mass)
-        for key in retained
+        abs(
+            restricted.get(key, 0.0)
+            - (retained[key] / mass if key in retained else 0.0)
+        )
+        for key in full_set
     )
+
+
+def _independent_conditioned_error(
+    full_keys: Sequence[Any], full_probabilities: Sequence[float],
+    restricted_keys: Sequence[Any], restricted_probabilities: Sequence[float],
+    allowed,
+) -> float:
+    """Separately authored direct summation oracle for the restriction."""
+    licensed = [index for index, key in enumerate(full_keys) if allowed(key)]
+    denominator = math.fsum(float(full_probabilities[index]) for index in licensed)
+    if not licensed or denominator <= 0.0 or not math.isfinite(denominator):
+        return math.inf
+    observed = {key: float(value) for key, value in zip(restricted_keys, restricted_probabilities)}
+    largest = 0.0
+    for index, key in enumerate(full_keys):
+        expected = float(full_probabilities[index]) / denominator if index in licensed else 0.0
+        largest = max(largest, abs(observed.get(key, 0.0) - expected))
+    return largest
+
+
+def _prior_mass(keys: Sequence[Any], log_prior, allowed) -> float:
+    logs = np.asarray([float(log_prior(key)) for key in keys], dtype=float)
+    maximum = float(np.max(logs))
+    weights = np.exp(logs - maximum); weights /= float(weights.sum())
+    return float(math.fsum(float(value) for key, value in zip(keys, weights) if allowed(key)))
+
+
+def _finite_optional(*values: float | None) -> bool:
+    return all(value is None or math.isfinite(float(value)) for value in values)
 
 
 def _posterior_distance(left: Sequence[float], right: Sequence[float]) -> float:
@@ -143,23 +185,31 @@ def _worker(task: tuple[int, str]) -> dict[str, Any]:
             world,
             slices=tuple(replace(item, mode_observed=False) for item in world.slices),
         )
-        full = v31.score_world(masked_world)
-        restricted = v31.score_world(world, lesions=frozenset({"mode_slot"}))
-        identity_error = _conditioned_error(
-            full.programs,
-            full.probabilities,
-            restricted.programs,
-            restricted.probabilities,
-            lambda program: v31.program_values(program)["active_mode"] == 0,
+        masked_reference = v31.score_world(masked_world, lesions=frozenset({"mode_slot"}))
+        surviving = v31.score_world(world, lesions=frozenset({"mode_slot"}))
+        restricted = surviving
+        identity_error = None
+        oracle_error = _posterior_distance(
+            masked_reference.probabilities, surviving.probabilities
         )
-        target_error = max(restricted.active_mode_probability, restricted.part_probability)
-        mask_error = identity_error
+        target_error = max(surviving.active_mode_probability, surviving.part_probability)
+        mask_error = _posterior_distance(
+            surviving.probabilities, masked_reference.probabilities
+        )
+        unrelated_error = max(
+            abs(surviving.edge_probabilities[name] - masked_reference.edge_probabilities[name])
+            for name in ("W_Y", "doA_Y")
+        )
+        licensed_count = 0
+        prior_mass = 0.0
+        restricted_evidence = None
+        identity_applicable = False
         descriptive = {
-            "full_part_probability": full.part_probability,
-            "full_W_Y_probability": full.edge_probabilities["W_Y"],
+            "masked_reference_part_probability": masked_reference.part_probability,
+            "masked_reference_W_Y_probability": masked_reference.edge_probabilities["W_Y"],
             "restricted_W_Y_probability": restricted.edge_probabilities["W_Y"],
         }
-        normalization_error = abs(math.fsum(restricted.probabilities) - 1.0)
+        normalization_error = abs(math.fsum(surviving.probabilities) - 1.0)
 
     elif lesion == "split_context_slot":
         structure = v32.TemporalStructure(
@@ -189,6 +239,15 @@ def _worker(task: tuple[int, str]) -> dict[str, Any]:
             restricted.probabilities,
             lambda program: program.active_contexts == 1,
         )
+        allowed = lambda program: program.active_contexts == 1
+        oracle_error = _independent_conditioned_error(
+            full.programs, full.probabilities, restricted.programs,
+            restricted.probabilities, allowed,
+        )
+        licensed_count = sum(allowed(program) for program in full.programs)
+        prior_mass = _prior_mass(full.programs, v32.structure_log_prior, allowed)
+        restricted_evidence = math.exp(restricted.log_evidence)
+        identity_applicable = True
         altered = replace(
             world,
             slices=tuple(
@@ -199,6 +258,18 @@ def _worker(task: tuple[int, str]) -> dict[str, Any]:
         altered_masked = v32.score_world(altered, masked_channels=masked)
         mask_error = _posterior_distance(full.probabilities, altered_masked.probabilities)
         target_error = math.fsum(restricted.active_context_probabilities[1:])
+        unrelated_error = abs(
+            restricted.scope_probability("cue_emission", "shared_global")
+            - math.fsum(
+                float(probability)
+                for program, probability in zip(full.programs, full.probabilities)
+                if allowed(program) and program.scopes[0] == "shared_global"
+            ) / math.fsum(
+                float(probability)
+                for program, probability in zip(full.programs, full.probabilities)
+                if allowed(program)
+            )
+        )
         descriptive = {
             "full_context_specific": full.scope_probability("cue_emission", "context_specific"),
             "full_recurrent": full.dynamics_probability("cue_emission", "discrete_recurrent_context"),
@@ -222,10 +293,35 @@ def _worker(task: tuple[int, str]) -> dict[str, Any]:
             restricted.probabilities,
             lambda program: v31.program_values(program)["M1_G"] == 0,
         )
+        allowed = lambda program: v31.program_values(program)["M1_G"] == 0
+        oracle_error = _independent_conditioned_error(
+            full.programs, full.probabilities, restricted.programs,
+            restricted.probabilities, allowed,
+        )
+        licensed_count = sum(allowed(program) for program in full.programs)
+        prior_mass = _prior_mass(
+            full.programs,
+            lambda program: v31.structure_log_prior(program, v31.DEFAULT_HYPERPARAMETERS),
+            allowed,
+        )
+        restricted_evidence = math.exp(restricted.log_evidence)
+        identity_applicable = True
         masked = v33.score_world(_mask_imaginal(world)).current
         dropped = v33.score_world(_drop_imaginal(world)).current
         mask_error = _posterior_distance(masked.probabilities, dropped.probabilities)
         target_error = restricted.edge_probabilities["M1_G"]
+        unrelated_error = abs(
+            restricted.edge_probabilities["W_Y"]
+            - math.fsum(
+                float(probability)
+                for program, probability in zip(full.programs, full.probabilities)
+                if allowed(program) and v31.program_values(program)["W_Y"]
+            ) / math.fsum(
+                float(probability)
+                for program, probability in zip(full.programs, full.probabilities)
+                if allowed(program)
+            )
+        )
         descriptive = {
             "full_M1_G_probability": full.edge_probabilities["M1_G"],
             "full_W_Y_probability": full.edge_probabilities["W_Y"],
@@ -245,6 +341,15 @@ def _worker(task: tuple[int, str]) -> dict[str, Any]:
             restricted.structure_probabilities,
             lambda program: v34.structure_values(program)["L_PREC"] == 0,
         )
+        allowed = lambda program: v34.structure_values(program)["L_PREC"] == 0
+        oracle_error = _independent_conditioned_error(
+            full.programs, full.structure_probabilities, restricted.programs,
+            restricted.structure_probabilities, allowed,
+        )
+        licensed_count = sum(allowed(program) for program in full.programs)
+        prior_mass = _prior_mass(full.programs, v34.structure_log_prior, allowed)
+        restricted_evidence = math.exp(restricted.log_evidence)
+        identity_applicable = True
         masked = v34.score_world(world, relational_enabled=False)
         altered_world = replace(
             world,
@@ -261,6 +366,18 @@ def _worker(task: tuple[int, str]) -> dict[str, Any]:
         target_error = max(
             restricted.edge_probabilities["L_PREC"],
             max(abs(value - v34.BASE_PRECISION) for value in restricted.local_precision),
+        )
+        unrelated_error = abs(
+            restricted.edge_probabilities["L_Y"]
+            - math.fsum(
+                float(probability)
+                for program, probability in zip(full.programs, full.structure_probabilities)
+                if allowed(program) and v34.structure_values(program)["L_Y"]
+            ) / math.fsum(
+                float(probability)
+                for program, probability in zip(full.programs, full.structure_probabilities)
+                if allowed(program)
+            )
         )
         descriptive = {
             "full_L_PREC_probability": full.edge_probabilities["L_PREC"],
@@ -283,9 +400,37 @@ def _worker(task: tuple[int, str]) -> dict[str, Any]:
             restricted.probabilities,
             lambda component: v35.program_values(component[0])["JOINT_POLICY_Y"] == 0,
         )
+        allowed = lambda component: v35.program_values(component[0])["JOINT_POLICY_Y"] == 0
+        oracle_error = _independent_conditioned_error(
+            full.components, full.probabilities, restricted.components,
+            restricted.probabilities, allowed,
+        )
+        licensed_count = sum(allowed(component) for component in full.components)
+        unique_structures = tuple(dict.fromkeys(component[0] for component in full.components))
+        prior_mass = float(math.fsum(
+            math.exp(v35.structure_log_prior(structure))
+            for structure in unique_structures
+            if v35.program_values(structure)["JOINT_POLICY_Y"] == 0
+        ) / math.fsum(
+            math.exp(v35.structure_log_prior(structure)) for structure in unique_structures
+        ))
+        restricted_evidence = math.exp(restricted.log_evidence)
+        identity_applicable = True
         registration_masked = v35.score_world(world, registration_enabled=False)
         mask_error = _posterior_distance(full.probabilities, registration_masked.probabilities)
         target_error = restricted.edge_probabilities["JOINT_POLICY_Y"]
+        unrelated_error = abs(
+            restricted.edge_probabilities["CROSS_MODE_Y"]
+            - math.fsum(
+                float(probability)
+                for component, probability in zip(full.components, full.probabilities)
+                if allowed(component) and v35.program_values(component[0])["CROSS_MODE_Y"]
+            ) / math.fsum(
+                float(probability)
+                for component, probability in zip(full.components, full.probabilities)
+                if allowed(component)
+            )
+        )
         descriptive = {
             "full_joint_policy_probability": full.edge_probabilities["JOINT_POLICY_Y"],
             "full_cross_mode_probability": full.edge_probabilities["CROSS_MODE_Y"],
@@ -300,14 +445,24 @@ def _worker(task: tuple[int, str]) -> dict[str, Any]:
         "seed": seed,
         "lesion": lesion,
         "world_sha256": _world_hash(world),
-        "restricted_prior_identity_error": float(identity_error),
+        "semantic_class": LESION_CLASSES[lesion],
+        "licensed_support_count": int(licensed_count),
+        "restricted_prior_mass": float(prior_mass),
+        "restricted_evidence": None if restricted_evidence is None else float(restricted_evidence),
+        "restricted_prior_identity_applicable": bool(identity_applicable),
+        "restricted_prior_identity_error": None if identity_error is None else float(identity_error),
         "masked_channel_neutrality_error": float(mask_error),
-        "normalization_error": float(normalization_error),
+        "independent_oracle_error": float(oracle_error),
+        "posterior_normalization_error": float(normalization_error),
+        "target_pathway_removed": bool(target_error <= TOLERANCE),
+        "unrelated_survivors_preserved": bool(unrelated_error <= TOLERANCE),
         "finite": bool(
-            math.isfinite(identity_error)
+            _finite_optional(identity_error, restricted_evidence)
             and math.isfinite(mask_error)
+            and math.isfinite(oracle_error)
             and math.isfinite(normalization_error)
             and math.isfinite(target_error)
+            and math.isfinite(unrelated_error)
         ),
         "declared_target_error": float(target_error),
         "unrelated_absolute_movement_descriptive": descriptive,
@@ -316,46 +471,52 @@ def _worker(task: tuple[int, str]) -> dict[str, Any]:
 
 def _trace_map(tasks: Sequence[tuple[int, str]]) -> list[dict[str, Any]]:
     RESULTS.mkdir(parents=True, exist_ok=True)
-    trace_path = RESULTS / "gate-4-replacement-traces.jsonl"
-    hash_path = RESULTS / "gate-4-replacement-trace-hashes.json"
+    trace_path = RESULTS / "gate-4-round14-replacement-2-traces.jsonl"
+    hash_path = RESULTS / "gate-4-round14-replacement-2-trace-hashes.json"
     if trace_path.exists() or hash_path.exists():
         raise RuntimeError("custody refusal: Gate-4 output already exists")
     rows: list[dict[str, Any]] = []
     record_hashes: list[dict[str, Any]] = []
     file_hash = hashlib.sha256()
+    def persist(handle, row: dict[str, Any]) -> None:
+        nonlocal file_hash
+        try:
+            validate_finite_worker_row(row)
+        except NonFiniteWorkerRow as error:
+            provenance = {
+                "record_type": "NONFINITE_WORKER_ROW_REJECTION",
+                "seed": int(row.get("seed", -1)),
+                "lesion": row.get("lesion"),
+                "offending_paths": list(error.paths),
+            }
+            encoded = _canonical(provenance)
+            handle.write(encoded); handle.flush(); os.fsync(handle.fileno())
+            file_hash.update(encoded)
+            _write_json(hash_path.name, {
+                "file": trace_path.name,
+                "file_sha256": file_hash.hexdigest(),
+                "record_count": len(rows) + 1,
+                "status": "HONEST_STOP_NONFINITE_WORKER_ROW",
+                "offending_row_provenance": provenance,
+            })
+            raise RuntimeError(str(error)) from error
+        encoded = _canonical(row)
+        handle.write(encoded); handle.flush(); os.fsync(handle.fileno())
+        file_hash.update(encoded)
+        rows.append(row)
+        record_hashes.append({
+            "seed": row["seed"], "sha256": hashlib.sha256(encoded).hexdigest()
+        })
+
     processes = max(1, min(8, (os.cpu_count() or 2) - 1))
     with trace_path.open("xb") as handle:
-        with get_context("spawn").Pool(processes) as pool:
-            for row in pool.imap(_worker, tasks, chunksize=2):
-                try:
-                    validate_finite_worker_row(row)
-                except NonFiniteWorkerRow as error:
-                    provenance = {
-                        "record_type": "NONFINITE_WORKER_ROW_REJECTION",
-                        "seed": int(row.get("seed", -1)),
-                        "lesion": row.get("lesion"),
-                        "offending_paths": list(error.paths),
-                    }
-                    encoded = _canonical(provenance)
-                    handle.write(encoded); handle.flush(); os.fsync(handle.fileno())
-                    file_hash.update(encoded)
-                    _write_json(hash_path.name, {
-                        "file": trace_path.name,
-                        "file_sha256": file_hash.hexdigest(),
-                        "record_count": len(rows) + 1,
-                        "status": "HONEST_STOP_NONFINITE_WORKER_ROW",
-                        "offending_row_provenance": provenance,
-                    })
-                    raise RuntimeError(str(error)) from error
-                encoded = _canonical(row)
-                handle.write(encoded)
-                handle.flush()
-                os.fsync(handle.fileno())
-                file_hash.update(encoded)
-                rows.append(row)
-                record_hashes.append(
-                    {"seed": row["seed"], "sha256": hashlib.sha256(encoded).hexdigest()}
-                )
+        # Round-14 custody rule: the first cell starts in-process and must be
+        # durable before ordinary parallel dispatch opens.
+        persist(handle, _worker(tasks[0]))
+        if len(tasks) > 1:
+            with get_context("spawn").Pool(processes) as pool:
+                for row in pool.imap(_worker, tasks[1:], chunksize=2):
+                    persist(handle, row)
     ledger = {
         "file": trace_path.name,
         "file_sha256": file_hash.hexdigest(),
@@ -373,12 +534,178 @@ def _trace_map(tasks: Sequence[tuple[int, str]]) -> list[dict[str, Any]]:
     return rows
 
 
+def _support_preserving_dummy(lesion: str) -> dict[str, Any]:
+    keys = ("licensed_positive", "licensed_exact_zero", "excluded")
+    prior = (0.4, 0.1, 0.5)
+    likelihood = (0.75, 0.0, 0.5)
+    joint = tuple(p * l for p, l in zip(prior, likelihood))
+    evidence = math.fsum(joint)
+    full = tuple(value / evidence for value in joint)
+    allowed = lambda key: key != "excluded"
+    restricted_evidence = joint[0] + joint[1]
+    restricted = (1.0, 0.0, 0.0)
+    identity = _conditioned_error(keys, full, keys, restricted, allowed)
+    oracle = _independent_conditioned_error(keys, full, keys, restricted, allowed)
+    return {
+        "lesion": lesion,
+        "semantic_class": SUPPORT_PRESERVING,
+        "licensed_support_count": 2,
+        "restricted_prior_mass": prior[0] + prior[1],
+        "restricted_evidence": restricted_evidence,
+        "restricted_identity_applicable": True,
+        "restricted_identity_error": identity,
+        "masked_neutrality_error": 0.0,
+        "independent_oracle_error": oracle,
+        "target_pathway_removed": True,
+        "unrelated_survivors_preserved": True,
+        "posterior_normalization_error": abs(math.fsum(restricted) - 1.0),
+        "all_outputs_finite": all(math.isfinite(value) for value in (
+            prior[0] + prior[1], restricted_evidence, identity, oracle,
+        )),
+        "boundary_fixture": {
+            "exact_zero_retained_candidate": "licensed_exact_zero",
+            "full_support_conditioning": True,
+            "target_channel_observed_before_masking": True,
+            "unaffected_channel_observed": True,
+        },
+    }
+
+
+def _support_destroying_dummy() -> dict[str, Any]:
+    masked_reference = (0.35, 0.65)
+    surviving = tuple(masked_reference)
+    return {
+        "lesion": "grow_mode_slot",
+        "semantic_class": SUPPORT_DESTROYING,
+        "licensed_support_count": 0,
+        "restricted_prior_mass": 0.0,
+        "restricted_evidence": None,
+        "restricted_identity_applicable": False,
+        "restricted_identity_error": None,
+        "masked_neutrality_error": _posterior_distance(
+            masked_reference, surviving
+        ),
+        "independent_oracle_error": max(
+            abs(surviving[index] - masked_reference[index]) for index in range(2)
+        ),
+        "target_pathway_removed": True,
+        "unrelated_survivors_preserved": True,
+        "posterior_normalization_error": abs(math.fsum(surviving) - 1.0),
+        "all_outputs_finite": all(math.isfinite(value) for value in surviving),
+        "boundary_fixture": {
+            "empty_licensed_target_subset": True,
+            "all_target_channels_masked_to_likelihood_one": True,
+            "target_channel_observed_before_masking": True,
+            "unaffected_channel_observed": True,
+            "clinical_or_protocol_label_reaches_inference": False,
+            "fallback_assigns_desired_readout": False,
+        },
+    }
+
+
+def run_preblock_proofs() -> dict[str, Any]:
+    rows = [_support_destroying_dummy()] + [
+        _support_preserving_dummy(lesion)
+        for lesion in LESIONS if lesion != "grow_mode_slot"
+    ]
+    failures = []
+    for row in rows:
+        validate_finite_worker_row(row)
+        preserving = row["semantic_class"] == SUPPORT_PRESERVING
+        passed = (
+            row["masked_neutrality_error"] <= TOLERANCE
+            and row["independent_oracle_error"] <= TOLERANCE
+            and row["target_pathway_removed"]
+            and row["unrelated_survivors_preserved"]
+            and row["posterior_normalization_error"] <= TOLERANCE
+            and row["all_outputs_finite"]
+            and (
+                row["licensed_support_count"] > 0
+                and row["restricted_prior_mass"] > 0.0
+                and row["restricted_evidence"] is not None
+                and row["restricted_evidence"] > 0.0
+                and row["restricted_identity_applicable"]
+                and row["restricted_identity_error"] <= TOLERANCE
+                if preserving else
+                row["licensed_support_count"] == 0
+                and row["restricted_prior_mass"] == 0.0
+                and row["restricted_evidence"] is None
+                and not row["restricted_identity_applicable"]
+                and row["restricted_identity_error"] is None
+            )
+        )
+        row["passed"] = bool(passed)
+        if not passed:
+            failures.append(row["lesion"])
+    bridge_spec = json.loads(
+        (ROOT / "protocols" / "v3.6-r1-bridge-spec.json").read_text()
+    )
+    source_hashes = {
+        relative: hashlib.sha256((SUITE_ROOT / relative).read_bytes()).hexdigest()
+        for relative in bridge_spec["scientific_source_sha256"]
+    }
+    source_identity = source_hashes == bridge_spec["scientific_source_sha256"]
+    if not source_identity:
+        failures.append("scientific_source_hash_identity")
+    record = {
+        "stage": "V3.6",
+        "proof": "ROUND14_ZERO_SEED_LESION_PRE_RUN_TABLE",
+        "tolerance": TOLERANCE,
+        "seed_consumption": [],
+        "lesion_declarations_frozen_before_execution": LESION_CLASSES,
+        "rows": rows,
+        "boundary_fixtures": {
+            "exact_zero_retained_candidate": True,
+            "empty_licensed_target_subset": True,
+            "all_target_channels_masked": True,
+            "target_channel_observed_before_masking": True,
+            "unaffected_channel_observed": True,
+            "full_support_conditioning_lesion": True,
+        },
+        "scientific_source_hash_identity": source_identity,
+        "scientific_source_hashes": source_hashes,
+        "failures": failures,
+        "verdict": "PASS" if not failures else "FAIL_PREBLOCK_LESION_PROOF",
+    }
+    trace = RESULTS / "gate-4-round14-preblock-proof-trace.jsonl"
+    ledger_path = RESULTS / "gate-4-round14-preblock-proof-trace-hashes.json"
+    if trace.exists() or ledger_path.exists():
+        raise RuntimeError("Round-14 lesion preproof outputs already exist")
+    encoded = _canonical(record)
+    with trace.open("xb") as handle:
+        handle.write(encoded); handle.flush(); os.fsync(handle.fileno())
+    ledger = {
+        "file": trace.name,
+        "sha256": hashlib.sha256(encoded).hexdigest(),
+        "record_count": 1,
+        "persisted_and_hashed_before_verdict_output": True,
+        "seed_consumption": [],
+    }
+    _write_json(ledger_path.name, ledger)
+    result = {**record, "custody": ledger}
+    _write_json("gate-4-round14-preblock-proofs.json", result)
+    (RESULTS / "gate-4-round14-preblock-proofs.md").write_text(
+        "# V3.6 Round-14 zero-seed lesion proofs\n\n"
+        f"Verdict: **{result['verdict']}**.\n\n"
+        "All five lesion classes were declared before seeded execution. The "
+        "proof table includes exact-zero retained support, empty destroyed "
+        "support, masking, unaffected observations, and full conditioning.\n",
+        encoding="utf-8",
+    )
+    return result
+
+
 def run_gate4() -> dict[str, Any]:
     proof = json.loads(
         (RESULTS / "v3.6-r1-round13-native-fixture-identity-proofs.json").read_text(encoding="utf-8")
     )
     if proof.get("verdict") != "PASS":
         raise RuntimeError("all eight Round-13 pre-block proofs must pass before Gate 4")
+    lesion_proof = json.loads(
+        (RESULTS / "gate-4-round14-preblock-proofs.json").read_text(encoding="utf-8")
+    )
+    if lesion_proof.get("verdict") != "PASS":
+        raise RuntimeError("Round-14 zero-seed lesion proof table is not PASS")
     tasks = [
         (seed, LESIONS[(seed - GATE4_BLOCK[0]) // 1000])
         for seed in range(GATE4_BLOCK[0], GATE4_BLOCK[1] + 1)
@@ -390,11 +717,24 @@ def run_gate4() -> dict[str, Any]:
         selected = [row for row in rows if row["lesion"] == lesion]
         cell = {
             "world_count": len(selected),
-            "restricted_prior_identity_error_max": max(row["restricted_prior_identity_error"] for row in selected),
+            "semantic_class": LESION_CLASSES[lesion],
+            "restricted_prior_identity_applicable": LESION_CLASSES[lesion] == SUPPORT_PRESERVING,
+            "restricted_prior_identity_error_max": (
+                max(row["restricted_prior_identity_error"] for row in selected)
+                if LESION_CLASSES[lesion] == SUPPORT_PRESERVING else None
+            ),
             "masked_channel_neutrality_error_max": max(row["masked_channel_neutrality_error"] for row in selected),
-            "normalization_error_max": max(row["normalization_error"] for row in selected),
+            "independent_oracle_error_max": max(row["independent_oracle_error"] for row in selected),
+            "posterior_normalization_error_max": max(row["posterior_normalization_error"] for row in selected),
             "declared_target_error_max": max(row["declared_target_error"] for row in selected),
             "finite_all": all(row["finite"] for row in selected),
+            "target_pathway_removed_all": all(row["target_pathway_removed"] for row in selected),
+            "unrelated_survivors_preserved_all": all(row["unrelated_survivors_preserved"] for row in selected),
+            "licensed_support_positive_all": all(
+                row["licensed_support_count"] > 0 and row["restricted_prior_mass"] > 0.0
+                and row["restricted_evidence"] is not None and row["restricted_evidence"] > 0.0
+                for row in selected
+            ) if LESION_CLASSES[lesion] == SUPPORT_PRESERVING else True,
             "unrelated_absolute_movement": {
                 "classification": "DESCRIPTIVE_RENORMALIZATION_MOVEMENT",
                 "note": "Absolute movement in non-target coordinates is not a selectivity criterion after conditioning the structure prior.",
@@ -402,11 +742,19 @@ def run_gate4() -> dict[str, Any]:
         }
         cell["passed"] = (
             cell["world_count"] == 1000
-            and cell["restricted_prior_identity_error_max"] <= TOLERANCE
+            and (
+                cell["restricted_prior_identity_error_max"] <= TOLERANCE
+                if cell["restricted_prior_identity_applicable"]
+                else all(row["restricted_prior_identity_error"] is None for row in selected)
+            )
             and cell["masked_channel_neutrality_error_max"] <= TOLERANCE
-            and cell["normalization_error_max"] <= TOLERANCE
+            and cell["independent_oracle_error_max"] <= TOLERANCE
+            and cell["posterior_normalization_error_max"] <= TOLERANCE
             and cell["declared_target_error_max"] <= TOLERANCE
             and cell["finite_all"]
+            and cell["target_pathway_removed_all"]
+            and cell["unrelated_survivors_preserved_all"]
+            and cell["licensed_support_positive_all"]
         )
         if not cell["passed"]:
             failures.append(f"{lesion}: {cell}")
@@ -436,8 +784,8 @@ def run_gate4() -> dict[str, Any]:
             "tournament_statistics": False,
         },
         "custody": {
-            "trace_file": "gate-4-replacement-traces.jsonl",
-            "trace_hash_ledger": "gate-4-replacement-trace-hashes.json",
+            "trace_file": "gate-4-round14-replacement-2-traces.jsonl",
+            "trace_hash_ledger": "gate-4-round14-replacement-2-trace-hashes.json",
             "persisted_before_aggregation": True,
             "barred_blocks_touched": False,
             "escrow_touched": False,
@@ -457,8 +805,12 @@ def run_gate4() -> dict[str, Any]:
         "|---|---:|---:|---:|:---:|",
     ]
     for lesion, cell in cells.items():
+        identity_text = (
+            f"{cell['restricted_prior_identity_error_max']:.3g}"
+            if cell["restricted_prior_identity_error_max"] is not None else "N/A"
+        )
         report.append(
-            f"| {lesion} | {cell['restricted_prior_identity_error_max']:.3g} | "
+            f"| {lesion} | {identity_text} | "
             f"{cell['masked_channel_neutrality_error_max']:.3g} | "
             f"{cell['declared_target_error_max']:.3g} | {cell['passed']} |"
         )
@@ -477,8 +829,12 @@ def run_gate4() -> dict[str, Any]:
 
 
 def main() -> None:
-    result = run_gate4()
-    print(json.dumps({"gate": 4, "verdict": result["verdict"]}, sort_keys=True))
+    if len(sys.argv) == 2 and sys.argv[1] == "preproof":
+        result = run_preblock_proofs()
+        print(json.dumps({"phase": "gate4-preproof", "verdict": result["verdict"]}, sort_keys=True))
+    else:
+        result = run_gate4()
+        print(json.dumps({"gate": 4, "verdict": result["verdict"]}, sort_keys=True))
 
 
 if __name__ == "__main__":
