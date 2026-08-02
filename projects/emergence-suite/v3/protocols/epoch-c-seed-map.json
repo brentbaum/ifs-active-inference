@@ -275,7 +275,7 @@
         3684000,
         3689999
       ],
-      "note": "Round-12 external rulings, adopted by gate3-adjudication-amendment-4.md; one requalification cycle only. Precommit custody adjudication 2026-08-01: block-first seeds barred, blocks re-scoped. Population-B adjudication 2026-08-01: context fixture defect (wrong prior init + marker collapse); first block barred; replacement 3700000:3701999; pre-block fixture-identity proof now permanent.",
+      "note": "Round-12 external rulings, adopted by gate3-adjudication-amendment-4.md; one requalification cycle only. Precommit custody adjudication 2026-08-01: block-first seeds barred, blocks re-scoped. Population-B adjudication 2026-08-01: context fixture defect (wrong prior init + marker collapse); first block barred; replacement 3700000:3701999; pre-block fixture-identity proof now permanent. Gate-4/Population-A custody adjudication 2026-08-02: both first blocks barred (prefix ambiguity), replacements allocated; finite-before-serialize custody rule permanent.",
       "barred_precommit_smoke_seeds": [
         3690000,
         3692000,
@@ -284,6 +284,22 @@
       "barred_population_b_first_attempt": [
         3690001,
         3691999
+      ],
+      "barred_gate4_first_block": [
+        3630000,
+        3634999
+      ],
+      "gate4_replacement": [
+        3702000,
+        3706999
+      ],
+      "barred_population_a_first_block": [
+        3692001,
+        3693999
+      ],
+      "population_a_replacement": [
+        3707000,
+        3708999
       ]
     }
   }
