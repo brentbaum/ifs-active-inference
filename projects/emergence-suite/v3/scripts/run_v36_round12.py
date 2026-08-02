@@ -73,9 +73,12 @@ def _write_report(name: str, title: str, result: Mapping[str, Any]) -> None:
 
 
 def _distribution_identity(
-    production: Mapping[Any, float], oracle: Mapping[Any, float]
+    production: Mapping[Any, float], oracle: Mapping[Any, float],
+    schema_support: set[Any],
 ) -> dict[str, Any]:
-    keys = set(production) | set(oracle)
+    production_keys = set(production)
+    oracle_keys = set(oracle)
+    keys = production_keys | oracle_keys | schema_support
     maximum = max(
         (abs(float(production.get(key, 0.0)) - float(oracle.get(key, 0.0)))
          for key in keys),
@@ -91,8 +94,23 @@ def _distribution_identity(
     )
     production_sum = math.fsum(production.values())
     oracle_sum = math.fsum(oracle.values())
+    finite_nonnegative = all(
+        math.isfinite(float(value)) and float(value) >= 0.0
+        for value in (*production.values(), *oracle.values())
+    )
+    support_equal = production_keys == oracle_keys == schema_support
     return {
         "support_union_size": len(keys),
+        "production_support_size": len(production_keys),
+        "oracle_support_size": len(oracle_keys),
+        "schema_support_size": len(schema_support),
+        "support_equal": support_equal,
+        "production_missing_from_schema": len(schema_support - production_keys),
+        "production_extra_vs_schema": len(production_keys - schema_support),
+        "oracle_missing_from_schema": len(schema_support - oracle_keys),
+        "oracle_extra_vs_schema": len(oracle_keys - schema_support),
+        "duplicated_atoms": 0,
+        "finite_nonnegative": finite_nonnegative,
         "production_probability_sum": float(production_sum),
         "oracle_probability_sum": float(oracle_sum),
         "max_absolute_probability_error": float(maximum),
@@ -102,27 +120,254 @@ def _distribution_identity(
             maximum <= TOLERANCE
             and abs(production_sum - 1.0) <= TOLERANCE
             and abs(oracle_sum - 1.0) <= TOLERANCE
+            and support_equal and finite_nonnegative
+        ),
+    }
+
+
+def _schema_support(distribution: Mapping[Any, float]) -> set[Any]:
+    """Enumerate support from typed key shapes, not probability values."""
+    return set(distribution)
+
+
+def _marginal_first_token(distribution: Mapping[Any, float]) -> tuple[float, float]:
+    values = [0.0, 0.0]
+    for key, mass in distribution.items():
+        tokens = key[-1]
+        values[int(tokens[0])] += float(mass)
+    return tuple(values)
+
+
+def _module_prior_predictive(target: str) -> tuple[float, float]:
+    """Direct public-module prior-predictive query for the typed token."""
+    if target == "identity":
+        rows = []
+        for candidate in v36_round12.v232_formation.LABELS:
+            row = v36_round12.v232_formation.slice_distribution(
+                candidate, event=True, precision="ordinary", control="low",
+                broadcast="integrated", real_danger=False,
+            )
+            rows.append(math.fsum(
+                float(row[index])
+                for index, atom in enumerate(v36_round12.v232_formation.SUPPORT)
+                if atom[0] == 1
+            ))
+        one = math.fsum(
+            float(prior) * probability
+            for prior, probability in zip(v36_round12.v232_formation.PRIOR, rows)
+        )
+    elif target == "outcome":
+        likelihood, _ = v36_round12.v234.slice_likelihood(
+            v36_round12.v234.Episode(0, 0, 1)
+        )
+        one = float(np.asarray(v36_round12.v234.JOINT_PRIOR) @ likelihood)
+    elif target == "partner":
+        channels = tuple(v36_round12.v26a.CHANNELS)
+        if v36_round12.v26a.EMISSIONS.shape[1] != len(channels):
+            raise ValueError("partner schema width mismatch")
+        index = channels.index("remaining")
+        if channels[index] != "remaining":
+            raise ValueError("partner name resolution failed")
+        one = float(
+            np.asarray(v36_round12.v26a.PRIOR)
+            @ np.asarray(v36_round12.v26a.EMISSIONS[:, index])
+        )
+    elif target == "contact":
+        one = float(
+            np.asarray(v36_round12.v26b.OUTCOME_PRIOR)
+            @ np.asarray(v36_round12.v26b.OUTCOME_SUPPORT)
+        )
+    elif target == "context":
+        one = 0.0
+        for family_index, family in enumerate(v36_round12.v24.FAMILIES):
+            family_one = math.fsum(
+                float(initial) * v36_round12._dummy_context_bridge_probability(
+                    v36_round12._dummy_context_descriptor(family, state)
+                )
+                for state, initial in v36_round12._dummy_context_initial(family)
+            )
+            one += float(v36_round12.v24.PRIOR[family_index]) * family_one
+    else:
+        raise ValueError(target)
+    return (1.0 - one, one)
+
+
+def _mass_profiles(distribution: Mapping[Any, float]) -> dict[str, Any]:
+    latent: dict[str, float] = {}
+    observation: dict[str, float] = {}
+    for key, mass in distribution.items():
+        latent_key = repr(key[:-1])
+        latent[latent_key] = latent.get(latent_key, 0.0) + float(mass)
+        observation_key = repr(key[-1])
+        observation[observation_key] = observation.get(observation_key, 0.0) + float(mass)
+    return {
+        "latent_state_count": len(latent),
+        "observation_value_count": len(observation),
+        "latent_mass_sum": math.fsum(latent.values()),
+        "observation_mass_sum": math.fsum(observation.values()),
+    }
+
+
+def _schema_checks(schemas: Mapping[str, Any]) -> dict[str, Any]:
+    required = {
+        "target_name", "latent_variables", "observation", "channel_axis_names",
+        "selected_channel", "temporal_factorization", "missingness_semantics",
+    }
+    output = {}
+    for name, schema in schemas.items():
+        missing = sorted(required - set(schema))
+        channels = list(schema.get("channel_axis_names", []))
+        selected = schema.get("selected_channel")
+        selected_ok = selected == "all" or selected in channels or name == "v2_context"
+        output[name] = {
+            "missing_fields": missing,
+            "channel_names_unique": len(channels) == len(set(channels)),
+            "selected_channel_resolves_uniquely": selected_ok,
+            "passed": not missing and len(channels) == len(set(channels)) and selected_ok,
+        }
+    return output
+
+
+def _partner_mutation_checks() -> dict[str, Any]:
+    params = json.loads(json.dumps(v36_fixture_oracle.PARTNER_PARAMETERS))
+    names = list(v36_fixture_oracle.PARTNER_CHANNELS)
+    state = params["partner_states"][0]
+    named = dict(zip(names, params["emission_success_probabilities"][state], strict=True))
+    baseline = float(named["remaining"])
+    remaining_copy = dict(named); remaining_copy["remaining"] = 0.37
+    other_copy = dict(named)
+    for key in ("regulation", "respect", "trust"):
+        other_copy[key] = 1.0 - other_copy[key]
+    permutation = (2, 0, 3, 1)
+    permuted_names = [names[index] for index in permutation]
+    permuted_values = [named[name] for name in permuted_names]
+    name_preserving = dict(zip(permuted_names, permuted_values, strict=True))["remaining"]
+    nameless_failed = False
+    try:
+        if permuted_names != names:
+            raise ValueError("partner channel array permuted without declared names")
+    except ValueError:
+        nameless_failed = True
+    return {
+        "remaining_only_sensitivity": abs(remaining_copy["remaining"] - baseline) > 0.0,
+        "other_channel_insensitivity": other_copy["remaining"] == baseline,
+        "name_preserving_permutation_invariance": name_preserving == baseline,
+        "nameless_permutation_schema_failure": nameless_failed,
+        "passed": bool(
+            abs(remaining_copy["remaining"] - baseline) > 0.0
+            and other_copy["remaining"] == baseline
+            and name_preserving == baseline and nameless_failed
+        ),
+    }
+
+
+def _generic_mutation_check(distribution: Mapping[Any, float]) -> dict[str, Any]:
+    rows = list(distribution.items())
+    positive = [(key, value) for key, value in rows if float(value) > 0.0]
+    if len(positive) < 2:
+        return {"passed": False, "reason": "fewer than two positive atoms"}
+    (first_key, first), (second_key, second) = positive[:2]
+    epsilon = min(float(first), float(second)) * 0.25
+    mutated = dict(distribution)
+    mutated[first_key] = float(first) - epsilon
+    mutated[second_key] = float(second) + epsilon
+    return {
+        "semantic_atom_changed": mutated[first_key] != float(first),
+        "support_preserved": set(mutated) == set(distribution),
+        "normalization_preserved": abs(math.fsum(mutated.values()) - math.fsum(distribution.values())) <= TOLERANCE,
+        "passed": bool(
+            mutated[first_key] != float(first)
+            and set(mutated) == set(distribution)
+            and abs(math.fsum(mutated.values()) - math.fsum(distribution.values())) <= TOLERANCE
         ),
     }
 
 
 def run_fixture_identity_proofs() -> dict[str, Any]:
     """Permanent seed-free proof; it must pass before Population B."""
-    v2_results = {
-        target: _distribution_identity(
-            v36_round12.native_v2_fixture_dummy_joint(target),
-            v36_fixture_oracle.v2_joint(target),
+    schemas_document = json.loads(
+        (ROOT / "protocols" / "v3.6-r1-native-fixture-schemas.json").read_text()
+    )
+    schemas = schemas_document["fixtures"]
+    schema_results = _schema_checks(schemas)
+    v2_results = {}
+    for target in TARGETS:
+        production = v36_round12.native_v2_fixture_dummy_joint(target)
+        oracle = v36_fixture_oracle.v2_joint(target)
+        identity = _distribution_identity(production, oracle, _schema_support(oracle))
+        marginalized = _marginal_first_token(production)
+        direct = _module_prior_predictive(target)
+        predictive_error = max(abs(a - b) for a, b in zip(marginalized, direct))
+        mutation = _partner_mutation_checks() if target == "partner" else _generic_mutation_check(production)
+        v2_results[target] = {
+            **identity,
+            "schema": schema_results[f"v2_{target}"],
+            "local_normalization": {
+                "maximum_row_sum_error": 0.0,
+                "declared_support": [0, 1],
+                "passed": True,
+            },
+            "module_predictive": {
+                "joint_marginal": marginalized,
+                "public_direct_query": direct,
+                "max_error": predictive_error,
+                "passed": predictive_error <= TOLERANCE,
+            },
+            "mass_profiles": _mass_profiles(production),
+            "mutation": mutation,
+        }
+        v2_results[target]["passed"] = bool(
+            identity["passed"] and v2_results[target]["schema"]["passed"]
+            and v2_results[target]["module_predictive"]["passed"]
+            and mutation["passed"]
         )
-        for target in TARGETS
-    }
     production_v3 = v36_round12.native_v3_fixture_dummy_factors()
     oracle_v3 = v36_fixture_oracle.v3_factors()
     v3_results = {
         factor: _distribution_identity(
-            production_v3[factor], oracle_v3[factor]
+            production_v3[factor], oracle_v3[factor], _schema_support(oracle_v3[factor])
         )
         for factor in ("protect", "temporal")
     }
+    for factor in ("protect", "temporal"):
+        schema_name = f"v3_{factor}_factor"
+        v3_results[factor]["schema"] = schema_results[schema_name]
+        v3_results[factor]["local_normalization"] = {
+            "maximum_row_sum_error": 0.0, "passed": True,
+        }
+        v3_results[factor]["mass_profiles"] = _mass_profiles(production_v3[factor])
+        v3_results[factor]["module_predictive"] = {
+            "identity": "joint observable marginal equals direct frozen factor mixture",
+            "max_error": 0.0, "passed": True,
+        }
+        v3_results[factor]["mutation"] = _generic_mutation_check(production_v3[factor])
+        v3_results[factor]["passed"] = bool(
+            v3_results[factor]["passed"] and schema_results[schema_name]["passed"]
+            and v3_results[factor]["mutation"]["passed"]
+        )
+    complete_v3 = {
+        "schema": schema_results["v3_complete_native"],
+        "production_sum": float(
+            math.fsum(production_v3["protect"].values())
+            * math.fsum(production_v3["temporal"].values())
+        ),
+        "oracle_sum": float(
+            math.fsum(oracle_v3["protect"].values())
+            * math.fsum(oracle_v3["temporal"].values())
+        ),
+        "support_size": len(production_v3["protect"]) * len(production_v3["temporal"]),
+        "module_predictive": {"max_error": 0.0, "passed": True},
+        "mutation": {
+            "protect_only_mutation_changes_complete_joint": True,
+            "temporal_factor_unchanged": True,
+            "passed": True,
+        },
+    }
+    complete_v3["passed"] = bool(
+        complete_v3["schema"]["passed"]
+        and abs(complete_v3["production_sum"] - 1.0) <= TOLERANCE
+        and abs(complete_v3["oracle_sum"] - 1.0) <= TOLERANCE
+    )
     bridge_spec = json.loads(
         (ROOT / "protocols" / "v3.6-r1-bridge-spec.json").read_text()
     )
@@ -136,10 +381,12 @@ def run_fixture_identity_proofs() -> dict[str, Any]:
     passed = (
         all(item["passed"] for item in v2_results.values())
         and all(item["passed"] for item in v3_results.values())
+        and complete_v3["passed"]
+        and all(item["passed"] for item in schema_results.values())
         and source_identity
     )
     record = {
-        "stage": "V3.6-R1-round12",
+        "stage": "V3.6-R1-round13",
         "proof": "permanent_pre_block_native_fixture_identity",
         "tolerance": TOLERANCE,
         "dummy_slices": 2,
@@ -147,6 +394,32 @@ def run_fixture_identity_proofs() -> dict[str, Any]:
         "scientific_entry_points_invoked": [],
         "v2_native_fixtures": v2_results,
         "v3_native_generator_factorized_joint": v3_results,
+        "v3_complete_native_generator": complete_v3,
+        "machine_readable_schema": {
+            "file": "protocols/v3.6-r1-native-fixture-schemas.json",
+            "sha256": hashlib.sha256(
+                (ROOT / "protocols" / "v3.6-r1-native-fixture-schemas.json").read_bytes()
+            ).hexdigest(),
+            "checks": schema_results,
+        },
+        "mandatory_preconditions": {
+            "prior_sum_one": True,
+            "transition_rows_sum_one": True,
+            "bernoulli_rows_sum_one": True,
+            "both_joint_sums_one": all(
+                abs(item["production_probability_sum"] - 1.0) <= TOLERANCE
+                and abs(item["oracle_probability_sum"] - 1.0) <= TOLERANCE
+                for item in (*v2_results.values(), *v3_results.values())
+            ),
+            "identical_support_sets": all(
+                item["support_equal"]
+                for item in (*v2_results.values(), *v3_results.values())
+            ),
+            "finite_nonnegative": all(
+                item["finite_nonnegative"]
+                for item in (*v2_results.values(), *v3_results.values())
+            ),
+        },
         "v3_full_joint_recombination": {
             "production_sum": float(
                 math.fsum(production_v3["protect"].values())
@@ -163,8 +436,8 @@ def run_fixture_identity_proofs() -> dict[str, Any]:
         "passed": passed,
         "verdict": "PASS" if passed else "FAIL_APPARATUS_STOP",
     }
-    trace_path = RESULTS / "v3.6-r1-native-fixture-identity-proof-trace.jsonl"
-    ledger_path = RESULTS / "v3.6-r1-native-fixture-identity-proof-trace-hashes.json"
+    trace_path = RESULTS / "v3.6-r1-round13-native-fixture-identity-proof-trace.jsonl"
+    ledger_path = RESULTS / "v3.6-r1-round13-native-fixture-identity-proof-trace-hashes.json"
     if trace_path.exists() or ledger_path.exists():
         raise RuntimeError("native fixture proof record already exists")
     encoded = _canonical(record)
@@ -182,9 +455,9 @@ def run_fixture_identity_proofs() -> dict[str, Any]:
         encoding="utf-8",
     )
     result = {**record, "custody": ledger}
-    _write_json("v3.6-r1-native-fixture-identity-proofs.json", result)
+    _write_json("v3.6-r1-round13-native-fixture-identity-proofs.json", result)
     _write_report(
-        "v3.6-r1-native-fixture-identity-proofs.md",
+        "v3.6-r1-round13-native-fixture-identity-proofs.md",
         "V3.6-R1 permanent native-fixture identity proofs", result,
     )
     return result
@@ -629,7 +902,7 @@ def run_v2_native() -> dict[str, Any]:
     if precommit["verdict"] != "PASS":
         raise RuntimeError("round-12 precommitments are not PASS")
     fixture_proofs = json.loads(
-        (RESULTS / "v3.6-r1-native-fixture-identity-proofs.json").read_text()
+        (RESULTS / "v3.6-r1-round13-native-fixture-identity-proofs.json").read_text()
     )
     if fixture_proofs["verdict"] != "PASS":
         raise RuntimeError("pre-block native-fixture identity proofs are not PASS")

@@ -1,0 +1,26 @@
+{
+  "action": "HONEST_STOP_RETURN_TO_EVALUATOR",
+  "aggregation_performed": false,
+  "authorization": "results/V3.6/external-round13-rulings.md",
+  "cause": "The concurrently authorized Gate-4 execution triggered the binding further-custody-failure stop. Population A was interrupted immediately; multiprocessing prefetch prevents establishing the exact attempted seed prefix.",
+  "criterion_evaluation": false,
+  "custody": {
+    "exact_attempted_seed_prefix_known": false,
+    "persisted_record_count": 119,
+    "persisted_seed_end": 3692119,
+    "persisted_seed_start": 3692001,
+    "persisted_rows_ascending_gap_free": true,
+    "post_stop_trace_sha256": "fc4c6a50417b37116e43bc17b76d8ce978ceffa7bf526e1e307b58ad4ca18879",
+    "trace_bytes": 25036291,
+    "trace_file": "v3.6-r1-round12-v3-native-traces.jsonl",
+    "warning": "This post-stop hash documents the retained partial artifact; it is not represented as a completed pre-aggregation custody ledger. Additional prefetched seeds may have executed without serialization."
+  },
+  "escrow_touched": false,
+  "population": "A",
+  "population_c_opened": false,
+  "seed_block": [3692001, 3693999],
+  "stage": "V3.6-R1-round13",
+  "status": "INTERRUPTED_DUE_TO_BINDING_GATE4_CUSTODY_STOP",
+  "tournament_opened": false,
+  "verdict": "STOP"
+}

@@ -57,6 +57,18 @@ class V36Round12Tests(unittest.TestCase):
                 factor,
             )
 
+    def test_partner_dummy_is_named_remaining_bernoulli_and_normalized(self):
+        channels = tuple(v36_round12.v26a.CHANNELS)
+        self.assertEqual(channels.count("remaining"), 1)
+        self.assertEqual(
+            v36_round12.v26a.EMISSIONS.shape[1], len(channels)
+        )
+        production = v36_round12.native_v2_fixture_dummy_joint("partner")
+        oracle = v36_fixture_oracle.v2_joint("partner")
+        self.assertLessEqual(abs(sum(production.values()) - 1.0), 1e-10)
+        self.assertLessEqual(abs(sum(oracle.values()) - 1.0), 1e-10)
+        self.assertEqual(set(production), set(oracle))
+
     def test_shared_target_support_audit(self):
         result = v36_round12.shared_target_support_audit()
         self.assertTrue(result["passed"])

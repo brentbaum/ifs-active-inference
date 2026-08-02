@@ -1,0 +1,77 @@
+{
+  "schema_version": "V3.6-R1-round13-1",
+  "fixtures": {
+    "v2_identity": {
+      "target_name": "identity",
+      "latent_variables": {"formation_candidate": ["T", "D", "P"]},
+      "observation": {"name": "identity_token", "support": [0, 1], "distribution": "Bernoulli"},
+      "channel_axis_names": ["identity_token"],
+      "selected_channel": "identity_token",
+      "temporal_factorization": "p(H) product_t p(identity_token_t | H)",
+      "missingness_semantics": "None is masked and contributes likelihood 1"
+    },
+    "v2_outcome": {
+      "target_name": "outcome",
+      "latent_variables": {"attribution_parameter": "v234.JOINT_SUPPORT"},
+      "observation": {"name": "outcome_token", "support": [0, 1], "distribution": "Bernoulli"},
+      "channel_axis_names": ["outcome_token"],
+      "selected_channel": "outcome_token",
+      "temporal_factorization": "p(theta) product_t p(outcome_token_t | do(action_t), context_t, theta)",
+      "missingness_semantics": "None is masked and contributes likelihood 1"
+    },
+    "v2_context": {
+      "target_name": "context",
+      "latent_variables": {"family": ["global_weight", "cue_local", "context_split", "drift", "change_point"], "context_state": ["then", "now", "none"]},
+      "observation": {"name": "binary_context_marker", "support": [0, 1], "distribution": "categorical marker conditioned on {then_marker, now_marker}"},
+      "channel_axis_names": ["then_marker", "now_marker", "none_marker"],
+      "selected_channel": "binary_context_marker",
+      "temporal_factorization": "p(family)p(c0|family) product_t p(marker_t|c_t,family)p(c_next|c_t,family)",
+      "missingness_semantics": "none_marker is a third observed value and is conditioned out, never complemented into binary support; None is masked"
+    },
+    "v2_partner": {
+      "target_name": "partner",
+      "latent_variables": {"partner_state": ["reliable_contingent", "soothing_noncontingent", "intrusive", "unstable"]},
+      "observation": {"name": "remaining", "support": [0, 1], "distribution": "Bernoulli"},
+      "channel_axis_names": ["regulation", "remaining", "respect", "trust"],
+      "selected_channel": "remaining",
+      "temporal_factorization": "p(s0)p(s1|s0)Bern(r0;theta[s0,remaining])Bern(r1;theta[s1,remaining])",
+      "missingness_semantics": "each None channel is masked and contributes likelihood 1; the four columns are separate Bernoulli channels, not categories"
+    },
+    "v2_contact": {
+      "target_name": "contact",
+      "latent_variables": {"contact_parameter": "v26b.OUTCOME_SUPPORT"},
+      "observation": {"name": "contact_response", "support": [0, 1], "distribution": "Bernoulli"},
+      "channel_axis_names": ["contact_response"],
+      "selected_channel": "contact_response",
+      "temporal_factorization": "p(theta_contact) product_t p(contact_response_t | theta_contact)",
+      "missingness_semantics": "None is masked and contributes likelihood 1"
+    },
+    "v3_complete_native": {
+      "target_name": "complete_v3_native",
+      "latent_variables": {"protect_program": "v35.PROGRAMS", "temporal_program": "v32.PROGRAMS"},
+      "observation": {"name": "protect_and_temporal_tokens", "support": "Cartesian product of the protect and temporal factor supports", "distribution": "factorized normalized joint"},
+      "channel_axis_names": ["identity", "outcome", "partner_remaining", "contact", "context"],
+      "selected_channel": "all",
+      "temporal_factorization": "p(protect_program, protect_latents, protect_tokens) p(temporal_program, context_token)",
+      "missingness_semantics": "None is masked per typed channel; the enumerable dummy delivers all five channels"
+    },
+    "v3_protect_factor": {
+      "target_name": "v3_protect_factor",
+      "latent_variables": {"protect_program": "v35.PROGRAMS", "cross_sign": [-1, 0, 1], "partner_reliable": [0, 1], "contact_parameter": [0, 1], "mode_vector": "binary active slots"},
+      "observation": {"name": "protect_tokens", "support": "{0,1}^4", "distribution": "four conditionally independent Bernoulli channels"},
+      "channel_axis_names": ["identity", "outcome", "partner_remaining", "contact"],
+      "selected_channel": "all",
+      "temporal_factorization": "p(program,sign,L,theta_contact,M) product_channel p(token|latents,program)",
+      "missingness_semantics": "None is masked; enumerable dummy has no masked channel"
+    },
+    "v3_temporal_factor": {
+      "target_name": "v3_temporal_factor",
+      "latent_variables": {"temporal_program": "v32.PROGRAMS", "context_state": [0, 1, 2]},
+      "observation": {"name": "context_token", "support": [0, 1], "distribution": "Bernoulli"},
+      "channel_axis_names": ["context_token"],
+      "selected_channel": "context_token",
+      "temporal_factorization": "p(temporal_program)p(context_token|compiled context path, scope, dynamics)",
+      "missingness_semantics": "None is masked and contributes likelihood 1"
+    }
+  }
+}

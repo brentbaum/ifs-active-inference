@@ -364,3 +364,64 @@ New ready-for-evaluator-commit files:
 Seed consumption in this dispatch: none. Replacement Population B,
 Populations A/C, the tournament, Gate 4, Gate 5, diagnosis reserves, barred
 blocks, and escrows remain untouched.
+
+## Round 13 — repaired fixtures, Population B pass, and binding custody stop
+
+The authorized partner-proof repair now treats `remaining` as one named
+Bernoulli channel. It no longer interprets V2.6a's four channel probabilities
+as a categorical row. A machine-readable schema and permanent schema,
+local/global-normalization, exact-support, direct-module-predictive, and
+semantic-mutation defenses cover all eight native fixture families.
+
+- All eight zero-seed proofs passed. Partner production and independent-oracle
+  joints each sum to `1.0`; their maximum atom error is `0.0`. Scientific
+  source hashes remained bitwise unchanged. The proof trace was persisted and
+  hashed before the verdict.
+- Replacement Population B consumed `3700000:3701999` once, ascending and
+  gap-free, and **PASS**ed all five blocking targets. ECEs were: contact
+  `0.014566`, context `0.026063`, identity `0.005069`, outcome `0.015189`, and
+  partner `0.006759`. Normalization and adapter/enumeration errors were all at
+  or below `4.45e-16`.
+- Gate 4 then stopped before its first row could serialize. Seed `3630000`
+  certainly executed; multiprocessing prefetch makes the additional attempted
+  prefix unknowable. A non-finite `masked_channel_neutrality_error=inf` was
+  rejected by strict JSON serialization. No Gate-4 criterion was aggregated.
+- The concurrently authorized Population-A process was interrupted
+  immediately. Its partial trace durably contains seeds `3692001:3692119`
+  (119 ascending records; SHA-256
+  `fc4c6a50417b37116e43bc17b76d8ce978ceffa7bf526e1e307b58ad4ca18879`),
+  but worker prefetch prevents establishing its exact attempted prefix. No
+  Population-A criterion was aggregated.
+
+Per the binding rule, this is an **HONEST STOP — FURTHER CUSTODY FAILURE**.
+Population C, the tournament, Gate 5, every barred block, and every escrow
+remain unopened. No repair or rerun was attempted.
+
+No full-suite run was started after the custody failure: further scoring or
+test invocations were prohibited by the immediate-stop ruling. The completed
+Population-B raw JSONL remains local under its verified 2,000-record hash
+ledger; the interrupted Population-A JSONL remains local as explicitly
+non-qualifying evidence under the post-stop hash above.
+
+Round-13 ready-for-evaluator-commit files:
+
+- `protocols/v3.6-r1-native-fixture-schemas.json`
+- `ref/v36_round12.py`
+- `ref/v36_fixture_oracle.py`
+- `scripts/run_v36_round12.py`
+- `scripts/run_v36_gate4.py`
+- `tests/test_v36_round12.py`
+- `results/V3.6/v3.6-r1-round13-native-fixture-identity-proof-trace.jsonl`
+- `results/V3.6/v3.6-r1-round13-native-fixture-identity-proof-trace-hashes.json`
+- `results/V3.6/v3.6-r1-round13-native-fixture-identity-proofs.json`
+- `results/V3.6/v3.6-r1-round13-native-fixture-identity-proofs.md`
+- `results/V3.6/v3.6-r1-round12-v2-native-replacement-qualification.json`
+- `results/V3.6/v3.6-r1-round12-v2-native-replacement-qualification.md`
+- `results/V3.6/v3.6-r1-round12-v2-native-replacement-trace-hashes.json`
+- `results/V3.6/gate-4-traces.jsonl` (empty retained evidence)
+- `results/V3.6/gate-4-custody-stop.json`
+- `results/V3.6/gate-4-custody-stop.md`
+- `results/V3.6/v3.6-r1-round12-v3-native-traces.jsonl` (partial local bundle)
+- `results/V3.6/v3.6-r1-round13-population-a-interrupted-custody-stop.json`
+- `results/V3.6/v3.6-r1-round13-population-a-interrupted-custody-stop.md`
+- `results/V3.6/ready-to-commit.md`

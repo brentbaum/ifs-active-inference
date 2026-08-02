@@ -703,16 +703,31 @@ def native_v2_fixture_dummy_joint(
                     mass *= _dummy_binary(float(likelihood[truth]), token)
                 output[(truth, tokens)] = mass
     elif target == "partner":
+        channels = tuple(v26a.CHANNELS)
+        if v26a.EMISSIONS.shape[1] != len(channels):
+            raise ValueError("partner emission width differs from declared channel schema")
+        if channels.count("remaining") != 1:
+            raise ValueError("partner schema must resolve remaining exactly once")
+        remaining_index = channels.index("remaining")
+        if channels[remaining_index] != "remaining":
+            raise ValueError("partner remaining-channel name resolution failed")
         for initial, prior in enumerate(v26a.PRIOR):
             for next_state in range(len(v26a.PRIOR)):
                 path_mass = float(prior) * float(
                     v26a.TRANSITION[initial, next_state]
                 )
                 for tokens in itertools.product((0, 1), repeat=2):
-                    output[((initial, next_state), tokens)] = path_mass * math.prod((
-                        float(v26a.EMISSIONS[initial, tokens[0]]),
-                        float(v26a.EMISSIONS[next_state, tokens[1]]),
-                    ))
+                    observations = (
+                        (None, tokens[0], None, None),
+                        (None, tokens[1], None, None),
+                    )
+                    likelihoods = (
+                        v26a.relational_likelihood(observations[0], initial),
+                        v26a.relational_likelihood(observations[1], next_state),
+                    )
+                    output[((initial, next_state), tokens)] = (
+                        path_mass * math.prod(float(value) for value in likelihoods)
+                    )
     elif target == "contact":
         for parameter, prior in enumerate(v26b.OUTCOME_PRIOR):
             probability = float(v26b.OUTCOME_SUPPORT[parameter])

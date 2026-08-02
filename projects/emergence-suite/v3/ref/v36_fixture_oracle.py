@@ -7,18 +7,25 @@ expands the frozen module priors, transitions, and observation tables directly.
 from __future__ import annotations
 
 import itertools
+import json
 import math
+from pathlib import Path
 from types import MappingProxyType
 from typing import Any, Mapping, Sequence
 
 import numpy as np
 
 from . import v32, v35
-from v2.ref import v232_formation, v234, v24, v26a, v26b
+from v2.ref import v232_formation, v234, v24, v26b
 
 
 LENGTH = 2
 TOTAL_SLICES = 64
+V2_ROOT = Path(__file__).resolve().parents[2] / "v2"
+PARTNER_PARAMETERS = json.loads(
+    (V2_ROOT / "protocols" / "v2.6a-parameters.json").read_text()
+)
+PARTNER_CHANNELS = ("regulation", "remaining", "respect", "trust")
 
 
 def _bernoulli(probability: float, value: int) -> float:
@@ -109,13 +116,33 @@ def v2_joint(target: str) -> Mapping[tuple[Any, ...], float]:
                     probability *= _bernoulli(float(cpt[latent]), value)
                 result[(latent, observations)] = probability
     elif target == "partner":
-        for first in range(len(v26a.PRIOR)):
-            for second in range(len(v26a.PRIOR)):
-                path = float(v26a.PRIOR[first]) * float(v26a.TRANSITION[first, second])
+        states = tuple(PARTNER_PARAMETERS["partner_states"])
+        prior = tuple(float(value) for value in PARTNER_PARAMETERS["partner_prior"])
+        stay = float(PARTNER_PARAMETERS["transition_stay_probability"])
+        transition = tuple(
+            tuple(stay if row == column else (1.0 - stay) / (len(states) - 1)
+                  for column in range(len(states)))
+            for row in range(len(states))
+        )
+        named_emissions = {
+            state: {
+                channel: float(value)
+                for channel, value in zip(
+                    PARTNER_CHANNELS,
+                    PARTNER_PARAMETERS["emission_success_probabilities"][state],
+                    strict=True,
+                )
+            }
+            for state in states
+        }
+        for first in range(len(states)):
+            for second in range(len(states)):
+                path = prior[first] * transition[first][second]
                 for observations in itertools.product((0, 1), repeat=LENGTH):
-                    result[((first, second), observations)] = path * float(
-                        v26a.EMISSIONS[first, observations[0]]
-                    ) * float(v26a.EMISSIONS[second, observations[1]])
+                    result[((first, second), observations)] = path * (
+                        _bernoulli(named_emissions[states[first]]["remaining"], observations[0])
+                        * _bernoulli(named_emissions[states[second]]["remaining"], observations[1])
+                    )
     elif target == "contact":
         for latent, prior in enumerate(v26b.OUTCOME_PRIOR):
             probability = float(v26b.OUTCOME_SUPPORT[latent])

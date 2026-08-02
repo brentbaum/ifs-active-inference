@@ -1,0 +1,33 @@
+{
+  "action": "HONEST_STOP_RETURN_TO_EVALUATOR",
+  "aggregation_performed": false,
+  "authorization": "results/V3.6/external-round13-rulings.md",
+  "cause": {
+    "apparatus_class": "runner serialization failure",
+    "exception": "ValueError: Out of range float values are not JSON compliant: inf",
+    "field": "masked_channel_neutrality_error",
+    "localization": "the Gate-4 conditioned-support helper returned infinity when a restricted scorer retained zero-probability entries on the full program axis; the row then failed strict JSON serialization"
+  },
+  "criterion_evaluation": false,
+  "custody": {
+    "empty_trace_file_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "event_ledgers_persisted": 0,
+    "exact_executed_seed_prefix_known": false,
+    "hash_ledger_written": false,
+    "known_executed_seed": 3630000,
+    "multiprocessing_prefetch_may_have_executed_additional_unpersisted_tasks": true,
+    "trace_file": "gate-4-traces.jsonl",
+    "trace_file_bytes": 0
+  },
+  "escrow_touched": false,
+  "gate": 4,
+  "gate5_opened": false,
+  "repair_or_rerun_attempted": false,
+  "seed_block": [
+    3630000,
+    3634999
+  ],
+  "stage": "V3.6",
+  "status": "HONEST_STOP_GATE4_CUSTODY_FAILURE",
+  "verdict": "STOP"
+}

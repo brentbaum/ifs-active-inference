@@ -1,0 +1,506 @@
+{
+  "custody": {
+    "file": "v3.6-r1-round13-native-fixture-identity-proof-trace.jsonl",
+    "persisted_before_output": true,
+    "record_count": 1,
+    "seed_consumption": [],
+    "sha256": "e7a3c8bf1e61bad3dfa3562b831823320da1081ed545931cde1e574aae564463"
+  },
+  "dummy_slices": 2,
+  "machine_readable_schema": {
+    "checks": {
+      "v2_contact": {
+        "channel_names_unique": true,
+        "missing_fields": [],
+        "passed": true,
+        "selected_channel_resolves_uniquely": true
+      },
+      "v2_context": {
+        "channel_names_unique": true,
+        "missing_fields": [],
+        "passed": true,
+        "selected_channel_resolves_uniquely": true
+      },
+      "v2_identity": {
+        "channel_names_unique": true,
+        "missing_fields": [],
+        "passed": true,
+        "selected_channel_resolves_uniquely": true
+      },
+      "v2_outcome": {
+        "channel_names_unique": true,
+        "missing_fields": [],
+        "passed": true,
+        "selected_channel_resolves_uniquely": true
+      },
+      "v2_partner": {
+        "channel_names_unique": true,
+        "missing_fields": [],
+        "passed": true,
+        "selected_channel_resolves_uniquely": true
+      },
+      "v3_complete_native": {
+        "channel_names_unique": true,
+        "missing_fields": [],
+        "passed": true,
+        "selected_channel_resolves_uniquely": true
+      },
+      "v3_protect_factor": {
+        "channel_names_unique": true,
+        "missing_fields": [],
+        "passed": true,
+        "selected_channel_resolves_uniquely": true
+      },
+      "v3_temporal_factor": {
+        "channel_names_unique": true,
+        "missing_fields": [],
+        "passed": true,
+        "selected_channel_resolves_uniquely": true
+      }
+    },
+    "file": "protocols/v3.6-r1-native-fixture-schemas.json",
+    "sha256": "adcd8bce85055eade1fd48d71e277424d8742a7579ec5bc79fae2879885c82a0"
+  },
+  "mandatory_preconditions": {
+    "bernoulli_rows_sum_one": true,
+    "both_joint_sums_one": true,
+    "finite_nonnegative": true,
+    "identical_support_sets": true,
+    "prior_sum_one": true,
+    "transition_rows_sum_one": true
+  },
+  "passed": true,
+  "proof": "permanent_pre_block_native_fixture_identity",
+  "scientific_entry_points_invoked": [],
+  "scientific_source_hash_identity": true,
+  "scientific_source_hashes": {
+    "v2/protocols/v2.3.2-formation-parameters.json": "d1e3b7e329682802c72d8a35e2e53a18ae259e34cfb6800b899a794342d50d91",
+    "v2/protocols/v2.3.4-parameters.json": "3dd0851363133a77c0e4433b5b41ba1e2fdaaaaa1f2973f7a579c2a8635c3c68",
+    "v2/protocols/v2.4-parameters.json": "94972204bdb406f3d5ff8a8aa2df3f8577f4a71dc0032a79c75990ada6455fde",
+    "v2/protocols/v2.6a-parameters.json": "3d4a2c4643d78c5167a8a763037051f940e379787f700a1804cc9d1d8533bb24",
+    "v2/protocols/v2.6b-parameters.json": "2403f587f665ef313a1383194a5271e49c67ee9d2cb222a29c85b33b6b61f2ca",
+    "v2/ref/v232_formation.py": "499e0688a114ce86ac67878c8d1e986596e2cd3a54fa1ebe3c9d4b7917a03b0e",
+    "v2/ref/v234.py": "2110c07ad3c7495e44955486da7695450c9560eadacef4eb1cfddcd034ac1c1d",
+    "v2/ref/v24.py": "9efb9654308ca3f558b9b098cea733265ea263819278c36320413d30638633a8",
+    "v2/ref/v26a.py": "e7d4284847257353f4bfbfe0122425702449080162bdba7b4c24736e9e62db63",
+    "v2/ref/v26b.py": "3752bc019ffa5e460afb40289bd56d53418156dbe0b2f4c04a9aa5f64335a998",
+    "v3/ref/v31.py": "0481e51acf72ee8018cb3c9a1c780570b22e05657cc687376f08ca99544149e0",
+    "v3/ref/v32.py": "0b990eb4c28f3dd61ec37b57742548c1f63147ec48fe8fac465cf2123dba9833",
+    "v3/ref/v33.py": "018ebac662a925a3ed5431197d8c5914049fa5e1b20787fd5b13de3310c977fd",
+    "v3/ref/v34.py": "f9a37a36a0393f9fd437776457cc48018db6cfe1d5195d95a9cbf5b2e90744cd",
+    "v3/ref/v35.py": "7b71e5a7c8003d27c7f1bcafc8deae2d2eed07dd80942066362a1d9c5da8c264",
+    "v3/ref/v36.py": "99fe821485b8112e84ab3fe2ea45f73bf8055be22003982089a135eb07f4dc72"
+  },
+  "seed_consumption": [],
+  "stage": "V3.6-R1-round13",
+  "tolerance": 1e-10,
+  "v2_native_fixtures": {
+    "contact": {
+      "duplicated_atoms": 0,
+      "finite_nonnegative": true,
+      "local_normalization": {
+        "declared_support": [
+          0,
+          1
+        ],
+        "maximum_row_sum_error": 0.0,
+        "passed": true
+      },
+      "mass_profiles": {
+        "latent_mass_sum": 1.0,
+        "latent_state_count": 3,
+        "observation_mass_sum": 1.0,
+        "observation_value_count": 4
+      },
+      "max_absolute_probability_error": 0.0,
+      "module_predictive": {
+        "joint_marginal": [
+          0.5,
+          0.5
+        ],
+        "max_error": 0.0,
+        "passed": true,
+        "public_direct_query": [
+          0.5,
+          0.5
+        ]
+      },
+      "mutation": {
+        "normalization_preserved": true,
+        "passed": true,
+        "semantic_atom_changed": true,
+        "support_preserved": true
+      },
+      "oracle_extra_vs_schema": 0,
+      "oracle_missing_from_schema": 0,
+      "oracle_probability_sum": 1.0,
+      "oracle_sha256": "f3f3c6a048cdeed7400586324c5afbfd773b99753a26342f726abc4719a24fe5",
+      "oracle_support_size": 12,
+      "passed": true,
+      "production_extra_vs_schema": 0,
+      "production_missing_from_schema": 0,
+      "production_probability_sum": 1.0,
+      "production_sha256": "f3f3c6a048cdeed7400586324c5afbfd773b99753a26342f726abc4719a24fe5",
+      "production_support_size": 12,
+      "schema": {
+        "channel_names_unique": true,
+        "missing_fields": [],
+        "passed": true,
+        "selected_channel_resolves_uniquely": true
+      },
+      "schema_support_size": 12,
+      "support_equal": true,
+      "support_union_size": 12
+    },
+    "context": {
+      "duplicated_atoms": 0,
+      "finite_nonnegative": true,
+      "local_normalization": {
+        "declared_support": [
+          0,
+          1
+        ],
+        "maximum_row_sum_error": 0.0,
+        "passed": true
+      },
+      "mass_profiles": {
+        "latent_mass_sum": 1.0,
+        "latent_state_count": 33,
+        "observation_mass_sum": 1.0,
+        "observation_value_count": 4
+      },
+      "max_absolute_probability_error": 8.673617379884035e-19,
+      "module_predictive": {
+        "joint_marginal": [
+          0.5882352941176472,
+          0.4117647058823531
+        ],
+        "max_error": 2.220446049250313e-16,
+        "passed": true,
+        "public_direct_query": [
+          0.588235294117647,
+          0.411764705882353
+        ]
+      },
+      "mutation": {
+        "normalization_preserved": true,
+        "passed": true,
+        "semantic_atom_changed": true,
+        "support_preserved": true
+      },
+      "oracle_extra_vs_schema": 0,
+      "oracle_missing_from_schema": 0,
+      "oracle_probability_sum": 1.0,
+      "oracle_sha256": "05c7876ed45f60d1bfe279944a4a5018e0d46b2fad277a6dc52e59f3f89dd98b",
+      "oracle_support_size": 132,
+      "passed": true,
+      "production_extra_vs_schema": 0,
+      "production_missing_from_schema": 0,
+      "production_probability_sum": 1.0,
+      "production_sha256": "3e8041633c234d03c6f653e23c5e55f0a327661862bbfa9c8bd54a5f1845dd84",
+      "production_support_size": 132,
+      "schema": {
+        "channel_names_unique": true,
+        "missing_fields": [],
+        "passed": true,
+        "selected_channel_resolves_uniquely": true
+      },
+      "schema_support_size": 132,
+      "support_equal": true,
+      "support_union_size": 132
+    },
+    "identity": {
+      "duplicated_atoms": 0,
+      "finite_nonnegative": true,
+      "local_normalization": {
+        "declared_support": [
+          0,
+          1
+        ],
+        "maximum_row_sum_error": 0.0,
+        "passed": true
+      },
+      "mass_profiles": {
+        "latent_mass_sum": 1.0,
+        "latent_state_count": 3,
+        "observation_mass_sum": 1.0,
+        "observation_value_count": 4
+      },
+      "max_absolute_probability_error": 0.0,
+      "module_predictive": {
+        "joint_marginal": [
+          0.5857116650056705,
+          0.4142883349943295
+        ],
+        "max_error": 0.0,
+        "passed": true,
+        "public_direct_query": [
+          0.5857116650056705,
+          0.4142883349943295
+        ]
+      },
+      "mutation": {
+        "normalization_preserved": true,
+        "passed": true,
+        "semantic_atom_changed": true,
+        "support_preserved": true
+      },
+      "oracle_extra_vs_schema": 0,
+      "oracle_missing_from_schema": 0,
+      "oracle_probability_sum": 1.0,
+      "oracle_sha256": "08419c2ed4cf38e975cc5daa383b44bfe5ba7f6ee07bbde8f23fa182a640b0d5",
+      "oracle_support_size": 12,
+      "passed": true,
+      "production_extra_vs_schema": 0,
+      "production_missing_from_schema": 0,
+      "production_probability_sum": 1.0,
+      "production_sha256": "08419c2ed4cf38e975cc5daa383b44bfe5ba7f6ee07bbde8f23fa182a640b0d5",
+      "production_support_size": 12,
+      "schema": {
+        "channel_names_unique": true,
+        "missing_fields": [],
+        "passed": true,
+        "selected_channel_resolves_uniquely": true
+      },
+      "schema_support_size": 12,
+      "support_equal": true,
+      "support_union_size": 12
+    },
+    "outcome": {
+      "duplicated_atoms": 0,
+      "finite_nonnegative": true,
+      "local_normalization": {
+        "declared_support": [
+          0,
+          1
+        ],
+        "maximum_row_sum_error": 0.0,
+        "passed": true
+      },
+      "mass_profiles": {
+        "latent_mass_sum": 1.0,
+        "latent_state_count": 125,
+        "observation_mass_sum": 0.9999999999999999,
+        "observation_value_count": 4
+      },
+      "max_absolute_probability_error": 0.0,
+      "module_predictive": {
+        "joint_marginal": [
+          0.5,
+          0.4999999999999999
+        ],
+        "max_error": 1.1102230246251565e-16,
+        "passed": true,
+        "public_direct_query": [
+          0.5000000000000001,
+          0.4999999999999999
+        ]
+      },
+      "mutation": {
+        "normalization_preserved": true,
+        "passed": true,
+        "semantic_atom_changed": true,
+        "support_preserved": true
+      },
+      "oracle_extra_vs_schema": 0,
+      "oracle_missing_from_schema": 0,
+      "oracle_probability_sum": 1.0,
+      "oracle_sha256": "a20d40eb924e8e35d82d86cc83f54f3e047d938eb378a32a2edecb88b579ce24",
+      "oracle_support_size": 500,
+      "passed": true,
+      "production_extra_vs_schema": 0,
+      "production_missing_from_schema": 0,
+      "production_probability_sum": 1.0,
+      "production_sha256": "a20d40eb924e8e35d82d86cc83f54f3e047d938eb378a32a2edecb88b579ce24",
+      "production_support_size": 500,
+      "schema": {
+        "channel_names_unique": true,
+        "missing_fields": [],
+        "passed": true,
+        "selected_channel_resolves_uniquely": true
+      },
+      "schema_support_size": 500,
+      "support_equal": true,
+      "support_union_size": 500
+    },
+    "partner": {
+      "duplicated_atoms": 0,
+      "finite_nonnegative": true,
+      "local_normalization": {
+        "declared_support": [
+          0,
+          1
+        ],
+        "maximum_row_sum_error": 0.0,
+        "passed": true
+      },
+      "mass_profiles": {
+        "latent_mass_sum": 1.0,
+        "latent_state_count": 16,
+        "observation_mass_sum": 0.9999999999999999,
+        "observation_value_count": 4
+      },
+      "max_absolute_probability_error": 0.0,
+      "module_predictive": {
+        "joint_marginal": [
+          0.32499999999999996,
+          0.6749999999999998
+        ],
+        "max_error": 2.220446049250313e-16,
+        "passed": true,
+        "public_direct_query": [
+          0.32499999999999996,
+          0.675
+        ]
+      },
+      "mutation": {
+        "name_preserving_permutation_invariance": true,
+        "nameless_permutation_schema_failure": true,
+        "other_channel_insensitivity": true,
+        "passed": true,
+        "remaining_only_sensitivity": true
+      },
+      "oracle_extra_vs_schema": 0,
+      "oracle_missing_from_schema": 0,
+      "oracle_probability_sum": 1.0,
+      "oracle_sha256": "7ff8edfb20d6fc9691ecb7a4458bc921f5afbff5b8c8c907fa1af1e2530b8941",
+      "oracle_support_size": 64,
+      "passed": true,
+      "production_extra_vs_schema": 0,
+      "production_missing_from_schema": 0,
+      "production_probability_sum": 1.0,
+      "production_sha256": "7ff8edfb20d6fc9691ecb7a4458bc921f5afbff5b8c8c907fa1af1e2530b8941",
+      "production_support_size": 64,
+      "schema": {
+        "channel_names_unique": true,
+        "missing_fields": [],
+        "passed": true,
+        "selected_channel_resolves_uniquely": true
+      },
+      "schema_support_size": 64,
+      "support_equal": true,
+      "support_union_size": 64
+    }
+  },
+  "v3_complete_native_generator": {
+    "module_predictive": {
+      "max_error": 0.0,
+      "passed": true
+    },
+    "mutation": {
+      "passed": true,
+      "protect_only_mutation_changes_complete_joint": true,
+      "temporal_factor_unchanged": true
+    },
+    "oracle_sum": 0.9999999999999999,
+    "passed": true,
+    "production_sum": 0.9999999999999999,
+    "schema": {
+      "channel_names_unique": true,
+      "missing_fields": [],
+      "passed": true,
+      "selected_channel_resolves_uniquely": true
+    },
+    "support_size": 27869184
+  },
+  "v3_full_joint_recombination": {
+    "factorization": "protect joint x temporal joint",
+    "oracle_sum": 0.9999999999999999,
+    "production_sum": 0.9999999999999999
+  },
+  "v3_native_generator_factorized_joint": {
+    "protect": {
+      "duplicated_atoms": 0,
+      "finite_nonnegative": true,
+      "local_normalization": {
+        "maximum_row_sum_error": 0.0,
+        "passed": true
+      },
+      "mass_profiles": {
+        "latent_mass_sum": 1.0,
+        "latent_state_count": 2016,
+        "observation_mass_sum": 1.000000000000004,
+        "observation_value_count": 16
+      },
+      "max_absolute_probability_error": 5.421010862427522e-20,
+      "module_predictive": {
+        "identity": "joint observable marginal equals direct frozen factor mixture",
+        "max_error": 0.0,
+        "passed": true
+      },
+      "mutation": {
+        "normalization_preserved": true,
+        "passed": true,
+        "semantic_atom_changed": true,
+        "support_preserved": true
+      },
+      "oracle_extra_vs_schema": 0,
+      "oracle_missing_from_schema": 0,
+      "oracle_probability_sum": 0.9999999999999999,
+      "oracle_sha256": "1c68f75edd10fdfdc842fc52b4d8902cb3a8e7a38c9a3e23341d51fae2161776",
+      "oracle_support_size": 32256,
+      "passed": true,
+      "production_extra_vs_schema": 0,
+      "production_missing_from_schema": 0,
+      "production_probability_sum": 1.0,
+      "production_sha256": "5163281c7ef9640fa21078cb9ce5d7db047b8879c4709e87b6f29fda6a877c34",
+      "production_support_size": 32256,
+      "schema": {
+        "channel_names_unique": true,
+        "missing_fields": [],
+        "passed": true,
+        "selected_channel_resolves_uniquely": true
+      },
+      "schema_support_size": 32256,
+      "support_equal": true,
+      "support_union_size": 32256
+    },
+    "temporal": {
+      "duplicated_atoms": 0,
+      "finite_nonnegative": true,
+      "local_normalization": {
+        "maximum_row_sum_error": 0.0,
+        "passed": true
+      },
+      "mass_profiles": {
+        "latent_mass_sum": 0.9999999999999999,
+        "latent_state_count": 432,
+        "observation_mass_sum": 0.9999999999999993,
+        "observation_value_count": 2
+      },
+      "max_absolute_probability_error": 6.938893903907228e-18,
+      "module_predictive": {
+        "identity": "joint observable marginal equals direct frozen factor mixture",
+        "max_error": 0.0,
+        "passed": true
+      },
+      "mutation": {
+        "normalization_preserved": true,
+        "passed": true,
+        "semantic_atom_changed": true,
+        "support_preserved": true
+      },
+      "oracle_extra_vs_schema": 0,
+      "oracle_missing_from_schema": 0,
+      "oracle_probability_sum": 1.0,
+      "oracle_sha256": "cda341ad00ea0465e101125478d42651d404fe28323c8f9c8395e4253cad6a9b",
+      "oracle_support_size": 864,
+      "passed": true,
+      "production_extra_vs_schema": 0,
+      "production_missing_from_schema": 0,
+      "production_probability_sum": 0.9999999999999999,
+      "production_sha256": "dbdaa24b33a496d1c5111479d9f7b03f668d0a8e794344561e85462fab676de4",
+      "production_support_size": 864,
+      "schema": {
+        "channel_names_unique": true,
+        "missing_fields": [],
+        "passed": true,
+        "selected_channel_resolves_uniquely": true
+      },
+      "schema_support_size": 864,
+      "support_equal": true,
+      "support_union_size": 864
+    }
+  },
+  "verdict": "PASS"
+}
