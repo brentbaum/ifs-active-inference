@@ -677,3 +677,30 @@ Files ready for evaluator commit:
 - `results/V3.6/population-c-preflight-stop.md`
 - `results/V3.6/v3.6-r1-round12-external-qualification-trace-hashes.json`
 - `results/V3.6/ready-to-commit.md`
+
+## Round 15 — replacement Population C native-support stop
+
+The fresh 2,000-seed Population C block `3724000:3725999` opened under the
+cardinality adjudication. An ascending, gap-free prefix of 1,500 rows
+(`3724000:3725499`) serialized before ordered seed `3725500`, the first
+`real_danger_adaptive` world, raised `truth program missing from native
+support` inside `v3_calibration_state`.
+
+The failure is apparatus-first: the external world declares one active mode
+with `cross_sign=-1`, while the native calibration support contains no exact
+truth-program tuple with that combination. It occurs after generation and
+scoring but before row serialization. Thus seed `3725500` was consumed but
+not persisted; because parallel dispatch was active, possible later in-flight
+seed consumption cannot be reconstructed exactly from the trace. No
+aggregation or criterion evaluation occurred.
+
+Status:
+**HONEST_STOP_APPARATUS_TRUTH_PROGRAM_OUTSIDE_NATIVE_CALIBRATION_SUPPORT**.
+No downstream battery or escrow was opened.
+
+Additional files ready for evaluator commit:
+
+- `results/V3.6/population-c-native-support-stop.json`
+- `results/V3.6/population-c-native-support-stop.md`
+- `results/V3.6/v3.6-r1-round15-external-qualification-replacement-trace-hashes.json`
+- `results/V3.6/ready-to-commit.md`

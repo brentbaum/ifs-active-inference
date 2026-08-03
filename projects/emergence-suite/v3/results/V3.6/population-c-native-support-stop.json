@@ -1,0 +1,45 @@
+{
+  "stage": "V3.6-R1-round15",
+  "battery": "Population C external shared-support qualification replacement",
+  "status": "HONEST_STOP_APPARATUS_TRUTH_PROGRAM_OUTSIDE_NATIVE_CALIBRATION_SUPPORT",
+  "authorized_block": [
+    3724000,
+    3725999
+  ],
+  "failure": "v3_calibration_state raised AssertionError: truth program missing from native support",
+  "criterion_evaluation_started": false,
+  "aggregation_started": false,
+  "localization": {
+    "ordered_failure_seed": 3725500,
+    "ordered_failure_stratum": "real_danger_adaptive",
+    "serialized_prefix": [
+      3724000,
+      3725499
+    ],
+    "serialized_prefix_world_count": 1500,
+    "serialized_prefix_ascending_gap_free": true,
+    "serialized_stratum_counts": {
+      "acute_one": 500,
+      "chronic_one": 500,
+      "chronic_multiple": 500
+    },
+    "apparatus_path": "The external real_danger_adaptive constructor declares active_modes=1 with cross_sign=-1. The native calibration support cannot locate that exact truth-program tuple and raises after generation and scoring.",
+    "scientific_module_changed": false
+  },
+  "custody": {
+    "trace_file": "v3.6-r1-round15-external-qualification-replacement-traces.jsonl",
+    "trace_file_bytes": 324764712,
+    "trace_sha256": "4ea857b94caaf1d51731fed9ca8c3e2a19072dc857a0b51def09bf2a8a57de41",
+    "persisted_rows": 1500,
+    "failing_seed_generated_and_scored_but_not_serialized": true,
+    "parallel_in_flight_seed_consumption_beyond_failure": "NOT_EXACTLY_RECONSTRUCTABLE_FROM_PERSISTED_TRACE",
+    "custody_exact_for_serialized_prefix_only": true,
+    "later_batteries_opened": false,
+    "escrows_opened": false
+  },
+  "retained_results": {
+    "population_a_r1": "PASS",
+    "retired_short_population_c_block_consumed": false
+  },
+  "next_action": "STOP for evaluator adjudication. Do not retry or repair, and do not open the tournament, Gate 4, Gate 5, or escrow."
+}

@@ -32,6 +32,7 @@ RESULTS = ROOT / "results" / "V3.6"
 TOLERANCE = 1e-10
 TARGETS = v36_round12.TARGETS
 A_R1_BLOCK = (3_722_000, 3_723_999)
+POPULATION_C_REPLACEMENT_BLOCK = (3_724_000, 3_725_999)
 
 
 def _plain(value: Any) -> Any:
@@ -1142,13 +1143,13 @@ def run_external_qualification() -> dict[str, Any]:
     )
     if previous["verdict"] != "PASS":
         raise RuntimeError("Population A did not pass")
-    block = v36_round12.EXTERNAL_QUALIFICATION_BLOCK
+    block = POPULATION_C_REPLACEMENT_BLOCK
     tasks = [
         (seed, block[0], block[1], "qualification")
         for seed in range(block[0], block[1] + 1)
     ]
     rows, ledger = _persist_rows(
-        "v3.6-r1-round12-external-qualification", tasks,
+        "v3.6-r1-round15-external-qualification-replacement", tasks,
         _external_row, chunksize=1,
     )
     precision = {}
@@ -1185,17 +1186,17 @@ def run_external_qualification() -> dict[str, Any]:
         "failures": failures, "custody": ledger,
         "verdict": "PASS" if not failures else "FAIL_APPARATUS_STOP",
     }
-    _write_json("v3.6-r1-round12-external-qualification.json", result)
+    _write_json("v3.6-r1-round15-external-qualification-replacement.json", result)
     _write_report(
-        "v3.6-r1-round12-external-qualification.md",
-        "V3.6-R1 Population C external qualification", result,
+        "v3.6-r1-round15-external-qualification-replacement.md",
+        "V3.6-R1 replacement Population C external qualification", result,
     )
     return result
 
 
 def run_tournament() -> dict[str, Any]:
     qualification = json.loads(
-        (RESULTS / "v3.6-r1-round12-external-qualification.json").read_text()
+        (RESULTS / "v3.6-r1-round15-external-qualification-replacement.json").read_text()
     )
     if qualification["verdict"] != "PASS":
         raise RuntimeError("external qualification did not pass")
