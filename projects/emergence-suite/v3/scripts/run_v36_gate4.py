@@ -33,7 +33,7 @@ from ref.trace_sink import require_trace_sink, traced_execution  # noqa: E402
 
 
 RESULTS = ROOT / "results" / "V3.6"
-GATE4_BLOCK = (3_709_000, 3_713_999)
+GATE4_BLOCK = (3_728_000, 3_732_999)
 TOLERANCE = 1e-10
 LESIONS = ("grow_mode_slot", "split_context_slot", "prune_M1_G", "relate_L_PREC", "protect_joint_policy")
 SUPPORT_PRESERVING = "SUPPORT_PRESERVING_CONDITIONING"
@@ -81,6 +81,17 @@ def _conditioned_error(
     restricted_probabilities: Sequence[float],
     allowed,
 ) -> float:
+    if len(full_keys) != len(full_probabilities):
+        raise AssertionError("full atom keys and probabilities differ in length")
+    if len(restricted_keys) != len(restricted_probabilities):
+        raise AssertionError("restricted atom keys and probabilities differ in length")
+    if len(set(full_keys)) != len(full_keys):
+        raise AssertionError("full scorer atom keys are not unique")
+    if len(set(restricted_keys)) != len(restricted_keys):
+        raise AssertionError("restricted scorer atom keys are not unique")
+    expected_restricted_keys = {key for key in full_keys if allowed(key)}
+    if set(restricted_keys) != expected_restricted_keys:
+        raise AssertionError("restricted/scorer full atom key sets differ")
     retained = {
         key: float(probability)
         for key, probability in zip(full_keys, full_probabilities)
@@ -111,6 +122,17 @@ def _independent_conditioned_error(
     allowed,
 ) -> float:
     """Separately authored direct summation oracle for the restriction."""
+    if len(full_keys) != len(full_probabilities):
+        raise AssertionError("full oracle atom keys and probabilities differ in length")
+    if len(restricted_keys) != len(restricted_probabilities):
+        raise AssertionError("restricted oracle atom keys and probabilities differ in length")
+    if len(set(full_keys)) != len(full_keys):
+        raise AssertionError("full oracle atom keys are not unique")
+    if len(set(restricted_keys)) != len(restricted_keys):
+        raise AssertionError("restricted oracle atom keys are not unique")
+    expected_restricted_keys = {key for key in full_keys if allowed(key)}
+    if set(restricted_keys) != expected_restricted_keys:
+        raise AssertionError("restricted/oracle full atom key sets differ")
     licensed = [index for index, key in enumerate(full_keys) if allowed(key)]
     denominator = math.fsum(float(full_probabilities[index]) for index in licensed)
     if not licensed or denominator <= 0.0 or not math.isfinite(denominator):
@@ -132,6 +154,29 @@ def _prior_mass(keys: Sequence[Any], log_prior, allowed) -> float:
 
 def _finite_optional(*values: float | None) -> bool:
     return all(value is None or math.isfinite(float(value)) for value in values)
+
+
+def _positive_log_evidence(value: float | None) -> bool:
+    """Evidence is positive iff its log is finite; never exponentiate it."""
+    return value is not None and math.isfinite(float(value))
+
+
+def _v35_atom_keys(posterior: v35.ProtectPosterior) -> tuple[Any, ...]:
+    """Expose scorer atoms as (structure, cross_sign, reliable)."""
+    if len(posterior.components) != len(posterior.probabilities):
+        raise AssertionError("V3.5 component/probability lengths differ")
+    if len(posterior.components) % 2:
+        raise AssertionError("V3.5 scorer atoms do not form reliability pairs")
+    keys = []
+    for index, component in enumerate(posterior.components):
+        pair_start = index - (index % 2)
+        if posterior.components[pair_start] != component or posterior.components[pair_start + 1] != component:
+            raise AssertionError("V3.5 scorer reliability-pair ordering changed")
+        structure, cross_sign = component
+        keys.append((structure, int(cross_sign), int(index % 2)))
+    if len(set(keys)) != len(keys):
+        raise AssertionError("V3.5 full atom coordinate set is not unique")
+    return tuple(keys)
 
 
 def _posterior_distance(left: Sequence[float], right: Sequence[float]) -> float:
@@ -202,7 +247,7 @@ def _worker(task: tuple[int, str]) -> dict[str, Any]:
         )
         licensed_count = 0
         prior_mass = 0.0
-        restricted_evidence = None
+        restricted_log_evidence = None
         identity_applicable = False
         descriptive = {
             "masked_reference_part_probability": masked_reference.part_probability,
@@ -246,7 +291,7 @@ def _worker(task: tuple[int, str]) -> dict[str, Any]:
         )
         licensed_count = sum(allowed(program) for program in full.programs)
         prior_mass = _prior_mass(full.programs, v32.structure_log_prior, allowed)
-        restricted_evidence = math.exp(restricted.log_evidence)
+        restricted_log_evidence = restricted.log_evidence
         identity_applicable = True
         altered = replace(
             world,
@@ -304,7 +349,7 @@ def _worker(task: tuple[int, str]) -> dict[str, Any]:
             lambda program: v31.structure_log_prior(program, v31.DEFAULT_HYPERPARAMETERS),
             allowed,
         )
-        restricted_evidence = math.exp(restricted.log_evidence)
+        restricted_log_evidence = restricted.log_evidence
         identity_applicable = True
         masked = v33.score_world(_mask_imaginal(world)).current
         dropped = v33.score_world(_drop_imaginal(world)).current
@@ -348,7 +393,7 @@ def _worker(task: tuple[int, str]) -> dict[str, Any]:
         )
         licensed_count = sum(allowed(program) for program in full.programs)
         prior_mass = _prior_mass(full.programs, v34.structure_log_prior, allowed)
-        restricted_evidence = math.exp(restricted.log_evidence)
+        restricted_log_evidence = restricted.log_evidence
         identity_applicable = True
         masked = v34.score_world(world, relational_enabled=False)
         altered_world = replace(
@@ -393,19 +438,21 @@ def _worker(task: tuple[int, str]) -> dict[str, Any]:
         world = v35.generate_world(seed, config, released_block=GATE4_BLOCK)
         full = v35.score_world(world)
         restricted = v35.score_world(world, restrictions={"JOINT_POLICY_Y": (0,)})
+        full_atom_keys = _v35_atom_keys(full)
+        restricted_atom_keys = _v35_atom_keys(restricted)
+        allowed = lambda atom: v35.program_values(atom[0])["JOINT_POLICY_Y"] == 0
         identity_error = _conditioned_error(
-            full.components,
+            full_atom_keys,
             full.probabilities,
-            restricted.components,
+            restricted_atom_keys,
             restricted.probabilities,
-            lambda component: v35.program_values(component[0])["JOINT_POLICY_Y"] == 0,
+            allowed,
         )
-        allowed = lambda component: v35.program_values(component[0])["JOINT_POLICY_Y"] == 0
         oracle_error = _independent_conditioned_error(
-            full.components, full.probabilities, restricted.components,
+            full_atom_keys, full.probabilities, restricted_atom_keys,
             restricted.probabilities, allowed,
         )
-        licensed_count = sum(allowed(component) for component in full.components)
+        licensed_count = sum(allowed(atom) for atom in full_atom_keys)
         unique_structures = tuple(dict.fromkeys(component[0] for component in full.components))
         prior_mass = float(math.fsum(
             math.exp(v35.structure_log_prior(structure))
@@ -414,7 +461,7 @@ def _worker(task: tuple[int, str]) -> dict[str, Any]:
         ) / math.fsum(
             math.exp(v35.structure_log_prior(structure)) for structure in unique_structures
         ))
-        restricted_evidence = math.exp(restricted.log_evidence)
+        restricted_log_evidence = restricted.log_evidence
         identity_applicable = True
         registration_masked = v35.score_world(world, registration_enabled=False)
         mask_error = _posterior_distance(full.probabilities, registration_masked.probabilities)
@@ -448,7 +495,7 @@ def _worker(task: tuple[int, str]) -> dict[str, Any]:
         "semantic_class": LESION_CLASSES[lesion],
         "licensed_support_count": int(licensed_count),
         "restricted_prior_mass": float(prior_mass),
-        "restricted_evidence": None if restricted_evidence is None else float(restricted_evidence),
+        "restricted_log_evidence": None if restricted_log_evidence is None else float(restricted_log_evidence),
         "restricted_prior_identity_applicable": bool(identity_applicable),
         "restricted_prior_identity_error": None if identity_error is None else float(identity_error),
         "masked_channel_neutrality_error": float(mask_error),
@@ -457,7 +504,7 @@ def _worker(task: tuple[int, str]) -> dict[str, Any]:
         "target_pathway_removed": bool(target_error <= TOLERANCE),
         "unrelated_survivors_preserved": bool(unrelated_error <= TOLERANCE),
         "finite": bool(
-            _finite_optional(identity_error, restricted_evidence)
+            _finite_optional(identity_error, restricted_log_evidence)
             and math.isfinite(mask_error)
             and math.isfinite(oracle_error)
             and math.isfinite(normalization_error)
@@ -471,9 +518,9 @@ def _worker(task: tuple[int, str]) -> dict[str, Any]:
 
 def _trace_map(tasks: Sequence[tuple[int, str]]) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     RESULTS.mkdir(parents=True, exist_ok=True)
-    trace_path = RESULTS / "v3.6-r1-gate4-traces.jsonl"
-    hash_path = RESULTS / "v3.6-r1-gate4-trace-hashes.json"
-    hash_events_path = RESULTS / "v3.6-r1-gate4-trace-hash-events.jsonl"
+    trace_path = RESULTS / "v3.6-r1-gate4-replacement-traces.jsonl"
+    hash_path = RESULTS / "v3.6-r1-gate4-replacement-trace-hashes.json"
+    hash_events_path = RESULTS / "v3.6-r1-gate4-replacement-trace-hash-events.jsonl"
     if trace_path.exists() or hash_path.exists() or hash_events_path.exists():
         raise RuntimeError("custody refusal: Gate-4 output already exists")
     rows: list[dict[str, Any]] = []
@@ -552,16 +599,21 @@ def _support_preserving_dummy(lesion: str) -> dict[str, Any]:
     evidence = math.fsum(joint)
     full = tuple(value / evidence for value in joint)
     allowed = lambda key: key != "excluded"
-    restricted_evidence = joint[0] + joint[1]
-    restricted = (1.0, 0.0, 0.0)
-    identity = _conditioned_error(keys, full, keys, restricted, allowed)
-    oracle = _independent_conditioned_error(keys, full, keys, restricted, allowed)
+    restricted_log_evidence = math.log(joint[0] + joint[1])
+    restricted_keys = keys[:2]
+    restricted = (1.0, 0.0)
+    identity = _conditioned_error(
+        keys, full, restricted_keys, restricted, allowed
+    )
+    oracle = _independent_conditioned_error(
+        keys, full, restricted_keys, restricted, allowed
+    )
     return {
         "lesion": lesion,
         "semantic_class": SUPPORT_PRESERVING,
         "licensed_support_count": 2,
         "restricted_prior_mass": prior[0] + prior[1],
-        "restricted_evidence": restricted_evidence,
+        "restricted_log_evidence": restricted_log_evidence,
         "restricted_identity_applicable": True,
         "restricted_identity_error": identity,
         "masked_neutrality_error": 0.0,
@@ -570,7 +622,7 @@ def _support_preserving_dummy(lesion: str) -> dict[str, Any]:
         "unrelated_survivors_preserved": True,
         "posterior_normalization_error": abs(math.fsum(restricted) - 1.0),
         "all_outputs_finite": all(math.isfinite(value) for value in (
-            prior[0] + prior[1], restricted_evidence, identity, oracle,
+            prior[0] + prior[1], restricted_log_evidence, identity, oracle,
         )),
         "boundary_fixture": {
             "exact_zero_retained_candidate": "licensed_exact_zero",
@@ -589,7 +641,7 @@ def _support_destroying_dummy() -> dict[str, Any]:
         "semantic_class": SUPPORT_DESTROYING,
         "licensed_support_count": 0,
         "restricted_prior_mass": 0.0,
-        "restricted_evidence": None,
+        "restricted_log_evidence": None,
         "restricted_identity_applicable": False,
         "restricted_identity_error": None,
         "masked_neutrality_error": _posterior_distance(
@@ -632,14 +684,13 @@ def run_preblock_proofs() -> dict[str, Any]:
             and (
                 row["licensed_support_count"] > 0
                 and row["restricted_prior_mass"] > 0.0
-                and row["restricted_evidence"] is not None
-                and row["restricted_evidence"] > 0.0
+                and _positive_log_evidence(row["restricted_log_evidence"])
                 and row["restricted_identity_applicable"]
                 and row["restricted_identity_error"] <= TOLERANCE
                 if preserving else
                 row["licensed_support_count"] == 0
                 and row["restricted_prior_mass"] == 0.0
-                and row["restricted_evidence"] is None
+                and row["restricted_log_evidence"] is None
                 and not row["restricted_identity_applicable"]
                 and row["restricted_identity_error"] is None
             )
@@ -689,8 +740,8 @@ def run_preblock_proofs() -> dict[str, Any]:
         "failures": failures,
         "verdict": "PASS" if not failures else "FAIL_PREBLOCK_LESION_PROOF",
     }
-    trace = RESULTS / "v3.6-r1-round17-gate4-preblock-proof-trace.jsonl"
-    ledger_path = RESULTS / "v3.6-r1-round17-gate4-preblock-proof-trace-hashes.json"
+    trace = RESULTS / "v3.6-r1-round19-gate4-preblock-proof-trace.jsonl"
+    ledger_path = RESULTS / "v3.6-r1-round19-gate4-preblock-proof-trace-hashes.json"
     if trace.exists() or ledger_path.exists():
         raise RuntimeError("Round-14 lesion preproof outputs already exist")
     encoded = _canonical(record)
@@ -705,9 +756,9 @@ def run_preblock_proofs() -> dict[str, Any]:
     }
     _write_json(ledger_path.name, ledger)
     result = {**record, "custody": ledger}
-    _write_json("v3.6-r1-round17-gate4-preblock-proofs.json", result)
-    (RESULTS / "v3.6-r1-round17-gate4-preblock-proofs.md").write_text(
-        "# V3.6 Round-17 zero-seed lesion proofs\n\n"
+    _write_json("v3.6-r1-round19-gate4-preblock-proofs.json", result)
+    (RESULTS / "v3.6-r1-round19-gate4-preblock-proofs.md").write_text(
+        "# V3.6 Round-19 repaired zero-seed lesion proofs\n\n"
         f"Verdict: **{result['verdict']}**.\n\n"
         "All five lesion classes were declared before seeded execution. The "
         "proof table includes exact-zero retained support, empty destroyed "
@@ -751,7 +802,7 @@ def run_gate4(lesion_proof: Mapping[str, Any]) -> dict[str, Any]:
             "unrelated_survivors_preserved_all": all(row["unrelated_survivors_preserved"] for row in selected),
             "licensed_support_positive_all": all(
                 row["licensed_support_count"] > 0 and row["restricted_prior_mass"] > 0.0
-                and row["restricted_evidence"] is not None and row["restricted_evidence"] > 0.0
+                and _positive_log_evidence(row["restricted_log_evidence"])
                 for row in selected
             ) if LESION_CLASSES[lesion] == SUPPORT_PRESERVING else True,
             "unrelated_absolute_movement": {
@@ -789,7 +840,7 @@ def run_gate4(lesion_proof: Mapping[str, Any]) -> dict[str, Any]:
         "proof_precondition": {
             "fixture_file": "v3.6-r1-round13-native-fixture-identity-proofs.json",
             "fixture_verdict": proof["verdict"],
-            "lesion_file": "v3.6-r1-round17-gate4-preblock-proofs.json",
+            "lesion_file": "v3.6-r1-round19-gate4-preblock-proofs.json",
             "lesion_verdict": lesion_proof["verdict"],
         },
         "selectivity_definition": "lesioned posterior equals the full posterior conditioned on the declared restricted structure prior",
@@ -805,8 +856,8 @@ def run_gate4(lesion_proof: Mapping[str, Any]) -> dict[str, Any]:
             "tournament_statistics": False,
         },
         "custody": {
-            "trace_file": "v3.6-r1-gate4-traces.jsonl",
-            "trace_hash_ledger": "v3.6-r1-gate4-trace-hashes.json",
+            "trace_file": "v3.6-r1-gate4-replacement-traces.jsonl",
+            "trace_hash_ledger": "v3.6-r1-gate4-replacement-trace-hashes.json",
             "trace_sha256": trace_ledger["file_sha256"],
             "incremental_hash_events_sha256": trace_ledger["incremental_hash_events_sha256"],
             "serial_cell_first_seeds": trace_ledger["serial_cell_first_seeds"],
@@ -818,9 +869,9 @@ def run_gate4(lesion_proof: Mapping[str, Any]) -> dict[str, Any]:
         "verdict": "PASS" if not failures else "FAIL",
     }
     result["immutable_verdict"] = result["verdict"]
-    _write_json("v3.6-r1-gate4-verdict.json", result)
+    _write_json("v3.6-r1-gate4-replacement-verdict.json", result)
     report = [
-        "# V3.6 Gate 4 — composed selective lesions",
+        "# V3.6 replacement Gate 4 — repaired composed selective lesions",
         "",
         f"Verdict: **{result['verdict']}**.",
         "",
@@ -844,10 +895,10 @@ def run_gate4(lesion_proof: Mapping[str, Any]) -> dict[str, Any]:
         "Every per-world row, including its runtime event ledger and world hash, was persisted and hashed before these aggregates were computed.",
         "",
     ])
-    (RESULTS / "v3.6-r1-gate4-verdict.md").write_text("\n".join(report), encoding="utf-8")
+    (RESULTS / "v3.6-r1-gate4-replacement-verdict.md").write_text("\n".join(report), encoding="utf-8")
     if failures:
         _write_json(
-            "gate-4-diagnosis-stub.json",
+            "gate-4-replacement-round19-diagnosis-stub.json",
             {"stage": "V3.6", "gate": 4, "failures": failures, "next_action": "HONEST_STOP"},
         )
     return result
@@ -857,13 +908,16 @@ def main() -> None:
     if len(sys.argv) == 2 and sys.argv[1] == "preproof":
         result = run_preblock_proofs()
         print(json.dumps({"phase": "gate4-preproof", "verdict": result["verdict"]}, sort_keys=True))
-    else:
-        lesion_proof = run_preblock_proofs()
-        if lesion_proof["verdict"] != "PASS":
-            print(json.dumps({"phase": "gate4-preproof", "verdict": lesion_proof["verdict"]}, sort_keys=True))
-            raise SystemExit(2)
+    elif len(sys.argv) == 2 and sys.argv[1] == "replacement":
+        lesion_proof = json.loads(
+            (RESULTS / "v3.6-r1-round19-gate4-preblock-proofs.json").read_text()
+        )
+        if lesion_proof.get("verdict") != "PASS":
+            raise RuntimeError("Round-19 zero-seed lesion proof table is not PASS")
         result = run_gate4(lesion_proof)
         print(json.dumps({"gate": 4, "verdict": result["verdict"]}, sort_keys=True))
+    else:
+        raise SystemExit("usage: run_v36_gate4.py preproof|replacement")
 
 
 if __name__ == "__main__":

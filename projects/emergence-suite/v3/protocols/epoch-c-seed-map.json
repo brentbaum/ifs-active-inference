@@ -351,7 +351,8 @@
       ],
       "notes": [
         "Round-16 (INTERNAL adjudication, evaluator-as-advisor per Brent 2026-08-03): 3724000:3725999 burned by real_danger_adaptive native-support stop (1,500-world prefix retained as evidence, sha 4ea857b9..., never scored); final Population-C block 3726000:3727999; per-stratum serial first worlds now standing; generator-coherence pre-block proof now standing.",
-        "Round-19 (INTERNAL): gate-4 block 3709000:3713999 consumed by the retained apparatus FAIL (D1 ORACLE_CONSTRUCT incomplete dict keys; D2 exp-underflow support accounting); verifier-side repairs authorized; replacement gate-4 block 3728000:3732999; permanent rules added: verifier key-set equality assertions, log-space support predicates."
+        "Round-19 (INTERNAL): gate-4 block 3709000:3713999 consumed by the retained apparatus FAIL (D1 ORACLE_CONSTRUCT incomplete dict keys; D2 exp-underflow support accounting); verifier-side repairs authorized; replacement gate-4 block 3728000:3732999; permanent rules added: verifier key-set equality assertions, log-space support predicates.",
+        "Round-20 (INTERNAL): V3.7 arc authorized (registered prediction sealed pre-implementation); A37 3734000:3735999, C37 3736000:3737999, T37 3740000:3745999; V3.6 chain completes first (gate-4 replacement PASS, gate-5 amended PASS, freeze declared)."
       ],
       "barred_gate4_replacement_2": [
         3709000,
@@ -360,6 +361,18 @@
       "gate4_replacement_3": [
         3728000,
         3732999
+      ],
+      "v37_population_a": [
+        3734000,
+        3735999
+      ],
+      "v37_population_c": [
+        3736000,
+        3737999
+      ],
+      "v37_tournament": [
+        3740000,
+        3745999
       ]
     }
   }

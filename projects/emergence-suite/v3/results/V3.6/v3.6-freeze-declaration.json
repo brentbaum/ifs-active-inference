@@ -1,0 +1,434 @@
+{
+  "apparatus_history": {
+    "original_gate4": {
+      "file": "results/V3.6/v3.6-r1-gate4-verdict.json",
+      "sha256": "6e7f49fc9b5c37d14cd5154d3ba039f799577c43d5de508627d3f6743083ab48",
+      "status": "FAIL_APPARATUS_RETAINED"
+    },
+    "original_gate5": {
+      "file": "results/V3.6/v3.6-r1-gate5-verdict.json",
+      "sha256": "7be4b27ab9d2bae056cb1112f1aab33dc08f62d75608d3689353d7dcc379c801",
+      "status": "FAIL_DERIVATIVE_RETAINED"
+    },
+    "round18_classification": "D1_ORACLE_CONSTRUCT__D2_SUPPORT_ACCOUNTING_APPARATUS",
+    "round19_verifier_repair": "PASS"
+  },
+  "authority": "results/V3.6/internal-round19-adjudication.md",
+  "barred_blocks": [
+    {
+      "range": [
+        3600000,
+        3600000
+      ],
+      "reason": "stage-0 custody seed"
+    },
+    {
+      "range": [
+        3600001,
+        3603999
+      ],
+      "reason": "first attainability pilot"
+    },
+    {
+      "range": [
+        3660000,
+        3663999
+      ],
+      "reason": "fresh event-indexed pilot"
+    },
+    {
+      "range": [
+        3664000,
+        3664389
+      ],
+      "reason": "evaluator linter attempt 1"
+    },
+    {
+      "range": [
+        3664390,
+        3664769
+      ],
+      "reason": "evaluator linter attempt 2"
+    },
+    {
+      "range": [
+        3664770,
+        3665159
+      ],
+      "reason": "pre-seal attainability diagnostics"
+    },
+    {
+      "range": [
+        3665160,
+        3667159
+      ],
+      "reason": "gate-3 noninferiority diagnosis"
+    },
+    {
+      "range": [
+        3680000,
+        3683999
+      ],
+      "reason": "retained hybrid bridge qualification"
+    },
+    {
+      "range": [
+        3690000,
+        3690000
+      ],
+      "reason": "round-12 Population-B smoke"
+    },
+    {
+      "range": [
+        3692000,
+        3692000
+      ],
+      "reason": "round-12 Population-A smoke"
+    },
+    {
+      "range": [
+        3694000,
+        3694000
+      ],
+      "reason": "round-12 Population-C smoke"
+    },
+    {
+      "range": [
+        3690001,
+        3691999
+      ],
+      "reason": "Population-B wrong native fixture"
+    },
+    {
+      "range": [
+        3630000,
+        3634999
+      ],
+      "reason": "first Gate-4 custody stop"
+    },
+    {
+      "range": [
+        3702000,
+        3706999
+      ],
+      "reason": "first Gate-4 replacement custody stop"
+    },
+    {
+      "range": [
+        3692001,
+        3693999
+      ],
+      "reason": "first Population-A custody stop"
+    },
+    {
+      "range": [
+        3707000,
+        3708999
+      ],
+      "reason": "Population-A replacement custody stop"
+    },
+    {
+      "range": [
+        3714000,
+        3715999
+      ],
+      "reason": "Population-A theorem-premise qualification stop"
+    },
+    {
+      "range": [
+        3724000,
+        3725999
+      ],
+      "reason": "Population-C native-support stop"
+    }
+  ],
+  "closed_diagnosis_only_blocks": [
+    {
+      "range": [
+        3696000,
+        3699999
+      ],
+      "reason": "R1 diagnosis reserve; never opened"
+    },
+    {
+      "range": [
+        3716000,
+        3720999
+      ],
+      "reason": "round-15 length ladder; never opened"
+    }
+  ],
+  "compatibility": {
+    "file": "results/V3.6/v3.6-compatibility-attestations.json",
+    "sha256": "70d7757ae2061f7decaef9ddb01cf7e4aa5492307094b3fe4cf1e1e7e9be0b73",
+    "six_of_six": true
+  },
+  "escrow_opened": false,
+  "freeze_declared": true,
+  "replacement_records": {
+    "gate4": {
+      "file": "results/V3.6/v3.6-r1-gate4-replacement-verdict.json",
+      "sha256": "4d8da6a0eaaf0669f4726420555cd11055f5da0607afbe020ddbfd320bb388d3"
+    },
+    "gate5": {
+      "file": "results/V3.6/v3.6-r1-gate5-amended-verdict.json",
+      "sha256": "f756b1005ec4e21ac6b1322a208db96ede373a69f736d0547fc06986acec1734"
+    },
+    "verifier_audit": {
+      "file": "results/V3.6/round19-verifier-repair-audit.json",
+      "sha256": "5e78c7e949ea7eaf3852571ed1d4b15cc112f3507dcb4e2030daa50a175a4f64"
+    }
+  },
+  "retained_stop_count": 41,
+  "retained_stops": [
+    {
+      "file": "results/V3.6/gate-3-diagnosis-stub.json",
+      "sha256": "ea44b66f86bdfa9843445b6eb3e15e4b60c4def01c62a88bb78b0bea3068eb2f"
+    },
+    {
+      "file": "results/V3.6/gate-3-diagnosis-stub.md",
+      "sha256": "74dc2d02f3b13b1491eb113dd05acf68b939c4d114855a4d6a4af2a03e858928"
+    },
+    {
+      "file": "results/V3.6/gate-3.json",
+      "sha256": "89c681c0397aa62c1b2214a0095ab6eb64adddb3f8663ff00ea42cbad0cff338"
+    },
+    {
+      "file": "results/V3.6/gate-4-custody-stop.json",
+      "sha256": "dc309f4e0a4f65fff01d04359954333c75d4f8082b703124426bd3bf766b011a"
+    },
+    {
+      "file": "results/V3.6/gate-4-custody-stop.md",
+      "sha256": "8f8c243947f38d5f1a0d09453c9e16b482feb458b45f22c6031283ec949c003c"
+    },
+    {
+      "file": "results/V3.6/gate-4-diagnosis-stub.json",
+      "sha256": "2d26e91094b994836e181c0d5b57e22ccd6d201c69feae6c20a4eb23bcd076d0"
+    },
+    {
+      "file": "results/V3.6/gate-4-replacement-custody-stop.json",
+      "sha256": "78da8f4281c3ad536707bf2128d55a836d161d05666fe8323eb4fc539a8e1e26"
+    },
+    {
+      "file": "results/V3.6/gate-4-replacement-custody-stop.md",
+      "sha256": "33046e74f2a4e4e0b6eded9aff29fc68d45ff9962fc610ee18f18b0d1eaa4da5"
+    },
+    {
+      "file": "results/V3.6/gate-4-replacement-diagnosis-stub.json",
+      "sha256": "c51dbd18f526861d8735f5c2bc89f194a4594f8314971ba93144e550681904cf"
+    },
+    {
+      "file": "results/V3.6/native-fixture-proof-diagnosis-stub.json",
+      "sha256": "d10ef057897fd506b9ff7135e3941c67166e63c5408194364a5dccda334fd082"
+    },
+    {
+      "file": "results/V3.6/native-fixture-proof-diagnosis-stub.md",
+      "sha256": "d6ddb1c038404179d127a58b7f21aa3dfacf664c7cc7601a343330942065e3e9"
+    },
+    {
+      "file": "results/V3.6/population-c-native-support-stop.json",
+      "sha256": "81fe4edcf5f1df2c6327f580e228df4073ba372aa0b93ef8ff8be00516680b39"
+    },
+    {
+      "file": "results/V3.6/population-c-native-support-stop.md",
+      "sha256": "cc13a6a46ac1024d5d399bd022a2569d227eefe88e8f72303055d1a56a6d4f56"
+    },
+    {
+      "file": "results/V3.6/population-c-preflight-stop.json",
+      "sha256": "a5100d03432349401cd2afebfc2cac38d500899263a7fe04ebbb6f3dc549fdeb"
+    },
+    {
+      "file": "results/V3.6/population-c-preflight-stop.md",
+      "sha256": "2e2e685f8252eefffbff99e3649f09fe860705ac1752c38791d10a91bf6a6a19"
+    },
+    {
+      "file": "results/V3.6/round18-gate4-diagnosis.json",
+      "sha256": "e0ff0eb82324b0a48f611eaeca125d87c1cd6295f15aaf66cc3ade931ed7d01e"
+    },
+    {
+      "file": "results/V3.6/stage0-adjudicated-pilot-diagnosis-stub.json",
+      "sha256": "964ca9ed035e33a6a3d80a6461c69f92903f796bf11ff4630fa387344b117302"
+    },
+    {
+      "file": "results/V3.6/stage0-adjudicated-pilot-diagnosis-stub.md",
+      "sha256": "ba61db31ab3c565bae1f07ab2ac2495e84850c75c57fa7545e6a1c7cd0c9f48b"
+    },
+    {
+      "file": "results/V3.6/stage0-custody-stop.json",
+      "sha256": "15131611958ee1a70e1dd9e155b3b3cac73c54a4ecc37b2eed30eba4d9f37cc2"
+    },
+    {
+      "file": "results/V3.6/stage0-custody-stop.md",
+      "sha256": "0b168058975782ac8e176ae5ffda820168d6ae6d32b293f8ec43618cab1f7d28"
+    },
+    {
+      "file": "results/V3.6/stage0-pilot-diagnosis-stub.json",
+      "sha256": "620d05763cfa0c681f909efda209e7f0af9ba11d23c1bc1e06596a0cf556d7b2"
+    },
+    {
+      "file": "results/V3.6/stage0-pilot-diagnosis-stub.md",
+      "sha256": "5d337ca0c0b7f074cd0f711c75039d8d6843ca0ac84f0b04ce04e1f2f641f51d"
+    },
+    {
+      "file": "results/V3.6/v3.6-r1-bridge-diagnosis-stub.json",
+      "sha256": "8e0fa58614b245211c8e84a643e68359132079f14ce576891a7b75d43dcd9c80"
+    },
+    {
+      "file": "results/V3.6/v3.6-r1-bridge-qualification.json",
+      "sha256": "80462821024b75f304c5dddbab19f8e027966084674b029cfbd929fdb4b68e9d"
+    },
+    {
+      "file": "results/V3.6/v3.6-r1-gate4-verdict.json",
+      "sha256": "6e7f49fc9b5c37d14cd5154d3ba039f799577c43d5de508627d3f6743083ab48"
+    },
+    {
+      "file": "results/V3.6/v3.6-r1-gate5-verdict.json",
+      "sha256": "7be4b27ab9d2bae056cb1112f1aab33dc08f62d75608d3689353d7dcc379c801"
+    },
+    {
+      "file": "results/V3.6/v3.6-r1-round12-population-b-stop.json",
+      "sha256": "dee4b9d400f029ceab25b856b750828f41df041af64b11a23fa06fc4bcab3983"
+    },
+    {
+      "file": "results/V3.6/v3.6-r1-round12-population-b-stop.md",
+      "sha256": "698cebc6381f2a98378c9bdfac5f8d2903bd0c3fc291cc7503787a1712916ff4"
+    },
+    {
+      "file": "results/V3.6/v3.6-r1-round12-precommit-custody-stop.json",
+      "sha256": "79dc33825d3eca09e31a4810b1b706f28fa2d70577908e1ac9658e900f8b1feb"
+    },
+    {
+      "file": "results/V3.6/v3.6-r1-round12-precommit-custody-stop.md",
+      "sha256": "227abcc92a19bcfb6db53aaef3ea79319e489fc9ce8d108cca5675ba472b1f27"
+    },
+    {
+      "file": "results/V3.6/v3.6-r1-round12-resumption-custody-stop.json",
+      "sha256": "391d50c6a5624981fdf6d6dc406a10d905c2ec8101e2901d6f95ad43636497fc"
+    },
+    {
+      "file": "results/V3.6/v3.6-r1-round12-resumption-custody-stop.md",
+      "sha256": "427c3b4464dd9dbfb8c1ef1232a366ebb8e13322e87842e2859829eb8cf428f1"
+    },
+    {
+      "file": "results/V3.6/v3.6-r1-round12-v2-native-qualification.json",
+      "sha256": "6680690898ccca0694f9628278f4ac83a48787c2e7a24ba2691357773385d4fe"
+    },
+    {
+      "file": "results/V3.6/v3.6-r1-round13-population-a-interrupted-custody-stop.json",
+      "sha256": "fa91d4ec8cac70d5038a6ed9e949aa02b239d12e51d0f882007d96e296b2e2be"
+    },
+    {
+      "file": "results/V3.6/v3.6-r1-round13-population-a-interrupted-custody-stop.md",
+      "sha256": "d0df85ce72a643609f5ce47b39371c4141b453e50352d634f2515cd206a7fe62"
+    },
+    {
+      "file": "results/V3.6/v3.6-r1-round13-population-a-replacement-interrupted-stop.json",
+      "sha256": "f53d4659300fad2c71377dfa00906ab9a50a3147265a0e328e3dba1c99207924"
+    },
+    {
+      "file": "results/V3.6/v3.6-r1-round13-population-a-replacement-interrupted-stop.md",
+      "sha256": "083d17f1608abbf66d78e7e42331ab548e7ab8b740d9cf2f9d778e3290d08d01"
+    },
+    {
+      "file": "results/V3.6/v3.6-r1-round14-population-a-diagnosis-stub.json",
+      "sha256": "cd44e78f7f7056939e2e13f665cc54a8758062c2493f47b963b2bd784663006d"
+    },
+    {
+      "file": "results/V3.6/v3.6-r1-round14-population-a-diagnosis-stub.md",
+      "sha256": "581233842acc0eaf7d8ce3980d49216f8257c9d89795daea62ac8c5a2ca25756"
+    },
+    {
+      "file": "results/V3.6/v3.6-r1-round14-v3-native-replacement-2-qualification.json",
+      "sha256": "ffbbb67c73341737f2e64cdb9089d629ada042fb111285d2caecdea72270b5e8"
+    },
+    {
+      "file": "results/V3.6/v3.6-r1-tournament-verdict.json",
+      "sha256": "40011a462bf3bfbda347b6b77dc8b8abe8246ea1b972b627afb7be57244252a0"
+    }
+  ],
+  "retired_unconsumed_blocks": [
+    {
+      "range": [
+        3694001,
+        3695999
+      ],
+      "reason": "Population-C short block retired by cardinality adjudication"
+    }
+  ],
+  "scientific_disposition": {
+    "amended_gate5": "PASS",
+    "common_target_tournament": "FAIL_PREDICTIVE_COST_RETAINED",
+    "replacement_gate4": "PASS"
+  },
+  "sealed_plaintext_opened": false,
+  "stage": "V3.6",
+  "status": "FROZEN_ROUND19_WITH_RETAINED_COMPRESSION_PREDICTIVE_COST",
+  "tests": {
+    "v3": "82/82 PASS"
+  },
+  "valid_once_consumed_blocks": [
+    {
+      "purpose": "Gate 2",
+      "range": [
+        3604000,
+        3613999
+      ]
+    },
+    {
+      "purpose": "original Gate 3",
+      "range": [
+        3614000,
+        3629999
+      ]
+    },
+    {
+      "purpose": "replacement Population B",
+      "range": [
+        3700000,
+        3701999
+      ]
+    },
+    {
+      "purpose": "Population A-R1",
+      "range": [
+        3722000,
+        3723999
+      ]
+    },
+    {
+      "purpose": "final Population C",
+      "range": [
+        3726000,
+        3727999
+      ]
+    },
+    {
+      "purpose": "one-shot common-target tournament",
+      "range": [
+        3684000,
+        3689999
+      ]
+    },
+    {
+      "purpose": "Gate 4",
+      "range": [
+        3709000,
+        3713999
+      ]
+    },
+    {
+      "purpose": "Gate 5",
+      "range": [
+        3635000,
+        3659999
+      ]
+    },
+    {
+      "purpose": "replacement Gate 4",
+      "range": [
+        3728000,
+        3732999
+      ]
+    }
+  ]
+}

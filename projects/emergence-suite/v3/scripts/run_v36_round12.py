@@ -22,7 +22,8 @@ sys.path.insert(0, str(SUITE_ROOT))
 sys.path.insert(0, str(ROOT))
 
 from ref import (  # noqa: E402
-    v35, v36_bridge, v36_bridge_oracle, v36_fixture_oracle, v36_round12,
+    v35, v36_bridge, v36_bridge_oracle, v36_coherence,
+    v36_fixture_oracle, v36_round12,
 )
 from ref.custody import NonFiniteWorkerRow, validate_finite_worker_row  # noqa: E402
 from ref.trace_sink import serializing_trace_context, traced_execution  # noqa: E402
@@ -1225,14 +1226,52 @@ def run_tournament() -> dict[str, Any]:
     if qualification["verdict"] != "PASS":
         raise RuntimeError("external qualification did not pass")
     block = v36_round12.TOURNAMENT_BLOCK
+    if block[1] - block[0] + 1 != 6_000:
+        raise RuntimeError("FAIL_UNEXECUTABLE: tournament cardinality is not 6,000")
     tasks = [
         (seed, block[0], block[1], "tournament")
         for seed in range(block[0], block[1] + 1)
     ]
+    coherence_path = RESULTS / "round16-tournament-generator-coherence-proof.json"
+    if coherence_path.exists():
+        raise RuntimeError("custody refusal: tournament coherence record exists")
+    coherence = v36_coherence.prove_generator_coherence()
+    coherence_encoded = (
+        json.dumps(_plain(coherence), indent=2, sort_keys=True, allow_nan=False)
+        + "\n"
+    ).encode("utf-8")
+    with coherence_path.open("xb") as handle:
+        handle.write(coherence_encoded)
+        handle.flush()
+        os.fsync(handle.fileno())
+    coherence_sha256 = hashlib.sha256(coherence_encoded).hexdigest()
+    if coherence["verdict"] != "PASS":
+        raise RuntimeError("FAIL_UNEXECUTABLE: tournament generator coherence failed")
     rows, ledger = _persist_rows(
-        "v3.6-r1-round12-tournament", tasks, _external_row,
+        "v3.6-r1-tournament", tasks, _external_row,
         chunksize=1, serial_group_size=len(tasks) // 4,
     )
+    document_identity = all(
+        row["world_sha256_v2"] == row["world_sha256_v3"]
+        and row["observation_sha256_v2"] == row["observation_sha256_v3"]
+        and row["target_sha256_v2"] == row["target_sha256_v3"]
+        for row in rows
+    )
+    if not document_identity:
+        result = {
+            "stage": "V3.6-R1", "name": "COMMON-TARGET COMPRESSION TOURNAMENT",
+            "seed_block": list(block), "world_count": len(rows),
+            "adapter_document_identity": False,
+            "criterion_evaluated": False,
+            "coherence_proof_sha256": coherence_sha256,
+            "custody": ledger, "verdict": "FAIL_APPARATUS_STOP",
+        }
+        _write_json("v3.6-r1-tournament-verdict.json", result)
+        _write_report(
+            "v3.6-r1-tournament-verdict.md",
+            "V3.6-R1 common-target tournament", result,
+        )
+        return result
     pareto = {}
     scientific_failures = []
     for index, target in enumerate(TARGETS):
@@ -1263,32 +1302,39 @@ def run_tournament() -> dict[str, Any]:
         }
         if not passed:
             scientific_failures.append(target)
-    verdict = (
-        "V3.6_COMPRESSION_NONINFERIORITY_PASS_WITH_RETAINED_R1_BRIDGE_QUALIFICATION_FAILURE"
+    scientific_status = (
+        "V3.6_COMPRESSION_NONINFERIORITY_PASS WITH_RETAINED_R1_BRIDGE_QUALIFICATION_FAILURE"
         if not scientific_failures else
-        "V3.6_COMPRESSION_PREDICTIVE_COST_RETAINED_WITH_RETAINED_R1_BRIDGE_QUALIFICATION_FAILURE"
+        "V3.6_COMPRESSION_PREDICTIVE_COST_RETAINED WITH_RETAINED_R1_BRIDGE_QUALIFICATION_FAILURE"
     )
     result = {
-        "stage": "V3.6-R1-round12",
+        "stage": "V3.6-R1",
         "name": "COMMON-TARGET COMPRESSION TOURNAMENT",
         "seed_block": list(block), "world_count": len(rows),
         "stratum_counts": {
             stratum: sum(row["stratum"] == stratum for row in rows)
             for stratum in v36_round12.STRATA
         },
+        "adapter_document_identity": document_identity,
+        "coherence_proof_sha256": coherence_sha256,
+        "criterion": {
+            "definition": "lower95[S_V3 - S_V2] >= -delta per target family",
+            "delta": v36_round12.DELTA,
+            "weighted_aggregate_used": False,
+        },
         "pareto_vector": pareto,
-        "macro_mean_descriptive_only": float(np.mean([
-            item["mean_D"] for item in pareto.values()
-        ])),
         "scientific_failures": scientific_failures,
+        "immutable_verdict": "PASS" if not scientific_failures else "FAIL",
+        "scientific_status": scientific_status,
+        "descriptive_external_calibration_nonblocking": _external_descriptive(rows),
         "original_gate3_tournament_unchanged": True,
         "hybrid_bridge_failure_retained": True,
-        "custody": ledger, "verdict": verdict,
+        "custody": ledger, "verdict": scientific_status,
     }
-    _write_json("v3.6-r1-round12-tournament.json", result)
+    _write_json("v3.6-r1-tournament-verdict.json", result)
     _write_report(
-        "v3.6-r1-round12-tournament.md",
-        "V3.6-R1 round-12 common-target tournament", result,
+        "v3.6-r1-tournament-verdict.md",
+        "V3.6-R1 common-target compression tournament", result,
     )
     return result
 
