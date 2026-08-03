@@ -1,0 +1,58 @@
+{
+  "stage": "V3.7",
+  "battery": "Population A37-R1",
+  "seed_block": [
+    3746000,
+    3747999
+  ],
+  "world_count": 2000,
+  "criterion_evaluated": true,
+  "classification": "FAIL_APPARATUS_THEOREM_PREMISE",
+  "blocking_failures": {
+    "active_count_top_label_ece": {
+      "observed": 0.09245909491157998,
+      "maximum": 0.05
+    },
+    "active_count_macro_classwise_ece": {
+      "observed": 0.08700701319168047,
+      "maximum": 0.05
+    }
+  },
+  "passing_checks": {
+    "target_ece": {
+      "contact": 0.0034716816833438016,
+      "context": 0.007110548547661077,
+      "identity": 0.004430758694200546,
+      "outcome": 0.004797032955078347,
+      "partner": 0.007237104547184479
+    },
+    "equivalence_class_top_label_ece": 0.015167017359848142,
+    "class_set_coverage_95": 0.957,
+    "maximum_edge_ece": {
+      "edge": "CROSS_MODE_Y",
+      "value": 0.03599770633205904
+    }
+  },
+  "apparatus_localization": {
+    "file": "ref/v37.py",
+    "function": "generate_v3_native_world",
+    "production": "modes_input[k] is sampled only when k < structure.active_modes; every higher slot is forced to zero",
+    "requirement_violated": "Round-20 candidate-common schedules must never depend on the sampled truth structure",
+    "why_calibration_by_theorem_does_not_apply": "The scorer conditions on modes_input and does not include the truth-dependent schedule probability in structure evidence, while the generator makes that schedule depend on active-mode count.",
+    "scientific_interpretation_withheld": true,
+    "repair_applied": false
+  },
+  "custody": {
+    "trace_file": "v3.7-population-a37-r1-traces.jsonl",
+    "trace_sha256": "1e5fed9a3770969e33611427271444129d40974f2ed9de932feb471a76dc1e23",
+    "record_count": 2000,
+    "ascending_gap_free": true,
+    "persisted_before_aggregation": true
+  },
+  "downstream": {
+    "population_c37_opened": false,
+    "tournament_t37_opened": false,
+    "prediction_scored": false
+  },
+  "verdict": "FAIL_APPARATUS_THEOREM_PREMISE"
+}

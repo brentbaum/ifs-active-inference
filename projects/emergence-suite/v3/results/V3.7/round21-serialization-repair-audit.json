@@ -1,0 +1,41 @@
+{
+  "stage": "V3.7",
+  "authorization": "internal-round21-adjudication.md ruling 21.1",
+  "classification": "SERIALIZATION_BOUNDARY_ONLY",
+  "repair": {
+    "file": "scripts/run_v37.py",
+    "function": "_native_row_from_world",
+    "change": "Convert the nested calibration_state MappingProxyType tree to ordinary dict/list/scalar containers with the pre-existing _plain serializer at the worker-row boundary.",
+    "scientific_values_changed": false,
+    "scientific_computation_changed": false
+  },
+  "authorized_supporting_plumbing": [
+    "Refactor native and external row construction into zero-seed-callable helpers without changing their score paths.",
+    "Add pickle round-trip proof execution before A37-R1, C37, and T37 parallel blocks.",
+    "Select the adjudicated A37-R1 replacement block 3746000:3747999 and distinct retained-result filenames."
+  ],
+  "regression_test": {
+    "file": "tests/test_v37.py",
+    "name": "test_exact_worker_rows_pickle_roundtrip_with_nested_types",
+    "result": "PASS"
+  },
+  "identity": {
+    "v36_final_manifest": "results/V3.6/v3.6-freeze-manifest-final.json",
+    "v36_ref_v3_files_checked": 25,
+    "v36_hash_mismatches": [],
+    "v37_scientific_module_sha256": {
+      "ref/v37.py": "65f6b17e14d02d4356f1f9f278027a275dffe3c803fffd5e4704ac3501b7c145",
+      "ref/v37_oracle.py": "c1482f8fc2b3ac971cc85cac0843621d10845ee633c92ee148faf9221ed7df16"
+    },
+    "design_freeze_sha256": {
+      "results/V3.7/v3.7-design-freeze.md": "452d7db694e9f48ab37ffc68b60f48f6416cf7019c94e6023f5c5af51100a75e",
+      "results/V3.7/v3.7-design-freeze.json": "c08167cb16dcab35c26cc07b4782e1553f4bb217119cd9a95fabc2cf961c2925"
+    },
+    "design_freeze_scientific_content_bitwise_unchanged": true
+  },
+  "post_repair_hashes": {
+    "scripts/run_v37.py": "6ff2d8f8c7ce635158ed04bf64ad3bff377e5eba54a3f64bee7b15fb270ae139",
+    "tests/test_v37.py": "46a00209239c61355e766b0ca4ab407b91602bb9580e8541f6cbbac628d32edb"
+  },
+  "verdict": "PASS"
+}

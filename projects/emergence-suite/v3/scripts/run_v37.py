@@ -8,6 +8,7 @@ import hashlib
 import json
 import math
 import os
+import pickle
 import sys
 from multiprocessing import get_context
 from pathlib import Path
@@ -31,6 +32,7 @@ TARGETS = v36_bridge.TARGETS
 STRATA = v36_round12.STRATA
 DELTA = math.log(1.02)
 TOLERANCE = 1e-10
+A37_R1_BLOCK = (3_746_000, 3_747_999)
 
 
 def _plain(value: Any) -> Any:
@@ -247,13 +249,20 @@ def _persist_rows(name: str, tasks: Sequence[Any], worker: Any, group_size: int)
 @traced_execution
 def _native_row(task: tuple[int, int, int]) -> dict[str, Any]:
     seed, start, end = task; world = v37.generate_v3_native_world(seed, released_block=(start, end))
+    return _native_row_from_world(world, seed=seed)
+
+
+def _native_row_from_world(world: v37.V37World, *, seed: int) -> dict[str, Any]:
     predictions = v37.score_v37(world); serialized, targets = _serialized_prediction(world.document, predictions)
     state = v37.calibration_state(world)
     return {
         "seed": seed, "population": "A37_complete_native", "stratum": world.document.stratum,
         "world_sha256": world.document.world_sha256, "observation_sha256": world.document.observation_sha256,
         "target_sha256": world.document.heldout_target_sha256,
-        "predictions": {"v37": serialized}, "targets": targets, "calibration_state": state,
+        # Round 21: immutable scientific views become plain containers only
+        # at the worker-row serialization boundary.  Values are unchanged.
+        "predictions": {"v37": serialized}, "targets": targets,
+        "calibration_state": _plain(state),
         "native_path_state": {
             "latent_mode_path": [list(item.modes_input) for item in world.document.slices],
             "context_state_path": [item.context_input for item in world.document.slices],
@@ -269,7 +278,12 @@ def _native_row(task: tuple[int, int, int]) -> dict[str, Any]:
 @traced_execution
 def _external_row(task: tuple[int, int, int, str]) -> dict[str, Any]:
     seed, start, end, phase = task; world = v37.generate_external_world(seed, released_block=(start, end)); document = world.document
-    prediction2 = v36_bridge.score_v2(document); prediction37 = v37.score_v37(world)
+    return _external_row_from_document(document, phase=phase)
+
+
+def _external_row_from_document(document: v36_bridge.CanonicalWorld, *, phase: str) -> dict[str, Any]:
+    seed = int(document.seed)
+    prediction2 = v36_bridge.score_v2(document); prediction37 = v37.score_v37(document)
     serialized2, targets2 = _serialized_prediction(document, prediction2)
     serialized37, targets37 = _serialized_prediction(document, prediction37)
     if targets2 != targets37:
@@ -283,6 +297,61 @@ def _external_row(task: tuple[int, int, int, str]) -> dict[str, Any]:
         "predictions": {"v2": serialized2, "v37": serialized37}, "targets": targets2,
         "scores": {"v2": scores2, "v37": scores37}, "document_identity": True,
     }
+
+
+def _roundtrip(value: Any) -> dict[str, Any]:
+    encoded = pickle.dumps(value, protocol=pickle.HIGHEST_PROTOCOL)
+    decoded = pickle.loads(encoded)
+    return {
+        "pickle_byte_count": len(encoded),
+        "deep_equal": decoded == value,
+        "original_type": type(value).__name__,
+        "decoded_type": type(decoded).__name__,
+        "sha256": hashlib.sha256(encoded).hexdigest(),
+    }
+
+
+def _run_roundtrip_proof(label: str, kinds: Sequence[str]) -> dict[str, Any]:
+    """Persist the exact parallel worker-row types before a block opens."""
+    path = RESULTS / f"v3.7-{label}-serialization-roundtrip-proof.jsonl"
+    hash_path = RESULTS / f"v3.7-{label}-serialization-roundtrip-proof-hash.json"
+    if path.exists() or hash_path.exists():
+        raise RuntimeError(f"round-trip proof output already exists for {label}")
+    with serializing_trace_context(f"v37-{label}-serialization-roundtrip") as sink:
+        document = v36_bridge.public_dummy()
+        records = {}
+        if "native" in kinds:
+            dummy_world = v37.V37World(
+                document=document,
+                persistence_index=0,
+                partner_state_path=(0,) * len(document.slices),
+                danger_state_path=(0,) * len(document.slices),
+                contact_parameter=int(document.contact_response),
+            )
+            records["native"] = _roundtrip(
+                _native_row_from_world(dummy_world, seed=int(document.seed))
+            )
+        if "external" in kinds:
+            records["external"] = _roundtrip(
+                _external_row_from_document(document, phase="zero_seed_roundtrip")
+            )
+        events = list(sink.events)
+    result = {
+        "label": label, "zero_seed": True, "worker_row_types": records,
+        "nested_deep_equality_required": True, "runtime_trace_events": events,
+        "verdict": "PASS" if records and all(row["deep_equal"] for row in records.values()) else "FAIL_APPARATUS_STOP",
+    }
+    encoded = _canonical(result)
+    with path.open("xb") as handle:
+        handle.write(encoded); handle.flush(); os.fsync(handle.fileno())
+    hash_record = {
+        "file": path.name, "sha256": hashlib.sha256(encoded).hexdigest(),
+        "persisted_before_block": True, "record_count": 1,
+    }
+    _write_json(hash_path.name, hash_record)
+    if result["verdict"] != "PASS":
+        raise RuntimeError(f"serialization round-trip proof failed for {label}")
+    return {**result, "custody": hash_record}
 
 
 def run_proofs() -> dict[str, Any]:
@@ -311,8 +380,9 @@ def run_proofs() -> dict[str, Any]:
 def run_population_a() -> dict[str, Any]:
     if json.loads((RESULTS / "v3.7-zero-seed-proofs.json").read_text())["verdict"] != "PASS":
         raise RuntimeError("zero-seed proofs did not pass")
-    start, end = v37.A_BLOCK; tasks = [(seed, start, end) for seed in range(start, end + 1)]
-    rows, ledger = _persist_rows("v3.7-population-a37", tasks, _native_row, 500)
+    roundtrip = _run_roundtrip_proof("population-a37-r1-preblock", ("native",))
+    start, end = A37_R1_BLOCK; tasks = [(seed, start, end) for seed in range(start, end + 1)]
+    rows, ledger = _persist_rows("v3.7-population-a37-r1", tasks, _native_row, 500)
     predictive = _predictive_calibration(rows, "v37"); structure = _structure_calibration(rows); failures = []
     for target, metrics in predictive.items():
         if metrics["ece"] > .05: failures.append(f"{target} ECE {metrics['ece']} > 0.05")
@@ -328,9 +398,10 @@ def run_population_a() -> dict[str, Any]:
     result = {"stage": "V3.7", "population": "A37", "seed_block": [start,end], "world_count": len(rows),
               "stratum_counts": {s: sum(row["stratum"] == s for row in rows) for s in STRATA},
               "predictive_calibration": predictive, "structure_calibration": structure,
-              "maximum_normalization_error": max_norm, "failures": failures, "custody": ledger,
+              "maximum_normalization_error": max_norm, "serialization_roundtrip_proof": roundtrip,
+              "failures": failures, "custody": ledger,
               "verdict": "PASS" if not failures else "FAIL"}
-    _write_json("v3.7-population-a37.json", result); _write_report("v3.7-population-a37.md", "V3.7 Population A37 qualification", result)
+    _write_json("v3.7-population-a37-r1.json", result); _write_report("v3.7-population-a37-r1.md", "V3.7 Population A37-R1 qualification", result)
     return result
 
 
@@ -344,18 +415,21 @@ def _external_descriptive(rows):
 
 
 def run_population_c() -> dict[str, Any]:
-    if json.loads((RESULTS / "v3.7-population-a37.json").read_text())["verdict"] != "PASS": raise RuntimeError("Population A37 did not pass")
+    if json.loads((RESULTS / "v3.7-population-a37-r1.json").read_text())["verdict"] != "PASS": raise RuntimeError("Population A37-R1 did not pass")
+    roundtrip = _run_roundtrip_proof("population-c37-preblock", ("external",))
     start,end=v37.C_BLOCK; tasks=[(seed,start,end,"C37") for seed in range(start,end+1)]
     rows,ledger=_persist_rows("v3.7-population-c37",tasks,_external_row,500)
     identity=all(row["document_identity"] and row["world_sha256_v2"]==row["world_sha256_v37"] and row["observation_sha256_v2"]==row["observation_sha256_v37"] and row["target_sha256_v2"]==row["target_sha256_v37"] for row in rows)
     result={"stage":"V3.7","population":"C37","seed_block":[start,end],"world_count":len(rows),
-            "adapter_document_identity":identity,"descriptive_calibration":_external_descriptive(rows),"custody":ledger,
+            "adapter_document_identity":identity,"descriptive_calibration":_external_descriptive(rows),
+            "serialization_roundtrip_proof":roundtrip,"custody":ledger,
             "verdict":"PASS" if identity else "FAIL_APPARATUS_STOP"}
     _write_json("v3.7-population-c37.json",result);_write_report("v3.7-population-c37.md","V3.7 Population C37",result);return result
 
 
 def run_tournament() -> dict[str, Any]:
     if json.loads((RESULTS / "v3.7-population-c37.json").read_text())["verdict"] != "PASS": raise RuntimeError("Population C37 did not pass")
+    roundtrip = _run_roundtrip_proof("tournament-t37-preblock", ("external",))
     coherence = _plain(v37.generator_coherence_proof())
     encoded = _canonical(coherence); proof_path=RESULTS/"v3.7-tournament-coherence-proof.jsonl"
     with proof_path.open("xb") as handle: handle.write(encoded);handle.flush();os.fsync(handle.fileno())
@@ -373,7 +447,8 @@ def run_tournament() -> dict[str, Any]:
         if not passed: failures.append(target)
     result={"stage":"V3.7","name":"T37 COMMON-TARGET TOURNAMENT","seed_block":[start,end],"world_count":len(rows),
             "adapter_document_identity":identity,"criterion":{"definition":"lower95[S_V3.7-S_V2] >= -log(1.02) per family","delta":DELTA,"weighted_aggregate_used":False},
-            "pareto_vector":pareto,"descriptive_calibration":_external_descriptive(rows),"failed_families":failures,"custody":ledger,
+            "pareto_vector":pareto,"descriptive_calibration":_external_descriptive(rows),"failed_families":failures,
+            "serialization_roundtrip_proof":roundtrip,"custody":ledger,
             "verdict":"PASS" if identity and not failures else ("FAIL_SCIENTIFIC_RETAINED" if identity else "FAIL_APPARATUS_STOP")}
     _write_json("v3.7-tournament-verdict.json",result);_write_report("v3.7-tournament-verdict.md","V3.7 T37 tournament",result);return result
 
