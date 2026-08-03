@@ -1,0 +1,1381 @@
+{
+  "compression_tournament": {
+    "delta": 0.01980262729617973,
+    "immutable_verdict": "FAIL",
+    "pareto_vector_verbatim": {
+      "contact": {
+        "by_stratum": {
+          "acute_one": {
+            "mean_D": -0.23599743869242268,
+            "world_count": 1500
+          },
+          "chronic_multiple": {
+            "mean_D": -0.25013806713598163,
+            "world_count": 1500
+          },
+          "chronic_one": {
+            "mean_D": -0.235050792431907,
+            "world_count": 1500
+          },
+          "real_danger_adaptive": {
+            "mean_D": -0.2391815829185688,
+            "world_count": 1500
+          }
+        },
+        "delta": 0.01980262729617973,
+        "interval_95": [
+          -0.24747987240336208,
+          -0.2325416505695966
+        ],
+        "mean_D": -0.24009197029472004,
+        "passed": false,
+        "quantiles": [
+          -0.9761808039261001,
+          -0.7599753291272631,
+          -0.1828144292668219,
+          0.16344395602865927,
+          0.2728127774791418
+        ]
+      },
+      "context": {
+        "by_stratum": {
+          "acute_one": {
+            "mean_D": 0.033350014124467864,
+            "world_count": 1500
+          },
+          "chronic_multiple": {
+            "mean_D": 0.34358722148792714,
+            "world_count": 1500
+          },
+          "chronic_one": {
+            "mean_D": 0.3474303409970477,
+            "world_count": 1500
+          },
+          "real_danger_adaptive": {
+            "mean_D": 0.3528295697140918,
+            "world_count": 1500
+          }
+        },
+        "delta": 0.01980262729617973,
+        "interval_95": [
+          0.2637635066107966,
+          0.27470809899014953
+        ],
+        "mean_D": 0.26929928658088365,
+        "passed": true,
+        "quantiles": [
+          -0.11060568268819765,
+          -0.04611096391308096,
+          0.29162772082754196,
+          0.6046608998265431,
+          0.6989348284727926
+        ]
+      },
+      "identity": {
+        "by_stratum": {
+          "acute_one": {
+            "mean_D": -0.24881082005966945,
+            "world_count": 1500
+          },
+          "chronic_multiple": {
+            "mean_D": -0.12207294568244319,
+            "world_count": 1500
+          },
+          "chronic_one": {
+            "mean_D": -0.05382257802669426,
+            "world_count": 1500
+          },
+          "real_danger_adaptive": {
+            "mean_D": -0.29707870461983726,
+            "world_count": 1500
+          }
+        },
+        "delta": 0.01980262729617973,
+        "interval_95": [
+          -0.1889720013029227,
+          -0.17175863145612577
+        ],
+        "mean_D": -0.18044626209716103,
+        "passed": false,
+        "quantiles": [
+          -1.2826723127606383,
+          -0.9961425002068355,
+          -0.030143833762331956,
+          0.12614013098586066,
+          0.30165576538449324
+        ]
+      },
+      "outcome": {
+        "by_stratum": {
+          "acute_one": {
+            "mean_D": -0.09577317851016809,
+            "world_count": 1500
+          },
+          "chronic_multiple": {
+            "mean_D": 0.010249718168264883,
+            "world_count": 1500
+          },
+          "chronic_one": {
+            "mean_D": 0.00941047898428903,
+            "world_count": 1500
+          },
+          "real_danger_adaptive": {
+            "mean_D": -0.006471248041955624,
+            "world_count": 1500
+          }
+        },
+        "delta": 0.01980262729617973,
+        "interval_95": [
+          -0.023203059948694895,
+          -0.018049091300627106
+        ],
+        "mean_D": -0.02064605734989245,
+        "passed": false,
+        "quantiles": [
+          -0.3094511611343592,
+          -0.22498990968546626,
+          -0.002005387584246454,
+          0.1162674922412684,
+          0.19469908317109752
+        ]
+      },
+      "partner": {
+        "by_stratum": {
+          "acute_one": {
+            "mean_D": -0.30455869424823345,
+            "world_count": 1500
+          },
+          "chronic_multiple": {
+            "mean_D": -0.29623060807051504,
+            "world_count": 1500
+          },
+          "chronic_one": {
+            "mean_D": -0.2759971983467138,
+            "world_count": 1500
+          },
+          "real_danger_adaptive": {
+            "mean_D": -0.30035191868578964,
+            "world_count": 1500
+          }
+        },
+        "delta": 0.01980262729617973,
+        "interval_95": [
+          -0.30226748032346307,
+          -0.2864180319948224
+        ],
+        "mean_D": -0.294284604837813,
+        "passed": false,
+        "quantiles": [
+          -1.082032816936768,
+          -0.8619908607221356,
+          -0.2575440929194515,
+          0.16779134051175904,
+          0.3853360580713437
+        ]
+      }
+    },
+    "source": {
+      "file": "results/V3.6/v3.6-r1-tournament-verdict.json",
+      "sha256": "40011a462bf3bfbda347b6b77dc8b8abe8246ea1b972b627afb7be57244252a0"
+    },
+    "verdict": "V3.6_COMPRESSION_PREDICTIVE_COST_RETAINED WITH_RETAINED_R1_BRIDGE_QUALIFICATION_FAILURE",
+    "weighted_aggregate": null,
+    "world_count": 6000
+  },
+  "deferred_work_untouched": [
+    "T-V3-DO1",
+    "V3.7"
+  ],
+  "internal_rounds_16_19": [
+    {
+      "file": "results/V3.6/internal-round16-adjudication.md",
+      "sha256": "c7f4d45bf689f08d0cee330bd8107c15639d113771060cd56db4ef95abccb9b6"
+    },
+    {
+      "file": "results/V3.6/internal-round17-adjudication.md",
+      "sha256": "635d0f8f6cb1d2c5d4b0e6523c317cc7094b7b93d7016e7d5798df90724ff7f2"
+    },
+    {
+      "file": "results/V3.6/internal-round18-adjudication.md",
+      "sha256": "5bc48c1edae9ebaa2a75a0d29b3a7e7ea05b11634a1370805be99135d1af410f"
+    },
+    {
+      "file": "results/V3.6/internal-round19-adjudication.md",
+      "sha256": "171d69c6a0b537804f7c7a8917917c4fe2f46cb8efa7332cfa1b28f3e8813dad"
+    }
+  ],
+  "no_softening_rule": "Round-17 ruling 17.3 applied: no weighted aggregate, no alternative delta, no near-miss language.",
+  "profile_status": "COMPLETE_AS_RECORDED_NO_AGGREGATE_PASS_COUNT",
+  "retained_stop_count_v3_6_exact": 41,
+  "retained_stop_records_v3_6_exact": [
+    {
+      "adjudication_round": "rounds 11-12",
+      "file": "results/V3.6/gate-3-diagnosis-stub.json",
+      "name": "gate-3-diagnosis-stub.json",
+      "retained": true,
+      "sha256": "ea44b66f86bdfa9843445b6eb3e15e4b60c4def01c62a88bb78b0bea3068eb2f"
+    },
+    {
+      "adjudication_round": "rounds 11-12",
+      "file": "results/V3.6/gate-3-diagnosis-stub.md",
+      "name": "gate-3-diagnosis-stub.md",
+      "retained": true,
+      "sha256": "74dc2d02f3b13b1491eb113dd05acf68b939c4d114855a4d6a4af2a03e858928"
+    },
+    {
+      "adjudication_round": "rounds 11-12",
+      "file": "results/V3.6/gate-3.json",
+      "name": "gate-3.json",
+      "retained": true,
+      "sha256": "89c681c0397aa62c1b2214a0095ab6eb64adddb3f8663ff00ea42cbad0cff338"
+    },
+    {
+      "adjudication_round": "round 14 custody adjudication",
+      "file": "results/V3.6/gate-4-custody-stop.json",
+      "name": "gate-4-custody-stop.json",
+      "retained": true,
+      "sha256": "dc309f4e0a4f65fff01d04359954333c75d4f8082b703124426bd3bf766b011a"
+    },
+    {
+      "adjudication_round": "round 14 custody adjudication",
+      "file": "results/V3.6/gate-4-custody-stop.md",
+      "name": "gate-4-custody-stop.md",
+      "retained": true,
+      "sha256": "8f8c243947f38d5f1a0d09453c9e16b482feb458b45f22c6031283ec949c003c"
+    },
+    {
+      "adjudication_round": "INTERNAL rounds 18-19",
+      "file": "results/V3.6/gate-4-diagnosis-stub.json",
+      "name": "gate-4-diagnosis-stub.json",
+      "retained": true,
+      "sha256": "2d26e91094b994836e181c0d5b57e22ccd6d201c69feae6c20a4eb23bcd076d0"
+    },
+    {
+      "adjudication_round": "round 14 custody adjudication",
+      "file": "results/V3.6/gate-4-replacement-custody-stop.json",
+      "name": "gate-4-replacement-custody-stop.json",
+      "retained": true,
+      "sha256": "78da8f4281c3ad536707bf2128d55a836d161d05666fe8323eb4fc539a8e1e26"
+    },
+    {
+      "adjudication_round": "round 14 custody adjudication",
+      "file": "results/V3.6/gate-4-replacement-custody-stop.md",
+      "name": "gate-4-replacement-custody-stop.md",
+      "retained": true,
+      "sha256": "33046e74f2a4e4e0b6eded9aff29fc68d45ff9962fc610ee18f18b0d1eaa4da5"
+    },
+    {
+      "adjudication_round": "retained by V3.6 freeze declaration",
+      "file": "results/V3.6/gate-4-replacement-diagnosis-stub.json",
+      "name": "gate-4-replacement-diagnosis-stub.json",
+      "retained": true,
+      "sha256": "c51dbd18f526861d8735f5c2bc89f194a4594f8314971ba93144e550681904cf"
+    },
+    {
+      "adjudication_round": "rounds 12-13",
+      "file": "results/V3.6/native-fixture-proof-diagnosis-stub.json",
+      "name": "native-fixture-proof-diagnosis-stub.json",
+      "retained": true,
+      "sha256": "d10ef057897fd506b9ff7135e3941c67166e63c5408194364a5dccda334fd082"
+    },
+    {
+      "adjudication_round": "rounds 12-13",
+      "file": "results/V3.6/native-fixture-proof-diagnosis-stub.md",
+      "name": "native-fixture-proof-diagnosis-stub.md",
+      "retained": true,
+      "sha256": "d6ddb1c038404179d127a58b7f21aa3dfacf664c7cc7601a343330942065e3e9"
+    },
+    {
+      "adjudication_round": "INTERNAL round 16",
+      "file": "results/V3.6/population-c-native-support-stop.json",
+      "name": "population-c-native-support-stop.json",
+      "retained": true,
+      "sha256": "81fe4edcf5f1df2c6327f580e228df4073ba372aa0b93ef8ff8be00516680b39"
+    },
+    {
+      "adjudication_round": "INTERNAL round 16",
+      "file": "results/V3.6/population-c-native-support-stop.md",
+      "name": "population-c-native-support-stop.md",
+      "retained": true,
+      "sha256": "cc13a6a46ac1024d5d399bd022a2569d227eefe88e8f72303055d1a56a6d4f56"
+    },
+    {
+      "adjudication_round": "Population-C cardinality adjudication before INTERNAL round 16",
+      "file": "results/V3.6/population-c-preflight-stop.json",
+      "name": "population-c-preflight-stop.json",
+      "retained": true,
+      "sha256": "a5100d03432349401cd2afebfc2cac38d500899263a7fe04ebbb6f3dc549fdeb"
+    },
+    {
+      "adjudication_round": "Population-C cardinality adjudication before INTERNAL round 16",
+      "file": "results/V3.6/population-c-preflight-stop.md",
+      "name": "population-c-preflight-stop.md",
+      "retained": true,
+      "sha256": "2e2e685f8252eefffbff99e3649f09fe860705ac1752c38791d10a91bf6a6a19"
+    },
+    {
+      "adjudication_round": "INTERNAL round 18",
+      "file": "results/V3.6/round18-gate4-diagnosis.json",
+      "name": "round18-gate4-diagnosis.json",
+      "retained": true,
+      "sha256": "e0ff0eb82324b0a48f611eaeca125d87c1cd6295f15aaf66cc3ade931ed7d01e"
+    },
+    {
+      "adjudication_round": "stage-0 adjudication 2",
+      "file": "results/V3.6/stage0-adjudicated-pilot-diagnosis-stub.json",
+      "name": "stage0-adjudicated-pilot-diagnosis-stub.json",
+      "retained": true,
+      "sha256": "964ca9ed035e33a6a3d80a6461c69f92903f796bf11ff4630fa387344b117302"
+    },
+    {
+      "adjudication_round": "stage-0 adjudication 2",
+      "file": "results/V3.6/stage0-adjudicated-pilot-diagnosis-stub.md",
+      "name": "stage0-adjudicated-pilot-diagnosis-stub.md",
+      "retained": true,
+      "sha256": "ba61db31ab3c565bae1f07ab2ac2495e84850c75c57fa7545e6a1c7cd0c9f48b"
+    },
+    {
+      "adjudication_round": "stage-0 custody adjudication",
+      "file": "results/V3.6/stage0-custody-stop.json",
+      "name": "stage0-custody-stop.json",
+      "retained": true,
+      "sha256": "15131611958ee1a70e1dd9e155b3b3cac73c54a4ecc37b2eed30eba4d9f37cc2"
+    },
+    {
+      "adjudication_round": "stage-0 custody adjudication",
+      "file": "results/V3.6/stage0-custody-stop.md",
+      "name": "stage0-custody-stop.md",
+      "retained": true,
+      "sha256": "0b168058975782ac8e176ae5ffda820168d6ae6d32b293f8ec43618cab1f7d28"
+    },
+    {
+      "adjudication_round": "stage-0 adjudication 1",
+      "file": "results/V3.6/stage0-pilot-diagnosis-stub.json",
+      "name": "stage0-pilot-diagnosis-stub.json",
+      "retained": true,
+      "sha256": "620d05763cfa0c681f909efda209e7f0af9ba11d23c1bc1e06596a0cf556d7b2"
+    },
+    {
+      "adjudication_round": "stage-0 adjudication 1",
+      "file": "results/V3.6/stage0-pilot-diagnosis-stub.md",
+      "name": "stage0-pilot-diagnosis-stub.md",
+      "retained": true,
+      "sha256": "5d337ca0c0b7f074cd0f711c75039d8d6843ca0ac84f0b04ce04e1f2f641f51d"
+    },
+    {
+      "adjudication_round": "rounds 11-12",
+      "file": "results/V3.6/v3.6-r1-bridge-diagnosis-stub.json",
+      "name": "v3.6-r1-bridge-diagnosis-stub.json",
+      "retained": true,
+      "sha256": "8e0fa58614b245211c8e84a643e68359132079f14ce576891a7b75d43dcd9c80"
+    },
+    {
+      "adjudication_round": "rounds 11-12",
+      "file": "results/V3.6/v3.6-r1-bridge-qualification.json",
+      "name": "v3.6-r1-bridge-qualification.json",
+      "retained": true,
+      "sha256": "80462821024b75f304c5dddbab19f8e027966084674b029cfbd929fdb4b68e9d"
+    },
+    {
+      "adjudication_round": "INTERNAL rounds 18-19",
+      "file": "results/V3.6/v3.6-r1-gate4-verdict.json",
+      "name": "v3.6-r1-gate4-verdict.json",
+      "retained": true,
+      "sha256": "6e7f49fc9b5c37d14cd5154d3ba039f799577c43d5de508627d3f6743083ab48"
+    },
+    {
+      "adjudication_round": "INTERNAL rounds 18-19",
+      "file": "results/V3.6/v3.6-r1-gate5-verdict.json",
+      "name": "v3.6-r1-gate5-verdict.json",
+      "retained": true,
+      "sha256": "7be4b27ab9d2bae056cb1112f1aab33dc08f62d75608d3689353d7dcc379c801"
+    },
+    {
+      "adjudication_round": "rounds 12-13",
+      "file": "results/V3.6/v3.6-r1-round12-population-b-stop.json",
+      "name": "v3.6-r1-round12-population-b-stop.json",
+      "retained": true,
+      "sha256": "dee4b9d400f029ceab25b856b750828f41df041af64b11a23fa06fc4bcab3983"
+    },
+    {
+      "adjudication_round": "rounds 12-13",
+      "file": "results/V3.6/v3.6-r1-round12-population-b-stop.md",
+      "name": "v3.6-r1-round12-population-b-stop.md",
+      "retained": true,
+      "sha256": "698cebc6381f2a98378c9bdfac5f8d2903bd0c3fc291cc7503787a1712916ff4"
+    },
+    {
+      "adjudication_round": "rounds 12-13",
+      "file": "results/V3.6/v3.6-r1-round12-precommit-custody-stop.json",
+      "name": "v3.6-r1-round12-precommit-custody-stop.json",
+      "retained": true,
+      "sha256": "79dc33825d3eca09e31a4810b1b706f28fa2d70577908e1ac9658e900f8b1feb"
+    },
+    {
+      "adjudication_round": "rounds 12-13",
+      "file": "results/V3.6/v3.6-r1-round12-precommit-custody-stop.md",
+      "name": "v3.6-r1-round12-precommit-custody-stop.md",
+      "retained": true,
+      "sha256": "227abcc92a19bcfb6db53aaef3ea79319e489fc9ce8d108cca5675ba472b1f27"
+    },
+    {
+      "adjudication_round": "rounds 12-13",
+      "file": "results/V3.6/v3.6-r1-round12-resumption-custody-stop.json",
+      "name": "v3.6-r1-round12-resumption-custody-stop.json",
+      "retained": true,
+      "sha256": "391d50c6a5624981fdf6d6dc406a10d905c2ec8101e2901d6f95ad43636497fc"
+    },
+    {
+      "adjudication_round": "rounds 12-13",
+      "file": "results/V3.6/v3.6-r1-round12-resumption-custody-stop.md",
+      "name": "v3.6-r1-round12-resumption-custody-stop.md",
+      "retained": true,
+      "sha256": "427c3b4464dd9dbfb8c1ef1232a366ebb8e13322e87842e2859829eb8cf428f1"
+    },
+    {
+      "adjudication_round": "rounds 12-13",
+      "file": "results/V3.6/v3.6-r1-round12-v2-native-qualification.json",
+      "name": "v3.6-r1-round12-v2-native-qualification.json",
+      "retained": true,
+      "sha256": "6680690898ccca0694f9628278f4ac83a48787c2e7a24ba2691357773385d4fe"
+    },
+    {
+      "adjudication_round": "round 14 custody adjudication",
+      "file": "results/V3.6/v3.6-r1-round13-population-a-interrupted-custody-stop.json",
+      "name": "v3.6-r1-round13-population-a-interrupted-custody-stop.json",
+      "retained": true,
+      "sha256": "fa91d4ec8cac70d5038a6ed9e949aa02b239d12e51d0f882007d96e296b2e2be"
+    },
+    {
+      "adjudication_round": "round 14 custody adjudication",
+      "file": "results/V3.6/v3.6-r1-round13-population-a-interrupted-custody-stop.md",
+      "name": "v3.6-r1-round13-population-a-interrupted-custody-stop.md",
+      "retained": true,
+      "sha256": "d0df85ce72a643609f5ce47b39371c4141b453e50352d634f2515cd206a7fe62"
+    },
+    {
+      "adjudication_round": "round 14 custody adjudication",
+      "file": "results/V3.6/v3.6-r1-round13-population-a-replacement-interrupted-stop.json",
+      "name": "v3.6-r1-round13-population-a-replacement-interrupted-stop.json",
+      "retained": true,
+      "sha256": "f53d4659300fad2c71377dfa00906ab9a50a3147265a0e328e3dba1c99207924"
+    },
+    {
+      "adjudication_round": "round 14 custody adjudication",
+      "file": "results/V3.6/v3.6-r1-round13-population-a-replacement-interrupted-stop.md",
+      "name": "v3.6-r1-round13-population-a-replacement-interrupted-stop.md",
+      "retained": true,
+      "sha256": "083d17f1608abbf66d78e7e42331ab548e7ab8b740d9cf2f9d778e3290d08d01"
+    },
+    {
+      "adjudication_round": "INTERNAL round 15",
+      "file": "results/V3.6/v3.6-r1-round14-population-a-diagnosis-stub.json",
+      "name": "v3.6-r1-round14-population-a-diagnosis-stub.json",
+      "retained": true,
+      "sha256": "cd44e78f7f7056939e2e13f665cc54a8758062c2493f47b963b2bd784663006d"
+    },
+    {
+      "adjudication_round": "INTERNAL round 15",
+      "file": "results/V3.6/v3.6-r1-round14-population-a-diagnosis-stub.md",
+      "name": "v3.6-r1-round14-population-a-diagnosis-stub.md",
+      "retained": true,
+      "sha256": "581233842acc0eaf7d8ce3980d49216f8257c9d89795daea62ac8c5a2ca25756"
+    },
+    {
+      "adjudication_round": "INTERNAL round 15",
+      "file": "results/V3.6/v3.6-r1-round14-v3-native-replacement-2-qualification.json",
+      "name": "v3.6-r1-round14-v3-native-replacement-2-qualification.json",
+      "retained": true,
+      "sha256": "ffbbb67c73341737f2e64cdb9089d629ada042fb111285d2caecdea72270b5e8"
+    },
+    {
+      "adjudication_round": "INTERNAL round 17",
+      "file": "results/V3.6/v3.6-r1-tournament-verdict.json",
+      "name": "v3.6-r1-tournament-verdict.json",
+      "retained": true,
+      "sha256": "40011a462bf3bfbda347b6b77dc8b8abe8246ea1b972b627afb7be57244252a0"
+    }
+  ],
+  "retained_stops_ladder_logical": [
+    {
+      "adjudication_round": "V3.0 Gate-5 repair authorization",
+      "classification": "PURE_SOFTWARE_ERROR_RETAINED",
+      "name": "Gate-5 parity-helper forwarding FAIL",
+      "records": [
+        {
+          "file": "results/V3.0/gate5-software-repair-authorization.md",
+          "sha256": "9a14120a843e4cd17894b516f9a86d559033c1603e075e24c3e6dc64f44b1665"
+        },
+        {
+          "file": "results/V3.0/gate-5-repaired.json",
+          "sha256": "fee7e6eaccbe370f04af6cb45baa0d9b66b945acf33e4d096f5ebb46c41f1435"
+        }
+      ],
+      "retained": true,
+      "stage": "V3.0"
+    },
+    {
+      "adjudication_round": "V3.1 Gate-3 mixed-verdict adjudication",
+      "classification": "SCIENTIFIC_LIMITATION_RETAINED",
+      "name": "Gate-3 revisability-floor FAIL",
+      "records": [
+        {
+          "file": "results/V3.1/gate3-adjudication.md",
+          "sha256": "43a52209bb7ac33dd97fe4ea0fab6795e24bab4671539e0343cec5390676684d"
+        }
+      ],
+      "retained": true,
+      "stage": "V3.1"
+    },
+    {
+      "adjudication_round": "V3.1 Gate-4 lesion-semantics and selectivity adjudications",
+      "classification": "APPARATUS_AND_SEMANTIC_STOPS_RETAINED",
+      "name": "Gate-4 lesion-semantics/restricted-prior sequence",
+      "records": [
+        {
+          "file": "results/V3.1/gate4-lesion-semantics-adjudication.md",
+          "sha256": "e9ec901f059602db6b1aef43c8e3d6978c1ca27c7f4c2786d5d76d32f671e4fc"
+        },
+        {
+          "file": "results/V3.1/gate4-selectivity-adjudication.md",
+          "sha256": "f4d55bd56d13cd10d9fea60dafc253037cf97ff5536f0321349df2859ff3b39c"
+        },
+        {
+          "file": "results/V3.1/gate-4-rescore-custody-stop.json",
+          "sha256": "86ddc6bc19204b093f1c4c434fba2070e2abb149e0b935732f42116956d597de"
+        }
+      ],
+      "retained": true,
+      "stage": "V3.1"
+    },
+    {
+      "adjudication_round": "V3.2 Stage-0 adjudication",
+      "classification": "DESIGN_DEFECT_RETAINED",
+      "name": "Stage-0 scope-identifiability defect",
+      "records": [
+        {
+          "file": "results/V3.2/stage0-adjudication.md",
+          "sha256": "9a3ccd637672c8c7e8536bf575afffe08e46783a88d8c56227d63cbda12f2fe3"
+        }
+      ],
+      "retained": true,
+      "stage": "V3.2"
+    },
+    {
+      "adjudication_round": "V3.2 Stage-0 custody adjudication",
+      "classification": "CUSTODY_STOP_RETAINED",
+      "name": "Unserialized repair-pilot preflight",
+      "records": [
+        {
+          "file": "results/V3.2/stage0-custody-adjudication.md",
+          "sha256": "4c92235b1357133193e9252f43e3e34597b47bc0a3d129877508fd19240e95e9"
+        },
+        {
+          "file": "results/V3.2/stage0-repair-pilot-custody-disclosure.md",
+          "sha256": "65bfd0c37027aab3d342f389635b522b547ec39a7feeba3524ce869251298d4c"
+        }
+      ],
+      "retained": true,
+      "stage": "V3.2"
+    },
+    {
+      "adjudication_round": "V3.3 Stage-0 adjudication",
+      "classification": "PLAN_FIDELITY_DEFECT_RETAINED",
+      "name": "Fixed-position do-over Stage-0 stop",
+      "records": [
+        {
+          "file": "results/V3.3/stage0-adjudication.md",
+          "sha256": "995f930e3837f61a6bc691d737ca4cfc664d2a4f73c311a264a18a5f6228ca5d"
+        }
+      ],
+      "retained": true,
+      "stage": "V3.3"
+    },
+    {
+      "adjudication_round": "V3.3 Gate-3 mixed-verdict adjudication",
+      "classification": "SCIENTIFIC_FINDINGS_RETAINED",
+      "name": "Do-over-speedup and suggestion-direction Gate-3 FAIL",
+      "records": [
+        {
+          "file": "results/V3.3/gate-3-stop.md",
+          "sha256": "91432a34ea938f8b396a53ae1adfbfc2167f8cdc5678936a8691b7beace97ee4"
+        },
+        {
+          "file": "results/V3.3/gate3-adjudication.md",
+          "sha256": "54013c1f7838a5ed95294f751c5dd3544b0617bdb2d184b2a40d2e9042054c14"
+        }
+      ],
+      "retained": true,
+      "stage": "V3.3"
+    },
+    {
+      "adjudication_round": "V3.4 Stage-0 repair authorization",
+      "classification": "GENERATOR_DEFECT_RETAINED",
+      "name": "Root-observation generator/scorer mismatch",
+      "records": [
+        {
+          "file": "results/V3.4/stage0-stop.json",
+          "sha256": "411efa88648849ce08b43297ac235230bf5a87ad21b165fdad4bdbae68052b83"
+        },
+        {
+          "file": "results/V3.4/stage0-repair-authorization.md",
+          "sha256": "7fe216c722022134bfcad8ddd08416b196c2ae4958765ff438da5a20f4cfb7f0"
+        }
+      ],
+      "retained": true,
+      "stage": "V3.4"
+    },
+    {
+      "adjudication_round": "V3.4 Gate-5 adjudication",
+      "classification": "INFORMATION_BUDGET_TRANSPLANT_RETAINED",
+      "name": "32-slice four-edge recovery Gate-5 FAIL",
+      "records": [
+        {
+          "file": "results/V3.4/full-fast-suite-gate5-stop.json",
+          "sha256": "8e9afee0647a390fda3a462c9c4ed082ffe4177f80fdad36de7deb49a29e7351"
+        },
+        {
+          "file": "results/V3.4/gate5-adjudication.md",
+          "sha256": "d885da18accaddea8c0153045fdcc86a2f145c8e34a7c33921be91023ede4882"
+        }
+      ],
+      "retained": true,
+      "stage": "V3.4"
+    },
+    {
+      "adjudication_round": "V3.5 Stage-0 adjudication and amendment 1",
+      "classification": "MODEL_SUPPORT_AND_CONSTRUCT_DEFECTS_RETAINED",
+      "name": "Original Stage-0 support/topology stop",
+      "records": [
+        {
+          "file": "results/V3.5/stage0-stop.json",
+          "sha256": "a3a59eac15db43e4723726d2606273df6536148e93275e5ca5146d8412611510"
+        },
+        {
+          "file": "results/V3.5/stage0-adjudication.md",
+          "sha256": "6ad9f57bb8e6affa5eaadf62af069f85ac9ec6a2f05b47c81a2e3fca8b9d85ac"
+        },
+        {
+          "file": "results/V3.5/stage0-adjudication-amendment-1.md",
+          "sha256": "1d5f917d63eddd0356cff695585015d269f29547d8631cfb851fe8f3142ced12"
+        }
+      ],
+      "retained": true,
+      "stage": "V3.5"
+    },
+    {
+      "adjudication_round": "V3.5 Gate-3 adjudication amendment 2",
+      "classification": "CANDIDATE_COMMONNESS_DEFECT_RETAINED",
+      "name": "Amendment-1 Gate-3 registration selectivity FAIL",
+      "records": [
+        {
+          "file": "results/V3.5/full-fast-suite-gate3-stop.json",
+          "sha256": "82f5aef513fdbabf6b6f6116d21662bb1eacfc7dac7cec25950e9558174c60c8"
+        },
+        {
+          "file": "results/V3.5/gate3-adjudication-amendment-2.md",
+          "sha256": "87b6843a9cc8b8e5b72ebcb456c4acdd36a94afa1d2445b7e8068a26730db4e0"
+        }
+      ],
+      "retained": true,
+      "stage": "V3.5"
+    }
+  ],
+  "sealed_challenge_verdicts": [
+    {
+      "challenge": "C-V30",
+      "criteria": "5/5",
+      "source": {
+        "file": "results/V3.0/c-v30/criteria.json",
+        "sha256": "ce62dfb49925ea5a729d565db9709e9e1ef6d6f2355a5f937dca99e0e31ff23f"
+      },
+      "stage": "V3.0",
+      "verdict": "PASS"
+    },
+    {
+      "challenge": "C-V31",
+      "criteria": "6/6",
+      "source": {
+        "file": "results/V3.1/c-v31/summary.json",
+        "sha256": "7823f0800fcaeaa5cbd39f5780bd6da765c0103302496731230f990c49a3ecfa"
+      },
+      "stage": "V3.1",
+      "verdict": "PASS"
+    },
+    {
+      "challenge": "C-V32",
+      "criteria": "5/5",
+      "source": {
+        "file": "results/V3.2/c-v32/summary.json",
+        "sha256": "b92e0605afebf70f4eb05fc23b620f54f5ca9428b868a42c8eaccd6e330f6ab1"
+      },
+      "stage": "V3.2",
+      "verdict": "PASS"
+    },
+    {
+      "challenge": "C-V33",
+      "criteria": "5/5",
+      "source": {
+        "file": "results/V3.3/c-v33/summary.json",
+        "sha256": "5057c3289099b96a72512d4fdf118ae8e8f416cc3b7ad5e8bc409f908ee4d545"
+      },
+      "stage": "V3.3",
+      "verdict": "PASS"
+    },
+    {
+      "challenge": "C-V34",
+      "criteria": "5/5",
+      "source": {
+        "file": "results/V3.4/c-v34/summary.json",
+        "sha256": "74d87ac2470687e9fa094d474a1629f4eceda4e4cd4a21f3692d0ac0a80e0d87"
+      },
+      "stage": "V3.4",
+      "verdict": "PASS"
+    },
+    {
+      "challenge": "C-V35",
+      "criteria": null,
+      "note": "Superseded after the amendment-1 Gate-3 failure; escrow 4050000:4054999 remained untouched.",
+      "source": {
+        "file": "results/V3.5/stage-verdict.json",
+        "sha256": "fab81041a3b0afbc5c0bef80335e2698797706c2ad045d66cb9dcbb3997c8598"
+      },
+      "stage": "V3.5",
+      "verdict": "RETIRED_UNOPENED"
+    },
+    {
+      "challenge": "C-V35B",
+      "criteria": "7/7",
+      "source": {
+        "file": "results/V3.5/cv35b-challenge-verdict.json",
+        "sha256": "2f65234518c98fb10808d12f2e247e85cbe25a3ba53df8c9c33b80face1308db"
+      },
+      "stage": "V3.5",
+      "verdict": "PASS"
+    },
+    {
+      "challenge": "C-V36A",
+      "criteria": "5/5",
+      "source": {
+        "file": "results/V3.6/c-v36a-verdict.json",
+        "sha256": "877d42efcec914901b2862c68ceb131f95d51dfdb062554bb9fdb77038eca632"
+      },
+      "stage": "V3.6",
+      "verdict": "PASS"
+    },
+    {
+      "challenge": "C-V36B",
+      "criteria": "5/5",
+      "source": {
+        "file": "results/V3.6/c-v36b-verdict.json",
+        "sha256": "03f3d51753ef73e89cd389365754c4f7bec09d06231a97c91e42b6f108f83be1"
+      },
+      "stage": "V3.6",
+      "verdict": "PASS"
+    },
+    {
+      "challenge": "C-V36C",
+      "criteria": "5/5",
+      "source": {
+        "file": "results/V3.6/c-v36c-verdict.json",
+        "sha256": "e6937f5f50d8228774bce82c4a7e5f3ee57e1915ae8d7e35ffce52555aa57b02"
+      },
+      "stage": "V3.6",
+      "verdict": "PASS"
+    }
+  ],
+  "seed_custody": {
+    "barred_blocks": [
+      {
+        "range": [
+          3000000,
+          3001999
+        ],
+        "reason": "attainability pilot",
+        "stage": "V3.0"
+      },
+      {
+        "range": [
+          3100000,
+          3101999
+        ],
+        "reason": "attainability pilot",
+        "stage": "V3.1"
+      },
+      {
+        "range": [
+          3200000,
+          3201999
+        ],
+        "reason": "original pilot",
+        "stage": "V3.2"
+      },
+      {
+        "range": [
+          3230000,
+          3231999
+        ],
+        "reason": "scope-neutrality repair pilot",
+        "stage": "V3.2"
+      },
+      {
+        "range": [
+          3300000,
+          3301999
+        ],
+        "reason": "original pilot",
+        "stage": "V3.3"
+      },
+      {
+        "range": [
+          3330000,
+          3331999
+        ],
+        "reason": "event-indexed repair pilot",
+        "stage": "V3.3"
+      },
+      {
+        "range": [
+          3400000,
+          3401999
+        ],
+        "reason": "defective-generator pilot",
+        "stage": "V3.4"
+      },
+      {
+        "range": [
+          3430000,
+          3431999
+        ],
+        "reason": "corrected pilot",
+        "stage": "V3.4"
+      },
+      {
+        "range": [
+          3500000,
+          3501999
+        ],
+        "reason": "original pilot",
+        "stage": "V3.5"
+      },
+      {
+        "range": [
+          3520000,
+          3520999
+        ],
+        "reason": "amendment-1 smoke",
+        "stage": "V3.5"
+      },
+      {
+        "range": [
+          3521000,
+          3522999
+        ],
+        "reason": "amendment-1 repaired pilot",
+        "stage": "V3.5"
+      },
+      {
+        "range": [
+          3523000,
+          3523960
+        ],
+        "reason": "diagnosis-reserved and consumed",
+        "stage": "V3.5"
+      },
+      {
+        "range": [
+          3523961,
+          3525960
+        ],
+        "reason": "amendment-2 pilot",
+        "stage": "V3.5"
+      },
+      {
+        "range": [
+          3525961,
+          3526480
+        ],
+        "reason": "evaluator pre-seal diagnosis",
+        "stage": "V3.5"
+      },
+      {
+        "range": [
+          3502000,
+          3509999
+        ],
+        "reason": "consumed amendment-1 Gates 2-3; non-probative after amendment 2",
+        "stage": "V3.5"
+      },
+      {
+        "range": [
+          3600000,
+          3600000
+        ],
+        "reason": "stage-0 custody seed",
+        "stage": "V3.6"
+      },
+      {
+        "range": [
+          3600001,
+          3603999
+        ],
+        "reason": "first attainability pilot",
+        "stage": "V3.6"
+      },
+      {
+        "range": [
+          3660000,
+          3663999
+        ],
+        "reason": "fresh event-indexed pilot",
+        "stage": "V3.6"
+      },
+      {
+        "range": [
+          3664000,
+          3664389
+        ],
+        "reason": "evaluator linter attempt 1",
+        "stage": "V3.6"
+      },
+      {
+        "range": [
+          3664390,
+          3664769
+        ],
+        "reason": "evaluator linter attempt 2",
+        "stage": "V3.6"
+      },
+      {
+        "range": [
+          3664770,
+          3665159
+        ],
+        "reason": "pre-seal attainability diagnostics",
+        "stage": "V3.6"
+      },
+      {
+        "range": [
+          3665160,
+          3667159
+        ],
+        "reason": "gate-3 noninferiority diagnosis",
+        "stage": "V3.6"
+      },
+      {
+        "range": [
+          3680000,
+          3683999
+        ],
+        "reason": "retained hybrid bridge qualification",
+        "stage": "V3.6"
+      },
+      {
+        "range": [
+          3690000,
+          3690000
+        ],
+        "reason": "round-12 Population-B smoke",
+        "stage": "V3.6"
+      },
+      {
+        "range": [
+          3692000,
+          3692000
+        ],
+        "reason": "round-12 Population-A smoke",
+        "stage": "V3.6"
+      },
+      {
+        "range": [
+          3694000,
+          3694000
+        ],
+        "reason": "round-12 Population-C smoke",
+        "stage": "V3.6"
+      },
+      {
+        "range": [
+          3690001,
+          3691999
+        ],
+        "reason": "Population-B wrong native fixture",
+        "stage": "V3.6"
+      },
+      {
+        "range": [
+          3630000,
+          3634999
+        ],
+        "reason": "first Gate-4 custody stop",
+        "stage": "V3.6"
+      },
+      {
+        "range": [
+          3702000,
+          3706999
+        ],
+        "reason": "first Gate-4 replacement custody stop",
+        "stage": "V3.6"
+      },
+      {
+        "range": [
+          3692001,
+          3693999
+        ],
+        "reason": "first Population-A custody stop",
+        "stage": "V3.6"
+      },
+      {
+        "range": [
+          3707000,
+          3708999
+        ],
+        "reason": "Population-A replacement custody stop",
+        "stage": "V3.6"
+      },
+      {
+        "range": [
+          3714000,
+          3715999
+        ],
+        "reason": "Population-A theorem-premise qualification stop",
+        "stage": "V3.6"
+      },
+      {
+        "range": [
+          3724000,
+          3725999
+        ],
+        "reason": "Population-C native-support stop",
+        "stage": "V3.6"
+      }
+    ],
+    "sealed_challenge_prefixes_consumed": [
+      {
+        "challenge": "C-V30",
+        "range": [
+          4000000,
+          4001999
+        ]
+      },
+      {
+        "challenge": "C-V31",
+        "range": [
+          4010000,
+          4013999
+        ]
+      },
+      {
+        "challenge": "C-V32",
+        "range": [
+          4020000,
+          4023999
+        ]
+      },
+      {
+        "challenge": "C-V33",
+        "range": [
+          4030000,
+          4033999
+        ]
+      },
+      {
+        "challenge": "C-V34",
+        "range": [
+          4040000,
+          4043999
+        ]
+      },
+      {
+        "challenge": "C-V35B",
+        "range": [
+          4055000,
+          4059999
+        ]
+      },
+      {
+        "challenge": "C-V36A",
+        "range": [
+          4100000,
+          4102999
+        ]
+      },
+      {
+        "challenge": "C-V36B",
+        "range": [
+          4110000,
+          4112999
+        ]
+      },
+      {
+        "challenge": "C-V36C",
+        "range": [
+          4120000,
+          4122999
+        ]
+      }
+    ],
+    "v3_5_retired_unopened_escrow": [
+      4050000,
+      4054999
+    ],
+    "v3_6_closed_diagnosis_only_blocks": [
+      {
+        "range": [
+          3696000,
+          3699999
+        ],
+        "reason": "R1 diagnosis reserve; never opened"
+      },
+      {
+        "range": [
+          3716000,
+          3720999
+        ],
+        "reason": "round-15 length ladder; never opened"
+      }
+    ],
+    "v3_6_retired_unconsumed_blocks": [
+      {
+        "range": [
+          3694001,
+          3695999
+        ],
+        "reason": "Population-C short block retired by cardinality adjudication"
+      }
+    ],
+    "v3_6_seal_remainders_retired_unconsumed": [
+      [
+        4103000,
+        4109999
+      ],
+      [
+        4113000,
+        4119999
+      ],
+      [
+        4123000,
+        4129999
+      ]
+    ],
+    "v3_6_valid_once_consumed_blocks": [
+      {
+        "purpose": "Gate 2",
+        "range": [
+          3604000,
+          3613999
+        ]
+      },
+      {
+        "purpose": "original Gate 3",
+        "range": [
+          3614000,
+          3629999
+        ]
+      },
+      {
+        "purpose": "replacement Population B",
+        "range": [
+          3700000,
+          3701999
+        ]
+      },
+      {
+        "purpose": "Population A-R1",
+        "range": [
+          3722000,
+          3723999
+        ]
+      },
+      {
+        "purpose": "final Population C",
+        "range": [
+          3726000,
+          3727999
+        ]
+      },
+      {
+        "purpose": "one-shot common-target tournament",
+        "range": [
+          3684000,
+          3689999
+        ]
+      },
+      {
+        "purpose": "Gate 4",
+        "range": [
+          3709000,
+          3713999
+        ]
+      },
+      {
+        "purpose": "Gate 5",
+        "range": [
+          3635000,
+          3659999
+        ]
+      },
+      {
+        "purpose": "replacement Gate 4",
+        "range": [
+          3728000,
+          3732999
+        ]
+      }
+    ]
+  },
+  "stage_dispositions": [
+    {
+      "disposition": "PASS",
+      "gate_record": "Gates 1-5 PASS after authorized Gate-5 parity-helper repair; original Gate-5 FAIL retained.",
+      "source": {
+        "file": "results/V3.0/stage-verdict.md",
+        "sha256": "25e02a1c6b4bc665f5892e318fc5e25c50098eb50e46a941a70cfbd558bd5ec6"
+      },
+      "stage": "V3.0"
+    },
+    {
+      "disposition": "PASS_WITH_ADJUDICATED_REVISABILITY_LIMITATION",
+      "gate_record": "Gate 3 revisability-floor FAIL retained; Gate 4 passed after lesion-semantics and restricted-prior adjudications; Gate 5 PASS.",
+      "source": {
+        "file": "results/V3.1/stage-verdict.md",
+        "sha256": "14180e59222b309bfd52f208809ad90fcefdf3aaf4d3afc9c5b37aa10613aa11"
+      },
+      "stage": "V3.1"
+    },
+    {
+      "disposition": "PASS_WITH_CUSTODY_NOTE_PREFLIGHT_UNSERIALIZED",
+      "gate_record": "Stage-0 design defect and untraced preflight retained; Gates 1-5 PASS after repair.",
+      "source": {
+        "file": "results/V3.2/stage-verdict.md",
+        "sha256": "fcd56bf7dd4da2cbf19b33569530a33318d43a06784be918bd973de9a3113e97"
+      },
+      "stage": "V3.2"
+    },
+    {
+      "disposition": "PASS_WITH_ADJUDICATED_DO_OVER_NULL_AND_SUGGESTION_DIRECTION",
+      "gate_record": "Stage-0 fixed-slice stop retained; Gate-3 do-over-speedup and suggestion-direction FAIL families retained; Gates 4-5 PASS.",
+      "source": {
+        "file": "results/V3.3/stage-verdict.md",
+        "sha256": "435ff1dedbdaca3ee66e9b02dff8aee5da510f04d6460ab82be5420fd3a243e9"
+      },
+      "stage": "V3.3"
+    },
+    {
+      "disposition": "PASS_WITH_ADJUDICATED_SHORT_HISTORY_CONJUNCTION_BOUND",
+      "gate_record": "Stage-0 generator/scorer defect retained; original Gate-5 32-slice transplanted-floor FAIL retained; primary 48-slice gate PASS.",
+      "source": {
+        "file": "results/V3.4/stage-verdict.md",
+        "sha256": "47db0f343cd5a25a3418867dce8ff3080c90de28dd8cf29c5702a82e4e69dc23"
+      },
+      "stage": "V3.4"
+    },
+    {
+      "disposition": "CLOSED_PASS_AFTER_AMENDMENT_2",
+      "gate_record": "Earlier Stage-0 and amendment-1 Gate-3 failures retained; amendment-2 Gates 1-5 PASS.",
+      "source": {
+        "file": "results/V3.5/stage-verdict.json",
+        "sha256": "fab81041a3b0afbc5c0bef80335e2698797706c2ad045d66cb9dcbb3997c8598"
+      },
+      "stage": "V3.5"
+    },
+    {
+      "disposition": "FROZEN_ROUND19_WITH_RETAINED_COMPRESSION_PREDICTIVE_COST",
+      "gate_record": "Original Gate 4 apparatus FAIL retained; replacement Gate 4 PASS; original derivative Gate 5 FAIL retained; amended Gate 5 PASS; tournament scientific FAIL retained.",
+      "source": {
+        "file": "results/V3.6/v3.6-freeze-declaration.json",
+        "sha256": "502b1f90400801c4de6f14a8b923f84dc8b6e8152a42bf2b428e027baf998867"
+      },
+      "stage": "V3.6"
+    }
+  ],
+  "title": "Final V3 profile",
+  "v3_6_gate_history": [
+    {
+      "failures": [
+        "split_context_slot: {'world_count': 1000, 'semantic_class': 'SUPPORT_PRESERVING_CONDITIONING', 'restricted_prior_identity_applicable': True, 'restricted_prior_identity_error_max': 5.67323965583455e-14, 'masked_channel_neutrality_error_max': 0.0, 'independent_oracle_error_max': 5.67323965583455e-14, 'posterior_normalization_error_max': 7.549516567451064e-14, 'declared_target_error_max': 0.0, 'finite_all': True, 'target_pathway_removed_all': True, 'unrelated_survivors_preserved_all': True, 'licensed_support_positive_all': False, 'unrelated_absolute_movement': {'classification': 'DESCRIPTIVE_RENORMALIZATION_MOVEMENT', 'note': 'Absolute movement in non-target coordinates is not a selectivity criterion after conditioning the structure prior.'}, 'passed': False}",
+        "protect_joint_policy: {'world_count': 1000, 'semantic_class': 'SUPPORT_PRESERVING_CONDITIONING', 'restricted_prior_identity_applicable': True, 'restricted_prior_identity_error_max': 4.8405723873656825e-14, 'masked_channel_neutrality_error_max': 1.3344880755994382e-13, 'independent_oracle_error_max': 0.8999336559889483, 'posterior_normalization_error_max': 5.706546346573305e-14, 'declared_target_error_max': 0.0, 'finite_all': True, 'target_pathway_removed_all': True, 'unrelated_survivors_preserved_all': True, 'licensed_support_positive_all': True, 'unrelated_absolute_movement': {'classification': 'DESCRIPTIVE_RENORMALIZATION_MOVEMENT', 'note': 'Absolute movement in non-target coordinates is not a selectivity criterion after conditioning the structure prior.'}, 'passed': False}"
+      ],
+      "record": "original_gate_4",
+      "source": {
+        "file": "results/V3.6/v3.6-r1-gate4-verdict.json",
+        "sha256": "6e7f49fc9b5c37d14cd5154d3ba039f799577c43d5de508627d3f6743083ab48"
+      },
+      "verdict": "FAIL_APPARATUS_RETAINED"
+    },
+    {
+      "failures": [],
+      "record": "replacement_gate_4",
+      "source": {
+        "file": "results/V3.6/v3.6-r1-gate4-replacement-verdict.json",
+        "sha256": "4d8da6a0eaaf0669f4726420555cd11055f5da0607afbe020ddbfd320bb388d3"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "failures": [
+        "Gate 4 retained scientific FAIL"
+      ],
+      "record": "original_gate_5",
+      "source": {
+        "file": "results/V3.6/v3.6-r1-gate5-verdict.json",
+        "sha256": "7be4b27ab9d2bae056cb1112f1aab33dc08f62d75608d3689353d7dcc379c801"
+      },
+      "verdict": "FAIL_DERIVATIVE_RETAINED"
+    },
+    {
+      "failures": [],
+      "record": "amended_gate_5",
+      "source": {
+        "file": "results/V3.6/v3.6-r1-gate5-amended-verdict.json",
+        "sha256": "f756b1005ec4e21ac6b1322a208db96ede373a69f736d0547fc06986acec1734"
+      },
+      "verdict": "PASS"
+    }
+  ],
+  "v3_6_qualification_populations": [
+    {
+      "note": "Replacement native-V2 qualification after the wrong context fixture was barred.",
+      "population": "B",
+      "seed_block": [
+        3700000,
+        3701999
+      ],
+      "source": {
+        "file": "results/V3.6/v3.6-r1-round12-v2-native-replacement-qualification.json",
+        "sha256": "f931f9739cf4297b034008d2fb2d479b663ef3558a9de1a1aab73572623a7570"
+      },
+      "verdict": "PASS",
+      "worlds": 2000
+    },
+    {
+      "note": "Final repaired V3 native-prior qualification after GENERATOR_ONLY localization.",
+      "population": "A-R1",
+      "seed_block": [
+        3722000,
+        3723999
+      ],
+      "source": {
+        "file": "results/V3.6/v3.6-r1-round15-v3-native-a-r1-qualification.json",
+        "sha256": "74b4c48dfbbede66b59735d727082ff23ed02db3e83e65fafb61d954722cf892"
+      },
+      "verdict": "PASS",
+      "worlds": 2000
+    },
+    {
+      "note": "Final external shared-support qualification after cardinality and native-support stops.",
+      "population": "C",
+      "seed_block": [
+        3726000,
+        3727999
+      ],
+      "source": {
+        "file": "results/V3.6/v3.6-r1-round16-population-c-qualification.json",
+        "sha256": "c84eac3c2486e98c6e4b4dfae61c1baa20db69536e94186189245eb5a6513ca5"
+      },
+      "verdict": "PASS",
+      "worlds": 2000
+    }
+  ]
+}
