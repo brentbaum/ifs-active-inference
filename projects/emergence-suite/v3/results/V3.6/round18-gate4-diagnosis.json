@@ -1,0 +1,5661 @@
+{
+  "D1_protect_joint_policy": {
+    "argmax_existing_oracle_coordinate": {
+      "absolute_error": 0.8999336559889483,
+      "collapsed_oracle_observed": 0.8999336559889483,
+      "cross_sign": 0,
+      "expected_conditioned_full": 1.0834251555600152e-147,
+      "fresh_hand_restricted": 1.0834251555599582e-147,
+      "partner_reliable": 0,
+      "production_restricted": 1.0834251555599582e-147,
+      "structure": [
+        3,
+        1,
+        1,
+        1,
+        0,
+        0
+      ]
+    },
+    "argmax_retained_row": {
+      "_runtime_trace_events": [
+        {
+          "lesion": "protect_joint_policy",
+          "operation": "v36.gate4.selective_lesion",
+          "seed": 3713860
+        },
+        {
+          "operation": "v35.generate_world",
+          "seed": 3713860
+        },
+        {
+          "operation": "v35.score_world",
+          "seed": 3713860
+        },
+        {
+          "operation": "v35.score_world",
+          "seed": 3713860
+        },
+        {
+          "operation": "v35.score_world",
+          "seed": 3713860
+        }
+      ],
+      "declared_target_error": 0.0,
+      "finite": true,
+      "independent_oracle_error": 0.8999336559889483,
+      "lesion": "protect_joint_policy",
+      "licensed_support_count": 84,
+      "masked_channel_neutrality_error": 5.599687380453133e-15,
+      "posterior_normalization_error": 5.262457136723242e-14,
+      "restricted_evidence": 4.0990120919490836e-244,
+      "restricted_prior_identity_applicable": true,
+      "restricted_prior_identity_error": 4.7406523151494184e-14,
+      "restricted_prior_mass": 0.6666666666666666,
+      "seed": 3713860,
+      "semantic_class": "SUPPORT_PRESERVING_CONDITIONING",
+      "target_pathway_removed": true,
+      "unrelated_absolute_movement_descriptive": {
+        "full_cross_mode_probability": 0.09137508824890499,
+        "full_joint_policy_probability": 0.07142919930079414,
+        "restricted_cross_mode_probability": 0.09285426631739689
+      },
+      "unrelated_survivors_preserved": true,
+      "world_sha256": "d94e862381618c78aabb83bdd613da4fc70746df73ce46598f85514005e07865"
+    },
+    "classification": "ORACLE_CONSTRUCT",
+    "existing_oracle_error_reproduced": 0.8999336559889483,
+    "fresh_hand_vs_production_full_argmax": [
+      3,
+      0,
+      1,
+      0,
+      0,
+      1,
+      1,
+      1
+    ],
+    "fresh_hand_vs_production_full_error": 3.04118709382184e-17,
+    "fresh_hand_vs_production_restricted_argmax": [
+      3,
+      0,
+      1,
+      0,
+      0,
+      1,
+      1,
+      1
+    ],
+    "fresh_hand_vs_production_restricted_error": 3.2742905609062234e-17,
+    "mechanism": "ProtectPosterior.components stores only (structure, cross_sign), while probabilities also index reliable in {0,1}; the existing oracle dict collapses the two reliable atoms and retains only the reliable=1 value.",
+    "named_disagreeing_factor": "partner reliability latent L and its p(L)=0.5 plus partner/support/contact likelihood factors",
+    "production_defect": false,
+    "production_restricted_prior_identity_argmax": [
+      3,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "production_restricted_prior_identity_error": 4.7406523151494184e-14,
+    "retained_existing_oracle_error": 0.8999336559889483
+  },
+  "D2_split_context_slot": {
+    "classification": "APPARATUS_SUPPORT_ACCOUNTING_ERROR",
+    "grammar_defect": false,
+    "grammar_enumeration": {
+      "all_excluded_derivations_require_deleted_active_context_production": true,
+      "excluded_prior_mass_sum": 0.4285714285714285,
+      "grammar_forced_excluded_active_contexts_2_or_3": 288,
+      "grammar_forced_excluded_structures": [
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "static"
+          ],
+          "prior_mass": 0.041464204729510845,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.010366051182377711,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.010366051182377711,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "one_way_change"
+          ],
+          "prior_mass": 0.010366051182377711,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "prior_mass": 0.010366051182377711,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "one_way_change"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "static"
+          ],
+          "prior_mass": 0.010366051182377711,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "one_way_change"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "static"
+          ],
+          "prior_mass": 0.010366051182377711,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "one_way_change"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "static"
+          ],
+          "prior_mass": 0.010366051182377711,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "one_way_change"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "one_way_change"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "static"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "one_way_change"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "static"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "one_way_change"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "static"
+          ],
+          "prior_mass": 0.010366051182377711,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "one_way_change"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "one_way_change"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "static"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "one_way_change"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "static"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "one_way_change"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "static"
+          ],
+          "prior_mass": 0.010366051182377711,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "one_way_change"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "one_way_change"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "static"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "one_way_change"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "static"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "one_way_change"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "static"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "one_way_change"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "one_way_change"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "static"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "one_way_change"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "static"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "one_way_change"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "static"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "one_way_change"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "one_way_change"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "static"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "one_way_change"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "static"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "one_way_change"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "static"
+          ],
+          "prior_mass": 0.010366051182377711,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "one_way_change"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "one_way_change"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "static"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "one_way_change"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "static"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "one_way_change"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "static"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "one_way_change"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "one_way_change"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "static"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "one_way_change"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "static"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "one_way_change"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "static"
+          ],
+          "prior_mass": 0.002591512795594428,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "one_way_change"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "one_way_change"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "static"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "one_way_change"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "static"
+          ],
+          "prior_mass": 0.000647878198898607,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 2,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "one_way_change"
+          ],
+          "prior_mass": 0.00016196954972465174,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "static"
+          ],
+          "prior_mass": 0.020732102364755423,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "one_way_change"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "one_way_change"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "static"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "one_way_change"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "static"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "one_way_change"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "static"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "one_way_change"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "one_way_change"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "static"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "one_way_change"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "static"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "one_way_change"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "static"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "one_way_change"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "one_way_change"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "static"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "one_way_change"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "static"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "one_way_change"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "static"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "one_way_change"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "one_way_change"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "static"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "one_way_change"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "static"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "one_way_change"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "static"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "one_way_change"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "one_way_change"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "static"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "one_way_change"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "static"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "one_way_change"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "static"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "one_way_change"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "one_way_change"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "static"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "one_way_change"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "static"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "one_way_change"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "static"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "one_way_change"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "one_way_change"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "static"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "one_way_change"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "static"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "one_way_change"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "static"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "one_way_change"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "one_way_change"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "static"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "one_way_change"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "static"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "one_way_change"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "static"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "static",
+            "one_way_change"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "one_way_change"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "static"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "ordered_random_walk",
+            "one_way_change"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "static"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 3,
+          "all_derivations_use_deleted_active_context_production": true,
+          "dynamics": [
+            "one_way_change",
+            "one_way_change"
+          ],
+          "prior_mass": 8.098477486232587e-05,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        }
+      ],
+      "licensed_active_contexts_1": 144,
+      "licensed_prior_mass_sum": 0.5714285714285713,
+      "licensed_structures": [
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "static"
+          ],
+          "prior_mass": 0.08292840945902169,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.020732102364755423,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.020732102364755423,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "one_way_change"
+          ],
+          "prior_mass": 0.020732102364755423,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "prior_mass": 0.020732102364755423,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "one_way_change"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "static"
+          ],
+          "prior_mass": 0.020732102364755423,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "one_way_change"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "static"
+          ],
+          "prior_mass": 0.020732102364755423,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "one_way_change"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "static"
+          ],
+          "prior_mass": 0.020732102364755423,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "one_way_change"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "one_way_change"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "static"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "one_way_change"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "static"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "one_way_change"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "static"
+          ],
+          "prior_mass": 0.020732102364755423,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "one_way_change"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "one_way_change"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "static"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "one_way_change"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "static"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "one_way_change"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "shared_global",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "static"
+          ],
+          "prior_mass": 0.020732102364755423,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "one_way_change"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "one_way_change"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "static"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "one_way_change"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "static"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "one_way_change"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "static"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "one_way_change"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "one_way_change"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "static"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "one_way_change"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "static"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "one_way_change"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "static"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "one_way_change"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "one_way_change"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "static"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "one_way_change"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "static"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "one_way_change"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "cue_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "static"
+          ],
+          "prior_mass": 0.020732102364755423,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "one_way_change"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "one_way_change"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "static"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "one_way_change"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "static"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "one_way_change"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "static"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "one_way_change"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "one_way_change"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "static"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "one_way_change"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "static"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "one_way_change"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "cue_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "static"
+          ],
+          "prior_mass": 0.005183025591188856,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "static",
+            "one_way_change"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "one_way_change"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "static"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "ordered_random_walk",
+            "one_way_change"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "static"
+          ],
+          "prior_mass": 0.001295756397797214,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "discrete_recurrent_context"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "ordered_random_walk"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        },
+        {
+          "active_contexts": 1,
+          "dynamics": [
+            "one_way_change",
+            "one_way_change"
+          ],
+          "prior_mass": 0.0003239390994493035,
+          "scopes": [
+            "context_specific",
+            "context_specific"
+          ]
+        }
+      ],
+      "licensed_structures_losing_all_prior_mass": [],
+      "total_structures": 432
+    },
+    "mechanism": "Every licensed active_contexts=1 structure has finite positive code-length prior mass. In all 1,000 retained worlds the normalized restricted posterior is finite, but exponentiating its very negative log evidence underflows to 0.0 and is misread as empty structural support.",
+    "named_disagreeing_factor": "exp(restricted.log_evidence) used as a support-positivity test",
+    "retained_trace_counts": {
+      "licensed_support_count_values": [
+        144
+      ],
+      "posterior_normalized_count": 1000,
+      "restricted_evidence_zero_count": 1000,
+      "restricted_prior_mass_values": [
+        0.5714285714285714
+      ],
+      "seed_max": 3710999,
+      "seed_min": 3710000,
+      "world_count": 1000
+    },
+    "retained_world_configuration": {
+      "cell": "split_context_slot",
+      "cue_count": 3,
+      "evidence_style": "witnessing",
+      "length": 48,
+      "seed_range": [
+        3710000,
+        3710999
+      ],
+      "truth_active_contexts": 2,
+      "truth_dynamics": [
+        "discrete_recurrent_context",
+        "discrete_recurrent_context"
+      ],
+      "truth_scopes": [
+        "context_specific",
+        "context_specific"
+      ]
+    },
+    "structural_class_heterogeneity": false
+  },
+  "custody": {
+    "escrow_touched": false,
+    "gate4_statistics_recomputed": false,
+    "gate4_verdict_amended": false,
+    "new_scientific_seeds_consumed": [],
+    "retained_seed_reconstructed": 3713860,
+    "retained_trace_file": "v3.6-r1-gate4-traces.jsonl",
+    "retained_trace_sha256": "dd28d295cfd793e9848ec4becdfe1179e0fdef6940ef0a4fbbb257118ec48bd0",
+    "retained_world_hash_verified": true,
+    "runtime_trace_events": [
+      {
+        "operation": "v35.generate_world",
+        "seed": 3713860
+      },
+      {
+        "operation": "v35.score_world",
+        "seed": 3713860
+      },
+      {
+        "operation": "v35.score_world",
+        "seed": 3713860
+      }
+    ]
+  },
+  "diagnosis": "ROUND18_GATE4_READ_ONLY_ZERO_NEW_SEED",
+  "stage": "V3.6",
+  "tolerance": 1e-10,
+  "verdicts_unchanged": {
+    "gate4": "FAIL_RETAINED_UNAMENDED",
+    "gate5": "FAIL_DERIVATIVE_RETAINED_UNAMENDED"
+  }
+}
