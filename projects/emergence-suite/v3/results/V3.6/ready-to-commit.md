@@ -644,3 +644,36 @@ Repair package ready for evaluator commit:
 - `results/V3.6/round15-repair-readiness.md`
 - `results/V3.6/round15-repair-custody-manifest.json`
 - `results/V3.6/ready-to-commit.md`
+
+## Round 15 — final Population A-R1 and Population C preflight stop
+
+Population A-R1 **PASS** on `3722000:3723999`: 2,000 worlds were consumed
+ascending and gap-free, complete native path state was serialized, all five
+target ECEs were at most `0.0371782573081875`, class top-label ECE was
+`0.018251291152461935`, 95% class coverage was `0.9495`, active-count
+top-label/macro ECEs were `0.004361190453375709` and
+`0.008322968515086624`, and maximum load-bearing-edge ECE was
+`0.030636612440936878`. The trace SHA-256 is
+`8a0d1fce7688e22c4891e50de6a63de46eed2edfe7297d1e2de748e36edc8e3a`.
+
+The subsequent Population C invocation stopped before its first world. The
+authorized replacement interval `3694001:3695999` contains 1,999 seeds, but
+the frozen external constructor accepts only 2,000- or 6,000-world
+populations. Seed `3694001` was not consumed: rejection occurred before any
+component RNG draw, world generation, row serialization, or criterion
+evaluation. The opened zero-byte trace is retained and hash-recorded as
+failure evidence. No downstream battery or escrow was opened.
+
+Status: **HONEST_STOP_APPARATUS_BLOCK_CARDINALITY_MISMATCH**. Evaluator
+adjudication is required before any Population C retry or apparatus change.
+
+Files ready for evaluator commit:
+
+- `scripts/run_v36_round12.py`
+- `results/V3.6/v3.6-r1-round15-v3-native-a-r1-qualification.json`
+- `results/V3.6/v3.6-r1-round15-v3-native-a-r1-qualification.md`
+- `results/V3.6/v3.6-r1-round15-v3-native-a-r1-trace-hashes.json`
+- `results/V3.6/population-c-preflight-stop.json`
+- `results/V3.6/population-c-preflight-stop.md`
+- `results/V3.6/v3.6-r1-round12-external-qualification-trace-hashes.json`
+- `results/V3.6/ready-to-commit.md`

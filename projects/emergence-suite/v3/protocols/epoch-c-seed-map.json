@@ -275,7 +275,7 @@
         3684000,
         3689999
       ],
-      "note": "Round-12 external rulings, adopted by gate3-adjudication-amendment-4.md; one requalification cycle only. Precommit custody adjudication 2026-08-01: block-first seeds barred, blocks re-scoped. Population-B adjudication 2026-08-01: context fixture defect (wrong prior init + marker collapse); first block barred; replacement 3700000:3701999; pre-block fixture-identity proof now permanent. Gate-4/Population-A custody adjudication 2026-08-02: both first blocks barred (prefix ambiguity), replacements allocated; finite-before-serialize custody rule permanent. Round-14: empty-support lesion semantics (V3.1 inheritance), second replacements, de-parallelized single-battery rule, zero-seed lesion pre-run proofs. Round-15: five-layer Population-A diagnosis authorized (ladder 3716000:3720999 diagnosis-only); conditional A-R1 3722000:3723999 (final block, strict preconditions); everything else closed.",
+      "note": "Round-12 external rulings, adopted by gate3-adjudication-amendment-4.md; one requalification cycle only. Precommit custody adjudication 2026-08-01: block-first seeds barred, blocks re-scoped. Population-B adjudication 2026-08-01: context fixture defect (wrong prior init + marker collapse); first block barred; replacement 3700000:3701999; pre-block fixture-identity proof now permanent. Gate-4/Population-A custody adjudication 2026-08-02: both first blocks barred (prefix ambiguity), replacements allocated; finite-before-serialize custody rule permanent. Round-14: empty-support lesion semantics (V3.1 inheritance), second replacements, de-parallelized single-battery rule, zero-seed lesion pre-run proofs. Round-15: five-layer Population-A diagnosis authorized (ladder 3716000:3720999 diagnosis-only); conditional A-R1 3722000:3723999 (final block, strict preconditions); everything else closed. Population-C cardinality adjudication 2026-08-03: 1,999-seed rescoped block retired unconsumed; replacement 3724000:3725999.",
       "barred_precommit_smoke_seeds": [
         3690000,
         3692000,
@@ -336,7 +336,15 @@
         "gate5_opened": false,
         "escrows_opened": false,
         "authority": "results/V3.6/external-round15-rulings.md"
-      }
+      },
+      "retired_population_c_short_block": [
+        3694001,
+        3695999
+      ],
+      "population_c_replacement": [
+        3724000,
+        3725999
+      ]
     }
   }
 }

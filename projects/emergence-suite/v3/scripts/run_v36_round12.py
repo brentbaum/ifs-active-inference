@@ -31,6 +31,7 @@ from ref.trace_sink import serializing_trace_context, traced_execution  # noqa: 
 RESULTS = ROOT / "results" / "V3.6"
 TOLERANCE = 1e-10
 TARGETS = v36_round12.TARGETS
+A_R1_BLOCK = (3_722_000, 3_723_999)
 
 
 def _plain(value: Any) -> Any:
@@ -815,8 +816,11 @@ def _native_path_state(
 
 
 @traced_execution
-def _v3_native_row(seed: int) -> dict[str, Any]:
-    world = v36_round12.generate_v3_native_world(seed)
+def _v3_native_row(task: tuple[int, int, int]) -> dict[str, Any]:
+    seed, start, end = task
+    world = v36_round12.generate_v3_native_world(
+        seed, released_block=(start, end)
+    )
     predictions = v36_bridge.score_v3(world)
     serialized, targets = _serialized_prediction(world, predictions)
     state = v36_round12.v3_calibration_state(world)
@@ -1034,12 +1038,12 @@ def run_v3_native() -> dict[str, Any]:
     )
     if previous["verdict"] != "PASS":
         raise RuntimeError("Population B did not pass")
-    seeds = list(range(
-        v36_round12.V3_NATIVE_BLOCK[0],
-        v36_round12.V3_NATIVE_BLOCK[1] + 1,
-    ))
+    tasks = [
+        (seed, A_R1_BLOCK[0], A_R1_BLOCK[1])
+        for seed in range(A_R1_BLOCK[0], A_R1_BLOCK[1] + 1)
+    ]
     rows, ledger = _persist_rows(
-        "v3.6-r1-round14-v3-native-replacement-2", seeds, _v3_native_row,
+        "v3.6-r1-round15-v3-native-a-r1", tasks, _v3_native_row,
         chunksize=1,
     )
     predictive = _predictive_calibration(rows, "v3")
@@ -1063,22 +1067,29 @@ def run_v3_native() -> dict[str, Any]:
             failures.append(f"edge {edge} ECE > 0.05")
     result = {
         "stage": "V3.6-R1-round12", "population": "A",
-        "seed_block": list(v36_round12.V3_NATIVE_BLOCK),
+        "seed_block": list(A_R1_BLOCK),
         "world_count": len(rows), "predictive_calibration": predictive,
         "structure_calibration": structure,
         "serialization_complete": all(
             all(key in row for key in (
                 "predictions", "targets", "masks", "calibration_state",
-                "confidence_correctness",
+                "confidence_correctness", "native_path_state",
             )) for row in rows
+        ) and all(
+            set(row["native_path_state"]) == {
+                "latent_mode_path", "context_state_path",
+                "prefix_observations", "contact_response_truth",
+                "intervention_schedule", "masks",
+            }
+            for row in rows
         ),
         "failures": failures, "custody": ledger,
         "verdict": "PASS" if not failures else "FAIL_APPARATUS_STOP",
     }
-    _write_json("v3.6-r1-round14-v3-native-replacement-2-qualification.json", result)
+    _write_json("v3.6-r1-round15-v3-native-a-r1-qualification.json", result)
     _write_report(
-        "v3.6-r1-round14-v3-native-replacement-2-qualification.md",
-        "V3.6-R1 Population A native qualification", result,
+        "v3.6-r1-round15-v3-native-a-r1-qualification.md",
+        "V3.6-R1 final Population A-R1 native qualification", result,
     )
     return result
 
@@ -1127,7 +1138,7 @@ def _external_descriptive(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
 
 def run_external_qualification() -> dict[str, Any]:
     previous = json.loads(
-        (RESULTS / "v3.6-r1-round14-v3-native-replacement-2-qualification.json").read_text()
+        (RESULTS / "v3.6-r1-round15-v3-native-a-r1-qualification.json").read_text()
     )
     if previous["verdict"] != "PASS":
         raise RuntimeError("Population A did not pass")

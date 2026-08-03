@@ -1,0 +1,40 @@
+{
+  "stage": "V3.6-R1-round15",
+  "battery": "Population C external shared-support qualification",
+  "status": "HONEST_STOP_APPARATUS_BLOCK_CARDINALITY_MISMATCH",
+  "authorized_block": [
+    3694001,
+    3695999
+  ],
+  "authorized_block_world_count": 1999,
+  "constructor_accepted_world_counts": [
+    2000,
+    6000
+  ],
+  "failure": "generate_external_world rejected the released block before the first world was generated: external population must contain 2,000 or 6,000 worlds",
+  "localization": {
+    "file": "ref/v36_round12.py",
+    "function": "_external_stratum",
+    "order": "The released-block containment check and trace-sink requirement run before _external_stratum; _external_stratum rejects the block before diagnosticity selection or any component RNG draw.",
+    "scientific_module_change": false,
+    "criterion_evaluation_started": false
+  },
+  "custody": {
+    "first_seed": 3694001,
+    "seed_consumed": false,
+    "worlds_generated": 0,
+    "rows_serialized": 0,
+    "trace_file": "v3.6-r1-round12-external-qualification-traces.jsonl",
+    "trace_file_bytes": 0,
+    "trace_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "trace_status": "OPENED_BUT_EMPTY_BEFORE_FIRST_WORLD_REJECTION",
+    "later_blocks_opened": false,
+    "escrows_opened": false
+  },
+  "retained_preceding_result": {
+    "population_a_r1_verdict": "PASS",
+    "population_a_r1_world_count": 2000,
+    "population_a_r1_trace_sha256": "8a0d1fce7688e22c4891e50de6a63de46eed2edfe7297d1e2de748e36edc8e3a"
+  },
+  "next_action": "STOP for evaluator adjudication; do not resize the block, change the constructor, retry Population C, or open downstream batteries."
+}
