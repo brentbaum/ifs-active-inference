@@ -1,0 +1,279 @@
+{
+  "changed_frozen_files": [],
+  "custody": {
+    "file": "v3.7-zero-seed-proof-record.jsonl",
+    "persisted_before_verdict": true,
+    "record_count": 1,
+    "sha256": "42652441d16af04f402a2d0b014593d4958e7970deee7a188ad3e5ca0c4ef99b"
+  },
+  "frozen_v36_scientific_hash_check": {
+    "ref/v31.py": {
+      "equal": true,
+      "expected": "0481e51acf72ee8018cb3c9a1c780570b22e05657cc687376f08ca99544149e0",
+      "observed": "0481e51acf72ee8018cb3c9a1c780570b22e05657cc687376f08ca99544149e0"
+    },
+    "ref/v31_oracle.py": {
+      "equal": true,
+      "expected": "3e8db784387c9719b6a06828cfd87a7121a24b07283902774491cb56d6d8b0ed",
+      "observed": "3e8db784387c9719b6a06828cfd87a7121a24b07283902774491cb56d6d8b0ed"
+    },
+    "ref/v32.py": {
+      "equal": true,
+      "expected": "0b990eb4c28f3dd61ec37b57742548c1f63147ec48fe8fac465cf2123dba9833",
+      "observed": "0b990eb4c28f3dd61ec37b57742548c1f63147ec48fe8fac465cf2123dba9833"
+    },
+    "ref/v32_oracle.py": {
+      "equal": true,
+      "expected": "a77f2f98ad8949b4c0557976ed5a5445f5b547183bc3f7b3032573c5e332f6ba",
+      "observed": "a77f2f98ad8949b4c0557976ed5a5445f5b547183bc3f7b3032573c5e332f6ba"
+    },
+    "ref/v33.py": {
+      "equal": true,
+      "expected": "018ebac662a925a3ed5431197d8c5914049fa5e1b20787fd5b13de3310c977fd",
+      "observed": "018ebac662a925a3ed5431197d8c5914049fa5e1b20787fd5b13de3310c977fd"
+    },
+    "ref/v33_oracle.py": {
+      "equal": true,
+      "expected": "781d66bc2052094948ee537cccc79f7147d2581ca2cf81698af3c93780e8dbed",
+      "observed": "781d66bc2052094948ee537cccc79f7147d2581ca2cf81698af3c93780e8dbed"
+    },
+    "ref/v34.py": {
+      "equal": true,
+      "expected": "f9a37a36a0393f9fd437776457cc48018db6cfe1d5195d95a9cbf5b2e90744cd",
+      "observed": "f9a37a36a0393f9fd437776457cc48018db6cfe1d5195d95a9cbf5b2e90744cd"
+    },
+    "ref/v34_oracle.py": {
+      "equal": true,
+      "expected": "bae51ea1f523c6c38b23dad31fec70a7f1f08ec1c891db1860649831ae0a2706",
+      "observed": "bae51ea1f523c6c38b23dad31fec70a7f1f08ec1c891db1860649831ae0a2706"
+    },
+    "ref/v35.py": {
+      "equal": true,
+      "expected": "7b71e5a7c8003d27c7f1bcafc8deae2d2eed07dd80942066362a1d9c5da8c264",
+      "observed": "7b71e5a7c8003d27c7f1bcafc8deae2d2eed07dd80942066362a1d9c5da8c264"
+    },
+    "ref/v35_calibration.py": {
+      "equal": true,
+      "expected": "9dd9ab5c6d6bf3a91de0f28c733c784b52f87a806ef6e48e52dafa3632080dbf",
+      "observed": "9dd9ab5c6d6bf3a91de0f28c733c784b52f87a806ef6e48e52dafa3632080dbf"
+    },
+    "ref/v35_calibration_oracle.py": {
+      "equal": true,
+      "expected": "3cb46716acc33ff29d36a07d31d4df2d3223653b5cfe44019a5d835e8cba53e3",
+      "observed": "3cb46716acc33ff29d36a07d31d4df2d3223653b5cfe44019a5d835e8cba53e3"
+    },
+    "ref/v35_oracle.py": {
+      "equal": true,
+      "expected": "57c76512d003808c705f64634ab08b5503d38c5a8300db3f8be970bdcbcdb702",
+      "observed": "57c76512d003808c705f64634ab08b5503d38c5a8300db3f8be970bdcbcdb702"
+    },
+    "ref/v35_topology.py": {
+      "equal": true,
+      "expected": "57924f038840cbeebc1c1eec0870da11d19a04b127bd1c98f37df226135ed5f1",
+      "observed": "57924f038840cbeebc1c1eec0870da11d19a04b127bd1c98f37df226135ed5f1"
+    },
+    "ref/v35_topology_oracle.py": {
+      "equal": true,
+      "expected": "3f94632a7119dafb51cdd7ec35cf9ab7c6ea5721ab8193d4b2bf6a1664725e6d",
+      "observed": "3f94632a7119dafb51cdd7ec35cf9ab7c6ea5721ab8193d4b2bf6a1664725e6d"
+    },
+    "ref/v36.py": {
+      "equal": true,
+      "expected": "99fe821485b8112e84ab3fe2ea45f73bf8055be22003982089a135eb07f4dc72",
+      "observed": "99fe821485b8112e84ab3fe2ea45f73bf8055be22003982089a135eb07f4dc72"
+    },
+    "ref/v36_bridge.py": {
+      "equal": true,
+      "expected": "7c03da3f7f1ebd2c8b3b59d0054f962d3cc4533e4897f7161eb98de52daa0503",
+      "observed": "7c03da3f7f1ebd2c8b3b59d0054f962d3cc4533e4897f7161eb98de52daa0503"
+    },
+    "ref/v36_bridge_oracle.py": {
+      "equal": true,
+      "expected": "5b6dc05449fde394ad5cb4bbb7d24bfd8c631206d2ace99ffd50cd463a7e6b02",
+      "observed": "5b6dc05449fde394ad5cb4bbb7d24bfd8c631206d2ace99ffd50cd463a7e6b02"
+    },
+    "ref/v36_coherence.py": {
+      "equal": true,
+      "expected": "7b7c9843ec89ee4ee3f11ae13ca5f01c44edd6290c671b15f3ad3fdeaa4c110c",
+      "observed": "7b7c9843ec89ee4ee3f11ae13ca5f01c44edd6290c671b15f3ad3fdeaa4c110c"
+    },
+    "ref/v36_fixture_oracle.py": {
+      "equal": true,
+      "expected": "26ae926acc5260d203ff84b6c5c06a44714c4cbc674876e5e38b9adcefca718f",
+      "observed": "26ae926acc5260d203ff84b6c5c06a44714c4cbc674876e5e38b9adcefca718f"
+    },
+    "ref/v36_oracle.py": {
+      "equal": true,
+      "expected": "955bf9fb15db510d5b387526c6c8c742d546d0092b7ab971e1a936c31539ba25",
+      "observed": "955bf9fb15db510d5b387526c6c8c742d546d0092b7ab971e1a936c31539ba25"
+    },
+    "ref/v36_round12.py": {
+      "equal": true,
+      "expected": "85d4442f128cfe0a92ca53a0be55c9b4b427854f5d463c5e90cbdfd0d3f36146",
+      "observed": "85d4442f128cfe0a92ca53a0be55c9b4b427854f5d463c5e90cbdfd0d3f36146"
+    },
+    "ref/v36_round15_oracle.py": {
+      "equal": true,
+      "expected": "ddb5c8a388ddaa2e2729ab5f4a85cb036d1e8b43f19784aee875ba0cb249f5d9",
+      "observed": "ddb5c8a388ddaa2e2729ab5f4a85cb036d1e8b43f19784aee875ba0cb249f5d9"
+    },
+    "ref/v36_round15_production_enum.py": {
+      "equal": true,
+      "expected": "5360e5173438560b09525f6f266e0aaae9e1a29ad15ae9592404a45d8055e8e6",
+      "observed": "5360e5173438560b09525f6f266e0aaae9e1a29ad15ae9592404a45d8055e8e6"
+    },
+    "ref/v36_round15_repair_oracle.py": {
+      "equal": true,
+      "expected": "4866df9c3f03b8600ea2d8d3ff76e90c37d70713a62e9fed540f0cb3535b392a",
+      "observed": "4866df9c3f03b8600ea2d8d3ff76e90c37d70713a62e9fed540f0cb3535b392a"
+    },
+    "ref/v36_round15_repair_production.py": {
+      "equal": true,
+      "expected": "ef9a4731412d467f353776509ed7d35bcc441ed0b886e87a286cd7077c88fd02",
+      "observed": "ef9a4731412d467f353776509ed7d35bcc441ed0b886e87a286cd7077c88fd02"
+    }
+  },
+  "proofs": {
+    "fixture_identity": {
+      "key_set_equal": true,
+      "maximum_atom_error": 2.7755575615628914e-17
+    },
+    "forecast_semantics_proof_15_extended": {
+      "errors": {
+        "contact": 1.1102230246251565e-16,
+        "context": 0.0,
+        "identity": 0.0,
+        "outcome": 0.0,
+        "partner": 2.220446049250313e-16
+      },
+      "maximum_error": 2.220446049250313e-16,
+      "passed": true
+    },
+    "generator_coherence": {
+      "passed": true,
+      "rows": [
+        {
+          "cross_sign": 0,
+          "danger_support": [
+            0,
+            1
+          ],
+          "finite_nonzero_native_mass": true,
+          "persistence_support": [
+            0.8,
+            0.9,
+            0.97
+          ],
+          "stratum": "acute_one",
+          "structure": {
+            "active_modes": 1,
+            "cross_mode_outcome": 0,
+            "joint_policy_outcome": 1,
+            "mode_root_edges": [
+              1,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "cross_sign": 0,
+          "danger_support": [
+            0,
+            1
+          ],
+          "finite_nonzero_native_mass": true,
+          "persistence_support": [
+            0.8,
+            0.9,
+            0.97
+          ],
+          "stratum": "chronic_one",
+          "structure": {
+            "active_modes": 1,
+            "cross_mode_outcome": 0,
+            "joint_policy_outcome": 1,
+            "mode_root_edges": [
+              1,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "cross_sign": 1,
+          "danger_support": [
+            0,
+            1
+          ],
+          "finite_nonzero_native_mass": true,
+          "persistence_support": [
+            0.8,
+            0.9,
+            0.97
+          ],
+          "stratum": "chronic_multiple",
+          "structure": {
+            "active_modes": 3,
+            "cross_mode_outcome": 1,
+            "joint_policy_outcome": 1,
+            "mode_root_edges": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        {
+          "cross_sign": 0,
+          "danger_support": [
+            0,
+            1
+          ],
+          "finite_nonzero_native_mass": true,
+          "persistence_support": [
+            0.8,
+            0.9,
+            0.97
+          ],
+          "stratum": "real_danger_adaptive",
+          "structure": {
+            "active_modes": 1,
+            "cross_mode_outcome": 0,
+            "joint_policy_outcome": 1,
+            "mode_root_edges": [
+              1,
+              0,
+              0
+            ]
+          }
+        }
+      ]
+    },
+    "global_danger_normalization_error": 1.1102230246251565e-16,
+    "input_copy": true,
+    "key_set_equality_asserted": true,
+    "local_normalization_error": 0.0,
+    "log_space_predicate": {
+      "passed": true,
+      "uses_exp_for_support_predicate": false
+    },
+    "mutation_tests": {
+      "other_context_factor_unchanged": true,
+      "partner_observation_changes_posterior": true
+    },
+    "passed": true
+  },
+  "runtime_trace_events": [
+    {
+      "operation": "v37.score_v37",
+      "seed": 0
+    },
+    {
+      "operation": "v36_bridge.score_v3",
+      "seed": 0
+    }
+  ],
+  "stage": "V3.7",
+  "verdict": "PASS"
+}

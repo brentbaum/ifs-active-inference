@@ -1,0 +1,37 @@
+{
+  "stage": "V3.7",
+  "battery": "Population A37",
+  "classification": "FAIL_APPARATUS_CUSTODY_STOP",
+  "seed_block": [
+    3734000,
+    3735999
+  ],
+  "criterion_evaluated": false,
+  "failure": {
+    "type": "multiprocessing_result_serialization",
+    "exception": "multiprocessing.pool.MaybeEncodingError",
+    "cause": "TypeError: cannot pickle 'mappingproxy' object",
+    "location": "scripts/run_v37.py::_native_row returned calibration_state containing nested MappingProxyType values",
+    "scientific_model_implicated": false
+  },
+  "custody": {
+    "persisted_seed_records": [
+      3734000
+    ],
+    "persisted_record_count": 1,
+    "trace_file": "v3.7-population-a37-traces.jsonl",
+    "trace_sha256": "dbac5c84327413d9e168a824e961a52240da264bd05b7648bcb051508a5df639",
+    "incremental_hash_file": "v3.7-population-a37-trace-hash-events.jsonl",
+    "incremental_hash_sha256": "cf1a3333c3df06eb3911e07903b18f2c3f8facae4608e3c89aa3636c9a73013a",
+    "failed_result_seed_observed_in_exception": 3734001,
+    "additional_prefetched_seed_execution_set": "not exactly recoverable",
+    "ascending_gap_free_claim_for_full_block": false,
+    "block_may_not_be_reused_without_evaluator_adjudication": true
+  },
+  "downstream": {
+    "population_c37_opened": false,
+    "tournament_t37_opened": false,
+    "registered_prediction_scored": false
+  },
+  "verdict": "FAIL_APPARATUS_CUSTODY_STOP"
+}

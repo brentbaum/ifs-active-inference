@@ -1,0 +1,69 @@
+{
+  "stage": "V3.7",
+  "status": "DESIGN_FROZEN_BEFORE_ANY_V3_7_SEED",
+  "authority": "results/V3.7/internal-round20-adjudication.md",
+  "registered_prediction": {
+    "file": "results/V3.7/registered-prediction.md",
+    "sha256": "5a26e1e0e67927278d03da186b3e18d6a4d9932f5322112c062f5a7443ad69e9",
+    "used_for_implementation_tuning": false,
+    "scored_only_after_immutable_tournament_verdict": true
+  },
+  "additions": {
+    "A1_dynamic_partner": {
+      "latent": "L_t in {0,1}, one state per slice",
+      "initial_prior": [0.5, 0.5],
+      "persistence_support": [0.8, 0.9, 0.97],
+      "persistence_prior": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333],
+      "transition": "p(L_t=L_{t-1}|rho)=rho; p(change|rho)=1-rho",
+      "partner_emission": "frozen v35.partner_channel_probability on the typed remaining channel",
+      "contact_emission": "frozen v35.contact_probability, marginalized jointly over L_t and the existing contact-response parameter",
+      "factor_placement": "A forward factor over (rho,L_t,theta_contact) replaces only the frozen adapter's static partner-trait mixture for partner/contact forecasts; it has no mode/context edge."
+    },
+    "A2_exogenous_danger": {
+      "latent": "D_t in {0,1}, one exogenous world-state bit per slice",
+      "prior": [0.5, 0.5],
+      "prior_odds": "1:1, the stratum-agnostic uniform convention",
+      "temporal_process": "candidate-common independent world-state draws; no stratum label enters inference",
+      "identity_factor": "D_t=0 uses frozen v35 root emission; D_t=1 uses the same atomic low root-signal row (0.14 for identity token 1), preventing exogenous danger from being forced into a mode-to-root edge",
+      "outcome_factor": "D_t=0 uses frozen v35 outcome prediction; D_t=1 uses the same atomic high-danger outcome row (0.86 for adverse outcome), with do(action) retained as an intervention and never scored",
+      "factor_placement": "D_t is marginalized inside the identity/outcome predictive factor and competes with mode-generated explanations; it has no partner/context edge."
+    }
+  },
+  "exactness": {
+    "partner_forward_state_count": 12,
+    "partner_state_coordinates": ["rho", "L_t", "theta_contact"],
+    "danger_state_count_per_slice": 2,
+    "all_new_latents_marginalized_exactly": true,
+    "tolerance": 1e-10
+  },
+  "touched_files_and_functions": [
+    {"file": "ref/v37.py", "functions": ["generate_v3_native_world", "generate_external_world", "score_v37", "calibration_state", "generator_coherence_proof", "forecast_semantics_proof"]},
+    {"file": "ref/v37_oracle.py", "functions": ["enumerate_partner_atoms", "direct_partner_contact_forecasts", "enumerate_danger_forecasts"]},
+    {"file": "scripts/run_v37.py", "functions": ["run_zero_seed_proofs", "run_population_a", "run_population_c", "run_tournament", "score_registered_prediction"]},
+    {"file": "tests/test_v37.py", "functions": ["V37ProofTests"]},
+    {"file": "results/V3.7/*", "functions": ["apparatus records only"]}
+  ],
+  "frozen_imports_reused_unmodified": [
+    "ref/v32.py",
+    "ref/v35.py",
+    "ref/v36.py",
+    "ref/v36_bridge.py",
+    "ref/v36_round12.py",
+    "ref/rng.py",
+    "ref/trace_sink.py",
+    "ref/custody.py"
+  ],
+  "excess_changes": [],
+  "forbidden": [
+    "new coupling between partner and mode/context machinery",
+    "new danger parameter or stratum-specific danger prior",
+    "changes to V3.6 scientific modules",
+    "truth-dependent schedules",
+    "seed-based tuning toward the registered prediction"
+  ],
+  "seed_status_at_freeze": {
+    "3734000:3735999": "UNOPENED",
+    "3736000:3737999": "UNOPENED",
+    "3740000:3745999": "UNOPENED"
+  }
+}
