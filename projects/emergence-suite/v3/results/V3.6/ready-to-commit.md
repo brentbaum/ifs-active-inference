@@ -704,3 +704,72 @@ Additional files ready for evaluator commit:
 - `results/V3.6/population-c-native-support-stop.md`
 - `results/V3.6/v3.6-r1-round15-external-qualification-replacement-trace-hashes.json`
 - `results/V3.6/ready-to-commit.md`
+
+## Round 16 — constructor repair and zero-seed coherence precondition
+
+Ruling 16.1 was applied as exactly one changed line in
+`ref/v36_round12.py::_external_structure`: absent cross-mode edges now always
+emit `cross_sign=0`; multi-mode cross-edge worlds emit `+1`. The differential
+audit confirms one added/one deleted line and all round-15 baseline scientific
+hashes match bitwise.
+
+The new permanent zero-seed coherence proof passed. All four external strata
+were constructed directly through `_external_structure` and
+`_external_temporal`; each emitted tuple has finite nonzero native support,
+legal sign enumeration, normalized positive partner-channel rows, and finite
+nonzero prior-predictive mass under both adapters. Population A's complete
+native support also normalized: 168 protect tuples and 432 temporal programs.
+
+The runner now partitions stratified blocks into four contiguous groups. The
+first world of every group runs in process and its trace row and hash event
+are independently fsynced before that group's parallel remainder opens.
+Population C uses the final block `3726000:3727999`; the tournament remains
+closed in this dispatch.
+
+Pre-block files ready for evaluator commit:
+
+- `ref/v36_round12.py`
+- `ref/v36_coherence.py`
+- `scripts/prove_v36_round16_coherence.py`
+- `scripts/run_v36_round12.py`
+- `tests/test_v36_coherence.py`
+- `results/V3.6/round16-constructor-repair-audit.json`
+- `results/V3.6/round16-constructor-repair-audit.md`
+- `results/V3.6/round16-generator-coherence-proof.json`
+- `results/V3.6/round16-generator-coherence-proof.md`
+- `results/V3.6/ready-to-commit.md`
+
+## Round 16 — final Population C qualification
+
+Disposition: **PASS**. The final block `3726000:3727999` produced 2,000
+ascending, gap-free rows: 500 in each of `acute_one`, `chronic_one`,
+`chronic_multiple`, and `real_danger_adaptive`. Each stratum's first seed
+(`3726000`, `3726500`, `3727000`, `3727500`) executed in process and was
+serialized and fsynced before parallel dispatch opened for that stratum.
+
+Adapter-document identity passed. All V2 deterministic-bootstrap precision
+widths were below `log(1.02)`: identity `0.0137623440`, outcome
+`0.0082116350`, context `0.0195183873`, partner `0.0108807043`, and contact
+`0.0080809294`. External calibration remains descriptive and non-blocking as
+frozen. No failure was recorded.
+
+The main trace has SHA-256
+`693bdc10e6f6c10b24614a7d4ed36156ceeffb4e153945b576769df335681852`.
+The 2,000-row incremental hash-event ledger has SHA-256
+`f99cc3d4a5726075f6c4e74f3e77cde8841e55204ad85cf3c30fd2cad72a34f4`.
+Both hashes were independently recomputed after the run and match their
+recorded values.
+
+Round-16 stop condition is satisfied. The tournament block
+`3684000:3689999` remains unopened, as do Gate 4, Gate 5, and all escrows.
+
+Population-C result files ready for evaluator commit:
+
+- `results/V3.6/v3.6-r1-round16-population-c-qualification.json`
+- `results/V3.6/v3.6-r1-round16-population-c-qualification.md`
+- `results/V3.6/v3.6-r1-round16-population-c-qualification-trace-hashes.json`
+- `results/V3.6/v3.6-r1-round16-population-c-qualification-trace-hash-events.jsonl`
+- `results/V3.6/ready-to-commit.md`
+
+The oversized raw trace bundle remains local under the committed hash
+ledger, following the standing trace-bundle convention.

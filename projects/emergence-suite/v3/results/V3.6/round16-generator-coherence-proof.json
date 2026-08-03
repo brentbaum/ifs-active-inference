@@ -1,0 +1,278 @@
+{
+  "external_strata": [
+    {
+      "emitted_tuple": {
+        "cross_sign": 0,
+        "partner_channel_type": "remaining",
+        "structure": {
+          "active_modes": 1,
+          "cross_mode_outcome": 0,
+          "joint_policy_outcome": 1,
+          "mode_root_edges": [
+            1,
+            0,
+            0
+          ]
+        },
+        "temporal": {
+          "active_contexts": 2,
+          "dynamics": [
+            "one_way_change",
+            "static"
+          ],
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        }
+      },
+      "enumerated_sign_support": [
+        0
+      ],
+      "partner_emission_rows": {
+        "0": [
+          0.86,
+          0.14
+        ],
+        "1": [
+          0.14,
+          0.86
+        ]
+      },
+      "partner_rows_normalized_positive": true,
+      "passed": true,
+      "stratum": "acute_one",
+      "v2_minimum_delivered_token_probability": 0.17725597604822677,
+      "v2_native_prior_predictive_log_mass": -54.75377022163744,
+      "v2_trace_events": [
+        {
+          "operation": "v36_bridge.score_v2",
+          "seed": 0
+        }
+      ],
+      "v3_minimum_delivered_token_probability": 0.13999999999999913,
+      "v3_native_prior_mass_by_partner_state": [
+        4.15057104399508e-05,
+        4.15057104399508e-05
+      ],
+      "v3_native_prior_predictive_log_mass": -45.45649195908385,
+      "v3_trace_events": [
+        {
+          "operation": "v36_bridge.score_v3",
+          "seed": 0
+        }
+      ]
+    },
+    {
+      "emitted_tuple": {
+        "cross_sign": 0,
+        "partner_channel_type": "remaining",
+        "structure": {
+          "active_modes": 1,
+          "cross_mode_outcome": 0,
+          "joint_policy_outcome": 1,
+          "mode_root_edges": [
+            1,
+            0,
+            0
+          ]
+        },
+        "temporal": {
+          "active_contexts": 2,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        }
+      },
+      "enumerated_sign_support": [
+        0
+      ],
+      "partner_emission_rows": {
+        "0": [
+          0.86,
+          0.14
+        ],
+        "1": [
+          0.14,
+          0.86
+        ]
+      },
+      "partner_rows_normalized_positive": true,
+      "passed": true,
+      "stratum": "chronic_one",
+      "v2_minimum_delivered_token_probability": 0.17725597604822677,
+      "v2_native_prior_predictive_log_mass": -54.75377022163744,
+      "v2_trace_events": [
+        {
+          "operation": "v36_bridge.score_v2",
+          "seed": 0
+        }
+      ],
+      "v3_minimum_delivered_token_probability": 0.13999999999999913,
+      "v3_native_prior_mass_by_partner_state": [
+        4.15057104399508e-05,
+        4.15057104399508e-05
+      ],
+      "v3_native_prior_predictive_log_mass": -45.45649195908385,
+      "v3_trace_events": [
+        {
+          "operation": "v36_bridge.score_v3",
+          "seed": 0
+        }
+      ]
+    },
+    {
+      "emitted_tuple": {
+        "cross_sign": 1,
+        "partner_channel_type": "remaining",
+        "structure": {
+          "active_modes": 3,
+          "cross_mode_outcome": 1,
+          "joint_policy_outcome": 1,
+          "mode_root_edges": [
+            1,
+            1,
+            1
+          ]
+        },
+        "temporal": {
+          "active_contexts": 2,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        }
+      },
+      "enumerated_sign_support": [
+        -1,
+        1
+      ],
+      "partner_emission_rows": {
+        "0": [
+          0.86,
+          0.14
+        ],
+        "1": [
+          0.14,
+          0.86
+        ]
+      },
+      "partner_rows_normalized_positive": true,
+      "passed": true,
+      "stratum": "chronic_multiple",
+      "v2_minimum_delivered_token_probability": 0.17725597604822677,
+      "v2_native_prior_predictive_log_mass": -54.75377022163744,
+      "v2_trace_events": [
+        {
+          "operation": "v36_bridge.score_v2",
+          "seed": 0
+        }
+      ],
+      "v3_minimum_delivered_token_probability": 0.13999999999999913,
+      "v3_native_prior_mass_by_partner_state": [
+        6.485267256242316e-07,
+        6.485267256242316e-07
+      ],
+      "v3_native_prior_predictive_log_mass": -45.45649195908385,
+      "v3_trace_events": [
+        {
+          "operation": "v36_bridge.score_v3",
+          "seed": 0
+        }
+      ]
+    },
+    {
+      "emitted_tuple": {
+        "cross_sign": 0,
+        "partner_channel_type": "remaining",
+        "structure": {
+          "active_modes": 1,
+          "cross_mode_outcome": 0,
+          "joint_policy_outcome": 1,
+          "mode_root_edges": [
+            1,
+            0,
+            0
+          ]
+        },
+        "temporal": {
+          "active_contexts": 2,
+          "dynamics": [
+            "discrete_recurrent_context",
+            "static"
+          ],
+          "scopes": [
+            "context_specific",
+            "shared_global"
+          ]
+        }
+      },
+      "enumerated_sign_support": [
+        0
+      ],
+      "partner_emission_rows": {
+        "0": [
+          0.86,
+          0.14
+        ],
+        "1": [
+          0.14,
+          0.86
+        ]
+      },
+      "partner_rows_normalized_positive": true,
+      "passed": true,
+      "stratum": "real_danger_adaptive",
+      "v2_minimum_delivered_token_probability": 0.17725597604822677,
+      "v2_native_prior_predictive_log_mass": -54.75377022163744,
+      "v2_trace_events": [
+        {
+          "operation": "v36_bridge.score_v2",
+          "seed": 0
+        }
+      ],
+      "v3_minimum_delivered_token_probability": 0.13999999999999913,
+      "v3_native_prior_mass_by_partner_state": [
+        4.15057104399508e-05,
+        4.15057104399508e-05
+      ],
+      "v3_native_prior_predictive_log_mass": -45.45649195908385,
+      "v3_trace_events": [
+        {
+          "operation": "v36_bridge.score_v3",
+          "seed": 0
+        }
+      ]
+    }
+  ],
+  "passed": true,
+  "population_a_native_generator": {
+    "minimum_protect_tuple_prior_mass": 0.00025025025025025036,
+    "minimum_temporal_prior_mass": 8.098477486232579e-05,
+    "passed": true,
+    "protect_prior_sum": 1.0000000000000002,
+    "protect_tuple_count": 168,
+    "same_complete_support_for_each_stratum": true,
+    "strata": [
+      "acute",
+      "chronic",
+      "danger",
+      "mixed"
+    ],
+    "temporal_prior_sum": 0.9999999999999996,
+    "temporal_program_count": 432
+  },
+  "proof": "permanent pre-block generator coherence",
+  "stage": "V3.6-R1",
+  "verdict": "PASS",
+  "zero_seed": true
+}

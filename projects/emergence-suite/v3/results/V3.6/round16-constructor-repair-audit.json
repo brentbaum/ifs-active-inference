@@ -1,0 +1,43 @@
+{
+  "stage": "V3.6-R1",
+  "round": 16,
+  "status": "PASS",
+  "authority": "results/V3.6/internal-round16-adjudication.md ruling 16.1",
+  "authorized_file": "ref/v36_round12.py",
+  "authorized_function": "_external_structure",
+  "diff": {
+    "lines_added": 1,
+    "lines_deleted": 1,
+    "before": "return structure, (-1 if stratum == \"real_danger_adaptive\" else 1 if active > 1 else 0)",
+    "after": "return structure, (1 if active > 1 else 0)",
+    "only_authorized_line_changed": true,
+    "pre_repair_sha256": "78dda8742e39627c3cd6004809207e54e93dfe12a258e117c4a95a766d8d3ab2",
+    "post_repair_sha256": "85d4442f128cfe0a92ca53a0be55c9b4b427854f5d463c5e90cbdfd0d3f36146"
+  },
+  "round15_baseline_verification": {
+    "ref/v31.py": {"sha256": "0481e51acf72ee8018cb3c9a1c780570b22e05657cc687376f08ca99544149e0", "matches": true},
+    "ref/v32.py": {"sha256": "0b990eb4c28f3dd61ec37b57742548c1f63147ec48fe8fac465cf2123dba9833", "matches": true},
+    "ref/v33.py": {"sha256": "018ebac662a925a3ed5431197d8c5914049fa5e1b20787fd5b13de3310c977fd", "matches": true},
+    "ref/v34.py": {"sha256": "f9a37a36a0393f9fd437776457cc48018db6cfe1d5195d95a9cbf5b2e90744cd", "matches": true},
+    "ref/v35.py": {"sha256": "7b71e5a7c8003d27c7f1bcafc8deae2d2eed07dd80942066362a1d9c5da8c264", "matches": true},
+    "ref/v36.py": {"sha256": "99fe821485b8112e84ab3fe2ea45f73bf8055be22003982089a135eb07f4dc72", "matches": true},
+    "ref/v36_bridge.py": {"sha256": "7c03da3f7f1ebd2c8b3b59d0054f962d3cc4533e4897f7161eb98de52daa0503", "matches": true}
+  },
+  "supplementary_unchanged_modules": {
+    "method": "Current SHA-256 recorded and git status confirmed clean; these files are not enumerated in round15-repair-baseline-hashes.json.",
+    "ref/v35_calibration.py": "9dd9ab5c6d6bf3a91de0f28c733c784b52f87a806ef6e48e52dafa3632080dbf",
+    "ref/v35_calibration_oracle.py": "3cb46716acc33ff29d36a07d31d4df2d3223653b5cfe44019a5d835e8cba53e3",
+    "ref/v31_oracle.py": "3e8db784387c9719b6a06828cfd87a7121a24b07283902774491cb56d6d8b0ed",
+    "ref/v32_oracle.py": "a77f2f98ad8949b4c0557976ed5a5445f5b547183bc3f7b3032573c5e332f6ba",
+    "ref/v33_oracle.py": "781d66bc2052094948ee537cccc79f7147d2581ca2cf81698af3c93780e8dbed",
+    "ref/v34_oracle.py": "bae51ea1f523c6c38b23dad31fec70a7f1f08ec1c891db1860649831ae0a2706",
+    "ref/v35_oracle.py": "57c76512d003808c705f64634ab08b5503d38c5a8300db3f8be970bdcbcdb702",
+    "ref/v35_topology_oracle.py": "3f94632a7119dafb51cdd7ec35cf9ab7c6ea5721ab8193d4b2bf6a1664725e6d",
+    "ref/v36_oracle.py": "955bf9fb15db510d5b387526c6c8c742d546d0092b7ab971e1a936c31539ba25",
+    "ref/v36_bridge_oracle.py": "5b6dc05449fde394ad5cb4bbb7d24bfd8c631206d2ace99ffd50cd463a7e6b02",
+    "ref/v36_fixture_oracle.py": "26ae926acc5260d203ff84b6c5c06a44714c4cbc674876e5e38b9adcefca718f",
+    "ref/v36_round15_oracle.py": "ddb5c8a388ddaa2e2729ab5f4a85cb036d1e8b43f19784aee875ba0cb249f5d9",
+    "ref/v36_round15_repair_oracle.py": "4866df9c3f03b8600ea2d8d3ff76e90c37d70713a62e9fed540f0cb3535b392a"
+  },
+  "scientific_scorer_changed": false
+}

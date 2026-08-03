@@ -33,6 +33,7 @@ TOLERANCE = 1e-10
 TARGETS = v36_round12.TARGETS
 A_R1_BLOCK = (3_722_000, 3_723_999)
 POPULATION_C_REPLACEMENT_BLOCK = (3_724_000, 3_725_999)
+FINAL_POPULATION_C_BLOCK = (3_726_000, 3_727_999)
 
 
 def _plain(value: Any) -> Any:
@@ -467,16 +468,18 @@ def run_fixture_identity_proofs() -> dict[str, Any]:
 
 
 def _persist_rows(
-    name: str, tasks: Sequence[Any], worker: Any, *, chunksize: int = 1
+    name: str, tasks: Sequence[Any], worker: Any, *, chunksize: int = 1,
+    serial_group_size: int | None = None,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     path = RESULTS / f"{name}-traces.jsonl"
     ledger_path = RESULTS / f"{name}-trace-hashes.json"
-    if path.exists() or ledger_path.exists():
+    hash_events_path = RESULTS / f"{name}-trace-hash-events.jsonl"
+    if path.exists() or ledger_path.exists() or hash_events_path.exists():
         raise RuntimeError(f"custody refusal: {name} outputs already exist")
     file_hash = hashlib.sha256()
     rows: list[dict[str, Any]] = []
     records = []
-    def persist(handle, row: dict[str, Any]) -> None:
+    def persist(handle, hash_handle, row: dict[str, Any]) -> None:
         nonlocal file_hash
         try:
             validate_finite_worker_row(row)
@@ -507,17 +510,26 @@ def _persist_rows(
             "seed": int(row["seed"]),
             "sha256": hashlib.sha256(encoded).hexdigest(),
         })
+        hash_event = _canonical(records[-1])
+        hash_handle.write(hash_event)
+        hash_handle.flush()
+        os.fsync(hash_handle.fileno())
         rows.append(row)
 
     processes = max(1, min(8, (os.cpu_count() or 2) - 1))
-    with path.open("xb") as handle:
-        # Round-14: first seeded cell must serialize single-process before
-        # ordinary parallel dispatch opens.
-        persist(handle, worker(tasks[0]))
-        if len(tasks) > 1:
-            with get_context("spawn").Pool(processes) as pool:
-                for row in pool.imap(worker, tasks[1:], chunksize=chunksize):
-                    persist(handle, row)
+    group_size = len(tasks) if serial_group_size is None else serial_group_size
+    if group_size <= 0 or len(tasks) % group_size:
+        raise ValueError("serial group size must divide the task count")
+    with path.open("xb") as handle, hash_events_path.open("xb") as hash_handle:
+        for start in range(0, len(tasks), group_size):
+            group = tasks[start:start + group_size]
+            # Round 16: each stratum's first world serializes and fsyncs in
+            # process before parallel dispatch opens for that stratum.
+            persist(handle, hash_handle, worker(group[0]))
+            if len(group) > 1:
+                with get_context("spawn").Pool(processes) as pool:
+                    for row in pool.imap(worker, group[1:], chunksize=chunksize):
+                        persist(handle, hash_handle, row)
     seeds = [int(task[0] if isinstance(task, tuple) else task) for task in tasks]
     if [int(row["seed"]) for row in rows] != seeds:
         raise RuntimeError("custody failure: output seed order/gap mismatch")
@@ -531,6 +543,12 @@ def _persist_rows(
         "seed_start": seeds[0], "seed_end": seeds[-1],
         "ascending_gap_free": True,
         "persisted_before_aggregation": True,
+        "incremental_hash_events_file": hash_events_path.name,
+        "incremental_hash_events_sha256": hashlib.sha256(
+            hash_events_path.read_bytes()
+        ).hexdigest(),
+        "serial_group_size": group_size,
+        "serial_group_first_seeds": seeds[::group_size],
         "records": records,
     }
     ledger_path.write_text(
@@ -1143,14 +1161,19 @@ def run_external_qualification() -> dict[str, Any]:
     )
     if previous["verdict"] != "PASS":
         raise RuntimeError("Population A did not pass")
-    block = POPULATION_C_REPLACEMENT_BLOCK
+    coherence = json.loads(
+        (RESULTS / "round16-generator-coherence-proof.json").read_text()
+    )
+    if coherence.get("verdict") != "PASS":
+        raise RuntimeError("FAIL_UNEXECUTABLE: generator coherence proof failed")
+    block = FINAL_POPULATION_C_BLOCK
     tasks = [
         (seed, block[0], block[1], "qualification")
         for seed in range(block[0], block[1] + 1)
     ]
     rows, ledger = _persist_rows(
-        "v3.6-r1-round15-external-qualification-replacement", tasks,
-        _external_row, chunksize=1,
+        "v3.6-r1-round16-population-c-qualification", tasks,
+        _external_row, chunksize=1, serial_group_size=len(tasks) // 4,
     )
     precision = {}
     failures = []
@@ -1186,17 +1209,18 @@ def run_external_qualification() -> dict[str, Any]:
         "failures": failures, "custody": ledger,
         "verdict": "PASS" if not failures else "FAIL_APPARATUS_STOP",
     }
-    _write_json("v3.6-r1-round15-external-qualification-replacement.json", result)
+    result["round16_generator_coherence_precondition"] = "PASS"
+    _write_json("v3.6-r1-round16-population-c-qualification.json", result)
     _write_report(
-        "v3.6-r1-round15-external-qualification-replacement.md",
-        "V3.6-R1 replacement Population C external qualification", result,
+        "v3.6-r1-round16-population-c-qualification.md",
+        "V3.6-R1 round-16 final Population C qualification", result,
     )
     return result
 
 
 def run_tournament() -> dict[str, Any]:
     qualification = json.loads(
-        (RESULTS / "v3.6-r1-round15-external-qualification-replacement.json").read_text()
+        (RESULTS / "v3.6-r1-round16-population-c-qualification.json").read_text()
     )
     if qualification["verdict"] != "PASS":
         raise RuntimeError("external qualification did not pass")
@@ -1207,7 +1231,7 @@ def run_tournament() -> dict[str, Any]:
     ]
     rows, ledger = _persist_rows(
         "v3.6-r1-round12-tournament", tasks, _external_row,
-        chunksize=1,
+        chunksize=1, serial_group_size=len(tasks) // 4,
     )
     pareto = {}
     scientific_failures = []

@@ -315,7 +315,7 @@ def _external_structure(stratum: str) -> tuple[v35.ProtectStructure, int]:
         active, tuple(int(index < active) for index in range(3)),
         1, int(active > 1),
     )
-    return structure, (-1 if stratum == "real_danger_adaptive" else 1 if active > 1 else 0)
+    return structure, (1 if active > 1 else 0)
 
 
 def _external_stratum(
