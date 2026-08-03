@@ -238,3 +238,6 @@ The one-shot common-target compression tournament ran exactly once on block 3684
 
 ## C-V36A revealed and escrow released (2026-08-03)
 The V3.6 freeze is DECLARED (final manifest, 301 files, zero mismatches; replacement gate 4 PASS; gate 5 amended PASS from retained records; internal rounds 16-19 recorded). C-V36A plaintext revealed to projects/emergence-suite/v3/sealed-revealed/C-V36A-acute-formation-challenge.md; sha256 verified against the sealed record (3b81a5cb...). Escrow 4100000:4102999 is RELEASED by this record for exactly one challenge execution per the sealed parse instruction. Immutable verdict before interpretation; traces persisted and hashed before criteria. C-V36B and C-V36C remain sealed.
+
+## C-V36A executed (2026-08-03)
+C-V36A ran exactly once on released escrow 4100000:4102999 (3,000 seeds, ascending, gap-free, event ledgers persisted and hashed before criteria; raw trace sha256 f951200e...). Immutable verdict: PASS on all five criteria — regulation uptake +0.4547 [0.4462, 0.4629], cue-only transfer +0.3180 [0.3115, 0.3242], pruning +0.6129 [0.5985, 0.6277], single-mode finiteness + descriptive fingerprints clean, custody clean. Escrow remainder 4103000:4109999 retired unconsumed per the seal.

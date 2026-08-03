@@ -1,0 +1,146 @@
+{
+  "challenge": "C-V36A",
+  "challenge_sha256": "3b81a5cb0b52a4423f2dc9e090ccd6b28598405d105d3b8b47c8fea6d0083ff8",
+  "criteria": {
+    "criterion_1": {
+      "cell": "cell_a1_regulation",
+      "deterministic_analysis_seed": 36001,
+      "field": "root_evidence_uptake",
+      "interval_95": [
+        0.4461858076988965,
+        0.4628897845533481
+      ],
+      "mean_full_minus_ablation": 0.45468077147312463,
+      "passed": true,
+      "positive_sign_carried": true,
+      "whole_world_bootstrap_replicates": 4000,
+      "world_pairs": 800
+    },
+    "criterion_2": {
+      "cell": "cell_a2_cue_only",
+      "deterministic_analysis_seed": 36002,
+      "field": "root_transfer",
+      "interval_95": [
+        0.31145967294417104,
+        0.3242290942124101
+      ],
+      "mean_full_minus_ablation": 0.3180404351113096,
+      "passed": true,
+      "positive_sign_carried": true,
+      "whole_world_bootstrap_replicates": 4000,
+      "world_pairs": 700
+    },
+    "criterion_3": {
+      "cell": "cell_a3_pruning",
+      "deterministic_analysis_seed": 36003,
+      "field": "q_current_edge_absence",
+      "interval_95": [
+        0.5984816659980968,
+        0.6276837958496897
+      ],
+      "mean_full_minus_ablation": 0.6129350587674327,
+      "passed": true,
+      "positive_sign_carried": true,
+      "whole_world_bootstrap_replicates": 4000,
+      "world_pairs": 700
+    },
+    "criterion_4": {
+      "cell": "cell_a4_single_mode_full",
+      "cross_mode_fingerprint_distributions_descriptive_no_floor": {
+        "allied_D_0_1": {
+          "max": 0.0014868924615014656,
+          "mean": -0.00220580519979006,
+          "median": -0.0001350484018037834,
+          "min": -0.0699585266764422,
+          "n": 800,
+          "q05": -0.012346969412969531,
+          "q25": -0.0009204550197627337,
+          "q75": -2.6035482904973595e-05,
+          "q95": -3.2102848792736623e-06,
+          "std": 0.006879644020149342
+        },
+        "allied_D_1_0": {
+          "max": 0.003058405654872809,
+          "mean": -0.0017830881677560065,
+          "median": -9.725025019158284e-05,
+          "min": -0.06720437928917211,
+          "n": 800,
+          "q05": -0.009386602190030435,
+          "q25": -0.0006776888348158372,
+          "q75": -1.867313395625958e-05,
+          "q95": -2.063879693703364e-06,
+          "std": 0.005961448600693263
+        },
+        "opposed_D_0_1": {
+          "max": 0.0,
+          "mean": 0.0,
+          "median": 0.0,
+          "min": 0.0,
+          "n": 800,
+          "q05": 0.0,
+          "q25": 0.0,
+          "q75": 0.0,
+          "q95": 0.0,
+          "std": 0.0
+        },
+        "opposed_D_1_0": {
+          "max": 0.0,
+          "mean": 0.0,
+          "median": 0.0,
+          "min": 0.0,
+          "n": 800,
+          "q05": 0.0,
+          "q25": 0.0,
+          "q75": 0.0,
+          "q95": 0.0,
+          "std": 0.0
+        }
+      },
+      "finite_every_world": {
+        "L_total": true,
+        "q_external_danger": true,
+        "q_identity_organization": true
+      },
+      "passed": true,
+      "worlds": 800
+    },
+    "criterion_5": {
+      "ascending_gap_free": true,
+      "consumed": 3000,
+      "escrow_remainder_retired_unconsumed": [
+        4103000,
+        4109999
+      ],
+      "event_ledgers_persisted_before_aggregation": true,
+      "passed": true,
+      "seed_end": 4102999,
+      "seed_start": 4100000,
+      "trace_hash_record": "c-v36a-trace-hashes.json",
+      "unique": 3000
+    }
+  },
+  "event_hash_ledger_sha256": "7c031b63f6fa5400901620379599d8f0116e0eb0ee220fd321863b73496dc47b",
+  "frozen_identity": {
+    "authorized_post_freeze_custody_record_changes": [
+      {
+        "expected": "d3bc9531ce9cc0cd57fefa63c0b7bf4845d658b4f4d5d3ca843b8a10a16aed7f",
+        "file": "protocols/epoch-c-seed-map.json",
+        "observed": "9d52bbbc4d89527ba480e3194071672df3714c403387b67444d717ee0e10ac02"
+      }
+    ],
+    "file_count": 301,
+    "manifest": "v3.6-freeze-manifest-final.json",
+    "manifest_sha256": "edbd5f93ef64344eb2c6692e4d9482028068cc4872030f11a3bd4c11dc4741a0",
+    "scientific_or_executable_mismatches": []
+  },
+  "immutable_verdict": "PASS",
+  "one_shot": true,
+  "parse_method": "ast.literal_eval on the exact bracketed literal line only",
+  "trace_sha256": "f951200ecf0cafc97e7ebece6c25fb85951e88da1efb24cc7ab57b7014078c93",
+  "verdict_classes": {
+    "custody": "PASS",
+    "scientific": "PASS",
+    "semantic_reporting": "PASS"
+  },
+  "verdict_written_before_interpretation": true
+}
