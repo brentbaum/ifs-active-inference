@@ -773,3 +773,45 @@ Population-C result files ready for evaluator commit:
 
 The oversized raw trace bundle remains local under the committed hash
 ledger, following the standing trace-bundle convention.
+
+## V3.6-R1 one-shot common-target compression tournament
+
+Immutable verdict: **FAIL**. Scientific status:
+`V3.6_COMPRESSION_PREDICTIVE_COST_RETAINED WITH_RETAINED_R1_BRIDGE_QUALIFICATION_FAILURE`.
+This is a valid scientific result and stands; it is not an apparatus stop.
+
+The fresh zero-seed generator-coherence proof passed and was persisted
+immediately before the block opened. The tournament then consumed
+`3684000:3689999` exactly once: 6,000 ascending, gap-free worlds, balanced
+1,500 per stratum. Serial stratum-boundary seeds were `3684000`, `3685500`,
+`3687000`, and `3688500`. Adapter-document identity held in every world.
+
+The five-element Pareto vector, in nats per delivered target token, is:
+
+- identity: `-0.1804463` (`95% CI [-0.1889720, -0.1717586]`) — FAIL;
+- outcome: `-0.0206461` (`95% CI [-0.0232031, -0.0180491]`) — FAIL;
+- context: `0.2692993` (`95% CI [0.2637635, 0.2747081]`) — PASS;
+- partner: `-0.2942846` (`95% CI [-0.3022675, -0.2864180]`) — FAIL;
+- contact: `-0.2400920` (`95% CI [-0.2474799, -0.2325417]`) — FAIL.
+
+Each family was evaluated separately against
+`lower95 >= -log(1.02) = -0.01980262729617973`; no weighted aggregate was
+computed. Descriptive calibration tables are retained as non-blocking.
+
+The 6,000-row trace SHA-256 is
+`f3bc6f6c5e550b479df35fb6cf217440726a465b2644cfde3ed84b1d7bc01134`.
+The 6,000-row incremental hash-event ledger SHA-256 is
+`a1f4b399a3598c8fd8730bceeceda4d95cbe57dda0a4178bd58645a5c1a7b957`.
+Both independently reverify. Gate 4 remains unopened, as required.
+
+Tournament files ready for evaluator commit:
+
+- `results/V3.6/round16-tournament-generator-coherence-proof.json`
+- `results/V3.6/v3.6-r1-tournament-verdict.json`
+- `results/V3.6/v3.6-r1-tournament-verdict.md`
+- `results/V3.6/v3.6-r1-tournament-trace-hashes.json`
+- `results/V3.6/v3.6-r1-tournament-trace-hash-events.jsonl`
+- `results/V3.6/ready-to-commit.md`
+
+The oversized raw tournament trace remains local under its committed hash
+ledger.
