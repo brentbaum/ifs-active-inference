@@ -241,3 +241,6 @@ The V3.6 freeze is DECLARED (final manifest, 301 files, zero mismatches; replace
 
 ## C-V36A executed (2026-08-03)
 C-V36A ran exactly once on released escrow 4100000:4102999 (3,000 seeds, ascending, gap-free, event ledgers persisted and hashed before criteria; raw trace sha256 f951200e...). Immutable verdict: PASS on all five criteria — regulation uptake +0.4547 [0.4462, 0.4629], cue-only transfer +0.3180 [0.3115, 0.3242], pruning +0.6129 [0.5985, 0.6277], single-mode finiteness + descriptive fingerprints clean, custody clean. Escrow remainder 4103000:4109999 retired unconsumed per the seal.
+
+## C-V36B revealed and escrow released (2026-08-03)
+C-V36B plaintext revealed to projects/emergence-suite/v3/sealed-revealed/C-V36B-chronic-protection-challenge.md; sha256 verified against the sealed record (e74aec8d...). Escrow 4110000:4112999 is RELEASED by this record for exactly one challenge execution per the sealed parse instruction. Immutable verdict before interpretation; traces persisted and hashed before criteria. C-V36C remains sealed.
