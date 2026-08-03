@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "stage": "V3.6-R1",
+  "canonical_slice": {
+    "time": {"role": "metadata", "factor": null},
+    "cue": {"role": "metadata", "factor": null},
+    "context_input": {"role": "latent", "factor": "temporal_context_path"},
+    "modes_input": {"role": "latent", "factor": "latent_mode_path"},
+    "action": {"role": "intervention", "factor": "do_action"},
+    "joint_policy": {"role": "intervention", "factor": "do_joint_policy"},
+    "identity": {"role": "observable", "factor": "root_identity_emission"},
+    "outcome": {"role": "observable", "factor": "joint_policy_outcome_emission"},
+    "context": {"role": "observable_or_mask", "factor": "context_emission"},
+    "partner": {"role": "observable", "factor": "partner_remaining_emission"},
+    "contact": {"role": "observable", "factor": "mode_specific_contact_emission"}
+  },
+  "canonical_world": {
+    "seed": {"role": "metadata"},
+    "population": {"role": "metadata"},
+    "stratum": {"role": "metadata"},
+    "r0_spec_hash": {"role": "metadata"},
+    "active_modes": {"role": "latent_truth_metadata"},
+    "structure": {"role": "latent_truth_metadata"},
+    "cross_sign": {"role": "latent_truth_metadata"},
+    "partner_reliable": {"role": "latent_truth_metadata"},
+    "contact_response": {"role": "latent_truth_metadata"},
+    "temporal_structure": {"role": "latent_truth_metadata"},
+    "slices": {"role": "typed_document"},
+    "rng_keys": {"role": "custody_metadata"},
+    "world_sha256": {"role": "custody_metadata"},
+    "observation_sha256": {"role": "custody_metadata"},
+    "heldout_target_sha256": {"role": "custody_metadata"}
+  },
+  "rules": {
+    "latent_modes_are_not_observed_mode_signals": true,
+    "action_selection_likelihood_absent": true,
+    "masked_context_likelihood": 1.0,
+    "one_generating_factor_per_observable": true,
+    "adapter_may_not_manufacture_observations": true,
+    "heldout_observations_unavailable_to_prefix_fit": true
+  }
+}

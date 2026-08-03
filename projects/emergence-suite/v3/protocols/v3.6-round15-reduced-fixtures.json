@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "lengths": [1, 2, 3, 4],
+  "fixtures": [
+    {"name": "K1vK2_JPY0", "active_counts": [1, 2], "joint_policy_y": 0, "cross_mode": 0},
+    {"name": "K1vK2_JPY1", "active_counts": [1, 2], "joint_policy_y": 1, "cross_mode": 0},
+    {"name": "K2vK3_JPY0", "active_counts": [2, 3], "joint_policy_y": 0, "cross_mode": 0},
+    {"name": "K2vK3_JPY1", "active_counts": [2, 3], "joint_policy_y": 1, "cross_mode": 0}
+  ],
+  "factor_ladder": [
+    "structure_prior",
+    "mode_paths",
+    "root_identity_emission",
+    "do_policy_outcome_emission",
+    "partner_emission",
+    "contact_emission",
+    "temporal_context",
+    "masking"
+  ],
+  "tolerance": 1e-10
+}

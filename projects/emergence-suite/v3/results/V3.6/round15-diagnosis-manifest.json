@@ -1,0 +1,25 @@
+{
+  "status": "STOPPED_AFTER_LOCALIZATION",
+  "classification": "GENERATOR_ONLY",
+  "scientific_source_changed": false,
+  "diagnosis_world_seeds_consumed": [],
+  "conditional_length_ladder_opened": false,
+  "population_a_r1_opened": false,
+  "retained_trace_ledger_sha256": "88eaa8ddcd888a0d6fee02741df4109f9bfac422d0dcb5e708bba1e5dcefa8e3",
+  "files": {
+    "protocols/v3.6-round15-diagnosis-plan.md": "42f255cf03f6f23e326b5142607119f4d58ffdfe3b9a2ba8973e3a1328524366",
+    "protocols/v3.6-round15-field-role-manifest.json": "0ef3ae03ee8eb6600fb8795520402f2c2690c18548a3146da22bd6420ee35973",
+    "protocols/v3.6-round15-reduced-fixtures.json": "a246458472d5ee612030b5bbc6837e6296d7bf5aa19be27f29215e4a55549a50",
+    "ref/v36_round15_production_enum.py": "5360e5173438560b09525f6f266e0aaae9e1a29ad15ae9592404a45d8055e8e6",
+    "ref/v36_round15_oracle.py": "ddb5c8a388ddaa2e2729ab5f4a85cb036d1e8b43f19784aee875ba0cb249f5d9",
+    "scripts/diagnose_v36_round15.py": "fb448c15c1f2cab7398a7f28098e9ef58d1f7a09e9dd8e5053fa75bfd9b44b06",
+    "results/V3.6/round15-five-layer-diagnosis.json": "4562f59be19b0e0ffea23d4eb32421dcfff0a379b5d6cf9d26a485fb344f0748",
+    "results/V3.6/round15-five-layer-diagnosis.md": "5d9f6baed999b3662d063386cdfb8def7655b8695b52f52e8a62c98e20b0dd42",
+    "results/V3.6/round15-generator-only-proposed.diff": "38c918061181f8f3b4e57c68f1289a3b1f8a1e73f284e0ebbf6955e8b891f6dc"
+  },
+  "scientific_source_hashes": {
+    "ref/v35.py": "7b71e5a7c8003d27c7f1bcafc8deae2d2eed07dd80942066362a1d9c5da8c264",
+    "ref/v36_bridge.py": "7c03da3f7f1ebd2c8b3b59d0054f962d3cc4533e4897f7161eb98de52daa0503",
+    "ref/v36_round12.py": "1dc39907356898c04ca31c78e905630a6b95699b8840b8b1e357b7adc3b30355"
+  }
+}

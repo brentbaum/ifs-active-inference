@@ -538,3 +538,59 @@ Population-A stop files:
 - `results/V3.6/v3.6-r1-round14-population-a-diagnosis-stub.json`
 - `results/V3.6/v3.6-r1-round14-population-a-diagnosis-stub.md`
 - `results/V3.6/ready-to-commit.md`
+
+## Round 15 — diagnosis plan frozen before execution
+
+The apparatus-first five-layer diagnosis plan, canonical field-role manifest,
+and reduced exact-enumeration fixtures were frozen and hash-pinned before the
+A1 analysis-only null RNG or any diagnosis world seed was used. The
+conditional length ladder and Population A-R1 remain unopened.
+
+Pre-execution files:
+
+- `protocols/v3.6-round15-diagnosis-plan.md`
+- `protocols/v3.6-round15-field-role-manifest.json`
+- `protocols/v3.6-round15-reduced-fixtures.json`
+- `results/V3.6/round15-diagnosis-precommit-manifest.json`
+
+## Round 15 — complete apparatus localization
+
+Disposition: **STOPPED_AFTER_LOCALIZATION / GENERATOR_ONLY**. The formal
+Population-A FAIL remains intact and scientific interpretation remains
+withheld.
+
+The exact-prior draw audit found no population-prior anomaly (complete
+72,576-category Pearson null upper-tail p = `0.7466266867`; no grouped
+simultaneous-band misses). Truth/readout reconstruction was exact, and the
+independent calibration estimator reproduced every retained statistic within
+`7.86e-14`.
+
+The semantic audit found the theorem-premise failure: the complete-native
+constructor chooses `do(joint_policy)` coordinates from the latent active-mode
+count, while the scorer correctly omits action-selection evidence and retains
+the unconditional structure prior. Independent reduced exact enumerators
+agree through structure prior, mode paths, and root emission at T=1..4, then
+first diverge when the truth-dependent intervention schedule enters at the
+do-policy outcome step.
+
+The trace does not serialize the native mode/context paths, prefix typed
+document, contact-response truth, or intervention schedule required for A2;
+that item is retained verbatim as
+`FAIL_APPARATUS_REQUIRED_NATIVE_PATH_STATE_NOT_SERIALIZED`. No seed
+reconstruction was attempted. The 90-digit audit cleared all posterior
+arithmetic that was recomputable (maximum error `6.87e-15`).
+
+No diagnosis world seed was consumed. Layer D, Population A-R1, Population C,
+the tournament, Gate 4, Gate 5, and every escrow remain unopened. A
+generator-only source diff is prepared but explicitly not applied.
+
+Diagnosis files ready for evaluator commit:
+
+- `results/V3.6/round15-five-layer-diagnosis.md`
+- `results/V3.6/round15-five-layer-diagnosis.json`
+- `results/V3.6/round15-generator-only-proposed.diff`
+- `results/V3.6/round15-diagnosis-manifest.json`
+- `scripts/diagnose_v36_round15.py`
+- `ref/v36_round15_production_enum.py`
+- `ref/v36_round15_oracle.py`
+- `results/V3.6/ready-to-commit.md`

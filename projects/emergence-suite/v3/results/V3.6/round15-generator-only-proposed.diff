@@ -1,0 +1,20 @@
+NOT APPLIED — conditional apparatus repair prepared for evaluator verification.
+
+The exact source hunk is illustrative until the evaluator verifies all ten
+replacement preconditions. It changes only the complete-native Population-A
+world constructor. It makes the do(joint_policy) schedule candidate-common;
+the scorer already and correctly omits action-selection likelihood.
+
+--- a/projects/emergence-suite/v3/ref/v36_round12.py
++++ b/projects/emergence-suite/v3/ref/v36_round12.py
+@@
+-        policy = tuple(
+-            policy_value if index < structure.active_modes else 1
+-            for index in range(3)
+-        )
++        # Candidate-common intervention design.  The do schedule may not be
++        # selected from the latent structure whose posterior is calibrated.
++        policy = (policy_value, policy_value, policy_value)
+
+No threshold, prior, likelihood, scorer, posterior aggregation, scientific
+module, calibration definition, or criterion change is proposed.
