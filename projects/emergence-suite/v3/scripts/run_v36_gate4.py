@@ -469,16 +469,17 @@ def _worker(task: tuple[int, str]) -> dict[str, Any]:
     }
 
 
-def _trace_map(tasks: Sequence[tuple[int, str]]) -> list[dict[str, Any]]:
+def _trace_map(tasks: Sequence[tuple[int, str]]) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     RESULTS.mkdir(parents=True, exist_ok=True)
-    trace_path = RESULTS / "gate-4-round14-replacement-2-traces.jsonl"
-    hash_path = RESULTS / "gate-4-round14-replacement-2-trace-hashes.json"
-    if trace_path.exists() or hash_path.exists():
+    trace_path = RESULTS / "v3.6-r1-gate4-traces.jsonl"
+    hash_path = RESULTS / "v3.6-r1-gate4-trace-hashes.json"
+    hash_events_path = RESULTS / "v3.6-r1-gate4-trace-hash-events.jsonl"
+    if trace_path.exists() or hash_path.exists() or hash_events_path.exists():
         raise RuntimeError("custody refusal: Gate-4 output already exists")
     rows: list[dict[str, Any]] = []
     record_hashes: list[dict[str, Any]] = []
     file_hash = hashlib.sha256()
-    def persist(handle, row: dict[str, Any]) -> None:
+    def persist(handle, hash_handle, row: dict[str, Any]) -> None:
         nonlocal file_hash
         try:
             validate_finite_worker_row(row)
@@ -507,21 +508,30 @@ def _trace_map(tasks: Sequence[tuple[int, str]]) -> list[dict[str, Any]]:
         record_hashes.append({
             "seed": row["seed"], "sha256": hashlib.sha256(encoded).hexdigest()
         })
+        hash_handle.write(_canonical(record_hashes[-1]))
+        hash_handle.flush(); os.fsync(hash_handle.fileno())
 
     processes = max(1, min(8, (os.cpu_count() or 2) - 1))
-    with trace_path.open("xb") as handle:
-        # Round-14 custody rule: the first cell starts in-process and must be
-        # durable before ordinary parallel dispatch opens.
-        persist(handle, _worker(tasks[0]))
-        if len(tasks) > 1:
+    cell_size = 1000
+    with trace_path.open("xb") as handle, hash_events_path.open("xb") as hash_handle:
+        for start in range(0, len(tasks), cell_size):
+            cell = tasks[start:start + cell_size]
+            # Round-16 custody: every cell's first row is durable before the
+            # parallel remainder of that cell opens.
+            persist(handle, hash_handle, _worker(cell[0]))
             with get_context("spawn").Pool(processes) as pool:
-                for row in pool.imap(_worker, tasks[1:], chunksize=2):
-                    persist(handle, row)
+                for row in pool.imap(_worker, cell[1:], chunksize=2):
+                    persist(handle, hash_handle, row)
     ledger = {
         "file": trace_path.name,
         "file_sha256": file_hash.hexdigest(),
         "record_count": len(rows),
         "seed_block": list(GATE4_BLOCK),
+        "incremental_hash_events_file": hash_events_path.name,
+        "incremental_hash_events_sha256": hashlib.sha256(
+            hash_events_path.read_bytes()
+        ).hexdigest(),
+        "serial_cell_first_seeds": list(range(GATE4_BLOCK[0], GATE4_BLOCK[1] + 1, cell_size)),
         "records": record_hashes,
         "persist_before_aggregation": True,
     }
@@ -531,7 +541,7 @@ def _trace_map(tasks: Sequence[tuple[int, str]]) -> list[dict[str, Any]]:
     expected = list(range(GATE4_BLOCK[0], GATE4_BLOCK[1] + 1))
     if [row["seed"] for row in rows] != expected:
         raise RuntimeError("Gate-4 seed order is not ascending and gap-free")
-    return rows
+    return rows, ledger
 
 
 def _support_preserving_dummy(lesion: str) -> dict[str, Any]:
@@ -647,6 +657,16 @@ def run_preblock_proofs() -> dict[str, Any]:
     source_identity = source_hashes == bridge_spec["scientific_source_sha256"]
     if not source_identity:
         failures.append("scientific_source_hash_identity")
+    round16_repair = json.loads(
+        (RESULTS / "round16-constructor-repair-audit.json").read_text()
+    )
+    round16_coherence = json.loads(
+        (RESULTS / "round16-generator-coherence-proof.json").read_text()
+    )
+    if round16_repair.get("status") != "PASS":
+        failures.append("round16_constructor_repair_audit")
+    if round16_coherence.get("verdict") != "PASS":
+        failures.append("round16_generator_coherence")
     record = {
         "stage": "V3.6",
         "proof": "ROUND14_ZERO_SEED_LESION_PRE_RUN_TABLE",
@@ -664,11 +684,13 @@ def run_preblock_proofs() -> dict[str, Any]:
         },
         "scientific_source_hash_identity": source_identity,
         "scientific_source_hashes": source_hashes,
+        "round16_constructor_repair_audit": round16_repair.get("status"),
+        "round16_generator_coherence": round16_coherence.get("verdict"),
         "failures": failures,
         "verdict": "PASS" if not failures else "FAIL_PREBLOCK_LESION_PROOF",
     }
-    trace = RESULTS / "gate-4-round14-preblock-proof-trace.jsonl"
-    ledger_path = RESULTS / "gate-4-round14-preblock-proof-trace-hashes.json"
+    trace = RESULTS / "v3.6-r1-round17-gate4-preblock-proof-trace.jsonl"
+    ledger_path = RESULTS / "v3.6-r1-round17-gate4-preblock-proof-trace-hashes.json"
     if trace.exists() or ledger_path.exists():
         raise RuntimeError("Round-14 lesion preproof outputs already exist")
     encoded = _canonical(record)
@@ -683,9 +705,9 @@ def run_preblock_proofs() -> dict[str, Any]:
     }
     _write_json(ledger_path.name, ledger)
     result = {**record, "custody": ledger}
-    _write_json("gate-4-round14-preblock-proofs.json", result)
-    (RESULTS / "gate-4-round14-preblock-proofs.md").write_text(
-        "# V3.6 Round-14 zero-seed lesion proofs\n\n"
+    _write_json("v3.6-r1-round17-gate4-preblock-proofs.json", result)
+    (RESULTS / "v3.6-r1-round17-gate4-preblock-proofs.md").write_text(
+        "# V3.6 Round-17 zero-seed lesion proofs\n\n"
         f"Verdict: **{result['verdict']}**.\n\n"
         "All five lesion classes were declared before seeded execution. The "
         "proof table includes exact-zero retained support, empty destroyed "
@@ -695,22 +717,19 @@ def run_preblock_proofs() -> dict[str, Any]:
     return result
 
 
-def run_gate4() -> dict[str, Any]:
+def run_gate4(lesion_proof: Mapping[str, Any]) -> dict[str, Any]:
     proof = json.loads(
         (RESULTS / "v3.6-r1-round13-native-fixture-identity-proofs.json").read_text(encoding="utf-8")
     )
     if proof.get("verdict") != "PASS":
         raise RuntimeError("all eight Round-13 pre-block proofs must pass before Gate 4")
-    lesion_proof = json.loads(
-        (RESULTS / "gate-4-round14-preblock-proofs.json").read_text(encoding="utf-8")
-    )
     if lesion_proof.get("verdict") != "PASS":
-        raise RuntimeError("Round-14 zero-seed lesion proof table is not PASS")
+        raise RuntimeError("Round-17 zero-seed lesion proof table is not PASS")
     tasks = [
         (seed, LESIONS[(seed - GATE4_BLOCK[0]) // 1000])
         for seed in range(GATE4_BLOCK[0], GATE4_BLOCK[1] + 1)
     ]
-    rows = _trace_map(tasks)
+    rows, trace_ledger = _trace_map(tasks)
     cells: dict[str, Any] = {}
     failures: list[str] = []
     for lesion in LESIONS:
@@ -768,8 +787,10 @@ def run_gate4() -> dict[str, Any]:
         "ascending_gap_free": [row["seed"] for row in rows]
         == list(range(GATE4_BLOCK[0], GATE4_BLOCK[1] + 1)),
         "proof_precondition": {
-            "file": "v3.6-r1-round13-native-fixture-identity-proofs.json",
-            "verdict": proof["verdict"],
+            "fixture_file": "v3.6-r1-round13-native-fixture-identity-proofs.json",
+            "fixture_verdict": proof["verdict"],
+            "lesion_file": "v3.6-r1-round17-gate4-preblock-proofs.json",
+            "lesion_verdict": lesion_proof["verdict"],
         },
         "selectivity_definition": "lesioned posterior equals the full posterior conditioned on the declared restricted structure prior",
         "masking_definition": "candidate-common masked channel contribution is likelihood one and invariant to the masked token",
@@ -784,8 +805,11 @@ def run_gate4() -> dict[str, Any]:
             "tournament_statistics": False,
         },
         "custody": {
-            "trace_file": "gate-4-round14-replacement-2-traces.jsonl",
-            "trace_hash_ledger": "gate-4-round14-replacement-2-trace-hashes.json",
+            "trace_file": "v3.6-r1-gate4-traces.jsonl",
+            "trace_hash_ledger": "v3.6-r1-gate4-trace-hashes.json",
+            "trace_sha256": trace_ledger["file_sha256"],
+            "incremental_hash_events_sha256": trace_ledger["incremental_hash_events_sha256"],
+            "serial_cell_first_seeds": trace_ledger["serial_cell_first_seeds"],
             "persisted_before_aggregation": True,
             "barred_blocks_touched": False,
             "escrow_touched": False,
@@ -793,7 +817,8 @@ def run_gate4() -> dict[str, Any]:
         "failures": failures,
         "verdict": "PASS" if not failures else "FAIL",
     }
-    _write_json("gate-4.json", result)
+    result["immutable_verdict"] = result["verdict"]
+    _write_json("v3.6-r1-gate4-verdict.json", result)
     report = [
         "# V3.6 Gate 4 — composed selective lesions",
         "",
@@ -819,7 +844,7 @@ def run_gate4() -> dict[str, Any]:
         "Every per-world row, including its runtime event ledger and world hash, was persisted and hashed before these aggregates were computed.",
         "",
     ])
-    (RESULTS / "gate-4-report.md").write_text("\n".join(report), encoding="utf-8")
+    (RESULTS / "v3.6-r1-gate4-verdict.md").write_text("\n".join(report), encoding="utf-8")
     if failures:
         _write_json(
             "gate-4-diagnosis-stub.json",
@@ -833,7 +858,11 @@ def main() -> None:
         result = run_preblock_proofs()
         print(json.dumps({"phase": "gate4-preproof", "verdict": result["verdict"]}, sort_keys=True))
     else:
-        result = run_gate4()
+        lesion_proof = run_preblock_proofs()
+        if lesion_proof["verdict"] != "PASS":
+            print(json.dumps({"phase": "gate4-preproof", "verdict": lesion_proof["verdict"]}, sort_keys=True))
+            raise SystemExit(2)
+        result = run_gate4(lesion_proof)
         print(json.dumps({"gate": 4, "verdict": result["verdict"]}, sort_keys=True))
 
 

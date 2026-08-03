@@ -1,0 +1,154 @@
+{
+  "ascending_gap_free": true,
+  "bounds": {
+    "B_max_v31": 3.801426508560692,
+    "B_max_v34_relational": 3.8066624897703196,
+    "B_max_v34_root": 1.9736255489018601,
+    "B_max_v35_atomic": 3.4760986898352733,
+    "implied_binary_change_bound": 0.7008782529950642,
+    "implied_relational_binary_change_bound": 0.7405361848863923,
+    "implied_root_binary_change_bound": 0.45691585232961845
+  },
+  "cells": {
+    "grow_mode_slot": {
+      "declared_target_error_max": 0.0,
+      "finite_all": true,
+      "independent_oracle_error_max": 0.0,
+      "licensed_support_positive_all": true,
+      "masked_channel_neutrality_error_max": 0.0,
+      "passed": true,
+      "posterior_normalization_error_max": 7.327471962526033e-15,
+      "restricted_prior_identity_applicable": false,
+      "restricted_prior_identity_error_max": null,
+      "semantic_class": "SUPPORT_DESTROYING_MASKING",
+      "target_pathway_removed_all": true,
+      "unrelated_absolute_movement": {
+        "classification": "DESCRIPTIVE_RENORMALIZATION_MOVEMENT",
+        "note": "Absolute movement in non-target coordinates is not a selectivity criterion after conditioning the structure prior."
+      },
+      "unrelated_survivors_preserved_all": true,
+      "world_count": 1000
+    },
+    "protect_joint_policy": {
+      "declared_target_error_max": 0.0,
+      "finite_all": true,
+      "independent_oracle_error_max": 0.8999336559889483,
+      "licensed_support_positive_all": true,
+      "masked_channel_neutrality_error_max": 1.3344880755994382e-13,
+      "passed": false,
+      "posterior_normalization_error_max": 5.706546346573305e-14,
+      "restricted_prior_identity_applicable": true,
+      "restricted_prior_identity_error_max": 4.8405723873656825e-14,
+      "semantic_class": "SUPPORT_PRESERVING_CONDITIONING",
+      "target_pathway_removed_all": true,
+      "unrelated_absolute_movement": {
+        "classification": "DESCRIPTIVE_RENORMALIZATION_MOVEMENT",
+        "note": "Absolute movement in non-target coordinates is not a selectivity criterion after conditioning the structure prior."
+      },
+      "unrelated_survivors_preserved_all": true,
+      "world_count": 1000
+    },
+    "prune_M1_G": {
+      "declared_target_error_max": 0.0,
+      "finite_all": true,
+      "independent_oracle_error_max": 8.215650382226158e-15,
+      "licensed_support_positive_all": true,
+      "masked_channel_neutrality_error_max": 0.0,
+      "passed": true,
+      "posterior_normalization_error_max": 1.432187701766452e-14,
+      "restricted_prior_identity_applicable": true,
+      "restricted_prior_identity_error_max": 8.215650382226158e-15,
+      "semantic_class": "SUPPORT_PRESERVING_CONDITIONING",
+      "target_pathway_removed_all": true,
+      "unrelated_absolute_movement": {
+        "classification": "DESCRIPTIVE_RENORMALIZATION_MOVEMENT",
+        "note": "Absolute movement in non-target coordinates is not a selectivity criterion after conditioning the structure prior."
+      },
+      "unrelated_survivors_preserved_all": true,
+      "world_count": 1000
+    },
+    "relate_L_PREC": {
+      "declared_target_error_max": 6.494804694057166e-15,
+      "finite_all": true,
+      "independent_oracle_error_max": 1.4210854715202004e-14,
+      "licensed_support_positive_all": true,
+      "masked_channel_neutrality_error_max": 0.0,
+      "passed": true,
+      "posterior_normalization_error_max": 1.4432899320127035e-14,
+      "restricted_prior_identity_applicable": true,
+      "restricted_prior_identity_error_max": 1.4210854715202004e-14,
+      "semantic_class": "SUPPORT_PRESERVING_CONDITIONING",
+      "target_pathway_removed_all": true,
+      "unrelated_absolute_movement": {
+        "classification": "DESCRIPTIVE_RENORMALIZATION_MOVEMENT",
+        "note": "Absolute movement in non-target coordinates is not a selectivity criterion after conditioning the structure prior."
+      },
+      "unrelated_survivors_preserved_all": true,
+      "world_count": 1000
+    },
+    "split_context_slot": {
+      "declared_target_error_max": 0.0,
+      "finite_all": true,
+      "independent_oracle_error_max": 5.67323965583455e-14,
+      "licensed_support_positive_all": false,
+      "masked_channel_neutrality_error_max": 0.0,
+      "passed": false,
+      "posterior_normalization_error_max": 7.549516567451064e-14,
+      "restricted_prior_identity_applicable": true,
+      "restricted_prior_identity_error_max": 5.67323965583455e-14,
+      "semantic_class": "SUPPORT_PRESERVING_CONDITIONING",
+      "target_pathway_removed_all": true,
+      "unrelated_absolute_movement": {
+        "classification": "DESCRIPTIVE_RENORMALIZATION_MOVEMENT",
+        "note": "Absolute movement in non-target coordinates is not a selectivity criterion after conditioning the structure prior."
+      },
+      "unrelated_survivors_preserved_all": true,
+      "world_count": 1000
+    }
+  },
+  "custody": {
+    "barred_blocks_touched": false,
+    "escrow_touched": false,
+    "incremental_hash_events_sha256": "9023b7b4deb1734a2f93098bd26f864c3cebbde471122773c132a93b32365ac8",
+    "persisted_before_aggregation": true,
+    "serial_cell_first_seeds": [
+      3709000,
+      3710000,
+      3711000,
+      3712000,
+      3713000
+    ],
+    "trace_file": "v3.6-r1-gate4-traces.jsonl",
+    "trace_hash_ledger": "v3.6-r1-gate4-trace-hashes.json",
+    "trace_sha256": "dd28d295cfd793e9848ec4becdfe1179e0fdef6940ef0a4fbbb257118ec48bd0"
+  },
+  "failures": [
+    "split_context_slot: {'world_count': 1000, 'semantic_class': 'SUPPORT_PRESERVING_CONDITIONING', 'restricted_prior_identity_applicable': True, 'restricted_prior_identity_error_max': 5.67323965583455e-14, 'masked_channel_neutrality_error_max': 0.0, 'independent_oracle_error_max': 5.67323965583455e-14, 'posterior_normalization_error_max': 7.549516567451064e-14, 'declared_target_error_max': 0.0, 'finite_all': True, 'target_pathway_removed_all': True, 'unrelated_survivors_preserved_all': True, 'licensed_support_positive_all': False, 'unrelated_absolute_movement': {'classification': 'DESCRIPTIVE_RENORMALIZATION_MOVEMENT', 'note': 'Absolute movement in non-target coordinates is not a selectivity criterion after conditioning the structure prior.'}, 'passed': False}",
+    "protect_joint_policy: {'world_count': 1000, 'semantic_class': 'SUPPORT_PRESERVING_CONDITIONING', 'restricted_prior_identity_applicable': True, 'restricted_prior_identity_error_max': 4.8405723873656825e-14, 'masked_channel_neutrality_error_max': 1.3344880755994382e-13, 'independent_oracle_error_max': 0.8999336559889483, 'posterior_normalization_error_max': 5.706546346573305e-14, 'declared_target_error_max': 0.0, 'finite_all': True, 'target_pathway_removed_all': True, 'unrelated_survivors_preserved_all': True, 'licensed_support_positive_all': True, 'unrelated_absolute_movement': {'classification': 'DESCRIPTIVE_RENORMALIZATION_MOVEMENT', 'note': 'Absolute movement in non-target coordinates is not a selectivity criterion after conditioning the structure prior.'}, 'passed': False}"
+  ],
+  "forbidden_import_audit": {
+    "bridge_adapters": false,
+    "calibration_definitions": false,
+    "external_generator": false,
+    "native_fixture_code": false,
+    "tournament_statistics": false
+  },
+  "gate": 4,
+  "immutable_verdict": "FAIL",
+  "masking_definition": "candidate-common masked channel contribution is likelihood one and invariant to the masked token",
+  "proof_precondition": {
+    "fixture_file": "v3.6-r1-round13-native-fixture-identity-proofs.json",
+    "fixture_verdict": "PASS",
+    "lesion_file": "v3.6-r1-round17-gate4-preblock-proofs.json",
+    "lesion_verdict": "PASS"
+  },
+  "seed_block": [
+    3709000,
+    3713999
+  ],
+  "seeds_consumed": 5000,
+  "selectivity_definition": "lesioned posterior equals the full posterior conditioned on the declared restricted structure prior",
+  "stage": "V3.6",
+  "tolerance": 1e-10,
+  "verdict": "FAIL"
+}

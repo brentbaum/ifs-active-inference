@@ -815,3 +815,81 @@ Tournament files ready for evaluator commit:
 
 The oversized raw tournament trace remains local under its committed hash
 ledger.
+
+## Round 17 — Gate 4 lesion battery
+
+Immutable verdict: **FAIL** (scientific; no apparatus stop). The fresh
+zero-seed pre-block proof and round-16 generator-coherence check passed before
+the authorized block opened. The run consumed `3709000:3713999` once,
+ascending and gap-free, with each cell's first world serialized in-process
+before parallel dispatch.
+
+Three lesions passed. Two retained failures were localized without repair:
+`split_context_slot` satisfied the restricted-prior and independent-oracle
+identities but did not maintain positive restricted evidence in every world;
+`protect_joint_policy` satisfied the production restricted-prior identity but
+missed its independently implemented oracle identity. The 5,000-world trace
+SHA-256 is `dd28d295cfd793e9848ec4becdfe1179e0fdef6940ef0a4fbbb257118ec48bd0`;
+the incremental hash ledger SHA-256 is
+`9023b7b4deb1734a2f93098bd26f864c3cebbde471122773c132a93b32365ac8`.
+
+## Round 17 — Gate 5 cumulative robustness
+
+Immutable verdict: **FAIL** because the retained Gate-4 scientific FAIL is a
+cumulative blocking result. All Gate-5 primary effects and the stakes identity
+and policy-effect checks passed their frozen criteria; the information curves
+and robustness sweeps are reported descriptively without transplanting
+primary-length floors. The tournament predictive-cost result is retained and
+was not recomputed.
+
+The block `3635000:3659999` was consumed once, ascending and gap-free, with
+25,000 finite serialized rows. The trace SHA-256 is
+`cb63c967605e4d0500bedf4bc735d7e823e890f52ef55a7a7428a76815d6b01e`;
+the incremental hash ledger SHA-256 is
+`b8336fba4286ed1fa3dcdbff20d64fa131541fd5392cd4532f79ac3074ec92f5`.
+No escrow or barred block was touched.
+
+## Round 17 — cumulative verification
+
+The post-run suites are green: V3 `80/80` and frozen V2 `180/180`. The
+compatibility and final-freeze builders are ready to run. They preserve the
+immutable tournament, Gate-4, and Gate-5 FAIL records; they do not claim an
+all-gates pass or touch any sealed plaintext or escrow.
+
+## Round 17 — compatibility and freeze closure
+
+The six-point compatibility attestation is PASS. All three seal hashes remain
+present and unchanged; frozen scientific-module hashes match their baseline;
+challenge plaintext/runners and escrow release records remain absent. The
+attestation enumerates the V3.0–V3.5 stage verdicts, every retained V3.6 stop
+or failure record, explicit barred and retired blocks, closed diagnosis-only
+ranges, and all valid once-consumed blocks.
+
+The final V3.6 manifest records status
+`FREEZE_RECORDED_WITH_RETAINED_TOURNAMENT_GATE4_GATE5_FAILURES` and hashes 278
+files. Independent rehashing found zero mismatches. This is a custody closure,
+not an all-gates-pass claim. Files ready for evaluator commit include:
+
+- `scripts/run_v36_gate4.py`
+- `scripts/run_v36_gate5.py`
+- `scripts/finalize_v36_round17.py`
+- `results/V3.6/v3.6-r1-round17-gate4-preblock-proofs.json`
+- `results/V3.6/v3.6-r1-round17-gate4-preblock-proofs.md`
+- `results/V3.6/v3.6-r1-round17-gate4-preblock-proof-trace.jsonl`
+- `results/V3.6/v3.6-r1-round17-gate4-preblock-proof-trace-hashes.json`
+- `results/V3.6/v3.6-r1-gate4-verdict.json`
+- `results/V3.6/v3.6-r1-gate4-verdict.md`
+- `results/V3.6/v3.6-r1-gate4-trace-hashes.json`
+- `results/V3.6/v3.6-r1-gate4-trace-hash-events.jsonl`
+- `results/V3.6/v3.6-r1-gate5-verdict.json`
+- `results/V3.6/v3.6-r1-gate5-verdict.md`
+- `results/V3.6/v3.6-r1-gate5-trace-hashes.json`
+- `results/V3.6/v3.6-r1-gate5-trace-hash-events.jsonl`
+- `results/V3.6/v3.6-compatibility-attestations.json`
+- `results/V3.6/v3.6-compatibility-attestations.md`
+- `results/V3.6/v3.6-freeze-manifest.json`
+- `results/V3.6/v3.6-freeze-manifest.md`
+- `results/V3.6/ready-to-commit.md`
+
+Raw Gate-4 and Gate-5 trace bundles remain local under the committed hash
+ledgers. No commit was made, and no sealed challenge or escrow was touched.
