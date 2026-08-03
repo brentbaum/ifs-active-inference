@@ -16,6 +16,16 @@ class V37ProofTests(unittest.TestCase):
         self.assertEqual(v37.PERSISTENCE, (0.80, 0.90, 0.97))
         self.assertEqual(v37.DANGER_PRIOR, (0.5, 0.5))
 
+    def test_candidate_common_schedule_all_truth_structures(self):
+        result = v37.candidate_common_schedule_proof()
+        self.assertTrue(result["passed"])
+        self.assertEqual(result["schedule_signature_count"], 1)
+        self.assertEqual(result["maximum_schedule_difference"], 0)
+        self.assertLessEqual(result["complete_data_maximum_atom_error"], 1e-10)
+        self.assertLessEqual(
+            result["complete_data_maximum_normalization_error"], 1e-10
+        )
+
     def test_exact_worker_rows_pickle_roundtrip_with_nested_types(self):
         with serializing_trace_context(self.id()):
             document = v36_bridge.public_dummy()

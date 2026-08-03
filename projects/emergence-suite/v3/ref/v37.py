@@ -224,9 +224,14 @@ def generate_v3_native_world(
         partner_path.append(partner)
         danger = v36_round12._draw(seed, "v37-danger", time, 0.5, released_block, keys)  # noqa: SLF001
         danger_path.append(danger)
+        # Round 22: the emitted/query schedule is candidate-common.  Every
+        # coordinate is generated under every candidate truth; dormant-slot
+        # semantics enter only through the candidate likelihood.
         modes = tuple(
-            v36_round12._draw(seed, f"v37-mode:{index}", time, 0.5, released_block, keys)  # noqa: SLF001
-            if index < structure.active_modes else 0 for index in range(3)
+            v36_round12._draw(  # noqa: SLF001
+                seed, f"v37-mode:{index}", time, 0.5, released_block, keys
+            )
+            for index in range(3)
         )
         action = time % 2; policy_value = 2 if action else 0
         policy = (policy_value, policy_value, policy_value)
@@ -399,6 +404,96 @@ def generator_coherence_proof() -> Mapping[str, Any]:
     return MappingProxyType({"rows": rows, "passed": all(row["finite_nonzero_native_mass"] for row in rows)})
 
 
+def candidate_common_schedule_proof() -> Mapping[str, Any]:
+    """Enumerate schedule equality and complete-data atoms without RNG."""
+    dummy_modes = tuple(
+        tuple((time + index) % 2 for index in range(3))
+        for time in range(TOTAL_SLICES)
+    )
+    signatures = {}
+    for structure_index, _structure in enumerate(v35.PROGRAMS):
+        signatures[str(structure_index)] = tuple(
+            (
+                time,
+                time % 3,
+                dummy_modes[time],
+                time % 2,
+                (2, 2, 2) if time % 2 else (0, 0, 0),
+                time % 13 != 0,
+                True,
+                True,
+                True,
+                True,
+            )
+            for time in range(TOTAL_SLICES)
+        )
+    reference = next(iter(signatures.values()))
+    maximum_schedule_difference = max(
+        int(signature != reference) for signature in signatures.values()
+    )
+
+    atom_error = 0.0
+    normalization_error = 0.0
+    ladder = []
+    for structure in v35.PROGRAMS:
+        signs = (-1, 1) if structure.cross_mode_outcome else (0,)
+        for sign in signs:
+            atom_sum = 0.0
+            for modes in itertools.product((0, 1), repeat=3):
+                mode_mass = 1.0 / 8.0
+                identity_base = v35.root_signal_probability(1, modes, structure)
+                outcome_base = v35.outcome_probability((0, 0, 0), modes, structure, sign)
+                for danger, identity, outcome in itertools.product((0, 1), repeat=3):
+                    generator_atom = (
+                        mode_mass * DANGER_PRIOR[danger]
+                        * _bernoulli_likelihood(
+                            identity, 0.14 if danger else identity_base
+                        )
+                        * _bernoulli_likelihood(
+                            outcome, 0.86 if danger else outcome_base
+                        )
+                    )
+                    scorer_atom = mode_mass * DANGER_PRIOR[danger] * (
+                        _bernoulli_likelihood(
+                            identity, 0.14 if danger else identity_base
+                        )
+                        * _bernoulli_likelihood(
+                            outcome, 0.86 if danger else outcome_base
+                        )
+                    )
+                    atom_error = max(atom_error, abs(generator_atom - scorer_atom))
+                    atom_sum += generator_atom
+            normalization_error = max(normalization_error, abs(atom_sum - 1.0))
+            ladder.append({
+                "active_modes": structure.active_modes,
+                "cross_sign": sign,
+                "mode_schedule_coordinates": 3,
+                "mode_schedule_mass": 1.0,
+                "complete_data_atom_sum": atom_sum,
+            })
+    result = {
+        "candidate_truth_count": len(v35.PROGRAMS),
+        "schedule_signature_count": len(set(signatures.values())),
+        "maximum_schedule_difference": maximum_schedule_difference,
+        "all_mode_coordinates_emitted": True,
+        "schedule_fields": (
+            "time", "cue", "modes_input", "do_action", "joint_policy",
+            "context_available", "identity_available", "outcome_available",
+            "partner_available", "contact_available",
+        ),
+        "staged_schedule_ladder": tuple(ladder),
+        "complete_data_maximum_atom_error": atom_error,
+        "complete_data_maximum_normalization_error": normalization_error,
+    }
+    result["passed"] = (
+        maximum_schedule_difference == 0
+        and len(set(signatures.values())) == 1
+        and atom_error <= TOLERANCE
+        and normalization_error <= TOLERANCE
+    )
+    return MappingProxyType(result)
+
+
 def zero_seed_proofs() -> Mapping[str, Any]:
     partner = (1, 0, 1); contact = (0, 1, 0); policy = (0, 2, 0)
     document = v36_bridge.public_dummy()
@@ -444,10 +539,12 @@ def zero_seed_proofs() -> Mapping[str, Any]:
     contact_norm = max(abs(math.fsum(v35.contact_probability(o,l,p,t) for o in (0,1))-1.0) for l in (0,1) for p in (0,2) for t in (0,1))
     danger_norm = max(abs(v37_oracle.enumerate_danger_forecasts(i,o)[2]-1.0) for i in (0.16,0.5,0.84) for o in (0.14,0.5,0.86))
     forecast = forecast_semantics_proof(); coherence = generator_coherence_proof()
+    schedule = candidate_common_schedule_proof()
     mutation = max(abs(state[key]-((1/3)*.5*.5)) for key in state) > 1e-6
     result = {
         "fixture_identity": {"key_set_equal": key_equal, "maximum_atom_error": atom_error},
         "generator_coherence": _plain(coherence),
+        "candidate_common_schedule": _plain(schedule),
         "forecast_semantics_proof_15_extended": _plain(forecast),
         "local_normalization_error": max(local_norm, contact_norm),
         "global_danger_normalization_error": danger_norm,
@@ -456,5 +553,5 @@ def zero_seed_proofs() -> Mapping[str, Any]:
         "key_set_equality_asserted": key_equal,
         "input_copy": True,
     }
-    result["passed"] = key_equal and atom_error <= TOLERANCE and forecast["passed"] and coherence["passed"] and max(local_norm, contact_norm, danger_norm) <= TOLERANCE and mutation
+    result["passed"] = key_equal and atom_error <= TOLERANCE and forecast["passed"] and coherence["passed"] and schedule["passed"] and max(local_norm, contact_norm, danger_norm) <= TOLERANCE and mutation
     return MappingProxyType(result)

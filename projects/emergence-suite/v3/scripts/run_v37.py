@@ -32,7 +32,7 @@ TARGETS = v36_bridge.TARGETS
 STRATA = v36_round12.STRATA
 DELTA = math.log(1.02)
 TOLERANCE = 1e-10
-A37_R1_BLOCK = (3_746_000, 3_747_999)
+A37_R2_BLOCK = (3_748_000, 3_749_999)
 
 
 def _plain(value: Any) -> Any:
@@ -354,6 +354,29 @@ def _run_roundtrip_proof(label: str, kinds: Sequence[str]) -> dict[str, Any]:
     return {**result, "custody": hash_record}
 
 
+def _run_schedule_proof(label: str) -> dict[str, Any]:
+    path = RESULTS / f"v3.7-{label}-candidate-common-schedule-proof.jsonl"
+    hash_path = RESULTS / f"v3.7-{label}-candidate-common-schedule-proof-hash.json"
+    if path.exists() or hash_path.exists():
+        raise RuntimeError(f"schedule proof output already exists for {label}")
+    proof = _plain(v37.candidate_common_schedule_proof())
+    record = {
+        "label": label, "zero_seed": True, "proof": proof,
+        "verdict": "PASS" if proof["passed"] else "FAIL_APPARATUS_STOP",
+    }
+    encoded = _canonical(record)
+    with path.open("xb") as handle:
+        handle.write(encoded); handle.flush(); os.fsync(handle.fileno())
+    custody = {
+        "file": path.name, "sha256": hashlib.sha256(encoded).hexdigest(),
+        "record_count": 1, "persisted_before_native_block": True,
+    }
+    _write_json(hash_path.name, custody)
+    if record["verdict"] != "PASS":
+        raise RuntimeError(f"candidate-common schedule proof failed for {label}")
+    return {**record, "custody": custody}
+
+
 def run_proofs() -> dict[str, Any]:
     with serializing_trace_context("v37-zero-seed-proof-battery") as sink:
         proofs = _plain(v37.zero_seed_proofs()); events = list(sink.events)
@@ -380,9 +403,13 @@ def run_proofs() -> dict[str, Any]:
 def run_population_a() -> dict[str, Any]:
     if json.loads((RESULTS / "v3.7-zero-seed-proofs.json").read_text())["verdict"] != "PASS":
         raise RuntimeError("zero-seed proofs did not pass")
-    roundtrip = _run_roundtrip_proof("population-a37-r1-preblock", ("native",))
-    start, end = A37_R1_BLOCK; tasks = [(seed, start, end) for seed in range(start, end + 1)]
-    rows, ledger = _persist_rows("v3.7-population-a37-r1", tasks, _native_row, 500)
+    schedule = _run_schedule_proof("population-a37-r2-preblock")
+    roundtrip = _run_roundtrip_proof("population-a37-r2-preblock", ("native",))
+    coherence = _plain(v37.generator_coherence_proof())
+    if not coherence["passed"]:
+        raise RuntimeError("A37-R2 generator coherence proof failed")
+    start, end = A37_R2_BLOCK; tasks = [(seed, start, end) for seed in range(start, end + 1)]
+    rows, ledger = _persist_rows("v3.7-population-a37-r2", tasks, _native_row, 500)
     predictive = _predictive_calibration(rows, "v37"); structure = _structure_calibration(rows); failures = []
     for target, metrics in predictive.items():
         if metrics["ece"] > .05: failures.append(f"{target} ECE {metrics['ece']} > 0.05")
@@ -398,10 +425,11 @@ def run_population_a() -> dict[str, Any]:
     result = {"stage": "V3.7", "population": "A37", "seed_block": [start,end], "world_count": len(rows),
               "stratum_counts": {s: sum(row["stratum"] == s for row in rows) for s in STRATA},
               "predictive_calibration": predictive, "structure_calibration": structure,
-              "maximum_normalization_error": max_norm, "serialization_roundtrip_proof": roundtrip,
+              "maximum_normalization_error": max_norm, "candidate_common_schedule_proof": schedule,
+              "serialization_roundtrip_proof": roundtrip, "generator_coherence_proof": coherence,
               "failures": failures, "custody": ledger,
               "verdict": "PASS" if not failures else "FAIL"}
-    _write_json("v3.7-population-a37-r1.json", result); _write_report("v3.7-population-a37-r1.md", "V3.7 Population A37-R1 qualification", result)
+    _write_json("v3.7-population-a37-r2.json", result); _write_report("v3.7-population-a37-r2.md", "V3.7 Population A37-R2 qualification", result)
     return result
 
 
@@ -415,7 +443,7 @@ def _external_descriptive(rows):
 
 
 def run_population_c() -> dict[str, Any]:
-    if json.loads((RESULTS / "v3.7-population-a37-r1.json").read_text())["verdict"] != "PASS": raise RuntimeError("Population A37-R1 did not pass")
+    if json.loads((RESULTS / "v3.7-population-a37-r2.json").read_text())["verdict"] != "PASS": raise RuntimeError("Population A37-R2 did not pass")
     roundtrip = _run_roundtrip_proof("population-c37-preblock", ("external",))
     start,end=v37.C_BLOCK; tasks=[(seed,start,end,"C37") for seed in range(start,end+1)]
     rows,ledger=_persist_rows("v3.7-population-c37",tasks,_external_row,500)

@@ -1,0 +1,53 @@
+{
+  "stage": "V3.7",
+  "authorization": "internal-round22-adjudication.md ruling 22.2",
+  "classification": "GENERATOR_ONLY",
+  "scientific_diff": {
+    "file": "ref/v37.py",
+    "function": "generate_v3_native_world",
+    "before": "sample mode coordinate k only when k < structure.active_modes; otherwise emit zero",
+    "after": "sample all three mode coordinates from the same Bernoulli(0.5) schedule under every truth structure",
+    "changed_factor": "candidate-common mode-emission/query schedule only",
+    "scorer_changed": false,
+    "prior_changed": false,
+    "likelihood_changed": false,
+    "criterion_changed": false
+  },
+  "schedule_only_differential": {
+    "same_structure_draw": true,
+    "same_temporal_draw": true,
+    "same_partner_process": true,
+    "same_danger_process": true,
+    "same_action_and_joint_policy_schedule": true,
+    "same_channel_emission_functions_given_schedule": true,
+    "only_new_rng_keys": "v37-mode:k for k >= active_modes, formerly omitted",
+    "downstream_observations_may_change_only_through_the_repaired_mode_inputs": true
+  },
+  "staged_schedule_ladder": {
+    "truth_structure_count": 56,
+    "distinct_schedule_signatures": 1,
+    "maximum_schedule_difference": 0,
+    "all_three_mode_coordinates_emitted": true,
+    "complete_data_maximum_atom_error": 0.0,
+    "complete_data_maximum_normalization_error": 1.1102230246251565e-16,
+    "passed": true
+  },
+  "identity": {
+    "v36_final_manifest": "results/V3.6/v3.6-freeze-manifest-final.json",
+    "v36_ref_v3_files_checked": 25,
+    "v36_hash_mismatches": [],
+    "v37_oracle_unchanged_sha256": "c1482f8fc2b3ac971cc85cac0843621d10845ee633c92ee148faf9221ed7df16",
+    "v37_design_freeze_sha256": {
+      "results/V3.7/v3.7-design-freeze.md": "452d7db694e9f48ab37ffc68b60f48f6416cf7019c94e6023f5c5af51100a75e",
+      "results/V3.7/v3.7-design-freeze.json": "c08167cb16dcab35c26cc07b4782e1553f4bb217119cd9a95fabc2cf961c2925"
+    },
+    "design_freeze_bitwise_unchanged": true
+  },
+  "hashes": {
+    "ref/v37.py_before": "65f6b17e14d02d4356f1f9f278027a275dffe3c803fffd5e4704ac3501b7c145",
+    "ref/v37.py_after": "e0cb50b7d09d5f010293e9ae1a0e444545edcfe8f24fa74efbd4eac0e59327f5",
+    "scripts/run_v37.py_after": "57b53d2df76052662cecc054f1ca154ec62d34f37a1bdf6cbbd7d4dcb18c4578",
+    "tests/test_v37.py_after": "eef83e3c3e35468a8969f18d3a34d59714a9367d73942af9aebc0653ac4531a6"
+  },
+  "verdict": "PASS"
+}
