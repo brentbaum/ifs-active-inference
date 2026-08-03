@@ -1,0 +1,143 @@
+{
+  "challenge": "C-V36B",
+  "challenge_sha256": "e74aec8d1c18805e49aaab2aeafc828df6f3247129995c5477c950becfa9592b",
+  "criteria": {
+    "criterion_1": {
+      "cell": "cell_b1_unreliable",
+      "deterministic_analysis_seed": 36101,
+      "field": "q_partner_reliable",
+      "floor_met": true,
+      "frozen_floor": 0.37054935530184596,
+      "interval_95": [
+        0.7315087587318162,
+        0.7745153010140751
+      ],
+      "mean_full_minus_ablation": 0.7535864246422147,
+      "passed": true,
+      "positive_sign_carried": true,
+      "whole_world_bootstrap_replicates": 4000,
+      "world_pairs": 700
+    },
+    "criterion_2": {
+      "cell": "cell_b2_noncontingent",
+      "deterministic_analysis_seed": 36102,
+      "field": "q_partner_reliable",
+      "floor_met": true,
+      "frozen_floor": 0.4970780975763216,
+      "interval_95": [
+        0.9946031149444129,
+        0.9962320601164935
+      ],
+      "mean_full_minus_ablation": 0.9954467340008117,
+      "passed": true,
+      "positive_sign_carried": true,
+      "whole_world_bootstrap_replicates": 4000,
+      "world_pairs": 700
+    },
+    "criterion_3": {
+      "cell": "cell_b3_mode_bypass",
+      "deterministic_analysis_seed": 36103,
+      "field": "q_policy_open",
+      "floor_met": true,
+      "frozen_floor": 0.034129478327372516,
+      "interval_95": [
+        0.06703058575146219,
+        0.07050140023962888
+      ],
+      "mean_full_minus_ablation": 0.06882162504756027,
+      "passed": true,
+      "positive_sign_carried": true,
+      "whole_world_bootstrap_replicates": 4000,
+      "world_pairs": 600
+    },
+    "criterion_4": {
+      "fingerprints": {
+        "allied_D_0_1": {
+          "cell": "cell_b5_allied",
+          "expected_frozen_readout_sign": "positive",
+          "interval_95": [
+            0.01723871187476282,
+            0.02044811490155284
+          ],
+          "interval_excludes_zero_in_expected_direction": true,
+          "mean": 0.018876630041686417,
+          "passed": true,
+          "worlds": 500
+        },
+        "allied_D_1_0": {
+          "cell": "cell_b5_allied",
+          "expected_frozen_readout_sign": "positive",
+          "interval_95": [
+            0.017200367755905,
+            0.020474225583881435
+          ],
+          "interval_excludes_zero_in_expected_direction": true,
+          "mean": 0.018864197878041892,
+          "passed": true,
+          "worlds": 500
+        },
+        "opposed_D_0_1": {
+          "cell": "cell_b4_opposed",
+          "expected_frozen_readout_sign": "positive",
+          "interval_95": [
+            0.008858568098865321,
+            0.012250943219625658
+          ],
+          "interval_excludes_zero_in_expected_direction": true,
+          "mean": 0.010582808156129093,
+          "passed": true,
+          "worlds": 500
+        },
+        "opposed_D_1_0": {
+          "cell": "cell_b4_opposed",
+          "expected_frozen_readout_sign": "positive",
+          "interval_95": [
+            0.008722684874850128,
+            0.012145749473934703
+          ],
+          "interval_excludes_zero_in_expected_direction": true,
+          "mean": 0.010481739782218294,
+          "passed": true,
+          "worlds": 500
+        }
+      },
+      "opposed_and_allied_reported_separately": true,
+      "passed": true
+    },
+    "criterion_5": {
+      "ascending_gap_free": true,
+      "consumed": 3000,
+      "escrow_remainder_retired_unconsumed": [
+        4113000,
+        4119999
+      ],
+      "event_ledgers_persisted_before_aggregation": true,
+      "passed": true,
+      "trace_hash_record": "c-v36b-trace-hashes.json",
+      "unique": 3000
+    }
+  },
+  "event_hash_ledger_sha256": "3252159a291aaef785534a5d61d629290e4dff79598c296f5f74fec7b4cda86c",
+  "frozen_identity": {
+    "authorized_post_freeze_custody_record_changes": [
+      {
+        "expected": "d3bc9531ce9cc0cd57fefa63c0b7bf4845d658b4f4d5d3ca843b8a10a16aed7f",
+        "file": "protocols/epoch-c-seed-map.json",
+        "observed": "9d52bbbc4d89527ba480e3194071672df3714c403387b67444d717ee0e10ac02"
+      }
+    ],
+    "file_count": 301,
+    "manifest": "v3.6-freeze-manifest-final.json",
+    "manifest_sha256": "edbd5f93ef64344eb2c6692e4d9482028068cc4872030f11a3bd4c11dc4741a0",
+    "scientific_or_executable_mismatches": []
+  },
+  "immutable_verdict": "PASS",
+  "one_shot": true,
+  "parse_method": "ast.literal_eval on the exact bracketed literal line only",
+  "trace_sha256": "85ad4271f3e1f299ebae08103b5ac14c652568f07cdfc0d598829cf1db4d1ded",
+  "verdict_classes": {
+    "custody": "PASS",
+    "scientific": "PASS"
+  },
+  "verdict_written_before_interpretation": true
+}

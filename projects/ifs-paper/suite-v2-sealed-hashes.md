@@ -244,3 +244,6 @@ C-V36A ran exactly once on released escrow 4100000:4102999 (3,000 seeds, ascendi
 
 ## C-V36B revealed and escrow released (2026-08-03)
 C-V36B plaintext revealed to projects/emergence-suite/v3/sealed-revealed/C-V36B-chronic-protection-challenge.md; sha256 verified against the sealed record (e74aec8d...). Escrow 4110000:4112999 is RELEASED by this record for exactly one challenge execution per the sealed parse instruction. Immutable verdict before interpretation; traces persisted and hashed before criteria. C-V36C remains sealed.
+
+## C-V36B executed (2026-08-03)
+C-V36B ran exactly once on released escrow 4110000:4112999 (3,000 seeds, ascending, gap-free, event ledgers persisted and hashed before criteria; raw trace sha256 85ad4271...). Immutable verdict: PASS on all five criteria — reliable-vs-unreliable partner +0.7536 [0.7315, 0.7745], reliable-vs-noncontingent soothing +0.9955 [0.9946, 0.9962], protection-respecting policy access +0.0688 [0.0670, 0.0705], all four opposed/allied fingerprint intervals positive, custody clean. Escrow remainder retired unconsumed per the seal.
