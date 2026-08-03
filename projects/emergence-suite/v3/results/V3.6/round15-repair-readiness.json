@@ -1,0 +1,39 @@
+{
+  "status": "READY_FOR_EVALUATOR_VERIFICATION_BEFORE_A_R1",
+  "all_ten_preconditions_pass": true,
+  "preconditions": {
+    "1_exact_generator_only_localization": "PASS",
+    "2_direction_independent_apparatus_statement": "PASS",
+    "3_authorized_source_diff_only": "PASS",
+    "4_frozen_scientific_and_criterion_hashes": "PASS",
+    "5_full_staged_path_identity_t1_t4": "PASS",
+    "6_complete_data_twelve_component_identity": "PASS",
+    "7_ninety_digit_posterior_identity": "PASS",
+    "8_eight_family_preblock_fixture_battery": "PASS",
+    "9_matched_dummy_differential_audit": "PASS",
+    "10_seed_map_and_custody_manifests": "PASS"
+  },
+  "key_metrics": {
+    "staged_path_cells": 128,
+    "staged_path_max_error": 1.582067810090848e-14,
+    "complete_log_joint_max_component_error": 8.881784197001252e-16,
+    "complete_log_joint_max_recombination_error": 3.552713678800501e-15,
+    "high_precision_max_posterior_error": "8.817394227044636961490944291270954018545398530904377260540376626279155591175E-15",
+    "fixture_families_passed": 8,
+    "v3_tests": "79/79",
+    "v2_tests": "180/180"
+  },
+  "seed_consumption": [],
+  "population_a_r1": {
+    "block": [3722000, 3723999],
+    "opened": false,
+    "authorization": "PENDING_EVALUATOR"
+  },
+  "closed": {
+    "population_c": true,
+    "tournament": true,
+    "gate4_seeded": true,
+    "gate5": true,
+    "escrows": true
+  }
+}

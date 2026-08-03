@@ -1,0 +1,56 @@
+{
+  "status": "READY_FOR_EVALUATOR_VERIFICATION_BEFORE_A_R1",
+  "seed_consumption": [],
+  "a_r1_opened": false,
+  "scientific_source_identity": {
+    "ref/v31.py": "0481e51acf72ee8018cb3c9a1c780570b22e05657cc687376f08ca99544149e0",
+    "ref/v32.py": "0b990eb4c28f3dd61ec37b57742548c1f63147ec48fe8fac465cf2123dba9833",
+    "ref/v33.py": "018ebac662a925a3ed5431197d8c5914049fa5e1b20787fd5b13de3310c977fd",
+    "ref/v34.py": "f9a37a36a0393f9fd437776457cc48018db6cfe1d5195d95a9cbf5b2e90744cd",
+    "ref/v35.py": "7b71e5a7c8003d27c7f1bcafc8deae2d2eed07dd80942066362a1d9c5da8c264",
+    "ref/v36.py": "99fe821485b8112e84ab3fe2ea45f73bf8055be22003982089a135eb07f4dc72",
+    "ref/v36_bridge.py": "7c03da3f7f1ebd2c8b3b59d0054f962d3cc4533e4897f7161eb98de52daa0503"
+  },
+  "frozen_contract_identity": {
+    "protocols/v3.6-analysis-plan.md": "da517c2115485a4396d33fda91fa2dfb17dc7874399d7ce21f9fb940cb2d04ab",
+    "protocols/v3.6-parameters.json": "34617d1af03cdbebf3ca141bb615b253bc6ca85b53b5049cfa3746228f57fdc1",
+    "protocols/v3.6-r1-native-fixture-schemas.json": "adcd8bce85055eade1fd48d71e277424d8742a7579ec5bc79fae2879885c82a0"
+  },
+  "authorized_apparatus_changes": {
+    "ref/v36_round12.py": {
+      "before": "1dc39907356898c04ca31c78e905630a6b95699b8840b8b1e357b7adc3b30355",
+      "after": "78dda8742e39627c3cd6004809207e54e93dfe12a258e117c4a95a766d8d3ab2",
+      "scope": "candidate-common native intervention schedule"
+    },
+    "scripts/run_v36_round12.py": {
+      "before": "f212e0a5cff0d662de53d137f6233f37cb517588747c2ec4a52536e4bc914389",
+      "after": "4005ae57cb1bfc34c5c298f617110c4fb122500f2011f36b4fe737c6aaf98baf",
+      "scope": "complete native path serialization only"
+    }
+  },
+  "files": {
+    "protocols/v3.6-round15-repair-verification-plan.md": "e3dab587e4764299e945270ba7e41687b9e93bff38d28876e0d00e3457de1ae1",
+    "protocols/epoch-c-seed-map.json": "d74250694800c9fe157a3119cc895a84d914966c469879d5f3ea1a721f936ab4",
+    "ref/v36_round15_repair_production.py": "ef9a4731412d467f353776509ed7d35bcc441ed0b886e87a286cd7077c88fd02",
+    "ref/v36_round15_repair_oracle.py": "4866df9c3f03b8600ea2d8d3ff76e90c37d70713a62e9fed540f0cb3535b392a",
+    "scripts/verify_v36_round15_repair.py": "5e1610692abc65fa894734820100c6d45961e64416f6790354e778ce315e218a",
+    "tests/test_v36_round12.py": "4d4cde732f89d5814e90aa524a997de614791bc70584d5a45ec782da48d9528c",
+    "results/V3.6/round15-repair-baseline-hashes.json": "808fec3e27472b7121ca958624b0a549c18388b764006c57cde7849663eb2ce3",
+    "results/V3.6/round15-repair-precommit-manifest.json": "05685a311853d975a126b5a8bea718a73f9ad2a49aeba0e2fc45d265b2e30946",
+    "results/V3.6/round15-generator-repair-applied.diff": "e6e89d9b7607b72924536e3f2c725fc3d1f330a20b38f4e14b00fe47367a776a",
+    "results/V3.6/round15-apparatus-repair-statement.md": "90dc3b804ade0ec68ffa500d58ed1c0e9381838db7ec64fa251ed6827efd8895",
+    "results/V3.6/round15-repair-verification.json": "f28f666dbab5b6174e6119279922c39d834017571479d67fbea889e1e0b0a926",
+    "results/V3.6/round15-repair-verification.md": "410d09dfc7aa9f12d14172c05b6f759f9f28418efa9107914f6772588083ecb2",
+    "results/V3.6/round15-repair-test-record.json": "1e1c792be956eeff0e57a159a8a289c76cd8fae27ecc8ccb6164dea1eb49e4fe",
+    "results/V3.6/round15-repair-readiness.json": "a551926add12252ad45cb86ab2338709fe4994e5dace6fef511fa907ab8d6930",
+    "results/V3.6/round15-repair-readiness.md": "074f4372eee4ac4e0c9c5a838611c84b29ecbd2a563ba6de4fd590e3d8198599"
+  },
+  "closed_blocks": {
+    "population_a_r1": [3722000, 3723999],
+    "population_c": [3694001, 3695999],
+    "tournament": [3684000, 3689999],
+    "gate4": [3709000, 3713999],
+    "gate5": [3635000, 3659999]
+  },
+  "escrows_opened": false
+}

@@ -1,0 +1,26 @@
+{
+  "status": "PASS",
+  "seed_consumption": [],
+  "commands": [
+    {
+      "command": "python3 -m unittest tests.test_v36_round12",
+      "working_directory": "projects/emergence-suite/v3",
+      "tests_run": 11,
+      "result": "PASS"
+    },
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "working_directory": "projects/emergence-suite/v3",
+      "tests_run": 79,
+      "result": "PASS"
+    },
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "working_directory": "projects/emergence-suite/v2",
+      "tests_run": 180,
+      "result": "PASS"
+    }
+  ],
+  "a_r1_opened": false,
+  "escrows_opened": false
+}

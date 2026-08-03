@@ -325,7 +325,18 @@
       "population_a_conditional_replacement_r1": [
         3722000,
         3723999
-      ]
+      ],
+      "round15_repair_verification": {
+        "status": "SEED_FREE_PACKAGE_COMPLETE_PENDING_EVALUATOR",
+        "diagnosis_length_ladder_consumed": [],
+        "population_a_r1_opened": false,
+        "population_c_opened": false,
+        "tournament_opened": false,
+        "gate4_seeded_opened": false,
+        "gate5_opened": false,
+        "escrows_opened": false,
+        "authority": "results/V3.6/external-round15-rulings.md"
+      }
     }
   }
 }

@@ -594,3 +594,53 @@ Diagnosis files ready for evaluator commit:
 - `ref/v36_round15_production_enum.py`
 - `ref/v36_round15_oracle.py`
 - `results/V3.6/ready-to-commit.md`
+
+## Round 15 — generator repair verification package
+
+Status: **READY_FOR_EVALUATOR_VERIFICATION_BEFORE_A_R1**.
+
+The accepted generator-only diff is applied. The complete-native constructor
+now uses a candidate-common `do(joint_policy)` vector. The Population-A runner
+serializes the complete mode/context paths, 48-slice prefix observations,
+contact-response truth, complete intervention schedule, and masks. No
+scientific module, likelihood, prior, threshold, posterior aggregation,
+calibration definition, or criterion changed.
+
+All ten replacement preconditions pass:
+
+- 128/128 staged T=1..4 exact-ladder cells passed; maximum error
+  `1.582067810090848e-14`.
+- The twelve-component complete-data identity passed; maximum component error
+  `8.881784197001252e-16`, recombination error
+  `3.552713678800501e-15`.
+- The independent 90-digit posterior identity passed; maximum error
+  `8.817394227044636961490944291270954018545398530904377260540376626279155591175E-15`.
+- All eight round-13 triangulation fixture families passed.
+- The matched-dummy differential audit showed unchanged structure/parameter
+  draws and unchanged conditional emissions; only dormant coordinates of the
+  intervention document changed under the repair.
+- V3 tests passed `79/79`; cumulative V2 tests passed `180/180`.
+
+No seed was consumed. A-R1 (`3722000:3723999`), Population C, the tournament,
+seeded Gate 4, Gate 5, and every escrow remain closed pending evaluator
+authorization.
+
+Repair package ready for evaluator commit:
+
+- `protocols/v3.6-round15-repair-verification-plan.md`
+- `protocols/epoch-c-seed-map.json`
+- `ref/v36_round12.py`
+- `ref/v36_round15_repair_production.py`
+- `ref/v36_round15_repair_oracle.py`
+- `scripts/run_v36_round12.py`
+- `scripts/verify_v36_round15_repair.py`
+- `tests/test_v36_round12.py`
+- `results/V3.6/round15-generator-repair-applied.diff`
+- `results/V3.6/round15-apparatus-repair-statement.md`
+- `results/V3.6/round15-repair-verification.json`
+- `results/V3.6/round15-repair-verification.md`
+- `results/V3.6/round15-repair-test-record.json`
+- `results/V3.6/round15-repair-readiness.json`
+- `results/V3.6/round15-repair-readiness.md`
+- `results/V3.6/round15-repair-custody-manifest.json`
+- `results/V3.6/ready-to-commit.md`

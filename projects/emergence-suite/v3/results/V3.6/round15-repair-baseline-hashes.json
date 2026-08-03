@@ -1,0 +1,24 @@
+{
+  "status": "FROZEN_BEFORE_REPAIR",
+  "scientific_modules": {
+    "ref/v31.py": "0481e51acf72ee8018cb3c9a1c780570b22e05657cc687376f08ca99544149e0",
+    "ref/v32.py": "0b990eb4c28f3dd61ec37b57742548c1f63147ec48fe8fac465cf2123dba9833",
+    "ref/v33.py": "018ebac662a925a3ed5431197d8c5914049fa5e1b20787fd5b13de3310c977fd",
+    "ref/v34.py": "f9a37a36a0393f9fd437776457cc48018db6cfe1d5195d95a9cbf5b2e90744cd",
+    "ref/v35.py": "7b71e5a7c8003d27c7f1bcafc8deae2d2eed07dd80942066362a1d9c5da8c264",
+    "ref/v36.py": "99fe821485b8112e84ab3fe2ea45f73bf8055be22003982089a135eb07f4dc72",
+    "ref/v36_bridge.py": "7c03da3f7f1ebd2c8b3b59d0054f962d3cc4533e4897f7161eb98de52daa0503"
+  },
+  "authorized_apparatus_files": {
+    "ref/v36_round12.py": "1dc39907356898c04ca31c78e905630a6b95699b8840b8b1e357b7adc3b30355",
+    "scripts/run_v36_round12.py": "f212e0a5cff0d662de53d137f6233f37cb517588747c2ec4a52536e4bc914389"
+  },
+  "frozen_protocols": {
+    "protocols/v3.6-analysis-plan.md": "da517c2115485a4396d33fda91fa2dfb17dc7874399d7ce21f9fb940cb2d04ab",
+    "protocols/v3.6-parameters.json": "34617d1af03cdbebf3ca141bb615b253bc6ca85b53b5049cfa3746228f57fdc1",
+    "protocols/v3.6-r1-native-fixture-schemas.json": "adcd8bce85055eade1fd48d71e277424d8742a7579ec5bc79fae2879885c82a0",
+    "protocols/epoch-c-seed-map.json": "d4b83cb0077bb3af5e5f6b55f0ea60febac2beee835a516aeda89c85b0c89a07"
+  },
+  "a_r1_opened": false,
+  "seed_consumption": []
+}

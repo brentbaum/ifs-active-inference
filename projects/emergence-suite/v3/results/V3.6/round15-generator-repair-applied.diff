@@ -1,0 +1,11 @@
+--- a/projects/emergence-suite/v3/ref/v36_round12.py
++++ b/projects/emergence-suite/v3/ref/v36_round12.py
+@@
+-        policy = tuple(
+-            policy_value if index < structure.active_modes else 1
+-            for index in range(3)
+-        )
++        # Candidate-common intervention design.  The do schedule may not be
++        # selected from the latent structure whose posterior is calibrated.
++        policy = (policy_value, policy_value, policy_value)
+

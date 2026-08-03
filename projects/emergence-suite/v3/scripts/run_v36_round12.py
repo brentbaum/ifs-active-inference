@@ -771,6 +771,49 @@ def _v2_native_row(seed: int) -> dict[str, Any]:
     return {"seed": seed, "population": "B_v2_target_native", "fixtures": fixtures}
 
 
+def _native_path_state(
+    world: v36_bridge.CanonicalWorld,
+) -> dict[str, Any]:
+    """Lossless custody record for complete-data identity; no inference."""
+    return {
+        "latent_mode_path": [
+            list(item.modes_input) for item in world.slices
+        ],
+        "context_state_path": [
+            int(item.context_input) for item in world.slices
+        ],
+        "prefix_observations": [
+            {
+                "time": int(item.time),
+                "cue": int(item.cue),
+                "identity": int(item.identity),
+                "outcome": int(item.outcome),
+                "context": (
+                    None if item.context is None else int(item.context)
+                ),
+                "partner": int(item.partner),
+                "contact": int(item.contact),
+            }
+            for item in world.slices[:v36_bridge.PREFIX_SLICES]
+        ],
+        "contact_response_truth": int(world.contact_response),
+        "intervention_schedule": [
+            {
+                "action": int(item.action),
+                "joint_policy": list(item.joint_policy),
+            }
+            for item in world.slices
+        ],
+        "masks": {
+            "context": [item.context is None for item in world.slices],
+            "identity": [False] * len(world.slices),
+            "outcome": [False] * len(world.slices),
+            "partner": [False] * len(world.slices),
+            "contact": [False] * len(world.slices),
+        },
+    }
+
+
 @traced_execution
 def _v3_native_row(seed: int) -> dict[str, Any]:
     world = v36_round12.generate_v3_native_world(seed)
@@ -788,6 +831,7 @@ def _v3_native_row(seed: int) -> dict[str, Any]:
             target: [value is None for value in targets[target]]
             for target in TARGETS
         },
+        "native_path_state": _native_path_state(world),
         "calibration_state": state,
         "confidence_correctness": {
             "class": {

@@ -250,10 +250,9 @@ def generate_v3_native_world(
         )
         action = time % 2
         policy_value = 2 if action else 0
-        policy = tuple(
-            policy_value if index < structure.active_modes else 1
-            for index in range(3)
-        )
+        # Candidate-common intervention design.  The do schedule may not be
+        # selected from the latent structure whose posterior is calibrated.
+        policy = (policy_value, policy_value, policy_value)
         context_input = int(path[time])
         cue = time % 3
         context_probability = v32.emission_probability(
