@@ -1,0 +1,50 @@
+{
+  "date": "2026-08-04",
+  "seed_consumption": [],
+  "scope": "frozen V3.6 scientific source",
+  "answers": [
+    {
+      "question": 1,
+      "answer": "Binary root state G; q_root is stored as latent posterior G. Identity organization is a separate structural readout, not mutable state.",
+      "citations": ["ref/v34.py:127-146", "ref/v34.py:443-462", "ref/v34.py:599-604", "ref/v31.py:427-465"]
+    },
+    {
+      "question": 2,
+      "answer": "Yes: ordinary typed likelihood, exact joint normalization, and marginalization over structure and root state.",
+      "citations": ["ref/v34.py:288-343", "ref/v34.py:431-497"]
+    },
+    {
+      "question": 3,
+      "answer": "No protocol assigns or increments q_root; protocols control evidence availability and broadcast only.",
+      "citations": ["ref/v36.py:179-192", "ref/v36.py:346-353", "ref/v34.py:671-696"]
+    },
+    {
+      "question": 4,
+      "answer": "Yes: therapy and nontherapy evidence use observation_likelihood and the same forward-backward graph.",
+      "citations": ["ref/v34.py:282-411", "ref/v34.py:630-696"]
+    },
+    {
+      "question": 5,
+      "answer": "Root movement is recalculated from q_root, but the transfer field is separately authored as 0.7 times movement.",
+      "citations": ["ref/v34.py:577-590", "ref/v36.py:381-386"]
+    },
+    {
+      "question": 6,
+      "answer": "Explicit transfer readout, not shared-parent posterior prediction.",
+      "citations": ["ref/v34.py:590", "ref/v31.py:468-483", "ref/v32.py:787-800"]
+    }
+  ],
+  "standing": 2,
+  "standing_label": "therapy evidence updates identity by ordinary inference, but transfer is authored",
+  "architecture_conditional_subtests": ["S1-B", "S1-C"],
+  "scientific_source_hashes": {
+    "ref/v31.py": "0481e51acf72ee8018cb3c9a1c780570b22e05657cc687376f08ca99544149e0",
+    "ref/v32.py": "0b990eb4c28f3dd61ec37b57742548c1f63147ec48fe8fac465cf2123dba9833",
+    "ref/v33.py": "018ebac662a925a3ed5431197d8c5914049fa5e1b20787fd5b13de3310c977fd",
+    "ref/v34.py": "f9a37a36a0393f9fd437776457cc48018db6cfe1d5195d95a9cbf5b2e90744cd",
+    "ref/v35.py": "7b71e5a7c8003d27c7f1bcafc8deae2d2eed07dd80942066362a1d9c5da8c264",
+    "ref/v36.py": "99fe821485b8112e84ab3fe2ea45f73bf8055be22003982089a135eb07f4dc72"
+  },
+  "frozen_scientific_modules_modified": false,
+  "verdict": "STANDING_2"
+}

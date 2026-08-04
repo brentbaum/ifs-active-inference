@@ -1,0 +1,53 @@
+{
+  "study": "DT-S1-IDGEN",
+  "frozen_before_seed": true,
+  "code_audit_standing": 2,
+  "seed_block": [3790000, 3799999],
+  "cells": [
+    {"name": "S1-A identity-coupled therapy", "start": 3790000, "end": 3791999, "count": 2000},
+    {"name": "S1-A exposure-rational control", "start": 3792000, "end": 3793999, "count": 2000},
+    {"name": "S1-B paired lesion table", "start": 3794000, "end": 3795499, "count": 1500, "arms_per_seed": 3},
+    {"name": "S1-C orthogonal 2x2 and comparator", "start": 3795500, "end": 3797999, "count": 2500, "cells_per_seed": 4},
+    {"name": "S1-D danger families", "start": 3798000, "end": 3799999, "count": 2000, "per_family": 500}
+  ],
+  "threshold_calibration": {
+    "seed_consumption": [],
+    "reference": {"p_o1_h1": 0.84, "p_o1_h0": 0.16, "prior_h1": 0.5, "length": 8},
+    "candidate_thresholds": "positive attainable absolute cumulative log-BF values",
+    "selection": "closest exact crossing probability to 0.75; tie smaller",
+    "validity": "b_G == b_Y and exact crossing probabilities equal"
+  },
+  "ordering": {
+    "identity_world": {"root_channel": [0.84, 0.16], "outcome_channel": [0.55, 0.45]},
+    "exposure_control": {"root_channel": [0.55, 0.45], "outcome_channel": [0.84, 0.16]},
+    "simultaneous_rope_slices": 1,
+    "control_oracle_requirement": "expected log BF_Y > expected log BF_G"
+  },
+  "root_sharing_lesion": {
+    "class": "SUPPORT_PRESERVING_CONDITIONING",
+    "removed_dependency": "G -> untreated identity-sharing cue",
+    "preserved": ["treated-cue evidence", "cue-local learning", "q(G)", "outcome counts", "treated-cue prediction"],
+    "rope": 0.01980262729617973
+  },
+  "cue_factorial": {
+    "dimensions": ["identity_parent_sharing", "perceptual_similarity"],
+    "orthogonal": true,
+    "same_seed_all_cells": true
+  },
+  "comparator": {
+    "kind": "apparatus-only exact beta-Bernoulli associative exposure model",
+    "same_observables": true,
+    "identity_latent": false,
+    "sharing_axis": "perceptual_similarity"
+  },
+  "danger_families": ["persistent_external", "recurrent_identity_coupled", "mixed", "acute_transient"],
+  "new_files": [
+    "scripts/run_decisive_s1.py",
+    "scripts/s1_associative_comparator.py",
+    "tests/test_decisive_s1.py",
+    "results/decisive-tests/s1-*"
+  ],
+  "excess_additions": [],
+  "frozen_v36_scientific_modules_modified": false,
+  "verdict": "DESIGN_FROZEN"
+}
