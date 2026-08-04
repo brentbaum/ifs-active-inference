@@ -1,0 +1,153 @@
+{
+  "met_count": 5,
+  "no_softening": true,
+  "not_met_count": 3,
+  "rows": [
+    {
+      "number": {
+        "descent_ordering_rate": 0.918,
+        "eventual_contact_rate": 0.9195,
+        "intended_strategy_rate": 0.918,
+        "modal_first_action": "request_access"
+      },
+      "outcome": "met",
+      "prediction": "S2-A protector contact -> trust -> permission -> vulnerable contact modal"
+    },
+    {
+      "number": {
+        "descent_ordering_rate": 0.0,
+        "eventual_contact_rate": 1.0,
+        "intended_strategy_rate": 1.0,
+        "modal_first_action": "contact_vulnerable_material"
+      },
+      "outcome": "met",
+      "prediction": "S2-A undefended/acute controller goes direct and succeeds"
+    },
+    {
+      "number": "implemented",
+      "outcome": "met",
+      "prediction": "S2-A one-slice first-passage ROPE"
+    },
+    {
+      "falsifier": "descent modal in direct-optimal control",
+      "number": {
+        "descent_ordering_rate": 0.0,
+        "eventual_contact_rate": 1.0,
+        "intended_strategy_rate": 1.0,
+        "modal_first_action": "contact_vulnerable_material"
+      },
+      "outcome": "not_triggered"
+    },
+    {
+      "falsifier": "descent never selected anywhere",
+      "number": {
+        "descent_ordering_rate": 0.918,
+        "eventual_contact_rate": 0.9195,
+        "intended_strategy_rate": 0.918,
+        "modal_first_action": "request_access"
+      },
+      "outcome": "not_triggered"
+    },
+    {
+      "number": {
+        "all_three": {
+          "count": 748,
+          "eventual_contact_rate": 0.820855614973262,
+          "mean_access": 0.766381821716535,
+          "mean_pressure": 0.23361817828346507
+        },
+        "contact_only": {
+          "count": 752,
+          "eventual_contact_rate": 0.0,
+          "mean_access": 0.05039520789902704,
+          "mean_pressure": 0.9496047921009729
+        },
+        "partner_only": {
+          "count": 748,
+          "eventual_contact_rate": 0.0,
+          "mean_access": 0.054546224816387344,
+          "mean_pressure": 0.9454537751836127
+        },
+        "without_contact": {
+          "count": 748,
+          "eventual_contact_rate": 0.4919786096256685,
+          "mean_access": 0.644336569252497,
+          "mean_pressure": 0.35566343074750295
+        },
+        "without_partner": {
+          "count": 752,
+          "eventual_contact_rate": 0.42154255319148937,
+          "mean_access": 0.5477976309125226,
+          "mean_pressure": 0.45220236908747735
+        }
+      },
+      "outcome": "met",
+      "prediction": "S2-B partner and contact individually insufficient and jointly necessary with co-protection"
+    },
+    {
+      "number": "full 32-row table published",
+      "outcome": "met",
+      "prediction": "S2-B minimal sufficient set reported whatever it is"
+    },
+    {
+      "falsifier": "descent survives removal of both partner and contact learning",
+      "number": {
+        "count": 1504,
+        "eventual_contact_rate": 0.0,
+        "mean_access": 0.11596063089959836,
+        "mean_pressure": 0.8840393691004016
+      },
+      "outcome": "not_triggered"
+    },
+    {
+      "number": {
+        "forced_minus_permission_pressure_logodds": 0.5565339511585505,
+        "low_minus_permission_pressure_logodds": -0.009444069542837052,
+        "permission_minus_forced_contact_logodds": -18.409630935047712,
+        "permission_minus_low_contact_logodds": -0.3200776522757476,
+        "retreat_minus_low_access": -0.019031747723725845,
+        "retreat_minus_low_information": 0.024055992784396685
+      },
+      "outcome": "not_met",
+      "prediction": "S2-C forced/low-permission contact increases protector pressure"
+    },
+    {
+      "number": {
+        "forced_minus_permission_pressure_logodds": 0.5565339511585505,
+        "low_minus_permission_pressure_logodds": -0.009444069542837052,
+        "permission_minus_forced_contact_logodds": -18.409630935047712,
+        "permission_minus_low_contact_logodds": -0.3200776522757476,
+        "retreat_minus_low_access": -0.019031747723725845,
+        "retreat_minus_low_information": 0.024055992784396685
+      },
+      "outcome": "not_met",
+      "prediction": "S2-C forced/low-permission contact reduces later contact"
+    },
+    {
+      "number": {
+        "forced_minus_permission_pressure_logodds": 0.5565339511585505,
+        "low_minus_permission_pressure_logodds": -0.009444069542837052,
+        "permission_minus_forced_contact_logodds": -18.409630935047712,
+        "permission_minus_low_contact_logodds": -0.3200776522757476,
+        "retreat_minus_low_access": -0.019031747723725845,
+        "retreat_minus_low_information": 0.024055992784396685
+      },
+      "outcome": "not_met",
+      "prediction": "S2-C refusal-respecting retreat preserves information seeking/access"
+    },
+    {
+      "falsifier": "no bypass arm difference",
+      "number": {
+        "forced_minus_permission_pressure_logodds": 0.5565339511585505,
+        "low_minus_permission_pressure_logodds": -0.009444069542837052,
+        "permission_minus_forced_contact_logodds": -18.409630935047712,
+        "permission_minus_low_contact_logodds": -0.3200776522757476,
+        "retreat_minus_low_access": -0.019031747723725845,
+        "retreat_minus_low_information": 0.024055992784396685
+      },
+      "outcome": "not_triggered"
+    }
+  ],
+  "study": "DT-S2-DESCENT",
+  "triggered_falsifiers": []
+}

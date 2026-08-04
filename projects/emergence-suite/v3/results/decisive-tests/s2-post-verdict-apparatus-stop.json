@@ -1,0 +1,34 @@
+{
+  "study": "DT-S2-DESCENT",
+  "status": "STOP_PENDING_EVALUATOR_ADJUDICATION",
+  "original_records_retained": true,
+  "defects": [
+    {
+      "class": "FORCED_INTERVENTION_SCOPE",
+      "localization": ["scripts/run_decisive_s2.py:226", "scripts/run_decisive_s2.py:235", "scripts/run_decisive_s2.py:243"],
+      "finding": "forced_done remains true after the designated probe and authorizes later contacts"
+    },
+    {
+      "class": "ESTIMAND_IMPLEMENTATION",
+      "localization": ["scripts/run_decisive_s2.py:244", "scripts/run_decisive_s2.py:270", "scripts/run_decisive_s2.py:384", "scripts/run_decisive_s2.py:388-389"],
+      "finding": "eventual_contact includes the forced probe but the registered outcome is later contact probability"
+    },
+    {
+      "class": "PLAN_FIDELITY",
+      "localization": ["scripts/run_decisive_s2.py:234"],
+      "finding": "low_permission_request invokes request_access rather than requesting contact"
+    }
+  ],
+  "affected_subtest": "S2-C",
+  "unaffected_separate_cells": ["S2-A", "S2-B"],
+  "repair_applied": false,
+  "seed_rerun": false,
+  "study_3_opened": false,
+  "escrow_opened": false,
+  "retained_hashes": {
+    "s2-verdict.json": "222c77445750f2917ebad268fe11278241c5423686f3d21d4c53f53ed64bf4a9",
+    "s2-prediction-scoring.json": "55c44809c72e586fe30f67d48d35a727aaa79a945f628dba9475343efd3a40b6",
+    "s2-traces.jsonl": "6ba91de86e3c2c8b2a1e042910c59132cb8b54eb7180c13b14277805c7b2345b"
+  },
+  "verdict": "FAIL_APPARATUS_S2C_ESTIMAND_AND_INTERVENTION_SCOPE"
+}

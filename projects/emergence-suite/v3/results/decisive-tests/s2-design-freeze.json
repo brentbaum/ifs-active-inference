@@ -1,0 +1,37 @@
+{
+  "study": "DT-S2-DESCENT",
+  "frozen_before_seed": true,
+  "controller_actions": ["inquire", "appreciate", "offer_present_orientation", "offer_co_protection", "request_access", "contact_vulnerable_material", "retreat"],
+  "internal_policies": ["permit", "refuse", "intensify_protection", "withdraw", "allow_partial_contact", "allow_full_contact"],
+  "selection_rule": "both agents enumerate finite policies and normalize exp(-expected_free_energy) under frozen V3.6 predictive factors",
+  "controller_can_assign_access": false,
+  "controller_can_assign_descent": false,
+  "descent_transition_rule": false,
+  "access_readout": "q(permit)+q(allow_partial_contact)+q(allow_full_contact)",
+  "ordering": {"events": ["protector_contact", "trust_change", "permission", "vulnerable_contact"], "simultaneous_rope_slices": 1},
+  "cells": [
+    {"name": "s2a_gated", "start": 3800000, "end": 3801999, "count": 2000},
+    {"name": "s2a_direct", "start": 3802000, "end": 3802999, "count": 1000},
+    {"name": "s2a_exposure", "start": 3803000, "end": 3803999, "count": 1000},
+    {"name": "s2a_reassurance", "start": 3804000, "end": 3804999, "count": 1000},
+    {"name": "s2b_factorial", "start": 3805000, "end": 3810999, "count": 6000, "fraction_rows": 32},
+    {"name": "s2c_bypass", "start": 3811000, "end": 3811999, "count": 1000, "arms_per_seed": 4}
+  ],
+  "control_oracle": {
+    "zero_seed": true,
+    "strategies": ["relational_descent", "direct_contact", "repeated_exposure", "reassurance", "retreat"],
+    "requirements": {
+      "undefended_acute": "direct_contact unique optimum",
+      "exposure_rational": "repeated_exposure unique optimum",
+      "reassurance_rational": "reassurance unique optimum"
+    }
+  },
+  "deadlock_factors": ["partner_state_inference", "contact_response_learning", "co_protection_efficacy", "appreciation_evidence", "future_outcome_horizon", "stakes", "registration_channel"],
+  "fraction": {"base_columns": 5, "rows": 32, "F": "A*B*C", "G": "B*C*D"},
+  "bypass_arms": ["permission_first", "low_permission_request", "forced_contact", "retreat_after_refusal"],
+  "probability_rope": 0.01980262729617973,
+  "new_files": ["scripts/run_decisive_s2.py", "tests/test_decisive_s2.py", "results/decisive-tests/s2-*"],
+  "excess_additions": [],
+  "frozen_v36_scientific_modules_modified": false,
+  "verdict": "DESIGN_FROZEN"
+}
