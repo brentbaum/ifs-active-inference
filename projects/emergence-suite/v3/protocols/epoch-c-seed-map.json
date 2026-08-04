@@ -354,7 +354,8 @@
         "Round-19 (INTERNAL): gate-4 block 3709000:3713999 consumed by the retained apparatus FAIL (D1 ORACLE_CONSTRUCT incomplete dict keys; D2 exp-underflow support accounting); verifier-side repairs authorized; replacement gate-4 block 3728000:3732999; permanent rules added: verifier key-set equality assertions, log-space support predicates.",
         "Round-20 (INTERNAL): V3.7 arc authorized (registered prediction sealed pre-implementation); A37 3734000:3735999, C37 3736000:3737999, T37 3740000:3745999; V3.6 chain completes first (gate-4 replacement PASS, gate-5 amended PASS, freeze declared).",
         "Round-21 (INTERNAL): A37 block 3734000:3735999 burned (MappingProxyType pickling failure at seed 3734001, prefetch ambiguity); serialization-boundary repair authorized; permanent pre-block serialization round-trip proof added; A37-R1 3746000:3747999.",
-        "Round-22 (INTERNAL): A37-R1 retained apparatus stop (truth-dependent mode schedule in fresh v37 generator, round-15 class recurrence); candidate-common repair authorized; permanent pre-block candidate-common-schedule proof added; final A37-R2 3748000:3749999."
+        "Round-22 (INTERNAL): A37-R1 retained apparatus stop (truth-dependent mode schedule in fresh v37 generator, round-15 class recurrence); candidate-common repair authorized; permanent pre-block candidate-common-schedule proof added; final A37-R2 3748000:3749999.",
+        "Round-24 (EXTERNAL retroactive review): internal rounds 16-23 RATIFIED (two amendments: round-22 wording, direct-localization precedent limited to nonscientific verifiers); T-V3-DO2 authorized once under dimensionless nonsaturation construct (rulings 4.2-4.4) - fresh apparatus-only qualification 5200000:5203999, main 5210000:5229999 and escrow 5300000:5305999 reserved and opened only if a schedule qualifies; four permanent defenses added (5.2 A-D); organism lineage frozen at V3.6+V3.7 for the paper; A-V3-MIN1 not authorized."
       ],
       "barred_gate4_replacement_2": [
         3709000,
@@ -383,6 +384,18 @@
       "v37_population_a_r2_final": [
         3748000,
         3749999
+      ],
+      "t_v3_do2_pacing_qualification": [
+        5200000,
+        5203999
+      ],
+      "t_v3_do2_main_reserved": [
+        5210000,
+        5229999
+      ],
+      "t_v3_do2_escrow_reserved": [
+        5300000,
+        5305999
       ]
     }
   }
