@@ -1,0 +1,68 @@
+{
+  "study": "DT-S3-PERMISSION",
+  "frozen_before_seed": true,
+  "seed_block": [3812000, 3819999],
+  "cells": [
+    {"name": "S3-A decomposition clamps", "start": 3812000, "end": 3812999, "count": 1000},
+    {"name": "S3-B co-protection x safety", "start": 3813000, "end": 3814999, "count": 2000, "same_seed_cells": 4},
+    {"name": "S3-C refusal EIG", "start": 3815000, "end": 3816999, "count": 2000, "same_seed_families": 4},
+    {"name": "S3-D diagnosticity-controlled revocation", "start": 3817000, "end": 3819999, "count": 3000, "same_seed_packets": true}
+  ],
+  "permission_readout": "sum of the frozen internal-system policy posterior over permit, allow_partial_contact, and allow_full_contact",
+  "named_inputs": {
+    "partner_reliability": "partner",
+    "contact_response": "contact",
+    "co_protection_efficacy": "co_protection",
+    "predicted_vulnerable_outcome": "orientation/safe-outcome predictive input",
+    "stakes": "stakes"
+  },
+  "apparatus_parameters": {
+    "base_inputs": {"partner": 0.62, "contact": 0.65, "co_protection": 0.60, "predicted_vulnerable_outcome": 0.65, "stakes": 0.75, "horizon": 1.0, "protector": 1.0},
+    "positive_input_intervention": [0.25, 0.82],
+    "stakes_intervention": [0.45, 1.0],
+    "danger_probe": {"predicted_vulnerable_outcome": 0.18, "stakes": 1.0},
+    "refusal_softmax_temperature": 4.0,
+    "refusal_EIG_weight": 1.8,
+    "matched_packet_abs_log_bf": 1.3862943611198906,
+    "failure_diagnostic_temporal_shift": 0.18
+  },
+  "S3-A": {
+    "estimand": "signed q(pi_permit) movement under one named-input intervention with all other inputs clamped",
+    "directions": {"partner_reliability": "positive", "contact_response": "positive", "co_protection_efficacy": "positive", "predicted_vulnerable_outcome": "positive", "stakes": "negative"},
+    "full_clamp_identity_tolerance": 1e-10
+  },
+  "S3-B": {
+    "factorial": ["current_safety", "learned_co_protection"],
+    "immediate_estimand": "high-minus-low current-safety permission",
+    "durable_estimand": "co-protection effect minus safety-history effect after a later danger probe",
+    "rope": 0.01980262729617973
+  },
+  "S3-C": {
+    "families": ["high_informative", "weak_informative", "costly_informative", "safe_uninformative"],
+    "eig": "I(L, theta_contact; O_partner | do(refuse))",
+    "estimand": "partial coefficient of EIG in q(refuse), controlling predicted immediate safety and refusal cost",
+    "direction": "positive"
+  },
+  "S3-D": {
+    "packets": ["weak_accrual", "equal_total_bf_violation", "larger_bf_violation", "nondiagnostic_bad_outcome"],
+    "models": ["failure_diagnostic", "symmetric"],
+    "matched_log_bf": true,
+    "rope": 0.01980262729617973,
+    "criteria": ["failure-diagnostic equal-BF revocation exceeds accrual by ROPE", "symmetric asymmetry lies within ROPE", "nondiagnostic outcome movement is smaller than equal-BF violation"]
+  },
+  "custody": {
+    "per_cell_serial_first_world": true,
+    "ascending_gap_free": true,
+    "persist_before_aggregation": true,
+    "finite_worker_row_guard": true
+  },
+  "new_files": [
+    "scripts/run_decisive_s3.py",
+    "tests/test_decisive_s3.py",
+    "results/decisive-tests/s3-*"
+  ],
+  "apparatus_only": true,
+  "frozen_v36_scientific_modules_modified": false,
+  "excess_additions": [],
+  "verdict": "DESIGN_FROZEN"
+}

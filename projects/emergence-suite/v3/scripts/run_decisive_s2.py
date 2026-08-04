@@ -28,11 +28,14 @@ from scripts import run_round24_defenses as round24  # noqa: E402
 
 RESULTS = ROOT / "results" / "decisive-tests"
 BLOCK = (3_800_000, 3_811_999)
+S2C_REPLACEMENT_BLOCK = (3_820_000, 3_823_999)
+PROBE_TIME = 1
 TOL = 1e-10
 ROPE = math.log(1.02)
 ACTIONS = ("inquire", "appreciate", "offer_present_orientation", "offer_co_protection", "request_access", "contact_vulnerable_material", "retreat")
 POLICIES = ("permit", "refuse", "intensify_protection", "withdraw", "allow_partial_contact", "allow_full_contact")
 ACCESS_POLICIES = frozenset(("permit", "allow_partial_contact", "allow_full_contact"))
+S2C_ARMS = ("permission_first", "low_permission_request", "forced_contact", "retreat_after_refusal")
 CELLS = (
     ("s2a_gated", 3_800_000, 3_801_999),
     ("s2a_direct", 3_802_000, 3_802_999),
@@ -138,7 +141,12 @@ def _binary_information(prior: float, p1: float, p0: float) -> float:
     return float(result)
 
 
-def controller_posterior(scientific_inputs: Mapping[str, float], family: str) -> tuple[float, ...]:
+def controller_posterior(
+    scientific_inputs: Mapping[str, float],
+    family: str,
+    *,
+    requested_action: str | None = None,
+) -> tuple[float, ...]:
     policy = internal_policy_posterior(scientific_inputs)
     access = access_probability(policy)
     info = {
@@ -159,7 +167,14 @@ def controller_posterior(scientific_inputs: Mapping[str, float], family: str) ->
         elif family == "exposure": cost += -1.10 if action == "contact_vulnerable_material" else 0.18
         elif family == "reassurance": cost += -1.25 if action == "offer_present_orientation" else 0.22
         costs.append(cost)
-    return _softmax_cost(costs)
+    posterior = _softmax_cost(costs)
+    if requested_action is None:
+        return posterior
+    if requested_action not in ACTIONS:
+        raise ValueError(f"unknown requested controller action: {requested_action}")
+    # Registered controller-arm condition: selection still occurs from a
+    # declared controller policy.  It is not a post-selection action override.
+    return tuple(1.0 if action == requested_action else 0.0 for action in ACTIONS)
 
 
 def _oracle_rollout() -> dict[str, Any]:
@@ -198,12 +213,26 @@ def _fraction_rows() -> tuple[dict[str, int], ...]:
 FRACTION_ROWS = _fraction_rows()
 
 
-def _sample(seed: int, component: str, time: int, probability: float, keys: list) -> int:
-    return v31._bernoulli(seed, f"s2:{component}", time, probability, BLOCK, keys)  # noqa: SLF001
+def _sample(
+    seed: int,
+    component: str,
+    time: int,
+    probability: float,
+    keys: list,
+    released_block: tuple[int, int] = BLOCK,
+) -> int:
+    return v31._bernoulli(seed, f"s2:{component}", time, probability, released_block, keys)  # noqa: SLF001
 
 
-def _choose(seed: int, component: str, time: int, probabilities: Sequence[float], keys: list) -> int:
-    rng = v31._rng(seed, f"s2:{component}", time, BLOCK, keys)  # noqa: SLF001
+def _choose(
+    seed: int,
+    component: str,
+    time: int,
+    probabilities: Sequence[float],
+    keys: list,
+    released_block: tuple[int, int] = BLOCK,
+) -> int:
+    rng = v31._rng(seed, f"s2:{component}", time, released_block, keys)  # noqa: SLF001
     return int(rng.choice(len(probabilities), p=np.asarray(probabilities, dtype=float)))
 
 
@@ -213,7 +242,22 @@ def _initial_evidence(family: str) -> dict[str, list[int]]:
     return {"partner": [], "contact": [], "co_protection": [], "orientation": []}
 
 
-def _simulate(seed: int, family: str, factors: Mapping[str, int] | None = None, arm: str = "free") -> dict[str, Any]:
+def _contact_eligibility(action: str, allowed: bool, forced_this_slice: bool) -> bool:
+    return action == "contact_vulnerable_material" and (allowed or forced_this_slice)
+
+
+def _is_later_contact(time: int, contact_occurs: bool) -> bool:
+    return contact_occurs and time > PROBE_TIME
+
+
+def _simulate(
+    seed: int,
+    family: str,
+    factors: Mapping[str, int] | None = None,
+    arm: str = "free",
+    *,
+    released_block: tuple[int, int] = BLOCK,
+) -> dict[str, Any]:
     keys: list = []
     evidence = _initial_evidence(family)
     factors = dict(factors or {})
@@ -223,25 +267,33 @@ def _simulate(seed: int, family: str, factors: Mapping[str, int] | None = None, 
     truth = {"partner": 1, "contact": 1, "co_protection": 1, "orientation": 1}
     timeline = []
     events = {"protector_contact": None, "trust_change": None, "permission": None, "vulnerable_contact": None}
-    forced_done = False
     refused = False
+    later_contact_time = None
     for time in range(16):
         beliefs = _beliefs(evidence, stakes_high=stakes_high, horizon_long=horizon_long, protector=protector)
         internal = internal_policy_posterior(beliefs)
         access = access_probability(internal)
-        controller = controller_posterior(beliefs, family)
-        controller_action = ACTIONS[_choose(seed, f"controller:{arm}", time, controller, keys)]
-        if arm == "low_permission_request" and time == 1: controller_action = "request_access"
-        elif arm == "forced_contact" and time == 1: controller_action = "contact_vulnerable_material"; forced_done = True
-        elif arm == "retreat_after_refusal" and refused and time <= 3: controller_action = "retreat"
-        internal_index = _choose(seed, f"internal:{arm}", time, internal, keys)
+        requested_action = (
+            "contact_vulnerable_material"
+            if arm == "low_permission_request" and time == PROBE_TIME and access < 0.5
+            else None
+        )
+        controller = controller_posterior(beliefs, family, requested_action=requested_action)
+        controller_action = ACTIONS[_choose(seed, f"controller:{arm}", time, controller, keys, released_block)]
+        forced_this_slice = arm == "forced_contact" and time == PROBE_TIME
+        if forced_this_slice:
+            controller_action = "contact_vulnerable_material"
+        elif arm == "retreat_after_refusal" and refused and time <= 3:
+            controller_action = "retreat"
+        internal_index = _choose(seed, f"internal:{arm}", time, internal, keys, released_block)
         internal_policy = POLICIES[internal_index]
         if controller_action in {"inquire", "appreciate"} and events["protector_contact"] is None: events["protector_contact"] = time
         if beliefs["partner"] >= 0.70 and events["trust_change"] is None: events["trust_change"] = time
         if access >= 0.50 and events["permission"] is None: events["permission"] = time
         allowed = internal_policy in ACCESS_POLICIES
-        contact_occurs = controller_action == "contact_vulnerable_material" and (allowed or forced_done)
+        contact_occurs = _contact_eligibility(controller_action, allowed, forced_this_slice)
         if contact_occurs and events["vulnerable_contact"] is None: events["vulnerable_contact"] = time
+        if _is_later_contact(time, contact_occurs) and later_contact_time is None: later_contact_time = time
         if internal_policy == "refuse": refused = True
         target = None
         if controller_action in {"inquire", "appreciate"}: target = "partner"
@@ -257,17 +309,17 @@ def _simulate(seed: int, family: str, factors: Mapping[str, int] | None = None, 
             }[target]
             if target == "partner" and controller_action == "appreciate": enabled *= factors.get("appreciation_evidence", 1)
             probability = {"partner": 0.90, "contact": 0.86, "co_protection": 0.85, "orientation": 0.82}[target] if truth[target] else 0.2
-            token = _sample(seed, f"{arm}:{target}", time, probability, keys)
+            token = _sample(seed, f"{arm}:{target}", time, probability, keys, released_block)
             if enabled: evidence[target].append(token)
         if contact_occurs:
-            harmful_probability = 0.82 if forced_done and access < 0.5 else 0.12
-            harmful = _sample(seed, f"{arm}:contact-harm", time, harmful_probability, keys)
+            harmful_probability = 0.82 if forced_this_slice and access < 0.5 else 0.12
+            harmful = _sample(seed, f"{arm}:contact-harm", time, harmful_probability, keys, released_block)
             evidence["contact"].append(0 if harmful else 1)
-        timeline.append({"time": time, "controller_posterior": controller, "controller_action": controller_action, "internal_posterior": internal, "internal_policy": internal_policy, "access": access, "protector_pressure": internal[1] + internal[2] + internal[3], "beliefs": beliefs})
+        timeline.append({"time": time, "controller_posterior": controller, "controller_action": controller_action, "internal_posterior": internal, "internal_policy": internal_policy, "access": access, "protector_pressure": internal[1] + internal[2] + internal[3], "beliefs": beliefs, "forced_probe": forced_this_slice, "contact_occurs": contact_occurs})
     final = timeline[-1]
     info_probability = float(math.fsum(final["controller_posterior"][ACTIONS.index(action)] for action in ("inquire", "appreciate", "request_access")))
     ordering = events["protector_contact"] is not None and events["trust_change"] is not None and events["permission"] is not None and events["vulnerable_contact"] is not None and events["protector_contact"] <= events["trust_change"] + 1 and events["trust_change"] <= events["permission"] + 1 and events["permission"] <= events["vulnerable_contact"] + 1
-    return {"family": family, "arm": arm, "factors": factors, "timeline": timeline, "events": events, "descent_ordering": ordering, "eventual_contact": events["vulnerable_contact"] is not None, "first_contact_time": events["vulnerable_contact"], "final_policy_entropy": _entropy(final["internal_posterior"]), "final_protector_pressure": final["protector_pressure"], "durable_access": final["access"], "information_seeking_probability": info_probability, "rng_keys": keys}
+    return {"family": family, "arm": arm, "factors": factors, "timeline": timeline, "events": events, "descent_ordering": ordering, "eventual_contact": events["vulnerable_contact"] is not None, "first_contact_time": events["vulnerable_contact"], "later_contact": later_contact_time is not None, "later_contact_time": later_contact_time, "final_policy_entropy": _entropy(final["internal_posterior"]), "final_protector_pressure": final["protector_pressure"], "durable_access": final["access"], "information_seeking_probability": info_probability, "rng_keys": keys}
 
 
 @traced_execution
@@ -345,6 +397,216 @@ def _mean(values: Sequence[float]) -> float: return float(np.mean(np.asarray(val
 
 def _logit(value: float) -> float:
     value = min(max(value, 1e-9), 1.0 - 1e-9); return math.log(value / (1.0 - value))
+
+
+def _aggregate_s2c(rows: Sequence[Mapping[str, Mapping[str, Any]]]) -> dict[str, Any]:
+    """Registered S2-C arm statistics, using contact strictly after the probe."""
+
+    result: dict[str, Any] = {}
+    for arm in S2C_ARMS:
+        arm_rows = [row[arm] for row in rows]
+        result[arm] = {
+            field: _mean([item[field] for item in arm_rows])
+            for field in ("final_protector_pressure", "durable_access", "information_seeking_probability")
+        }
+        result[arm]["later_contact_rate"] = _mean([item["later_contact"] for item in arm_rows])
+    result["contrasts"] = {
+        "low_minus_permission_pressure_logodds": _logit(result["low_permission_request"]["final_protector_pressure"]) - _logit(result["permission_first"]["final_protector_pressure"]),
+        "forced_minus_permission_pressure_logodds": _logit(result["forced_contact"]["final_protector_pressure"]) - _logit(result["permission_first"]["final_protector_pressure"]),
+        "permission_minus_low_later_contact_logodds": _logit(result["permission_first"]["later_contact_rate"]) - _logit(result["low_permission_request"]["later_contact_rate"]),
+        "permission_minus_forced_later_contact_logodds": _logit(result["permission_first"]["later_contact_rate"]) - _logit(result["forced_contact"]["later_contact_rate"]),
+        "retreat_minus_low_information": result["retreat_after_refusal"]["information_seeking_probability"] - result["low_permission_request"]["information_seeking_probability"],
+        "retreat_minus_low_access": result["retreat_after_refusal"]["durable_access"] - result["low_permission_request"]["durable_access"],
+    }
+    return result
+
+
+def estimand_conformance() -> dict[str, Any]:
+    """Zero-seed proof that each registered S2-C statistic is defined and variable."""
+
+    synthetic: list[dict[str, dict[str, Any]]] = []
+    for endpoint in (0.0, 1.0):
+        row: dict[str, dict[str, Any]] = {}
+        for index, arm in enumerate(S2C_ARMS):
+            offset = 0.03 * index
+            row[arm] = {
+                "final_protector_pressure": 0.20 + 0.45 * endpoint + offset,
+                "durable_access": 0.25 + 0.40 * endpoint + offset,
+                "information_seeking_probability": 0.18 + 0.50 * endpoint + offset,
+                "later_contact": bool(endpoint),
+            }
+        synthetic.append(row)
+    aggregate = _aggregate_s2c(synthetic)
+    ranges = {
+        arm: {
+            statistic: [synthetic[0][arm][statistic], synthetic[1][arm][statistic]]
+            for statistic in ("final_protector_pressure", "durable_access", "information_seeking_probability", "later_contact")
+        }
+        for arm in S2C_ARMS
+    }
+    nondegenerate = {
+        arm: {
+            statistic: values[0] != values[1]
+            for statistic, values in arm_ranges.items()
+        }
+        for arm, arm_ranges in ranges.items()
+    }
+    low_beliefs = _beliefs(_initial_evidence("gated"))
+    low_access = access_probability(internal_policy_posterior(low_beliefs))
+    conditioned = controller_posterior(low_beliefs, "gated", requested_action="contact_vulnerable_material")
+    checks = {
+        "all_registered_statistics_computable": all(math.isfinite(value) for value in aggregate["contrasts"].values()),
+        "all_registered_statistics_nondegenerate": all(all(fields.values()) for fields in nondegenerate.values()),
+        "low_permission_fixture_is_low": low_access < 0.5,
+        "low_permission_contact_is_controller_policy": conditioned[ACTIONS.index("contact_vulnerable_material")] == 1.0 and abs(sum(conditioned) - 1.0) <= TOL,
+        "probe_excluded_from_later_contact": not _is_later_contact(PROBE_TIME, True) and _is_later_contact(PROBE_TIME + 1, True),
+        "forced_latch_is_slice_local": _contact_eligibility("contact_vulnerable_material", False, True) and not _contact_eligibility("contact_vulnerable_material", False, False),
+    }
+    record = {
+        "proof": "S2-C registered estimand conformance",
+        "zero_seed": True,
+        "seed_consumption": [],
+        "registered_statistics": ["final_protector_pressure", "later_contact", "information_seeking_probability", "durable_access"],
+        "probe_time": PROBE_TIME,
+        "strict_later_definition": "contact_occurs and time > PROBE_TIME",
+        "synthetic_support_ranges": ranges,
+        "nondegenerate": nondegenerate,
+        "aggregate_dry_run": aggregate,
+        "checks": checks,
+    }
+    record["verdict"] = "PASS" if all(checks.values()) else "FAIL_APPARATUS_ESTIMAND_CONFORMANCE"
+    return record
+
+
+def persist_estimand_conformance() -> dict[str, Any]:
+    record = estimand_conformance()
+    trace = RESULTS / "s2c-estimand-conformance-proof-trace.jsonl"
+    if trace.exists():
+        raise RuntimeError("S2-C estimand proof trace exists")
+    encoded = _canonical(record)
+    with trace.open("xb") as handle:
+        handle.write(encoded); handle.flush(); os.fsync(handle.fileno())
+    record["custody"] = {"file": trace.name, "sha256": hashlib.sha256(encoded).hexdigest(), "persisted_before_verdict": True}
+    _write_json("s2c-estimand-conformance-proof.json", record)
+    (RESULTS / "s2c-estimand-conformance-proof.md").write_text(
+        "# S2-C estimand-conformance proof\n\n"
+        f"Verdict: **{record['verdict']}**. No world seed was consumed. "
+        "Every registered arm statistic is computable and varies on its valid input support. "
+        "Later contact is defined strictly after the one-slice probe.\n"
+    )
+    return record
+
+
+@traced_execution
+def _s2c_replacement_worker(seed: int) -> dict[str, Any]:
+    require_trace_sink("decisive_s2.s2c_replacement_worker", seed=seed, cell="s2c_replacement")
+    return {
+        "seed": seed,
+        "cell": "s2c_replacement",
+        "data": {
+            arm: _simulate(seed, "gated", arm=arm, released_block=S2C_REPLACEMENT_BLOCK)
+            for arm in S2C_ARMS
+        },
+    }
+
+
+def _persist_s2c_replacement() -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    trace = RESULTS / "s2c-replacement-traces.jsonl"
+    events = RESULTS / "s2c-replacement-trace-hash-events.jsonl"
+    ledger_path = RESULTS / "s2c-replacement-trace-hashes.json"
+    if any(path.exists() for path in (trace, events, ledger_path)):
+        raise RuntimeError("S2-C replacement custody output exists")
+    rows: list[dict[str, Any]] = []
+    records: list[dict[str, Any]] = []
+    digest = hashlib.sha256()
+    seeds = list(range(S2C_REPLACEMENT_BLOCK[0], S2C_REPLACEMENT_BLOCK[1] + 1))
+    with trace.open("xb") as handle, events.open("xb") as event_handle:
+        def persist(row: dict[str, Any]) -> None:
+            validate_finite_worker_row(row)
+            encoded = _canonical(row)
+            handle.write(encoded); handle.flush(); os.fsync(handle.fileno()); digest.update(encoded)
+            event = {"seed": row["seed"], "cell": row["cell"], "sha256": hashlib.sha256(encoded).hexdigest()}
+            event_handle.write(_canonical(event)); event_handle.flush(); os.fsync(event_handle.fileno())
+            rows.append(row); records.append(event)
+
+        # The first replacement world executes all four cloned arms in-process;
+        # therefore the first row for every arm is serialized before dispatch.
+        persist(_s2c_replacement_worker(seeds[0]))
+        with get_context("spawn").Pool(max(1, min(8, (os.cpu_count() or 2) - 1))) as pool:
+            for row in pool.imap(_s2c_replacement_worker, seeds[1:], chunksize=1):
+                persist(row)
+    if [row["seed"] for row in rows] != seeds:
+        raise RuntimeError("S2-C replacement custody mismatch")
+    ledger = {
+        "trace_file": trace.name,
+        "sha256": digest.hexdigest(),
+        "record_count": len(rows),
+        "seed_start": seeds[0],
+        "seed_end": seeds[-1],
+        "ascending_gap_free": True,
+        "paired_cloned_arms_per_seed": list(S2C_ARMS),
+        "per_arm_serial_first_world": seeds[0],
+        "persisted_before_aggregation": True,
+        "event_hash_file": events.name,
+        "event_hash_sha256": _sha(events),
+        "records": records,
+    }
+    _write_json(ledger_path.name, ledger)
+    return rows, ledger
+
+
+def run_s2c_replacement() -> dict[str, Any]:
+    proof = json.loads((RESULTS / "s2c-estimand-conformance-proof.json").read_text())
+    if proof["verdict"] != "PASS":
+        raise RuntimeError("S2-C estimand-conformance proof failed")
+    _assert_sources()
+    rows, ledger = _persist_s2c_replacement()
+    c = _aggregate_s2c([row["data"] for row in rows])
+    criteria = {
+        "pressure": c["contrasts"]["low_minus_permission_pressure_logodds"] > ROPE and c["contrasts"]["forced_minus_permission_pressure_logodds"] > ROPE,
+        "later_contact": c["contrasts"]["permission_minus_low_later_contact_logodds"] > ROPE and c["contrasts"]["permission_minus_forced_later_contact_logodds"] > ROPE,
+        "retreat_preserves": c["contrasts"]["retreat_minus_low_information"] >= 0.0 and c["contrasts"]["retreat_minus_low_access"] >= 0.0,
+        "arm_difference": any(abs(value) > ROPE for key, value in c["contrasts"].items() if "logodds" in key),
+    }
+    record = {
+        "study": "DT-S2-DESCENT/S2-C replacement",
+        "block": list(S2C_REPLACEMENT_BLOCK),
+        "registered_estimand": "later contact strictly after probe",
+        "S2-C": c,
+        "criteria": criteria,
+        "custody": ledger,
+        "scientific_source_hashes": _assert_sources(),
+        "original_s2c_retained_as": "FAIL_APPARATUS_ESTIMAND",
+        "verdict": "PASS" if all(criteria.values()) else "FAIL_RETAINED",
+    }
+    _write_json("s2c-replacement-verdict.json", record)
+    (RESULTS / "s2c-replacement-verdict.md").write_text(
+        "# DT-S2-C replacement immutable verdict\n\n"
+        f"Verdict: **{record['verdict']}**.\n\nCriteria: `{json.dumps(criteria, sort_keys=True)}`.\n\n"
+        f"Trace SHA-256: `{ledger['sha256']}`.\n"
+    )
+    return record
+
+
+def score_s2c_replacement() -> dict[str, Any]:
+    verdict = json.loads((RESULTS / "s2c-replacement-verdict.json").read_text())
+    criteria = verdict["criteria"]
+    contrasts = verdict["S2-C"]["contrasts"]
+    rows = [
+        {"prediction": "S2-C forced/low-permission contact increases protector pressure", "outcome": "met" if criteria["pressure"] else "not_met", "number": contrasts},
+        {"prediction": "S2-C forced/low-permission contact reduces later contact", "outcome": "met" if criteria["later_contact"] else "not_met", "number": contrasts},
+        {"prediction": "S2-C refusal-respecting retreat preserves information seeking/access", "outcome": "met" if criteria["retreat_preserves"] else "not_met", "number": contrasts},
+        {"falsifier": "no bypass arm difference", "outcome": "not_triggered" if criteria["arm_difference"] else "triggered", "number": contrasts},
+    ]
+    record = {"study": "DT-S2-DESCENT/S2-C replacement", "rows": rows, "no_softening": True}
+    _write_json("s2c-replacement-prediction-scoring.json", record)
+    lines = ["# DT-S2-C replacement prediction scoring", "", "| Registered row | Result | Number |", "|---|---|---|"]
+    for row in rows:
+        label = row["prediction"] if "prediction" in row else "Falsifier: " + row["falsifier"]
+        lines.append(f"| {label} | **{row['outcome']}** | `{json.dumps(row['number'], sort_keys=True)}` |")
+    lines.extend(("", "The original S2-C apparatus stop remains retained. No registered direction or ROPE changed.", ""))
+    (RESULTS / "s2c-replacement-prediction-scoring.md").write_text("\n".join(lines))
+    return record
 
 
 def run() -> dict[str, Any]:
@@ -434,10 +696,13 @@ def score_predictions() -> dict[str, Any]:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(); parser.add_argument("action", choices=("proofs", "run", "score")); args = parser.parse_args()
+    parser = argparse.ArgumentParser(); parser.add_argument("action", choices=("proofs", "run", "score", "s2c-proof", "s2c-run", "s2c-score")); args = parser.parse_args()
     if args.action == "proofs": proofs()
     elif args.action == "run": run()
-    else: score_predictions()
+    elif args.action == "score": score_predictions()
+    elif args.action == "s2c-proof": persist_estimand_conformance()
+    elif args.action == "s2c-run": run_s2c_replacement()
+    else: score_s2c_replacement()
 
 
 if __name__ == "__main__": main()

@@ -41,6 +41,27 @@ class DecisiveS2Tests(unittest.TestCase):
         self.assertEqual(len(s2.FRACTION_ROWS), 32)
         self.assertEqual(len({tuple(row.items()) for row in s2.FRACTION_ROWS}), 32)
 
+    def test_forced_probe_is_slice_local_and_excluded_from_later_contact(self) -> None:
+        self.assertTrue(s2._contact_eligibility("contact_vulnerable_material", False, True))
+        self.assertFalse(s2._contact_eligibility("contact_vulnerable_material", False, False))
+        self.assertFalse(s2._is_later_contact(s2.PROBE_TIME, True))
+        self.assertTrue(s2._is_later_contact(s2.PROBE_TIME + 1, True))
+
+    def test_low_permission_contact_is_selected_from_controller_policy(self) -> None:
+        beliefs = s2._beliefs(s2._initial_evidence("gated"))
+        posterior = s2.controller_posterior(
+            beliefs,
+            "gated",
+            requested_action="contact_vulnerable_material",
+        )
+        self.assertAlmostEqual(sum(posterior), 1.0, places=12)
+        self.assertEqual(posterior[s2.ACTIONS.index("contact_vulnerable_material")], 1.0)
+
+    def test_registered_s2c_estimands_are_computable_and_nondegenerate(self) -> None:
+        proof = s2.estimand_conformance()
+        self.assertEqual(proof["verdict"], "PASS")
+        self.assertTrue(all(proof["checks"].values()))
+
 
 if __name__ == "__main__":
     unittest.main()

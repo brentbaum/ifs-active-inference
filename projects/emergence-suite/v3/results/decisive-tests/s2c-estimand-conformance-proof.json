@@ -1,0 +1,161 @@
+{
+  "aggregate_dry_run": {
+    "contrasts": {
+      "forced_minus_permission_pressure_logodds": 0.24226286214668036,
+      "low_minus_permission_pressure_logodds": 0.12179249616063986,
+      "permission_minus_forced_later_contact_logodds": 0.0,
+      "permission_minus_low_later_contact_logodds": 0.0,
+      "retreat_minus_low_access": 0.06,
+      "retreat_minus_low_information": 0.06000000000000005
+    },
+    "forced_contact": {
+      "durable_access": 0.51,
+      "final_protector_pressure": 0.485,
+      "information_seeking_probability": 0.49,
+      "later_contact_rate": 0.5
+    },
+    "low_permission_request": {
+      "durable_access": 0.48000000000000004,
+      "final_protector_pressure": 0.455,
+      "information_seeking_probability": 0.45999999999999996,
+      "later_contact_rate": 0.5
+    },
+    "permission_first": {
+      "durable_access": 0.45,
+      "final_protector_pressure": 0.42500000000000004,
+      "information_seeking_probability": 0.42999999999999994,
+      "later_contact_rate": 0.5
+    },
+    "retreat_after_refusal": {
+      "durable_access": 0.54,
+      "final_protector_pressure": 0.515,
+      "information_seeking_probability": 0.52,
+      "later_contact_rate": 0.5
+    }
+  },
+  "checks": {
+    "all_registered_statistics_computable": true,
+    "all_registered_statistics_nondegenerate": true,
+    "forced_latch_is_slice_local": true,
+    "low_permission_contact_is_controller_policy": true,
+    "low_permission_fixture_is_low": true,
+    "probe_excluded_from_later_contact": true
+  },
+  "custody": {
+    "file": "s2c-estimand-conformance-proof-trace.jsonl",
+    "persisted_before_verdict": true,
+    "sha256": "41e880a7adbfd184c211e7f5d1025e803e82657b149f547a78dad2149373f9be"
+  },
+  "nondegenerate": {
+    "forced_contact": {
+      "durable_access": true,
+      "final_protector_pressure": true,
+      "information_seeking_probability": true,
+      "later_contact": true
+    },
+    "low_permission_request": {
+      "durable_access": true,
+      "final_protector_pressure": true,
+      "information_seeking_probability": true,
+      "later_contact": true
+    },
+    "permission_first": {
+      "durable_access": true,
+      "final_protector_pressure": true,
+      "information_seeking_probability": true,
+      "later_contact": true
+    },
+    "retreat_after_refusal": {
+      "durable_access": true,
+      "final_protector_pressure": true,
+      "information_seeking_probability": true,
+      "later_contact": true
+    }
+  },
+  "probe_time": 1,
+  "proof": "S2-C registered estimand conformance",
+  "registered_statistics": [
+    "final_protector_pressure",
+    "later_contact",
+    "information_seeking_probability",
+    "durable_access"
+  ],
+  "seed_consumption": [],
+  "strict_later_definition": "contact_occurs and time > PROBE_TIME",
+  "synthetic_support_ranges": {
+    "forced_contact": {
+      "durable_access": [
+        0.31,
+        0.71
+      ],
+      "final_protector_pressure": [
+        0.26,
+        0.71
+      ],
+      "information_seeking_probability": [
+        0.24,
+        0.74
+      ],
+      "later_contact": [
+        false,
+        true
+      ]
+    },
+    "low_permission_request": {
+      "durable_access": [
+        0.28,
+        0.68
+      ],
+      "final_protector_pressure": [
+        0.23,
+        0.68
+      ],
+      "information_seeking_probability": [
+        0.21,
+        0.71
+      ],
+      "later_contact": [
+        false,
+        true
+      ]
+    },
+    "permission_first": {
+      "durable_access": [
+        0.25,
+        0.65
+      ],
+      "final_protector_pressure": [
+        0.2,
+        0.65
+      ],
+      "information_seeking_probability": [
+        0.18,
+        0.6799999999999999
+      ],
+      "later_contact": [
+        false,
+        true
+      ]
+    },
+    "retreat_after_refusal": {
+      "durable_access": [
+        0.33999999999999997,
+        0.74
+      ],
+      "final_protector_pressure": [
+        0.29000000000000004,
+        0.74
+      ],
+      "information_seeking_probability": [
+        0.27,
+        0.7699999999999999
+      ],
+      "later_contact": [
+        false,
+        true
+      ]
+    }
+  },
+  "verdict": "PASS",
+  "zero_seed": true
+}

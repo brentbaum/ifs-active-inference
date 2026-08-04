@@ -1,0 +1,54 @@
+{
+  "no_softening": true,
+  "rows": [
+    {
+      "number": {
+        "forced_minus_permission_pressure_logodds": 0.7582980311156942,
+        "low_minus_permission_pressure_logodds": 0.16714057792785342,
+        "permission_minus_forced_later_contact_logodds": 1.293124291683721,
+        "permission_minus_low_later_contact_logodds": 0.3470855437928617,
+        "retreat_minus_low_access": -0.026782469149426835,
+        "retreat_minus_low_information": 0.018348814507246236
+      },
+      "outcome": "met",
+      "prediction": "S2-C forced/low-permission contact increases protector pressure"
+    },
+    {
+      "number": {
+        "forced_minus_permission_pressure_logodds": 0.7582980311156942,
+        "low_minus_permission_pressure_logodds": 0.16714057792785342,
+        "permission_minus_forced_later_contact_logodds": 1.293124291683721,
+        "permission_minus_low_later_contact_logodds": 0.3470855437928617,
+        "retreat_minus_low_access": -0.026782469149426835,
+        "retreat_minus_low_information": 0.018348814507246236
+      },
+      "outcome": "met",
+      "prediction": "S2-C forced/low-permission contact reduces later contact"
+    },
+    {
+      "number": {
+        "forced_minus_permission_pressure_logodds": 0.7582980311156942,
+        "low_minus_permission_pressure_logodds": 0.16714057792785342,
+        "permission_minus_forced_later_contact_logodds": 1.293124291683721,
+        "permission_minus_low_later_contact_logodds": 0.3470855437928617,
+        "retreat_minus_low_access": -0.026782469149426835,
+        "retreat_minus_low_information": 0.018348814507246236
+      },
+      "outcome": "not_met",
+      "prediction": "S2-C refusal-respecting retreat preserves information seeking/access"
+    },
+    {
+      "falsifier": "no bypass arm difference",
+      "number": {
+        "forced_minus_permission_pressure_logodds": 0.7582980311156942,
+        "low_minus_permission_pressure_logodds": 0.16714057792785342,
+        "permission_minus_forced_later_contact_logodds": 1.293124291683721,
+        "permission_minus_low_later_contact_logodds": 0.3470855437928617,
+        "retreat_minus_low_access": -0.026782469149426835,
+        "retreat_minus_low_information": 0.018348814507246236
+      },
+      "outcome": "not_triggered"
+    }
+  ],
+  "study": "DT-S2-DESCENT/S2-C replacement"
+}

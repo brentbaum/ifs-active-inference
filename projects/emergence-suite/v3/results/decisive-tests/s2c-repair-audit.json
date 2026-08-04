@@ -1,0 +1,37 @@
+{
+  "adjudication": "internal-round26-adjudication.md, rulings 26.3-26.4",
+  "classification": "RUNNER_AND_AGGREGATION_ONLY",
+  "original_records_retained": true,
+  "changes": [
+    "replace the persistent forced_done latch with forced_this_slice at probe time only",
+    "define later_contact strictly as contact_occurs at time greater than PROBE_TIME",
+    "condition the controller policy on contact_vulnerable_material in the low-permission probe arm and sample through the ordinary controller-choice path",
+    "thread the adjudicated replacement block through existing component RNG helpers",
+    "add the permanent zero-seed estimand-conformance proof and replacement runner/custody outputs"
+  ],
+  "unchanged": [
+    "all frozen scientific modules ref/v31.py through ref/v36.py",
+    "internal_policy_posterior",
+    "access_probability",
+    "all likelihoods, priors, thresholds, and registered directions",
+    "S2 design-freeze scientific content",
+    "the retained original S2-C records"
+  ],
+  "scientific_source_hashes": {
+    "ref/v31.py": "0481e51acf72ee8018cb3c9a1c780570b22e05657cc687376f08ca99544149e0",
+    "ref/v32.py": "0b990eb4c28f3dd61ec37b57742548c1f63147ec48fe8fac465cf2123dba9833",
+    "ref/v33.py": "018ebac662a925a3ed5431197d8c5914049fa5e1b20787fd5b13de3310c977fd",
+    "ref/v34.py": "f9a37a36a0393f9fd437776457cc48018db6cfe1d5195d95a9cbf5b2e90744cd",
+    "ref/v35.py": "7b71e5a7c8003d27c7f1bcafc8deae2d2eed07dd80942066362a1d9c5da8c264",
+    "ref/v36.py": "99fe821485b8112e84ab3fe2ea45f73bf8055be22003982089a135eb07f4dc72"
+  },
+  "design_freeze_hashes": {
+    "s2-design-freeze.md": "4e12c4f502586f7e88d222cb92da5ea43ca39ae55765ccf3389b3569ed201180",
+    "s2-design-freeze.json": "7b62b78a0c3df6b3f9eea0804cbe83b6a48157e1e590781cceb23fdf66d94e65"
+  },
+  "old_s2c_status": "FAIL_APPARATUS_ESTIMAND",
+  "replacement_block": [3820000, 3823999],
+  "post_verdict_reporting_note": "A dict.get default-expression KeyError occurred after the immutable replacement verdict was written and before the Markdown prediction table was rendered. The report-only conditional was corrected; no seed, trace, statistic, criterion, or verdict was recomputed.",
+  "scientific_module_change": false,
+  "design_freeze_scientific_change": false
+}
