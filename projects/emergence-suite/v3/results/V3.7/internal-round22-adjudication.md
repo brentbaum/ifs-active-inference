@@ -49,3 +49,19 @@ A37-R1 block `3746000:3747999` consumed by the retained apparatus stop
 correctly generated population stands scientifically; only a new apparatus
 class returns here). Chain unchanged: A37-R2 → C37 → T37 → prediction
 scoring.
+
+## Round-24 amendment — 2026-08-04
+
+External round 24 ratifies the execution ruling but replaces the
+signature-recurrence rationale in ruling 22.1. The binding classification
+wording is:
+
+> The defect was directly demonstrated to violate candidate-common
+> intervention semantics; its recurrence showed that the earlier local
+> repair had not become a system-wide invariant.
+
+Recurrence is a diagnostic clue, not proof. The classification rests on the
+truth-dependent schedule construction, the resulting mismatch between the
+generator and candidate comparison, the candidate-common repair, and the
+new all-candidate schedule-equality proof. No repair, result, or seed
+disposition changes.
