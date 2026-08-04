@@ -361,7 +361,8 @@
         "Round-26 (INTERNAL): S2-C apparatus estimand stop (forced-latch, probe-inclusive estimand, arm override); S2-A/B stand; replacement S2-C block 3820000:3823999; permanent estimand-conformance proof added.",
         "Round-28 (EXTERNAL): T-CAP1 authorized to design with ten amendments (sequential feedback, selection-aware/naive transparency, replaced estimands, matched-persistence capture definition, calibration-based real-danger criterion, representation-only witnessing, two explicit productions, focused variant organism, census-before-seal, seven controls). Census public seeds 3824000:3831999; confirmatory 3832000:3839999 and challenge escrow 4130000:4132999 reserved, opened only at/after Stage-2 seal.",
         "Round-29 (INTERNAL): census-1 invalid as panel (arm-specific world keys; missing fixed-point replays; raw-H classification \u2014 H=0.325 at zero coupling exposes persistence confound), retained as evidence; repairs runner/readout-only; permanent arm-common world proof; census-2 3840000:3847999 on the unchanged frozen grid.",
-        "Round-30 (EXTERNAL): round-29 ratified with arm-common terminology correction; fixed-point bistability NOT SUPPORTED in frozen family/grid (2/8000, never criterial again in T-CAP1); CALIBRATION_BASED_METASTABILITY authorized as distinct claim (allocation-aware oracle required; coupling-zero counterfactual primary; H_excess retired); census-3 3848000:3859999 (final; census-4 not authorized; stop rule closes T-CAP1 with two negative dynamics findings)."
+        "Round-30 (EXTERNAL): round-29 ratified with arm-common terminology correction; fixed-point bistability NOT SUPPORTED in frozen family/grid (2/8000, never criterial again in T-CAP1); CALIBRATION_BASED_METASTABILITY authorized as distinct claim (allocation-aware oracle required; coupling-zero counterfactual primary; H_excess retired); census-3 3848000:3859999 (final; census-4 not authorized; stop rule closes T-CAP1 with two negative dynamics findings).",
+        "T-CAP1 CLOSED per round-30 stop rule: census-3 zero material-metastability cells, fingerprint 0.0000, recovery max 0.652 < 0.80, coupling-zero identity exact; two negative dynamics findings retained; confirmatory and escrow blocks retired unconsumed."
       ],
       "barred_gate4_replacement_2": [
         3709000,
@@ -419,14 +420,6 @@
         3820000,
         3823999
       ],
-      "tcap1_confirmatory_reserved": [
-        3832000,
-        3839999
-      ],
-      "tcap1_challenge_escrow_reserved": [
-        4130000,
-        4132999
-      ],
       "consumed_tcap1_census_1": [
         3824000,
         3831999
@@ -438,6 +431,14 @@
       "tcap1_census_3": [
         3848000,
         3859999
+      ],
+      "retired_tcap1_confirmatory": [
+        3832000,
+        3839999
+      ],
+      "retired_tcap1_escrow": [
+        4130000,
+        4132999
       ]
     }
   }

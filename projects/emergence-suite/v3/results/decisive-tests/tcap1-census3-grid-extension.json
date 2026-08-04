@@ -1,0 +1,62 @@
+{
+  "authorization": "external round 30",
+  "beta_phi_extension": {
+    "added_values": [],
+    "reason": "The frozen allocation equation has no separate beta_Phi parameter. coupling_strength is its only posterior-coupling coefficient, so adding a second beta would change the frozen parameterization."
+  },
+  "classification_rule": {
+    "cell_classes": [
+      "null",
+      "weak",
+      "material_metastability",
+      "pathological_nonqualifying"
+    ],
+    "eventual_recovery_definition": "First post-withdrawal position at which abs(logit(qT)-logit(qO)) is at most epsilon for k consecutive slices; epsilon and k are selected from the public census by the frozen rule below.",
+    "fingerprint": {
+      "continuing_danger_excluded": true,
+      "feedback_necessity": "A_feedback > 0",
+      "material_cue_response": "max cue-period qT minus first-slice qT >= 0.10",
+      "matched_truth_oracle": "qO at the final slice <= 0.50",
+      "no_continuing_congruent_evidence": "zero delivered confirming-channel token-1 observations after cue withdrawal",
+      "oracle_relative_area": "A_M_transparent exceeds the frozen q95 of coupling-zero safe original-grid worlds",
+      "recovery": "eventual_recovery is true",
+      "transparency_dependence": "A_M_transparent - A_M_represented > 0"
+    },
+    "material_metastability": "world fingerprint rate >= 0.10, mean transparent-minus-represented A_M > 0, and eventual recovery among fingerprint-eligible worlds >= 0.80",
+    "null": "Neither mean A_feedback nor mean transparent-minus-represented A_M is positive.",
+    "panel_selection": "Within each class, select the first cell in the committed lexicographic parameter order. Never select by largest effect.",
+    "pathological_nonqualifying": "The cell has material cue response and oracle-relative area in at least 10% of worlds but fails recovery, continuing-danger, continuing-evidence, oracle-truth, feedback-necessity, or transparency-dependence requirements.",
+    "recovery_parameter_selection": {
+      "candidate_epsilon": [0.05, 0.1, 0.2, 0.3, 0.5],
+      "candidate_k": [4, 3, 2],
+      "rule": "Choose the first (epsilon ascending, then k in listed order) for which at least 80% of safe coupling-zero original-grid worlds attain sustained agreement. If none qualifies, use no recovery definition, classify no cell as material_metastability, and report unattainability."
+    },
+    "weak": "Not material or pathological, but mean A_feedback > 0 and mean transparent-minus-represented A_M > 0."
+  },
+  "coupling_extension": {
+    "added_values": [8.0, 10.0],
+    "frozen_equation_unchanged": true
+  },
+  "grid": {
+    "allocation_persistence": [0.0, 0.6, 0.9],
+    "bundle_transition_persistence": [0.85, 0.95, 0.99],
+    "cell_count": 486,
+    "coupling_strength": [0.0, 2.0, 4.0, 6.0, 8.0, 10.0],
+    "cue_intensity": [0.25, 0.5, 0.75],
+    "extension_cell_count": 162,
+    "lexicographic_order": [
+      "coupling_strength",
+      "cue_intensity",
+      "allocation_persistence",
+      "bundle_transition_persistence",
+      "meta_observation_reliability"
+    ],
+    "meta_observation_reliability": [0.6, 0.8, 0.95],
+    "original_cell_count": 324,
+    "original_grid_unchanged": true
+  },
+  "h_excess": "Retired as a classifier; raw H and historical H_excess remain descriptive.",
+  "registered_before_census_seed": true,
+  "seed_block": [3848000, 3859999],
+  "study": "T-CAP1 Census-3"
+}

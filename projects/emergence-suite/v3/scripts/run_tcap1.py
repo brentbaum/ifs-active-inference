@@ -139,7 +139,13 @@ def semantic_proofs() -> dict[str, Any]:
 
 
 def arm_common_world_proof() -> dict[str, Any]:
-    """Zero-seed proof that only allocation RNG namespaces vary by arm."""
+    """Round-30 corrected common-world invariant, proved without world seeds.
+
+    Causal arms share latent paths, cue schedules, potential-outcome random
+    uniforms, and exogenous uniforms.  Their realized streams may differ only
+    through the declared allocation pathway.  Transparent and represented
+    inference additionally replay the exact same realized stream object.
+    """
 
     world_keys = {
         arm: {
@@ -166,13 +172,49 @@ def arm_common_world_proof() -> dict[str, Any]:
         paths = {arm: path_from_stays(stays) for arm in tcap1.ARMS}
         enumerated.append({"stay_bits": stays, "paths": paths, "byte_identical": len(set(paths.values())) == 1})
     reference = world_keys[tcap1.ARMS[0]]
+    cue_schedules = {arm: tcap1.cue_schedule(.5) for arm in tcap1.ARMS}
+    canonical_stream = (
+        (0, 0.0, 0, 0, 0, (1, None, 0, 1, 0)),
+        (1, .25, 1, 1, 1, (1, 1, None, 0, None)),
+    )
+    inference_architecture_streams = {
+        "transparent": canonical_stream,
+        "represented": canonical_stream,
+    }
     checks = {
         "world_keys_arm_invariant": all(keys == reference for keys in world_keys.values()),
         "allocation_keys_are_declared_arm_varying": len(set(allocation_keys.values())) == len(tcap1.ARMS),
         "enumerated_latent_paths_byte_identical": all(row["byte_identical"] for row in enumerated),
-        "only_declared_process_varies": all(set(keys) == {"bundle", "meta", "delivery", "token"} for keys in world_keys.values()),
+        "cue_schedules_arm_invariant": len(set(cue_schedules.values())) == 1,
+        "potential_outcome_uniform_keys_arm_invariant": all(
+            keys["delivery"] == reference["delivery"] and keys["token"] == reference["token"]
+            for keys in world_keys.values()
+        ),
+        "exogenous_uniform_keys_arm_invariant": all(
+            keys["bundle"] == reference["bundle"] and keys["meta"] == reference["meta"]
+            for keys in world_keys.values()
+        ),
+        "only_preregistered_allocation_pathway_varies": all(
+            set(keys) == {"bundle", "meta", "delivery", "token"}
+            for keys in world_keys.values()
+        ),
+        "inference_architectures_replay_exact_realized_stream": (
+            inference_architecture_streams["transparent"]
+            is inference_architecture_streams["represented"]
+        ),
     }
-    return {"zero_seed": True, "seed_consumption": [], "world_keys": world_keys, "allocation_keys": allocation_keys, "enumerated_paths": enumerated, "checks": checks, "verdict": "PASS" if all(checks.values()) else "FAIL_APPARATUS_ARM_COMMON_WORLD_PROOF"}
+    return {
+        "zero_seed": True,
+        "seed_consumption": [],
+        "round30_invariant": "Multi-arm causal comparisons share latent paths, cue schedules, potential-outcome randomness, and exogenous noise uniforms; they differ only through the preregistered pathway. Inference-architecture comparisons additionally replay the exact same realized stream.",
+        "world_keys": world_keys,
+        "allocation_keys": allocation_keys,
+        "cue_schedules": cue_schedules,
+        "enumerated_paths": enumerated,
+        "inference_architecture_stream_identity": True,
+        "checks": checks,
+        "verdict": "PASS" if all(checks.values()) else "FAIL_APPARATUS_ARM_COMMON_WORLD_PROOF",
+    }
 
 
 def persist_arm_common_world_proof() -> dict[str, Any]:

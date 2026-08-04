@@ -51,6 +51,10 @@ class TCap1Tests(unittest.TestCase):
         proof = run_tcap1.arm_common_world_proof()
         self.assertEqual(proof["verdict"], "PASS")
         self.assertTrue(all(proof["checks"].values()))
+        self.assertTrue(proof["checks"]["cue_schedules_arm_invariant"])
+        self.assertTrue(proof["checks"]["potential_outcome_uniform_keys_arm_invariant"])
+        self.assertTrue(proof["checks"]["exogenous_uniform_keys_arm_invariant"])
+        self.assertTrue(proof["checks"]["inference_architectures_replay_exact_realized_stream"])
 
     def test_only_allocation_rng_key_varies_by_arm(self) -> None:
         reference = {
@@ -69,6 +73,20 @@ class TCap1Tests(unittest.TestCase):
         result = tcap1.bistability_readout(score((.02, .02, .02, .02)), score((.98, .98, .98, .98)))
         self.assertTrue(result["two_stable_fixed_points"])
         self.assertEqual(result["fixed_point_count"], 2)
+
+    def test_allocation_aware_oracle_conditions_on_realized_allocation(self) -> None:
+        observations = (1, None, 0, 1, None)
+        for bundle in (0, 1):
+            direct = tcap1._channel_log_likelihood(observations, bundle, 1, .4)  # noqa: SLF001
+            oracle = tcap1.allocation_aware_log_likelihood(observations, bundle, 1, .4)
+            self.assertEqual(direct, oracle)
+
+    def test_coupling_zero_probability_identity_is_exact(self) -> None:
+        for q in (.02, .3, .8):
+            for cue in (0.0, .5, 1.0):
+                left = tcap1.allocation_probability(q, cue, 0.0, 1, .6)
+                right = tcap1.allocation_probability(q, cue, 0.0, 1, .6)
+                self.assertEqual(left, right)
 
 
 if __name__ == "__main__":

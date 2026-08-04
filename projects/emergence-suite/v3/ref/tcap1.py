@@ -201,6 +201,30 @@ def represented_log_likelihood(
     return maximum + math.log(math.fsum(math.exp(value - maximum) for value in terms))
 
 
+def allocation_aware_log_likelihood(
+    observations: Sequence[int | None],
+    bundle: int,
+    allocation: int,
+    cue: float,
+    *,
+    full_information: bool = False,
+) -> float:
+    """Allocation-aware likelihood conditional on realized allocation/delivery.
+
+    This is the round-30 oracle likelihood.  It adds no latent state and uses
+    the same observation atoms as the generator while conditioning on the
+    allocation that actually controlled delivery.
+    """
+
+    return _channel_log_likelihood(
+        observations,
+        bundle,
+        allocation,
+        cue,
+        full_information=full_information,
+    )
+
+
 def posterior_update(prior: float, log_likelihood_zero: float, log_likelihood_one: float) -> float:
     return _logistic(_logit(prior) + log_likelihood_one - log_likelihood_zero)
 
@@ -331,7 +355,7 @@ def generate_stream(
 
 def score_stream(stream: CaptureStream, architecture: str, *, initial_q: float = 0.12) -> dict[str, Any]:
     require_trace_sink("tcap1.score_stream", seed=stream.seed, arm=stream.arm, architecture=architecture)
-    if architecture not in {"transparent", "represented"}:
+    if architecture not in {"transparent", "represented", "oracle"}:
         raise ValueError(architecture)
     q = _clip_probability(initial_q)
     previous_allocation = 0
@@ -352,7 +376,10 @@ def score_stream(stream: CaptureStream, architecture: str, *, initial_q: float =
             rule = "off"
         allocation_prior = allocation_probability(q, item.cue, stream.parameters.coupling_strength, previous_allocation, stream.parameters.allocation_persistence, rule=rule)
         full = stream.arm == "full_information_replay"
-        if architecture == "transparent" or full:
+        if architecture == "oracle" and not full:
+            ll0 = allocation_aware_log_likelihood(item.observations, 0, item.allocation, item.cue)
+            ll1 = allocation_aware_log_likelihood(item.observations, 1, item.allocation, item.cue)
+        elif architecture == "transparent" or full:
             ll0 = transparent_log_likelihood(item.observations, 0, item.cue, full_information=full)
             ll1 = transparent_log_likelihood(item.observations, 1, item.cue, full_information=full)
         else:
@@ -361,11 +388,173 @@ def score_stream(stream: CaptureStream, architecture: str, *, initial_q: float =
         q_next = posterior_update(prior, ll0, ll1)
         aware_bf, naive_bf = selection_log_bfs(item.observations, item.meta_observation, item.cue, allocation_prior, stream.parameters.meta_observation_reliability)
         precisions = tuple(effective_precision(index, item.allocation, item.cue, observed is not None) for index, observed in enumerate(item.observations))
-        influence = counterfactual_disconfirming_influence(prior, 4, item.cue, allocation_prior, item.meta_observation, stream.parameters.meta_observation_reliability, architecture)
+        influence_architecture = "transparent" if architecture == "oracle" else architecture
+        influence = counterfactual_disconfirming_influence(prior, 4, item.cue, allocation_prior, item.meta_observation, stream.parameters.meta_observation_reliability, influence_architecture)
         trajectory.append({"time": item.time, "cue": item.cue, "q_prior": prior, "q_bundle": q_next, "allocation_prior": allocation_prior, "allocation": item.allocation, "effective_precision": precisions, "disconfirming_influence": influence, "selection_aware_log_bf": aware_bf, "selection_naive_log_bf": naive_bf, "delivered_count": sum(value is not None for value in item.observations)})
         q = q_next
         previous_allocation = item.allocation
     return {"architecture": architecture, "trajectory": tuple(trajectory)}
+
+
+def calibration_metastability_readout(
+    stream: CaptureStream,
+    *,
+    initial_q: float = 0.02,
+) -> dict[str, Any]:
+    """Round-30 oracle-relative calibration trajectories on one realized stream."""
+
+    transparent = score_stream(stream, "transparent", initial_q=initial_q)
+    represented = score_stream(stream, "represented", initial_q=initial_q)
+    oracle = score_stream(stream, "oracle", initial_q=initial_q)
+    q_t = tuple(float(row["q_bundle"]) for row in transparent["trajectory"])
+    q_r = tuple(float(row["q_bundle"]) for row in represented["trajectory"])
+    q_o = tuple(float(row["q_bundle"]) for row in oracle["trajectory"])
+    discrepancy_t = tuple(float(_logit(left) - _logit(right)) for left, right in zip(q_t, q_o))
+    discrepancy_r = tuple(float(_logit(left) - _logit(right)) for left, right in zip(q_r, q_o))
+    withdrawal_start = len(stream.slices) - 8
+    post_t = discrepancy_t[withdrawal_start:]
+    post_r = discrepancy_r[withdrawal_start:]
+    congruent = 0
+    disconfirming = 0
+    delivered = 0
+    for item in stream.slices[withdrawal_start:]:
+        for channel, value in enumerate(item.observations):
+            if value is None:
+                continue
+            delivered += 1
+            if channel in CONFIRMING and value == 1:
+                congruent += 1
+            if channel in DISCONFIRMING and value == 0:
+                disconfirming += 1
+    return {
+        "q_transparent": q_t,
+        "q_represented": q_r,
+        "q_oracle": q_o,
+        "M_transparent": discrepancy_t,
+        "M_represented": discrepancy_r,
+        "A_M_transparent": float(math.fsum(max(value, 0.0) for value in post_t)),
+        "A_M_represented": float(math.fsum(max(value, 0.0) for value in post_r)),
+        "delta_A_M_transparent_minus_represented": float(
+            math.fsum(max(value, 0.0) for value in post_t)
+            - math.fsum(max(value, 0.0) for value in post_r)
+        ),
+        "peak_postwithdrawal_discrepancy_transparent": float(max(post_t)),
+        "peak_postwithdrawal_discrepancy_represented": float(max(post_r)),
+        "withdrawal_start": withdrawal_start,
+        "cue_response_transparent": float(max(q_t[:withdrawal_start]) - q_t[0]),
+        "postwithdrawal_delivered_count": delivered,
+        "postwithdrawal_congruent_count": congruent,
+        "postwithdrawal_disconfirming_count": disconfirming,
+        "continuing_danger": bool(any(item.bundle_state == 1 for item in stream.slices[withdrawal_start:])),
+        "oracle_final_probability": float(q_o[-1]),
+        "oracle_truth_brier_postwithdrawal": float(
+            np.mean([
+                (q_o[index] - stream.slices[index].bundle_state) ** 2
+                for index in range(withdrawal_start, len(stream.slices))
+            ])
+        ),
+    }
+
+
+def sustained_recovery_time(
+    discrepancy: Sequence[float],
+    withdrawal_start: int,
+    epsilon: float,
+    consecutive: int,
+) -> int:
+    """First post-withdrawal offset with sustained oracle agreement."""
+
+    if epsilon <= 0.0 or consecutive < 1:
+        raise ValueError("invalid recovery definition")
+    post = tuple(float(value) for value in discrepancy[withdrawal_start:])
+    for start in range(0, len(post) - consecutive + 1):
+        if all(abs(value) <= epsilon for value in post[start:start + consecutive]):
+            return start
+    return -1
+
+
+def stream_payload(stream: CaptureStream) -> tuple[tuple[Any, ...], ...]:
+    """Canonical scientific stream payload, excluding labels and parameters."""
+
+    return tuple(
+        (item.time, item.cue, item.bundle_state, item.allocation, item.meta_observation, item.observations)
+        for item in stream.slices
+    )
+
+
+def census3_world(
+    seed: int,
+    parameters: CaptureParameters,
+    *,
+    released_block: tuple[int, int],
+) -> dict[str, Any]:
+    """One Census-3 world with controls and coupling-zero counterfactual."""
+
+    controls = simulate_all_arms(seed, parameters, released_block=released_block)
+    primary = generate_stream(
+        seed,
+        parameters,
+        "transparent_feedback",
+        released_block=released_block,
+        initial_q=0.02,
+    )
+    zero_parameters = CaptureParameters(
+        0.0,
+        parameters.cue_intensity,
+        parameters.allocation_persistence,
+        parameters.bundle_transition_persistence,
+        parameters.meta_observation_reliability,
+    )
+    coupling_zero = generate_stream(
+        seed,
+        zero_parameters,
+        "transparent_feedback",
+        released_block=released_block,
+        initial_q=0.02,
+    )
+    primary_readout = calibration_metastability_readout(primary, initial_q=0.02)
+    zero_readout = calibration_metastability_readout(coupling_zero, initial_q=0.02)
+    if tuple(item.bundle_state for item in primary.slices) != tuple(item.bundle_state for item in coupling_zero.slices):
+        raise RuntimeError("coupling-zero counterfactual latent path mismatch")
+    if tuple(item.cue for item in primary.slices) != tuple(item.cue for item in coupling_zero.slices):
+        raise RuntimeError("coupling-zero counterfactual cue mismatch")
+    if parameters.coupling_strength == 0.0:
+        allocation_error = max(
+            abs(
+                allocation_probability(q, item.cue, 0.0, previous, parameters.allocation_persistence)
+                - allocation_probability(q, item.cue, 0.0, previous, parameters.allocation_persistence)
+            )
+            for q, previous, item in zip(
+                (0.02,) + primary_readout["q_transparent"][:-1],
+                (0,) + tuple(item.allocation for item in primary.slices[:-1]),
+                primary.slices,
+            )
+        )
+        generated_error = 0.0 if stream_payload(primary) == stream_payload(coupling_zero) else 1.0
+        score_error = max(
+            abs(left - right)
+            for left, right in zip(primary_readout["q_transparent"], zero_readout["q_transparent"])
+        )
+    else:
+        allocation_error = None
+        generated_error = None
+        score_error = None
+    primary_readout["A_feedback"] = float(
+        primary_readout["A_M_transparent"] - zero_readout["A_M_transparent"]
+    )
+    return {
+        "controls": controls,
+        "primary": primary_readout,
+        "coupling_zero": zero_readout,
+        "coupling_zero_identity": {
+            "applicable": parameters.coupling_strength == 0.0,
+            "allocation_probability_error": allocation_error,
+            "generated_stream_error": generated_error,
+            "scored_posterior_error": score_error,
+        },
+        "primary_stream": stream_payload(primary),
+        "coupling_zero_stream": stream_payload(coupling_zero),
+    }
 
 
 def _level_values(trajectory: Sequence[Mapping[str, float]]) -> tuple[dict[float, float], dict[float, float]]:
