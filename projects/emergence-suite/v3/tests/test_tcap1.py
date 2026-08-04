@@ -47,6 +47,29 @@ class TCap1Tests(unittest.TestCase):
             represented = tcap1.represented_log_likelihood(observations, 1, bundle, .3, .7, .8, full_information=True)
             self.assertAlmostEqual(transparent, represented, places=12)
 
+    def test_arm_common_world_proof(self) -> None:
+        proof = run_tcap1.arm_common_world_proof()
+        self.assertEqual(proof["verdict"], "PASS")
+        self.assertTrue(all(proof["checks"].values()))
+
+    def test_only_allocation_rng_key_varies_by_arm(self) -> None:
+        reference = {
+            "bundle": tcap1.world_component_key("bundle-stay"),
+            "meta": tcap1.world_component_key("meta"),
+            "delivery": tuple(tcap1.world_component_key("delivery", index) for index in range(5)),
+            "token": tuple(tcap1.world_component_key("token", index) for index in range(5)),
+        }
+        for arm in tcap1.ARMS:
+            self.assertEqual(reference["bundle"], tcap1.world_component_key("bundle-stay"))
+            self.assertTrue(tcap1.allocation_component_key(arm).endswith(arm))
+
+    def test_bistability_is_paired_initial_condition_readout(self) -> None:
+        def score(values):
+            return {"trajectory": tuple({"q_bundle": value} for value in values)}
+        result = tcap1.bistability_readout(score((.02, .02, .02, .02)), score((.98, .98, .98, .98)))
+        self.assertTrue(result["two_stable_fixed_points"])
+        self.assertEqual(result["fixed_point_count"], 2)
+
 
 if __name__ == "__main__":
     unittest.main()

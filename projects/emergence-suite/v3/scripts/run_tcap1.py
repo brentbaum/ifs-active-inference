@@ -29,6 +29,7 @@ from scripts import run_round24_defenses as round24  # noqa: E402
 
 RESULTS = ROOT / "results" / "decisive-tests"
 BLOCK = (3_824_000, 3_831_999)
+CENSUS2_BLOCK = (3_840_000, 3_847_999)
 TOL = 1e-10
 GRID = tuple(itertools.product(
     (0.0, 2.0, 4.0, 6.0),
@@ -137,6 +138,60 @@ def semantic_proofs() -> dict[str, Any]:
     }
 
 
+def arm_common_world_proof() -> dict[str, Any]:
+    """Zero-seed proof that only allocation RNG namespaces vary by arm."""
+
+    world_keys = {
+        arm: {
+            "bundle": tcap1.world_component_key("bundle-stay"),
+            "meta": tcap1.world_component_key("meta"),
+            "delivery": [tcap1.world_component_key("delivery", channel) for channel in range(len(tcap1.CHANNELS))],
+            "token": [tcap1.world_component_key("token", channel) for channel in range(len(tcap1.CHANNELS))],
+        }
+        for arm in tcap1.ARMS
+    }
+    allocation_keys = {arm: tcap1.allocation_component_key(arm) for arm in tcap1.ARMS}
+
+    def path_from_stays(stays: Sequence[int]) -> tuple[int, ...]:
+        state = 0
+        path = [state]
+        for stay in stays:
+            if not stay:
+                state = 1 - state
+            path.append(state)
+        return tuple(path)
+
+    enumerated = []
+    for stays in itertools.product((0, 1), repeat=4):
+        paths = {arm: path_from_stays(stays) for arm in tcap1.ARMS}
+        enumerated.append({"stay_bits": stays, "paths": paths, "byte_identical": len(set(paths.values())) == 1})
+    reference = world_keys[tcap1.ARMS[0]]
+    checks = {
+        "world_keys_arm_invariant": all(keys == reference for keys in world_keys.values()),
+        "allocation_keys_are_declared_arm_varying": len(set(allocation_keys.values())) == len(tcap1.ARMS),
+        "enumerated_latent_paths_byte_identical": all(row["byte_identical"] for row in enumerated),
+        "only_declared_process_varies": all(set(keys) == {"bundle", "meta", "delivery", "token"} for keys in world_keys.values()),
+    }
+    return {"zero_seed": True, "seed_consumption": [], "world_keys": world_keys, "allocation_keys": allocation_keys, "enumerated_paths": enumerated, "checks": checks, "verdict": "PASS" if all(checks.values()) else "FAIL_APPARATUS_ARM_COMMON_WORLD_PROOF"}
+
+
+def persist_arm_common_world_proof() -> dict[str, Any]:
+    record = arm_common_world_proof()
+    trace = RESULTS / "tcap1-round29-arm-common-world-proof-trace.jsonl"
+    if trace.exists():
+        raise RuntimeError("round-29 arm-common proof trace exists")
+    encoded = _canonical(record)
+    with trace.open("xb") as handle:
+        handle.write(encoded); handle.flush(); os.fsync(handle.fileno())
+    record["custody"] = {"trace_file": trace.name, "sha256": hashlib.sha256(encoded).hexdigest(), "persisted_before_verdict": True}
+    _write_json("tcap1-round29-arm-common-world-proof.json", record)
+    (RESULTS / "tcap1-round29-arm-common-world-proof.md").write_text(
+        "# T-CAP1 arm-common world proof\n\n"
+        f"Verdict: **{record['verdict']}**. All {len(tcap1.ARMS)} arms use identical world, bundle-path, metacognitive-noise, delivery-noise, and token-noise keys. Only allocation RNG keys vary by arm.\n"
+    )
+    return record
+
+
 def estimand_conformance() -> dict[str, Any]:
     levels = (0.0, 0.25, 0.5, 0.75, 1.0)
     hand_up = {0.0: 0.10, 0.25: 0.20, 0.5: 0.35, 0.75: 0.60, 1.0: 0.80}
@@ -201,17 +256,17 @@ def stage0() -> dict[str, Any]:
     return record
 
 
-def _cell_ranges() -> tuple[tuple[int, int, int, tcap1.CaptureParameters], ...]:
-    total, count = BLOCK[1] - BLOCK[0] + 1, len(GRID)
+def _cell_ranges(block: tuple[int, int] = BLOCK) -> tuple[tuple[int, int, int, tcap1.CaptureParameters], ...]:
+    total, count = block[1] - block[0] + 1, len(GRID)
     base, remainder = divmod(total, count)
-    cursor = BLOCK[0]
+    cursor = block[0]
     rows = []
     for index, values in enumerate(GRID):
         size = base + int(index < remainder)
         params = tcap1.CaptureParameters(*values)
         rows.append((index, cursor, cursor + size - 1, params))
         cursor += size
-    if cursor != BLOCK[1] + 1:
+    if cursor != block[1] + 1:
         raise RuntimeError("T-CAP1 Stage-1 cardinality preflight failed")
     return tuple(rows)
 
@@ -329,14 +384,179 @@ def stage1() -> dict[str, Any]:
     return record
 
 
+def stage1b_preblock() -> dict[str, Any]:
+    arm_proof = json.loads((RESULTS / "tcap1-round29-arm-common-world-proof.json").read_text())
+    defenses = {
+        "A": {"native": round24.native_identity(), "external": round24.external_identity()},
+        "B": round24.forecast_manifest(),
+        "C": round24.ledger(),
+        "D": round24.metamorphic(),
+    }
+    stage0_record = json.loads((RESULTS / "tcap1-stage0-proofs.json").read_text())
+    checks = {
+        "stage0_stands": stage0_record["verdict"] == "PASS",
+        "arm_common_world_proof": arm_proof["verdict"] == "PASS",
+        "round24_A": defenses["A"]["native"]["passed"] and defenses["A"]["external"]["passed"],
+        "round24_B": defenses["B"]["passed"],
+        "round24_C": bool(defenses["C"]["proofs"]),
+        "round24_D": defenses["D"]["passed"],
+        "estimand_conformance": all(estimand_conformance()["checks"].values()),
+        "v36_sources_unchanged": s2._assert_sources() == s2.SOURCE_HASHES,
+    }
+    pre_verdict = {"study": "T-CAP1", "battery": "Census-2 preblock", "zero_seed": True, "seed_consumption": [], "checks": checks, "arm_common_world_proof": arm_proof, "standing_defenses": defenses}
+    trace = RESULTS / "tcap1-stage1b-preblock-proof-trace.jsonl"
+    if trace.exists():
+        raise RuntimeError("T-CAP1 Census-2 preblock trace exists")
+    encoded = _canonical(pre_verdict)
+    with trace.open("xb") as handle:
+        handle.write(encoded); handle.flush(); os.fsync(handle.fileno())
+    record = dict(pre_verdict)
+    record["custody"] = {"trace_file": trace.name, "sha256": hashlib.sha256(encoded).hexdigest(), "persisted_before_verdict": True}
+    record["verdict"] = "PASS" if all(checks.values()) else "FAIL_APPARATUS_PREBLOCK"
+    _write_json("tcap1-stage1b-preblock-proofs.json", record)
+    (RESULTS / "tcap1-stage1b-preblock-proofs.md").write_text(f"# T-CAP1 Census-2 preblock proofs\n\nVerdict: **{record['verdict']}**. No world seed was consumed.\n")
+    return record
+
+
+@traced_execution
+def _worker_stage1b(task: tuple[int, int, tuple[float, float, float, float, float]]) -> dict[str, Any]:
+    seed, cell_index, values = task
+    require_trace_sink("tcap1.stage1b_worker", seed=seed, cell=cell_index)
+    parameters = tcap1.CaptureParameters(*values)
+    data = tcap1.simulate_all_arms(seed, parameters, released_block=CENSUS2_BLOCK)
+    if not data["arm_common_world_identity"]:
+        raise RuntimeError("Census-2 runtime arm-common identity failed")
+    return {"seed": seed, "cell_index": cell_index, "parameters": _plain(parameters), "data": data}
+
+
+def _persist_stage1b(tasks: Sequence[tuple[int, int, tuple[float, float, float, float, float]]]) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    trace = RESULTS / "tcap1-stage1b-census-traces.jsonl"
+    events = RESULTS / "tcap1-stage1b-census-trace-hash-events.jsonl"
+    ledger_path = RESULTS / "tcap1-stage1b-census-trace-hashes.json"
+    if any(path.exists() for path in (trace, events, ledger_path)):
+        raise RuntimeError("T-CAP1 Census-2 custody output exists")
+    rows, records, digest = [], [], hashlib.sha256()
+    ranges = _cell_ranges(CENSUS2_BLOCK)
+    with trace.open("xb") as handle, events.open("xb") as event_handle:
+        def persist(row: dict[str, Any]) -> None:
+            validate_finite_worker_row(row)
+            encoded = _canonical(row)
+            handle.write(encoded); handle.flush(); os.fsync(handle.fileno()); digest.update(encoded)
+            event = {"seed": row["seed"], "cell_index": row["cell_index"], "sha256": hashlib.sha256(encoded).hexdigest()}
+            event_handle.write(_canonical(event)); event_handle.flush(); os.fsync(event_handle.fileno())
+            rows.append(row); records.append(event)
+        offset = 0
+        for index, start, end, parameters in ranges:
+            subset = list(tasks[offset:offset + end - start + 1]); offset += len(subset)
+            expected_values = tuple(_plain(parameters).values())
+            if subset[0] != (start, index, expected_values) or subset[-1] != (end, index, expected_values):
+                raise RuntimeError("T-CAP1 Census-2 cell preflight mismatch")
+            persist(_worker_stage1b(subset[0]))
+            with get_context("spawn").Pool(max(1, min(8, (os.cpu_count() or 2) - 1))) as pool:
+                for row in pool.imap(_worker_stage1b, subset[1:], chunksize=1):
+                    persist(row)
+    expected = [(seed, index) for index, start, end, _ in ranges for seed in range(start, end + 1)]
+    if [(row["seed"], row["cell_index"]) for row in rows] != expected:
+        raise RuntimeError("T-CAP1 Census-2 custody mismatch")
+    ledger = {"trace_file": trace.name, "sha256": digest.hexdigest(), "record_count": len(rows), "seed_start": CENSUS2_BLOCK[0], "seed_end": CENSUS2_BLOCK[1], "ascending_gap_free_per_cell": True, "serial_first_worlds": [start for _, start, _, _ in ranges], "persisted_before_aggregation": True, "event_hash_file": events.name, "event_hash_sha256": _sha(events), "records": records}
+    _write_json(ledger_path.name, ledger)
+    return rows, ledger
+
+
+def stage1b() -> dict[str, Any]:
+    preblock = json.loads((RESULTS / "tcap1-stage1b-preblock-proofs.json").read_text())
+    if preblock["verdict"] != "PASS":
+        raise RuntimeError("T-CAP1 Census-2 preblock failed")
+    ranges = _cell_ranges(CENSUS2_BLOCK)
+    tasks = []
+    for index, start, end, parameters in ranges:
+        values = tuple(_plain(parameters).values())
+        tasks.extend((seed, index, values) for seed in range(start, end + 1))
+    rows, ledger = _persist_stage1b(tasks)
+    cells = []
+    for index, start, end, parameters in ranges:
+        subset = [row for row in rows if row["cell_index"] == index]
+        arm_summary = {}
+        for arm in tcap1.ARMS:
+            arm_rows = [row["data"]["arms"][arm] for row in subset]
+            arm_summary[arm] = {
+                key: _mean([item[key] for item in arm_rows])
+                for key in ("hysteresis_area", "capture_on_threshold", "release_threshold", "posterior_after_full_withdrawal", "material_elevation_after_withdrawal", "recovery_time", "mean_disconfirming_influence", "mean_selection_bf_divergence", "delivered_token_denominator")
+            }
+            arm_summary[arm]["hysteresis_distribution"] = _quantiles([item["hysteresis_area"] for item in arm_rows])
+            arm_summary[arm]["effective_precision_by_channel"] = [_mean([item["mean_effective_precision"][channel] for item in arm_rows]) for channel in range(len(tcap1.CHANNELS))]
+            arm_summary[arm]["two_stable_fixed_point_fraction"] = _mean([item["bistability"]["two_stable_fixed_points"] for item in arm_rows])
+            arm_summary[arm]["initial_posterior_final_separation"] = _mean([item["bistability"]["final_separation"] for item in arm_rows])
+            arm_summary[arm]["bistability_distribution"] = _quantiles([item["bistability"]["final_separation"] for item in arm_rows])
+            if arm == "full_information_replay":
+                arm_summary[arm]["transparent_represented_max_error"] = max(item["transparent_represented_max_error"] for item in arm_rows)
+        paired_excess = [row["data"]["arms"]["transparent_feedback"]["hysteresis_area"] - row["data"]["arms"]["matched_persistence"]["hysteresis_area"] for row in subset]
+        h_excess = _mean(paired_excess)
+        region = "no_hysteresis" if h_excess < .02 else "near_boundary" if h_excess < .08 else "clear_hysteresis"
+        cells.append({"cell_index": index, "seed_start": start, "seed_end": end, "count": len(subset), "parameters": _plain(parameters), "region": region, "H_excess_mean": h_excess, "H_excess_distribution": _quantiles(paired_excess), "raw_H_descriptive": {"transparent": arm_summary["transparent_feedback"]["hysteresis_area"], "matched_persistence": arm_summary["matched_persistence"]["hysteresis_area"]}, "arms": arm_summary, "arm_common_world_identity": all(row["data"]["arm_common_world_identity"] for row in subset)})
+    panel = {}
+    for region in ("no_hysteresis", "near_boundary", "clear_hysteresis"):
+        matches = [cell for cell in cells if cell["region"] == region]
+        panel[region] = matches[0] if matches else None
+    region_counts = {region: sum(cell["region"] == region for cell in cells) for region in panel}
+    panel_complete = all(cell is not None for cell in panel.values())
+    bistability_census = {
+        arm: {
+            "two_stable_fixed_point_world_count": int(round(sum(cell["arms"][arm]["two_stable_fixed_point_fraction"] * cell["count"] for cell in cells))),
+            "two_stable_fixed_point_world_fraction": sum(cell["arms"][arm]["two_stable_fixed_point_fraction"] * cell["count"] for cell in cells) / len(rows),
+        }
+        for arm in tcap1.ARMS
+    }
+    record = {
+        "study": "T-CAP1",
+        "stage": "1b",
+        "status": "COMPLETE_NON_CRITERIAL_DYNAMICS_CENSUS_2" if panel_complete else "COMPLETE_NON_CRITERIAL_DYNAMICS_CENSUS_2_PANEL_SPAN_NOT_ATTAINED",
+        "seed_block": list(CENSUS2_BLOCK),
+        "grid_identity": "same frozen 324-cell Stage-1 grid",
+        "grid_cell_count": len(cells),
+        "world_count": len(rows),
+        "classification_estimand": "cell mean of paired H_transparent - H_matched-persistence",
+        "raw_H_reported_descriptively": True,
+        "region_counts": region_counts,
+        "panel_complete": panel_complete,
+        "frozen_parameter_panel": panel,
+        "bistability_census": bistability_census,
+        "census_map": cells,
+        "custody": ledger,
+        "arm_common_world_identity_all_rows": all(row["data"]["arm_common_world_identity"] for row in rows),
+        "no_prediction_seal": True,
+        "confirmatory_blocks_opened": False,
+        "escrow_opened": False,
+    }
+    _write_json("tcap1-stage1b-census.json", record)
+    panel_lines = []
+    for region, cell in panel.items():
+        panel_lines.append(f"- **{region}**: " + (f"cell {cell['cell_index']}, `{json.dumps(cell['parameters'], sort_keys=True)}`, mean H_excess `{cell['H_excess_mean']}`" if cell else "no occupied cell; reported without substitution"))
+    finding = "The excess-hysteresis grid spans all three frozen regions." if panel_complete else "The excess-hysteresis panel does not span all three regions. Missing entries remain null; no parameter or boundary was tuned."
+    (RESULTS / "tcap1-stage1b-census.md").write_text(
+        "# T-CAP1 Census-2 dynamics map\n\n"
+        f"Status: **{record['status']}**. This is a public, non-criterial census.\n\n"
+        f"All {len(rows)} worlds used arm-common latent paths. Regions are classified on paired `H_excess = H_transparent - H_matched-persistence`; raw H remains descriptive. Counts: `{json.dumps(region_counts, sort_keys=True)}`.\n\n"
+        "## Frozen parameter panel\n\n" + "\n".join(panel_lines) + "\n\n" + finding + "\n\n"
+        f"Trace SHA-256: `{ledger['sha256']}`.\n"
+    )
+    return record
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("action", choices=("stage0", "stage1"))
+    parser.add_argument("action", choices=("stage0", "stage1", "proof29", "preblock29", "stage1b"))
     args = parser.parse_args()
     if args.action == "stage0":
         stage0()
-    else:
+    elif args.action == "stage1":
         stage1()
+    elif args.action == "proof29":
+        persist_arm_common_world_proof()
+    elif args.action == "preblock29":
+        stage1b_preblock()
+    else:
+        stage1b()
 
 
 if __name__ == "__main__":

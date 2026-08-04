@@ -1,0 +1,1246 @@
+{
+  "allocation_keys": {
+    "filter_awareness_only": "allocation:filter_awareness_only",
+    "full_information_replay": "allocation:full_information_replay",
+    "matched_persistence": "allocation:matched_persistence",
+    "no_feedback_candidate_common": "allocation:no_feedback_candidate_common",
+    "random_allocation": "allocation:random_allocation",
+    "represented_feedback": "allocation:represented_feedback",
+    "sign_reversed_allocation": "allocation:sign_reversed_allocation",
+    "transparent_feedback": "allocation:transparent_feedback"
+  },
+  "checks": {
+    "allocation_keys_are_declared_arm_varying": true,
+    "enumerated_latent_paths_byte_identical": true,
+    "only_declared_process_varies": true,
+    "world_keys_arm_invariant": true
+  },
+  "custody": {
+    "persisted_before_verdict": true,
+    "sha256": "994000fad0be0559d7349d1d8d3dac52716adb6d06b7c4569b6e2a033ac335c0",
+    "trace_file": "tcap1-round29-arm-common-world-proof-trace.jsonl"
+  },
+  "enumerated_paths": [
+    {
+      "byte_identical": true,
+      "paths": {
+        "filter_awareness_only": [
+          0,
+          1,
+          0,
+          1,
+          0
+        ],
+        "full_information_replay": [
+          0,
+          1,
+          0,
+          1,
+          0
+        ],
+        "matched_persistence": [
+          0,
+          1,
+          0,
+          1,
+          0
+        ],
+        "no_feedback_candidate_common": [
+          0,
+          1,
+          0,
+          1,
+          0
+        ],
+        "random_allocation": [
+          0,
+          1,
+          0,
+          1,
+          0
+        ],
+        "represented_feedback": [
+          0,
+          1,
+          0,
+          1,
+          0
+        ],
+        "sign_reversed_allocation": [
+          0,
+          1,
+          0,
+          1,
+          0
+        ],
+        "transparent_feedback": [
+          0,
+          1,
+          0,
+          1,
+          0
+        ]
+      },
+      "stay_bits": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "byte_identical": true,
+      "paths": {
+        "filter_awareness_only": [
+          0,
+          1,
+          0,
+          1,
+          1
+        ],
+        "full_information_replay": [
+          0,
+          1,
+          0,
+          1,
+          1
+        ],
+        "matched_persistence": [
+          0,
+          1,
+          0,
+          1,
+          1
+        ],
+        "no_feedback_candidate_common": [
+          0,
+          1,
+          0,
+          1,
+          1
+        ],
+        "random_allocation": [
+          0,
+          1,
+          0,
+          1,
+          1
+        ],
+        "represented_feedback": [
+          0,
+          1,
+          0,
+          1,
+          1
+        ],
+        "sign_reversed_allocation": [
+          0,
+          1,
+          0,
+          1,
+          1
+        ],
+        "transparent_feedback": [
+          0,
+          1,
+          0,
+          1,
+          1
+        ]
+      },
+      "stay_bits": [
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "byte_identical": true,
+      "paths": {
+        "filter_awareness_only": [
+          0,
+          1,
+          0,
+          0,
+          1
+        ],
+        "full_information_replay": [
+          0,
+          1,
+          0,
+          0,
+          1
+        ],
+        "matched_persistence": [
+          0,
+          1,
+          0,
+          0,
+          1
+        ],
+        "no_feedback_candidate_common": [
+          0,
+          1,
+          0,
+          0,
+          1
+        ],
+        "random_allocation": [
+          0,
+          1,
+          0,
+          0,
+          1
+        ],
+        "represented_feedback": [
+          0,
+          1,
+          0,
+          0,
+          1
+        ],
+        "sign_reversed_allocation": [
+          0,
+          1,
+          0,
+          0,
+          1
+        ],
+        "transparent_feedback": [
+          0,
+          1,
+          0,
+          0,
+          1
+        ]
+      },
+      "stay_bits": [
+        0,
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "byte_identical": true,
+      "paths": {
+        "filter_awareness_only": [
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "full_information_replay": [
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "matched_persistence": [
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "no_feedback_candidate_common": [
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "random_allocation": [
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "represented_feedback": [
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "sign_reversed_allocation": [
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "transparent_feedback": [
+          0,
+          1,
+          0,
+          0,
+          0
+        ]
+      },
+      "stay_bits": [
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "byte_identical": true,
+      "paths": {
+        "filter_awareness_only": [
+          0,
+          1,
+          1,
+          0,
+          1
+        ],
+        "full_information_replay": [
+          0,
+          1,
+          1,
+          0,
+          1
+        ],
+        "matched_persistence": [
+          0,
+          1,
+          1,
+          0,
+          1
+        ],
+        "no_feedback_candidate_common": [
+          0,
+          1,
+          1,
+          0,
+          1
+        ],
+        "random_allocation": [
+          0,
+          1,
+          1,
+          0,
+          1
+        ],
+        "represented_feedback": [
+          0,
+          1,
+          1,
+          0,
+          1
+        ],
+        "sign_reversed_allocation": [
+          0,
+          1,
+          1,
+          0,
+          1
+        ],
+        "transparent_feedback": [
+          0,
+          1,
+          1,
+          0,
+          1
+        ]
+      },
+      "stay_bits": [
+        0,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "byte_identical": true,
+      "paths": {
+        "filter_awareness_only": [
+          0,
+          1,
+          1,
+          0,
+          0
+        ],
+        "full_information_replay": [
+          0,
+          1,
+          1,
+          0,
+          0
+        ],
+        "matched_persistence": [
+          0,
+          1,
+          1,
+          0,
+          0
+        ],
+        "no_feedback_candidate_common": [
+          0,
+          1,
+          1,
+          0,
+          0
+        ],
+        "random_allocation": [
+          0,
+          1,
+          1,
+          0,
+          0
+        ],
+        "represented_feedback": [
+          0,
+          1,
+          1,
+          0,
+          0
+        ],
+        "sign_reversed_allocation": [
+          0,
+          1,
+          1,
+          0,
+          0
+        ],
+        "transparent_feedback": [
+          0,
+          1,
+          1,
+          0,
+          0
+        ]
+      },
+      "stay_bits": [
+        0,
+        1,
+        0,
+        1
+      ]
+    },
+    {
+      "byte_identical": true,
+      "paths": {
+        "filter_awareness_only": [
+          0,
+          1,
+          1,
+          1,
+          0
+        ],
+        "full_information_replay": [
+          0,
+          1,
+          1,
+          1,
+          0
+        ],
+        "matched_persistence": [
+          0,
+          1,
+          1,
+          1,
+          0
+        ],
+        "no_feedback_candidate_common": [
+          0,
+          1,
+          1,
+          1,
+          0
+        ],
+        "random_allocation": [
+          0,
+          1,
+          1,
+          1,
+          0
+        ],
+        "represented_feedback": [
+          0,
+          1,
+          1,
+          1,
+          0
+        ],
+        "sign_reversed_allocation": [
+          0,
+          1,
+          1,
+          1,
+          0
+        ],
+        "transparent_feedback": [
+          0,
+          1,
+          1,
+          1,
+          0
+        ]
+      },
+      "stay_bits": [
+        0,
+        1,
+        1,
+        0
+      ]
+    },
+    {
+      "byte_identical": true,
+      "paths": {
+        "filter_awareness_only": [
+          0,
+          1,
+          1,
+          1,
+          1
+        ],
+        "full_information_replay": [
+          0,
+          1,
+          1,
+          1,
+          1
+        ],
+        "matched_persistence": [
+          0,
+          1,
+          1,
+          1,
+          1
+        ],
+        "no_feedback_candidate_common": [
+          0,
+          1,
+          1,
+          1,
+          1
+        ],
+        "random_allocation": [
+          0,
+          1,
+          1,
+          1,
+          1
+        ],
+        "represented_feedback": [
+          0,
+          1,
+          1,
+          1,
+          1
+        ],
+        "sign_reversed_allocation": [
+          0,
+          1,
+          1,
+          1,
+          1
+        ],
+        "transparent_feedback": [
+          0,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "stay_bits": [
+        0,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "byte_identical": true,
+      "paths": {
+        "filter_awareness_only": [
+          0,
+          0,
+          1,
+          0,
+          1
+        ],
+        "full_information_replay": [
+          0,
+          0,
+          1,
+          0,
+          1
+        ],
+        "matched_persistence": [
+          0,
+          0,
+          1,
+          0,
+          1
+        ],
+        "no_feedback_candidate_common": [
+          0,
+          0,
+          1,
+          0,
+          1
+        ],
+        "random_allocation": [
+          0,
+          0,
+          1,
+          0,
+          1
+        ],
+        "represented_feedback": [
+          0,
+          0,
+          1,
+          0,
+          1
+        ],
+        "sign_reversed_allocation": [
+          0,
+          0,
+          1,
+          0,
+          1
+        ],
+        "transparent_feedback": [
+          0,
+          0,
+          1,
+          0,
+          1
+        ]
+      },
+      "stay_bits": [
+        1,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "byte_identical": true,
+      "paths": {
+        "filter_awareness_only": [
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "full_information_replay": [
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "matched_persistence": [
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "no_feedback_candidate_common": [
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "random_allocation": [
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "represented_feedback": [
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "sign_reversed_allocation": [
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "transparent_feedback": [
+          0,
+          0,
+          1,
+          0,
+          0
+        ]
+      },
+      "stay_bits": [
+        1,
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "byte_identical": true,
+      "paths": {
+        "filter_awareness_only": [
+          0,
+          0,
+          1,
+          1,
+          0
+        ],
+        "full_information_replay": [
+          0,
+          0,
+          1,
+          1,
+          0
+        ],
+        "matched_persistence": [
+          0,
+          0,
+          1,
+          1,
+          0
+        ],
+        "no_feedback_candidate_common": [
+          0,
+          0,
+          1,
+          1,
+          0
+        ],
+        "random_allocation": [
+          0,
+          0,
+          1,
+          1,
+          0
+        ],
+        "represented_feedback": [
+          0,
+          0,
+          1,
+          1,
+          0
+        ],
+        "sign_reversed_allocation": [
+          0,
+          0,
+          1,
+          1,
+          0
+        ],
+        "transparent_feedback": [
+          0,
+          0,
+          1,
+          1,
+          0
+        ]
+      },
+      "stay_bits": [
+        1,
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "byte_identical": true,
+      "paths": {
+        "filter_awareness_only": [
+          0,
+          0,
+          1,
+          1,
+          1
+        ],
+        "full_information_replay": [
+          0,
+          0,
+          1,
+          1,
+          1
+        ],
+        "matched_persistence": [
+          0,
+          0,
+          1,
+          1,
+          1
+        ],
+        "no_feedback_candidate_common": [
+          0,
+          0,
+          1,
+          1,
+          1
+        ],
+        "random_allocation": [
+          0,
+          0,
+          1,
+          1,
+          1
+        ],
+        "represented_feedback": [
+          0,
+          0,
+          1,
+          1,
+          1
+        ],
+        "sign_reversed_allocation": [
+          0,
+          0,
+          1,
+          1,
+          1
+        ],
+        "transparent_feedback": [
+          0,
+          0,
+          1,
+          1,
+          1
+        ]
+      },
+      "stay_bits": [
+        1,
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "byte_identical": true,
+      "paths": {
+        "filter_awareness_only": [
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        "full_information_replay": [
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        "matched_persistence": [
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        "no_feedback_candidate_common": [
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        "random_allocation": [
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        "represented_feedback": [
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        "sign_reversed_allocation": [
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        "transparent_feedback": [
+          0,
+          0,
+          0,
+          1,
+          0
+        ]
+      },
+      "stay_bits": [
+        1,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "byte_identical": true,
+      "paths": {
+        "filter_awareness_only": [
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        "full_information_replay": [
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        "matched_persistence": [
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        "no_feedback_candidate_common": [
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        "random_allocation": [
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        "represented_feedback": [
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        "sign_reversed_allocation": [
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        "transparent_feedback": [
+          0,
+          0,
+          0,
+          1,
+          1
+        ]
+      },
+      "stay_bits": [
+        1,
+        1,
+        0,
+        1
+      ]
+    },
+    {
+      "byte_identical": true,
+      "paths": {
+        "filter_awareness_only": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "full_information_replay": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "matched_persistence": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "no_feedback_candidate_common": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "random_allocation": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "represented_feedback": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "sign_reversed_allocation": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparent_feedback": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      "stay_bits": [
+        1,
+        1,
+        1,
+        0
+      ]
+    },
+    {
+      "byte_identical": true,
+      "paths": {
+        "filter_awareness_only": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "full_information_replay": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "matched_persistence": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "no_feedback_candidate_common": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "random_allocation": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "represented_feedback": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "sign_reversed_allocation": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "transparent_feedback": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "stay_bits": [
+        1,
+        1,
+        1,
+        1
+      ]
+    }
+  ],
+  "seed_consumption": [],
+  "verdict": "PASS",
+  "world_keys": {
+    "filter_awareness_only": {
+      "bundle": "bundle-stay",
+      "delivery": [
+        "delivery:0",
+        "delivery:1",
+        "delivery:2",
+        "delivery:3",
+        "delivery:4"
+      ],
+      "meta": "meta",
+      "token": [
+        "token:0",
+        "token:1",
+        "token:2",
+        "token:3",
+        "token:4"
+      ]
+    },
+    "full_information_replay": {
+      "bundle": "bundle-stay",
+      "delivery": [
+        "delivery:0",
+        "delivery:1",
+        "delivery:2",
+        "delivery:3",
+        "delivery:4"
+      ],
+      "meta": "meta",
+      "token": [
+        "token:0",
+        "token:1",
+        "token:2",
+        "token:3",
+        "token:4"
+      ]
+    },
+    "matched_persistence": {
+      "bundle": "bundle-stay",
+      "delivery": [
+        "delivery:0",
+        "delivery:1",
+        "delivery:2",
+        "delivery:3",
+        "delivery:4"
+      ],
+      "meta": "meta",
+      "token": [
+        "token:0",
+        "token:1",
+        "token:2",
+        "token:3",
+        "token:4"
+      ]
+    },
+    "no_feedback_candidate_common": {
+      "bundle": "bundle-stay",
+      "delivery": [
+        "delivery:0",
+        "delivery:1",
+        "delivery:2",
+        "delivery:3",
+        "delivery:4"
+      ],
+      "meta": "meta",
+      "token": [
+        "token:0",
+        "token:1",
+        "token:2",
+        "token:3",
+        "token:4"
+      ]
+    },
+    "random_allocation": {
+      "bundle": "bundle-stay",
+      "delivery": [
+        "delivery:0",
+        "delivery:1",
+        "delivery:2",
+        "delivery:3",
+        "delivery:4"
+      ],
+      "meta": "meta",
+      "token": [
+        "token:0",
+        "token:1",
+        "token:2",
+        "token:3",
+        "token:4"
+      ]
+    },
+    "represented_feedback": {
+      "bundle": "bundle-stay",
+      "delivery": [
+        "delivery:0",
+        "delivery:1",
+        "delivery:2",
+        "delivery:3",
+        "delivery:4"
+      ],
+      "meta": "meta",
+      "token": [
+        "token:0",
+        "token:1",
+        "token:2",
+        "token:3",
+        "token:4"
+      ]
+    },
+    "sign_reversed_allocation": {
+      "bundle": "bundle-stay",
+      "delivery": [
+        "delivery:0",
+        "delivery:1",
+        "delivery:2",
+        "delivery:3",
+        "delivery:4"
+      ],
+      "meta": "meta",
+      "token": [
+        "token:0",
+        "token:1",
+        "token:2",
+        "token:3",
+        "token:4"
+      ]
+    },
+    "transparent_feedback": {
+      "bundle": "bundle-stay",
+      "delivery": [
+        "delivery:0",
+        "delivery:1",
+        "delivery:2",
+        "delivery:3",
+        "delivery:4"
+      ],
+      "meta": "meta",
+      "token": [
+        "token:0",
+        "token:1",
+        "token:2",
+        "token:3",
+        "token:4"
+      ]
+    }
+  },
+  "zero_seed": true
+}

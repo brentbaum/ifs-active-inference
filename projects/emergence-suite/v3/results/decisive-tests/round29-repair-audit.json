@@ -1,0 +1,37 @@
+{
+  "authority": "internal-round29-adjudication.md, ruling 29.2",
+  "classification": "RUNNER_READOUT_ONLY",
+  "original_census_retained": true,
+  "original_trace_sha256": "c1cecb3232f43578ba45395a0b4b730469535ae44128f4677c268a845449f64e",
+  "repairs": [
+    "arm-invariant bundle-path, metacognitive-noise, delivery-noise, and token-noise RNG keys; allocation RNG key remains arm-specific",
+    "paired low/high initial-posterior executions through the delayed allocation loop and explicit bistability readout",
+    "Census-2 region classification by paired cell-mean H_excess = H_transparent - H_matched-persistence; raw H retained"
+  ],
+  "tcap1_file_hashes": {
+    "before": {
+      "ref/tcap1.py": "37806940146e377a33ce5a014ccaaf8f18ff06b180e45ec1a94f51d114206835",
+      "scripts/run_tcap1.py": "38d60e9447b4a5f117e820a5cb9aa0657e2f83934aab939d44e05507cc5fa22a",
+      "tests/test_tcap1.py": "1fd7fd2f86fd257b098f5f05b70d5056db91b168635d515416e6b0817ae4f5a5"
+    },
+    "after": {
+      "ref/tcap1.py": "87f054bcb7c0c9542186075415f3d6bbdc1f1956bc06754d65f2fdb6b022148c",
+      "scripts/run_tcap1.py": "45c54e060a4418d84f3e63ede7e5f4276364c8dda71a98daa7828eaa6449eae3",
+      "tests/test_tcap1.py": "da869e58c82d02683e7468187bb002930f301fe40c1760b772afe684001436e6"
+    }
+  },
+  "scientific_production_function_hashes_unchanged": {
+    "allocation_probability": "c1a3aa79596e54c6b79d0d29f3ef565fd70fb9cd9d83323bebf85d0f9c975232",
+    "allocation_observation_probability": "cc345169c5cc0ccbeffd7eff62055f931c7749e0358d6cbde5128b1d445ea568",
+    "token_probability": "eade172f906094b2c9cac26abe66c6bd2309bcab89b7e683cd328a3638ecd052",
+    "observation_atom_probability": "ec1cd1cf8c4053b125eb75414ef320839ecd1c51f284a25b1d372e323630f27c",
+    "transparent_log_likelihood": "baff9a9696e22bb33c0cf7a58285df83d99b2d72d6b3cbc7b7fe49bbbe7864cb",
+    "represented_log_likelihood": "fed9758953036d185260d087ec85375a4f71d9594357220a52e895c9188b2916",
+    "posterior_update": "c5d22b70cb4bf6f5432e41d8a8cb3590b63eb7d7a8fc864e8853b6e96941fc86"
+  },
+  "frozen_v36_hashes_unchanged": true,
+  "new_seed_block": [3840000, 3847999],
+  "grid_changed": false,
+  "threshold_changed": false,
+  "scientific_production_changed": false
+}

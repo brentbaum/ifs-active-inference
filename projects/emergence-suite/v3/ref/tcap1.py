@@ -254,25 +254,44 @@ def _draw(seed: int, component: str, time: int, probability: float, released_blo
     return int(_rng(seed, component, time, released_block, keys).random() < probability)
 
 
+def world_component_key(kind: str, channel: int | None = None) -> str:
+    """Arm-invariant key for world and potential-observation randomness."""
+
+    if kind in {"bundle-stay", "meta"} and channel is None:
+        return kind
+    if kind in {"delivery", "token"} and channel is not None:
+        return f"{kind}:{channel}"
+    raise ValueError((kind, channel))
+
+
+def allocation_component_key(arm: str) -> str:
+    """The sole arm-varying RNG namespace in the repaired census runner."""
+
+    if arm not in ARMS:
+        raise ValueError(arm)
+    return f"allocation:{arm}"
+
+
 def generate_stream(
     seed: int,
     parameters: CaptureParameters,
     arm: str,
     *,
     released_block: tuple[int, int],
+    initial_q: float = 0.12,
 ) -> CaptureStream:
     require_trace_sink("tcap1.generate_stream", seed=seed, arm=arm)
     if arm not in ARMS:
         raise ValueError(arm)
     keys: list[str] = []
     schedule = cue_schedule(parameters.cue_intensity)
-    q_controller = 0.12
+    q_controller = _clip_probability(initial_q)
     bundle = 0
     previous_allocation = 0
     slices = []
     for time, cue in enumerate(schedule):
         if time:
-            stay = _draw(seed, f"bundle-stay:{arm}", time, parameters.bundle_transition_persistence, released_block, keys)
+            stay = _draw(seed, world_component_key("bundle-stay"), time, parameters.bundle_transition_persistence, released_block, keys)
             if not stay:
                 bundle = 1 - bundle
         if arm in {"no_feedback_candidate_common", "matched_persistence"}:
@@ -286,18 +305,18 @@ def generate_stream(
         else:
             rule = "feedback"
         allocation_prior = allocation_probability(q_controller, cue, parameters.coupling_strength, previous_allocation, parameters.allocation_persistence, rule=rule)
-        allocation = _draw(seed, f"allocation:{arm}", time, allocation_prior, released_block, keys)
-        meta = _draw(seed, f"meta:{arm}", time, allocation_observation_probability(1, allocation, parameters.meta_observation_reliability), released_block, keys)
+        allocation = _draw(seed, allocation_component_key(arm), time, allocation_prior, released_block, keys)
+        meta = _draw(seed, world_component_key("meta"), time, allocation_observation_probability(1, allocation, parameters.meta_observation_reliability), released_block, keys)
         observations = []
         for channel in range(len(CHANNELS)):
             if arm == "full_information_replay":
                 delivered = 1
                 lambda_for_token = 0
             else:
-                delivered = _draw(seed, f"delivery:{arm}:{channel}", time, delivery_probability(channel, allocation), released_block, keys)
+                delivered = _draw(seed, world_component_key("delivery", channel), time, delivery_probability(channel, allocation), released_block, keys)
                 lambda_for_token = allocation
             if delivered:
-                observations.append(_draw(seed, f"token:{arm}:{channel}", time, token_probability(channel, bundle, lambda_for_token, cue), released_block, keys))
+                observations.append(_draw(seed, world_component_key("token", channel), time, token_probability(channel, bundle, lambda_for_token, cue), released_block, keys))
             else:
                 observations.append(None)
         item = CaptureSlice(time, cue, bundle, allocation, meta, tuple(observations))
@@ -310,11 +329,11 @@ def generate_stream(
     return CaptureStream(seed, arm, parameters, tuple(slices), tuple(keys))
 
 
-def score_stream(stream: CaptureStream, architecture: str) -> dict[str, Any]:
+def score_stream(stream: CaptureStream, architecture: str, *, initial_q: float = 0.12) -> dict[str, Any]:
     require_trace_sink("tcap1.score_stream", seed=stream.seed, arm=stream.arm, architecture=architecture)
     if architecture not in {"transparent", "represented"}:
         raise ValueError(architecture)
-    q = 0.12
+    q = _clip_probability(initial_q)
     previous_allocation = 0
     trajectory = []
     for item in stream.slices:
@@ -375,7 +394,6 @@ def dynamics_readouts(score: Mapping[str, Any]) -> dict[str, Any]:
     recovery = next((item["time"] - withdrawal_start for item in trajectory[withdrawal_start:] if item["q_bundle"] < 0.30), -1)
     final_q = float(trajectory[-1]["q_bundle"])
     initial_q = float(trajectory[0]["q_bundle"])
-    fixed_points = int(abs(float(trajectory[-1]["q_bundle"]) - float(trajectory[-8]["q_bundle"])) < 0.05) + int(final_q > 0.65)
     return {
         "hysteresis_area": float(hysteresis),
         "capture_on_threshold": float(capture_on),
@@ -383,7 +401,6 @@ def dynamics_readouts(score: Mapping[str, Any]) -> dict[str, Any]:
         "posterior_after_full_withdrawal": final_q,
         "material_elevation_after_withdrawal": final_q - initial_q,
         "recovery_time": int(recovery),
-        "fixed_point_count": int(max(1, fixed_points)),
         "mean_effective_precision": tuple(float(np.mean([item["effective_precision"][index] for item in trajectory])) for index in range(len(CHANNELS))),
         "mean_disconfirming_influence": float(np.mean([item["disconfirming_influence"] for item in trajectory])),
         "mean_selection_bf_divergence": float(np.mean([item["selection_naive_log_bf"] - item["selection_aware_log_bf"] for item in trajectory])),
@@ -393,27 +410,68 @@ def dynamics_readouts(score: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
+def bistability_readout(low_score: Mapping[str, Any], high_score: Mapping[str, Any]) -> dict[str, Any]:
+    """Explicit paired low/high-initial-posterior fixed-point estimand."""
+
+    low = low_score["trajectory"]
+    high = high_score["trajectory"]
+    low_final = float(low[-1]["q_bundle"])
+    high_final = float(high[-1]["q_bundle"])
+    low_stability = abs(low_final - float(np.mean([item["q_bundle"] for item in low[-4:]])))
+    high_stability = abs(high_final - float(np.mean([item["q_bundle"] for item in high[-4:]])))
+    separation = abs(high_final - low_final)
+    two_stable = low_stability <= 0.05 and high_stability <= 0.05 and separation >= 0.25
+    return {
+        "low_initial_posterior": 0.02,
+        "high_initial_posterior": 0.98,
+        "low_final_posterior": low_final,
+        "high_final_posterior": high_final,
+        "final_separation": separation,
+        "low_stability_error": low_stability,
+        "high_stability_error": high_stability,
+        "two_stable_fixed_points": bool(two_stable),
+        "fixed_point_count": 2 if two_stable else 1,
+    }
+
+
 def simulate_all_arms(seed: int, parameters: CaptureParameters, *, released_block: tuple[int, int]) -> dict[str, Any]:
     """Generate/control all arms; represented arms replay one common stream."""
 
-    feedback_stream = generate_stream(seed, parameters, "transparent_feedback", released_block=released_block)
-    transparent = score_stream(feedback_stream, "transparent")
-    represented = score_stream(feedback_stream, "represented")
+    feedback_stream = generate_stream(seed, parameters, "transparent_feedback", released_block=released_block, initial_q=0.02)
+    feedback_stream_high = generate_stream(seed, parameters, "transparent_feedback", released_block=released_block, initial_q=0.98)
+    transparent = score_stream(feedback_stream, "transparent", initial_q=0.02)
+    transparent_high = score_stream(feedback_stream_high, "transparent", initial_q=0.98)
+    represented = score_stream(feedback_stream, "represented", initial_q=0.02)
+    represented_high = score_stream(feedback_stream_high, "represented", initial_q=0.98)
     arms: dict[str, Any] = {
         "transparent_feedback": dynamics_readouts(transparent),
         "represented_feedback": dynamics_readouts(represented),
         "filter_awareness_only": dynamics_readouts(represented),
     }
+    arms["transparent_feedback"]["bistability"] = bistability_readout(transparent, transparent_high)
+    arms["represented_feedback"]["bistability"] = bistability_readout(represented, represented_high)
+    arms["filter_awareness_only"]["bistability"] = dict(arms["represented_feedback"]["bistability"])
     stream_hash_payload = tuple((item.time, item.cue, item.bundle_state, item.allocation, item.meta_observation, item.observations) for item in feedback_stream.slices)
     arms["represented_feedback"]["common_stream_identity"] = True
     arms["filter_awareness_only"]["common_stream_identity"] = True
+    common_paths = {
+        "transparent_feedback": tuple(item.bundle_state for item in feedback_stream.slices),
+        "represented_feedback": tuple(item.bundle_state for item in feedback_stream.slices),
+        "filter_awareness_only": tuple(item.bundle_state for item in feedback_stream.slices),
+    }
     for arm in ("no_feedback_candidate_common", "random_allocation", "sign_reversed_allocation", "matched_persistence", "full_information_replay"):
-        stream = generate_stream(seed, parameters, arm, released_block=released_block)
-        transparent_score = score_stream(stream, "transparent")
+        stream = generate_stream(seed, parameters, arm, released_block=released_block, initial_q=0.02)
+        stream_high = generate_stream(seed, parameters, arm, released_block=released_block, initial_q=0.98)
+        transparent_score = score_stream(stream, "transparent", initial_q=0.02)
+        transparent_score_high = score_stream(stream_high, "transparent", initial_q=0.98)
         readout = dynamics_readouts(transparent_score)
+        readout["bistability"] = bistability_readout(transparent_score, transparent_score_high)
         if arm == "full_information_replay":
-            represented_score = score_stream(stream, "represented")
+            represented_score = score_stream(stream, "represented", initial_q=0.02)
             error = max(abs(left["q_bundle"] - right["q_bundle"]) for left, right in zip(transparent_score["trajectory"], represented_score["trajectory"]))
             readout["transparent_represented_max_error"] = float(error)
         arms[arm] = readout
-    return {"arms": arms, "feedback_stream": stream_hash_payload, "component_rng_keys": feedback_stream.component_rng_keys}
+        common_paths[arm] = tuple(item.bundle_state for item in stream.slices)
+    if len(set(common_paths.values())) != 1:
+        raise RuntimeError("arm-common latent world path identity failed")
+    return {"arms": arms, "feedback_stream": stream_hash_payload, "common_bundle_path": next(iter(common_paths.values())), "arm_common_world_identity": True, "component_rng_keys": feedback_stream.component_rng_keys}
