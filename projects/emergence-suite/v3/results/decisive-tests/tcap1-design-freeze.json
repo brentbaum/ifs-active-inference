@@ -1,0 +1,65 @@
+{
+  "study": "T-CAP1",
+  "status": "STAGES_0_1_DESIGN_FROZEN",
+  "organism": {
+    "kind": "focused variant",
+    "bundle_states": 2,
+    "channel_types": ["threat_cue", "body_state", "partner_face", "present_context", "safety_evidence"],
+    "new_productions": [
+      "p(A_Phi[t+1] | q_t(B), C_t)",
+      "p(O_Phi[t+1] | A_Phi[t+1], D_t)"
+    ],
+    "sequential_order": "q_t -> A_{t+1} -> Lambda_{t+1} -> O_{t+1} -> q_{t+1}",
+    "same_update_feedback": false
+  },
+  "architectures": {
+    "transparent": "scores the generated stream under baseline Lambda-bar",
+    "represented": "marginalizes Lambda using the noisy metacognitive allocation observation",
+    "represented_limitation_resolution": "metacognitive allocation observation with reliability swept over 0.60, 0.80, and 0.95",
+    "raw_stream_identity": "transparent and represented architectures replay the same serialized stream"
+  },
+  "arms": [
+    "transparent_feedback",
+    "no_feedback_candidate_common",
+    "represented_feedback",
+    "random_allocation",
+    "sign_reversed_allocation",
+    "matched_persistence",
+    "full_information_replay",
+    "filter_awareness_only"
+  ],
+  "estimands": {
+    "delivered_effective_precision": "absolute channel log-likelihood-ratio separation, zero when masked",
+    "counterfactual_disconfirming_influence": "posterior-logit difference for a disconfirming token versus the same channel masked",
+    "selection_filtering_signature": "selection-naive minus selection-aware log Bayes factor",
+    "hysteresis_area": "sum over cue grid of positive down-curve minus up-curve times 0.25",
+    "capture_on": "first upward cue level with q(B)>=0.70",
+    "release": "first descending cue level with q(B)<0.50",
+    "recovery_time": "slices after final withdrawal until q(B)<0.30"
+  },
+  "stage1": {
+    "seed_block": [3824000, 3831999],
+    "non_criterial": true,
+    "grid": {
+      "coupling_strength": [0.0, 2.0, 4.0, 6.0],
+      "cue_intensity": [0.25, 0.5, 0.75],
+      "allocation_persistence": [0.0, 0.6, 0.9],
+      "bundle_transition_persistence": [0.85, 0.95, 0.99],
+      "meta_observation_reliability": [0.6, 0.8, 0.95]
+    },
+    "panel_rule": {
+      "no_hysteresis": "mean transparent H < 0.02",
+      "near_boundary": "0.02 <= mean transparent H < 0.08",
+      "clear_hysteresis": "mean transparent H >= 0.08",
+      "selection": "first lexicographic parameter cell in each occupied region; report any empty region without substitution"
+    }
+  },
+  "touched_files": [
+    "ref/tcap1.py",
+    "scripts/run_tcap1.py",
+    "tests/test_tcap1.py",
+    "results/decisive-tests/tcap1-*"
+  ],
+  "v36_scientific_modules_modified": false,
+  "excess_additions": []
+}

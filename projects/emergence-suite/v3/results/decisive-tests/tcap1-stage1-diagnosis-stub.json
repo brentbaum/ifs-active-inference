@@ -1,0 +1,41 @@
+{
+  "study": "T-CAP1",
+  "stage": 1,
+  "classification": "FAIL_APPARATUS_STAGE1_COMMON_WORLD_AND_READOUT_COMPLETENESS",
+  "stage0_verdict": "PASS",
+  "stage1_block_consumed_once": [3824000, 3831999],
+  "retained_trace_sha256": "c1cecb3232f43578ba45395a0b4b730469535ae44128f4677c268a845449f64e",
+  "defects": [
+    {
+      "name": "CONTROL_WORLD_PATH_NOT_COMMON",
+      "localization": "ref/tcap1.py::generate_stream uses bundle-stay:{arm} as the component RNG key",
+      "effect": "transparent and represented architectures share an identical feedback stream, but no-feedback, random, sign-reversed, matched-persistence, and full-information controls can receive different latent bundle paths rather than counterfactual allocations on one common world",
+      "affected_results": "between-control dynamics contrasts and any panel interpretation that depends on them"
+    },
+    {
+      "name": "INITIAL_POSTERIOR_SENSITIVITY_NOT_EXECUTED",
+      "localization": "ref/tcap1.py::dynamics_readouts fixed_point_count",
+      "effect": "the count is a trajectory-end heuristic; the required low-vs-high initial-posterior replay and explicit fraction of worlds with two stable fixed points were not computed",
+      "affected_results": "fixed-point count and initial-condition sensitivity readouts"
+    },
+    {
+      "name": "PARAMETER_PANEL_SPAN_NOT_ATTAINED",
+      "localization": "predeclared Stage-1 region rule",
+      "effect": "all 324 cells classified clear; the no-hysteresis and near-boundary panel entries remain null",
+      "minimum_cell_mean_H": 0.08085224401195291,
+      "clear_boundary": 0.08
+    }
+  ],
+  "unaffected_records": [
+    "Stage-0 exact semantic proofs",
+    "transparent-versus-represented raw-stream identity within the primary feedback stream",
+    "the raw per-world census traces and custody hashes",
+    "the descriptive within-arm trajectories"
+  ],
+  "repair_applied": false,
+  "rerun_performed": false,
+  "prediction_sealed": false,
+  "confirmatory_block_opened": false,
+  "escrow_opened": false,
+  "disposition": "STOP_FOR_EVALUATOR_ADJUDICATION"
+}

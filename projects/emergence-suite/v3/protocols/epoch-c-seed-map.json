@@ -359,7 +359,8 @@
         "T-V3-DO2: no schedule qualified (detectable-opportunity max 0.001473 vs 0.80); program closed per round-24 4.4; main and escrow retired unconsumed.",
         "Round-25 (EXTERNAL): decisive-tests program authorized by Brent ('please design and run'); registered predictions for DT-S1-IDGEN/DT-S2-DESCENT/DT-S3-PERMISSION sealed pre-implementation; blocks S1 3790000:3799999, S2 3800000:3811999, S3 3812000:3819999; serial execution; interim ledger standings binding until scored.",
         "Round-26 (INTERNAL): S2-C apparatus estimand stop (forced-latch, probe-inclusive estimand, arm override); S2-A/B stand; replacement S2-C block 3820000:3823999; permanent estimand-conformance proof added.",
-        "Round-28 (EXTERNAL): T-CAP1 authorized to design with ten amendments (sequential feedback, selection-aware/naive transparency, replaced estimands, matched-persistence capture definition, calibration-based real-danger criterion, representation-only witnessing, two explicit productions, focused variant organism, census-before-seal, seven controls). Census public seeds 3824000:3831999; confirmatory 3832000:3839999 and challenge escrow 4130000:4132999 reserved, opened only at/after Stage-2 seal."
+        "Round-28 (EXTERNAL): T-CAP1 authorized to design with ten amendments (sequential feedback, selection-aware/naive transparency, replaced estimands, matched-persistence capture definition, calibration-based real-danger criterion, representation-only witnessing, two explicit productions, focused variant organism, census-before-seal, seven controls). Census public seeds 3824000:3831999; confirmatory 3832000:3839999 and challenge escrow 4130000:4132999 reserved, opened only at/after Stage-2 seal.",
+        "Round-29 (INTERNAL): census-1 invalid as panel (arm-specific world keys; missing fixed-point replays; raw-H classification \u2014 H=0.325 at zero coupling exposes persistence confound), retained as evidence; repairs runner/readout-only; permanent arm-common world proof; census-2 3840000:3847999 on the unchanged frozen grid."
       ],
       "barred_gate4_replacement_2": [
         3709000,
@@ -417,10 +418,6 @@
         3820000,
         3823999
       ],
-      "tcap1_dynamics_census_public": [
-        3824000,
-        3831999
-      ],
       "tcap1_confirmatory_reserved": [
         3832000,
         3839999
@@ -428,6 +425,14 @@
       "tcap1_challenge_escrow_reserved": [
         4130000,
         4132999
+      ],
+      "consumed_tcap1_census_1": [
+        3824000,
+        3831999
+      ],
+      "tcap1_census_2": [
+        3840000,
+        3847999
       ]
     }
   }
